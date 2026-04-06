@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あの人の性格を分析する｜ビッグファイブ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --card-bg: rgba(26,10,62,0.45);
+    --card-border: rgba(139,92,246,0.2);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden; line-height: 1.8;
+  }
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(236,72,153,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.08) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate;
+  }
+  @keyframes nebula-drift { 0%{transform:scale(1)} 100%{transform:scale(1.05) translate(-1%,1%)} }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
+  @keyframes twinkle { 0%{opacity:.5} 100%{opacity:1} }
+
+  /* ===== 共通 ===== */
+  .screen {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    min-height: 100vh;
+    display: none; flex-direction: column;
+    padding: 40px 24px;
+  }
+  .screen.active { display: flex; }
+
+  /* ===== スタート画面 ===== */
+  #startScreen { justify-content: center; align-items: center; text-align: center; }
+  .start-eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    color: var(--purple); margin-bottom: 16px;
+  }
+  .start-title {
+    font-size: 26px; font-weight: 900; line-height: 1.4; margin-bottom: 10px;
+  }
+  .start-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .start-sub { font-size: 14px; color: var(--dim); margin-bottom: 36px; line-height: 1.7; }
+
+  /* 関係性選択 */
+  .rel-label { font-size: 13px; color: var(--dim); text-align: left; width: 100%; margin-bottom: 10px; font-weight: 500; }
+  .rel-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 24px; }
+  .rel-btn {
+    padding: 16px 6px; border-radius: 14px;
+    background: rgba(139,92,246,0.08);
+    border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .2s; text-align: center; line-height: 1.5;
+  }
+  .rel-btn .rel-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+  .rel-btn:hover { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.35); color: var(--text); }
+  .rel-btn.selected { border-color: var(--purple); color: var(--text); font-weight: 700; }
+  .rel-btn.sel-love    { background: rgba(236,72,153,0.15); border-color: var(--pink); }
+  .rel-btn.sel-work    { background: rgba(59,130,246,0.15); border-color: var(--blue); }
+  .rel-btn.sel-friend  { background: rgba(16,185,129,0.15); border-color: #10b981; }
+
+  /* 名前入力 */
+  .input-group { width: 100%; margin-bottom: 18px; text-align: left; }
+  .input-label { display: block; font-size: 13px; color: var(--dim); margin-bottom: 8px; font-weight: 500; }
+  .text-input {
+    width: 100%; padding: 14px 18px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.2);
+    border-radius: 12px; color: var(--text); font-family: inherit; font-size: 16px;
+    outline: none; transition: border-color .2s;
+  }
+  .text-input::placeholder { color: var(--dim); }
+  .text-input:focus { border-color: var(--purple); }
+
+  /* 付き合い期間 */
+  .period-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .period-btn {
+    padding: 10px 8px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .period-btn:hover { background: rgba(139,92,246,0.18); color: var(--text); }
+  .period-btn.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); color: var(--text); font-weight: 700; }
+
+  .accuracy-note {
+    display: none; font-size: 12px; color: var(--dim);
+    padding: 10px 14px; background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.15); border-radius: 8px;
+    margin-bottom: 20px; width: 100%; text-align: left;
+  }
+  .accuracy-note.show { display: block; }
+
+  .start-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 14px;
+    color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s; margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+  }
+  .start-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .start-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+  .start-note { font-size: 12px; color: var(--dim); text-align: center; line-height: 1.6; }
+
+  /* ===== クイズ画面 ===== */
+  #quizScreen { justify-content: flex-start; }
+  .who-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+    padding: 10px 14px; border-radius: 10px;
+  }
+  .who-bar.rel-love   { background: rgba(236,72,153,0.09); border: 1px solid rgba(236,72,153,0.22); }
+  .who-bar.rel-work   { background: rgba(59,130,246,0.09); border: 1px solid rgba(59,130,246,0.22); }
+  .who-bar.rel-friend { background: rgba(16,185,129,0.09); border: 1px solid rgba(16,185,129,0.22); }
+  .who-icon { font-size: 20px; }
+  .who-name-txt { font-size: 14px; font-weight: 700; }
+  .rel-love   .who-name-txt { color: var(--pink); }
+  .rel-work   .who-name-txt { color: var(--blue); }
+  .rel-friend .who-name-txt { color: #10b981; }
+  .who-sub-txt { font-size: 12px; color: var(--dim); }
+
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .progress-bar { flex:1; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:3px; transition: width .4s ease; }
+  .rel-love-bar   .progress-fill { background: linear-gradient(90deg, var(--pink), var(--purple)); }
+  .rel-work-bar   .progress-fill { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  .rel-friend-bar .progress-fill { background: linear-gradient(90deg, #10b981, var(--blue)); }
+  .progress-text { font-size:13px; color:var(--dim); font-weight:500; min-width:40px; text-align:right; }
+
+  .question-area { flex:1; display:flex; flex-direction:column; justify-content:center; }
+  .question-num { font-size:13px; font-weight:500; margin-bottom:12px; }
+  .rel-love   .question-num { color: var(--pink); }
+  .rel-work   .question-num { color: var(--blue); }
+  .rel-friend .question-num { color: #10b981; }
+  .question-text { font-size:18px; line-height:1.7; margin-bottom:36px; min-height:80px; transition:opacity .2s; }
+
+  .answers { display:flex; gap:10px; margin-bottom:40px; }
+  .answer-btn {
+    flex:1; padding:14px 4px; font-family:inherit; font-size:12px; font-weight:500;
+    color:var(--dim); background:rgba(139,92,246,0.08); border:1.5px solid rgba(139,92,246,0.15);
+    border-radius:12px; cursor:pointer; transition:all .2s;
+    min-height:48px; display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .answer-btn:hover { background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.4); color:var(--text); }
+  .answer-btn.selected { background:linear-gradient(135deg,var(--purple),var(--blue)); border-color:transparent; color:#fff; font-weight:700; }
+
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:13px;
+    color:var(--dim); background:none; border:none; cursor:pointer; padding:8px 0; transition:color .2s;
+  }
+  .back-btn:hover { color:var(--text); }
+
+  /* ===== ローディング ===== */
+  #loadingScreen { justify-content:center; align-items:center; text-align:center; gap:24px; }
+  .loading-spinner {
+    width:56px; height:56px; border:3px solid rgba(139,92,246,0.2);
+    border-top-color:var(--purple); border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .loading-text { font-size:20px; font-weight:700; }
+  .loading-name { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .loading-sub { font-size:14px; color:var(--dim); }
+  .loading-dots::after { content:''; animation:dots 1.5s infinite; }
+  @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
+
+  /* ===== 結果画面 ===== */
+  #resultScreen { justify-content:flex-start; padding-top:48px; }
+  .result-header { text-align:center; margin-bottom:32px; }
+  .result-rel-badge {
+    display:inline-block; font-size:12px; font-weight:700;
+    border-radius:20px; padding:4px 16px; margin-bottom:12px;
+  }
+  .badge-love   { background:rgba(236,72,153,0.15); color:var(--pink); border:1px solid rgba(236,72,153,0.3); }
+  .badge-work   { background:rgba(59,130,246,0.15); color:var(--blue); border:1px solid rgba(59,130,246,0.3); }
+  .badge-friend { background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); }
+  .result-name { font-size:26px; font-weight:900; margin-bottom:6px; }
+  .result-name em { font-style:normal; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .result-sub { font-size:13px; color:var(--dim); }
+
+  /* 特性バー */
+  .traits-card {
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:16px; padding:24px; margin-bottom:20px; backdrop-filter:blur(8px);
+  }
+  .trait-row { margin-bottom:20px; }
+  .trait-row:last-child { margin-bottom:0; }
+  .trait-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .trait-label { font-size:14px; font-weight:700; }
+  .trait-desc { font-size:11px; color:var(--dim); font-weight:400; margin-left:6px; }
+  .trait-level { font-size:12px; padding:2px 10px; border-radius:10px; font-weight:600; }
+  .lv-high { background:rgba(236,72,153,0.2); color:var(--pink); }
+  .lv-mid  { background:rgba(139,92,246,0.2); color:var(--purple); }
+  .lv-low  { background:rgba(148,163,184,0.15); color:var(--dim); }
+  .bar-bg  { height:8px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+
+  /* 相性カード */
+  .compat-card {
+    border-radius:16px; padding:24px; margin-bottom:20px; text-align:center;
+    backdrop-filter:blur(8px);
+  }
+  .compat-card.love   { background:rgba(236,72,153,0.08); border:1px solid rgba(236,72,153,0.2); }
+  .compat-card.work   { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); }
+  .compat-card.friend { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); }
+  .compat-title { font-size:14px; color:var(--dim); margin-bottom:10px; }
+  .compat-score { font-size:52px; font-weight:900; line-height:1; margin-bottom:8px; }
+  .compat-score.love   { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-score.work   { background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-score.friend { background:linear-gradient(135deg,#10b981,var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-label { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .compat-desc { font-size:13px; color:var(--dim); line-height:1.7; }
+
+  /* 性格説明カード */
+  .desc-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .desc-title { font-size: 13px; color: var(--dim); margin-bottom: 10px; font-weight: 500; }
+  .desc-text { font-size: 15px; line-height: 1.9; color: var(--text); }
+  .desc-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .desc-kw {
+    font-size: 12px; padding: 4px 12px; border-radius: 20px;
+    background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2);
+    color: var(--purple); font-weight: 500;
+  }
+
+  /* 相性誘導カード */
+  .compat-prompt {
+    background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    text-align: center;
+  }
+  .compat-prompt-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .compat-prompt-sub { font-size: 13px; color: var(--dim); margin-bottom: 16px; line-height: 1.7; }
+  .compat-prompt-btn {
+    display: inline-block; padding: 12px 24px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border-radius: 12px; color: #fff; font-size: 14px; font-weight: 700;
+    text-decoration: none; transition: opacity .2s;
+  }
+  .compat-prompt-btn:hover { opacity: .85; }
+
+  /* 精度注記 */
+  .accuracy-card {
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px; padding:14px 16px; margin-bottom:20px;
+    font-size:12px; color:var(--dim); line-height:1.7;
+  }
+
+  /* アクション */
+  .action-btn {
+    width:100%; padding:15px; border:none; border-radius:14px;
+    font-family:inherit; font-size:15px; font-weight:700;
+    cursor:pointer; transition:all .2s; margin-bottom:12px;
+    display:block; text-decoration:none; text-align:center;
+  }
+  .btn-primary { background:linear-gradient(135deg,var(--pink),var(--purple)); color:#fff; }
+  .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
+  .btn-secondary { background:rgba(139,92,246,0.1); border:1.5px solid rgba(139,92,246,0.25); color:var(--text); }
+  .btn-secondary:hover { background:rgba(139,92,246,0.2); }
+
+  @media(max-width:400px){
+    .question-text{font-size:16px}
+    .answer-btn{font-size:11px;padding:12px 2px}
+    .answers{gap:6px}
+    .start-title{font-size:22px}
+    .rel-options{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  }
+
+  /* ===== バイアス警告カード ===== */
+  .bias-warning {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 16px; padding: 20px;
+    margin-bottom: 16px; text-align: center;
+  }
+  .bias-warning-text {
+    font-size: 13px; color: #fbbf24;
+    margin-bottom: 14px; line-height: 1.6; font-weight: 500;
+  }
+  .bias-btns { display: flex; gap: 10px; flex-direction: column; }
+  .bias-btn-remove {
+    padding: 14px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    color: #fff; font-family: inherit; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s;
+  }
+  .bias-btn-remove:hover { opacity: .9; transform: translateY(-1px); }
+  .bias-btn-keep {
+    padding: 11px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; color: var(--dim);
+    font-family: inherit; font-size: 13px; cursor: pointer; transition: all .2s;
+  }
+  .bias-btn-keep:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+  /* ===== バイアス説明画面 ===== */
+  #biasScreen { justify-content: flex-start; padding-top: 48px; }
+  .bias-screen-header { text-align: center; margin-bottom: 28px; }
+  .bias-screen-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    color: #f59e0b; margin-bottom: 10px;
+  }
+  .bias-screen-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; line-height: 1.4; }
+  .bias-screen-sub { font-size: 13px; color: var(--dim); line-height: 1.7; }
+  .bias-list { width: 100%; margin-bottom: 28px; }
+  .bias-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px; margin-bottom: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; transition: border-color .2s;
+  }
+  .bias-item:hover { border-color: rgba(245,158,11,0.25); }
+  .bias-num {
+    width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 50%; background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: #fbbf24; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bias-body h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .bias-body p { font-size: 13px; color: var(--dim); line-height: 1.6; }
+  .bias-cta {
+    width: 100%; padding: 16px; border: none; border-radius: 14px;
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s; margin-bottom: 12px;
+    display: block;
+  }
+  .bias-cta:hover { opacity: .9; transform: translateY(-1px); }
+  .bias-back {
+    width: 100%; padding: 13px;
+    background: rgba(139,92,246,0.1); border: 1.5px solid rgba(139,92,246,0.25);
+    border-radius: 12px; color: var(--text);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .bias-back:hover { background: rgba(139,92,246,0.2); }
+
+  /* ===== プレミアムモーダル ===== */
+  .premium-overlay {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .premium-overlay.show { display: flex; }
+  .premium-modal {
+    background: linear-gradient(160deg, #1a0a3e, #0a0e27);
+    border: 1px solid rgba(245,158,11,0.35);
+    border-radius: 20px; padding: 36px 24px;
+    max-width: 320px; width: 100%; text-align: center;
+  }
+  .premium-icon { font-size: 44px; margin-bottom: 14px; }
+  .premium-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
+  .premium-sub { font-size: 14px; color: var(--dim); line-height: 1.8; margin-bottom: 24px; }
+  .premium-close {
+    width: 100%; padding: 13px; border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 10px; background: none; color: var(--dim);
+    font-family: inherit; font-size: 14px; cursor: pointer; transition: color .2s;
+  }
+  .premium-close:hover { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="bg-nebula"></div>
+<div class="bg-stars" id="bgStars"></div>
+
+<!-- ===== スタート画面 ===== -->
+<div class="screen active" id="startScreen">
+  <p class="start-eyebrow">👁️ Big Five 他者分析</p>
+  <h1 class="start-title">あの人の性格を<br><em>科学的に推測する</em></h1>
+  <p class="start-sub">行動・言動の観察をもとにビッグファイブ理論で<br>その人の性格を推定します</p>
+
+  <span class="input-label" style="width:100%;text-align:left;">どんな関係ですか？</span>
+  <div class="rel-options">
+    <button class="rel-btn" data-rel="love">
+      <span class="rel-icon">💕</span>恋愛・<br>気になる人
+    </button>
+    <button class="rel-btn" data-rel="work">
+      <span class="rel-icon">💼</span>仕事・<br>上司・同僚
+    </button>
+    <button class="rel-btn" data-rel="friend">
+      <span class="rel-icon">👫</span>友人・<br>知人
+    </button>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label" for="personName">診断する人のニックネーム</label>
+    <input type="text" class="text-input" id="personName" placeholder="例：Aさん、田中くん…" maxlength="20">
+  </div>
+
+  <div class="input-group" style="margin-bottom:10px;">
+    <span class="input-label">どのくらいの付き合いですか？</span>
+    <div class="period-options">
+      <button class="period-btn" data-period="short">1ヶ月未満</button>
+      <button class="period-btn" data-period="few">1〜6ヶ月</button>
+      <button class="period-btn" data-period="mid">6ヶ月〜2年</button>
+      <button class="period-btn" data-period="long">2年以上</button>
+    </div>
+  </div>
+
+  <div class="accuracy-note" id="accuracyNote"></div>
+
+  <button class="start-btn" id="startBtn" disabled>診断スタート →</button>
+  <p class="start-note">
+    ※この診断は観察情報からの推定です。本人の実際の性格と異なる場合があります。
+  </p>
+</div>
+
+<!-- ===== クイズ画面 ===== -->
+<div class="screen" id="quizScreen">
+  <div class="who-bar" id="whoBar">
+    <span class="who-icon" id="whoIcon">👁️</span>
+    <div>
+      <div class="who-name-txt" id="whoName">—</div>
+      <div class="who-sub-txt" id="whoSub">を観察して答えてください</div>
+    </div>
+  </div>
+  <div class="progress" id="progressWrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/15</span>
+  </div>
+  <div class="question-area" id="questionArea">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらとも<br>言えない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+</div>
+
+<!-- ===== ローディング ===== -->
+<div class="screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p class="loading-text"><span class="loading-name" id="loadingName">—</span>の性格を分析中<span class="loading-dots"></span></p>
+  <p class="loading-sub">観察データから性格傾向を導き出しています</p>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div class="screen" id="resultScreen">
+  <div class="result-header">
+    <span class="result-rel-badge" id="relBadge">—</span>
+    <p class="result-name"><em id="resultName">—</em>の推定性格</p>
+    <p class="result-sub">ビッグファイブ理論による観察分析</p>
+  </div>
+  <div class="traits-card" id="traitsCard"></div>
+  <div class="desc-card" id="descCard"></div>
+  <div class="compat-card" id="compatCard"></div>
+  <div class="accuracy-card" id="resultAccuracyNote"></div>
+
+  <!-- バイアス警告カード -->
+  <div class="bias-warning" id="biasWarning">
+    <p class="bias-warning-text">⚠️ この結果にはあなたの先入観が含まれている可能性があります</p>
+    <div class="bias-btns">
+      <button class="bias-btn-remove" id="biasRemoveBtn">先入観を取り除いて見る →</button>
+      <button class="bias-btn-keep" id="biasKeepBtn">このまま見る</button>
+    </div>
+  </div>
+
+  <button class="action-btn btn-primary" id="retryBtn">別の人を診断する</button>
+  <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
+</div>
+
+<!-- ===== バイアス説明画面 ===== -->
+<div class="screen" id="biasScreen">
+  <div class="bias-screen-header">
+    <p class="bias-screen-eyebrow">BIAS ANALYSIS</p>
+    <h2 class="bias-screen-title">あなたの先入観を<br>分析します</h2>
+    <p class="bias-screen-sub">人が他者を判断するとき、<br>こんな歪みが無意識に起きています。</p>
+  </div>
+  <div class="bias-list">
+    <div class="bias-item">
+      <div class="bias-num">①</div>
+      <div class="bias-body">
+        <h3>好き嫌いフィルター</h3>
+        <p>好きな人は全部良く見え、嫌いな人は全部悪く見えます。</p>
+      </div>
+    </div>
+    <div class="bias-item">
+      <div class="bias-num">②</div>
+      <div class="bias-body">
+        <h3>自分との比較</h3>
+        <p>自分の性格と「違う部分」を大げさに感じやすくなります。</p>
+      </div>
+    </div>
+    <div class="bias-item">
+      <div class="bias-num">③</div>
+      <div class="bias-body">
+        <h3>第一印象の支配</h3>
+        <p>最初の印象が、その後の判断全体を引きずります。</p>
+      </div>
+    </div>
+    <div class="bias-item">
+      <div class="bias-num">④</div>
+      <div class="bias-body">
+        <h3>状況と性格の混同</h3>
+        <p>その時の状況を性格と判断してしまいます。<br>（例：遅刻した＝だらしない人）</p>
+      </div>
+    </div>
+    <div class="bias-item">
+      <div class="bias-num">⑤</div>
+      <div class="bias-body">
+        <h3>思い込みセット</h3>
+        <p>根拠のない性格パッケージで見てしまいます。<br>（例：外向的な人は協調的なはず）</p>
+      </div>
+    </div>
+  </div>
+  <button class="bias-cta" id="biasCta">補正結果を見る →</button>
+  <button class="bias-back" id="biasBackBtn">← 結果に戻る</button>
+</div>
+
+<!-- プレミアムモーダル -->
+<div class="premium-overlay" id="premiumOverlay">
+  <div class="premium-modal">
+    <div class="premium-icon">🔒</div>
+    <p class="premium-title">準備中です</p>
+    <p class="premium-sub">先入観を補正した本格分析は<br>近日公開予定です。<br>お楽しみに！</p>
+    <button class="premium-close" id="premiumClose">閉じる</button>
+  </div>
+</div>
+
+<script>
+// ===== 質問データ（インターリーブ順） =====
+const questions = [
+  { text: '初対面の人にも自分から話しかけ、すぐに打ち解けるほうだと思う', factor:'E', dir:'+' },
+  { text: '予定が急に変わったり、思い通りにいかないとき、強く動揺する様子がある', factor:'N', dir:'+' },
+  { text: '新しい場所・食べ物・体験に対して、抵抗よりも「試してみたい」という反応を見せる', factor:'O', dir:'+' },
+  { text: '約束の時間・期限をきちんと守り、遅刻やすっぽかしがほとんどない', factor:'C', dir:'+' },
+  { text: '困っている人を見かけると、自分から声をかけて助けようとする', factor:'A', dir:'+' },
+  { text: '人が集まる場所や賑やかなイベントが好きそうで、積極的に参加する', factor:'E', dir:'+' },
+  { text: '心配事があると、同じ不安を何度も繰り返し話したり、引きずる傾向がある', factor:'N', dir:'+' },
+  { text: 'いつもと違うやり方や、ユニークなアイデアを提案することがある', factor:'O', dir:'+' },
+  { text: '身の回りの整理整頓ができていて、物事をきちんと管理している様子がある', factor:'C', dir:'+' },
+  { text: '意見が対立しそうな場面で、争いを避けて丸く収めようとする', factor:'A', dir:'+' },
+  { text: '一人で過ごす時間を大切にしていて、人混みの後は充電が必要そうだ', factor:'E', dir:'-' },
+  { text: '多少のトラブルでも「まあいいか」と切り替えが早く、動じない印象がある', factor:'N', dir:'-' },
+  { text: '慣れたやり方や定番を好み、変化を求めない安定志向に見える', factor:'O', dir:'-' },
+  { text: '行き当たりばったりで動くことが多く、計画を立てて行動するタイプではない', factor:'C', dir:'-' },
+  { text: '自分の意見を曲げず、主張が強い印象がある', factor:'A', dir:'-' },
+];
+const total = questions.length;
+
+// ===== 関係性設定 =====
+const relConfig = {
+  love: {
+    icon: '💕', label: '恋愛・気になる人',
+    badge: '💕 恋愛・気になる人', badgeClass: 'badge-love',
+    barClass: 'rel-love-bar', whoClass: 'rel-love', qClass: 'rel-love',
+    compatTitle: '恋愛相性スコア',
+    // 恋愛は 神経症傾向の差・外向性の一致・協調性の高さ を重視
+    compatWeights: { E: 1.5, N: 2.0, O: 1.0, C: 0.8, A: 1.5 },
+    compatHigh: '💕 とても良い相性です！感情的な波長が合いやすく、自然体でいられる関係です。',
+    compatMid:  '🌙 お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
+    compatLow:  '⚡ 性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
+  },
+  work: {
+    icon: '💼', label: '仕事・上司・同僚',
+    badge: '💼 仕事・職場', badgeClass: 'badge-work',
+    barClass: 'rel-work-bar', whoClass: 'rel-work', qClass: 'rel-work',
+    compatTitle: '仕事の相性スコア',
+    // 仕事は 誠実性の一致・協調性の高さ を重視
+    compatWeights: { E: 0.8, N: 1.2, O: 1.0, C: 2.0, A: 1.8 },
+    compatHigh: '💼 仕事上の相性は良好です！お互いの強みを活かし合える関係です。',
+    compatMid:  '📋 コミュニケーションを丁寧にすれば良いチームワークが生まれます。',
+    compatLow:  '🔧 スタイルの違いがあります。役割分担を明確にすると力を発揮しやすくなります。',
+  },
+  friend: {
+    icon: '👫', label: '友人・知人',
+    badge: '👫 友人・知人', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    compatTitle: '友人としての相性スコア',
+    // 友人は 開放性・外向性のバランス を重視
+    compatWeights: { E: 1.5, N: 1.0, O: 2.0, C: 0.8, A: 1.5 },
+    compatHigh: '👫 気の合う友人です！話題が合いやすく、一緒にいて楽しい関係です。',
+    compatMid:  '🌿 お互いの違いを楽しめれば、刺激し合える良い関係になります。',
+    compatLow:  '🌀 タイプは違いますが、だからこそ新しい視点をもらえる関係かもしれません。',
+  },
+};
+
+const traitInfo = {
+  E: { name: '外向性',     desc: '社交的・話好き・積極的',         color: '#f59e0b' },
+  N: { name: '神経症傾向', desc: '感情的・不安になりやすい・敏感', color: '#f43f5e' },
+  O: { name: '開放性',     desc: '好奇心旺盛・創造的・変化好き',   color: '#8b5cf6' },
+  C: { name: '誠実性',     desc: '計画的・責任感・几帳面',         color: '#3b82f6' },
+  A: { name: '協調性',     desc: '思いやり・協力的・争い回避',     color: '#10b981' },
+};
+
+const periodNotes = {
+  short: '⚠️ 知り合ってまもないため推定誤差が大きい場合があります。',
+  few:   '💡 ある程度の観察データがあります。参考程度にご活用ください。',
+  mid:   '✅ 十分な観察期間があります。推定精度は比較的高いでしょう。',
+  long:  '🎯 長期の観察データがあります。かなり精度の高い推定が期待できます。',
+};
+
+// ===== 状態 =====
+let personName = '', personPeriod = '', personRel = '';
+let current = 0;
+const ans = new Array(total).fill(null);
+
+// 自分のスコア（result.htmlから渡される）
+const urlParams = new URLSearchParams(window.location.search);
+const myCode = urlParams.get('my') || '';
+const myScores = myCode.length === 5 ? {
+  O: parseInt(myCode[0]), C: parseInt(myCode[1]),
+  E: parseInt(myCode[2]), A: parseInt(myCode[3]), N: parseInt(myCode[4])
+} : null;
+
+// ===== 画面切替 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== スタート画面 =====
+const nameInput  = document.getElementById('personName');
+const startBtn   = document.getElementById('startBtn');
+const accNote    = document.getElementById('accuracyNote');
+
+document.querySelectorAll('.rel-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rel-btn').forEach(b => {
+      b.classList.remove('selected','sel-love','sel-work','sel-friend');
+    });
+    btn.classList.add('selected', `sel-${btn.dataset.rel}`);
+    personRel = btn.dataset.rel;
+    checkReady();
+  });
+});
+
+nameInput.addEventListener('input', checkReady);
+
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    personPeriod = btn.dataset.period;
+    accNote.textContent = periodNotes[personPeriod];
+    accNote.classList.add('show');
+    checkReady();
+  });
+});
+
+function checkReady() {
+  startBtn.disabled = !(nameInput.value.trim() && personPeriod && personRel);
+}
+
+startBtn.addEventListener('click', () => {
+  personName = nameInput.value.trim();
+  const cfg = relConfig[personRel];
+  // who bar
+  const whoBar = document.getElementById('whoBar');
+  whoBar.className = `who-bar ${cfg.whoClass}`;
+  document.getElementById('whoIcon').textContent = cfg.icon;
+  document.getElementById('whoName').textContent = personName;
+  document.getElementById('whoSub').textContent = `を観察して答えてください（${cfg.label}）`;
+  // progress color
+  document.getElementById('progressWrap').className = `progress ${cfg.barClass}`;
+  // question num color
+  document.getElementById('questionNum').className = `question-num ${cfg.qClass}`;
+  // loading name
+  document.getElementById('loadingName').textContent = personName;
+  document.getElementById('resultName').textContent = personName;
+  // rel badge
+  const badge = document.getElementById('relBadge');
+  badge.textContent = cfg.badge;
+  badge.className = `result-rel-badge ${cfg.badgeClass}`;
+
+  current = 0; ans.fill(null);
+  render();
+  showScreen('quizScreen');
+});
+
+// ===== クイズ =====
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const questionNum  = document.getElementById('questionNum');
+const questionText = document.getElementById('questionText');
+const answersEl    = document.getElementById('answers');
+const backBtn      = document.getElementById('backBtn');
+
+function render() {
+  progressFill.style.width = `${((current+1)/total)*100}%`;
+  progressText.textContent = `${current+1}/${total}`;
+  questionNum.textContent = `Q${current+1}`;
+  questionText.textContent = questions[current].text;
+  answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === ans[current]);
+  });
+  backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+answersEl.addEventListener('click', e => {
+  const btn = e.target.closest('.answer-btn');
+  if (!btn) return;
+  ans[current] = parseInt(btn.dataset.val);
+  answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  setTimeout(() => {
+    if (current < total-1) { current++; render(); }
+    else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
+  }, 300);
+});
+
+backBtn.addEventListener('click', () => { if (current>0){current--; render();} });
+
+// ===== スコア計算 =====
+function calcScores() {
+  const fm = { E:[], N:[], O:[], C:[], A:[] };
+  questions.forEach((q,i) => {
+    const raw = ans[i] || 3;
+    const val = q.dir==='-' ? (6-raw) : raw;
+    fm[q.factor].push(val);
+  });
+  const sc = {};
+  for (const [f, vals] of Object.entries(fm)) {
+    const sum = vals.reduce((a,b)=>a+b,0); // 3〜15
+    sc[f] = sum<=7 ? 1 : sum<=11 ? 3 : 5;
+  }
+  return sc;
+}
+
+// ===== 性格説明生成 =====
+const traitDesc = {
+  E: {
+    5: { text: '社交的でエネルギッシュ。人と関わることで活力を得るタイプ。', kw: ['社交的','話好き','場を盛り上げる'] },
+    3: { text: '状況に応じて社交的にも一人の時間も楽しめるバランス型。', kw: ['状況対応力','柔軟','程よい社交性'] },
+    1: { text: '内向的で一人の時間を大切にする。深く考えることを好む。', kw: ['内向的','思慮深い','一人時間重視'] },
+  },
+  N: {
+    5: { text: '感受性が豊かで細かいことも気になりやすい。感情の波が出やすい。', kw: ['繊細','感情的','ストレスに敏感'] },
+    3: { text: '感情のコントロールはできる方だが、時に不安や心配を感じやすい。', kw: ['感情豊か','普通の敏感さ'] },
+    1: { text: '精神的に安定していてプレッシャーにも動じにくい。', kw: ['精神的安定','冷静','切り替えが早い'] },
+  },
+  O: {
+    5: { text: '好奇心旺盛で新しいことへの挑戦を楽しむ。発想が豊か。', kw: ['好奇心旺盛','創造的','変化好き'] },
+    3: { text: '新しいことにも慣れたことにも対応できる実用的なタイプ。', kw: ['バランス型','実用的','柔軟'] },
+    1: { text: '安定を好み、慣れたやり方を着実にこなす堅実なタイプ。', kw: ['堅実','安定志向','実直'] },
+  },
+  C: {
+    5: { text: '責任感が強く、約束や期限を大切にする計画型。', kw: ['責任感が強い','計画的','几帳面'] },
+    3: { text: 'ある程度の計画性はあるが、柔軟に対応することもできる。', kw: ['普通の計画性','融通が利く'] },
+    1: { text: '自由奔放で直感的に動くことが多い。柔軟性と即興力がある。', kw: ['自由奔放','直感型','即興力'] },
+  },
+  A: {
+    5: { text: '思いやりがあり人間関係を大切にする。争いを避ける平和主義。', kw: ['思いやり','協力的','平和主義'] },
+    3: { text: '協調しながらも自分の意見を持つバランスの取れたタイプ。', kw: ['協調性あり','自己主張できる'] },
+    1: { text: '自己主張がはっきりしており、競争心もある。リーダー気質。', kw: ['自己主張強い','競争心','リーダー気質'] },
+  },
+};
+
+function genPersonDesc(sc, name) {
+  // 最もスコアが高い2特性を特定
+  const sorted = Object.entries(sc).sort((a,b) => b[1]-a[1]);
+  const top1 = sorted[0][0], top2 = sorted[1][0];
+
+  // 総合説明文
+  const e1 = traitDesc[top1][sc[top1]];
+  const e2 = traitDesc[top2][sc[top2]];
+
+  const summaries = {
+    EO: `${name}さんは、明るく社交的でありながら好奇心旺盛な行動派タイプです。`,
+    EC: `${name}さんは、社交的でありながら責任感も強い、信頼されやすいタイプです。`,
+    EA: `${name}さんは、人懐こく思いやり深い、周りを温かくする存在です。`,
+    EN: `${name}さんは、表に出る明るさの裏に繊細な感受性を持ち合わせています。`,
+    OC: `${name}さんは、好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。`,
+    OA: `${name}さんは、オープンマインドで人にも親切な、懐の深いタイプです。`,
+    ON: `${name}さんは、豊かな感受性と好奇心を持つ、感性の鋭いタイプです。`,
+    CA: `${name}さんは、誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。`,
+    CN: `${name}さんは、几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。`,
+    AN: `${name}さんは、共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。`,
+  };
+
+  const key = [top1, top2].sort().join('').replace('EN','EN').replace('NE','EN');
+  const keyStr = top1+top2;
+  const reverseKey = top2+top1;
+  const summary = summaries[keyStr] || summaries[reverseKey] || `${name}さんは${e1.kw[0]}で${e2.kw[0]}な性格傾向が見られます。`;
+
+  // キーワード収集（全特性から）
+  const allKw = [];
+  for (const f of ['E','N','O','C','A']) {
+    allKw.push(...(traitDesc[f][sc[f]]?.kw || []).slice(0,1));
+  }
+
+  return { summary, detail: `${e1.text} ${e2.text}`, keywords: allKw };
+}
+
+// ===== 相性スコア計算 =====
+function calcCompat(other, my, weights) {
+  if (!my) return null;
+  let total = 0, maxPossible = 0;
+  for (const f of ['E','N','O','C','A']) {
+    const diff = Math.abs(other[f] - my[f]);
+    const w = weights[f] || 1;
+    // N は差が少ない（安定同士）ほど良い。他は近いほど良い
+    total += (4 - diff) * w;
+    maxPossible += 4 * w;
+  }
+  return Math.round((total / maxPossible) * 100);
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  const sc = calcScores();
+  const cfg = relConfig[personRel];
+
+  // 特性バー
+  const card = document.getElementById('traitsCard');
+  card.innerHTML = '';
+  ['E','N','O','C','A'].forEach(f => {
+    const s = sc[f], info = traitInfo[f];
+    const pct = s===1 ? 22 : s===3 ? 55 : 88;
+    const lv  = s===5 ? '高め' : s===3 ? '普通' : '低め';
+    const lvClass = s===5 ? 'lv-high' : s===3 ? 'lv-mid' : 'lv-low';
+    card.innerHTML += `
+      <div class="trait-row">
+        <div class="trait-header">
+          <span class="trait-label">${info.name}<span class="trait-desc">${info.desc}</span></span>
+          <span class="trait-level ${lvClass}">${lv}</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:0%;background:${info.color};" data-w="${pct}%"></div></div>
+      </div>`;
+  });
+
+  // 性格説明
+  const descCard = document.getElementById('descCard');
+  const { summary, detail, keywords } = genPersonDesc(sc, personName);
+  descCard.innerHTML = `
+    <p class="desc-title">📋 ${personName}さんの性格まとめ</p>
+    <p class="desc-text">${summary}<br>${detail}</p>
+    <div class="desc-keywords">${keywords.map(k=>`<span class="desc-kw">${k}</span>`).join('')}</div>`;
+
+  // 相性スコア
+  const compatCard = document.getElementById('compatCard');
+  const score = calcCompat(sc, myScores, cfg.compatWeights);
+  if (score !== null) {
+    // 自分のスコアあり → 相性スコア表示
+    const desc = score >= 75 ? cfg.compatHigh : score >= 50 ? cfg.compatMid : cfg.compatLow;
+    compatCard.className = `compat-card ${personRel}`;
+    compatCard.innerHTML = `
+      <p class="compat-title">${cfg.compatTitle}</p>
+      <div class="compat-score ${personRel}">${score}<span style="font-size:24px;">%</span></div>
+      <p class="compat-label">${score>=75?'相性◎':score>=50?'相性○':'相性△'}</p>
+      <p class="compat-desc">${desc}</p>`;
+  } else {
+    // 自分のスコアなし → 自己診断への誘導
+    const otherCode = `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`;
+    compatCard.className = 'compat-prompt';
+    compatCard.innerHTML = `
+      <p class="compat-prompt-title">💡 ${personName}さんとの相性を見る</p>
+      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${personName}さんとの相性スコア</strong>が表示されます</p>
+      <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}" class="compat-prompt-btn">
+        自分を診断して相性を確認する →
+      </a>`;
+  }
+
+  // 精度注記
+  document.getElementById('resultAccuracyNote').innerHTML =
+    `${periodNotes[personPeriod]}<br>
+     ※好きな人・気になる人を診断した場合、実際より良く見えやすい傾向があります（ハロー効果）。<br>
+     ※この診断は推定です。本人の実際の性格と異なる場合があります。`;
+
+  showScreen('resultScreen');
+
+  // バーアニメーション
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+  }, 100);
+}
+
+// ===== もう一度 =====
+document.getElementById('retryBtn').addEventListener('click', () => {
+  nameInput.value = ''; personName = ''; personPeriod = ''; personRel = '';
+  document.querySelectorAll('.rel-btn, .period-btn').forEach(b => b.classList.remove('selected','sel-love','sel-work','sel-friend'));
+  accNote.classList.remove('show');
+  startBtn.disabled = true;
+  showScreen('startScreen');
+});
+
+// ===== バイアス画面 =====
+document.getElementById('biasRemoveBtn').addEventListener('click', () => showScreen('biasScreen'));
+document.getElementById('biasKeepBtn').addEventListener('click', () => {
+  document.getElementById('biasWarning').style.display = 'none';
+});
+document.getElementById('biasBackBtn').addEventListener('click', () => showScreen('resultScreen'));
+document.getElementById('biasCta').addEventListener('click', () => {
+  document.getElementById('premiumOverlay').classList.add('show');
+});
+document.getElementById('premiumClose').addEventListener('click', () => {
+  document.getElementById('premiumOverlay').classList.remove('show');
+});
+
+// ===== 星の生成 =====
+(function(){
+  const el = document.getElementById('bgStars');
+  let css = '';
+  const n = 60, bright = new Set(), superBright = new Set();
+  while(superBright.size<5) superBright.add(Math.floor(Math.random()*n));
+  while(bright.size<10){const v=Math.floor(Math.random()*n);if(!superBright.has(v))bright.add(v);}
+  for(let i=0;i<n;i++){
+    const x=Math.random()*100,y=Math.random()*100;
+    if(superBright.has(i)){const s=Math.random()*2+3,o=Math.random()*.2+.8;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*4}px ${s*4}px at ${x}% ${y}%,rgba(200,210,255,${o*.4}) 0%,transparent 100%),radial-gradient(${s*8}px ${s*8}px at ${x}% ${y}%,rgba(140,160,255,${o*.15}) 0%,transparent 100%)`;}
+    else if(bright.has(i)){const s=Math.random()*2+2,o=Math.random()*.3+.7;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*3}px ${s*3}px at ${x}% ${y}%,rgba(180,200,255,${o*.3}) 0%,transparent 100%)`;}
+    else{const s=Math.random()*1.5+.5,o=Math.random()*.5+.2;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%)`;}
+    if(i<n-1)css+=',';
+  }
+  el.style.backgroundImage=css;
+})();
+</script>
+</body>
+</html>

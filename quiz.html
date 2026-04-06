@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ビッグファイブ診断</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* 星雲背景 */
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.08) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate;
+  }
+  @keyframes nebula-drift {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05) translate(-1%, 1%); }
+  }
+  .bg-stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    0% { opacity: 0.5; } 100% { opacity: 1; }
+  }
+
+  /* メイン */
+  .quiz-container {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 40px 24px;
+  }
+
+  /* プログレスバー */
+  .progress {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 40px;
+  }
+  .progress-bar {
+    flex: 1; height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--blue));
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 13px; color: var(--dim);
+    font-weight: 500; min-width: 40px; text-align: right;
+  }
+
+  /* 質問エリア */
+  .question-area {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .question-num {
+    font-size: 13px; color: var(--purple);
+    font-weight: 500; margin-bottom: 12px;
+  }
+  .question-text {
+    font-size: 18px; line-height: 1.7;
+    margin-bottom: 36px;
+    min-height: 60px;
+    transition: opacity 0.2s;
+  }
+
+  /* 回答ボタン */
+  .answers {
+    display: flex; gap: 10px;
+    margin-bottom: 40px;
+  }
+  .answer-btn {
+    flex: 1;
+    padding: 14px 4px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--dim);
+    background: rgba(139,92,246,0.08);
+    border: 1.5px solid rgba(139,92,246,0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .answer-btn:hover {
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(139,92,246,0.4);
+    color: var(--text);
+  }
+  .answer-btn.selected {
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* 戻るボタン */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: inherit; font-size: 13px;
+    color: var(--dim); background: none; border: none;
+    cursor: pointer; padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  /* ローディング */
+  .loading {
+    display: none;
+    flex: 1; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 24px; text-align: center;
+  }
+  .loading.active { display: flex; }
+  .loading-text {
+    font-size: 18px; font-weight: 500;
+    color: var(--text);
+  }
+  .loading-sub {
+    font-size: 13px; color: var(--dim);
+  }
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+  }
+  .loading-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(139,92,246,0.2);
+    border-top-color: var(--purple);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 400px) {
+    .question-text { font-size: 16px; }
+    .answer-btn { font-size: 11px; padding: 12px 2px; }
+    .answers { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-nebula"></div>
+<div class="bg-stars" id="bgStars"></div>
+
+<div class="quiz-container">
+  <div class="progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/10</span>
+  </div>
+
+  <div class="question-area" id="questionArea">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText">人と話していると、自然と元気になる</p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらでも<br>ない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">性格を分析中<span class="loading-dots"></span></p>
+    <p class="loading-sub">あなたのタイプを導き出しています</p>
+  </div>
+</div>
+
+<script>
+// ===== 問題データ =====
+const questions10 = [
+  { text: '人と話していると、自然と元気になる', factor: 'E', dir: '+' },
+  { text: '一人でいる方が、大勢でいるより楽だ', factor: 'E', dir: '-' },
+  { text: '困っている人を見ると、放っておけない', factor: 'A', dir: '+' },
+  { text: '自分の意見を曲げたくないと思うことが多い', factor: 'A', dir: '-' },
+  { text: 'やると決めたことは最後までやり遂げる', factor: 'C', dir: '+' },
+  { text: '物事を後回しにしてしまうことがよくある', factor: 'C', dir: '-' },
+  { text: '些細なことでも心配してしまう方だ', factor: 'N', dir: '+' },
+  { text: 'ストレスを感じても、わりと早く気持ちを切り替えられる', factor: 'N', dir: '-' },
+  { text: '新しい体験や知識を積極的に求める方だ', factor: 'O', dir: '+' },
+  { text: '慣れたやり方の方が、新しいやり方より安心できる', factor: 'O', dir: '-' }
+];
+
+const questions30 = [
+  { text: '人と話していると自然とエネルギーが湧いてくる', factor: 'E', dir: '+' },
+  { text: '他の人の気持ちを察することが得意だ', factor: 'A', dir: '+' },
+  { text: '仕事や課題を最後までやり遂げることができる', factor: 'C', dir: '+' },
+  { text: '些細なことでも心配や不安を感じやすい', factor: 'N', dir: '+' },
+  { text: '新しいアイデアを考えたり、想像することが好きだ', factor: 'O', dir: '+' },
+  { text: '初対面の人とも話しかけるのが得意だ', factor: 'E', dir: '+' },
+  { text: '困っている人を見ると自然と手を差し伸べたくなる', factor: 'A', dir: '+' },
+  { text: '計画を立ててから行動する習慣がある', factor: 'C', dir: '+' },
+  { text: '気分が落ち込んだり沈んだりすることがよくある', factor: 'N', dir: '+' },
+  { text: '芸術・音楽・文学などに深く興味がある', factor: 'O', dir: '+' },
+  { text: 'にぎやかな場が好きで、パーティや集まりを楽しめる', factor: 'E', dir: '+' },
+  { text: '争いごとは避け、話し合いで解決したいと思う', factor: 'A', dir: '+' },
+  { text: '締め切りや約束は必ず守る', factor: 'C', dir: '+' },
+  { text: '自分のことを批判されると強く傷ついてしまう', factor: 'N', dir: '+' },
+  { text: '未知の体験や旅行、新しい挑戦に積極的に取り組む', factor: 'O', dir: '+' },
+  { text: '一人でいる時間の方が、大勢でいるより楽だと感じる', factor: 'E', dir: '-' },
+  { text: '自分の利益を優先し、競争に勝つことにこだわる', factor: 'A', dir: '-' },
+  { text: '物事を先延ばしにしてしまうことが多い', factor: 'C', dir: '-' },
+  { text: 'ストレスの多い状況でも落ち着いて対処できる', factor: 'N', dir: '-' },
+  { text: '慣れたやり方の方が、新しいやり方より安心できる', factor: 'O', dir: '-' },
+  { text: 'グループの中でリードしたり発言することが多い', factor: 'E', dir: '+' },
+  { text: '他の人を基本的には信頼できる、いい人だと思っている', factor: 'A', dir: '+' },
+  { text: '部屋や持ち物の整理整頓をこまめにする', factor: 'C', dir: '+' },
+  { text: '緊張したり、プレッシャーに弱いと感じる', factor: 'N', dir: '+' },
+  { text: '物事の本質や「なぜ？」を考えることが好きだ', factor: 'O', dir: '+' },
+  { text: '人と長時間いると疲れてしまう', factor: 'E', dir: '-' },
+  { text: '批判的な発言や嫌味を言ってしまうことがある', factor: 'A', dir: '-' },
+  { text: '衝動的に行動してしまい、後悔することがある', factor: 'C', dir: '-' },
+  { text: '何か失敗したことをいつまでも引きずりやすい', factor: 'N', dir: '+' },
+  { text: '複雑な問題でも、さまざまな視点で考えようとする', factor: 'O', dir: '+' }
+];
+
+// ===== 状態管理 =====
+const params = new URLSearchParams(window.location.search);
+const version = params.get('v') === '30' ? '30' : '10';
+const questions = version === '30' ? questions30 : questions10;
+const total = questions.length;
+let current = 0;
+const answers = new Array(total).fill(null);
+
+// ===== DOM =====
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const questionNum = document.getElementById('questionNum');
+const questionText = document.getElementById('questionText');
+const answersEl = document.getElementById('answers');
+const backBtn = document.getElementById('backBtn');
+const questionArea = document.getElementById('questionArea');
+const loading = document.getElementById('loading');
+
+// ===== 画面更新 =====
+function render() {
+  const q = questions[current];
+  progressFill.style.width = `${((current + 1) / total) * 100}%`;
+  progressText.textContent = `${current + 1}/${total}`;
+  questionNum.textContent = `Q${current + 1}`;
+  questionText.textContent = q.text;
+
+  // 回答状態復元
+  answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === answers[current]);
+  });
+
+  backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答選択 =====
+answersEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.answer-btn');
+  if (!btn) return;
+  answers[current] = parseInt(btn.dataset.val);
+
+  answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  // 0.3秒後に次の問題へ
+  setTimeout(() => {
+    if (current < total - 1) {
+      current++;
+      render();
+    } else {
+      showResult();
+    }
+  }, 300);
+});
+
+// ===== 戻る =====
+backBtn.addEventListener('click', () => {
+  if (current > 0) { current--; render(); }
+});
+
+// ===== スコア計算 =====
+function calcScore() {
+  if (version === '10') {
+    // 10問版：各因子2問、平均→3段階
+    const factors = { E: [0,1], A: [2,3], C: [4,5], N: [6,7], O: [8,9] };
+    const scores = {};
+    for (const [f, [i1, i2]] of Object.entries(factors)) {
+      const a1 = answers[i1], a2 = answers[i2];
+      const q2 = questions[i2];
+      const v1 = a1;
+      const v2 = q2.dir === '-' ? (6 - a2) : a2;
+      const avg = (v1 + v2) / 2;
+      scores[f] = avg <= 2.4 ? 1 : avg <= 3.5 ? 3 : 5;
+    }
+    return {
+      O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
+      code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`
+    };
+  } else {
+    // 30問版：各因子6問、合計→5段階
+    const factorMap = { E: [], A: [], C: [], N: [], O: [] };
+    questions.forEach((q, i) => {
+      const val = q.dir === '-' ? (6 - answers[i]) : answers[i];
+      factorMap[q.factor].push(val);
+    });
+    const scores = {};
+    for (const [f, vals] of Object.entries(factorMap)) {
+      const sum = vals.reduce((a, b) => a + b, 0);
+      scores[f] = sum <= 11 ? 1 : sum <= 16 ? 2 : sum <= 23 ? 3 : sum <= 28 ? 4 : 5;
+    }
+    return {
+      O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
+      code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`
+    };
+  }
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  const result = calcScore();
+  questionArea.style.display = 'none';
+  loading.classList.add('active');
+
+  setTimeout(() => {
+    const ref = params.get('ref') || '';
+    const otherCode = params.get('other_code') || '';
+    const otherName = params.get('other_name') || '';
+    let url = `result.html?type=${result.code}&v=${version}`;
+    if (ref) url += `&ref=${ref}`;
+    if (otherCode) url += `&other_code=${otherCode}`;
+    if (otherName) url += `&other_name=${encodeURIComponent(otherName)}`;
+    window.location.href = url;
+  }, 2000);
+}
+
+// ===== 星の生成 =====
+(function() {
+  const el = document.getElementById('bgStars');
+  let css = '';
+  const total2 = 60;
+  const bright = new Set();
+  const superBright = new Set();
+  while (superBright.size < 5) superBright.add(Math.floor(Math.random() * total2));
+  while (bright.size < 10) {
+    const n = Math.floor(Math.random() * total2);
+    if (!superBright.has(n)) bright.add(n);
+  }
+  for (let i = 0; i < total2; i++) {
+    const x = Math.random() * 100, y = Math.random() * 100;
+    if (superBright.has(i)) {
+      const s = Math.random() * 2 + 3, o = Math.random() * 0.2 + 0.8;
+      css += `radial-gradient(${s}px ${s}px at ${x}% ${y}%, rgba(255,255,255,${o}) 0%, transparent 100%),radial-gradient(${s*4}px ${s*4}px at ${x}% ${y}%, rgba(200,210,255,${o*0.4}) 0%, transparent 100%),radial-gradient(${s*8}px ${s*8}px at ${x}% ${y}%, rgba(140,160,255,${o*0.15}) 0%, transparent 100%)`;
+    } else if (bright.has(i)) {
+      const s = Math.random() * 2 + 2, o = Math.random() * 0.3 + 0.7;
+      css += `radial-gradient(${s}px ${s}px at ${x}% ${y}%, rgba(255,255,255,${o}) 0%, transparent 100%),radial-gradient(${s*3}px ${s*3}px at ${x}% ${y}%, rgba(180,200,255,${o*0.3}) 0%, transparent 100%)`;
+    } else {
+      const s = Math.random() * 1.5 + 0.5, o = Math.random() * 0.5 + 0.2;
+      css += `radial-gradient(${s}px ${s}px at ${x}% ${y}%, rgba(255,255,255,${o}) 0%, transparent 100%)`;
+    }
+    if (i < total2 - 1) css += ', ';
+  }
+  el.style.backgroundImage = css;
+})();
+
+// ===== 初期表示 =====
+render();
+</script>
+</body>
+</html>
