@@ -52,40 +52,6 @@
     0% { opacity: 0.5; } 100% { opacity: 1; }
   }
 
-  .bg-golden-rays {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    opacity: 0;
-    transition: opacity 1.5s ease-in-out;
-  }
-  .bg-golden-rays.active {
-    opacity: 1;
-  }
-  .bg-golden-rays::before {
-    content: ''; position: absolute; inset: 0;
-    background: repeating-conic-gradient(
-      from 0deg,
-      transparent 0deg 10deg,
-      rgba(255, 215, 0, 0.03) 10deg 20deg
-    );
-    animation: rotate-rays 60s linear infinite;
-  }
-  .bg-golden-rays::after {
-    content: ''; position: absolute;
-    top: 50%; left: 50%;
-    width: 100%; height: 100%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 60%);
-    animation: pulse-glow 3s ease-in-out infinite alternate;
-  }
-  @keyframes rotate-rays {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  @keyframes pulse-glow {
-    0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-  }
-
   .container {
     position: relative; z-index: 1;
     width: 100%; max-width: 520px;
@@ -114,6 +80,30 @@
       radial-gradient(ellipse 70% 50% at 80% 75%, rgba(59,130,246,0.25) 0%, transparent 55%),
       radial-gradient(ellipse 40% 30% at 60% 40%, rgba(26,10,62,0.8) 0%, transparent 70%),
       linear-gradient(160deg, #0a0e27 0%, #1a0a3e 40%, #0f172a 100%);
+  }
+  .card-bg.role-model {
+    background:
+      repeating-conic-gradient(
+        from 0deg,
+        transparent 0deg 8deg,
+        rgba(255, 215, 0, 0.15) 8deg 16deg
+      ),
+      radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.25) 0%, transparent 50%),
+      linear-gradient(160deg, #ffffff 0%, #f5f5dc 40%, #ffffff 100%);
+  }
+  .card-bg.role-model::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg 10deg,
+      rgba(255, 215, 0, 0.12) 10deg 20deg
+    );
+    animation: rotate-rays 60s linear infinite;
+  }
+  @keyframes rotate-rays {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
   .stars {
     position: absolute; inset: 0; z-index: 1;
@@ -160,6 +150,32 @@
     border-radius: inherit;
     background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%);
     animation: glow-pulse 3s ease-in-out infinite;
+  }
+  .glow-overlay.active {
+    opacity: 1;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ダークパーソナリティの光るエフェクト */
+  .card-bg.dark-personality {
+    position: relative;
+  }
+  .card-bg.dark-personality::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(139, 0, 139, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(75, 0, 130, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.2) 0%, transparent 60%);
+    animation: dark-glow 4s ease-in-out infinite alternate;
+  }
+  @keyframes dark-glow {
+    0% { opacity: 0.5; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
   }
   .rarity-legendary .glow-overlay { opacity: 1; }
   @keyframes glow-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
@@ -390,7 +406,6 @@
 
 <div class="bg-nebula"></div>
 <div class="bg-stars" id="bgStars"></div>
-<div class="bg-golden-rays" id="bgGoldenRays"></div>
 
 <div class="container">
 
@@ -921,19 +936,49 @@ if (otherCode && otherCode.length === 5) {
   el.style.backgroundImage = css;
 })();
 
-// ===== 金色の放射光（ロールモデル判定） =====
+// ===== カード背景色の設定 =====
 (function() {
-  const goldenRays = document.getElementById('bgGoldenRays');
+  const cardBg = document.querySelector('.card-bg');
+  const card = document.querySelector('.card');
+  const cardStars = document.querySelector('.stars');
 
-  // 3個以上5があるかチェック（神経症傾向が5は除外、神経症傾向が1はカウント）
+  // 5因子の色設定
+  const factorColors = {
+    O: '#8b5cf6',  // 開放性 - 紫
+    C: '#3b82f6',  // 誠実性 - 青
+    E: '#f97316',  // 外向性 - オレンジ
+    A: '#f472b6',  // 協調性 - ピンク
+    N: '#14b8a6'   // 神経症傾向 - シアン
+  };
+
+  const factors = [
+    { key: 'N', score: N, name: '神経症傾向' },
+    { key: 'E', score: E, name: '外向性' },
+    { key: 'O', score: O, name: '開放性' },
+    { key: 'C', score: C, name: '誠実性' },
+    { key: 'A', score: A, name: '協調性' }
+  ];
+
+  // スコア順にソート（高い順）
+  factors.sort((a, b) => b.score - a.score);
+
+  console.log('因子スコア順:', factors);
+
+  const first = factors[0];  // 1位
+  const second = factors[1]; // 2位
+
+  console.log('1位:', first, '2位:', second);
+
+  // ダークパーソナリティ判定（全て1）
+  const isDarkPersonality = (O === 1 && C === 1 && E === 1 && A === 1 && N === 1);
+
+  // ロールモデル判定（3個以上5、ただしN5は除外）
   let countHighScores = 0;
-  const scores = [O, C, E, A, N];
-  const isNHigh = (N === 5);  // 神経症傾向が5（良くない）
+  const isNHigh = (N === 5);
 
-  for (let i = 0; i < scores.length; i++) {
-    if (scores[i] === 5) {
-      // 神経症傾向が5なら除外、それ以外はカウント
-      if (!(i === 4 && isNHigh)) {
+  for (let i = 0; i < factors.length; i++) {
+    if (factors[i].score === 5) {
+      if (!(factors[i].key === 'N' && isNHigh)) {
         countHighScores++;
       }
     }
@@ -944,9 +989,41 @@ if (otherCode && otherCode.length === 5) {
     countHighScores++;
   }
 
-  // 3個以上5（または良いスコア）なら金色の放射光を表示
-  if (countHighScores >= 3) {
-    goldenRays.classList.add('active');
+  console.log('ロールモデルカウント:', countHighScores, 'ダークパーソナリティ:', isDarkPersonality);
+
+  // ダークパーソナリティ → 真っ黒 + 暗い光
+  if (isDarkPersonality) {
+    cardBg.style.background = '#000000';
+    cardBg.classList.add('dark-personality');
+    cardStars.style.opacity = '0';
+    card.style.borderColor = '#4a004a';
+    card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.8), 0 0 40px rgba(139, 0, 139, 0.3), 0 0 80px rgba(75, 0, 130, 0.2)';
+    console.log('ダークパーソナリティ：真っ黒 + 暗い光');
+  }
+  // ロールモデル（3個以上5） → 白色背景 + 金色の放射線
+  else if (countHighScores >= 3) {
+    cardBg.classList.add('role-model');
+    cardBg.style.background = '#ffffff';
+    cardStars.style.opacity = '0';
+    card.style.borderColor = 'rgba(255, 215, 0, 0.4)';
+    card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2)';
+    console.log('ロールモデル：白色 + 金色放射線');
+  }
+  // それ以外 → 因子色
+  else {
+    const firstColor = factorColors[first.key];
+    cardBg.style.background = `
+      radial-gradient(circle at 50% 50%, ${firstColor}40 0%, ${firstColor}20 40%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 25% 20%, ${firstColor}50 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 75%, ${firstColor}40 0%, transparent 55%),
+      linear-gradient(160deg, ${firstColor}15 0%, ${firstColor}25 40%, ${firstColor}10 100%)
+    `;
+
+    const secondColor = factorColors[second.key];
+    card.style.borderColor = secondColor;
+    card.style.boxShadow = `0 8px 32px rgba(0,0,0,0.6), 0 0 40px ${secondColor}40, 0 0 80px ${secondColor}20`;
+
+    console.log('背景色:', firstColor, '縁色:', secondColor);
   }
 })();
 </script>
