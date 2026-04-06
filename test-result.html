@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>結果テスト — ビッグファイブ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --c-O: #8b5cf6;
+    --c-C: #3b82f6;
+    --c-E: #f97316;
+    --c-A: #f472b6;
+    --c-N: #14b8a6;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 900;
+  }
+
+  .controls {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  .sliders {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .slider-group label {
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .slider-group input {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .slider-group input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--thumb-color, #fff);
+    cursor: pointer;
+  }
+
+  .slider-group.O input { --thumb-color: var(--c-O); }
+  .slider-group.C input { --thumb-color: var(--c-C); }
+  .slider-group.E input { --thumb-color: var(--c-E); }
+  .slider-group.A input { --thumb-color: var(--c-A); }
+  .slider-group.N input { --thumb-color: var(--c-N); }
+
+  .code-display {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+  }
+
+  .presets {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .preset-btn {
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--purple);
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 12px;
+    background: var(--bg);
+    min-height: 50vh;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎨 結果テスト画面</h1>
+
+  <div class="controls">
+    <div class="code-display">
+      typeCode: <span id="codeDisplay">33333</span>
+    </div>
+
+    <div class="sliders">
+      <div class="slider-group O">
+        <label>開放性 (O) <span id="val-O">3</span></label>
+        <input type="range" id="slider-O" min="1" max="5" value="3" step="1">
+      </div>
+      <div class="slider-group C">
+        <label>誠実性 (C) <span id="val-C">3</span></label>
+        <input type="range" id="slider-C" min="1" max="5" value="3" step="1">
+      </div>
+      <div class="slider-group E">
+        <label>外向性 (E) <span id="val-E">3</span></label>
+        <input type="range" id="slider-E" min="1" max="5" value="3" step="1">
+      </div>
+      <div class="slider-group A">
+        <label>協調性 (A) <span id="val-A">3</span></label>
+        <input type="range" id="slider-A" min="1" max="5" value="3" step="1">
+      </div>
+      <div class="slider-group N">
+        <label>神経症傾向 (N) <span id="val-N">3</span></label>
+        <input type="range" id="slider-N" min="1" max="5" value="3" step="1">
+      </div>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" onclick="setPreset(55555)">全て5（ロールモデル）</button>
+      <button class="preset-btn" onclick="setPreset(51555)">N1+他4（金色）</button>
+      <button class="preset-btn" onclick="setPreset(55551)">N5+他4（金色なし）</button>
+      <button class="preset-btn" onclick="setPreset(11111)">全て1（ダーク）</button>
+      <button class="preset-btn" onclick="setPreset(53333)">O5（開放性）</button>
+      <button class="preset-btn" onclick="setPreset(35333)">C5（誠実性）</button>
+      <button class="preset-btn" onclick="setPreset(33533)">E5（外向性）</button>
+      <button class="preset-btn" onclick="setPreset(33353)">A5（協調性）</button>
+      <button class="preset-btn" onclick="setPreset(33335)">N5（神経症）</button>
+      <button class="preset-btn" onclick="randomPreset()">ランダム</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="updatePreview()">結果を更新</button>
+    </div>
+  </div>
+
+  <iframe id="previewFrame"></iframe>
+</div>
+
+<script>
+const sliders = {
+  O: document.getElementById('slider-O'),
+  C: document.getElementById('slider-C'),
+  E: document.getElementById('slider-E'),
+  A: document.getElementById('slider-A'),
+  N: document.getElementById('slider-N')
+};
+
+const displays = {
+  O: document.getElementById('val-O'),
+  C: document.getElementById('val-C'),
+  E: document.getElementById('val-E'),
+  A: document.getElementById('val-A'),
+  N: document.getElementById('val-N')
+};
+
+const codeDisplay = document.getElementById('codeDisplay');
+const previewFrame = document.getElementById('previewFrame');
+
+// スライダーの値を表示更新
+Object.keys(sliders).forEach(key => {
+  sliders[key].addEventListener('input', (e) => {
+    displays[key].textContent = e.target.value;
+    updateCode();
+  });
+});
+
+function updateCode() {
+  const code = sliders.O.value + sliders.C.value + sliders.E.value + sliders.A.value + sliders.N.value;
+  codeDisplay.textContent = code;
+}
+
+function setPreset(code) {
+  const chars = String(code).split('');
+  sliders.O.value = chars[0];
+  sliders.C.value = chars[1];
+  sliders.E.value = chars[2];
+  sliders.A.value = chars[3];
+  sliders.N.value = chars[4];
+
+  Object.keys(displays).forEach(key => {
+    displays[key].textContent = sliders[key].value;
+  });
+
+  updateCode();
+  updatePreview();
+}
+
+function randomPreset() {
+  let code = '';
+  ['O', 'C', 'E', 'A', 'N'].forEach(key => {
+    const val = Math.floor(Math.random() * 5) + 1;
+    sliders[key].value = val;
+    displays[key].textContent = val;
+    code += val;
+  });
+  codeDisplay.textContent = code;
+  updatePreview();
+}
+
+function updatePreview() {
+  const code = sliders.O.value + sliders.C.value + sliders.E.value + sliders.A.value + sliders.N.value;
+  previewFrame.src = `result.html?type=${code}`;
+}
+
+// 初期表示
+updateCode();
+updatePreview();
+</script>
+</body>
+</html>
