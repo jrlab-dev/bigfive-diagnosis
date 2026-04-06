@@ -920,6 +920,35 @@ if (otherCode && otherCode.length === 5) {
   }
   el.style.backgroundImage = css;
 })();
+
+// ===== 金色の放射光（ロールモデル判定） =====
+(function() {
+  const goldenRays = document.getElementById('bgGoldenRays');
+
+  // 3個以上5があるかチェック（神経症傾向が5は除外、神経症傾向が1はカウント）
+  let countHighScores = 0;
+  const scores = [O, C, E, A, N];
+  const isNHigh = (N === 5);  // 神経症傾向が5（良くない）
+
+  for (let i = 0; i < scores.length; i++) {
+    if (scores[i] === 5) {
+      // 神経症傾向が5なら除外、それ以外はカウント
+      if (!(i === 4 && isNHigh)) {
+        countHighScores++;
+      }
+    }
+  }
+
+  // 神経症傾向が1は「良い」のでカウントに追加
+  if (N === 1) {
+    countHighScores++;
+  }
+
+  // 3個以上5（または良いスコア）なら金色の放射光を表示
+  if (countHighScores >= 3) {
+    goldenRays.classList.add('active');
+  }
+})();
 </script>
 </body>
 </html>
