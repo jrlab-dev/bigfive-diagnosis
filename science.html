@@ -210,8 +210,9 @@
   }
   .trait-circle {
     width: 188px; height: 188px; border-radius: 50%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 18px; text-align: center; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding: 20px 16px 16px; text-align: center; position: relative;
+    overflow: hidden;
     transition: transform .3s, box-shadow .3s;
     cursor: default;
   }
@@ -241,20 +242,31 @@
     border: 2px solid rgba(20,184,166,0.45);
     box-shadow: 0 0 28px rgba(20,184,166,0.15);
   }
-  .tc-icon { font-size: 22px; margin-bottom: 4px; }
-  .tc-en { font-size: 9px; font-weight: 700; letter-spacing: .15em; margin-bottom: 2px; }
-  .tc-ja { font-size: 17px; font-weight: 900; margin-bottom: 10px; }
+  .tc-icon { font-size: 20px; margin-bottom: 2px; position: relative; z-index: 1; }
+  .tc-en {
+    font-size: 9px; font-weight: 700; letter-spacing: .12em; margin-bottom: 4px;
+    position: relative; z-index: 1;
+  }
   .trait-circle.O .tc-en { color: var(--c-O); }
   .trait-circle.C .tc-en { color: var(--c-C); }
   .trait-circle.E .tc-en { color: var(--c-E); }
   .trait-circle.A .tc-en { color: var(--c-A); }
   .trait-circle.N .tc-en { color: var(--c-N); }
+  .tc-ja {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px; font-weight: 900;
+    opacity: 0.13; white-space: nowrap;
+    pointer-events: none; z-index: 0;
+    margin: 0;
+  }
   .tc-keywords {
     display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+    position: relative; z-index: 1; margin-top: 4px;
   }
   .tc-keywords span {
-    font-size: 10px; color: rgba(226,232,240,0.75);
-    background: rgba(0,0,0,0.3); border-radius: 20px;
+    font-size: 10px; color: rgba(226,232,240,0.85);
+    background: rgba(0,0,0,0.35); border-radius: 20px;
     padding: 2px 7px; line-height: 1.6;
   }
 
