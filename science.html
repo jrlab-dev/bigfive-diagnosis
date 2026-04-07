@@ -199,6 +199,65 @@
   }
   .myth-item p { font-size: 13px; color: var(--dim); line-height: 1.8; margin: 0; }
 
+  /* 5因子図 */
+  .traits-overview { margin-top: 56px; }
+  .traits-overview-label {
+    font-size: 11px; font-weight: 700; color: var(--cyan); letter-spacing: .2em;
+    text-align: center; margin-bottom: 32px;
+  }
+  .traits-circles {
+    display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+  }
+  .trait-circle {
+    width: 188px; height: 188px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 18px; text-align: center; position: relative;
+    transition: transform .3s, box-shadow .3s;
+    cursor: default;
+  }
+  .trait-circle:hover { transform: scale(1.06); }
+  .trait-circle.O {
+    background: radial-gradient(circle at 40% 35%, rgba(139,92,246,0.3) 0%, rgba(139,92,246,0.08) 70%);
+    border: 2px solid rgba(139,92,246,0.45);
+    box-shadow: 0 0 28px rgba(139,92,246,0.15);
+  }
+  .trait-circle.C {
+    background: radial-gradient(circle at 40% 35%, rgba(59,130,246,0.3) 0%, rgba(59,130,246,0.08) 70%);
+    border: 2px solid rgba(59,130,246,0.45);
+    box-shadow: 0 0 28px rgba(59,130,246,0.15);
+  }
+  .trait-circle.E {
+    background: radial-gradient(circle at 40% 35%, rgba(249,115,22,0.3) 0%, rgba(249,115,22,0.08) 70%);
+    border: 2px solid rgba(249,115,22,0.45);
+    box-shadow: 0 0 28px rgba(249,115,22,0.15);
+  }
+  .trait-circle.A {
+    background: radial-gradient(circle at 40% 35%, rgba(244,114,182,0.3) 0%, rgba(244,114,182,0.08) 70%);
+    border: 2px solid rgba(244,114,182,0.45);
+    box-shadow: 0 0 28px rgba(244,114,182,0.15);
+  }
+  .trait-circle.N {
+    background: radial-gradient(circle at 40% 35%, rgba(20,184,166,0.3) 0%, rgba(20,184,166,0.08) 70%);
+    border: 2px solid rgba(20,184,166,0.45);
+    box-shadow: 0 0 28px rgba(20,184,166,0.15);
+  }
+  .tc-icon { font-size: 22px; margin-bottom: 4px; }
+  .tc-en { font-size: 9px; font-weight: 700; letter-spacing: .15em; margin-bottom: 2px; }
+  .tc-ja { font-size: 17px; font-weight: 900; margin-bottom: 10px; }
+  .trait-circle.O .tc-en { color: var(--c-O); }
+  .trait-circle.C .tc-en { color: var(--c-C); }
+  .trait-circle.E .tc-en { color: var(--c-E); }
+  .trait-circle.A .tc-en { color: var(--c-A); }
+  .trait-circle.N .tc-en { color: var(--c-N); }
+  .tc-keywords {
+    display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+  }
+  .tc-keywords span {
+    font-size: 10px; color: rgba(226,232,240,0.75);
+    background: rgba(0,0,0,0.3); border-radius: 20px;
+    padding: 2px 7px; line-height: 1.6;
+  }
+
   /* 参考文献 */
   .ref-list { list-style: none; display: grid; gap: 10px; margin-top: 24px; }
   .ref-item {
@@ -560,6 +619,87 @@
         </ul>
       </div>
 
+    </div>
+
+    <!-- 5因子 概要図 -->
+    <div class="traits-overview">
+      <p class="traits-overview-label">BIG FIVE — 5因子の概要</p>
+      <div class="traits-circles">
+
+        <div class="trait-circle O">
+          <span class="tc-icon">🔭</span>
+          <p class="tc-en">OPENNESS</p>
+          <p class="tc-ja">開放性</p>
+          <div class="tc-keywords">
+            <span>好奇心</span>
+            <span>創造性</span>
+            <span>芸術</span>
+            <span>哲学</span>
+            <span>想像力</span>
+            <span>変化を好む</span>
+            <span>柔軟性</span>
+          </div>
+        </div>
+
+        <div class="trait-circle C">
+          <span class="tc-icon">📋</span>
+          <p class="tc-en">CONSCIENTIOUSNESS</p>
+          <p class="tc-ja">誠実性</p>
+          <div class="tc-keywords">
+            <span>計画性</span>
+            <span>責任感</span>
+            <span>几帳面</span>
+            <span>努力</span>
+            <span>自己規律</span>
+            <span>信頼性</span>
+            <span>目標達成</span>
+          </div>
+        </div>
+
+        <div class="trait-circle E">
+          <span class="tc-icon">🌟</span>
+          <p class="tc-en">EXTRAVERSION</p>
+          <p class="tc-ja">外向性</p>
+          <div class="tc-keywords">
+            <span>社交的</span>
+            <span>積極性</span>
+            <span>エネルギー</span>
+            <span>リーダー</span>
+            <span>明るさ</span>
+            <span>刺激を求める</span>
+          </div>
+        </div>
+
+        <div class="trait-circle A">
+          <span class="tc-icon">🤝</span>
+          <p class="tc-en">AGREEABLENESS</p>
+          <p class="tc-ja">協調性</p>
+          <div class="tc-keywords">
+            <span>思いやり</span>
+            <span>共感</span>
+            <span>協力</span>
+            <span>優しさ</span>
+            <span>調和</span>
+            <span>親切</span>
+            <span>信頼</span>
+          </div>
+        </div>
+
+        <div class="trait-circle N">
+          <span class="tc-icon">🌊</span>
+          <p class="tc-en">NEUROTICISM</p>
+          <p class="tc-ja">神経症傾向</p>
+          <div class="tc-keywords">
+            <span>感受性</span>
+            <span>繊細さ</span>
+            <span>共感力</span>
+            <span>芸術性</span>
+            <span>感情豊か</span>
+            <span>警戒心</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
