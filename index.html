@@ -203,6 +203,14 @@
   .feature-icon { font-size: 32px; margin-bottom: 10px; display: block; }
   .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
   .feature-card p  { font-size: 13px; color: var(--dim); line-height: 1.7; }
+  .science-link {
+    display: inline-block; margin-top: 14px;
+    font-size: 11px; font-weight: 700; color: var(--cyan);
+    text-decoration: none; letter-spacing: .06em;
+    border-bottom: 1px solid rgba(6,182,212,0.3);
+    transition: border-color .3s, color .3s;
+  }
+  .science-link:hover { border-color: var(--cyan); color: #fff; }
 
   /* CTA */
   .cta { text-align: center; padding: 60px 24px 100px; }
@@ -303,6 +311,7 @@
         <span class="feature-icon">🧬</span>
         <h3>科学的根拠</h3>
         <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
+        <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
       </div>
 
       <div class="feature-card feature-card--anohito">
