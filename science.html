@@ -212,9 +212,14 @@
     width: 188px; height: 188px; border-radius: 50%;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     padding: 20px 16px 16px; text-align: center; position: relative;
-    overflow: hidden;
+    overflow: visible;
     transition: transform .3s, box-shadow .3s;
     cursor: default;
+  }
+  /* 円の形はclip-pathで管理（背景・ボーダーのみ円形にクリップ） */
+  .trait-circle::after {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 50%; pointer-events: none; z-index: -1;
   }
   .trait-circle:hover { transform: scale(1.06); }
   .trait-circle.O {
@@ -266,10 +271,11 @@
   .tc-ja {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3900px; font-weight: 900;
-    opacity: 0.28; white-space: nowrap;
+    font-size: 160px; font-weight: 900;
+    opacity: 0.35; white-space: nowrap;
     pointer-events: none; z-index: 9999;
     margin: 0; line-height: 1;
+    color: #fff;
   }
   .tc-keywords {
     position: absolute; bottom: 32px; left: 50%;
