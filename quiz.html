@@ -214,6 +214,36 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* 性別選択 */
+  .gender-select {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .gender-select.visible { display: flex; }
+  .gender-label {
+    font-size: 14px; color: var(--dim);
+  }
+  .gender-btns {
+    display: flex; gap: 16px;
+  }
+  .gender-btn {
+    padding: 12px 32px;
+    border: 2px solid var(--purple);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .gender-btn:hover {
+    background: var(--purple);
+    color: #fff;
+  }
+
   .top-link {
     position: absolute; top: 20px; left: 20px;
     display: inline-flex; align-items: center; gap: 6px;
@@ -262,6 +292,13 @@
     <div class="loading-spinner"></div>
     <p class="loading-text">性格を分析中<span class="loading-dots"></span></p>
     <p class="loading-sub">あなたのタイプを導き出しています</p>
+    <div class="gender-select" id="genderSelect">
+      <p class="gender-label">キャラクターの性別を選んでください</p>
+      <div class="gender-btns">
+        <button class="gender-btn" id="genderF">女性</button>
+        <button class="gender-btn" id="genderM">男性</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -415,16 +452,24 @@ function showResult() {
   questionArea.style.display = 'none';
   loading.classList.add('active');
 
+  // 1.5秒後に性別選択ボタンを表示
   setTimeout(() => {
+    document.getElementById('genderSelect').classList.add('visible');
+  }, 1500);
+
+  function goToResult(gender) {
     const ref = params.get('ref') || '';
     const otherCode = params.get('other_code') || '';
     const otherName = params.get('other_name') || '';
-    let url = `result.html?type=${result.code}&v=${version}`;
+    let url = `result.html?type=${result.code}&v=${version}&gender=${gender}`;
     if (ref) url += `&ref=${ref}`;
     if (otherCode) url += `&other_code=${otherCode}`;
     if (otherName) url += `&other_name=${encodeURIComponent(otherName)}`;
     window.location.href = url;
-  }, 2000);
+  }
+
+  document.getElementById('genderF').addEventListener('click', () => goToResult('F'));
+  document.getElementById('genderM').addEventListener('click', () => goToResult('M'));
 }
 
 // ===== 星の生成 =====
