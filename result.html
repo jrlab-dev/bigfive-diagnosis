@@ -926,8 +926,13 @@ document.getElementById('desc').textContent = genDescription();
 const card = document.getElementById('card');
 card.className = `card rarity-${getRarity()}`;
 
-// キャラクター画像（プレースホルダー — 後で実装）
-document.getElementById('charImg').style.display = 'none';
+// キャラクター画像
+const gender = params.get('gender') || 'F';
+const charImg = document.getElementById('charImg');
+const charSrc = `images/characters/${gender}/${typeCode}.png`;
+charImg.src = charSrc;
+charImg.style.display = '';
+charImg.onerror = () => { charImg.style.display = 'none'; };
 
 // ===== 特性詳細カード =====
 const sc = { O, C, E, A, N };
@@ -1223,14 +1228,16 @@ if (otherCode && otherCode.length === 5) {
     scores: { O, C, E, A, N },
     typeName: document.getElementById('typeName').textContent,
     date: new Date().toISOString(),
-    version: version
+    version: version,
+    gender: params.get('gender') || 'F' // 性別を追加
   };
 
   // 他者診断から来た場合の相手のデータ
   const otherResult = otherCode ? {
     name: otherName,
     code: otherCode,
-    date: new Date().toISOString()
+    date: new Date().toISOString(),
+    gender: 'F' // 相手の性別はデフォルトで女性（後で選択可能に）
   } : null;
 
   // すでに保存済みかチェック
