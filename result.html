@@ -310,6 +310,14 @@
     color: var(--dim);
   }
   .btn-secondary:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+  .btn-save {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+  .btn-save:hover { box-shadow: 0 8px 32px rgba(16,185,129,0.4); }
+  .btn-saved {
+    background: linear-gradient(135deg, rgba(6,182,212,0.8), rgba(59,130,246,0.8));
+    pointer-events: none;
+  }
 
   /* ===== SNSシェアボタン ===== */
   .share-section {
@@ -545,6 +553,7 @@
   <div class="result-buttons">
     <a href="index.html" class="btn btn-secondary">トップに戻る</a>
     <a href="#" class="btn btn-primary" id="retryBtn">もう一度診断する</a>
+    <button class="btn btn-save" id="saveBtn">💾 結果を保存</button>
   </div>
 
   <!-- SNSシェア -->
@@ -1197,6 +1206,82 @@ if (otherCode && otherCode.length === 5) {
       }
     });
   }
+})();
+
+// ===== 結果保存機能（LocalStorage） =====
+(function() {
+  const saveBtn = document.getElementById('saveBtn');
+  if (!saveBtn) return;
+
+  // ストレージキー
+  const STORAGE_KEY_MY = 'bigfive_my_results';
+  const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+
+  // 現在の結果データ
+  const currentResult = {
+    code: typeCode,
+    scores: { O, C, E, A, N },
+    typeName: document.getElementById('typeName').textContent,
+    date: new Date().toISOString(),
+    version: version
+  };
+
+  // 他者診断から来た場合の相手のデータ
+  const otherResult = otherCode ? {
+    name: otherName,
+    code: otherCode,
+    date: new Date().toISOString()
+  } : null;
+
+  // すでに保存済みかチェック
+  function checkAlreadySaved() {
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    const isSaved = myResults.some(r => r.code === currentResult.code);
+    if (isSaved) {
+      saveBtn.textContent = '✓ 保存済み';
+      saveBtn.className = 'btn btn-saved';
+    }
+  }
+
+  // 保存実行
+  saveBtn.addEventListener('click', () => {
+    try {
+      // 自分の結果を保存
+      const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+      const isDuplicate = myResults.some(r => r.code === currentResult.code);
+      if (!isDuplicate) {
+        myResults.unshift(currentResult);
+        if (myResults.length > 50) myResults.pop();
+        localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(myResults));
+      }
+
+      // あの人の結果も保存（他者診断から来た場合）
+      if (otherResult) {
+        const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+        const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
+        if (!isOtherDuplicate) {
+          others.unshift(otherResult);
+          if (others.length > 100) others.pop();
+          localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+        }
+      }
+
+      // ボタン表示更新
+      saveBtn.textContent = '✓ 保存しました！';
+      saveBtn.className = 'btn btn-saved';
+
+      setTimeout(() => {
+        saveBtn.textContent = '✓ 保存済み';
+      }, 2000);
+
+    } catch (e) {
+      console.error('保存エラー:', e);
+      alert('保存に失敗しました');
+    }
+  });
+
+  // 初期チェック
+  checkAlreadySaved();
 })();
 </script>
 </body>

@@ -214,6 +214,14 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  .top-link {
+    position: absolute; top: 20px; left: 20px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none;
+    font-size: 13px; z-index: 10;
+  }
+  .top-link:hover { color: var(--text); }
+
   @media (max-width: 400px) {
     .question-text { font-size: 16px; }
     .answer-btn { font-size: 11px; padding: 12px 2px; }
@@ -225,6 +233,11 @@
 
 <div class="bg-nebula"></div>
 <div class="bg-stars" id="bgStars"></div>
+
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
 
 <div class="quiz-container">
   <div class="progress">
