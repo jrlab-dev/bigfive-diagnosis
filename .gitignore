@@ -1,0 +1,28 @@
+# 公開不要なファイル・フォルダ
+
+## 研究データ・内部資料
+心理学データ集め/
+キャラクター作成データ/
+ビックファイブデータ集め/
+
+## 非公開フォルダ
+_private/
+plans/
+
+## 開発用スクリプト
+generate_*.py
+test_*.py
+
+## デバッグ・一時ファイル
+result*.json
+*.txt
+generate_log.txt
+
+## サイト不要ファイル
+ogp-generator.html
+card_template.html
+test-result.html
+pdf_rename.py
+
+## 画像（別途管理する場合）
+# 画像/
