@@ -445,6 +445,96 @@
     color: var(--text);
   }
 
+  /* ポジションアドバイス */
+  .position-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .position-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .position-member {
+    padding: 14px 16px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.12);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .position-member:last-child { margin-bottom: 0; }
+  .position-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .position-name .factor-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .position-advice {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+  .position-advice strong { color: var(--text); }
+  .position-tip-area {
+    margin-top: 8px;
+    position: relative;
+  }
+  .position-tip {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--dim);
+    padding: 10px 14px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 8px;
+  }
+  .position-tip.locked {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+  }
+  .position-lock-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 8px;
+    background: rgba(10,14,39,0.4);
+    cursor: pointer;
+  }
+  .position-lock-icon {
+    font-size: 20px;
+  }
+  .position-lock-text {
+    font-size: 11px;
+    color: var(--purple);
+    font-weight: 600;
+  }
+  .position-good {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #34d399;
+    text-align: center;
+    padding: 8px 0;
+  }
+
   /* 空状態 */
   .empty-state {
     text-align: center;
@@ -637,6 +727,122 @@ function renderMembers() {
 
   // ボタン有効化
   document.getElementById('analyzeBtn').disabled = count < MIN_MEMBERS;
+}
+
+// ===== ポジションアドバイスデータ =====
+const improvementTips = {
+  O: {
+    up: '毎月1つ新しい体験をする。知らない分野の本を1冊手に取ってみる。',
+    down: '一度決めたルーティンを1週間続けてみる。変化よりも継続を意識する。'
+  },
+  C: {
+    up: '毎朝5分だけ今日の予定を書く。小さな目標を立てて達成感を味わう。',
+    down: '「完璧じゃなくていい」と声に出す。60%できたらOKとするルールを試す。'
+  },
+  E: {
+    up: '毎日1人に話しかけてみる。最初は「今日もよろしく」でOK。',
+    down: '1日の終わりに5分だけ一人で静かな時間を作る。スマホンを置く練習。'
+  },
+  A: {
+    up: '相手の意見を聞く前に3秒待つ練習。今日1回だけ相手を褒める。',
+    down: '自分の「NO」と言う練習を月に1回だけしてみる。'
+  },
+  N: {
+    up: '不安なとき「本当に最悪のケースを考えた？」と自問する。深呼吸を習慣にする。',
+    down: 'あとで悩むことがあれば「1週間後にどうなるか」を考える。'
+  },
+};
+
+// ===== ポジションアドバイス計算 =====
+function genPositionAdvice(members, currentScore) {
+  const advice = [];
+
+  members.forEach((member, idx) => {
+    let bestImprovement = 0;
+    let bestFactor = null;
+    let bestDirection = 0;
+
+    ['O', 'C', 'E', 'A', 'N'].forEach(f => {
+      [-1, 1].forEach(dir => {
+        const newScore = Math.max(1, Math.min(5, member.scores[f] + dir));
+        if (newScore === member.scores[f]) return;
+
+        const adjustedMembers = members.map((m, i) =>
+          i === idx ? { ...m, scores: { ...m.scores, [f]: newScore } } : m
+        );
+        const { score: newTeamScore } = calcTeamScore(adjustedMembers);
+        const improvement = newTeamScore - currentScore;
+
+        if (improvement > bestImprovement) {
+          bestImprovement = improvement;
+          bestFactor = f;
+          bestDirection = dir;
+        }
+      });
+    });
+
+    if (bestFactor && bestImprovement >= 2) {
+      advice.push({
+        name: member.name,
+        factor: bestFactor,
+        factorName: traitInfo[bestFactor].name,
+        direction: bestDirection > 0 ? '上げる' : '下げる',
+        improvement: bestImprovement,
+        text: `${traitInfo[bestFactor].name}を${bestDirection > 0 ? '上げる' : '下げる'}とチームスコアが<b>+${bestImprovement}点</b>になります`,
+        tipKey: bestFactor,
+        tipDir: bestDirection > 0 ? 'up' : 'down'
+      });
+    } else {
+      advice.push({
+        name: member.name,
+        text: '現在のあなたの特性はチームに良い影響を与えています',
+        factor: null, tipKey: null
+      });
+    }
+  });
+
+  return advice;
+}
+
+// ===== ポジションアドバイスHTML生成 =====
+function genPositionAdviceHtml(members, currentScore) {
+  const adviceList = genPositionAdvice(members, currentScore);
+
+  const membersHtml = adviceList.map(a => {
+    if (!a.factor) {
+      return `
+        <div class="position-member">
+          <div class="position-name">${a.name}</div>
+          <div class="position-good">現在の特性はチームに良い影響を与えています ✓</div>
+        </div>
+      `;
+    }
+    const color = traitInfo[a.factor].color;
+    const tip = improvementTips[a.tipKey][a.tipDir];
+    return `
+      <div class="position-member">
+        <div class="position-name">
+          ${a.name}
+          <span class="factor-tag" style="background:${color}">${a.factorName}</span>
+        </div>
+        <div class="position-advice">${a.text}</div>
+        <div class="position-tip-area">
+          <div class="position-tip locked">${tip}</div>
+          <div class="position-lock-overlay">
+            <span class="position-lock-icon">🔒</span>
+            <span class="position-lock-text">改善ヒントを見る（有料機能）</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="position-card">
+      <p class="position-title">💡 あなたがチームを良くするヒント</p>
+      ${membersHtml}
+    </div>
+  `;
 }
 
 // ===== チームスコア計算 =====
@@ -903,6 +1109,9 @@ function renderResults() {
       ${strengthsHtml}
       ${cautionsHtml}
     </div>
+
+    <!-- ポジションアドバイス -->
+    ${genPositionAdviceHtml(selected, score)}
 
     <button class="btn-reselect" id="reselectBtn">🔄 メンバーを選び直す</button>
   `;
