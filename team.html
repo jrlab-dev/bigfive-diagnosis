@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>チーム相性診断 — ビッグファイブ3125タイプ診断</title>
+<meta name="description" content="保存した診断結果からメンバーを選んで、チーム全体の相性を診断。因子ごとの分析や最適なペア組み合わせがわかります。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ3125タイプ診断">
+<meta property="og:title" content="チーム相性診断 — ビッグファイブ3125タイプ診断">
+<meta property="og:description" content="最大6人のチーム相性を無料で診断。因子ごとの分析や最適なペア組み合わせがわかります。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/team.html">
+<meta name="twitter:card" content="summary">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --c-O: #8b5cf6;
+    --c-C: #3b82f6;
+    --c-E: #f97316;
+    --c-A: #f472b6;
+    --c-N: #14b8a6;
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ヘッダー */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--text); }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* 説明 */
+  .intro {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .intro p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+
+  /* メンバー選択 */
+  .member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .member-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .member-card:hover {
+    border-color: rgba(139,92,246,0.4);
+  }
+  .member-card.selected {
+    border-color: var(--purple);
+    background: rgba(139,92,246,0.12);
+    box-shadow: 0 0 20px rgba(139,92,246,0.15);
+  }
+  .member-card.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .member-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid rgba(139,92,246,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .member-card.selected .member-checkbox {
+    background: var(--purple);
+    border-color: var(--purple);
+  }
+  .member-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(139,92,246,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .member-icon.other {
+    background: rgba(236,72,153,0.15);
+  }
+  .member-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .member-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .member-meta {
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .member-code {
+    font-family: monospace;
+    background: rgba(139,92,246,0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--purple);
+  }
+  .member-score-bars {
+    display: flex;
+    gap: 3px;
+    margin-top: 4px;
+  }
+  .member-sbar {
+    width: 20px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .member-sbar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  /* 選択カウンター */
+  .selection-info {
+    text-align: center;
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+  .selection-info span {
+    color: var(--purple);
+    font-weight: 700;
+  }
+
+  /* 診断ボタン */
+  .btn-analyze {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 32px;
+  }
+  .btn-analyze:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+  }
+  .btn-analyze:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ===== 結果セクション ===== */
+  .result-section {
+    display: none;
+    animation: fadein 0.5s ease-out;
+  }
+  .result-section.visible {
+    display: block;
+  }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* チームスコアカード */
+  .team-card {
+    background: rgba(26,10,62,0.5);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .team-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* 総合スコア */
+  .team-score-area {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .team-score-value {
+    font-size: clamp(48px, 12vw, 64px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .team-score-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .team-score-rank {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .rank-s { background: rgba(255,215,0,0.2); color: #fbbf24; }
+  .rank-a { background: rgba(139,92,246,0.2); color: #a78bfa; }
+  .rank-b { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .rank-c { background: rgba(148,163,184,0.15); color: var(--dim); }
+
+  /* 因子バー */
+  .factor-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .factor-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .factor-label {
+    font-size: 13px;
+    font-weight: 700;
+    width: 56px;
+    flex-shrink: 0;
+  }
+  .factor-bar-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .factor-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s ease;
+  }
+  .factor-avg {
+    font-size: 13px;
+    font-weight: 600;
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* 因子コメント */
+  .factor-comments {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .factor-comments-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .factor-comment {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+  .factor-comment:last-child { margin-bottom: 0; }
+  .factor-comment-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .factor-comment-text { flex: 1; }
+  .factor-comment strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ペアカード */
+  .pair-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .pair-section {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .pair-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .pair-label {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pair-names {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pair-score {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .pair-comment {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-top: 6px;
+  }
+
+  /* 総合コメント */
+  .summary-card {
+    background: linear-gradient(145deg, rgba(139,92,246,0.15) 0%, rgba(59,130,246,0.08) 100%);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .summary-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .summary-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text);
+  }
+  .summary-strengths,
+  .summary-cautions {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .summary-strengths {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .summary-cautions {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.2);
+  }
+  .summary-strengths strong { color: #34d399; }
+  .summary-cautions strong { color: #fbbf24; }
+
+  /* 再選択ボタン */
+  .btn-reselect {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dim);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-reselect:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+
+  /* 空状態 */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--dim);
+  }
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .empty-state a {
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .empty-state a:hover { text-decoration: underline; }
+
+  @media (max-width: 400px) {
+    body { padding: 24px 14px 60px; }
+    .member-card { padding: 12px 14px; gap: 10px; }
+    .team-card { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      トップに戻る
+    </a>
+    <h1 class="page-title">👥 チーム相性診断</h1>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <div class="intro">
+    <p>保存した診断結果からメンバーを選んで（2〜6人）<br>チーム全体の相性を診断します</p>
+  </div>
+
+  <!-- メンバー選択 -->
+  <div id="memberSection">
+    <div class="member-list" id="memberList"></div>
+    <div class="selection-info" id="selectionInfo"></div>
+    <button class="btn-analyze" id="analyzeBtn" disabled>チーム相性を診断する</button>
+  </div>
+
+  <!-- 結果表示 -->
+  <div class="result-section" id="resultSection"></div>
+</div>
+
+<script>
+// ===== 定数 =====
+const STORAGE_KEY_MY = 'bigfive_my_results';
+const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const MAX_MEMBERS = 6;
+const MIN_MEMBERS = 2;
+
+const traitInfo = {
+  O: { name: '開放性', color: '#8b5cf6' },
+  C: { name: '誠実性', color: '#3b82f6' },
+  E: { name: '外向性', color: '#f97316' },
+  A: { name: '協調性', color: '#f472b6' },
+  N: { name: '感受性', color: '#14b8a6' },
+};
+
+// ===== ユーティリティ =====
+function codeToScores(code) {
+  return {
+    O: parseInt(code[0]), C: parseInt(code[1]),
+    E: parseInt(code[2]), A: parseInt(code[3]), N: parseInt(code[4])
+  };
+}
+
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return '今日';
+  if (diffDays === 1) return '昨日';
+  if (diffDays < 7) return `${diffDays}日前`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}週間前`;
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+// ===== メンバー読み込み =====
+let allMembers = [];
+let selectedIds = new Set();
+
+function loadMembers() {
+  const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+
+  const members = [];
+
+  // 自分の結果（最新のみ、または全件？→全件表示）
+  myResults.forEach((r, i) => {
+    const scores = r.scores || codeToScores(r.code);
+    members.push({
+      id: `my_${i}`,
+      name: r.typeName || `自分 (${r.code})`,
+      code: r.code,
+      scores,
+      gender: r.gender || 'F',
+      type: 'my',
+      date: r.date
+    });
+  });
+
+  // 他人の結果
+  otherResults.forEach((r, i) => {
+    const scores = codeToScores(r.code);
+    members.push({
+      id: `other_${i}`,
+      name: r.name || `あの人 (${r.code})`,
+      code: r.code,
+      scores,
+      gender: r.gender || 'F',
+      type: 'other',
+      date: r.date
+    });
+  });
+
+  return members;
+}
+
+// ===== メンバー一覧描画 =====
+function renderMembers() {
+  const container = document.getElementById('memberList');
+  allMembers = loadMembers();
+
+  if (allMembers.length < MIN_MEMBERS) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <p>診断結果が不足しています（最低${MIN_MEMBERS}人必要）</p>
+        <p><a href="quiz.html">自分を診断する →</a>　<a href="other_quiz.html">あの人を診断する →</a></p>
+      </div>
+    `;
+    document.getElementById('selectionInfo').textContent = '';
+    document.getElementById('analyzeBtn').disabled = true;
+    return;
+  }
+
+  container.innerHTML = allMembers.map(m => {
+    const isSelected = selectedIds.has(m.id);
+    const isDisabled = !isSelected && selectedIds.size >= MAX_MEMBERS;
+    return `
+      <div class="member-card${isSelected ? ' selected' : ''}${isDisabled ? ' disabled' : ''}" data-id="${m.id}">
+        <div class="member-checkbox">${isSelected ? '✓' : ''}</div>
+        <div class="member-icon${m.type === 'other' ? ' other' : ''}">
+          ${m.type === 'my' ? '🧑' : '👤'}
+        </div>
+        <div class="member-info">
+          <div class="member-name">${m.name}</div>
+          <div class="member-meta">
+            <span class="member-code">${m.code}</span>
+          </div>
+          <div class="member-score-bars">
+            ${['O','C','E','A','N'].map(f => {
+              const pct = (m.scores[f] / 5) * 100;
+              return `<div class="member-sbar"><div class="member-sbar-fill" style="width:${pct}%;background:${traitInfo[f].color}"></div></div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // クリックイベント
+  container.querySelectorAll('.member-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+      } else if (selectedIds.size < MAX_MEMBERS) {
+        selectedIds.add(id);
+      }
+      renderMembers();
+    });
+  });
+
+  // 選択カウンター
+  const info = document.getElementById('selectionInfo');
+  const count = selectedIds.size;
+  if (count === 0) {
+    info.innerHTML = `メンバーを選択してください（${MIN_MEMBERS}〜${MAX_MEMBERS}人）`;
+  } else {
+    info.innerHTML = `<span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）`;
+  }
+
+  // ボタン有効化
+  document.getElementById('analyzeBtn').disabled = count < MIN_MEMBERS;
+}
+
+// ===== チームスコア計算 =====
+function calcTeamScore(members) {
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  const n = members.length;
+
+  // 平均
+  const avg = {};
+  factors.forEach(f => {
+    avg[f] = members.reduce((sum, m) => sum + m.scores[f], 0) / n;
+  });
+
+  // 分散
+  const variance = {};
+  factors.forEach(f => {
+    variance[f] = members.reduce((sum, m) => sum + (m.scores[f] - avg[f]) ** 2, 0) / n;
+  });
+
+  // 最小値・最大値（視覚化用）
+  const min = {}, max = {};
+  factors.forEach(f => {
+    min[f] = Math.min(...members.map(m => m.scores[f]));
+    max[f] = Math.max(...members.map(m => m.scores[f]));
+  });
+
+  // チームスコア計算
+  let raw = 50;
+
+  // ポジティブ要因
+  raw += avg.C * 7;       // C高＝実行力プラス
+  raw += avg.A * 7;       // A高＝協調性プラス
+  raw += variance.O * 1.5; // O分散＝多様性プラス（控えめ）
+
+  // ネガティブ要因
+  raw -= variance.C * 3;  // C分散＝生活スタイル不一致マイナス
+  raw -= avg.N * 7;       // N高＝ストレスリスクマイナス
+
+  // 「高すぎる」ペナルティ
+  if (avg.A >= 4.5) raw -= 5;  // A高すぎ＝グループシンクリスク
+  if (avg.C >= 4.5) raw -= 3;  // C高すぎ＝柔軟性不足リスク
+
+  // 多様性ボーナス（3人以上の場合）
+  if (n >= 3) {
+    const totalVariance = variance.O + variance.E + variance.A;
+    raw += Math.min(totalVariance * 0.5, 4);
+  }
+
+  // 2人チームはペア相性を重視
+  if (n === 2) {
+    const pairScore = calcPairCompatibility(members[0].code, members[1].code);
+    raw = raw * 0.4 + pairScore * 0.6;
+  }
+
+  // 正規化 0〜100
+  const score = Math.max(0, Math.min(100, Math.round(raw)));
+
+  return { score, avg, variance, min, max };
+}
+
+// ===== ペア相性計算 =====
+function calcPairCompatibility(code1, code2) {
+  const [o1, c1, e1, a1, n1] = code1.split('').map(Number);
+  const [o2, c2, e2, a2, n2] = code2.split('').map(Number);
+
+  let raw =
+    (6 - n1) * 5 + (6 - n2) * 4 +
+    a1 * 5 + a2 * 3.5 +
+    c1 * 3 + c2 * 1.5 +
+    (-Math.abs(c1 - c2) * 2) +
+    (-Math.abs(e1 - e2) * 3.5) +
+    (-Math.abs(o1 - o2) * 0.5);
+
+  if (n1 >= 4 && a2 <= 2) raw -= 15;
+  if (n2 >= 4 && a1 <= 2) raw -= 15;
+  if (n1 <= 2 && n2 <= 2) raw += 8;
+  if (a1 >= 4 && a2 >= 4) raw += 8;
+
+  const MIN = -16, MAX = 110;
+  return Math.max(0, Math.min(100, Math.round((raw - MIN) / (MAX - MIN) * 100)));
+}
+
+// ===== 因子コメント生成 =====
+function genFactorComments(avg, variance) {
+  const comments = [];
+
+  // 誠実性
+  if (avg.C >= 4.0) {
+    comments.push({ icon: '💪', text: `<strong>誠実性が高いチーム</strong>です。計画的に物事を進め、期限や約束を守る組織です。` });
+  } else if (avg.C >= 2.5) {
+    comments.push({ icon: '📋', text: `<strong>適度な計画性</strong>のあるチームです。柔軟さと計画性のバランスが取れています。` });
+  } else {
+    comments.push({ icon: '🎨', text: `<strong>自由度が高いチーム</strong>です。柔軟で創造的ですが、段取りの役割分担が必要です。` });
+  }
+
+  // 協調性
+  if (avg.A >= 4.0) {
+    comments.push({ icon: '🤝', text: `<strong>協力し合えるチーム</strong>です。対立が少なく、和やかに進められます。` });
+  } else if (avg.A >= 2.5) {
+    comments.push({ icon: '⚖️', text: `<strong>意見の交わるチーム</strong>です。協力しつつも、建設的な議論ができるバランスがあります。` });
+  } else {
+    comments.push({ icon: '🎯', text: `<strong>個性が強いチーム</strong>です。率直な意見が出やすい分、ルールを決めておくとスムーズです。` });
+  }
+
+  // 感受性
+  if (avg.N >= 4.0) {
+    comments.push({ icon: '🌊', text: `<strong>感受性が高いチーム</strong>です。ストレス管理や、定期的な振り返りの場を設けるのがおすすめです。` });
+  } else if (avg.N >= 2.5) {
+    comments.push({ icon: '🔄', text: `<strong>感情のバランスが取れたチーム</strong>です。普段は落ち着いていますが、重要な場面では熱量を出せます。` });
+  } else {
+    comments.push({ icon: '🧊', text: `<strong>精神的に安定したチーム</strong>です。困難な状況でも冷静に対処できる強みがあります。` });
+  }
+
+  // 分散系（条件付き）
+  if (variance.C >= 1.0) {
+    comments.push({ icon: '⏰', text: `生活リズムや計画性に<strong>ばらつきがあります</strong>。締切や役割の認識合わせをしっかりしましょう。` });
+  }
+  if (variance.O >= 1.0) {
+    comments.push({ icon: '💡', text: `<strong>多様な視点を持つチーム</strong>です。創造的なアイデアが生まれやすい環境です。` });
+  }
+
+  return comments;
+}
+
+// ===== 総合コメント生成 =====
+function genSummary(score, avg, variance, bestPair, worstPair) {
+  let rank, rankClass, summaryText;
+
+  if (score >= 80) {
+    rank = 'S'; rankClass = 'rank-s';
+    summaryText = '非常に高いチーム相性です。メンバーの強みがうまく補完し合っており、協力して成果を出せる理想的な組成です。';
+  } else if (score >= 60) {
+    rank = 'A'; rankClass = 'rank-a';
+    summaryText = '良好なチーム相性です。お互いの違いを活かしながら、効果的に連携できるチームです。';
+  } else if (score >= 40) {
+    rank = 'B'; rankClass = 'rank-b';
+    summaryText = '普通のチーム相性です。工夫次第で良いチームになります。いくつか注意点を意識しましょう。';
+  } else {
+    rank = 'C'; rankClass = 'rank-c';
+    summaryText = '挑戦的なチーム相性です。個性の違いが大きい分、衝突リスクもありますが、乗り越えられれば最強のチームになります。';
+  }
+
+  // 強み
+  const strengths = [];
+  if (avg.C >= 3.5) strengths.push('計画性と実行力');
+  if (avg.A >= 3.5) strengths.push('チームの和と協力関係');
+  if (variance.O >= 0.8) strengths.push('多様な視点からの創造性');
+  if (avg.N <= 2.5) strengths.push('精神的な安定性');
+
+  // 注意点
+  const cautions = [];
+  if (variance.E >= 1.0) cautions.push('コミュニケーション方法の違い');
+  if (avg.N >= 3.5) cautions.push('ストレスによる感情的な対立');
+  if (avg.A <= 2.5) cautions.push('意見の衝突と意思決定の遅れ');
+  if (avg.C <= 2.5) cautions.push('段取りや計画の不在');
+
+  return { rank, rankClass, summaryText, strengths, cautions };
+}
+
+// ===== 結果描画 =====
+function renderResults() {
+  const selected = allMembers.filter(m => selectedIds.has(m.id));
+  const { score, avg, variance } = calcTeamScore(selected);
+  const comments = genFactorComments(avg, variance);
+
+  // 全ペア計算
+  let bestPair = null, worstPair = null;
+  for (let i = 0; i < selected.length; i++) {
+    for (let j = i + 1; j < selected.length; j++) {
+      const pairScore = calcPairCompatibility(selected[i].code, selected[j].code);
+      const pair = { a: selected[i], b: selected[j], score: pairScore };
+      if (!bestPair || pairScore > bestPair.score) bestPair = pair;
+      if (!worstPair || pairScore < worstPair.score) worstPair = pair;
+    }
+  }
+
+  const summary = genSummary(score, avg, variance, bestPair, worstPair);
+
+  const container = document.getElementById('resultSection');
+
+  // ペア表示（2人以上の場合のみ）
+  let pairHtml = '';
+  if (bestPair) {
+    pairHtml = `
+      <div class="pair-card">
+        <div class="pair-section">
+          <p class="pair-label">🏆 最も相性が良いペア</p>
+          <p class="pair-names">${bestPair.a.name} × ${bestPair.b.name}</p>
+          <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
+        </div>
+        <div class="pair-section">
+          <p class="pair-label">⚠️ 最も注意が必要なペア</p>
+          <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
+          <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
+        </div>
+      </div>
+    `;
+  }
+
+  // 強み・注意点
+  let strengthsHtml = '';
+  let cautionsHtml = '';
+  if (summary.strengths.length > 0) {
+    strengthsHtml = `
+      <div class="summary-strengths">
+        <strong>チームの強み：</strong>${summary.strengths.join('、')}
+      </div>
+    `;
+  }
+  if (summary.cautions.length > 0) {
+    cautionsHtml = `
+      <div class="summary-cautions">
+        <strong>注意点：</strong>${summary.cautions.join('、')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <!-- チームスコア -->
+    <div class="team-card">
+      <p class="team-card-title">📊 チーム全体スコア</p>
+      <div class="team-score-area">
+        <div class="team-score-value">${score}</div>
+        <p class="team-score-label">/ 100点</p>
+        <span class="team-score-rank ${summary.rankClass}">${summary.rank}ランク</span>
+      </div>
+      <div class="factor-rows">
+        ${['O','C','E','A','N'].map(f => {
+          const val = avg[f];
+          const pct = (val / 5) * 100;
+          return `
+            <div class="factor-row">
+              <span class="factor-label" style="color:${traitInfo[f].color}">${traitInfo[f].name}</span>
+              <div class="factor-bar-track">
+                <div class="factor-bar-fill" style="width:0%;background:${traitInfo[f].color};" data-w="${pct}%"></div>
+              </div>
+              <span class="factor-avg">${val.toFixed(1)}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- 因子コメント -->
+    <div class="factor-comments">
+      <p class="factor-comments-title">📝 チーム分析</p>
+      ${comments.map(c => `
+        <div class="factor-comment">
+          <span class="factor-comment-icon">${c.icon}</span>
+          <span class="factor-comment-text">${c.text}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- ペア相性 -->
+    ${pairHtml}
+
+    <!-- 総合コメント -->
+    <div class="summary-card">
+      <p class="summary-title">🎯 総合コメント</p>
+      <p class="summary-text">${summary.summaryText}</p>
+      ${strengthsHtml}
+      ${cautionsHtml}
+    </div>
+
+    <button class="btn-reselect" id="reselectBtn">🔄 メンバーを選び直す</button>
+  `;
+
+  // メンバーセクションを隠して結果を表示
+  document.getElementById('memberSection').style.display = 'none';
+  container.classList.add('visible');
+
+  // アニメーション（バー）
+  setTimeout(() => {
+    container.querySelectorAll('.factor-bar-fill').forEach(b => {
+      b.style.width = b.dataset.w;
+    });
+  }, 100);
+
+  // 再選択ボタン
+  document.getElementById('reselectBtn').addEventListener('click', () => {
+    container.classList.remove('visible');
+    container.innerHTML = '';
+    document.getElementById('memberSection').style.display = 'block';
+  });
+}
+
+// ===== イベント =====
+document.getElementById('analyzeBtn').addEventListener('click', () => {
+  renderResults();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== 初期化 =====
+renderMembers();
+</script>
+</body>
+</html>
