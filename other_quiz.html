@@ -319,6 +319,9 @@
   .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
   .btn-secondary { background:rgba(139,92,246,0.1); border:1.5px solid rgba(139,92,246,0.25); color:var(--text); }
   .btn-secondary:hover { background:rgba(139,92,246,0.2); }
+  .btn-save { background:linear-gradient(135deg,#10b981,#059669); }
+  .btn-save:hover { box-shadow:0 8px 32px rgba(16,185,129,0.4); }
+  .btn-saved { background:linear-gradient(135deg,rgba(6,182,212,0.8),rgba(59,130,246,0.8)); pointer-events:none; }
 
   @media(max-width:400px){
     .question-text{font-size:16px}
@@ -524,6 +527,7 @@
     </div>
   </div>
 
+  <button class="action-btn btn-save" id="saveBtn">💾 結果を保存</button>
   <button class="action-btn btn-primary" id="retryBtn">別の人を診断する</button>
   <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
 </div>
@@ -937,6 +941,18 @@ function showResult() {
   setTimeout(() => {
     document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
   }, 100);
+
+  // 保存用に結果をグローバル変数に保存
+  window.currentOtherResult = {
+    name: personName,
+    code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+    scores: sc,
+    relation: personRel,
+    date: new Date().toISOString()
+  };
+
+  // 保存済みチェック
+  checkAlreadySaved();
 }
 
 // ===== もう一度 =====
@@ -959,6 +975,61 @@ document.getElementById('biasCta').addEventListener('click', () => {
 });
 document.getElementById('premiumClose').addEventListener('click', () => {
   document.getElementById('premiumOverlay').classList.remove('show');
+});
+
+// ===== 結果保存機能（LocalStorage） =====
+const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+
+// 保存済みチェック
+function checkAlreadySaved() {
+  if (!window.currentOtherResult) return;
+
+  const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  const saveBtn = document.getElementById('saveBtn');
+  if (!saveBtn) return;
+
+  const isSaved = others.some(r =>
+    r.name === window.currentOtherResult.name &&
+    r.code === window.currentOtherResult.code
+  );
+
+  if (isSaved) {
+    saveBtn.textContent = '✓ 保存済み';
+    saveBtn.className = 'action-btn btn-saved';
+  }
+}
+
+// 保存実行
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!window.currentOtherResult) return;
+
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+    const result = window.currentOtherResult;
+
+    // 重複チェック
+    const isDuplicate = others.some(r =>
+      r.name === result.name && r.code === result.code
+    );
+
+    if (!isDuplicate) {
+      others.unshift(result);
+      if (others.length > 100) others.pop();
+      localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+    }
+
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.textContent = '✓ 保存しました！';
+    saveBtn.className = 'action-btn btn-saved';
+
+    setTimeout(() => {
+      saveBtn.textContent = '✓ 保存済み';
+    }, 2000);
+
+  } catch (e) {
+    console.error('保存エラー:', e);
+    alert('保存に失敗しました');
+  }
 });
 
 // ===== 星の生成 =====
