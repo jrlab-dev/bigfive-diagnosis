@@ -412,12 +412,78 @@
     width: 100%; max-width: 480px;
   }
   .desc-card-title { font-size: 13px; color: var(--dim); margin-bottom: 10px; font-weight: 500; }
-  .desc-card-text { font-size: 15px; line-height: 1.9; color: var(--text); }
+  .desc-card-text { font-size: 15px; line-height: 1.9; color: var(--text); white-space: pre-line; }
   .desc-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
   .desc-kw {
     font-size: 12px; padding: 4px 12px; border-radius: 20px;
     background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2);
     color: var(--purple); font-weight: 500;
+  }
+
+  /* ===== 弱点セクション ===== */
+  .weakness-section {
+    width: 100%; max-width: 480px;
+    margin-bottom: 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .btn-weakness {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    color: #cbd5e1; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-weakness:hover {
+    background: rgba(139,92,246,0.12);
+    border-color: rgba(139,92,246,0.3);
+    color: #e2e8f0;
+    transform: translateY(-1px);
+  }
+  .btn-weakness.active {
+    background: rgba(139,92,246,0.15);
+    border-color: rgba(139,92,246,0.4);
+    color: #e2e8f0;
+  }
+  .weakness-card {
+    width: 100%;
+    background: rgba(26,10,62,0.5);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 16px; padding: 22px 24px;
+    margin-top: 16px; backdrop-filter: blur(8px);
+    animation: weakness-fadein 0.4s ease-out;
+  }
+  @keyframes weakness-fadein {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .weakness-card-title {
+    font-size: 15px; font-weight: 700; text-align: center;
+    margin-bottom: 6px; color: var(--text);
+  }
+  .weakness-card-note {
+    font-size: 12px; color: var(--dim); text-align: center;
+    margin-bottom: 18px;
+  }
+  .weakness-row {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .weakness-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .weakness-row-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .weakness-factor-name {
+    font-size: 14px; font-weight: 700;
+  }
+  .weakness-tendency {
+    font-size: 11px; padding: 2px 10px; border-radius: 10px;
+    background: rgba(251,191,36,0.12); color: #fbbf24; font-weight: 600;
+  }
+  .weakness-text {
+    font-size: 13px; line-height: 1.8; color: #94a3b8;
   }
 
   /* ===== 相性カード ===== */
@@ -534,6 +600,19 @@
   <!-- 性格説明カード -->
   <div class="desc-card" id="descCard"></div>
 
+  <!-- 弱点カード -->
+  <div class="weakness-section" id="weaknessSection">
+    <button class="btn btn-weakness" id="weaknessBtn">
+      <span id="weaknessBtnIcon">🔓</span>
+      <span id="weaknessBtnText">自分の弱点を知る</span>
+    </button>
+    <div class="weakness-card" id="weaknessCard" style="display:none;">
+      <p class="weakness-card-title">🔮 自分の弱点を知る</p>
+      <p class="weakness-card-note">弱点は「悪いところ」ではありません。自分を理解し、成長するためのヒントです。</p>
+      <div id="weaknessContent"></div>
+    </div>
+  </div>
+
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
   <div class="compatibility-card" id="compatibilityCard" style="display:none;">
     <p class="compatibility-title">💕 あの人との相性</p>
@@ -609,29 +688,78 @@ const traitInfo = {
 
 const traitDesc = {
   O: {
-    5: { text: '好奇心旺盛で新しいことへの挑戦を楽しむ。発想が豊かで変化を歓迎する。', kw: ['好奇心旺盛', '創造的', '変化好き'] },
-    3: { text: '新しいことにも慣れたことにも対応できる実用的なタイプ。', kw: ['バランス型', '実用的', '柔軟'] },
-    1: { text: '安定を好み、慣れたやり方を着実にこなす堅実なタイプ。', kw: ['堅実', '安定志向', '実直'] },
+    1: { text: '慣れ親しんだやり方を大切にし、着実に実績を積む保守派。一度決めた道を忠実に歩む力がある。', kw: ['堅実派', '伝統重視', '実直'] },
+    2: { text: '実用的で地に足のついた考え方をする。無理な冒険よりも確実な選択を好む。', kw: ['現実派', '慎重', '実用主義'] },
+    3: { text: '新しいことへの関心と安定へのニーズのバランスが取れている。状況に応じて柔軟に対応できる。', kw: ['順応型', '柔軟', '適応力'] },
+    4: { text: '好奇心が旺盛で、新しいアイデアや体験に積極的に目を向ける。変化を楽しむ余裕がある。', kw: ['好奇心旺盛', '創造的', '適応力'] },
+    5: { text: '豊かな想像力と強い知的好奇心を持ち、常に新しい視点や可能性を探求する発想家。', kw: ['探求者', '発想力', '先見性'] },
   },
   C: {
-    5: { text: '責任感が強く、約束や期限を大切にする計画型。', kw: ['責任感が強い', '計画的', '几帳面'] },
-    3: { text: 'ある程度の計画性はあるが、柔軟に対応することもできる。', kw: ['普通の計画性', '融通が利く'] },
-    1: { text: '自由奔放で直感的に動くことが多い。柔軟性と即興力がある。', kw: ['自由奔放', '直感型', '即興力'] },
+    1: { text: '自由な流れに身を任せ、直感と即興力で物事に取り組む。柔軟性と臨機応変さが武器。', kw: ['自由人', '即興力', '柔軟性'] },
+    2: { text: '計画より流れを重視するが、必要な時にはちゃんと取り組む。束縛を嫌うタイプ。', kw: ['気まぐれ', '臨機応変', 'マイペース'] },
+    3: { text: '計画性と柔軟性をバランスよく使い分ける。日常では計画を立てつつ、急な変更にも対応可能。', kw: ['中庸型', '適度な計画性', '融通が利く'] },
+    4: { text: '責任感が強く、目標に向けて着実に取り組む。周囲からの信頼が厚い。', kw: ['責任感', '計画的', '信頼性'] },
+    5: { text: '高い自己規律と計画性で、何事も確実にやり遂げる完璧主義者。細部まで気を配る力がある。', kw: ['完璧主義', '几帳面', '達成力'] },
   },
   E: {
-    5: { text: '社交的でエネルギッシュ。人と関わることで活力を得るタイプ。', kw: ['社交的', '話好き', '場を盛り上げる'] },
-    3: { text: '状況に応じて社交的にも一人の時間も楽しめるバランス型。', kw: ['状況対応力', '柔軟', '程よい社交性'] },
-    1: { text: '内向的で一人の時間を大切にする。深く考えることを好む。', kw: ['内向的', '思慮深い', '一人時間重視'] },
+    1: { text: '一人の時間を深く大切にする内省派。静かな環境でこそ力を発揮し、深い思考ができる。', kw: ['内省家', '静寂愛', '思考力'] },
+    2: { text: '少数の親しい人との関係を大切にする。大勢より少人数の方が心地よい。', kw: ['少数派', '親密な関係', '穏やか'] },
+    3: { text: '社交的な場面も一人の時間もどちらも楽しめる。状況に応じて切り替えられる。', kw: ['両面型', '状況対応', '順応性'] },
+    4: { text: '人との交流からエネルギーを得る社交派。会話を楽しみ、場を明るくする。', kw: ['社交的', '話好き', 'ムードメーカー'] },
+    5: { text: '活発でエネルギッシュ。常に誰かと関わり、賑やかな場や新しい出会いを求める行動派。', kw: ['行動派', 'エネルギッシュ', '人たらし'] },
   },
   A: {
-    5: { text: '思いやりがあり人間関係を大切にする。争いを避ける平和主義。', kw: ['思いやり', '協力的', '平和主義'] },
-    3: { text: '協調しながらも自分の意見を持つバランスの取れたタイプ。', kw: ['協調性あり', '自己主張できる'] },
-    1: { text: '自己主張がはっきりしており、競争心もある。リーダー気質。', kw: ['自己主張強い', '競争心', 'リーダー気質'] },
+    1: { text: '自己主張が明確で、自分の意見や利益を大切にする。競争的な場面でも揺るがない芯の強さがある。', kw: ['競争者', '自己主張', '決断力'] },
+    2: { text: '自分の考えをしっかり持ちつつ、無用な対立は避ける。独立心が強め。', kw: ['自立心', '現実的', '合理派'] },
+    3: { text: '他者への配慮と自己主張のバランスが取れている。協力しつつも自分の意見は言える。', kw: ['均衡型', '協調性', '自己主張'] },
+    4: { text: '思いやりが深く、周囲との調和を大切にする。人間関係の潤滑油的存在。', kw: ['思いやり', '調和重視', 'サポート力'] },
+    5: { text: '深い共感力と利他性を持ち、他者のために自然と動く。周囲から頼られる癒し系。', kw: ['共感力', '利他性', '癒し系'] },
   },
   N: {
-    5: { text: '感受性が豊かで細かいことも気になりやすい。感情の波が出やすい。', kw: ['繊細', '感情的', 'ストレスに敏感'] },
-    3: { text: '感情のコントロールはできる方だが、時に不安や心配を感じやすい。', kw: ['感情豊か', '普通の敏感さ'] },
-    1: { text: '精神的に安定していてプレッシャーにも動じにくい。', kw: ['精神的安定', '冷静', '切り替えが早い'] },
+    1: { text: '精神的な安定感が高く、どんなプレッシャーでも冷静さを保つ。感情的な揺れが少ない。', kw: ['鉄壁派', '冷静', 'メンタル強'] },
+    2: { text: '比較的落ち着いていて、感情的な波も穏やか。ストレス耐性がある方。', kw: ['安定派', '落ち着き', 'ストレス耐性'] },
+    3: { text: '感情の波はあるが、自分でコントロールできる範囲。日常的な不安や喜びを普通に感じる。', kw: ['平穏型', '感情コントロール', '普通'] },
+    4: { text: '感情豊かで繊細。周囲の雰囲気や人の気持ちに敏感に反応する。', kw: ['感受家', '繊細', '表現力'] },
+    5: { text: '非常に感情に敏感で、深く物事を感じ取る。ストレスや不安を強く感じる分、豊かな感情表現の持ち主でもある。', kw: ['超感受性', '感情豊か', '深い感情'] },
+  },
+};
+
+// ===== 弱点説明 =====
+const weaknessDesc = {
+  O: {
+    1: { text: '新しいアイデアや変化に対する抵抗感が強く、知らないことへの挑戦を避ける傾向があります。ただし、この安定を重んじる姿勢は、継続力と信頼性の源でもあります。', tendency: '変化への抵抗' },
+    2: { text: '変化に慎重で、思い切った決断に時間がかかることがあります。安全策を取りすぎてチャンスを逃すことも。ただし、この慎重さは失敗を防ぐ力でもあります。', tendency: 'チャンス逸し' },
+    3: { text: '好奇心と安定へのニーズの両方を持つため、どちらの方向にも深く踏み込む前に立ち止まることがあります。ただし、この柔軟さは多様な状況に対応する力でもあります。', tendency: '決断の迷い' },
+    4: { text: '興味が次々と移り、一つのことを深く続けるのが苦手なことがあります。ただし、この広い興味は多才さの源でもあります。', tendency: '飽きっぽさ' },
+    5: { text: '現実的な制約を無視して理想を追いすぎたり、突飛なアイデアに飛びつきすぎたりすることがあります。ただし、この発想力はイノベーションの源です。', tendency: '現実離れ' },
+  },
+  C: {
+    1: { text: '計画性が不足しがちで、期限や約束を守るのが苦手なことがあります。後回しにする傾向があるため、周囲が困惑することも。ただし、この自由さは柔軟な発想の源でもあります。', tendency: '後回し癖' },
+    2: { text: '細かい手順を面倒に感じ、大まかなやり方で済ませることがあります。油断すると段取りが乱れがち。ただし、この「適度な手抜き」は効率化の源でもあります。', tendency: '段取り不足' },
+    3: { text: '計画と実行の切り替えが忙しく、計画を立てすぎて動けなくなるか、逆に計画なさすぎて後で焦るパターンがありえます。ただし、この両面性は状況に応じた対応力の源でもあります。', tendency: '計画の揺らぎ' },
+    4: { text: '完璧主義が強く出すぎると、時間をかけすぎたり、細かいミスが気になりすぎたりすることがあります。ただし、このこだわりは品質保証の源でもあります。', tendency: '完璧主義' },
+    5: { text: 'ルールや計画に縛られすぎて、柔軟な対応ができなくなることがあります。予想外のことが起きるとパニックになりがち。ただし、この規律力は組織を支える基盤でもあります。', tendency: '融通の利かなさ' },
+  },
+  E: {
+    1: { text: '自分の意見や魅力を外に出すのが苦手で、実力以上に評価されないことがあります。控えめな印象を与えすぎて、存在感が薄くなることも。ただし、この静かさは深い思考の源でもあります。', tendency: '自己表現の苦手' },
+    2: { text: '人前で発言する機会を逃しがちで、実力をアピールするのが苦手なことがあります。ただし、この謙虚さは周囲との信頼関係の源でもあります。', tendency: 'アピール不足' },
+    3: { text: '社交的な場と一人の時間の両方を求めるため、どちらも十分に満たされないと感じることがあります。ただし、この両面性はどんな環境でも適応できる力の源でもあります。', tendency: 'エネルギー分散' },
+    4: { text: '人といる時間が長すぎると一人の時間が不足し、内面の整理ができなくなることがあります。また、場の空気に流されやすい面も。ただし、この親和力は人間関係の源でもあります。', tendency: '一人時間の不足' },
+    5: { text: '常に誰かといることを求めがちで、一人だと不安や退屈を感じやすいことがあります。刺激を求めすぎて行動が衝動的になることも。ただし、このエネルギーは周囲を巻き込む力の源でもあります。', tendency: '刺激への依存' },
+  },
+  A: {
+    1: { text: 'はっきりと意見を伝えることで、時に相手との意見の相違が大きく見えることがあります。率直さがきつく受け取られることも。ただし、この明確さはリーダーシップの源でもあります。', tendency: '対立の増加' },
+    2: { text: '相手の気持ちより自分の利益を優先しがちで、周囲とのすれ違いが生じることがあります。ただし、この自分軸は決断力の源でもあります。', tendency: '自分優先' },
+    3: { text: '協調と自己主張の両方を求めるため、場面によってどちらかに寄せきれないことがあります。ただし、このバランス感覚は外交的な対応力の源でもあります。', tendency: 'バランスの悩み' },
+    4: { text: '断ることが苦手で、自分の限界を超えて引き受けてしまうことがあります。他人のために自分を犠牲にしすぎて疲弊することも。ただし、この優しさは周囲からの信頼の源でもあります。', tendency: '断れない' },
+    5: { text: '争いを極端に避けるあまり、不満を我慢しすぎたり、自分の意見を言えなくなったりすることがあります。ただし、この平和主義はチームの調和の源でもあります。', tendency: '我慢の蓄積' },
+  },
+  N: {
+    1: { text: '自分や他人の感情に気づきにくく、そっけない印象を与えることがあります。相手の繊細な気持ちに気づかないことも。ただし、この冷静さは危機管理能力の源でもあります。', tendency: '感情への鈍感さ' },
+    2: { text: '感情表現が乏しく、周囲に「何を考えているか分からない」と思われることがあります。ただし、この落ち着きは周囲を安心させる力でもあります。', tendency: '感情表現の乏しさ' },
+    3: { text: '感情の波が穏やかな分、他人の強い感情に対して「そこまで？」と感じてしまうことがあります。ただし、この落ち着きは周囲を安定させる力でもあります。', tendency: '感情理解のズレ' },
+    4: { text: 'ストレスや不安を感じやすく、少しのことで気分が沈んだり不安になったりすることがあります。過剰に心配して行動できなくなることも。ただし、この繊細さは状況判断力の源でもあります。', tendency: '不安の増大' },
+    5: { text: '感情の波が激しく、ストレスに対する耐性が低いことがあります。気分の浮き沈みが激しくて日常生活に影響することも。ただし、この感受性は豊かな感情表現の源でもあります。', tendency: '感情の波' },
   },
 };
 
@@ -657,11 +785,23 @@ function genRichDesc(sc) {
   const revKey = top2 + top1;
   const summary = summaries[keyStr] || summaries[revKey] || `あなたは${e1.kw[0]}で${e2.kw[0]}な性格傾向があります。`;
 
+  // 全5因子のキーワードを収集
   const allKw = [];
   for (const f of ['O', 'C', 'E', 'A', 'N']) {
     allKw.push(...(traitDesc[f][sc[f]]?.kw || []).slice(0, 1));
   }
-  return { summary, detail: `${e1.text} ${e2.text}`, keywords: allKw };
+
+  // 全5因子の説明を結合（上位2因子は長文、残りは短文）
+  const topTexts = [top1, top2].map(f => traitDesc[f][sc[f]].text);
+  const otherFactors = sorted.filter(([k]) => k !== top1 && k !== top2);
+  const otherTexts = otherFactors.map(([f]) => {
+    const info = traitInfo[f];
+    const frag = fragments[f][sc[f]];
+    return `${info.name}：${frag}`;
+  });
+  const detail = topTexts.join(' ') + '\n' + otherTexts.join('\n');
+
+  return { summary, detail, keywords: allKw };
 }
 
 // ===== 因子記述フラグメント =====
@@ -862,34 +1002,38 @@ function genDescription() {
   return parts.slice(0, 2).join('。') + '。';
 }
 
-// ===== タイプ名生成（簡易版） =====
+// ===== タイプ名生成 =====
 function genTypeName() {
-  const labels = { O: '', C: '', E: '', A: '', N: '' };
-  // 最も高い因子でメインを決定
   const scores = { O, C, E, A, N };
   let main = 'O', max = O;
   for (const [k, v] of Object.entries(scores)) {
     if (v > max) { max = v; main = k; }
   }
   const mainLabels = {
-    O: max >= 4 ? '探求者' : '好奇心旺盛な',
-    C: max >= 4 ? '実行者' : '真面目な',
-    E: max >= 4 ? '社交家' : '穏やかな',
-    A: max >= 4 ? '調停者' : '自立心のある',
-    N: max >= 4 ? '繊細な' : '安定した'
+    O: { high: '探求者', low: '確実派' },
+    C: { high: '実行者', low: '自由人' },
+    E: { high: '社交家', low: '内省家' },
+    A: { high: '調停者', low: '競争者' },
+    N: { high: '感受家', low: '平静派' }
   };
   const subLabels = {
-    O: max <= 2 ? '現実派' : '', C: max <= 2 ? '自由人' : '',
-    E: max <= 2 ? '内省派' : '', A: max <= 2 ? '競争者' : '',
-    N: max <= 2 ? 'メンタル強い' : '感受性豊かな'
+    O: { high: '発想家', low: '現実派' },
+    C: { high: '規律派', low: '柔軟派' },
+    E: { high: 'ムードメーカー', low: '思考家' },
+    A: { high: '支援者', low: '自立派' },
+    N: { high: '繊細派', low: '泰然家' }
   };
-  const mainLabel = mainLabels[main] || 'バランス型';
-  // 2番目に特徴的な因子
+  const mainEntry = mainLabels[main];
+  const mainLabel = max >= 4 ? mainEntry.high : mainEntry.low;
+  // 2番目に特徴的な因子（スコア1または5）
   let sub = '';
   for (const [k, v] of Object.entries(scores)) {
-    if (k !== main && (v === 1 || v === 5)) { sub = subLabels[k]; break; }
+    if (k !== main && (v === 1 || v === 5)) {
+      sub = subLabels[k][v === 5 ? 'high' : 'low'];
+      break;
+    }
   }
-  return sub ? `${sub}${mainLabel}` : mainLabel;
+  return sub ? `${sub}・${mainLabel}` : mainLabel;
 }
 
 // ===== 描画 =====
@@ -961,6 +1105,45 @@ document.getElementById('descCard').innerHTML = `
   <p class="desc-card-title">📋 あなたの性格まとめ</p>
   <p class="desc-card-text">${summary}<br>${detail}</p>
   <div class="desc-keywords">${keywords.map(k => `<span class="desc-kw">${k}</span>`).join('')}</div>`;
+
+// ===== 弱点カード =====
+(function() {
+  const btn = document.getElementById('weaknessBtn');
+  const card = document.getElementById('weaknessCard');
+  const content = document.getElementById('weaknessContent');
+  const btnIcon = document.getElementById('weaknessBtnIcon');
+  const btnText = document.getElementById('weaknessBtnText');
+  let isOpen = false;
+
+  // 弱点コンテンツ生成
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  let html = '';
+  factors.forEach(f => {
+    const s = sc[f];
+    const info = traitInfo[f];
+    const w = weaknessDesc[f][s];
+    html += `
+      <div class="weakness-row">
+        <div class="weakness-row-header">
+          <span class="weakness-factor-name" style="color:${info.color}">${info.name}</span>
+          <span class="weakness-tendency">${w.tendency}</span>
+        </div>
+        <p class="weakness-text">${w.text}</p>
+      </div>`;
+  });
+  content.innerHTML = html;
+
+  btn.addEventListener('click', () => {
+    isOpen = !isOpen;
+    card.style.display = isOpen ? 'block' : 'none';
+    btn.classList.toggle('active', isOpen);
+    btnIcon.textContent = isOpen ? '🔒' : '🔓';
+    btnText.textContent = isOpen ? '弱点を隠す' : '自分の弱点を知る';
+    if (isOpen) {
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+  });
+})();
 
 // 10問版→30問版誘導
 if (version === '10') {
