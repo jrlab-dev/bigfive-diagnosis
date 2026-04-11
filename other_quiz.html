@@ -673,9 +673,25 @@ let personName = '', personPeriod = '', personRel = '';
 let current = 0;
 const ans = new Array(total).fill(null);
 
-// 自分のスコア（result.htmlから渡される）
+// 自分のスコア（result.htmlから渡される または LocalStorageから読み込み）
 const urlParams = new URLSearchParams(window.location.search);
-const myCode = urlParams.get('my') || '';
+let myCode = urlParams.get('my') || '';
+
+// URLパラメータになければ LocalStorageから最新の自分のコードを読み込む
+if (!myCode) {
+  try {
+    const STORAGE_KEY_MY = 'bigfive_my_results';
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    if (myResults.length > 0) {
+      // 最新の自分の診断結果を使う
+      myCode = myResults[0].code;
+      console.log('LocalStorageから自分のコードを読み込みました:', myCode);
+    }
+  } catch (e) {
+    console.error('LocalStorage読み込みエラー:', e);
+  }
+}
+
 const myScores = myCode.length === 5 ? {
   O: parseInt(myCode[0]), C: parseInt(myCode[1]),
   E: parseInt(myCode[2]), A: parseInt(myCode[3]), N: parseInt(myCode[4])
@@ -920,11 +936,12 @@ function showResult() {
   } else {
     // 自分のスコアなし → 自己診断への誘導
     const otherCode = `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`;
+    const myQueryParam = myCode ? `&my=${myCode}` : '';
     compatCard.className = 'compat-prompt';
     compatCard.innerHTML = `
       <p class="compat-prompt-title">💡 ${personName}さんとの相性を見る</p>
       <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${personName}さんとの相性スコア</strong>が表示されます</p>
-      <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}" class="compat-prompt-btn">
+      <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}${myQueryParam}" class="compat-prompt-btn">
         自分を診断して相性を確認する →
       </a>`;
   }

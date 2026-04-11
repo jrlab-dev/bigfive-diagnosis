@@ -358,6 +358,22 @@ const total = questions.length;
 let current = 0;
 const answers = new Array(total).fill(null);
 
+// other_quizから来た場合、LocalStorageから自分のコードを取得
+let myCode = params.get('my') || '';
+const ref = params.get('ref') || '';
+if (ref === 'other' && !myCode) {
+  try {
+    const STORAGE_KEY_MY = 'bigfive_my_results';
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    if (myResults.length > 0) {
+      myCode = myResults[0].code;
+      console.log('LocalStorageから自分のコードを読み込みました:', myCode);
+    }
+  } catch (e) {
+    console.error('LocalStorage読み込みエラー:', e);
+  }
+}
+
 // ===== DOM =====
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
@@ -465,6 +481,9 @@ function showResult() {
     if (ref) url += `&ref=${ref}`;
     if (otherCode) url += `&other_code=${otherCode}`;
     if (otherName) url += `&other_name=${encodeURIComponent(otherName)}`;
+    // other_quizから来た場合で、自分のコードがある場合は渡す（診断前にLocalStorageから取得したもの）
+    // ※診断結果自体はtypeパラメータで渡されるので、これは参照用
+    if (myCode && ref === 'other') url += `&stored_my_code=${myCode}`;
     window.location.href = url;
   }
 
