@@ -112,25 +112,27 @@
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
   @keyframes twinkle { 0%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:.5;transform:scale(1)} }
 
-  /* 背景に浮かぶあの人 */
-  #bgCharacterDiv {
-    position: fixed;
-    z-index: 0;
-    pointer-events: none;
-    width: 360px;
-    left: 50%;
-    top: 12%;
-    transform: translateX(-50%);
+  /* ヒーロー内キャラクター */
+  .hero-char {
+    position: absolute;
+    top: 6%;
+    width: 175px;
     opacity: 0;
     transition: opacity 1.2s ease;
-    animation: floatGhost 7s ease-in-out infinite;
-    filter: drop-shadow(0 0 48px rgba(139,92,246,0.4)) drop-shadow(0 0 16px rgba(232,121,176,0.25));
+    pointer-events: none;
+    filter: drop-shadow(0 0 30px rgba(139,92,246,0.4)) drop-shadow(0 0 10px rgba(232,121,176,0.25));
   }
-  #bgCharacterDiv.visible { opacity: 0.18; }
-  #bgCharacterDiv img { width: 100%; height: auto; display: block; }
-  @keyframes floatGhost {
-    0%, 100% { transform: translateX(-50%) translateY(0px); }
-    50% { transform: translateX(-50%) translateY(-28px); }
+  .hero-char.visible { opacity: 0.28; }
+  #heroCharLeft  { left: 3%;  animation: floatCharL 7s ease-in-out infinite; }
+  #heroCharRight { right: 3%; animation: floatCharR 7s ease-in-out infinite; animation-delay: 1.8s; }
+  .hero-char img { width: 100%; height: auto; display: block; }
+  @keyframes floatCharL {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-22px); }
+  }
+  @keyframes floatCharR {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-22px); }
   }
 
   .content { position: relative; z-index: 1; }
@@ -317,69 +319,6 @@
   }
   .personalized-section.active { display: block; }
 
-  .welcome-title {
-    font-size: 13px; color: var(--cyan);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    margin-bottom: 20px;
-  }
-
-  .characters-display {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 20px;
-    margin-bottom: 24px;
-  }
-
-  .character-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .character-card {
-    width: 180px;
-    height: 180px;
-    background: var(--card-bg);
-    border: 1.5px solid var(--card-border);
-    border-radius: 20px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    backdrop-filter: blur(8px);
-  }
-
-  .character-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .character-placeholder {
-    font-size: 64px;
-    opacity: 0.3;
-  }
-
-  .character-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    max-width: 180px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .character-type {
-    font-size: 11px;
-    color: var(--dim);
-    font-family: monospace;
-  }
-
   .partner-selector {
     margin-top: 16px;
     text-align: center;
@@ -448,11 +387,12 @@
 <body>
 <div class="bg-nebula"></div>
 <div class="bg-stars" id="bgStars"></div>
-<div id="bgCharacterDiv"></div>
 <div class="content">
 
   <!-- ヒーロー -->
   <section class="hero">
+    <div id="heroCharLeft"  class="hero-char"></div>
+    <div id="heroCharRight" class="hero-char"></div>
     <span class="hero-badge">SCIENCE-BASED PERSONALITY ANALYSIS</span>
     <div class="trust-badges">
       <span class="trust-badge"><span class="dot"></span>心理学研究に基づく</span>
@@ -468,17 +408,10 @@
 
   <!-- パーソナライズ表示（保存済みの場合に表示） -->
   <section class="personalized-section" id="personalizedSection">
-    <p class="welcome-title" id="welcomeTitle">おかえりなさい</p>
-
-    <div class="characters-display" id="charactersDisplay">
-      <!-- JavaScriptで動的に生成 -->
-    </div>
-
     <div class="partner-selector" id="partnerSelector" style="display: none;">
       <p class="partner-selector-label">一緒に表示する相手を選ぶ</p>
       <div class="partner-chips" id="partnerChips"></div>
     </div>
-
     <a href="mypage.html" class="back-to-mypage">📋 マイページで全結果を見る →</a>
   </section>
 
@@ -624,10 +557,10 @@
   if (myResults.length === 0) return;
 
   const personalizedSection = document.getElementById('personalizedSection');
-  const charactersDisplay = document.getElementById('charactersDisplay');
-  const welcomeTitle = document.getElementById('welcomeTitle');
   const partnerSelector = document.getElementById('partnerSelector');
   const partnerChips = document.getElementById('partnerChips');
+  const leftDiv  = document.getElementById('heroCharLeft');
+  const rightDiv = document.getElementById('heroCharRight');
 
   const myResult = myResults[0];
   const myGender = myResult.gender || 'F';
@@ -635,22 +568,16 @@
 
   personalizedSection.classList.add('active');
 
-  // キャラクターカード生成
-  function createCharacterCard(result, gender, isMe) {
-    const code = result.code;
-    const name = isMe ? 'あなた' : result.name;
-    const typeName = result.typeName || '性格タイプ';
-    const imgCode = code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
-    const imgPath = `images/characters/${gender}/${imgCode}.webp`;
-    return `
-      <div class="character-wrapper">
-        <div class="character-card">
-          <img src="${imgPath}" alt="${name}" class="character-img" onerror="this.parentElement.innerHTML='<span class=\'character-placeholder\'>👤</span>'">
-        </div>
-        <p class="character-name">${name}</p>
-        <p class="character-type">${typeName}</p>
-      </div>
-    `;
+  // コードを画像用に丸める（1/3/5のみ存在）
+  function toImgCode(code) {
+    return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+  }
+
+  // ヒーロー内キャラを更新
+  function setHeroChar(div, code, gender) {
+    const imgCode = toImgCode(code);
+    div.classList.remove('visible');
+    div.innerHTML = `<img src="images/characters/${gender}/${imgCode}.webp" alt="" onload="this.closest('.hero-char').classList.add('visible')">`;
   }
 
   // 相性スコア計算（内部用）
@@ -666,23 +593,16 @@
     return Math.max(0, Math.min(100, score));
   }
 
-  // 相手を選択して表示
+  // 自分のキャラを左に表示
+  setHeroChar(leftDiv, myResult.code, myGender);
+
+  // 相手を選択して右に表示
   function showPartner(index) {
     partnerChips.querySelectorAll('.partner-chip').forEach((chip, i) => {
       chip.classList.toggle('active', i === index);
     });
     const other = others[index];
-    const otherGender = other.gender || 'F';
-    charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true) + createCharacterCard(other, otherGender, false);
-    welcomeTitle.textContent = `${other.name}さんと`;
-
-    // 背景に「あの人」を浮かせる
-    const bgDiv = document.getElementById('bgCharacterDiv');
-    if (bgDiv) {
-      const otherImgCode = other.code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
-      bgDiv.classList.remove('visible');
-      bgDiv.innerHTML = `<img src="images/characters/${otherGender}/${otherImgCode}.webp" alt="" onload="this.closest('#bgCharacterDiv').classList.add('visible')">`;
-    }
+    setHeroChar(rightDiv, other.code, other.gender || 'F');
   }
 
   window.selectPartner = showPartner;
@@ -702,11 +622,6 @@
     }
 
     showPartner(bestIdx);
-  } else {
-    welcomeTitle.textContent = 'おかえりなさい';
-    charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true);
-    const bgDiv = document.getElementById('bgCharacterDiv');
-    if (bgDiv) { bgDiv.innerHTML = ''; bgDiv.classList.remove('visible'); }
   }
 })();
 </script>
