@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>診断スタート — ビッグファイブ3125タイプ診断</title>
-<meta name="description" content="10問の質問に答えるだけ。無料・登録不要でビッグファイブ性格診断がすぐできます。あなたは3125通りのどのタイプ？">
+<meta name="description" content="10問・30問・120問の3段階でビッグファイブ性格診断。無料・登録不要ですぐできます。あなたは3125通りのどのタイプ？">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブ3125タイプ診断">
 <meta property="og:title" content="診断スタート — ビッグファイブ3125タイプ診断">
-<meta property="og:description" content="10問の質問に答えるだけ。無料・登録不要でビッグファイブ性格診断がすぐできます。あなたは3125通りのどのタイプ？">
+<meta property="og:description" content="10問・30問・120問の3段階でビッグファイブ性格診断。無料・登録不要ですぐできます。あなたは3125通りのどのタイプ？">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/quiz.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="診断スタート — ビッグファイブ3125タイプ診断">
-<meta name="twitter:description" content="10問の質問に答えるだけ。無料・登録不要でビッグファイブ性格診断がすぐできます。あなたは3125通りのどのタイプ？">
+<meta name="twitter:description" content="10問・30問・120問の3段階でビッグファイブ性格診断。無料・登録不要ですぐできます。あなたは3125通りのどのタイプ？">
 
 <!-- 構造化データ（JSON-LD） -->
 <script type="application/ld+json">
@@ -21,7 +21,7 @@
   "@type": "Quiz",
   "name": "ビッグファイブ性格診断",
   "url": "https://bigfive.jr-genius.jp/quiz.html",
-  "description": "10問または30問の質問に答えるだけで、科学的根拠に基づいたビッグファイブ性格診断ができます。3125通りの性格タイプからあなたの性格を分析。",
+  "description": "10問・30問・120問の3段階から選べるビッグファイブ性格診断。科学的根拠に基づいたIPIP-NEO-120採用。3125通りの性格タイプからあなたの性格を分析。",
   "about": {
     "@type": "Thing",
     "name": "ビッグファイブ性格理論",
@@ -350,10 +350,163 @@ const questions30 = [
   { text: '複雑な問題でも、さまざまな視点で考えようとする', factor: 'O', dir: '+' }
 ];
 
+const questions120 = [
+  // N1: 不安
+  { text: 'あれこれ心配しやすい方だ', factor: 'N', dir: '+' },
+  { text: '最悪の事態を想像してしまう', factor: 'N', dir: '+' },
+  { text: '多くのことが不安に感じる', factor: 'N', dir: '+' },
+  { text: 'ストレスを感じやすい', factor: 'N', dir: '+' },
+  // N2: 怒り
+  { text: 'イライラしやすい', factor: 'N', dir: '+' },
+  { text: 'すぐに腹を立てる', factor: 'N', dir: '+' },
+  { text: 'カッとなることがよくある', factor: 'N', dir: '+' },
+  { text: 'なかなかイライラしない方だ', factor: 'N', dir: '-' },
+  // N3: 抑うつ
+  { text: '気分が沈みやすい', factor: 'N', dir: '+' },
+  { text: '自分のことが嫌になることがある', factor: 'N', dir: '+' },
+  { text: 'ふさぎ込むことがよくある', factor: 'N', dir: '+' },
+  { text: '自分に自信を持っている', factor: 'N', dir: '-' },
+  // N4: 自己意識
+  { text: '自分から人に話しかけるのは苦手だ', factor: 'N', dir: '+' },
+  { text: '人前で目立ちたくない', factor: 'N', dir: '+' },
+  { text: '親しい友人としかリラックスできない', factor: 'N', dir: '+' },
+  { text: '初対面の場でも気にしない方だ', factor: 'N', dir: '-' },
+  // N5: 無抑制
+  { text: '一度やり始めると止まらないことがある', factor: 'N', dir: '+' },
+  { text: '食べ過ぎや飲み過ぎをしない方だ', factor: 'N', dir: '-' },
+  { text: '誘惑に負けにくい', factor: 'N', dir: '-' },
+  { text: '自分の欲求をコントロールできる', factor: 'N', dir: '-' },
+  // N6: 脆弱性
+  { text: 'パニックになりやすい', factor: 'N', dir: '+' },
+  { text: '出来事に圧倒されやすい', factor: 'N', dir: '+' },
+  { text: '自分には対処できないと感じることがある', factor: 'N', dir: '+' },
+  { text: 'プレッシャーでも落ち着いていられる', factor: 'N', dir: '-' },
+  // E1: 友好性
+  { text: '友達ができやすい方だ', factor: 'E', dir: '+' },
+  { text: '人といると心地よい', factor: 'E', dir: '+' },
+  { text: '人との接触を避ける方だ', factor: 'E', dir: '-' },
+  { text: '他人との距離を置きがちだ', factor: 'E', dir: '-' },
+  // E2: 群居性
+  { text: '大勢の集まりが好きだ', factor: 'E', dir: '+' },
+  { text: 'パーティーで色々な人と話す', factor: 'E', dir: '+' },
+  { text: '一人でいる方が好きだ', factor: 'E', dir: '-' },
+  { text: '人混みは苦手だ', factor: 'E', dir: '-' },
+  // E3: 主張性
+  { text: '自分からリードする方だ', factor: 'E', dir: '+' },
+  { text: '周りを引っ張っていける', factor: 'E', dir: '+' },
+  { text: '物事を自分で切り盛りする', factor: 'E', dir: '+' },
+  { text: '誰かに先導してもらうのを待つ', factor: 'E', dir: '-' },
+  // E4: 活動性
+  { text: 'いつも忙しくしている', factor: 'E', dir: '+' },
+  { text: '常に何か動いている', factor: 'E', dir: '+' },
+  { text: '空き時間もたくさん活動する', factor: 'E', dir: '+' },
+  { text: 'ゆっくり過ごすのが好きだ', factor: 'E', dir: '-' },
+  // E5: 刺激追求
+  { text: 'スリルや興奮が好きだ', factor: 'E', dir: '+' },
+  { text: '冒険を求める方だ', factor: 'E', dir: '+' },
+  { text: '無茶なことも楽しいと思う', factor: 'E', dir: '+' },
+  { text: '思い切り羽目を外すことがある', factor: 'E', dir: '+' },
+  // E6: 陽気さ
+  { text: '周りを明るくする方だ', factor: 'E', dir: '+' },
+  { text: 'よく笑い、楽しく過ごす', factor: 'E', dir: '+' },
+  { text: '人生が好きだ', factor: 'E', dir: '+' },
+  { text: '物事の明るい面を見る方だ', factor: 'E', dir: '+' },
+  // O1: 想像力
+  { text: '想像力が豊かだ', factor: 'O', dir: '+' },
+  { text: '空想にふけりのが好きだ', factor: 'O', dir: '+' },
+  { text: '白昼夢を見るのが好きだ', factor: 'O', dir: '+' },
+  { text: '考え事に没頭することがある', factor: 'O', dir: '+' },
+  // O2: 芸術的興味
+  { text: '芸術の価値を信じている', factor: 'O', dir: '+' },
+  { text: '他の人が気づかない美しさを見つける', factor: 'O', dir: '+' },
+  { text: '詩には興味がない', factor: 'O', dir: '-' },
+  { text: '美術館に行くのは好きではない', factor: 'O', dir: '-' },
+  // O3: 感情性
+  { text: '感情を強く感じる方だ', factor: 'O', dir: '+' },
+  { text: '他人の気持ちに共感しやすい', factor: 'O', dir: '+' },
+  { text: '自分の感情の変化に気づきにくい', factor: 'O', dir: '-' },
+  { text: '感情的になる人が理解できない', factor: 'O', dir: '-' },
+  // O4: 冒険性
+  { text: 'いつもと同じより変化が欲しい', factor: 'O', dir: '+' },
+  { text: '知っているものを好む方だ', factor: 'O', dir: '-' },
+  { text: '変化は苦手だ', factor: 'O', dir: '-' },
+  { text: '昔からのやり方にこだわる', factor: 'O', dir: '-' },
+  // O5: 知性
+  { text: '難しい本を読むのが好きだ', factor: 'O', dir: '+' },
+  { text: '哲学的な議論は避ける方だ', factor: 'O', dir: '-' },
+  { text: '抽象的な考えを理解するのが苦手だ', factor: 'O', dir: '-' },
+  { text: '理論的な話題には興味がない', factor: 'O', dir: '-' },
+  // O6: 自由主義
+  { text: '自由な考え方に惹かれる', factor: 'O', dir: '+' },
+  { text: '絶対的な正しさはないと思う', factor: 'O', dir: '+' },
+  { text: '保守的な考え方をする方だ', factor: 'O', dir: '-' },
+  { text: 'ルールは厳しく守るべきだと思う', factor: 'O', dir: '-' },
+  // A1: 信頼
+  { text: '他人を信頼できる', factor: 'A', dir: '+' },
+  { text: '人は良い意図を持っていると思う', factor: 'A', dir: '+' },
+  { text: '人の言うことを信じる方だ', factor: 'A', dir: '+' },
+  { text: '人は信用できないと思う', factor: 'A', dir: '-' },
+  // A2: 道徳性
+  { text: '自分のために人を利用することがある', factor: 'A', dir: '-' },
+  { text: '出世のために不正をすることもある', factor: 'A', dir: '-' },
+  { text: '他人の弱みに付け込むことがある', factor: 'A', dir: '-' },
+  { text: '他人の計画を邪魔することがある', factor: 'A', dir: '-' },
+  // A3: 利他性
+  { text: '他人を気にかける方だ', factor: 'A', dir: '+' },
+  { text: '人を助けるのが好きだ', factor: 'A', dir: '+' },
+  { text: '他人の気持ちはどうでもいいと思う', factor: 'A', dir: '-' },
+  { text: '他人のために時間を割かない', factor: 'A', dir: '-' },
+  // A4: 協調性
+  { text: '言い合いになるのも楽しいと思う', factor: 'A', dir: '-' },
+  { text: '人に怒鳴りつけることがある', factor: 'A', dir: '-' },
+  { text: '人を侮辱することがある', factor: 'A', dir: '-' },
+  { text: '仕返しをすることがある', factor: 'A', dir: '-' },
+  // A5: 謙虚さ
+  { text: '自分は他人より優れていると思う', factor: 'A', dir: '-' },
+  { text: '自分のことを高く評価している', factor: 'A', dir: '-' },
+  { text: '自分に自信過剰なところがある', factor: 'A', dir: '-' },
+  { text: '自分の良いところを自慢することがある', factor: 'A', dir: '-' },
+  // A6: 共感性
+  { text: '困っている人に同情する', factor: 'A', dir: '+' },
+  { text: '自分より恵まれていない人を気の毒に思う', factor: 'A', dir: '+' },
+  { text: '他人の問題には興味がない', factor: 'A', dir: '-' },
+  { text: '困っている人のことは考えないようにする', factor: 'A', dir: '-' },
+  // C1: 有能性
+  { text: '任務をちゃんとやり遂げる', factor: 'C', dir: '+' },
+  { text: 'やることは最高の結果を出す', factor: 'C', dir: '+' },
+  { text: '物事をスムーズにこなせる', factor: 'C', dir: '+' },
+  { text: '効率よく物事を進めるのが得意だ', factor: 'C', dir: '+' },
+  // C2: 秩序性
+  { text: '片付けるのが好きだ', factor: 'C', dir: '+' },
+  { text: '物を元の場所に戻し忘れることがある', factor: 'C', dir: '-' },
+  { text: '部屋を散らかしがちだ', factor: 'C', dir: '-' },
+  { text: '持ち物を適当に置いてしまう', factor: 'C', dir: '-' },
+  // C3: 義務感
+  { text: '約束は必ず守る', factor: 'C', dir: '+' },
+  { text: '嘘はつかない', factor: 'C', dir: '+' },
+  { text: 'ルールを破ることがある', factor: 'C', dir: '-' },
+  { text: '約束を破ることがある', factor: 'C', dir: '-' },
+  // C4: 達成努力
+  { text: '期待以上のことをやり遂げる', factor: 'C', dir: '+' },
+  { text: '努力を惜しまない', factor: 'C', dir: '+' },
+  { text: '仕事や勉強にあまり時間をかけない', factor: 'C', dir: '-' },
+  { text: '最低限のことしかやらないことがある', factor: 'C', dir: '-' },
+  // C5: 自己規律
+  { text: 'いつも準備は万全だ', factor: 'C', dir: '+' },
+  { text: '計画を実行に移せる', factor: 'C', dir: '+' },
+  { text: '無駄な時間を過ごしてしまう', factor: 'C', dir: '-' },
+  { text: '作業に取り掛かるのが遅い', factor: 'C', dir: '-' },
+  // C6: 慎重さ
+  { text: '考えずに行動してしまうことがある', factor: 'C', dir: '-' },
+  { text: '衝動的に決断してしまう', factor: 'C', dir: '-' },
+  { text: '何事も急いで飛び込む方だ', factor: 'C', dir: '-' },
+  { text: '考えずに動いてしまうことがある', factor: 'C', dir: '-' }
+];
+
 // ===== 状態管理 =====
 const params = new URLSearchParams(window.location.search);
-const version = params.get('v') === '30' ? '30' : '10';
-const questions = version === '30' ? questions30 : questions10;
+const version = params.get('v') === '120' ? '120' : params.get('v') === '30' ? '30' : '10';
+const questions = version === '120' ? questions120 : version === '30' ? questions30 : questions10;
 const total = questions.length;
 let current = 0;
 const answers = new Array(total).fill(null);
@@ -438,6 +591,23 @@ function calcScore() {
       const v2 = q2.dir === '-' ? (6 - a2) : a2;
       const avg = (v1 + v2) / 2;
       scores[f] = avg <= 2.4 ? 1 : avg <= 3.5 ? 3 : 5;
+    }
+    return {
+      O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
+      code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`
+    };
+  } else if (version === '120') {
+    // 120問版：各因子24問、合計→5段階（30問版と比例的な閾値）
+    const factorMap = { E: [], A: [], C: [], N: [], O: [] };
+    questions.forEach((q, i) => {
+      const val = q.dir === '-' ? (6 - answers[i]) : answers[i];
+      factorMap[q.factor].push(val);
+    });
+    const scores = {};
+    for (const [f, vals] of Object.entries(factorMap)) {
+      const sum = vals.reduce((a, b) => a + b, 0);
+      // 24問×5段階=合計24〜120、平均ベースで30問版と同じ閾値
+      scores[f] = sum <= 44 ? 1 : sum <= 64 ? 2 : sum <= 92 ? 3 : sum <= 112 ? 4 : 5;
     }
     return {
       O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
