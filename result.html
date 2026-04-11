@@ -486,6 +486,39 @@
     font-size: 13px; line-height: 1.8; color: #94a3b8;
   }
 
+  /* ===== おすすめ職種 ===== */
+  .career-section {
+    width: 100%; max-width: 480px;
+    margin-bottom: 20px;
+  }
+  .career-card {
+    background: rgba(26,10,62,0.5);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 16px; padding: 22px 24px;
+    backdrop-filter: blur(8px);
+  }
+  .career-title {
+    font-size: 15px; font-weight: 700; text-align: center;
+    margin-bottom: 16px;
+  }
+  .career-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; margin-bottom: 14px;
+  }
+  .career-tag {
+    font-size: 13px; padding: 6px 14px; border-radius: 20px;
+    background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2);
+    color: var(--purple); font-weight: 600;
+  }
+  .career-reasons {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .career-reason {
+    font-size: 13px; line-height: 1.7; color: var(--dim);
+    padding-left: 14px;
+    border-left: 2px solid rgba(139,92,246,0.3);
+  }
+
   /* ===== 相性カード ===== */
   .compatibility-card {
     background: linear-gradient(145deg, rgba(236,72,153,0.12) 0%, rgba(139,92,246,0.08) 100%);
@@ -611,6 +644,11 @@
       <p class="weakness-card-note">弱点は「悪いところ」ではありません。自分を理解し、成長するためのヒントです。</p>
       <div id="weaknessContent"></div>
     </div>
+  </div>
+
+  <!-- おすすめ職種 -->
+  <div class="career-section">
+    <div class="career-card" id="careerCard"></div>
   </div>
 
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
@@ -844,6 +882,117 @@ const fragments = {
 };
 
 const factorNames = { O: '開放性', C: '誠実性', E: '外向性', A: '協調性', N: '感受性' };
+
+// ===== おすすめ職種データ =====
+const careerByFactor = {
+  O: {
+    high: [
+      { name: '起業家', why: '新しいアイデアを次々形にする好奇心と実行力があるため' },
+      { name: '研究開発者', why: '既存の枠にとらわれない探求心が研究に活きるため' },
+      { name: 'クリエイティブディレクター', why: '豊かな発想力でチームの創造性を引っ張れるため' },
+    ],
+    low: [
+      { name: '経理・財務', why: '安定を好み、ルールに沿って正確に処理するのが得意なため' },
+      { name: '行政管理', why: '組織を安定させることや、決められた手順を守るのが得意なため' },
+      { name: '品質管理', why: '基準を厳格に守る几帳面さが、品質保証の要となるため' },
+    ],
+  },
+  C: {
+    high: [
+      { name: '経営者・管理職', why: '計画性と責任感で組織をまとめ、目標を着実に達成するため' },
+      { name: 'プロジェクトマネージャー', why: 'スケジュールとリソースを管理する能力が高いため' },
+      { name: 'システムエンジニア', why: '複雑な問題を論理的に解く几帳面さが活きるため' },
+    ],
+    low: [
+      { name: 'アーティスト・クリエイター', why: '柔軟で自由な発想が、創造的な仕事に活きるため' },
+      { name: 'イベントプランナー', why: '臨機応変に対応する力と、場を盛り上げる即興力が武器になるため' },
+      { name: 'コンサルタント', why: '一つの手法に縛られず、状況に合わせて最適解を出せるため' },
+    ],
+  },
+  E: {
+    high: [
+      { name: '営業・マーケティング', why: '人と関わってエネルギーを得る社交性が、顧客との関係構築に活きるため' },
+      { name: 'PR・広報', why: '場を盛り上げる力と人を巻き込む魅力が、ブランド発信に活きるため' },
+      { name: '人事・採用担当', why: '多くの人と出会い、人材を見極める社交性が活きるため' },
+    ],
+    low: [
+      { name: 'プログラマー・技術職', why: '一人で集中して深く取り組む内省の力が、専門性の高い仕事に活きるため' },
+      { name: '研究職・アナリスト', why: 'データや文献と向き合う集中力が、分析や研究に活きるため' },
+      { name: 'ライター・編集者', why: '一人の世界で思考を深める力が、文章を書く仕事に活きるため' },
+    ],
+  },
+  A: {
+    high: [
+      { name: '教師・トレーナー', why: '相手を理解し、サポートする力が教育や育成の場で活きるため' },
+      { name: 'カウンセラー・心理士', why: '共感力と受容力が、人の心に寄り添う仕事に活きるため' },
+      { name: '看護師・医療福祉', why: '他者のために動ける利他性が、人を助ける仕事に活きるため' },
+    ],
+    low: [
+      { name: '弁護士・法務', why: '感情に流されず、自分の主張を通す力が交渉に活きるため' },
+      { name: '投資家・トレーダー', why: '自分の利益を冷静に判断する力が、金融の世界で活きるため' },
+      { name: '経営者', why: '決断力と競争心が、ビジネスの厳しい世界で武器になるため' },
+    ],
+  },
+  N: {
+    high: [
+      { name: '作家・脚本家', why: '深く物事を感じ取る感受性が、人の心を動かす作品づくりに活きるため' },
+      { name: 'アーティスト・デザイナー', why: '繊細な感覚が、美しさを追求するクリエイティブな仕事に活きるため' },
+      { name: '心理カウンセラー', why: '人の感情に敏感な気づきが、心のケアの仕事に活きるため' },
+    ],
+    low: [
+      { name: '経営者・役員', why: 'プレッシャーでも揺れない冷静さが、責任ある決断に活きるため' },
+      { name: '危機管理・緊急対応', why: '混乱の中で冷静さを保てる精神的安定性が、緊急時の対応に活きるため' },
+      { name: '外科研修医・パイロット', why: '極限のプレッシャーでも判断を崩さないメンタルが活きるため' },
+    ],
+  },
+};
+
+function genCareerSection(sc) {
+  const seen = new Set();
+  const careers = [];
+  const reasons = [];
+
+  // 極端な因子（1-2, 4-5）から職業を収集
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  const extreme = factors.filter(f => sc[f] >= 4 || sc[f] <= 2);
+
+  if (extreme.length >= 2) {
+    extreme.forEach(f => {
+      const level = sc[f] >= 4 ? 'high' : 'low';
+      const items = careerByFactor[f][level];
+      items.forEach(item => {
+        if (!seen.has(item.name)) {
+          seen.add(item.name);
+          careers.push(item);
+        }
+      });
+    });
+  } else {
+    // 中間型：上位2因子から中程度の職業を追加
+    const sorted = Object.entries(sc).sort((a, b) => b[1] - a[1]);
+    sorted.slice(0, 2).forEach(([f]) => {
+      const items = careerByFactor[f][sc[f] >= 3 ? 'high' : 'low'];
+      items.forEach(item => {
+        if (!seen.has(item.name)) {
+          seen.add(item.name);
+          careers.push(item);
+        }
+      });
+    });
+  }
+
+  // 最大5つに絞る
+  const display = careers.slice(0, 5);
+
+  // 特徴的な理由を生成
+  const top2 = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 2);
+  const traitLabels = top2.map(([f, v]) => {
+    const info = traitInfo[f];
+    return v >= 4 ? `${info.name}が高い` : v <= 2 ? `${info.name}が低い` : '';
+  }).filter(Boolean);
+
+  return { careers: display, traits: traitLabels };
+}
 
 // ===== URLパラメータ取得 =====
 const params = new URLSearchParams(window.location.search);
@@ -1153,6 +1302,27 @@ document.getElementById('descCard').innerHTML = `
 if (version === '10') {
   document.getElementById('upgradeBanner').style.display = 'block';
 }
+
+// ===== おすすめ職種カード =====
+(function() {
+  const { careers, traits } = genCareerSection(sc);
+  const container = document.getElementById('careerCard');
+
+  const traitText = traits.length > 0
+    ? `${traits.join('・')}あなたにおすすめの職種です。`
+    : 'あなたの性格に合う職種です。';
+
+  container.innerHTML = `
+    <p class="career-title">💼 おすすめ職種</p>
+    <p style="font-size:13px; color:var(--dim); text-align:center; margin-bottom:16px;">${traitText}</p>
+    <div class="career-tags">
+      ${careers.map(c => `<span class="career-tag">${c.name}</span>`).join('')}
+    </div>
+    <div class="career-reasons">
+      ${careers.map(c => `<p class="career-reason">${c.name}：${c.why}</p>`).join('')}
+    </div>
+  `;
+})();
 
 // リトライボタン
 document.getElementById('retryBtn').href = `quiz.html?v=${version}`;
