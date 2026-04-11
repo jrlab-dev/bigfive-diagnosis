@@ -359,17 +359,40 @@
     font-family: monospace;
   }
 
-  .compatibility-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(139,92,246,0.15));
-    border: 1px solid rgba(236,72,153,0.3);
+  .partner-selector {
+    margin-top: 16px;
+    text-align: center;
+  }
+  .partner-selector-label {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .partner-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .partner-chip {
+    padding: 6px 14px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.3);
     border-radius: 20px;
+    color: var(--dim);
     font-size: 13px;
-    font-weight: 600;
-    color: #f0a0c8;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .partner-chip:hover {
+    border-color: rgba(139,92,246,0.6);
+    color: var(--text);
+  }
+  .partner-chip.active {
+    background: rgba(139,92,246,0.25);
+    border-color: var(--purple);
+    color: var(--text);
   }
 
   .back-to-mypage {
@@ -429,8 +452,9 @@
       <!-- JavaScriptで動的に生成 -->
     </div>
 
-    <div class="compatibility-area" id="compatibilityArea" style="display: none;">
-      <div class="compatibility-badge" id="compatibilityBadge"></div>
+    <div class="partner-selector" id="partnerSelector" style="display: none;">
+      <p class="partner-selector-label">一緒に表示する相手を選ぶ</p>
+      <div class="partner-chips" id="partnerChips"></div>
     </div>
 
     <a href="mypage.html" class="back-to-mypage">📋 マイページで全結果を見る →</a>
@@ -572,36 +596,30 @@
   const STORAGE_KEY_MY = 'bigfive_my_results';
   const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 
-  // 保存データを取得
   const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
   const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
 
-  // 自分の結果がない場合は非表示
   if (myResults.length === 0) return;
 
   const personalizedSection = document.getElementById('personalizedSection');
   const charactersDisplay = document.getElementById('charactersDisplay');
   const welcomeTitle = document.getElementById('welcomeTitle');
-  const compatibilityArea = document.getElementById('compatibilityArea');
-  const compatibilityBadge = document.getElementById('compatibilityBadge');
+  const partnerSelector = document.getElementById('partnerSelector');
+  const partnerChips = document.getElementById('partnerChips');
 
-  // 最新の自分の結果
   const myResult = myResults[0];
-  const myGender = myResult.gender || 'F'; // データに性別がない場合は女性をデフォルト
+  const myGender = myResult.gender || 'F';
+  const myScores = myResult.scores || { O:3, C:3, E:3, A:3, N:3 };
 
-  // セクションを表示
   personalizedSection.classList.add('active');
 
-  // キャラクター表示関数
+  // キャラクターカード生成
   function createCharacterCard(result, gender, isMe) {
     const code = result.code;
     const name = isMe ? 'あなた' : result.name;
     const typeName = result.typeName || '性格タイプ';
-
-    // キャラクター画像パス（30問版は2/4が出るため1/3/5に丸める）
     const imgCode = code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
     const imgPath = `images/characters/${gender}/${imgCode}.webp`;
-
     return `
       <div class="character-wrapper">
         <div class="character-card">
@@ -613,44 +631,51 @@
     `;
   }
 
-  // 自分のキャラクターを表示
-  let displayHTML = createCharacterCard(myResult, myGender, true);
-
-  // あの人の結果があれば表示
-  if (others.length > 0) {
-    const otherResult = others[0];
-    const otherGender = otherResult.gender || 'F'; // データに性別がない場合は女性をデフォルト
-    displayHTML += createCharacterCard(otherResult, otherGender, false);
-
-    // 相性スコア計算
-    const myScores = myResult.scores;
-    const otherScores = {
-      O: parseInt(otherResult.code[0]),
-      C: parseInt(otherResult.code[1]),
-      E: parseInt(otherResult.code[2]),
-      A: parseInt(otherResult.code[3]),
-      N: parseInt(otherResult.code[4])
-    };
-
-    // 簡易相性計算
+  // 相性スコア計算（内部用）
+  function calcCompatibility(otherCode) {
+    const os = { O: parseInt(otherCode[0]), C: parseInt(otherCode[1]), E: parseInt(otherCode[2]), A: parseInt(otherCode[3]), N: parseInt(otherCode[4]) };
     let score = 50;
     score += (6 - myScores.N) * 3;
-    score += (6 - otherScores.N) * 3;
+    score += (6 - os.N) * 3;
     score += myScores.A * 2;
-    score += otherScores.A * 2;
-    score -= Math.abs(myScores.E - otherScores.E) * 3;
-    score -= Math.abs(myScores.C - otherScores.C) * 2;
-    score = Math.max(0, Math.min(100, score));
-
-    // 相性表示
-    compatibilityArea.style.display = 'block';
-    compatibilityBadge.innerHTML = `💕 ${otherResult.name}さんとの相性: ${Math.round(score)}点`;
-    welcomeTitle.textContent = `${otherResult.name}さんとの相性診断結果`;
-  } else {
-    welcomeTitle.textContent = 'おかえりなさい';
+    score += os.A * 2;
+    score -= Math.abs(myScores.E - os.E) * 3;
+    score -= Math.abs(myScores.C - os.C) * 2;
+    return Math.max(0, Math.min(100, score));
   }
 
-  charactersDisplay.innerHTML = displayHTML;
+  // 相手を選択して表示
+  function showPartner(index) {
+    partnerChips.querySelectorAll('.partner-chip').forEach((chip, i) => {
+      chip.classList.toggle('active', i === index);
+    });
+    const other = others[index];
+    const otherGender = other.gender || 'F';
+    charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true) + createCharacterCard(other, otherGender, false);
+    welcomeTitle.textContent = `${other.name}さんと`;
+  }
+
+  window.selectPartner = showPartner;
+
+  if (others.length > 0) {
+    // 最も相性の良い人を自動選択
+    let bestIdx = 0, bestScore = -1;
+    others.forEach((o, i) => {
+      const s = calcCompatibility(o.code);
+      if (s > bestScore) { bestScore = s; bestIdx = i; }
+    });
+
+    // 2人以上いる場合はセレクター表示
+    if (others.length >= 2) {
+      partnerSelector.style.display = 'block';
+      partnerChips.innerHTML = others.map((o, i) => `<button class="partner-chip" onclick="selectPartner(${i})">${o.name}</button>`).join('');
+    }
+
+    showPartner(bestIdx);
+  } else {
+    welcomeTitle.textContent = 'おかえりなさい';
+    charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true);
+  }
 })();
 </script>
 </body>
