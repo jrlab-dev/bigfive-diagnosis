@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マインドセット診断 — 成長思考・固定思考</title>
+<meta name="description" content="Dweck（2006）のマインドセット理論に基づく8問診断。あなたの思考パターンが「成長型」か「固定型」かを科学的に分析します。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ3125タイプ診断">
+<meta property="og:title" content="マインドセット診断 — 成長思考・固定思考">
+<meta property="og:description" content="Dweck（2006）のマインドセット理論に基づく8問診断。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/mindset.html">
+<meta name="twitter:card" content="summary">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27; --text: #e2e8f0; --dim: #94a3b8;
+    --growth: #10b981; --fixed: #f97316; --mixed: #8b5cf6;
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 30%, rgba(16,185,129,0.1) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(139,92,246,0.1) 0%, transparent 70%); animation: nebula-drift 25s ease-in-out infinite alternate; }
+  @keyframes nebula-drift { 0% { transform: scale(1); } 100% { transform: scale(1.05) translate(-1%, 1%); } }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .top-link { position: fixed; top: 20px; left: 20px; display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 13px; z-index: 10; transition: color .2s; }
+  .top-link:hover { color: var(--text); }
+  .quiz-container { position: relative; z-index: 1; width: 100%; max-width: 560px; min-height: 100vh; display: flex; flex-direction: column; padding: 60px 24px 40px; }
+
+  /* イントロ */
+  .intro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 999px; font-size: 12px; color: var(--growth); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 26px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--growth); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
+  .two-types { display: flex; gap: 16px; width: 100%; max-width: 360px; }
+  .type-chip { flex: 1; padding: 12px; border-radius: 12px; text-align: center; }
+  .type-chip .type-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .type-chip .type-desc { font-size: 11px; color: var(--dim); line-height: 1.5; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--growth), #059669); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(16,185,129,0.35); transition: transform .2s, box-shadow .2s; }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.5); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+
+  /* プログレス */
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--growth), var(--mixed)); transition: width .4s ease; }
+  .progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+
+  /* 質問 */
+  .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .question-num { font-size: 13px; color: var(--growth); font-weight: 500; margin-bottom: 12px; }
+  .question-text { font-size: 18px; line-height: 1.7; margin-bottom: 36px; min-height: 60px; }
+  .answers { display: flex; gap: 10px; margin-bottom: 40px; }
+  .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--dim); background: rgba(16,185,129,0.06); border: 1.5px solid rgba(16,185,129,0.15); border-radius: 12px; cursor: pointer; transition: all .2s; min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .answer-btn:hover { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--growth), #059669); border-color: transparent; color: #fff; font-weight: 700; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13px; color: var(--dim); background: none; border: none; cursor: pointer; padding: 8px 0; transition: color .2s; }
+  .back-btn:hover { color: var(--text); }
+
+  /* ローディング */
+  .loading { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; }
+  .loading.active { display: flex; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(16,185,129,0.2); border-top-color: var(--growth); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 結果 */
+  .result { display: none; flex-direction: column; align-items: center; gap: 24px; padding-bottom: 60px; }
+  .result.active { display: flex; }
+  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+  .result-card-inner { padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); position: relative; }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; }
+  .result-title { font-size: 32px; font-weight: 900; }
+  .result-score-display { font-size: 48px; font-weight: 900; }
+  .result-desc { font-size: 14px; line-height: 1.75; max-width: 320px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+  /* メーター */
+  .meter-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .meter-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 16px; letter-spacing: .08em; }
+  .meter-track { position: relative; height: 20px; background: linear-gradient(90deg, var(--fixed), #94a3b8, var(--growth)); border-radius: 10px; margin-bottom: 8px; }
+  .meter-needle { position: absolute; top: -6px; width: 4px; height: 32px; background: #fff; border-radius: 2px; transform: translateX(-50%); transition: left 1.2s ease; box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+  .meter-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); }
+
+  /* ディメンション詳細 */
+  .detail-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .detail-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .08em; }
+  .detail-item { margin-bottom: 14px; }
+  .detail-item-label { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .detail-item-text { font-size: 13px; color: var(--dim); line-height: 1.65; }
+
+  /* Big Five連携 */
+  .bigfive-cross { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .bigfive-cross h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; letter-spacing: .08em; }
+  .cross-text { font-size: 14px; line-height: 1.75; }
+  .cross-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: #a78bfa; margin: 0 2px; }
+
+  /* ナビ */
+  .result-nav { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+  .nav-btn { width: 100%; padding: 14px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; text-decoration: none; display: block; }
+  .nav-btn-primary { background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: none; color: #fff; }
+  .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
+  .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .disclaimer { width: 100%; max-width: 420px; font-size: 11px; color: var(--dim); line-height: 1.6; text-align: center; padding: 0 12px; }
+</style>
+</head>
+<body>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
+
+<div class="quiz-container">
+  <!-- イントロ -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">🧠 認知心理学</span>
+    <h1>あなたの<span>マインドセット</span>は？</h1>
+    <p class="intro-sub">Carol Dweck（2006）の研究に基づき、あなたの「能力観」が成長型か固定型かを8問で科学的に測定します。</p>
+    <div class="two-types">
+      <div class="type-chip" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);">
+        <div class="type-name" style="color:var(--growth);">成長マインドセット</div>
+        <div class="type-desc">能力は努力と経験で伸ばせると信じている</div>
+      </div>
+      <div class="type-chip" style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);">
+        <div class="type-name" style="color:var(--fixed);">固定マインドセット</div>
+        <div class="type-desc">能力は生まれつき決まっていると信じている</div>
+      </div>
+    </div>
+    <button class="start-btn" id="startBtn">診断スタート</button>
+    <p class="intro-note">8問・無料・登録不要</p>
+  </div>
+
+  <!-- プログレス -->
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/8</span>
+  </div>
+
+  <!-- 質問 -->
+  <div class="question-area" id="questionArea" style="display:none;">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">全く<br>そう思わない</button>
+      <button class="answer-btn" data-val="2">そう思わない</button>
+      <button class="answer-btn" data-val="3">どちらでも<br>ない</button>
+      <button class="answer-btn" data-val="4">そう思う</button>
+      <button class="answer-btn" data-val="5">強く<br>そう思う</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中…</p>
+    <p style="font-size:13px;color:var(--dim);">あなたの思考パターンを読み解いています</p>
+  </div>
+
+  <!-- 結果 -->
+  <div class="result" id="resultArea">
+    <div class="result-card" id="resultCard">
+      <div class="result-card-inner">
+        <p class="result-label" id="resultLabel">GROWTH MINDSET</p>
+        <p class="result-title" id="resultTitle">成長マインドセット</p>
+        <p class="result-score-display" id="resultScoreDisplay"></p>
+        <p class="result-desc" id="resultDesc"></p>
+      </div>
+    </div>
+
+    <div class="meter-box">
+      <h3>固定型 ← あなたの位置 → 成長型</h3>
+      <div class="meter-track"><div class="meter-needle" id="meterNeedle" style="left:50%"></div></div>
+      <div class="meter-labels"><span style="color:var(--fixed);">固定型</span><span>中間</span><span style="color:var(--growth);">成長型</span></div>
+    </div>
+
+    <div class="detail-box">
+      <h3>あなたの傾向</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <div class="bigfive-cross">
+      <h3>ビッグファイブとの組み合わせ分析</h3>
+      <div id="crossText"></div>
+    </div>
+
+    <div class="result-nav">
+      <a href="sdt.html" class="nav-btn nav-btn-primary">次：動機のタイプを診断する →</a>
+      <a href="index.html" class="nav-btn nav-btn-secondary">トップに戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn">もう一度診断する</button>
+    </div>
+
+    <p class="disclaimer">※ Dweck, C. S.（2006）Mindset: The New Psychology of Success をベースにした診断です。結果は傾向を示すものであり、能力の限界を決定するものではありません。</p>
+  </div>
+</div>
+
+<script>
+// ===== 質問データ（Dweck 2006 原版に忠実） =====
+const questions = [
+  { text: '人はそれぞれ決まった量の能力を持っており、それを大きく変えることはできない。', dir: '-' },
+  { text: '自分の能力は、努力によって大幅に変えることができる。', dir: '+' },
+  { text: '正直なところ、自分の基本的な能力を変えることはほとんどできない。', dir: '-' },
+  { text: '新しいことは学べるが、根本的な能力レベルを変えることはできない。', dir: '-' },
+  { text: '誰であっても、自分の能力を大幅に伸ばすことができる。', dir: '+' },
+  { text: '今どの程度の能力があっても、かなり変えることは常に可能だ。', dir: '+' },
+  { text: '自分の能力の程度は、基本的には固定されたものだと思う。', dir: '-' },
+  { text: '根本的な能力レベルであっても、努力次第でかなり変えられる。', dir: '+' },
+];
+
+const resultData = {
+  growth: {
+    label: 'GROWTH MINDSET', title: '成長マインドセット', color: '#10b981',
+    desc: '能力は努力と経験によって伸ばせると強く信じています。失敗を学びの機会としてとらえ、挑戦を恐れない姿勢があります。困難に直面したとき、諦めずに戦略を変えて取り組む力があります。',
+    detail: [
+      { label: '失敗への向き合い方', text: '失敗を「まだ成長途中」のサインととらえ、次の行動への手がかりにします。' },
+      { label: '挑戦への姿勢', text: '難しい課題ほど成長の機会と感じ、積極的に取り組む傾向があります。' },
+      { label: '他者との比較', text: '他人の成功を脅威ではなく、自分が学べるモデルとして見ることができます。' },
+    ]
+  },
+  mixed: {
+    label: 'MIXED MINDSET', title: '混合マインドセット', color: '#8b5cf6',
+    desc: '状況や分野によって成長型と固定型が混在しています。得意分野では挑戦を楽しめる一方、苦手分野では「自分には向いていない」と感じやすい側面もあります。これは非常に一般的なパターンです。',
+    detail: [
+      { label: '分野による差', text: '「自分が得意なこと」では成長型、「苦手なこと」では固定型になりやすい傾向があります。' },
+      { label: '成長のヒント', text: '苦手意識のある分野で「まだできない」と「永遠にできない」を区別することが鍵になります。' },
+      { label: 'バランスの良さ', text: '現実的な自己認識と挑戦意欲が共存しており、無謀なリスクを避けながら成長できます。' },
+    ]
+  },
+  fixed: {
+    label: 'FIXED MINDSET', title: '固定マインドセット', color: '#f97316',
+    desc: '能力は生まれつきある程度決まっていると感じています。そのため、失敗を能力の証明ととらえやすく、挑戦を避けることで自己イメージを守ろうとする傾向があります。しかしこの認識自体を変えることができます。',
+    detail: [
+      { label: '失敗への向き合い方', text: '失敗が「自分の能力不足の証明」に感じられやすく、自己評価が下がりやすい傾向があります。' },
+      { label: '挑戦への姿勢', text: '失敗したくないために、難しい課題を避ける行動が出やすい側面があります。' },
+      { label: '成長のヒント', text: '「才能があるからできる」ではなく「努力のプロセス」に注目することで思考が変わります。' },
+    ]
+  }
+};
+
+// ===== 状態 =====
+let current = 0;
+const answers = new Array(questions.length).fill(null);
+
+// 星背景
+(function() {
+  const c = document.getElementById('bgStars');
+  const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.6+0.2})`;
+    ctx.fill();
+  }
+})();
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'flex';
+  document.getElementById('questionArea').style.display = 'flex';
+  showQuestion();
+});
+
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById('questionNum').textContent = `Q${current + 1}`;
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/${questions.length}`;
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if (answers[current] == btn.dataset.val) btn.classList.add('selected');
+    btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
+  });
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+function selectAnswer(val) {
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
+  setTimeout(() => { current++; current < questions.length ? showQuestion() : showLoading(); }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => { if (current > 0) { current--; showQuestion(); } });
+
+function showLoading() {
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(showResult, 1800);
+}
+
+function calcScore() {
+  let total = 0;
+  questions.forEach((q, i) => {
+    const val = answers[i] || 3;
+    total += q.dir === '+' ? val : (6 - val);
+  });
+  return total / questions.length; // 1〜5
+}
+
+function showResult() {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const score = calcScore();
+  const type = score >= 3.5 ? 'growth' : score >= 2.5 ? 'mixed' : 'fixed';
+  const data = resultData[type];
+
+  document.getElementById('resultLabel').textContent = data.label;
+  document.getElementById('resultLabel').style.color = data.color;
+  document.getElementById('resultTitle').textContent = data.title;
+  document.getElementById('resultTitle').style.color = data.color;
+  document.getElementById('resultScoreDisplay').textContent = score.toFixed(1);
+  document.getElementById('resultScoreDisplay').style.color = data.color;
+  document.getElementById('resultDesc').textContent = data.desc;
+
+  // メーター針（1〜5 → 0〜100%）
+  setTimeout(() => {
+    document.getElementById('meterNeedle').style.left = `${((score - 1) / 4) * 100}%`;
+  }, 200);
+
+  // 詳細
+  document.getElementById('detailContent').innerHTML = data.detail.map(d =>
+    `<div class="detail-item"><div class="detail-item-label" style="color:${data.color}">${d.label}</div><div class="detail-item-text">${d.text}</div></div>`
+  ).join('');
+
+  // Big Five連携
+  const bfResult = JSON.parse(localStorage.getItem('bigfive_result') || 'null');
+  const crossArea = document.getElementById('crossText');
+  if (bfResult && bfResult.scores) {
+    const s = bfResult.scores;
+    const oHigh = s.O >= 4, cHigh = s.C >= 4, nLow = s.N <= 2;
+    let msg = '';
+    if (type === 'growth') {
+      if (oHigh) msg = '開放性が高いあなたは、新しいことへの好奇心が強く、成長マインドセットと深く共鳴します。挑戦を楽しむ力が際立っています。';
+      else if (cHigh) msg = '誠実性が高いあなたは、コツコツ努力を続ける力があり、成長マインドセットの実践に向いています。';
+      else msg = 'あなたの性格特性と成長マインドセットが組み合わさることで、困難な状況でも前向きに取り組む力が発揮されます。';
+    } else if (type === 'fixed') {
+      if (nLow) msg = '感受性が低めのあなたは感情的なストレスを受けにくいため、マインドセットを意識的に変えるトレーニングに向いています。';
+      else msg = '固定マインドセットは変えることができます。あなたのビッグファイブの特性を活かして、小さな成功体験を積み重ねることから始めましょう。';
+    } else {
+      msg = '混合マインドセットはとても一般的です。あなたの性格の強みを「得意分野以外」にも応用していくことが成長のカギになります。';
+    }
+    const labels = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+    const high = Object.entries(s).filter(([,v]) => v >= 4).map(([k]) => `<span class="cross-badge">${labels[k]}高</span>`).join('');
+    crossArea.innerHTML = `<p class="cross-text">${high ? high + '<br><br>' : ''}${msg}</p>`;
+  } else {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。組み合わせ分析には<a href="quiz.html" style="color:#a78bfa;">性格診断</a>が必要です。</p>`;
+  }
+
+  localStorage.setItem('mindset_result', JSON.stringify({ type, score, timestamp: Date.now() }));
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  current = 0; answers.fill(null);
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+});
+</script>
+</body>
+</html>
