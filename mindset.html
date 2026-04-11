@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>マインドセット診断 — 成長思考・固定思考</title>
 <meta name="description" content="Dweck（2006）のマインドセット理論に基づく8問診断。あなたの思考パターンが「成長型」か「固定型」かを科学的に分析します。">
@@ -273,6 +274,19 @@ function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
   } catch(e) { clearProgress(); }
 })();
 
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem('mindset_result');
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.type) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult(d.score, d.type);
+    }
+  } catch(e) {}
+})();
+
 // 星背景
 (function() {
   const c = document.getElementById('bgStars');
@@ -332,12 +346,12 @@ function calcScore() {
   return total / questions.length; // 1〜5
 }
 
-function showResult() {
+function showResult(preScore, preType) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
-  const score = calcScore();
-  const type = score >= 3.5 ? 'growth' : score >= 2.5 ? 'mixed' : 'fixed';
+  const score = preScore !== undefined ? preScore : calcScore();
+  const type = preType || (score >= 3.5 ? 'growth' : score >= 2.5 ? 'mixed' : 'fixed');
   const data = resultData[type];
 
   document.getElementById('resultLabel').textContent = data.label;
@@ -383,8 +397,10 @@ function showResult() {
     crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。組み合わせ分析には<a href="quiz.html" style="color:#a78bfa;">性格診断</a>が必要です。</p>`;
   }
 
-  localStorage.setItem('mindset_result', JSON.stringify({ type, score, timestamp: Date.now() }));
-  clearProgress();
+  if (preScore === undefined) {
+    localStorage.setItem('mindset_result', JSON.stringify({ type, score, timestamp: Date.now() }));
+    clearProgress();
+  }
 }
 
 document.getElementById('retryBtn').addEventListener('click', () => {

@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>価値観タイプ診断（シュワーツ理論）— あなたが大切にしているもの</title>
 <meta name="description" content="Schwartz（1992）の価値理論に基づく21問診断。80カ国以上で検証された科学的根拠をもとに、あなたの核心的な価値観を10カテゴリで分析します。">
@@ -300,11 +301,11 @@ function calcScores() {
   return scores;
 }
 
-function showResult() {
+function showResult(preScores) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
-  const scores = calcScores();
+  const scores = preScores || calcScores();
   const sorted = Object.entries(scores).sort((a,b) => b[1]-a[1]);
   const top3 = sorted.slice(0, 3);
 
@@ -380,9 +381,24 @@ function showResult() {
     crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#a78bfa;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
   }
 
-  localStorage.setItem('schwartz_result', JSON.stringify({ top3: top3.map(([k])=>k), scores, timestamp: Date.now() }));
-  clearProgress();
+  if (!preScores) {
+    localStorage.setItem('schwartz_result', JSON.stringify({ top3: top3.map(([k])=>k), scores, timestamp: Date.now() }));
+    clearProgress();
+  }
 }
+
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem('schwartz_result');
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.scores) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult(d.scores);
+    }
+  } catch(e) {}
+})();
 
 document.getElementById('retryBtn').addEventListener('click', () => {
   current = 0; answers.fill(null); clearProgress();

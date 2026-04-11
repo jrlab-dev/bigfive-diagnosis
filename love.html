@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>恋愛スタイル診断 — あなたの愛し方がわかる</title>
 <meta name="description" content="12問で分かる恋愛スタイル診断。情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせ分析も。">
@@ -668,6 +669,19 @@ function clearProgress() {
   }
 })();
 
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem('love_result');
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.mainStyle && d.scores) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult(d.scores, d.mainStyle);
+    }
+  } catch(e) {}
+})();
+
 // ===== スタート =====
 document.getElementById('startBtn').addEventListener('click', () => {
   document.getElementById('introArea').style.display = 'none';
@@ -734,14 +748,14 @@ function calcScores() {
 }
 
 // ===== 結果表示 =====
-function showResult() {
+function showResult(preScores, preMainKey) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
-  const scores = calcScores();
+  const scores = preScores || calcScores();
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const [mainKey, mainScore] = sorted[0];
-  const [subKey] = sorted[1];
+  const [mainKey, mainScore] = preMainKey ? [preMainKey, scores[preMainKey]] : sorted[0];
+  const [subKey] = sorted.find(([k]) => k !== mainKey) || sorted[1];
   const mainStyle = styles[mainKey];
   const subStyle = styles[subKey];
 
@@ -803,9 +817,10 @@ function showResult() {
     </div>`).join('');
   document.getElementById('compatArea').innerHTML = compatHtml;
 
-  // LocalStorageに保存（途中保存は削除）
-  localStorage.setItem('love_result', JSON.stringify({ mainStyle: mainKey, scores, timestamp: Date.now() }));
-  clearProgress();
+  if (!preScores) {
+    localStorage.setItem('love_result', JSON.stringify({ mainStyle: mainKey, scores, timestamp: Date.now() }));
+    clearProgress();
+  }
 }
 
 // ===== リトライ =====
