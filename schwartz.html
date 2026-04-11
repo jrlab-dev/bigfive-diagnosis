@@ -111,6 +111,8 @@
       <p><strong>答え方：</strong>ある人物の説明が表示されます。「自分はこの人にどれくらい似ているか」を直感で選んでください。価値観を直接聞くと「よく見せたい」バイアスが入るため、人物への共感度で測定します。</p>
     </div>
     <button class="start-btn" id="startBtn">診断スタート</button>
+    <button class="start-btn" id="resumeBtn" style="display:none; background:linear-gradient(135deg,#f59e0b,#d97706); margin-top:10px; font-size:15px;">▶ 途中から再開する</button>
+    <p class="resume-info" id="resumeInfo" style="display:none; font-size:12px; color:rgba(245,158,11,0.8); margin-top:6px;"></p>
     <p class="intro-note">21問・無料・登録不要</p>
   </div>
 
@@ -217,6 +219,35 @@ const questions = [
 
 let current = 0;
 const answers = new Array(questions.length).fill(null);
+const PROGRESS_KEY = 'schwartz_progress';
+
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current, answers: answers.slice() }));
+}
+function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
+
+(function checkResume() {
+  const saved = localStorage.getItem(PROGRESS_KEY);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    if (data && data.current > 0) {
+      const resumeBtn = document.getElementById('resumeBtn');
+      const resumeInfo = document.getElementById('resumeInfo');
+      resumeBtn.style.display = 'block';
+      resumeInfo.style.display = 'block';
+      resumeInfo.textContent = `前回 Q${data.current + 1} まで回答済み（残り ${questions.length - data.current} 問）`;
+      resumeBtn.addEventListener('click', () => {
+        current = data.current;
+        answers.splice(0, answers.length, ...data.answers.map(v => v === undefined ? null : v));
+        document.getElementById('introArea').style.display = 'none';
+        document.getElementById('progressArea').style.display = 'flex';
+        document.getElementById('questionArea').style.display = 'flex';
+        showQuestion();
+      });
+    }
+  } catch(e) { clearProgress(); }
+})();
 
 (function() {
   const c = document.getElementById('bgStars'); const ctx = c.getContext('2d');
@@ -248,7 +279,7 @@ function selectAnswer(val) {
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
-  setTimeout(() => { current++; current < questions.length ? showQuestion() : showLoading(); }, 280);
+  setTimeout(() => { current++; saveProgress(); current < questions.length ? showQuestion() : showLoading(); }, 280);
 }
 
 document.getElementById('backBtn').addEventListener('click', () => { if (current > 0) { current--; showQuestion(); } });
@@ -350,10 +381,13 @@ function showResult() {
   }
 
   localStorage.setItem('schwartz_result', JSON.stringify({ top3: top3.map(([k])=>k), scores, timestamp: Date.now() }));
+  clearProgress();
 }
 
 document.getElementById('retryBtn').addEventListener('click', () => {
-  current = 0; answers.fill(null);
+  current = 0; answers.fill(null); clearProgress();
+  document.getElementById('resumeBtn').style.display = 'none';
+  document.getElementById('resumeInfo').style.display = 'none';
   document.getElementById('resultArea').classList.remove('active');
   document.getElementById('introArea').style.display = 'flex';
 });
