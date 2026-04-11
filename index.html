@@ -235,8 +235,8 @@
   .feature-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 24px; }
   .feature-card {
     background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 18px; padding: 22px 20px; backdrop-filter: blur(8px);
-    min-height: 168px;
+    border-radius: 18px; padding: 14px 16px; backdrop-filter: blur(8px);
+    min-height: 88px;
     transition: transform .3s, border-color .3s, box-shadow .3s;
     position: relative; overflow: hidden;
   }
@@ -285,10 +285,9 @@
     transform: translateY(-50%);
     height: 125%;
     width: auto;
-    opacity: 0.28;
+    opacity: 0.5;
     pointer-events: none;
     z-index: 0;
-    filter: saturate(0.75) brightness(1.1);
     border-radius: 8px;
   }
 
@@ -303,9 +302,9 @@
     pointer-events: none;
   }
   .feature-chara-bg img {
-    height: 150px;
+    height: 100px;
     width: auto;
-    opacity: 0.42;
+    opacity: 0.52;
   }
   .feature-chara-bg img:first-child { margin-right: -10px; }
 
@@ -318,12 +317,12 @@
 
   /* テキスト背後のぼかし */
   .feature-text-body {
-    background: rgba(10, 14, 39, 0.52);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-top: 8px;
+    background: rgba(10, 14, 39, 0.42);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 7px 11px;
+    margin-top: 6px;
   }
   .feature-text-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
   .feature-text-body p  { font-size: 12px; color: var(--dim); line-height: 1.65; }
