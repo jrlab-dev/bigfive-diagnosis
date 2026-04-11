@@ -442,13 +442,13 @@
       <span class="style-chip" style="color:var(--agape);border-color:var(--agape);">献身型</span>
     </div>
     <button class="start-btn" id="startBtn">診断スタート</button>
-    <p class="intro-note">12問・無料・登録不要</p>
+    <p class="intro-note">24問・無料・登録不要</p>
   </div>
 
   <!-- プログレス -->
   <div class="progress" id="progressArea" style="display:none;">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <span class="progress-text" id="progressText">1/12</span>
+    <span class="progress-text" id="progressText">1/24</span>
   </div>
 
   <!-- 質問 -->
@@ -515,20 +515,39 @@
 </div>
 
 <script>
-// ===== 質問データ（各スタイル2問） =====
+// ===== 質問データ（LAS-SF 各スタイル4問・計24問） =====
+// Hendrick, Hendrick & Dicke (1998) Love Attitudes Scale: Short Form
 const questions = [
-  { text: '初めて会った瞬間に「この人だ」と感じることがある', style: 'eros' },
-  { text: '恋愛では外見や雰囲気への強い惹かれが大切だと思う', style: 'eros' },
-  { text: '恋愛はある程度、楽しむゲームのようなものだと思う', style: 'ludus' },
-  { text: '特定の一人にこだわらず、恋愛を自由に楽しみたい', style: 'ludus' },
-  { text: '長い友人関係から自然に恋愛に発展するのが理想だ', style: 'storge' },
-  { text: '恋人とは親友のような、気楽で深い関係が心地よい', style: 'storge' },
-  { text: '恋人を選ぶとき、価値観・生活水準・将来性を冷静に考える', style: 'pragma' },
-  { text: '長期的に安定した関係を築けるかどうかを重視する', style: 'pragma' },
-  { text: '好きな人から連絡が来ないと、強い不安を感じる', style: 'mania' },
-  { text: '恋愛中は相手のことが頭から離れず、他のことに集中できなくなる', style: 'mania' },
-  { text: '愛する人のためなら、自分が犠牲になっても構わないと思う', style: 'agape' },
-  { text: '相手が幸せであれば、自分の欲求は後回しにできる', style: 'agape' },
+  // Eros（情熱型）
+  { text: '好きな人と出会った瞬間から、強く惹かれるものを感じた（感じると思う）。', style: 'eros' },
+  { text: '恋愛では、身体的・感覚的な相性がとても大切だと思う。', style: 'eros' },
+  { text: '相手との関係において、情熱的なつながりを強く求める。', style: 'eros' },
+  { text: '「この人だ」という運命的な感覚が恋愛の始まりだと感じる。', style: 'eros' },
+  // Ludus（遊び型）
+  { text: '恋愛では、相手に自分の気持ちをあえて曖昧にしておくことがある。', style: 'ludus' },
+  { text: '相手が知らなければ、恋愛中に他の人と楽しむことも問題ないと思う。', style: 'ludus' },
+  { text: '恋愛は特定の一人に縛られず、自由に楽しむものだと思う。', style: 'ludus' },
+  { text: '複数の相手と同時に関係を持つことにあまり抵抗を感じない。', style: 'ludus' },
+  // Storge（友情型）
+  { text: '友情がいつの間にか恋愛に変わっていたという経験がある（またはそれが理想だ）。', style: 'storge' },
+  { text: '本当の愛とは、神秘的な感情よりも深い友情に近いものだと思う。', style: 'storge' },
+  { text: '長い時間をかけて育まれた関係こそが、最も深い愛だと感じる。', style: 'storge' },
+  { text: 'まず友人として信頼関係を築かないと、心から愛することができない。', style: 'storge' },
+  // Pragma（現実型）
+  { text: '恋人を選ぶとき、将来その人がどうなるかを真剣に考える。', style: 'pragma' },
+  { text: 'パートナーを選ぶ前に、自分の人生計画をしっかり考えておくべきだと思う。', style: 'pragma' },
+  { text: '恋愛では、似た背景・価値観・生活水準を持つ相手を選ぶのが賢明だと思う。', style: 'pragma' },
+  { text: '相手が自分の家族や周囲にどう見られるかも、パートナー選びの基準になる。', style: 'pragma' },
+  // Mania（執着型）
+  { text: 'パートナーから連絡が来ないと、体中が不安でたまらなくなる。', style: 'mania' },
+  { text: '好きな人のことが気になって、他のことに集中できなくなることがよくある。', style: 'mania' },
+  { text: 'パートナーが他の人といるかもしれないと思うと、落ち着いていられない。', style: 'mania' },
+  { text: '相手の気を引くために、時々無謀な行動をとってしまうことがある。', style: 'mania' },
+  // Agape（献身型）
+  { text: 'パートナーが困難な時期に、できる限りサポートするために努力する。', style: 'agape' },
+  { text: '自分が苦しんででも、相手には苦しんでほしくないと強く思う。', style: 'agape' },
+  { text: '相手の幸せを自分より優先しないと、自分は本当に幸せになれないと感じる。', style: 'agape' },
+  { text: '自分のものは、相手が必要としているなら自由に使ってもらって構わない。', style: 'agape' },
 ];
 
 // ===== スタイル定義 =====
@@ -673,8 +692,8 @@ function calcScores() {
   questions.forEach((q, i) => {
     scores[q.style] += (answers[i] || 3);
   });
-  // 各スタイル2問なので最大10点 → 5段階に変換
-  Object.keys(scores).forEach(k => { scores[k] = scores[k] / 2; });
+  // 各スタイル4問なので最大20点 → 5段階に変換
+  Object.keys(scores).forEach(k => { scores[k] = scores[k] / 4; });
   return scores;
 }
 
