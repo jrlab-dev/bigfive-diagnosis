@@ -328,7 +328,8 @@ function showResult() {
   ).join('');
 
   // Big Five連携
-  const bfResult = JSON.parse(localStorage.getItem('bigfive_result') || 'null');
+  const bfResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const bfResult = bfResults.length > 0 ? bfResults[0] : null;
   const crossArea = document.getElementById('crossText');
   if (bfResult && bfResult.scores) {
     const s = bfResult.scores;
