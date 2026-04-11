@@ -112,6 +112,27 @@
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
   @keyframes twinkle { 0%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:.5;transform:scale(1)} }
 
+  /* 背景に浮かぶあの人 */
+  #bgCharacterDiv {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    width: 360px;
+    left: 50%;
+    top: 12%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    animation: floatGhost 7s ease-in-out infinite;
+    filter: drop-shadow(0 0 48px rgba(139,92,246,0.4)) drop-shadow(0 0 16px rgba(232,121,176,0.25));
+  }
+  #bgCharacterDiv.visible { opacity: 0.18; }
+  #bgCharacterDiv img { width: 100%; height: auto; display: block; }
+  @keyframes floatGhost {
+    0%, 100% { transform: translateX(-50%) translateY(0px); }
+    50% { transform: translateX(-50%) translateY(-28px); }
+  }
+
   .content { position: relative; z-index: 1; }
 
   /* ヒーロー */
@@ -427,6 +448,7 @@
 <body>
 <div class="bg-nebula"></div>
 <div class="bg-stars" id="bgStars"></div>
+<div id="bgCharacterDiv"></div>
 <div class="content">
 
   <!-- ヒーロー -->
@@ -653,6 +675,14 @@
     const otherGender = other.gender || 'F';
     charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true) + createCharacterCard(other, otherGender, false);
     welcomeTitle.textContent = `${other.name}さんと`;
+
+    // 背景に「あの人」を浮かせる
+    const bgDiv = document.getElementById('bgCharacterDiv');
+    if (bgDiv) {
+      const otherImgCode = other.code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+      bgDiv.classList.remove('visible');
+      bgDiv.innerHTML = `<img src="images/characters/${otherGender}/${otherImgCode}.webp" alt="" onload="this.closest('#bgCharacterDiv').classList.add('visible')">`;
+    }
   }
 
   window.selectPartner = showPartner;
@@ -675,6 +705,8 @@
   } else {
     welcomeTitle.textContent = 'おかえりなさい';
     charactersDisplay.innerHTML = createCharacterCard(myResult, myGender, true);
+    const bgDiv = document.getElementById('bgCharacterDiv');
+    if (bgDiv) { bgDiv.innerHTML = ''; bgDiv.classList.remove('visible'); }
   }
 })();
 </script>
