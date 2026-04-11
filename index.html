@@ -282,6 +282,34 @@
   .science-label svg { width: 10px; height: 10px; flex-shrink: 0; }
 
   .feature-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+
+  /* 2人対比（キャラクターカード用） */
+  .feature-duo {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 12px;
+    min-height: 70px;
+  }
+  .feature-duo img {
+    height: 64px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s;
+  }
+  .feature-duo img:hover { transform: translateY(-4px) scale(1.05); }
+  .feature-duo .vs-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--dim);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
   .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
   .feature-card p  { font-size: 13px; color: var(--dim); line-height: 1.7; }
   .science-link {
@@ -444,7 +472,7 @@
           <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
           研究で実証
         </span>
-        <span class="feature-icon">🌌</span>
+        <span class="feature-icon"><img src="images/features/patterns.webp" alt="3125パターン" style="height:56px;width:auto;border-radius:8px;"></span>
         <h3>3125パターン</h3>
         <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125種類の性格タイプを導き出します。</p>
       </div>
@@ -454,7 +482,11 @@
           <svg viewBox="0 0 12 12" fill="none"><rect x="1.5" y="4" width="2" height="6.5" rx=".5" fill="#f0a0c8"/><rect x="5" y="2" width="2" height="8.5" rx=".5" fill="#f0a0c8"/><rect x="8.5" y="5.5" width="2" height="5" rx=".5" fill="#f0a0c8"/></svg>
           可視化
         </span>
-        <span class="feature-icon">🃏</span>
+        <div class="feature-duo">
+          <img src="images/characters/F/43334.webp" alt="女性キャラクター">
+          <span class="vs-badge">×</span>
+          <img src="images/characters/M/35243.webp" alt="男性キャラクター">
+        </div>
         <h3>キャラクターカード</h3>
         <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
       </div>
@@ -464,7 +496,7 @@
           <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           科学的根拠
         </span>
-        <span class="feature-icon">🧬</span>
+        <span class="feature-icon"><img src="images/features/science.webp" alt="科学的根拠" style="height:56px;width:auto;border-radius:8px;"></span>
         <h3>科学的根拠</h3>
         <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
         <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
@@ -475,7 +507,7 @@
           <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
           行動観察
         </span>
-        <span class="feature-icon">👁️</span>
+        <span class="feature-icon"><img src="images/features/observation.webp" alt="あの人を分析する" style="height:56px;width:auto;border-radius:8px;"></span>
         <h3>あの人を分析する</h3>
         <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
       </div>
