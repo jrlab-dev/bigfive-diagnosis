@@ -1070,10 +1070,14 @@ document.getElementById('desc').textContent = genDescription();
 const card = document.getElementById('card');
 card.className = `card rarity-${getRarity()}`;
 
-// キャラクター画像
+// キャラクター画像（30問版はスコアが1-5になるため、画像用に1/3/5に丸める）
 const gender = params.get('gender') || 'F';
 const charImg = document.getElementById('charImg');
-const charSrc = `images/characters/${gender}/${typeCode}.webp`;
+const imgCode = typeCode.split('').map(d => {
+  const n = parseInt(d);
+  return n <= 2 ? '1' : n >= 4 ? '5' : '3';
+}).join('');
+const charSrc = `images/characters/${gender}/${imgCode}.webp`;
 charImg.src = charSrc;
 charImg.style.display = '';
 charImg.onerror = () => { charImg.style.display = 'none'; };
