@@ -776,7 +776,7 @@ function genSummary(score, avg, variance, bestPair, worstPair) {
     summaryText = '普通のチーム相性です。工夫次第で良いチームになります。いくつか注意点を意識しましょう。';
   } else {
     rank = 'C'; rankClass = 'rank-c';
-    summaryText = '挑戦的なチーム相性です。個性の違いが大きい分、衝突リスクもありますが、乗り越えられれば最強のチームになります。';
+    summaryText = '挑戦的なチーム相性です。個性の違いが大きい分、衝突リスクもありますが、工夫次第で強力なチームになります。';
   }
 
   // 強み
@@ -788,9 +788,10 @@ function genSummary(score, avg, variance, bestPair, worstPair) {
 
   // 注意点
   const cautions = [];
-  if (variance.E >= 1.0) cautions.push('コミュニケーション方法の違い');
+  if (variance.C >= 1.0) cautions.push('生活リズムや計画性の違い');
   if (avg.N >= 3.5) cautions.push('ストレスによる感情的な対立');
   if (avg.A <= 2.5) cautions.push('意見の衝突と意思決定の遅れ');
+  if (avg.A >= 4.5) cautions.push('反対意見が出にくい傾向');
   if (avg.C <= 2.5) cautions.push('段取りや計画の不在');
 
   return { rank, rankClass, summaryText, strengths, cautions };
@@ -799,7 +800,7 @@ function genSummary(score, avg, variance, bestPair, worstPair) {
 // ===== 結果描画 =====
 function renderResults() {
   const selected = allMembers.filter(m => selectedIds.has(m.id));
-  const { score, avg, variance } = calcTeamScore(selected);
+  const { score, avg, variance, min, max } = calcTeamScore(selected);
   const comments = genFactorComments(avg, variance);
 
   // 全ペア計算
@@ -817,9 +818,9 @@ function renderResults() {
 
   const container = document.getElementById('resultSection');
 
-  // ペア表示（2人以上の場合のみ）
+  // ペア表示（3人以上の場合のみ）
   let pairHtml = '';
-  if (bestPair) {
+  if (bestPair && selected.length >= 3) {
     pairHtml = `
       <div class="pair-card">
         <div class="pair-section">
@@ -828,9 +829,8 @@ function renderResults() {
           <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
         </div>
         <div class="pair-section">
-          <p class="pair-label">⚠️ 最も注意が必要なペア</p>
-          <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
-          <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
+          <p class="pair-label">💬 ペア相性にばらつきがあります</p>
+          <p class="pair-comment">チーム内でペア相性の差があります。コミュニケーションの工夫でカバーしましょう。</p>
         </div>
       </div>
     `;
@@ -867,13 +867,15 @@ function renderResults() {
         ${['O','C','E','A','N'].map(f => {
           const val = avg[f];
           const pct = (val / 5) * 100;
+          const lo = min[f], hi = max[f];
+          const range = lo !== hi ? ` (${lo}〜${hi})` : '';
           return `
             <div class="factor-row">
               <span class="factor-label" style="color:${traitInfo[f].color}">${traitInfo[f].name}</span>
               <div class="factor-bar-track">
                 <div class="factor-bar-fill" style="width:0%;background:${traitInfo[f].color};" data-w="${pct}%"></div>
               </div>
-              <span class="factor-avg">${val.toFixed(1)}</span>
+              <span class="factor-avg">${val.toFixed(1)}<small style="font-weight:400;font-size:10px;color:var(--dim);">${range}</small></span>
             </div>
           `;
         }).join('')}
