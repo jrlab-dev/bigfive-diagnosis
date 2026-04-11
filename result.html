@@ -1073,7 +1073,7 @@ card.className = `card rarity-${getRarity()}`;
 // キャラクター画像
 const gender = params.get('gender') || 'F';
 const charImg = document.getElementById('charImg');
-const charSrc = `images/characters/${gender}/${typeCode}.png`;
+const charSrc = `images/characters/${gender}/${typeCode}.webp`;
 charImg.src = charSrc;
 charImg.style.display = '';
 charImg.onerror = () => { charImg.style.display = 'none'; };
