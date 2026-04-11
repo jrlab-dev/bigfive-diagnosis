@@ -235,7 +235,8 @@
   .feature-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 24px; }
   .feature-card {
     background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 18px; padding: 28px 24px; backdrop-filter: blur(8px);
+    border-radius: 18px; padding: 22px 20px; backdrop-filter: blur(8px);
+    min-height: 168px;
     transition: transform .3s, border-color .3s, box-shadow .3s;
     position: relative; overflow: hidden;
   }
@@ -276,37 +277,56 @@
   }
   .science-label svg { width: 10px; height: 10px; flex-shrink: 0; }
 
-  .feature-icon { font-size: 32px; margin-bottom: 10px; display: block; }
-
-  /* 2人対比（キャラクターカード用） */
-  .feature-duo {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 16px;
-    margin-bottom: 12px;
-    min-height: 70px;
-  }
-  .feature-duo img {
-    height: 64px;
+  /* 背景画像（大きく・右寄り・半透明） */
+  .feature-bg-img {
+    position: absolute;
+    right: -8%;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 125%;
     width: auto;
-    object-fit: contain;
+    opacity: 0.28;
+    pointer-events: none;
+    z-index: 0;
+    filter: saturate(0.75) brightness(1.1);
     border-radius: 8px;
-    transition: transform 0.3s;
   }
-  .feature-duo img:hover { transform: translateY(-4px) scale(1.05); }
-  .feature-duo .vs-badge {
-    font-size: 11px;
-    font-weight: 900;
-    color: var(--dim);
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 2px 8px;
+
+  /* キャラクター2体（背景・右寄り） */
+  .feature-chara-bg {
+    position: absolute;
+    right: -4%;
+    bottom: -8%;
+    display: flex;
+    align-items: flex-end;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .feature-chara-bg img {
+    height: 150px;
+    width: auto;
+    opacity: 0.42;
+  }
+  .feature-chara-bg img:first-child { margin-right: -10px; }
+
+  /* テキスト前面 */
+  .feature-content {
+    position: relative;
+    z-index: 1;
+    max-width: 62%;
+  }
+
+  /* テキスト背後のぼかし */
+  .feature-text-body {
+    background: rgba(10, 14, 39, 0.52);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 10px;
-    margin-bottom: 20px;
+    padding: 10px 14px;
+    margin-top: 8px;
   }
-  .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-  .feature-card p  { font-size: 13px; color: var(--dim); line-height: 1.7; }
+  .feature-text-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .feature-text-body p  { font-size: 12px; color: var(--dim); line-height: 1.65; }
   .science-link {
     display: inline-block; margin-top: 14px;
     font-size: 11px; font-weight: 700; color: var(--cyan);
@@ -463,48 +483,63 @@
     <div class="feature-cards">
 
       <div class="feature-card">
-        <span class="science-label">
-          <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
-          研究で実証
-        </span>
-        <span class="feature-icon"><img src="images/features/patterns.webp" alt="3125パターン" style="height:56px;width:auto;border-radius:8px;"></span>
-        <h3>3125パターン</h3>
-        <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125種類の性格タイプを導き出します。</p>
+        <img class="feature-bg-img" src="images/features/patterns.webp" alt="">
+        <div class="feature-content">
+          <span class="science-label">
+            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
+            研究で実証
+          </span>
+          <div class="feature-text-body">
+            <h3>3125パターン</h3>
+            <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125種類の性格タイプを導き出します。</p>
+          </div>
+        </div>
       </div>
 
       <div class="feature-card feature-card--chara">
-        <span class="science-label" style="background:rgba(232,121,176,0.1);border-color:rgba(232,121,176,0.3);color:var(--rose);">
-          <svg viewBox="0 0 12 12" fill="none"><rect x="1.5" y="4" width="2" height="6.5" rx=".5" fill="#f0a0c8"/><rect x="5" y="2" width="2" height="8.5" rx=".5" fill="#f0a0c8"/><rect x="8.5" y="5.5" width="2" height="5" rx=".5" fill="#f0a0c8"/></svg>
-          可視化
-        </span>
-        <div class="feature-duo">
-          <img src="images/characters/F/55511.webp" alt="女性キャラクター">
-          <span class="vs-badge">×</span>
-          <img src="images/characters/M/11155.webp" alt="男性キャラクター">
+        <div class="feature-chara-bg">
+          <img src="images/characters/F/55511.webp" alt="">
+          <img src="images/characters/M/11155.webp" alt="">
         </div>
-        <h3>キャラクターカード</h3>
-        <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
+        <div class="feature-content">
+          <span class="science-label" style="background:rgba(232,121,176,0.1);border-color:rgba(232,121,176,0.3);color:var(--rose);">
+            <svg viewBox="0 0 12 12" fill="none"><rect x="1.5" y="4" width="2" height="6.5" rx=".5" fill="#f0a0c8"/><rect x="5" y="2" width="2" height="8.5" rx=".5" fill="#f0a0c8"/><rect x="8.5" y="5.5" width="2" height="5" rx=".5" fill="#f0a0c8"/></svg>
+            可視化
+          </span>
+          <div class="feature-text-body">
+            <h3>キャラクターカード</h3>
+            <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
+          </div>
+        </div>
       </div>
 
       <div class="feature-card">
-        <span class="science-label">
-          <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          科学的根拠
-        </span>
-        <span class="feature-icon"><img src="images/features/science.webp" alt="科学的根拠" style="height:56px;width:auto;border-radius:8px;"></span>
-        <h3>科学的根拠</h3>
-        <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
-        <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
+        <img class="feature-bg-img" src="images/features/science.webp" alt="">
+        <div class="feature-content">
+          <span class="science-label">
+            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            科学的根拠
+          </span>
+          <div class="feature-text-body">
+            <h3>科学的根拠</h3>
+            <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
+            <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
+          </div>
+        </div>
       </div>
 
       <div class="feature-card feature-card--anohito">
-        <span class="science-label" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);color:#f472b6;">
-          <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
-          行動観察
-        </span>
-        <span class="feature-icon"><img src="images/features/observation.webp" alt="あの人を分析する" style="height:56px;width:auto;border-radius:8px;"></span>
-        <h3>あの人を分析する</h3>
-        <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
+        <img class="feature-bg-img" src="images/features/observation.webp" alt="">
+        <div class="feature-content">
+          <span class="science-label" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);color:#f472b6;">
+            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
+            行動観察
+          </span>
+          <div class="feature-text-body">
+            <h3>あの人を分析する</h3>
+            <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
+          </div>
+        </div>
       </div>
 
     </div>
