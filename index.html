@@ -598,8 +598,9 @@
     const name = isMe ? 'あなた' : result.name;
     const typeName = result.typeName || '性格タイプ';
 
-    // キャラクター画像パス
-    const imgPath = `images/characters/${gender}/${code}.webp`;
+    // キャラクター画像パス（30問版は2/4が出るため1/3/5に丸める）
+    const imgCode = code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+    const imgPath = `images/characters/${gender}/${imgCode}.webp`;
 
     return `
       <div class="character-wrapper">

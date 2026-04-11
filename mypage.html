@@ -321,7 +321,8 @@ function renderMyResults() {
   container.innerHTML = results.map((r, i) => {
     const scores = r.scores || {};
     const gender = r.gender || 'F';
-    const imgPath = `images/characters/${gender}/${r.code}.webp`;
+    const imgCode = r.code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+    const imgPath = `images/characters/${gender}/${imgCode}.webp`;
 
     return `
       <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}" class="result-card">
