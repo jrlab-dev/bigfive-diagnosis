@@ -743,7 +743,8 @@ function showResult() {
 
   // ビッグファイブとの組み合わせ
   const crossArea = document.getElementById('crossText');
-  const bfResult = JSON.parse(localStorage.getItem('bigfive_result') || 'null');
+  const bfResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const bfResult = bfResults.length > 0 ? bfResults[0] : null;
   if (bfResult && bfResult.scores) {
     const s = bfResult.scores;
     const highFactors = Object.entries(s).filter(([,v]) => v >= 4).map(([k]) => k);
