@@ -84,7 +84,7 @@
   font-weight: 600;
 }
 /* ページ上部の余白（navの高さ分） */
-body { padding-top: 0; }
+body { padding-top: 52px !important; }
 `;
 
   // スタイル注入
