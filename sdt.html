@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>動機タイプ診断（自己決定理論）— 何があなたを動かすか</title>
+<meta name="description" content="Deci & Ryanの自己決定理論に基づく21問診断。自律性・有能感・関係性の3つの心理的欲求からあなたの動機パターンを科学的に分析します。">
+<meta property="og:title" content="動機タイプ診断 — 何があなたを動かすか">
+<meta property="og:description" content="21問で分かる自己決定理論診断。あなたの内発的動機のパターンを分析。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/sdt.html">
+<meta name="twitter:card" content="summary">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --bg: #0a0e27; --text: #e2e8f0; --dim: #94a3b8; --auto: #3b82f6; --comp: #f59e0b; --rel: #ec4899; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 30%, rgba(59,130,246,0.1) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(236,72,153,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245,158,11,0.07) 0%, transparent 70%); animation: nebula-drift 25s ease-in-out infinite alternate; }
+  @keyframes nebula-drift { 0% { transform: scale(1); } 100% { transform: scale(1.05) translate(-1%, 1%); } }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .top-link { position: fixed; top: 20px; left: 20px; display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 13px; z-index: 10; transition: color .2s; }
+  .top-link:hover { color: var(--text); }
+  .quiz-container { position: relative; z-index: 1; width: 100%; max-width: 560px; min-height: 100vh; display: flex; flex-direction: column; padding: 60px 24px 40px; }
+
+  .intro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); border-radius: 999px; font-size: 12px; color: var(--auto); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--auto); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
+  .three-needs { display: flex; gap: 10px; width: 100%; max-width: 400px; }
+  .need-chip { flex: 1; padding: 10px 8px; border-radius: 10px; text-align: center; }
+  .need-chip .need-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .need-chip .need-desc { font-size: 10px; color: var(--dim); line-height: 1.4; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--auto), #1d4ed8); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(59,130,246,0.35); transition: transform .2s; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--auto), var(--rel)); transition: width .4s ease; }
+  .progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+  .need-indicator { font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px; }
+
+  .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .question-num { font-size: 13px; color: var(--auto); font-weight: 500; margin-bottom: 4px; }
+  .question-text { font-size: 17px; line-height: 1.7; margin-bottom: 32px; min-height: 60px; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); margin-bottom: 8px; }
+  .answers { display: flex; gap: 8px; margin-bottom: 40px; }
+  .answer-btn { flex: 1; padding: 14px 2px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim); background: rgba(59,130,246,0.06); border: 1.5px solid rgba(59,130,246,0.15); border-radius: 10px; cursor: pointer; transition: all .2s; min-height: 52px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .answer-btn:hover { background: rgba(59,130,246,0.18); border-color: rgba(59,130,246,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--auto), #1d4ed8); border-color: transparent; color: #fff; font-weight: 700; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13px; color: var(--dim); background: none; border: none; cursor: pointer; padding: 8px 0; transition: color .2s; }
+  .back-btn:hover { color: var(--text); }
+
+  .loading { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; }
+  .loading.active { display: flex; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(59,130,246,0.2); border-top-color: var(--auto); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .result { display: none; flex-direction: column; align-items: center; gap: 24px; padding-bottom: 60px; }
+  .result.active { display: flex; }
+
+  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+  .result-card-inner { padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; }
+  .result-title { font-size: 26px; font-weight: 900; }
+  .result-desc { font-size: 14px; line-height: 1.75; max-width: 320px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+  .needs-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .needs-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 16px; letter-spacing: .08em; }
+  .need-row { margin-bottom: 16px; }
+  .need-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .need-row-label { font-size: 13px; font-weight: 700; }
+  .need-row-score { font-size: 13px; font-weight: 700; }
+  .need-bar-bg { height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; margin-bottom: 4px; }
+  .need-bar-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
+  .need-row-desc { font-size: 12px; color: var(--dim); line-height: 1.55; }
+
+  .profile-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .profile-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .08em; }
+  .profile-text { font-size: 14px; line-height: 1.75; }
+
+  .bigfive-cross { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .bigfive-cross h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; letter-spacing: .08em; }
+  .cross-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: #a78bfa; margin: 0 2px; }
+
+  .result-nav { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+  .nav-btn { width: 100%; padding: 14px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; text-decoration: none; display: block; }
+  .nav-btn-primary { background: linear-gradient(135deg, #8b5cf6, #ec4899); border: none; color: #fff; }
+  .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
+  .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .disclaimer { width: 100%; max-width: 420px; font-size: 11px; color: var(--dim); line-height: 1.6; text-align: center; padding: 0 12px; }
+</style>
+</head>
+<body>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
+
+<div class="quiz-container">
+  <div class="intro" id="introArea">
+    <span class="intro-badge">⚡ 動機心理学</span>
+    <h1>何が<span>あなたを動かす</span>のか</h1>
+    <p class="intro-sub">Deci & Ryanの自己決定理論（SDT）に基づき、あなたの「3つの心理的欲求」の充足度を21問で科学的に測定します。</p>
+    <div class="three-needs">
+      <div class="need-chip" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);">
+        <div class="need-name" style="color:var(--auto);">自律性</div>
+        <div class="need-desc">自分で選んで動けているか</div>
+      </div>
+      <div class="need-chip" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);">
+        <div class="need-name" style="color:var(--comp);">有能感</div>
+        <div class="need-desc">能力が発揮できているか</div>
+      </div>
+      <div class="need-chip" style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.25);">
+        <div class="need-name" style="color:var(--rel);">関係性</div>
+        <div class="need-desc">人とつながれているか</div>
+      </div>
+    </div>
+    <button class="start-btn" id="startBtn">診断スタート</button>
+    <p class="intro-note">21問・無料・登録不要</p>
+  </div>
+
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/21</span>
+  </div>
+
+  <div class="question-area" id="questionArea" style="display:none;">
+    <p class="need-indicator" id="needIndicator"></p>
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="scale-labels"><span>全くあてはまらない</span><span>非常によくあてはまる</span></div>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">1</button>
+      <button class="answer-btn" data-val="2">2</button>
+      <button class="answer-btn" data-val="3">3</button>
+      <button class="answer-btn" data-val="4">4</button>
+      <button class="answer-btn" data-val="5">5</button>
+      <button class="answer-btn" data-val="6">6</button>
+      <button class="answer-btn" data-val="7">7</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中…</p>
+    <p style="font-size:13px;color:var(--dim);">3つの心理的欲求を測定しています</p>
+  </div>
+
+  <div class="result" id="resultArea">
+    <div class="result-card">
+      <div class="result-card-inner">
+        <p class="result-label" id="resultLabel">YOUR MOTIVATION TYPE</p>
+        <p class="result-title" id="resultTitle"></p>
+        <p class="result-desc" id="resultDesc"></p>
+      </div>
+    </div>
+
+    <div class="needs-box">
+      <h3>3つの心理的欲求の充足度</h3>
+      <div id="needsBars"></div>
+    </div>
+
+    <div class="profile-box">
+      <h3>あなたの動機プロフィール</h3>
+      <p class="profile-text" id="profileText"></p>
+    </div>
+
+    <div class="bigfive-cross">
+      <h3>ビッグファイブとの組み合わせ分析</h3>
+      <div id="crossText"></div>
+    </div>
+
+    <div class="result-nav">
+      <a href="schwartz.html" class="nav-btn nav-btn-primary">次：価値観タイプを診断する →</a>
+      <a href="index.html" class="nav-btn nav-btn-secondary">トップに戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn">もう一度診断する</button>
+    </div>
+
+    <p class="disclaimer">※ Deci, E. L. & Ryan, R. M.（2000）の基本心理欲求尺度（BPNS）をベースにした診断です。結果はあなたの現在の心理的充足状態の傾向を示します。</p>
+  </div>
+</div>
+
+<script>
+// ===== 質問データ（BPNS 原版準拠・21問） =====
+const questions = [
+  // 自律性 7問
+  { text: '自分の人生をどのように生きるか、自分で自由に選んでいると感じる。', need: 'autonomy', dir: '+' },
+  { text: '自分のやり方で物事を進められていると感じる。', need: 'autonomy', dir: '+' },
+  { text: '自分の行動を人から強制されているように感じる。', need: 'autonomy', dir: '-' },
+  { text: '自分には選択肢がほとんどないと感じることが多い。', need: 'autonomy', dir: '-' },
+  { text: '自分の行動は、自分自身の価値観や関心に基づいていると感じる。', need: 'autonomy', dir: '+' },
+  { text: '何をすべきか、いつも誰かに指示されているように感じる。', need: 'autonomy', dir: '-' },
+  { text: '自分の生き方を自分でコントロールできていると感じる。', need: 'autonomy', dir: '+' },
+  // 有能感 7問
+  { text: '日々の生活の中で達成感を感じることが多い。', need: 'competence', dir: '+' },
+  { text: '自分はあまり有能でないと感じることが多い。', need: 'competence', dir: '-' },
+  { text: '最近、新しいスキルや知識を身につけることができた。', need: 'competence', dir: '+' },
+  { text: '周りの人から、自分は得意なことがあると認められている。', need: 'competence', dir: '+' },
+  { text: '自分の能力が十分に発揮できていないと感じる。', need: 'competence', dir: '-' },
+  { text: '取り組んでいることをうまくこなせていると感じる。', need: 'competence', dir: '+' },
+  { text: '難しい課題でも、うまく対処できていると感じる。', need: 'competence', dir: '+' },
+  // 関係性 7問
+  { text: '大切な人たちと深いつながりを感じている。', need: 'relatedness', dir: '+' },
+  { text: '打ち明け話ができる相手がほとんどいないと感じる。', need: 'relatedness', dir: '-' },
+  { text: '社会的なグループの中に受け入れられていると感じる。', need: 'relatedness', dir: '+' },
+  { text: '自分のことを気にかけてくれる人がいると感じる。', need: 'relatedness', dir: '+' },
+  { text: '身近な人たちと本当にわかり合えていると感じる。', need: 'relatedness', dir: '+' },
+  { text: '孤立しているような気持ちになることが多い。', need: 'relatedness', dir: '-' },
+  { text: '親しくしている人たちと充実した関係があると感じる。', need: 'relatedness', dir: '+' },
+];
+
+const needLabels = { autonomy: '自律性', competence: '有能感', relatedness: '関係性' };
+const needColors = { autonomy: '#3b82f6', competence: '#f59e0b', relatedness: '#ec4899' };
+const needEmoji = { autonomy: '🔵', competence: '🟡', relatedness: '🩷' };
+
+let current = 0;
+const answers = new Array(questions.length).fill(null);
+
+(function() {
+  const c = document.getElementById('bgStars'); const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) { ctx.beginPath(); ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI); ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.6+0.2})`; ctx.fill(); }
+})();
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'flex';
+  document.getElementById('questionArea').style.display = 'flex';
+  showQuestion();
+});
+
+function showQuestion() {
+  const q = questions[current];
+  const color = needColors[q.need];
+  document.getElementById('needIndicator').textContent = needEmoji[q.need] + ' ' + needLabels[q.need];
+  document.getElementById('needIndicator').style.color = color;
+  document.getElementById('questionNum').textContent = `Q${current + 1}`;
+  document.getElementById('questionNum').style.color = color;
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/${questions.length}`;
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    if (answers[current] == btn.dataset.val) btn.classList.add('selected');
+    btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
+  });
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+function selectAnswer(val) {
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
+  setTimeout(() => { current++; current < questions.length ? showQuestion() : showLoading(); }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => { if (current > 0) { current--; showQuestion(); } });
+
+function showLoading() {
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(showResult, 1800);
+}
+
+function calcScores() {
+  const sums = { autonomy: 0, competence: 0, relatedness: 0 };
+  const counts = { autonomy: 0, competence: 0, relatedness: 0 };
+  questions.forEach((q, i) => {
+    const val = answers[i] || 4;
+    const score = q.dir === '+' ? val : (8 - val);
+    sums[q.need] += score; counts[q.need]++;
+  });
+  return { autonomy: sums.autonomy / counts.autonomy, competence: sums.competence / counts.competence, relatedness: sums.relatedness / counts.relatedness };
+}
+
+function showResult() {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const scores = calcScores();
+  const avg = (scores.autonomy + scores.competence + scores.relatedness) / 3;
+
+  // タイプ判定
+  const sorted = Object.entries(scores).sort((a,b) => b[1]-a[1]);
+  const strongest = sorted[0][0];
+  const weakest = sorted[2][0];
+
+  const typeData = {
+    autonomy: { title: '自律駆動型', desc: '「自分で決めて動く」ことが最大のエネルギー源です。自由と裁量を与えられた環境で最大の力を発揮します。' },
+    competence: { title: '達成志向型', desc: '「できた・成長した」という実感が最大の動機になります。スキルアップや成果の確認が日々の活力になります。' },
+    relatedness: { title: '関係重視型', desc: '「誰かとつながっている」という感覚が最大の原動力です。信頼関係のある環境で最もよく機能します。' },
+  };
+
+  const data = typeData[strongest];
+  document.getElementById('resultLabel').textContent = needLabels[strongest].toUpperCase() + ' DRIVEN';
+  document.getElementById('resultLabel').style.color = needColors[strongest];
+  document.getElementById('resultTitle').textContent = data.title;
+  document.getElementById('resultTitle').style.color = needColors[strongest];
+  document.getElementById('resultDesc').textContent = data.desc;
+
+  // 3欲求バー
+  const barsHtml = ['autonomy','competence','relatedness'].map(need => {
+    const s = scores[need];
+    const pct = Math.round(((s - 1) / 6) * 100);
+    const level = s >= 5.5 ? '充足' : s >= 4 ? '普通' : '要注意';
+    const levelColor = s >= 5.5 ? needColors[need] : s >= 4 ? '#94a3b8' : '#f87171';
+    const descs = {
+      autonomy: { 充足: '自分の意志で動けている実感が強い状態です。', 普通: '時に「やらされ感」を感じることもありますが、全体的にバランスが取れています。', 要注意: '外から強制されている感覚が強く、内発的な動機が低下しやすい状態です。' },
+      competence: { 充足: '自分の能力が発揮できている満足感が高い状態です。', 普通: '成果を感じる場面もありますが、さらなる手ごたえを求めている面もあります。', 要注意: '自分の能力への不安や、成果を感じにくい状況が続いている可能性があります。' },
+      relatedness: { 充足: '人との深いつながりを感じられており、孤立感が少ない状態です。', 普通: 'つながりはあるものの、もう少し深い関係を求めている面もあります。', 要注意: '孤立感や疎外感を感じやすく、人間関係のサポートが特に重要な時期かもしれません。' },
+    };
+    return `<div class="need-row">
+      <div class="need-row-header">
+        <span class="need-row-label" style="color:${needColors[need]}">${needLabels[need]}</span>
+        <span class="need-row-score" style="color:${levelColor}">${s.toFixed(1)} / 7 　${level}</span>
+      </div>
+      <div class="need-bar-bg"><div class="need-bar-fill" style="width:0%;background:${needColors[need]}" data-pct="${pct}"></div></div>
+      <div class="need-row-desc">${descs[need][level]}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('needsBars').innerHTML = barsHtml;
+  setTimeout(() => { document.querySelectorAll('.need-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; }); }, 100);
+
+  // プロフィール
+  const profileMsgs = {
+    autonomy: `あなたは「自分で決める」ことに最も強い動機を感じます。裁量がある環境・自主的なプロジェクト・自分のペースで進められる仕事で力を発揮します。一方、「${needLabels[weakest]}」が比較的低めなので、${weakest === 'competence' ? 'スキルアップの実感を積み重ねること' : weakest === 'relatedness' ? '意識的に人とのつながりを深めること' : '自律性の確保'}を意識するとさらにバランスがよくなります。`,
+    competence: `あなたは「できた・成長した」という実感が最大のエネルギー源です。明確な目標設定・フィードバックのある環境・スキルが活かされる場で最高のパフォーマンスを発揮します。「${needLabels[weakest]}」の充足も意識することで、さらに持続可能な動機づけが生まれます。`,
+    relatedness: `あなたは人とのつながりから最大のエネルギーを得ます。チームワーク・信頼関係のある職場・大切な人と共に取り組む環境で最もよく機能します。「${needLabels[weakest]}」も同時に育てることで、より自立した動機づけが生まれます。`,
+  };
+  document.getElementById('profileText').textContent = profileMsgs[strongest];
+
+  // Big Five連携
+  const bfResult = JSON.parse(localStorage.getItem('bigfive_result') || 'null');
+  const crossArea = document.getElementById('crossText');
+  if (bfResult && bfResult.scores) {
+    const s = bfResult.scores;
+    const labels = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+    const high = Object.entries(s).filter(([,v]) => v >= 4).map(([k]) => `<span class="cross-badge">${labels[k]}高</span>`).join('');
+    let msg = '';
+    if (strongest === 'autonomy') msg = s.O >= 4 ? '開放性の高いあなたは好奇心が強く、自律性への欲求と相まって、新しい分野を自分のペースで探求することで大きな成果を生みます。' : '自律性への強い欲求は、あなたの性格の芯の強さを示しています。自分のビジョンで動ける環境を積極的に選びましょう。';
+    else if (strongest === 'competence') msg = s.C >= 4 ? '誠実性の高いあなたは計画的に努力を重ねる力があります。有能感への欲求と組み合わさることで、着実に高い成果を出せるタイプです。' : '有能感への欲求が高いあなたは、成果が見えやすいプロジェクトや役割に就くことで最大限の力を発揮できます。';
+    else msg = s.E >= 4 ? '外向的なあなたは関係性の欲求が自然と充たされやすい環境にいます。人との交流がそのままエネルギーになる強みを活かしましょう。' : '関係性への欲求が高くても、内向的な性格と矛盾しません。少人数での深いつながりがあなたの充足感を最大化します。';
+    crossArea.innerHTML = `<p style="font-size:14px;line-height:1.75;">${high ? high + '<br><br>' : ''}${msg}</p>`;
+  } else {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#a78bfa;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
+  }
+
+  localStorage.setItem('sdt_result', JSON.stringify({ strongest, scores, timestamp: Date.now() }));
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  current = 0; answers.fill(null);
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+});
+</script>
+</body>
+</html>
