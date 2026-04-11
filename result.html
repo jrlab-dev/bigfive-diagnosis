@@ -706,10 +706,10 @@
     <p style="font-size:12px; color:var(--dim); text-align:center;">恋愛・仕事・友人…気になる人の性格を推測できます</p>
   </div>
 
-  <!-- 10問版→30問版誘導 -->
+  <!-- 10問/30問版→上位版誘導 -->
   <div class="upgrade-banner" id="upgradeBanner" style="display:none;">
-    <p>もっと正確に自分を知りたい方へ</p>
-    <a href="quiz.html?v=30" class="btn btn-primary">30問の本格診断へ（無料）</a>
+    <p id="upgradeText">もっと正確に自分を知りたい方へ</p>
+    <a href="quiz.html?v=30" class="btn btn-primary" id="upgradeBtn">30問の本格診断へ（無料）</a>
   </div>
 
 </div>
@@ -1212,6 +1212,11 @@ function renderScores() {
 // ===== 初期化 =====
 document.getElementById('typeName').textContent = genTypeName();
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
+// バージョンラベル表示
+if (version === '120') {
+  const codeEl = document.getElementById('typeCode');
+  codeEl.textContent += '  —  120問版（IPIP-NEO-120）';
+}
 renderScores();
 document.getElementById('desc').textContent = genDescription();
 
@@ -1298,9 +1303,17 @@ document.getElementById('descCard').innerHTML = `
   });
 })();
 
-// 10問版→30問版誘導
+// 10問版→30問版誘導 / 30問版→120問版誘導
 if (version === '10') {
   document.getElementById('upgradeBanner').style.display = 'block';
+  document.getElementById('upgradeText').textContent = 'もっと正確に自分を知りたい方へ';
+  document.getElementById('upgradeBtn').textContent = '30問の本格診断へ（無料）';
+  document.getElementById('upgradeBtn').href = 'quiz.html?v=30';
+} else if (version === '30') {
+  document.getElementById('upgradeBanner').style.display = 'block';
+  document.getElementById('upgradeText').textContent = 'さらに深く自分を分析したい方へ';
+  document.getElementById('upgradeBtn').textContent = '120問の徹底分析へ（無料）';
+  document.getElementById('upgradeBtn').href = 'quiz.html?v=120';
 }
 
 // ===== おすすめ職種カード =====
