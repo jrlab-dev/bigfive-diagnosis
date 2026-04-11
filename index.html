@@ -574,9 +574,9 @@
   <section class="cta">
     <p class="cta-text">診断を選んでください。</p>
     <div class="cta-buttons">
-      <a href="quiz.html?v=10" class="shimmer-btn cta-btn" data-done-key="bigfive">自分を診断する（10問）</a>
-      <a href="quiz.html?v=30" class="shimmer-btn cta-btn-premium" data-done-key="bigfive">本格診断（30問）</a>
-      <a href="quiz.html?v=120" class="shimmer-btn cta-btn-premium" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-done-key="bigfive">徹底分析（120問）</a>
+      <a href="quiz.html?v=10" class="shimmer-btn cta-btn" data-done-key="bigfive_v10">自分を診断する（10問）</a>
+      <a href="quiz.html?v=30" class="shimmer-btn cta-btn-premium" data-done-key="bigfive_v30">本格診断（30問）</a>
+      <a href="quiz.html?v=120" class="shimmer-btn cta-btn-premium" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-done-key="bigfive_v120">徹底分析（120問）</a>
     </div>
     <p class="cta-note">※ 30問・120問版はより精度の高い結果が得られます</p>
     <div class="anohito-section">
@@ -657,8 +657,10 @@
 // ===== 診断済みチェック欄表示 =====
 (function() {
   function isDone(key) {
-    if (key === 'bigfive') {
-      return JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
+    if (key === 'bigfive_v10' || key === 'bigfive_v30' || key === 'bigfive_v120') {
+      const v = key.replace('bigfive_v', '');
+      const arr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      return arr.some(function(r) { return String(r.version) === v; });
     }
     if (key === 'bigfive_other') {
       return JSON.parse(localStorage.getItem('bigfive_other_results') || '[]').length > 0;
