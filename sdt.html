@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>動機タイプ診断（自己決定理論）— 何があなたを動かすか</title>
 <meta name="description" content="Deci & Ryanの自己決定理論に基づく21問診断。自律性・有能感・関係性の3つの心理的欲求からあなたの動機パターンを科学的に分析します。">
@@ -257,6 +258,19 @@ function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
   for (let i = 0; i < 100; i++) { ctx.beginPath(); ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI); ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.6+0.2})`; ctx.fill(); }
 })();
 
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem('sdt_result');
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.strongest && d.scores) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult(d.scores, d.strongest);
+    }
+  } catch(e) {}
+})();
+
 document.getElementById('startBtn').addEventListener('click', () => {
   document.getElementById('introArea').style.display = 'none';
   document.getElementById('progressArea').style.display = 'flex';
@@ -309,17 +323,17 @@ function calcScores() {
   return { autonomy: sums.autonomy / counts.autonomy, competence: sums.competence / counts.competence, relatedness: sums.relatedness / counts.relatedness };
 }
 
-function showResult() {
+function showResult(preScores, preStrongest) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
-  const scores = calcScores();
+  const scores = preScores || calcScores();
   const avg = (scores.autonomy + scores.competence + scores.relatedness) / 3;
 
   // タイプ判定
   const sorted = Object.entries(scores).sort((a,b) => b[1]-a[1]);
-  const strongest = sorted[0][0];
-  const weakest = sorted[2][0];
+  const strongest = preStrongest || sorted[0][0];
+  const weakest = sorted[sorted.length - 1][0];
 
   const typeData = {
     autonomy: { title: '自律駆動型', desc: '「自分で決めて動く」ことが最大のエネルギー源です。自由と裁量を与えられた環境で最大の力を発揮します。' },
@@ -382,8 +396,10 @@ function showResult() {
     crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#a78bfa;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
   }
 
-  localStorage.setItem('sdt_result', JSON.stringify({ strongest, scores, timestamp: Date.now() }));
-  clearProgress();
+  if (!preScores) {
+    localStorage.setItem('sdt_result', JSON.stringify({ strongest, scores, timestamp: Date.now() }));
+    clearProgress();
+  }
 }
 
 document.getElementById('retryBtn').addEventListener('click', () => {
