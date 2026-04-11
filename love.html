@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>恋愛スタイル診断 — あなたの愛し方がわかる</title>
+<meta name="description" content="12問で分かる恋愛スタイル診断。情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせ分析も。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ3125タイプ診断">
+<meta property="og:title" content="恋愛スタイル診断 — あなたの愛し方がわかる">
+<meta property="og:description" content="12問で分かる恋愛スタイル診断。情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/love.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="恋愛スタイル診断 — あなたの愛し方がわかる">
+<meta name="twitter:description" content="12問で分かる恋愛スタイル診断。ビッグファイブとの組み合わせ分析も。">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    /* 恋愛スタイル6色 */
+    --eros:   #ec4899;
+    --ludus:  #f97316;
+    --storge: #22c55e;
+    --pragma: #3b82f6;
+    --mania:  #8b5cf6;
+    --agape:  #f59e0b;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* 背景 */
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(236,72,153,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(139,92,246,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 40% at 50% 70%, rgba(249,115,22,0.07) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate;
+  }
+  @keyframes nebula-drift {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05) translate(-1%, 1%); }
+  }
+  .bg-stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+  /* トップリンク */
+  .top-link {
+    position: fixed; top: 20px; left: 20px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none;
+    font-size: 13px; z-index: 10;
+    transition: color 0.2s;
+  }
+  .top-link:hover { color: var(--text); }
+
+  /* クイズコンテナ */
+  .quiz-container {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 60px 24px 40px;
+  }
+
+  /* タイトル画面 */
+  .intro {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; gap: 20px;
+  }
+  .intro-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px;
+    background: rgba(236,72,153,0.1);
+    border: 1px solid rgba(236,72,153,0.3);
+    border-radius: 999px;
+    font-size: 12px; color: var(--eros);
+    font-weight: 700; letter-spacing: .08em;
+  }
+  .intro h1 {
+    font-size: 28px; font-weight: 900;
+    line-height: 1.3;
+  }
+  .intro h1 span { color: var(--eros); }
+  .intro-sub {
+    font-size: 14px; color: var(--dim); line-height: 1.7;
+    max-width: 360px;
+  }
+  .styles-preview {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 8px;
+    max-width: 360px;
+  }
+  .style-chip {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    border: 1.5px solid;
+  }
+  .start-btn {
+    padding: 16px 48px;
+    background: linear-gradient(135deg, var(--eros), #f43f5e);
+    border: none; border-radius: 999px;
+    color: #fff; font-family: inherit;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(236,72,153,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(236,72,153,0.5);
+  }
+  .intro-note {
+    font-size: 12px; color: var(--dim);
+  }
+
+  /* プログレスバー */
+  .progress {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 40px;
+  }
+  .progress-bar {
+    flex: 1; height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--eros), var(--mania));
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 13px; color: var(--dim);
+    font-weight: 500; min-width: 40px; text-align: right;
+  }
+
+  /* 質問エリア */
+  .question-area {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .question-num {
+    font-size: 13px; color: var(--eros);
+    font-weight: 500; margin-bottom: 12px;
+  }
+  .question-text {
+    font-size: 18px; line-height: 1.7;
+    margin-bottom: 36px;
+    min-height: 60px;
+    transition: opacity 0.2s;
+  }
+  .answers {
+    display: flex; gap: 10px;
+    margin-bottom: 40px;
+  }
+  .answer-btn {
+    flex: 1; padding: 14px 4px;
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    color: var(--dim);
+    background: rgba(236,72,153,0.06);
+    border: 1.5px solid rgba(236,72,153,0.15);
+    border-radius: 12px; cursor: pointer;
+    transition: all 0.2s; min-height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .answer-btn:hover {
+    background: rgba(236,72,153,0.18);
+    border-color: rgba(236,72,153,0.4);
+    color: var(--text);
+  }
+  .answer-btn.selected {
+    background: linear-gradient(135deg, var(--eros), #f43f5e);
+    border-color: transparent; color: #fff; font-weight: 700;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: inherit; font-size: 13px;
+    color: var(--dim); background: none; border: none;
+    cursor: pointer; padding: 8px 0; transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  /* ローディング */
+  .loading {
+    display: none; flex: 1; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; text-align: center;
+  }
+  .loading.active { display: flex; }
+  .loading-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(236,72,153,0.2);
+    border-top-color: var(--eros);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 18px; font-weight: 500; }
+  .loading-sub { font-size: 13px; color: var(--dim); }
+
+  /* 結果エリア */
+  .result {
+    display: none; flex-direction: column;
+    align-items: center; gap: 24px;
+    padding-bottom: 60px;
+  }
+  .result.active { display: flex; }
+
+  /* メインカード */
+  .result-card {
+    width: 100%; max-width: 420px;
+    border-radius: 24px; overflow: hidden;
+    position: relative;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  }
+  .result-card-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(145deg, var(--style-color, var(--eros)) 0%, rgba(10,14,39,0.9) 60%);
+    opacity: 0.25;
+  }
+  .result-card-inner {
+    position: relative; z-index: 1;
+    padding: 32px 24px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+    text-align: center;
+    background: rgba(10,14,39,0.6);
+    backdrop-filter: blur(12px);
+  }
+  .result-type-en {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .2em; color: var(--style-color, var(--eros));
+  }
+  .result-type-ja {
+    font-size: 32px; font-weight: 900;
+    line-height: 1.2;
+  }
+  .result-sub-type {
+    font-size: 13px; color: var(--dim);
+  }
+  .result-desc {
+    font-size: 14px; line-height: 1.75;
+    color: var(--text); max-width: 320px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .result-keyword {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 6px;
+    font-size: 12px;
+  }
+  .kw-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--dim);
+  }
+
+  /* 6スタイルバー */
+  .style-bars {
+    width: 100%; max-width: 420px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 18px;
+    padding: 20px 20px;
+    backdrop-filter: blur(8px);
+  }
+  .style-bars h3 {
+    font-size: 13px; font-weight: 700;
+    color: var(--dim); margin-bottom: 14px;
+    letter-spacing: .08em;
+  }
+  .bar-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bar-label {
+    font-size: 12px; font-weight: 700;
+    min-width: 56px;
+  }
+  .bar-bg {
+    flex: 1; height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .bar-score {
+    font-size: 11px; color: var(--dim);
+    min-width: 28px; text-align: right;
+  }
+
+  /* Big Five との関係 */
+  .bigfive-cross {
+    width: 100%; max-width: 420px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 18px;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .bigfive-cross h3 {
+    font-size: 13px; font-weight: 700;
+    color: var(--dim); margin-bottom: 12px;
+    letter-spacing: .08em;
+  }
+  .cross-text {
+    font-size: 14px; line-height: 1.75;
+    color: var(--text);
+  }
+  .cross-badge {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+    background: rgba(139,92,246,0.15);
+    border: 1px solid rgba(139,92,246,0.3);
+    color: var(--purple);
+    margin: 0 2px;
+  }
+  .no-bigfive {
+    font-size: 13px; color: var(--dim); line-height: 1.7;
+  }
+
+  /* 相性 */
+  .compatibility {
+    width: 100%; max-width: 420px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 18px;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .compatibility h3 {
+    font-size: 13px; font-weight: 700;
+    color: var(--dim); margin-bottom: 12px;
+    letter-spacing: .08em;
+  }
+  .compat-row {
+    display: flex; gap: 10px;
+    margin-bottom: 8px; align-items: center;
+  }
+  .compat-icon { font-size: 16px; }
+  .compat-name {
+    font-size: 13px; font-weight: 700;
+    min-width: 60px;
+  }
+  .compat-reason {
+    font-size: 12px; color: var(--dim); line-height: 1.5;
+  }
+
+  /* ナビゲーション */
+  .result-nav {
+    width: 100%; max-width: 420px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .nav-btn {
+    width: 100%; padding: 14px;
+    border-radius: 12px; font-family: inherit;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    text-align: center; text-decoration: none;
+    display: block;
+  }
+  .nav-btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none; color: #fff;
+  }
+  .nav-btn-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: var(--dim);
+  }
+  .nav-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* 注意書き */
+  .disclaimer {
+    width: 100%; max-width: 420px;
+    font-size: 11px; color: var(--dim);
+    line-height: 1.6; text-align: center;
+    padding: 0 12px;
+  }
+
+  @media (max-width: 400px) {
+    .question-text { font-size: 16px; }
+    .answer-btn { font-size: 11px; padding: 12px 2px; }
+    .answers { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
+
+<div class="quiz-container" id="quizContainer">
+
+  <!-- タイトル画面 -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">💕 恋愛心理学</span>
+    <h1>あなたの<span>恋愛スタイル</span>は？</h1>
+    <p class="intro-sub">
+      Lee（1973）の恋愛スタイル理論をベースに、<br>
+      あなたの「愛し方のパターン」を12問で分析します。
+    </p>
+    <div class="styles-preview">
+      <span class="style-chip" style="color:var(--eros);border-color:var(--eros);">情熱型</span>
+      <span class="style-chip" style="color:var(--ludus);border-color:var(--ludus);">遊び型</span>
+      <span class="style-chip" style="color:var(--storge);border-color:var(--storge);">友情型</span>
+      <span class="style-chip" style="color:var(--pragma);border-color:var(--pragma);">現実型</span>
+      <span class="style-chip" style="color:var(--mania);border-color:var(--mania);">執着型</span>
+      <span class="style-chip" style="color:var(--agape);border-color:var(--agape);">献身型</span>
+    </div>
+    <button class="start-btn" id="startBtn">診断スタート</button>
+    <p class="intro-note">12問・無料・登録不要</p>
+  </div>
+
+  <!-- プログレス -->
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/12</span>
+  </div>
+
+  <!-- 質問 -->
+  <div class="question-area" id="questionArea" style="display:none;">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらでも<br>ない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">恋愛スタイルを分析中…</p>
+    <p class="loading-sub">あなたの愛し方のパターンを読み解いています</p>
+  </div>
+
+  <!-- 結果 -->
+  <div class="result" id="resultArea">
+
+    <div class="result-card" id="resultCard">
+      <div class="result-card-bg" id="resultCardBg"></div>
+      <div class="result-card-inner">
+        <p class="result-type-en" id="resultTypeEn">EROS</p>
+        <p class="result-type-ja" id="resultTypeJa">情熱型</p>
+        <p class="result-sub-type" id="resultSubType">サブ：友情型</p>
+        <p class="result-desc" id="resultDesc"></p>
+        <div class="result-keyword" id="resultKeyword"></div>
+      </div>
+    </div>
+
+    <div class="style-bars">
+      <h3>あなたの6スタイル分布</h3>
+      <div id="styleBars"></div>
+    </div>
+
+    <div class="bigfive-cross" id="bigfiveCross">
+      <h3>ビッグファイブとの組み合わせ分析</h3>
+      <div id="crossText"></div>
+    </div>
+
+    <div class="compatibility">
+      <h3>相性のよい恋愛スタイル</h3>
+      <div id="compatArea"></div>
+    </div>
+
+    <div class="result-nav">
+      <a href="quiz.html" class="nav-btn nav-btn-primary">ビッグファイブ性格診断もやってみる</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn">もう一度診断する</button>
+    </div>
+
+    <p class="disclaimer">
+      ※この診断は Lee（1973）・Hendrick &amp; Hendrick（1986）の恋愛スタイル理論をもとにした参考診断です。
+      結果は傾向を示すものであり、絶対的な判定ではありません。
+    </p>
+
+  </div>
+</div>
+
+<script>
+// ===== 質問データ（各スタイル2問） =====
+const questions = [
+  { text: '初めて会った瞬間に「この人だ」と感じることがある', style: 'eros' },
+  { text: '恋愛では外見や雰囲気への強い惹かれが大切だと思う', style: 'eros' },
+  { text: '恋愛はある程度、楽しむゲームのようなものだと思う', style: 'ludus' },
+  { text: '特定の一人にこだわらず、恋愛を自由に楽しみたい', style: 'ludus' },
+  { text: '長い友人関係から自然に恋愛に発展するのが理想だ', style: 'storge' },
+  { text: '恋人とは親友のような、気楽で深い関係が心地よい', style: 'storge' },
+  { text: '恋人を選ぶとき、価値観・生活水準・将来性を冷静に考える', style: 'pragma' },
+  { text: '長期的に安定した関係を築けるかどうかを重視する', style: 'pragma' },
+  { text: '好きな人から連絡が来ないと、強い不安を感じる', style: 'mania' },
+  { text: '恋愛中は相手のことが頭から離れず、他のことに集中できなくなる', style: 'mania' },
+  { text: '愛する人のためなら、自分が犠牲になっても構わないと思う', style: 'agape' },
+  { text: '相手が幸せであれば、自分の欲求は後回しにできる', style: 'agape' },
+];
+
+// ===== スタイル定義 =====
+const styles = {
+  eros: {
+    en: 'Eros', ja: '情熱型', color: '#ec4899',
+    desc: '一目惚れを信じ、運命の出会いを大切にするロマンチスト。外見・雰囲気への強い惹かれを恋愛の入口にします。感情が豊かで、愛に全力投球するタイプです。',
+    keywords: ['一目惚れ', '運命', 'ロマンチスト', '情熱的', '感情豊か'],
+    compat: [
+      { style: 'agape', icon: '💛', reason: '献身的な相手が情熱を受け止めてくれる' },
+      { style: 'storge', icon: '💚', reason: '深い絆と情熱が融合した理想的な関係に' },
+    ],
+    bigfive: { high: ['E', 'O'], text: '外向的で開放的な性格のあなたにとって、Erosは自然な恋愛スタイルです。感情表現が得意で、相手を積極的に引き付ける力があります。' }
+  },
+  ludus: {
+    en: 'Ludus', ja: '遊び型', color: '#f97316',
+    desc: '恋愛をゲームとして楽しむ自由人。特定の相手に束縛されることを好まず、軽やかに複数の関係を楽しむ傾向があります。相手を傷つけないための誠実さも持ち合わせています。',
+    keywords: ['自由', '軽やか', 'マイペース', '束縛されない', '楽しむ'],
+    compat: [
+      { style: 'ludus', icon: '🧡', reason: 'お互いの自由を尊重できる対等な関係' },
+      { style: 'pragma', icon: '💙', reason: '現実的な相手がうまくバランスを取れる' },
+    ],
+    bigfive: { high: ['E'], low: ['A'], text: '外向的で協調性を重視しすぎないあなたは、Ludusの自由な恋愛観と相性がよい傾向にあります。ただし、相手への配慮も忘れずに。' }
+  },
+  storge: {
+    en: 'Storge', ja: '友情型', color: '#22c55e',
+    desc: '友情の延長線上に愛を育てる堅実なタイプ。ゆっくりと信頼を積み重ね、深い絆を大切にします。派手さはないけれど、長く続く安定した関係を築くのが得意です。',
+    keywords: ['友情', '信頼', '長続き', '安定', 'ゆっくり'],
+    compat: [
+      { style: 'storge', icon: '💚', reason: '同じペースで信頼を積み重ねられる' },
+      { style: 'pragma', icon: '💙', reason: '現実的な価値観を共有できる' },
+    ],
+    bigfive: { high: ['A', 'C'], text: '協調性が高く誠実なあなたは、Storgeの「友情を育てる恋愛」と深く共鳴します。信頼を大切にする姿勢が長期的な関係を支えます。' }
+  },
+  pragma: {
+    en: 'Pragma', ja: '現実型', color: '#3b82f6',
+    desc: '条件・相性・将来性を冷静に見極める戦略家。感情に流されず、理性的なパートナー選びをします。長期的な視点で安定した関係を築くことを最重視します。',
+    keywords: ['冷静', '計画的', '現実的', '将来設計', '安定志向'],
+    compat: [
+      { style: 'storge', icon: '💚', reason: '友情ベースの安定した関係観が一致する' },
+      { style: 'agape', icon: '💛', reason: '献身的な相手が安心感を与えてくれる' },
+    ],
+    bigfive: { high: ['C'], low: ['N'], text: '誠実で感情が安定しているあなたは、Pragmaの現実的な恋愛観と一致します。計画性と安定を重視する姿勢が長期的な関係に強みを発揮します。' }
+  },
+  mania: {
+    en: 'Mania', ja: '執着型', color: '#8b5cf6',
+    desc: '愛の喜びと不安が共存する激しいタイプ。相手への強い執着と不安から、嫉妬や独占欲が生じやすいです。その裏には深い愛情と傷つきへの恐れがあります。',
+    keywords: ['強い愛情', '嫉妬', '不安', '独占欲', '深く愛する'],
+    compat: [
+      { style: 'agape', icon: '💛', reason: '献身的な相手が不安を包み込んでくれる' },
+      { style: 'eros', icon: '💗', reason: '情熱的な愛でManiaの激しさを受け止める' },
+    ],
+    bigfive: { high: ['N'], low: ['A'], text: '感受性が高いあなたは、Maniaの「強く愛するほど不安も大きくなる」パターンに共感できるかもしれません。感情をコントロールする意識が関係改善につながります。' }
+  },
+  agape: {
+    en: 'Agape', ja: '献身型', color: '#f59e0b',
+    desc: '相手の幸せを自分よりも優先する無償の愛を持つタイプ。見返りを求めず、ただ相手のために尽くします。その深い愛情は相手に大きな安心感を与えます。',
+    keywords: ['無償の愛', '献身', '自己犠牲', '思いやり', '深い愛'],
+    compat: [
+      { style: 'eros', icon: '💗', reason: '情熱型の愛をしっかり受け止め支えられる' },
+      { style: 'mania', icon: '💜', reason: '不安な相手を献身的に包み込める' },
+    ],
+    bigfive: { high: ['A'], low: ['N'], text: '協調性が高く感情が安定しているあなたは、Agapeの「相手ファースト」な愛し方と深く共鳴します。自分自身を大切にすることも忘れずに。' }
+  }
+};
+
+const styleOrder = ['eros', 'ludus', 'storge', 'pragma', 'mania', 'agape'];
+
+// ===== 状態管理 =====
+let current = 0;
+const answers = new Array(questions.length).fill(null);
+
+// ===== 星背景 =====
+(function() {
+  const c = document.getElementById('bgStars');
+  const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 120; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.6+0.2})`;
+    ctx.fill();
+  }
+})();
+
+// ===== スタート =====
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'flex';
+  document.getElementById('questionArea').style.display = 'flex';
+  showQuestion();
+});
+
+// ===== 質問表示 =====
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById('questionNum').textContent = `Q${current + 1}`;
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/${questions.length}`;
+
+  const btns = document.querySelectorAll('.answer-btn');
+  btns.forEach(btn => {
+    btn.classList.remove('selected');
+    if (answers[current] == btn.dataset.val) btn.classList.add('selected');
+    btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
+  });
+
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+function selectAnswer(val) {
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
+
+  setTimeout(() => {
+    current++;
+    if (current < questions.length) {
+      showQuestion();
+    } else {
+      showLoading();
+    }
+  }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (current > 0) { current--; showQuestion(); }
+});
+
+// ===== ローディング → 結果 =====
+function showLoading() {
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(showResult, 1800);
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  const scores = { eros: 0, ludus: 0, storge: 0, pragma: 0, mania: 0, agape: 0 };
+  questions.forEach((q, i) => {
+    scores[q.style] += (answers[i] || 3);
+  });
+  // 各スタイル2問なので最大10点 → 5段階に変換
+  Object.keys(scores).forEach(k => { scores[k] = scores[k] / 2; });
+  return scores;
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const scores = calcScores();
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const [mainKey, mainScore] = sorted[0];
+  const [subKey] = sorted[1];
+  const mainStyle = styles[mainKey];
+  const subStyle = styles[subKey];
+
+  // カード
+  document.getElementById('resultCardBg').style.background =
+    `linear-gradient(145deg, ${mainStyle.color} 0%, rgba(10,14,39,0.9) 60%)`;
+  document.getElementById('resultTypeEn').style.color = mainStyle.color;
+  document.getElementById('resultTypeEn').textContent = mainStyle.en;
+  document.getElementById('resultTypeJa').textContent = mainStyle.ja;
+  document.getElementById('resultSubType').textContent = `サブタイプ：${subStyle.ja}`;
+  document.getElementById('resultDesc').textContent = mainStyle.desc;
+
+  const kwArea = document.getElementById('resultKeyword');
+  kwArea.innerHTML = mainStyle.keywords.map(k => `<span class="kw-tag">${k}</span>`).join('');
+
+  // バー
+  const barsHtml = styleOrder.map(k => {
+    const s = styles[k];
+    const pct = Math.round((scores[k] / 5) * 100);
+    return `
+      <div class="bar-row">
+        <span class="bar-label" style="color:${s.color}">${s.ja}</span>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:0%;background:${s.color}" data-pct="${pct}"></div>
+        </div>
+        <span class="bar-score">${scores[k].toFixed(1)}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('styleBars').innerHTML = barsHtml;
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 100);
+
+  // ビッグファイブとの組み合わせ
+  const crossArea = document.getElementById('crossText');
+  const bfResult = JSON.parse(localStorage.getItem('bigfive_result') || 'null');
+  if (bfResult && bfResult.scores) {
+    const s = bfResult.scores;
+    const highFactors = Object.entries(s).filter(([,v]) => v >= 4).map(([k]) => k);
+    const labels = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+    const badges = highFactors.map(f => `<span class="cross-badge">${labels[f]}が高い</span>`).join('');
+    const crossMsg = mainStyle.bigfive.text;
+    crossArea.innerHTML = `<p class="cross-text">あなたは${badges} 性格タイプです。<br><br>${crossMsg}</p>`;
+  } else {
+    crossArea.innerHTML = `
+      <p class="no-bigfive">ビッグファイブの結果がまだありません。<br>
+      性格診断と組み合わせると、より深い自己分析ができます。</p>`;
+  }
+
+  // 相性
+  const compatHtml = mainStyle.compat.map(c => `
+    <div class="compat-row">
+      <span class="compat-icon">${c.icon}</span>
+      <span class="compat-name" style="color:${styles[c.style].color}">${styles[c.style].ja}</span>
+      <span class="compat-reason">${c.reason}</span>
+    </div>`).join('');
+  document.getElementById('compatArea').innerHTML = compatHtml;
+
+  // LocalStorageに保存
+  localStorage.setItem('love_result', JSON.stringify({ mainStyle: mainKey, scores, timestamp: Date.now() }));
+}
+
+// ===== リトライ =====
+document.getElementById('retryBtn').addEventListener('click', () => {
+  current = 0;
+  answers.fill(null);
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+});
+</script>
+</body>
+</html>
