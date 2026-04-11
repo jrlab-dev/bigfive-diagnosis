@@ -349,16 +349,31 @@
   .anohito-section { margin-top: 44px; padding-top: 44px; border-top: 1px solid rgba(236,72,153,0.18); }
   .anohito-lead { font-size: 14px; color: var(--dim); margin-bottom: 22px; font-weight: 300; }
 
-  /* ===== 診断済みバッジ ===== */
-  .done-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(16,185,129,0.18); border: 1px solid rgba(16,185,129,0.45);
-    color: #6ee7b7; border-radius: 20px; padding: 4px 12px;
-    font-size: 12px; font-weight: 500; margin-top: 10px;
-    animation: badge-in 0.4s ease;
+  /* ===== 診断済みチェック欄 ===== */
+  .btn-check-row {
+    display: inline-flex; align-items: center; gap: 10px;
   }
-  @keyframes badge-in { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
-  .btn-wrapper { display: inline-block; position: relative; }
+  .check-col {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 48px; flex-shrink: 0;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .check-col.done {
+    opacity: 1;
+    animation: check-in 0.4s ease;
+  }
+  @keyframes check-in { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
+  .check-label {
+    font-size: 10px; color: #6ee7b7; font-weight: 600;
+    letter-spacing: 0.02em; margin-bottom: 3px; white-space: nowrap;
+  }
+  .check-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(16,185,129,0.18); border: 1.5px solid rgba(16,185,129,0.55);
+    display: flex; align-items: center; justify-content: center;
+    color: #6ee7b7; font-size: 14px; font-weight: 700;
+  }
 
   footer { text-align: center; padding: 30px 20px; border-top: 1px solid rgba(139,92,246,0.08); font-size: 12px; color: rgba(148,163,184,0.4); }
 
@@ -639,32 +654,36 @@
   el.style.backgroundImage = css;
 })();
 
-// ===== 診断済みバッジ表示 =====
+// ===== 診断済みチェック欄表示 =====
 (function() {
   function isDone(key) {
     if (key === 'bigfive') {
-      const arr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
-      return arr.length > 0;
+      return JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
     }
     if (key === 'bigfive_other') {
-      const arr = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
-      return arr.length > 0;
+      return JSON.parse(localStorage.getItem('bigfive_other_results') || '[]').length > 0;
     }
     return !!localStorage.getItem(key);
   }
 
-  const badge = '<span class="done-badge">✓ 診断済み</span>';
+  // ボタンをラップしてチェック欄を右に追加（各ボタン1つずつ処理）
   document.querySelectorAll('[data-done-key]').forEach(function(btn) {
     const key = btn.getAttribute('data-done-key');
-    if (!isDone(key)) return;
-    // 同じキーのバッジがまだ未追加の場合だけ追加（ボタン複数あるキーは初回のみ）
-    const section = btn.closest('.anohito-section') || btn.closest('.cta-buttons');
-    if (section && !section.querySelector('.done-badge')) {
-      const b = document.createElement('div');
-      b.innerHTML = badge;
-      b.style.cssText = 'text-align:center;margin-top:8px;';
-      btn.insertAdjacentElement('afterend', b);
-    }
+    const done = isDone(key);
+
+    // ラッパー作成
+    const row = document.createElement('span');
+    row.className = 'btn-check-row';
+
+    // チェック欄
+    const col = document.createElement('span');
+    col.className = 'check-col' + (done ? ' done' : '');
+    col.innerHTML = '<span class="check-label">診断済み</span><span class="check-circle">✓</span>';
+
+    // ボタンをラッパーに移動
+    btn.parentNode.insertBefore(row, btn);
+    row.appendChild(btn);
+    row.appendChild(col);
   });
 })();
 
