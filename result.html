@@ -1240,10 +1240,10 @@ if (otherCode && otherCode.length === 5) {
     gender: 'F' // 相手の性別はデフォルトで女性（後で選択可能に）
   } : null;
 
-  // すでに保存済みかチェック
+  // すでに保存済みかチェック（versionも含めてチェック）
   function checkAlreadySaved() {
     const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
-    const isSaved = myResults.some(r => r.code === currentResult.code);
+    const isSaved = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
     if (isSaved) {
       saveBtn.textContent = '✓ 保存済み';
       saveBtn.className = 'btn btn-saved';
@@ -1253,9 +1253,9 @@ if (otherCode && otherCode.length === 5) {
   // 保存実行
   saveBtn.addEventListener('click', () => {
     try {
-      // 自分の結果を保存
+      // 自分の結果を保存（versionも含めて重複チェック）
       const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
-      const isDuplicate = myResults.some(r => r.code === currentResult.code);
+      const isDuplicate = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
       if (!isDuplicate) {
         myResults.unshift(currentResult);
         if (myResults.length > 50) myResults.pop();
