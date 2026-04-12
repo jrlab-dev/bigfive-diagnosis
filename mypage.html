@@ -278,6 +278,49 @@
     font-weight: 600;
   }
 
+  /* 総合レポートバナー */
+  .report-banner {
+    margin-bottom: 20px;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(236,72,153,0.12));
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .report-banner-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .report-banner-sub {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 14px;
+  }
+  .report-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none;
+    border-radius: 999px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .report-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .report-missing-note {
+    font-size: 12px;
+    color: var(--dim);
+    margin-top: 10px;
+  }
+  .report-missing-note a { color: var(--purple); font-weight: 600; text-decoration: none; }
+
   /* クリアボタン */
   .clear-all {
     margin-top: 24px;
@@ -317,6 +360,9 @@
   <div id="myResults" class="results-list"></div>
   <div id="otherResults" class="results-list" style="display: none;"></div>
   <div id="otherTestResults" class="results-list" style="display: none;"></div>
+
+  <!-- 総合レポートバナー -->
+  <div class="report-banner" id="reportBanner"></div>
 
   <button class="clear-all" id="clearAllBtn">🗑️ すべてのデータを削除</button>
 
@@ -616,8 +662,42 @@ function render() {
   }
 }
 
+// ===== 総合レポートバナー =====
+function renderReportBanner() {
+  const banner = document.getElementById('reportBanner');
+  const hasBf  = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
+  const tests  = [
+    { key: 'love_result',     name: '恋愛スタイル診断', url: 'love.html' },
+    { key: 'mindset_result',  name: 'マインドセット診断', url: 'mindset.html' },
+    { key: 'sdt_result',      name: '動機タイプ診断',    url: 'sdt.html' },
+    { key: 'schwartz_result', name: '価値観診断',        url: 'schwartz.html' },
+  ];
+  const missing = tests.filter(t => !localStorage.getItem(t.key));
+  const allDone = hasBf && missing.length === 0;
+
+  if (allDone) {
+    banner.innerHTML = `
+      <div class="report-banner-title">✦ 全テスト完了！総合レポートが見られます</div>
+      <div class="report-banner-sub">5つのテストを統合した、あなただけの深層分析</div>
+      <a href="report.html" class="report-btn">📊 総合レポートを見る</a>
+    `;
+  } else {
+    const remainCount = missing.length + (hasBf ? 0 : 1);
+    const missingLinks = missing.slice(0, 2).map(t =>
+      `<a href="${t.url}">${t.name}</a>`
+    ).join('・');
+    banner.innerHTML = `
+      <div class="report-banner-title">📊 総合レポートを解放しよう</div>
+      <div class="report-banner-sub">あと ${remainCount} つのテストで全テスト統合レポートが見られます</div>
+      <a href="report.html" class="report-btn" style="opacity:0.6;">📊 レポートを見る（一部）</a>
+      <div class="report-missing-note">未受診: ${missingLinks}${missing.length > 2 ? '…' : ''}</div>
+    `;
+  }
+}
+
 // 初期表示
 render();
+renderReportBanner();
 </script>
 <script src="nav.js"></script>
 </body>

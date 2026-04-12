@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>総合性格レポート — ビッグファイブ診断</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --purple: #8b5cf6;
+  --blue: #3b82f6;
+  --pink: #ec4899;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --c-O: #8b5cf6;
+  --c-C: #3b82f6;
+  --c-E: #f97316;
+  --c-A: #f472b6;
+  --c-N: #14b8a6;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* ===== 背景 ===== */
+.bg-nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 80%, rgba(236,72,153,0.06) 0%, transparent 70%);
+}
+
+/* ===== レイアウト ===== */
+.container {
+  position: relative; z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ===== ページヘッダー ===== */
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(236,72,153,0.2));
+  border: 1px solid rgba(139,92,246,0.4);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c4b5fd;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #c4b5fd, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-size: 13px;
+  color: var(--dim);
+}
+
+/* ===== セクション共通 ===== */
+.section {
+  margin-bottom: 32px;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--purple);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(139,92,246,0.2);
+}
+
+/* ===== プロフィールカード ===== */
+.profile-card {
+  background: rgba(26,10,62,0.6);
+  border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 20px;
+  padding: 28px 24px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.profile-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 0% 0%, rgba(139,92,246,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.profile-char {
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(139,92,246,0.1);
+  border: 1px solid rgba(139,92,246,0.2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-char img { width: 100%; height: 100%; object-fit: contain; }
+.profile-char-placeholder { font-size: 48px; opacity: 0.3; }
+.profile-info { flex: 1; min-width: 0; }
+.profile-type-code {
+  font-size: 11px;
+  color: var(--purple);
+  font-family: monospace;
+  background: rgba(139,92,246,0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.profile-type-name {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.factor-bars { display: flex; flex-direction: column; gap: 5px; }
+.factor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+.factor-label { width: 16px; font-weight: 700; flex-shrink: 0; }
+.factor-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.factor-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+.factor-score { width: 16px; text-align: right; color: var(--dim); flex-shrink: 0; }
+
+/* ===== テスト結果サマリー ===== */
+.tests-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.test-summary-card {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.test-summary-icon { font-size: 18px; margin-bottom: 6px; }
+.test-summary-label { font-size: 10px; color: var(--dim); margin-bottom: 2px; }
+.test-summary-value { font-size: 14px; font-weight: 700; }
+.test-summary-card.not-taken {
+  opacity: 0.4;
+  border-style: dashed;
+}
+.test-summary-card.not-taken .test-summary-value { color: var(--dim); font-size: 12px; font-weight: 400; }
+
+/* ===== 分析セクション ===== */
+.analysis-block {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.15);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.analysis-block-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.analysis-text {
+  font-size: 13px;
+  color: rgba(226,232,240,0.85);
+  line-height: 1.9;
+}
+.analysis-text strong { color: var(--text); }
+
+/* ===== 弱点セクション ===== */
+.weakness-block {
+  background: rgba(30,10,10,0.6);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.weakness-block-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f87171;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.weakness-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.weakness-item {
+  font-size: 13px;
+  color: rgba(226,232,240,0.8);
+  line-height: 1.8;
+  padding-left: 16px;
+  position: relative;
+}
+.weakness-item::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #f87171;
+  font-size: 10px;
+  top: 4px;
+}
+
+/* ===== 領域別アドバイス ===== */
+.advice-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.advice-tab {
+  flex: 1;
+  padding: 10px 8px;
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.15);
+  border-radius: 10px;
+  color: var(--dim);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  font-family: inherit;
+}
+.advice-tab:hover { color: var(--text); border-color: rgba(139,92,246,0.3); }
+.advice-tab.active {
+  background: rgba(139,92,246,0.15);
+  border-color: rgba(139,92,246,0.4);
+  color: #c4b5fd;
+}
+.advice-content { display: none; }
+.advice-content.active { display: block; }
+.advice-block {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.15);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.advice-item {
+  font-size: 13px;
+  color: rgba(226,232,240,0.85);
+  line-height: 1.9;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.advice-item::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--purple);
+  font-size: 9px;
+  top: 5px;
+}
+.advice-item:last-child { margin-bottom: 0; }
+
+/* ===== 成長ロードマップ ===== */
+.growth-block {
+  background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.06));
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.growth-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+.growth-step:last-child { margin-bottom: 0; }
+.growth-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(16,185,129,0.2);
+  border: 1px solid rgba(16,185,129,0.4);
+  color: #10b981;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.growth-text { font-size: 13px; line-height: 1.8; color: rgba(226,232,240,0.85); }
+.growth-text strong { color: var(--text); }
+
+/* ===== 未受診バナー ===== */
+.missing-banner {
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 32px;
+}
+.missing-banner-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+.missing-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.missing-list li {
+  font-size: 13px;
+  color: rgba(226,232,240,0.8);
+}
+.missing-list a {
+  color: #fbbf24;
+  font-weight: 600;
+  text-decoration: none;
+}
+.missing-list a:hover { text-decoration: underline; }
+
+/* ===== フッター ===== */
+.footer-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 40px;
+  line-height: 2;
+  opacity: 0.6;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 480px) {
+  .profile-card { flex-direction: column; gap: 16px; align-items: center; text-align: center; }
+  .profile-char { width: 80px; height: 80px; }
+  .factor-bars { width: 100%; }
+  .tests-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-nebula"></div>
+
+<div class="container">
+
+  <!-- ページヘッダー -->
+  <div class="page-header">
+    <div class="page-badge">✦ PREMIUM REPORT</div>
+    <h1 class="page-title">総合性格レポート</h1>
+    <p class="page-subtitle">5つの心理テストを統合した、あなただけの深層分析</p>
+  </div>
+
+  <!-- 未受診バナー（受診が足りない場合に表示） -->
+  <div class="missing-banner" id="missingBanner" style="display:none;">
+    <div class="missing-banner-title">⚠️ 未受診のテストがあります</div>
+    <ul class="missing-list" id="missingList"></ul>
+    <p style="font-size:12px; color:var(--dim); margin-top:12px;">全テストを受診すると、より深い分析が可能になります。</p>
+  </div>
+
+  <!-- プロフィールカード -->
+  <div class="section">
+    <div class="section-label">YOUR PROFILE</div>
+    <div class="profile-card" id="profileCard">
+      <div class="profile-char" id="profileChar">
+        <span class="profile-char-placeholder">🧬</span>
+      </div>
+      <div class="profile-info">
+        <div class="profile-type-code" id="profileCode">—</div>
+        <div class="profile-type-name" id="profileName">読み込み中...</div>
+        <div class="factor-bars" id="factorBars"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5テストサマリー -->
+  <div class="section">
+    <div class="section-label">ALL TESTS</div>
+    <div class="tests-grid" id="testsGrid"></div>
+  </div>
+
+  <!-- 総合パターン分析 -->
+  <div class="section" id="analysisSection">
+    <div class="section-label">PERSONALITY PATTERN</div>
+    <div id="analysisBlocks"></div>
+  </div>
+
+  <!-- 弱点・課題（有料差別化） -->
+  <div class="section" id="weaknessSection">
+    <div class="section-label">WEAKNESS & CHALLENGE</div>
+    <div id="weaknessBlocks"></div>
+  </div>
+
+  <!-- 領域別アドバイス -->
+  <div class="section" id="adviceSection">
+    <div class="section-label">AREA ADVICE</div>
+    <div class="advice-tabs">
+      <button class="advice-tab active" data-tab="work">💼 仕事</button>
+      <button class="advice-tab" data-tab="love">💕 恋愛</button>
+      <button class="advice-tab" data-tab="human">🤝 人間関係</button>
+    </div>
+    <div class="advice-content active" id="advice-work">
+      <div class="advice-block" id="workAdvice"></div>
+    </div>
+    <div class="advice-content" id="advice-love">
+      <div class="advice-block" id="loveAdvice"></div>
+    </div>
+    <div class="advice-content" id="advice-human">
+      <div class="advice-block" id="humanAdvice"></div>
+    </div>
+  </div>
+
+  <!-- 成長ロードマップ -->
+  <div class="section" id="growthSection">
+    <div class="section-label">GROWTH ROADMAP</div>
+    <div class="growth-block" id="growthBlock"></div>
+  </div>
+
+  <div class="footer-note">
+    このレポートはビッグファイブ理論・自己決定理論・シュワルツ価値観モデル等の<br>
+    科学的心理学理論に基づいて生成されています。
+  </div>
+
+</div>
+
+<script>
+// ===== 定義集 =====
+const LOVE_STYLES = {
+  eros:   { name: '情熱型', color: '#ec4899' },
+  ludus:  { name: '遊び型', color: '#f97316' },
+  storge: { name: '友情型', color: '#22c55e' },
+  pragma: { name: '現実型', color: '#3b82f6' },
+  mania:  { name: '執着型', color: '#8b5cf6' },
+  agape:  { name: '献身型', color: '#f59e0b' },
+};
+const MINDSET_TYPES = {
+  growth: { name: '成長マインドセット', color: '#10b981' },
+  mixed:  { name: '混合マインドセット', color: '#8b5cf6' },
+  fixed:  { name: '固定マインドセット', color: '#f97316' },
+};
+const SDT_TYPES = {
+  autonomy:    { name: '自律駆動型', color: '#3b82f6' },
+  competence:  { name: '達成志向型', color: '#f59e0b' },
+  relatedness: { name: '関係重視型', color: '#ec4899' },
+};
+const VALUES_JA = {
+  'self-direction':'自己方向性','stimulation':'刺激追求','hedonism':'快楽主義',
+  'achievement':'達成','power':'権力','security':'安全',
+  'conformity':'同調','tradition':'伝統','benevolence':'仁愛','universalism':'普遍主義'
+};
+const FACTOR_COLORS = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
+const FACTOR_LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+
+// ===== データ読み込み =====
+function loadData() {
+  const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const bf     = bfList.length > 0 ? bfList[0] : null;
+  let love     = null, mindset = null, sdt = null, schwartz = null;
+  try { love     = JSON.parse(localStorage.getItem('love_result'));     } catch(e) {}
+  try { mindset  = JSON.parse(localStorage.getItem('mindset_result'));  } catch(e) {}
+  try { sdt      = JSON.parse(localStorage.getItem('sdt_result'));      } catch(e) {}
+  try { schwartz = JSON.parse(localStorage.getItem('schwartz_result')); } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz };
+}
+
+// ===== 未受診チェック =====
+function checkMissing(data) {
+  const missing = [];
+  if (!data.bf)       missing.push({ name: 'ビッグファイブ診断',  url: 'quiz.html?v=10' });
+  if (!data.love)     missing.push({ name: '恋愛スタイル診断',    url: 'love.html' });
+  if (!data.mindset)  missing.push({ name: 'マインドセット診断',  url: 'mindset.html' });
+  if (!data.sdt)      missing.push({ name: '動機タイプ診断',      url: 'sdt.html' });
+  if (!data.schwartz) missing.push({ name: '価値観診断',          url: 'schwartz.html' });
+  return missing;
+}
+
+// ===== プロフィールカード描画 =====
+function renderProfile(bf) {
+  if (!bf) return;
+  const scores  = bf.scores || {};
+  const gender  = bf.gender || 'F';
+  const imgCode = bf.code.split('').map(d => {
+    const n = parseInt(d);
+    return n <= 2 ? '1' : n >= 4 ? '5' : '3';
+  }).join('');
+  const imgPath = `images/characters/${gender}/${imgCode}.webp`;
+
+  const charEl = document.getElementById('profileChar');
+  charEl.innerHTML = `<img src="${imgPath}" alt="キャラクター" onerror="this.parentElement.innerHTML='<span class=\'profile-char-placeholder\'>🧑</span>'">`;
+
+  document.getElementById('profileCode').textContent = bf.code;
+  document.getElementById('profileName').textContent = bf.typeName || '—';
+
+  const barsHtml = ['O','C','E','A','N'].map(f => {
+    const score = scores[f] || 3;
+    const pct   = (score / 5) * 100;
+    return `
+      <div class="factor-row">
+        <span class="factor-label" style="color:${FACTOR_COLORS[f]}">${f}</span>
+        <div class="factor-bar-bg">
+          <div class="factor-bar-fill" style="width:${pct}%;background:${FACTOR_COLORS[f]}"></div>
+        </div>
+        <span class="factor-score">${score}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('factorBars').innerHTML = barsHtml;
+}
+
+// ===== テストサマリーグリッド描画 =====
+function renderTestsGrid(data) {
+  const tests = [
+    {
+      icon: '🧬', label: 'ビッグファイブ',
+      value: data.bf ? data.bf.typeName : null,
+      color: '#8b5cf6', url: 'quiz.html'
+    },
+    {
+      icon: '💕', label: '恋愛スタイル',
+      value: data.love ? (LOVE_STYLES[data.love.mainStyle] || {}).name : null,
+      color: data.love ? (LOVE_STYLES[data.love.mainStyle] || {}).color : '#ec4899',
+      url: 'love.html'
+    },
+    {
+      icon: '🧠', label: 'マインドセット',
+      value: data.mindset ? (MINDSET_TYPES[data.mindset.type] || {}).name : null,
+      color: data.mindset ? (MINDSET_TYPES[data.mindset.type] || {}).color : '#10b981',
+      url: 'mindset.html'
+    },
+    {
+      icon: '⚡', label: '動機タイプ',
+      value: data.sdt ? (SDT_TYPES[data.sdt.strongest] || {}).name : null,
+      color: data.sdt ? (SDT_TYPES[data.sdt.strongest] || {}).color : '#3b82f6',
+      url: 'sdt.html'
+    },
+    {
+      icon: '🌍', label: '価値観（TOP1）',
+      value: data.schwartz && data.schwartz.top3 && data.schwartz.top3[0]
+        ? VALUES_JA[data.schwartz.top3[0]] || data.schwartz.top3[0]
+        : null,
+      color: '#f59e0b', url: 'schwartz.html'
+    },
+  ];
+
+  document.getElementById('testsGrid').innerHTML = tests.map(t => {
+    if (t.value) {
+      return `
+        <div class="test-summary-card">
+          <div class="test-summary-icon">${t.icon}</div>
+          <div class="test-summary-label">${t.label}</div>
+          <div class="test-summary-value" style="color:${t.color}">${t.value}</div>
+        </div>`;
+    } else {
+      return `
+        <a href="${t.url}" class="test-summary-card not-taken" style="text-decoration:none;color:inherit;">
+          <div class="test-summary-icon">${t.icon}</div>
+          <div class="test-summary-label">${t.label}</div>
+          <div class="test-summary-value">未受診 →</div>
+        </a>`;
+    }
+  }).join('');
+}
+
+// ===== 分析ロジック =====
+function buildAnalysis(data) {
+  const bf = data.bf;
+  const s  = bf ? (bf.scores || {}) : {};
+
+  // ビッグファイブの各因子を high/mid/low に分類
+  function level(score) {
+    if (!score) return 'mid';
+    if (score >= 4) return 'high';
+    if (score <= 2) return 'low';
+    return 'mid';
+  }
+  const O = level(s.O), C = level(s.C), E = level(s.E), A = level(s.A), N = level(s.N);
+
+  const love     = data.love     ? data.love.mainStyle        : null;
+  const mindset  = data.mindset  ? data.mindset.type          : null;
+  const sdt      = data.sdt      ? data.sdt.strongest         : null;
+  const topValue = data.schwartz && data.schwartz.top3 ? data.schwartz.top3[0] : null;
+
+  const blocks = [];
+
+  // ── 1. 核となる性格パターン ──
+  const corePatterns = getCorePattern(O, C, E, A, N);
+  blocks.push({ title: '🔬 あなたの核となる性格パターン', text: corePatterns });
+
+  // ── 2. 恋愛・動機との相関 ──
+  if (love || sdt) {
+    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset);
+    if (crossText) blocks.push({ title: '🔗 複数テストが示すあなたの傾向', text: crossText });
+  }
+
+  // ── 3. 価値観との一致・不一致 ──
+  if (topValue) {
+    const valueText = getValueInsight(O, C, E, A, N, topValue);
+    if (valueText) blocks.push({ title: '🌍 価値観と性格の一致度', text: valueText });
+  }
+
+  return blocks;
+}
+
+// ===== 弱点ロジック =====
+function buildWeakness(data) {
+  const bf = data.bf;
+  const s  = bf ? (bf.scores || {}) : {};
+  const love    = data.love    ? data.love.mainStyle    : null;
+  const mindset = data.mindset ? data.mindset.type      : null;
+  const sdt     = data.sdt    ? data.sdt.strongest      : null;
+
+  return getWeaknesses(s, love, mindset, sdt);
+}
+
+// ===== 領域別アドバイスロジック =====
+function buildAdvice(data) {
+  const bf = data.bf;
+  const s  = bf ? (bf.scores || {}) : {};
+  function level(score) {
+    if (!score) return 'mid';
+    if (score >= 4) return 'high';
+    if (score <= 2) return 'low';
+    return 'mid';
+  }
+  const O = level(s.O), C = level(s.C), E = level(s.E), A = level(s.A), N = level(s.N);
+  const love    = data.love    ? data.love.mainStyle    : null;
+  const mindset = data.mindset ? data.mindset.type      : null;
+  const sdt     = data.sdt    ? data.sdt.strongest      : null;
+  const topValue = data.schwartz && data.schwartz.top3 ? data.schwartz.top3[0] : null;
+
+  return {
+    work:  getWorkAdvice(O, C, E, A, N, mindset, sdt),
+    love:  getLoveAdvice(O, C, E, A, N, love),
+    human: getHumanAdvice(O, C, E, A, N, A, sdt, topValue),
+  };
+}
+
+// ===== 成長ロードマップロジック =====
+function buildGrowth(data) {
+  const bf = data.bf;
+  const s  = bf ? (bf.scores || {}) : {};
+  const mindset = data.mindset ? data.mindset.type : null;
+
+  return getGrowthSteps(s, mindset);
+}
+
+// ===================================================
+// ===== 分析テキスト生成関数 =====
+// ===================================================
+
+function getCorePattern(O, C, E, A, N) {
+  const lines = [];
+
+  // 開放性
+  if (O === 'high') lines.push('強い好奇心と豊かな想像力を持ち、新しいアイデアや経験に積極的に飛び込んでいくタイプです。芸術・哲学・科学など多様な分野に関心を持ちやすく、変化を楽しめます。');
+  else if (O === 'low') lines.push('実用的・現実的な思考を好み、実績のある方法や安定したルーティンに価値を見出します。地に足のついた判断力が強みです。');
+
+  // 誠実性
+  if (C === 'high') lines.push('計画性と自己規律が高く、目標に向かって着実に行動できます。約束を守り、責任感が強いため、周囲からの信頼を集めやすいです。');
+  else if (C === 'low') lines.push('柔軟性と即興力が高く、状況に応じて動けます。一方で、長期計画の継続や細かいタスク管理には意識的な工夫が必要です。');
+
+  // 外向性
+  if (E === 'high') lines.push('他者と交わることでエネルギーを得るタイプ。積極的に人脈を広げ、グループの中心になることも多いです。');
+  else if (E === 'low') lines.push('一人の時間や少人数での深い交流でエネルギーを回復します。思慮深く、熟考してから行動に移す傾向があります。');
+
+  // 協調性
+  if (A === 'high') lines.push('他者への共感と思いやりが強く、チームワークや協力関係を大切にします。摩擦を避けようとする気遣いが人間関係の潤滑油になります。');
+  else if (A === 'low') lines.push('独立心が強く、自分の判断を優先します。競争環境でも動じず、必要なら厳しい決断を下せる冷静さがあります。');
+
+  // 神経症的傾向
+  if (N === 'high') lines.push('感情の感度が高く、喜びも不安も深く感じます。豊かな感受性は共感力や創造性の源でもありますが、ストレス管理に意識的な取り組みが必要です。');
+  else if (N === 'low') lines.push('感情的に安定しており、ストレスや批判にも冷静に対処できます。安定感が周囲に安心感を与えます。');
+
+  if (lines.length === 0) lines.push('バランスの取れた性格で、状況に応じて柔軟に対応できます。特定の傾向が突出しているわけではなく、多様な環境に適応できます。');
+  return lines.join('<br><br>');
+}
+
+function getCrossInsight(O, C, E, A, N, love, sdt, mindset) {
+  const parts = [];
+
+  // 恋愛 × 神経症的傾向
+  if (love === 'mania' && N === 'high') {
+    parts.push('<strong>恋愛スタイル「執着型」×感受性の高さ：</strong>感情の波が大きく、好きな人への気持ちが不安や心配に変わりやすい傾向があります。深く愛せる力は本物ですが、相手に過度な期待をかけてしまうことも。信頼を積み重ねることが安定への鍵です。');
+  }
+  if (love === 'agape' && A === 'high') {
+    parts.push('<strong>恋愛スタイル「献身型」×高い協調性：</strong>相手のために尽くすことに喜びを感じる、稀有な存在です。ただし、自分の気持ちを後回しにしすぎると消耗してしまうことも。与えるだけでなく「受け取る」練習も大切にしてください。');
+  }
+  if (love === 'pragma' && C === 'high') {
+    parts.push('<strong>恋愛スタイル「現実型」×高い誠実性：</strong>パートナー選びを慎重に行い、長期的に安定した関係を築く力があります。感情より理性で判断する傾向が強く、関係の深まりに時間がかかることもありますが、一度信頼すると非常に誠実です。');
+  }
+
+  // 動機 × ビッグファイブ
+  if (sdt === 'autonomy' && E === 'low') {
+    parts.push('<strong>動機「自律駆動型」×内向性：</strong>自分の内側からくる強い意志で動くタイプ。他者の承認より、自分の判断軸を大切にします。孤独に見えることもありますが、それがあなたの集中力の源です。');
+  }
+  if (sdt === 'competence' && C === 'high') {
+    parts.push('<strong>動機「達成志向型」×高い誠実性：</strong>「できた」という実感と、計画的に努力を積み重ねる力が掛け合わさっています。高い目標を着実に達成できるポテンシャルを持っています。');
+  }
+  if (sdt === 'relatedness' && A === 'high') {
+    parts.push('<strong>動機「関係重視型」×高い協調性：</strong>人とのつながりから最大のエネルギーを得て、思いやりで周囲を支えます。職場や仲間の雰囲気が仕事のパフォーマンスに直結します。');
+  }
+
+  // マインドセット × 開放性
+  if (mindset === 'growth' && O === 'high') {
+    parts.push('<strong>成長マインドセット×高い開放性：</strong>「もっと知りたい、もっと成長したい」という欲求がとても強い組み合わせです。学習速度が速く、新しい分野への適応も早いでしょう。知識の吸収を止めないことがあなたの武器です。');
+  }
+  if (mindset === 'fixed' && C === 'high') {
+    parts.push('<strong>固定マインドセット×高い誠実性：</strong>得意分野では非常に高い成果を出せますが、「自分には向いていない」と判断した分野には壁を作りやすい傾向があります。誠実さと責任感は本物ですが、失敗を「学び」として再定義することで、さらに成長の幅が広がります。');
+  }
+
+  if (parts.length === 0) {
+    parts.push('複数のテスト結果を照合した結果、あなたの性格は<strong>バランス型</strong>の傾向を示しています。特定の強烈な偏りがない分、状況に応じた柔軟な対応が得意です。一方で「これが自分の強みだ」と明確に言える核を意識的に育てることが次のステップです。');
+  }
+
+  return parts.join('<br><br>');
+}
+
+function getValueInsight(O, C, E, A, N, topValue) {
+  const selfValues = ['self-direction', 'stimulation', 'hedonism'];
+  const socialValues = ['benevolence', 'universalism', 'conformity'];
+  const achieveValues = ['achievement', 'power'];
+  const secureValues = ['security', 'tradition'];
+
+  if (selfValues.includes(topValue) && O === 'high') {
+    return `あなたの最上位価値観「${VALUES_JA[topValue]}」は、高い開放性とよく一致しています。自由・独立・創造への欲求が性格と価値観の両面で一致しており、<strong>内的な一貫性</strong>が高い状態です。この軸で生きると迷いが少ないでしょう。`;
+  }
+  if (socialValues.includes(topValue) && A === 'high') {
+    return `「${VALUES_JA[topValue]}」を最重視することと、高い協調性は深く連動しています。他者への思いやりがあなたのアイデンティティの核にあります。ただし、自己犠牲になりすぎないよう<strong>自分自身の欲求も大切に</strong>する意識を持ってください。`;
+  }
+  if (achieveValues.includes(topValue) && C === 'high') {
+    return `「${VALUES_JA[topValue]}」という価値観と高い誠実性の組み合わせは、<strong>目標達成に非常に強い</strong>パターンです。野心と実行力が揃っています。燃え尽きに注意しながら、着実に前進してください。`;
+  }
+  if (secureValues.includes(topValue) && N === 'high') {
+    return `「${VALUES_JA[topValue]}」を大切にすることは、感受性の高さから来る不安への対応戦略でもあります。安定・安全を求める気持ちは自然なことです。ただし、安全を求めるあまり<strong>挑戦の機会を逃さない</strong>よう意識してみてください。`;
+  }
+  return `あなたの最上位価値観「${VALUES_JA[topValue] || topValue}」は、性格特性とユニークな形で組み合わさっています。この価値観があなたの判断基準の中心にあることを意識して行動すると、迷いが減るでしょう。`;
+}
+
+function getWeaknesses(s, love, mindset, sdt) {
+  const items = [];
+
+  if ((s.N || 3) >= 4) items.push('感情の波が大きく、ストレスや批判を受けると気持ちの立て直しに時間がかかることがある。反芻思考（グルグル考える癖）に気をつけましょう。');
+  if ((s.C || 3) <= 2) items.push('計画を立てても途中で飽きてしまったり、締め切り直前にならないと動けないことがある。「小さく始める」習慣が改善に効果的です。');
+  if ((s.A || 3) <= 2) items.push('自分の意見を押し通そうとするあまり、周囲との衝突が生まれやすい。「正しさ」より「関係性」が大切な場面を見極める力を養うと良いでしょう。');
+  if ((s.E || 3) <= 2) items.push('一人で抱え込みやすく、助けを求めるタイミングが遅れることがある。「相談する」こと自体を強さとして再定義することが助けになります。');
+  if ((s.O || 3) <= 2) items.push('慣れ親しんだやり方に固執し、新しいアプローチへの抵抗が出やすい。意識的に「小さな実験」を取り入れることで視野が広がります。');
+
+  if (love === 'mania') items.push('恋愛において、不安や嫉妬が強くなりすぎることがある。感情の揺れを相手にぶつけず、まず自分で消化する習慣が関係を守ります。');
+  if (love === 'ludus') items.push('恋愛を「ゲーム」としてとらえる側面が、相手の深い感情を傷つけることがある。自分の距離感が相手に伝わっているか、確認する習慣を持ちましょう。');
+  if (mindset === 'fixed') items.push('苦手意識のある分野で「自分には無理」と早めにあきらめてしまうことがある。失敗は能力ではなく「まだ成長中」のサインと捉え直してみてください。');
+  if (sdt === 'autonomy' && (s.A || 3) <= 2) items.push('「自分でやりたい」という欲求が強すぎると、チームでの協力関係が難しくなることがある。自律性と協力は両立できます。');
+
+  if (items.length === 0) items.push('大きな弱点は見当たりません。ただし、バランスが取れているということは「尖った強み」も作りにくい側面があります。意識的に得意分野を深掘りすることを意識してみてください。');
+
+  return items;
+}
+
+function getWorkAdvice(O, C, E, A, N, mindset, sdt) {
+  const items = [];
+
+  if (sdt === 'autonomy') items.push('自分でテーマを決められる役割・プロジェクトで最大の力を発揮します。細かく管理されるよりも、成果で評価される環境を選びましょう。');
+  if (sdt === 'competence') items.push('スキルアップや成長が実感できる仕事に強いモチベーションを感じます。定期的な目標設定と達成確認のサイクルを作ることが活力の源になります。');
+  if (sdt === 'relatedness') items.push('信頼できる同僚・チームと一緒に働ける環境で最高のパフォーマンスを発揮します。職場の人間関係の質を最優先にして働く場所を選ぶことが重要です。');
+
+  if (O === 'high') items.push('創造性・発想力が求められる仕事が向いています。ルーティン業務より、プロジェクト型・提案型の仕事でエネルギーが湧きます。');
+  if (C === 'high') items.push('長期プロジェクトの管理や、精度が求められる業務で強みを発揮します。細部まで丁寧に仕上げる力は大きな武器です。');
+  if (E === 'high') items.push('対人業務・プレゼン・営業など、人と関わる頻度の高い仕事でエネルギーが高まります。会議や交流の場を積極的に活用しましょう。');
+  if (E === 'low') items.push('深く集中できる環境での作業が得意です。ノイズの少ない環境で独自の成果を出す仕事スタイルが合っています。');
+  if (mindset === 'growth') items.push('新しいスキルの習得や未知の分野への挑戦を積極的に受け入れられます。「未経験だから無理」ではなく「未経験だから成長できる」と捉えて行動しましょう。');
+
+  if (items.length === 0) items.push('バランスよく様々な仕事環境に適応できます。自分が最もエネルギーを感じる業務に意識的に時間を割くことで、さらに成果が上がるでしょう。');
+  return items;
+}
+
+function getLoveAdvice(O, C, E, A, N, love) {
+  const items = [];
+
+  if (love === 'eros') items.push('直感と情熱を大切にするあなたは、相手への気持ちを率直に伝えることが強みです。ただし、最初の熱が落ち着いたあとの「育てる恋愛」も意識的に取り組んでみてください。');
+  if (love === 'storge') items.push('友情から始まる深い絆を築けるあなた。焦らず時間をかけて信頼を育てる過程を楽しんでください。相手にとって「安心できる存在」であることがあなたの最大の魅力です。');
+  if (love === 'pragma') items.push('長期的視点でパートナーを選べる冷静さが強みです。一方で、感情の交流も大切にすることで、より豊かな関係になります。');
+  if (love === 'mania') items.push('深い愛情と不安が共存するあなた。「愛しているから不安になる」ことを相手にも伝えながら、相互理解を深めましょう。安心感の積み重ねが関係を安定させます。');
+  if (love === 'agape') items.push('相手への純粋な献身が魅力のあなた。「尽くすこと」を喜びにしつつも、自分の気持ちや欲求を伝えることも関係を深める大切な行為です。');
+  if (love === 'ludus') items.push('軽やかさと自由さが魅力ですが、深い関係を求める相手との摩擦が生まれやすいです。自分がどんな関係を求めているか、定期的に見つめ直しましょう。');
+
+  if (N === 'high') items.push('感情が豊かな分、喜びも傷つきも深く感じます。感情の揺れを「自分の感受性の豊かさ」として受け入れつつ、自己調整の習慣（書く・話す・動く）を持ちましょう。');
+  if (A === 'high') items.push('相手の気持ちに敏感で、さりげない思いやりができます。ただし、自分の意見や希望を言えずに溜め込まないよう、「伝える練習」を意識してください。');
+
+  if (items.length === 0) items.push('あなたの恋愛スタイルは状況に応じて柔軟に変化します。大切なのは、相手との対話を続けてお互いの期待値をすり合わせていくことです。');
+  return items;
+}
+
+function getHumanAdvice(O, C, E, A, N, a, sdt, topValue) {
+  const items = [];
+
+  if (A === 'high') items.push('相手の気持ちに自然と寄り添えるため、多くの人から信頼されます。ただし「いい人」でいようとするあまり、本音を言えなくなる場面に注意してください。');
+  if (A === 'low') items.push('率直な意見を言える強みがあります。衝突を恐れず話し合える関係は長続きします。ただし、伝え方の工夫（タイミング・言葉選び）が人間関係の質を上げます。');
+  if (E === 'high') items.push('広い人脈を持ち、初対面でも打ち解けやすい強みがあります。浅く広くなりがちな関係の中に、深く信頼できる数人を意識的に作ることが人生の豊かさにつながります。');
+  if (E === 'low') items.push('少人数との深い関係を好むあなた。信頼できる人との絆は非常に強固です。広さより深さを大切にする関係構築スタイルを自信を持って続けてください。');
+  if (sdt === 'relatedness') items.push('人とのつながりがあなたのエネルギー源です。意識的に感謝を伝え、相手の変化に気づく小さな行動が、深い絆を生み出します。');
+  if (topValue && ['benevolence','universalism'].includes(topValue)) items.push('他者や社会への深い関心が行動の根底にあります。その思いやりは周囲に伝わっており、あなたの人間関係の核になっています。');
+
+  if (items.length === 0) items.push('様々な人と柔軟に関われるバランス型です。関係の深さと広さのバランスを意識しながら、自分にとって心地よい人間関係を構築していきましょう。');
+  return items;
+}
+
+function getGrowthSteps(s, mindset) {
+  const steps = [];
+
+  // 最も低い因子を特定
+  const factors = [
+    { key: 'O', score: s.O || 3 },
+    { key: 'C', score: s.C || 3 },
+    { key: 'E', score: s.E || 3 },
+    { key: 'A', score: s.A || 3 },
+    { key: 'N', score: s.N || 3 },
+  ].sort((a,b) => a.score - b.score);
+
+  const growthActions = {
+    O: { label: '開放性を育てる', action: '月に1冊、普段読まないジャンルの本を読む。または、知らない場所・体験に意識的に足を運ぶ。' },
+    C: { label: '誠実性を高める', action: '「今日やること」を3つだけ書き出し、完了したらチェックする習慣を始める。小さな達成感が自己規律を育てます。' },
+    E: { label: '外向性を広げる', action: '週1回、普段話さない人に自分から声をかけてみる。小さな接点の積み重ねが自信になります。' },
+    A: { label: '協調性を磨く', action: '相手の話を聞くとき、最後まで遮らずに聞く練習をする。「まず理解」の姿勢が人間関係を変えます。' },
+    N: { label: '感情を整える', action: 'ネガティブな感情が出たとき、3分間だけ書き出す習慣をつける。感情を言語化することで、揺れが収まりやすくなります。' },
+  };
+
+  // 最もスコアが低い1〜2因子にフォーカス
+  const weakFactors = factors.slice(0, 2);
+  weakFactors.forEach((f, i) => {
+    if (f.score <= 3) {
+      const act = growthActions[f.key];
+      steps.push({ num: i + 1, label: act.label, action: act.action });
+    }
+  });
+
+  // マインドセット由来のステップ
+  if (mindset === 'fixed') {
+    steps.push({ num: steps.length + 1, label: '「まだ」という言葉を使う', action: '「自分にはできない」ではなく「自分にはまだできない」に言い換える練習をする。脳の可塑性を活かした、科学的に効果が証明されたアプローチです。' });
+  }
+  if (mindset === 'growth') {
+    steps.push({ num: steps.length + 1, label: '挑戦の記録をつける', action: '「やってみたこと・学んだこと」を週に一度振り返る習慣を持つ。成長マインドセットをさらに強化できます。' });
+  }
+
+  if (steps.length === 0) {
+    steps.push({ num: 1, label: '強みをさらに尖らせる', action: '今の自分の最も高いスコアの因子をさらに深める行動を1つ設定する。弱点を補うより、強みで突き抜けることが成功の近道です。' });
+  }
+
+  return steps;
+}
+
+// ===================================================
+// ===== 描画関数 =====
+// ===================================================
+
+function renderAnalysis(blocks) {
+  document.getElementById('analysisBlocks').innerHTML = blocks.map(b => `
+    <div class="analysis-block">
+      <div class="analysis-block-title">${b.title}</div>
+      <div class="analysis-text">${b.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderWeakness(items) {
+  document.getElementById('weaknessBlocks').innerHTML = `
+    <div class="weakness-block">
+      <div class="weakness-block-title">⚠️ あなたが直面しやすい課題</div>
+      <ul class="weakness-list">
+        ${items.map(item => `<li class="weakness-item">${item}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+function renderAdvice(advice) {
+  const render = (items, id) => {
+    document.getElementById(id).innerHTML = items.map(item =>
+      `<div class="advice-item">${item}</div>`
+    ).join('');
+  };
+  render(advice.work,  'workAdvice');
+  render(advice.love,  'loveAdvice');
+  render(advice.human, 'humanAdvice');
+
+  // タブ切り替え
+  document.querySelectorAll('.advice-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.advice-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.advice-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('advice-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+function renderGrowth(steps) {
+  document.getElementById('growthBlock').innerHTML = steps.map(s => `
+    <div class="growth-step">
+      <div class="growth-num">${s.num}</div>
+      <div class="growth-text"><strong>${s.label}</strong><br>${s.action}</div>
+    </div>
+  `).join('');
+}
+
+// ===================================================
+// ===== メイン =====
+// ===================================================
+(function init() {
+  const data    = loadData();
+  const missing = checkMissing(data);
+
+  // 未受診バナー
+  if (missing.length > 0) {
+    const banner = document.getElementById('missingBanner');
+    banner.style.display = 'block';
+    document.getElementById('missingList').innerHTML = missing.map(m =>
+      `<li>・<a href="${m.url}">${m.name} →</a></li>`
+    ).join('');
+  }
+
+  // ビッグファイブがなければ最低限のメッセージを出して終了
+  if (!data.bf) {
+    document.getElementById('profileName').textContent = '未受診';
+    document.getElementById('analysisBlocks').innerHTML = '<div class="analysis-block"><div class="analysis-text">ビッグファイブ診断を受診してからレポートを生成できます。<br><a href="quiz.html?v=10" style="color:var(--purple);font-weight:700;">診断を受ける →</a></div></div>';
+    document.getElementById('weaknessBlocks').innerHTML = '';
+    document.getElementById('growthBlock').innerHTML = '';
+    return;
+  }
+
+  renderProfile(data.bf);
+  renderTestsGrid(data);
+  renderAnalysis(buildAnalysis(data));
+  renderWeakness(buildWeakness(data));
+  renderAdvice(buildAdvice(data));
+  renderGrowth(buildGrowth(data));
+})();
+</script>
+
+<script src="nav.js"></script>
+</body>
+</html>
