@@ -219,6 +219,65 @@
     opacity: 0.3;
   }
 
+  /* 心理テストカード */
+  .test-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+  }
+  .test-card:hover {
+    border-color: rgba(139,92,246,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139,92,246,0.15);
+  }
+  .test-card.not-taken {
+    opacity: 0.55;
+    border-style: dashed;
+  }
+  .test-card.not-taken:hover {
+    opacity: 0.8;
+  }
+  .test-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .test-card-content { flex: 1; min-width: 0; }
+  .test-card-title {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 4px;
+  }
+  .test-card-result {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .test-card-date {
+    font-size: 12px;
+    color: var(--dim);
+  }
+  .test-card-cta {
+    font-size: 13px;
+    color: var(--purple);
+    font-weight: 600;
+  }
+
   /* クリアボタン */
   .clear-all {
     margin-top: 24px;
@@ -252,10 +311,12 @@
   <div class="tabs">
     <button class="tab active" data-tab="my">自分の結果</button>
     <button class="tab" data-tab="others">あの人の結果</button>
+    <button class="tab" data-tab="tests">心理テスト</button>
   </div>
 
   <div id="myResults" class="results-list"></div>
   <div id="otherResults" class="results-list" style="display: none;"></div>
+  <div id="otherTestResults" class="results-list" style="display: none;"></div>
 
   <button class="clear-all" id="clearAllBtn">🗑️ すべてのデータを削除</button>
 
@@ -416,24 +477,142 @@ function deleteOtherResult(index) {
   render();
 }
 
+// ===== 心理テスト結果 =====
+const TEST_META = [
+  {
+    key: 'love_result',
+    title: '恋愛スタイル診断',
+    icon: '💕',
+    url: 'love.html',
+    bgColor: 'rgba(236,72,153,0.15)',
+    getResult: (d) => {
+      const map = {
+        eros: { name: '情熱型', color: '#ec4899' },
+        ludus: { name: '遊び型', color: '#f97316' },
+        storge: { name: '友情型', color: '#22c55e' },
+        pragma: { name: '現実型', color: '#3b82f6' },
+        mania: { name: '執着型', color: '#8b5cf6' },
+        agape: { name: '献身型', color: '#f59e0b' },
+      };
+      return map[d.mainStyle] || { name: d.mainStyle, color: '#ec4899' };
+    }
+  },
+  {
+    key: 'mindset_result',
+    title: 'マインドセット診断',
+    icon: '🧠',
+    url: 'mindset.html',
+    bgColor: 'rgba(16,185,129,0.15)',
+    getResult: (d) => {
+      const map = {
+        growth: { name: '成長マインドセット', color: '#10b981' },
+        mixed:  { name: '混合マインドセット', color: '#8b5cf6' },
+        fixed:  { name: '固定マインドセット', color: '#f97316' },
+      };
+      return map[d.type] || { name: d.type, color: '#10b981' };
+    }
+  },
+  {
+    key: 'sdt_result',
+    title: '動機タイプ診断',
+    icon: '⚡',
+    url: 'sdt.html',
+    bgColor: 'rgba(59,130,246,0.15)',
+    getResult: (d) => {
+      const map = {
+        autonomy:    { name: '自律駆動型', color: '#3b82f6' },
+        competence:  { name: '達成志向型', color: '#f59e0b' },
+        relatedness: { name: '関係重視型', color: '#ec4899' },
+      };
+      return map[d.strongest] || { name: d.strongest, color: '#3b82f6' };
+    }
+  },
+  {
+    key: 'schwartz_result',
+    title: '価値観診断',
+    icon: '🌍',
+    url: 'schwartz.html',
+    bgColor: 'rgba(245,158,11,0.15)',
+    getResult: (d) => {
+      const valJa = {
+        'self-direction': '自己方向性', 'stimulation': '刺激追求', 'hedonism': '快楽主義',
+        'achievement': '達成', 'power': '権力', 'security': '安全',
+        'conformity': '同調', 'tradition': '伝統', 'benevolence': '仁愛', 'universalism': '普遍主義'
+      };
+      const top = d.top3 && d.top3[0] ? valJa[d.top3[0]] || d.top3[0] : '不明';
+      const sub = d.top3 && d.top3[1] ? valJa[d.top3[1]] || d.top3[1] : '';
+      return { name: sub ? `${top}・${sub}重視` : `${top}重視`, color: '#f59e0b' };
+    }
+  },
+];
+
+function renderOtherTests() {
+  const container = document.getElementById('otherTestResults');
+  container.innerHTML = TEST_META.map((test, i) => {
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem(test.key)); } catch(e) {}
+
+    if (stored) {
+      const res = test.getResult(stored);
+      const date = stored.timestamp ? formatDate(new Date(stored.timestamp).toISOString()) : '';
+      return `
+        <a href="${test.url}" class="test-card">
+          <div class="test-card-icon" style="background:${test.bgColor}">${test.icon}</div>
+          <div class="test-card-content">
+            <div class="test-card-title">${test.title}</div>
+            <div class="test-card-result" style="color:${res.color}">${res.name}</div>
+            ${date ? `<div class="test-card-date">${date}</div>` : ''}
+          </div>
+          <button class="delete-btn" onclick="event.preventDefault(); deleteTestResult('${test.key}')">削除</button>
+        </a>
+      `;
+    } else {
+      return `
+        <a href="${test.url}" class="test-card not-taken">
+          <div class="test-card-icon" style="background:${test.bgColor}">${test.icon}</div>
+          <div class="test-card-content">
+            <div class="test-card-title">${test.title}</div>
+            <div class="test-card-cta">診断を受ける →</div>
+          </div>
+        </a>
+      `;
+    }
+  }).join('');
+}
+
+function deleteTestResult(key) {
+  if (!confirm('この結果を削除しますか？')) return;
+  localStorage.removeItem(key);
+  renderOtherTests();
+}
+
 // 全削除
 document.getElementById('clearAllBtn').addEventListener('click', () => {
   if (!confirm('すべての保存データを削除しますか？\nこの操作は取り消せません。')) return;
   localStorage.removeItem(STORAGE_KEY_MY);
   localStorage.removeItem(STORAGE_KEY_OTHERS);
+  TEST_META.forEach(t => localStorage.removeItem(t.key));
   render();
 });
 
 // レンダリング
 function render() {
+  const myEl = document.getElementById('myResults');
+  const otherEl = document.getElementById('otherResults');
+  const testEl = document.getElementById('otherTestResults');
+  myEl.style.display = 'none';
+  otherEl.style.display = 'none';
+  testEl.style.display = 'none';
+
   if (currentTab === 'my') {
-    document.getElementById('myResults').style.display = 'flex';
-    document.getElementById('otherResults').style.display = 'none';
+    myEl.style.display = 'flex';
     renderMyResults();
-  } else {
-    document.getElementById('myResults').style.display = 'none';
-    document.getElementById('otherResults').style.display = 'flex';
+  } else if (currentTab === 'others') {
+    otherEl.style.display = 'flex';
     renderOtherResults();
+  } else {
+    testEl.style.display = 'flex';
+    renderOtherTests();
   }
 }
 
