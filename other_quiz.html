@@ -145,6 +145,24 @@
   .period-btn:hover { background: rgba(139,92,246,0.18); color: var(--text); }
   .period-btn.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); color: var(--text); font-weight: 700; }
 
+  .gender-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .gender-btn {
+    padding: 10px 8px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .gender-btn:hover { background: rgba(139,92,246,0.18); color: var(--text); }
+  .gender-btn.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); color: var(--text); font-weight: 700; }
+
+  /* キャラクター表示 */
+  .char-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+  .char-img-other {
+    width: 160px; height: 160px; object-fit: contain; border-radius: 16px;
+    background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2);
+  }
+  .char-name-label { font-size: 13px; color: var(--dim); margin-top: 8px; }
+
   .accuracy-note {
     display: none; font-size: 12px; color: var(--dim);
     padding: 10px 14px; background: rgba(139,92,246,0.07);
@@ -465,6 +483,14 @@
     </div>
   </div>
 
+  <div class="input-group" style="margin-bottom:10px;">
+    <span class="input-label">その人の性別は？</span>
+    <div class="gender-options">
+      <button class="gender-btn selected" data-gender="F">👩 女性</button>
+      <button class="gender-btn" data-gender="M">👨 男性</button>
+    </div>
+  </div>
+
   <div class="accuracy-note" id="accuracyNote"></div>
 
   <button class="start-btn" id="startBtn" disabled>診断スタート →</button>
@@ -513,6 +539,10 @@
     <span class="result-rel-badge" id="relBadge">—</span>
     <p class="result-name"><em id="resultName">—</em>の推定性格</p>
     <p class="result-sub">ビッグファイブ理論による観察分析</p>
+  </div>
+  <div class="char-area" id="charArea" style="display:none;">
+    <img class="char-img-other" id="charImgOther" src="" alt="キャラクター">
+    <p class="char-name-label" id="charNameLabel"></p>
   </div>
   <div class="traits-card" id="traitsCard"></div>
   <div class="desc-card" id="descCard"></div>
@@ -670,7 +700,7 @@ const periodNotes = {
 };
 
 // ===== 状態 =====
-let personName = '', personPeriod = '', personRel = '';
+let personName = '', personPeriod = '', personRel = '', personGender = 'F';
 let current = 0;
 const ans = new Array(total).fill(null);
 
@@ -733,6 +763,14 @@ document.querySelectorAll('.period-btn').forEach(btn => {
   });
 });
 
+document.querySelectorAll('.gender-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    personGender = btn.dataset.gender;
+  });
+});
+
 function checkReady() {
   startBtn.disabled = !(nameInput.value.trim() && personPeriod && personRel);
 }
@@ -777,7 +815,9 @@ function render() {
   questionNum.textContent = `Q${current+1}`;
   questionText.textContent = questions[current].text;
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.toggle('selected', parseInt(btn.dataset.val) === ans[current]);
+    requestAnimationFrame(() => { btn.style.transition = ''; });
   });
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
@@ -896,6 +936,17 @@ function showResult() {
   const sc = calcScores();
   const cfg = relConfig[personRel];
 
+  // キャラクター画像
+  const charArea = document.getElementById('charArea');
+  const charImg = document.getElementById('charImgOther');
+  const charLabel = document.getElementById('charNameLabel');
+  function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
+  const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
+  charImg.src = `images/characters/${personGender}/${imgCode}.webp`;
+  charImg.onerror = () => { charArea.style.display = 'none'; };
+  charImg.onload = () => { charArea.style.display = 'flex'; };
+  charLabel.textContent = `${personName}の推定キャラクター`;
+
   // 特性バー
   const card = document.getElementById('traitsCard');
   card.innerHTML = '';
@@ -966,6 +1017,7 @@ function showResult() {
     code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
     scores: sc,
     relation: personRel,
+    gender: personGender,
     date: new Date().toISOString()
   };
 

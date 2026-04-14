@@ -314,8 +314,10 @@ function showQuestion() {
   document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
   document.getElementById('progressText').textContent = `${current + 1}/${questions.length}`;
   document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.remove('selected');
     if (answers[current] == btn.dataset.val) btn.classList.add('selected');
+    requestAnimationFrame(() => { btn.style.transition = ''; });
     btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
   });
   document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';

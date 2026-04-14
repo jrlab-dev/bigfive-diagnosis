@@ -475,16 +475,24 @@ function renderOtherResults() {
     return;
   }
 
-  container.innerHTML = results.map((r, i) => {
+  const addBtn = `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`;
+
+  container.innerHTML = addBtn + results.map((r, i) => {
     // コードからスコアを抽出
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
     };
+    // キャラクター画像（性別が保存されていればそれを使用、なければFをデフォルト）
+    const gender = r.gender || 'F';
+    function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
+    const imgCode = `${roundImg(scores.O)}${roundImg(scores.C)}${roundImg(scores.E)}${roundImg(scores.A)}${roundImg(scores.N)}`;
+    const charSrc = `images/characters/${gender}/${imgCode}.webp`;
     return `
       <div class="result-card">
-        <div class="result-card-icon" style="background: rgba(236,72,153,0.2);">
-          👤
+        <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
+          <img src="${charSrc}" alt="${r.name}" style="width:56px;height:56px;object-fit:contain;"
+               onerror="this.parentElement.innerHTML='👤';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.fontSize='24px';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
         </div>
         <div class="result-card-content">
           <div class="result-card-name">${r.name}</div>

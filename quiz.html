@@ -548,7 +548,9 @@ function render() {
 
   // 回答状態復元
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.toggle('selected', parseInt(btn.dataset.val) === answers[current]);
+    requestAnimationFrame(() => { btn.style.transition = ''; });
   });
 
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
