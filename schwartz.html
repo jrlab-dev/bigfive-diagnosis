@@ -195,27 +195,27 @@ const valuesMeta = {
 
 // ===== PVQ-21 質問（Schwartz 2003 原版準拠） =====
 const questions = [
-  { text: 'この人は、新しいアイデアを考え出し、創造的であることを大切にしています。物事を自分独自のやり方でやりたいと思っています。', value: 'self-direction' },
-  { text: 'この人は、富んでいることが大切です。お金をたくさん持ち、高価なものを買えるようになりたいと思っています。', value: 'power' },
-  { text: 'この人は、誰もが公平に扱われることが大切です。すべての人が平等の機会を持つべきだと思っています。', value: 'universalism' },
-  { text: 'この人は、自分の能力を見せることが大切です。人々が賞賛するようなことをしたいと思っています。', value: 'achievement' },
-  { text: 'この人は、安全な環境で生活することが大切です。危険なことを避け、安全な場所に住みたいと思っています。', value: 'security' },
-  { text: 'この人は、人生でさまざまな楽しいことをすることが好きです。自分自身を甘やかすことを大切にしています。', value: 'hedonism' },
-  { text: 'この人は、誰もが同じように扱われるべきだと思っています。人生において、すべての人に平等な機会があるべきだと思っています。', value: 'universalism' },
-  { text: 'この人は、友人や身近な人を気にかけることを大切にしています。親しい人の幸せを大切にしています。', value: 'benevolence' },
-  { text: 'この人は、伝統を守ることが大切です。自分の文化や宗教から引き継いだ習慣を大切にしています。', value: 'tradition' },
-  { text: 'この人は、興奮と新しさを求めています。新しいことや変わったことをすることを楽しみます。', value: 'stimulation' },
-  { text: 'この人は、自分が何をするかを自分で決めることが大切です。自由に計画を立て、自分で選択したいと思っています。', value: 'self-direction' },
-  { text: 'この人は、困っている人を助けることがとても大切です。身近な人の面倒を見ることを大切にしています。', value: 'benevolence' },
-  { text: 'この人は、何事においても成功することが大切です。達成したことが認められることを望んでいます。', value: 'achievement' },
-  { text: 'この人は、国家の安全が大切です。国が外からの脅威に対して強くあるべきだと思っています。', value: 'security' },
-  { text: 'この人は、ルールを破ることは間違っていると思っています。たとえルールが不正であっても、ルールには従うべきだと思っています。', value: 'conformity' },
-  { text: 'この人は、人々に敬われることを大切にしています。他の人が自分のすることに注目してほしいと思っています。', value: 'power' },
-  { text: 'この人は、良い友人であることがとても大切です。友人と良い関係を保つことに努めています。', value: 'benevolence' },
-  { text: 'この人は、人々が平和に暮らすことを大切にしています。争いをなくすことが大切だと思っています。', value: 'universalism' },
-  { text: 'この人は、冒険好きで、リスクを取ることを楽しんでいます。スリルのある生活を望んでいます。', value: 'stimulation' },
-  { text: 'この人は、社会が信頼できる環境であることが大切です。秩序があり、安定した社会に住みたいと思っています。', value: 'conformity' },
-  { text: 'この人は、自然と環境の世話をすることが大切です。環境保護を大切にしています。', value: 'universalism' },
+  { text: 'この人は、創造的なアイデアを大切にし、物事を自分独自のやり方で進めたいと思っています。', value: 'self-direction' },
+  { text: 'この人は、経済的な豊かさを大切にし、高価なものを手に入れられる生活を望んでいます。', value: 'power' },
+  { text: 'この人は、すべての人が公平・平等に扱われることを大切にしています。', value: 'universalism' },
+  { text: 'この人は、自分の能力を発揮し、人々から賞賛されることを大切にしています。', value: 'achievement' },
+  { text: 'この人は、危険を避け、安全な環境で安心して生活することを大切にしています。', value: 'security' },
+  { text: 'この人は、人生の楽しみや喜びを大切にし、自分自身を満足させることを重視しています。', value: 'hedonism' },
+  { text: 'この人は、すべての人が同じように扱われ、平等な機会を持つべきだと考えています。', value: 'universalism' },
+  { text: 'この人は、友人や身近な人の幸せを気にかけ、大切にしています。', value: 'benevolence' },
+  { text: 'この人は、自分の文化や宗教から受け継いだ伝統や習慣を大切にしています。', value: 'tradition' },
+  { text: 'この人は、刺激や新しさを求め、変わったことへの挑戦を楽しんでいます。', value: 'stimulation' },
+  { text: 'この人は、自分の行動を自由に決め、計画を自分で立てて選択することを大切にしています。', value: 'self-direction' },
+  { text: 'この人は、困っている人や身近な人を助け、面倒を見ることをとても大切にしています。', value: 'benevolence' },
+  { text: 'この人は、何事においても成功を追い求め、その成果が認められることを望んでいます。', value: 'achievement' },
+  { text: 'この人は、国家の安全を大切にし、外からの脅威に強い国であるべきだと考えています。', value: 'security' },
+  { text: 'この人は、ルールを守ることを重視し、たとえ不正であっても規則には従うべきだと考えています。', value: 'conformity' },
+  { text: 'この人は、他者から敬われ、自分の行動に注目されることを大切にしています。', value: 'power' },
+  { text: 'この人は、良い友人関係を大切にし、維持することに努めています。', value: 'benevolence' },
+  { text: 'この人は、人々が平和に暮らせる世界を大切にし、争いをなくすことを重視しています。', value: 'universalism' },
+  { text: 'この人は、冒険やリスクを楽しみ、スリルのある刺激的な生活を望んでいます。', value: 'stimulation' },
+  { text: 'この人は、秩序があり安定した、信頼できる社会で生活することを大切にしています。', value: 'conformity' },
+  { text: 'この人は、自然と環境を守ることを大切にし、環境保護を重視しています。', value: 'universalism' },
 ];
 
 let current = 0;
@@ -269,8 +269,10 @@ function showQuestion() {
   document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
   document.getElementById('progressText').textContent = `${current + 1}/${questions.length}`;
   document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.remove('selected');
     if (answers[current] == btn.dataset.val) btn.classList.add('selected');
+    requestAnimationFrame(() => { btn.style.transition = ''; });
     btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
   });
   document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
