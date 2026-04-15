@@ -644,6 +644,14 @@
 
   // 自分のキャラを左に表示
   setHeroChar(leftDiv, myResult.code, myGender);
+
+  // あの人のキャラを右に表示（マイページでチェックした人）
+  const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
+  if (partnerData && partnerData.code) {
+    const rightDiv = document.getElementById('heroCharRight');
+    const partnerGender = partnerData.gender || 'F';
+    setHeroChar(rightDiv, partnerData.code, partnerGender);
+  }
 })();
 </script>
 <script src="nav.js"></script>
