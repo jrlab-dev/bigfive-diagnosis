@@ -1821,20 +1821,29 @@ if (otherCode && otherCode.length === 5) {
   if (!card || !wrapper) return;
 
   let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
+  const isTouchDevice = 'ontouchstart' in window;
+  const lerpSpeed = isTouchDevice ? 0.15 : 0.08;
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  wrapper.addEventListener('mousemove', e => {
+  function updateTarget(cx, cy) {
     const r = wrapper.getBoundingClientRect();
-    const mx = (e.clientX - r.left) / r.width  - 0.5;
-    const my = (e.clientY - r.top)  / r.height - 0.5;
+    const mx = (cx - r.left) / r.width  - 0.5;
+    const my = (cy - r.top)  / r.height - 0.5;
     tRy =  mx * 18;
     tRx = -my * 12;
-  });
+  }
+
+  wrapper.addEventListener('mousemove', e => updateTarget(e.clientX, e.clientY));
   wrapper.addEventListener('mouseleave', () => { tRx = 0; tRy = 0; });
+  wrapper.addEventListener('touchmove', e => {
+    e.preventDefault();
+    updateTarget(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+  wrapper.addEventListener('touchend', () => { tRx = 0; tRy = 0; });
 
   (function animTilt() {
-    cRx = lerp(cRx, tRx, 0.08);
-    cRy = lerp(cRy, tRy, 0.08);
+    cRx = lerp(cRx, tRx, lerpSpeed);
+    cRy = lerp(cRy, tRy, lerpSpeed);
     card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
 
     // --- 1. エッジハイライト（マウス位置に光の反射）---
