@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>無料ビッグファイブ性格診断｜3125タイプで本当の自分がわかる</title>
 <meta name="description" content="たった10問・無料・登録不要で今すぐ診断できる科学的ビッグファイブ性格診断。3125通りの性格タイプからあなたの本当の性格を発見。">
@@ -381,65 +383,6 @@
   /* ===== パーソナライズ表示 ===== */
   .personalized-section {
     display: none;
-    max-width: 800px;
-    margin: 0 auto 60px;
-    padding: 0 24px;
-    text-align: center;
-  }
-  .personalized-section.active { display: block; }
-
-  .partner-selector {
-    margin-top: 16px;
-    text-align: center;
-  }
-  .partner-selector-label {
-    font-size: 12px;
-    color: var(--dim);
-    margin-bottom: 10px;
-  }
-  .partner-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-  }
-  .partner-chip {
-    padding: 6px 14px;
-    background: rgba(139,92,246,0.1);
-    border: 1px solid rgba(139,92,246,0.3);
-    border-radius: 20px;
-    color: var(--dim);
-    font-size: 13px;
-    font-family: 'Noto Sans JP', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .partner-chip:hover {
-    border-color: rgba(139,92,246,0.6);
-    color: var(--text);
-  }
-  .partner-chip.active {
-    background: rgba(139,92,246,0.25);
-    border-color: var(--purple);
-    color: var(--text);
-  }
-
-  .back-to-mypage {
-    display: inline-block;
-    margin-top: 16px;
-    padding: 10px 24px;
-    background: rgba(139,92,246,0.15);
-    border: 1px solid rgba(139,92,246,0.3);
-    border-radius: 10px;
-    color: var(--purple);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-  .back-to-mypage:hover {
-    background: rgba(139,92,246,0.25);
-    border-color: rgba(139,92,246,0.5);
   }
 
   @media(max-width:600px){
@@ -476,13 +419,7 @@
   </section>
 
   <!-- パーソナライズ表示（保存済みの場合に表示） -->
-  <section class="personalized-section" id="personalizedSection">
-    <div class="partner-selector" id="partnerSelector" style="display: none;">
-      <p class="partner-selector-label">一緒に表示する相手を選ぶ</p>
-      <div class="partner-chips" id="partnerChips"></div>
-    </div>
-    <a href="mypage.html" class="back-to-mypage">📋 マイページで全結果を見る →</a>
-  </section>
+  <section class="personalized-section" id="personalizedSection"></section>
 
   <!-- 数字セクション -->
   <section class="stats-section">
@@ -685,24 +622,13 @@
 // ===== パーソナライズ表示 =====
 (function() {
   const STORAGE_KEY_MY = 'bigfive_my_results';
-  const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 
   const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
-  const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
-
   if (myResults.length === 0) return;
 
-  const personalizedSection = document.getElementById('personalizedSection');
-  const partnerSelector = document.getElementById('partnerSelector');
-  const partnerChips = document.getElementById('partnerChips');
-  const leftDiv  = document.getElementById('heroCharLeft');
-  const rightDiv = document.getElementById('heroCharRight');
-
+  const leftDiv = document.getElementById('heroCharLeft');
   const myResult = myResults[0];
   const myGender = myResult.gender || 'F';
-  const myScores = myResult.scores || { O:3, C:3, E:3, A:3, N:3 };
-
-  personalizedSection.classList.add('active');
 
   // コードを画像用に丸める（1/3/5のみ存在）
   function toImgCode(code) {
@@ -716,49 +642,8 @@
     div.innerHTML = `<img src="images/characters/${gender}/${imgCode}.webp" alt="" onload="this.closest('.hero-char').classList.add('visible')">`;
   }
 
-  // 相性スコア計算（内部用）
-  function calcCompatibility(otherCode) {
-    const os = { O: parseInt(otherCode[0]), C: parseInt(otherCode[1]), E: parseInt(otherCode[2]), A: parseInt(otherCode[3]), N: parseInt(otherCode[4]) };
-    let score = 50;
-    score += (6 - myScores.N) * 3;
-    score += (6 - os.N) * 3;
-    score += myScores.A * 2;
-    score += os.A * 2;
-    score -= Math.abs(myScores.E - os.E) * 3;
-    score -= Math.abs(myScores.C - os.C) * 2;
-    return Math.max(0, Math.min(100, score));
-  }
-
   // 自分のキャラを左に表示
   setHeroChar(leftDiv, myResult.code, myGender);
-
-  // 相手を選択して右に表示
-  function showPartner(index) {
-    partnerChips.querySelectorAll('.partner-chip').forEach((chip, i) => {
-      chip.classList.toggle('active', i === index);
-    });
-    const other = others[index];
-    setHeroChar(rightDiv, other.code, other.gender || 'F');
-  }
-
-  window.selectPartner = showPartner;
-
-  if (others.length > 0) {
-    // 最も相性の良い人を自動選択
-    let bestIdx = 0, bestScore = -1;
-    others.forEach((o, i) => {
-      const s = calcCompatibility(o.code);
-      if (s > bestScore) { bestScore = s; bestIdx = i; }
-    });
-
-    // 2人以上いる場合はセレクター表示
-    if (others.length >= 2) {
-      partnerSelector.style.display = 'block';
-      partnerChips.innerHTML = others.map((o, i) => `<button class="partner-chip" onclick="selectPartner(${i})">${o.name}</button>`).join('');
-    }
-
-    showPartner(bestIdx);
-  }
 })();
 </script>
 <script src="nav.js"></script>
