@@ -132,7 +132,10 @@
     justify-content: center;
     font-size: 18px;
     flex-shrink: 0;
+    overflow: hidden;
+    padding: 0;
   }
+  .member-icon img { width: 100%; height: 100%; object-fit: contain; }
   .member-icon.other {
     background: rgba(236,72,153,0.15);
   }
@@ -605,6 +608,10 @@ const traitInfo = {
 };
 
 // ===== ユーティリティ =====
+function toImgCode(code) {
+  return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+}
+
 function codeToScores(code) {
   return {
     O: parseInt(code[0]), C: parseInt(code[1]),
@@ -688,7 +695,8 @@ function renderMembers() {
       <div class="member-card${isSelected ? ' selected' : ''}${isDisabled ? ' disabled' : ''}" data-id="${m.id}">
         <div class="member-checkbox">${isSelected ? '✓' : ''}</div>
         <div class="member-icon${m.type === 'other' ? ' other' : ''}">
-          ${m.type === 'my' ? '🧑' : '👤'}
+          <img src="images/characters/${m.gender}/${toImgCode(m.code)}.webp" alt=""
+               onerror="this.parentElement.textContent='${m.type === 'my' ? '🧑' : '👤'}'">
         </div>
         <div class="member-info">
           <div class="member-name">${m.name}</div>
