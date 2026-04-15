@@ -181,15 +181,11 @@
     pointer-events: none; opacity: 0; transition: opacity 0.5s;
   }
   /* レアリティ判定（スコアの極端さで自動設定） */
-  .rarity-common .card-bg {
-    background: linear-gradient(160deg,
-      #fdf6ec 0%,
-      #f5e6cc 50%,
-      #ead8b4 100%
-    );
+  .rarity-common .card-content {
+    background: linear-gradient(to bottom, transparent 0%, #ead8b4 30%, #e0c89a 100%);
   }
   .rarity-common .description {
-    background: rgba(255,255,255,0.88);
+    background: rgba(255,255,255,0.92);
     border-radius: 8px;
     color: #3a2e1e;
   }
@@ -1751,19 +1747,27 @@ if (isOtherMode) {
     card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2)';
     console.log('ロールモデル：白色 + 金色放射線');
   }
-  // それ以外 → 因子色
+  // それ以外
   else {
-    const firstColor = factorColors[first.key];
-    cardBg.style.background = `
-      radial-gradient(circle at 50% 50%, ${firstColor}40 0%, ${firstColor}20 40%, transparent 70%),
-      radial-gradient(ellipse 80% 60% at 25% 20%, ${firstColor}50 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 80% 75%, ${firstColor}40 0%, transparent 55%),
-      linear-gradient(160deg, ${firstColor}15 0%, ${firstColor}25 40%, ${firstColor}10 100%)
-    `;
-
-    const secondColor = factorColors[second.key];
-    card.style.borderColor = secondColor;
-    card.style.boxShadow = `0 8px 32px rgba(0,0,0,0.6), 0 0 40px ${secondColor}40, 0 0 80px ${secondColor}20`;
+    const rarity = getRarity();
+    if (rarity === 'common') {
+      // コモン → ベージュ（空と大地のイメージ）
+      cardBg.style.background = 'linear-gradient(160deg, #fdf6ec 0%, #f5e6cc 50%, #ead8b4 100%)';
+      card.style.borderColor = 'rgba(180,140,90,0.4)';
+      card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+    } else {
+      // Rare以上 → 因子色
+      const firstColor = factorColors[first.key];
+      cardBg.style.background = `
+        radial-gradient(circle at 50% 50%, ${firstColor}40 0%, ${firstColor}20 40%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 25% 20%, ${firstColor}50 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 75%, ${firstColor}40 0%, transparent 55%),
+        linear-gradient(160deg, ${firstColor}15 0%, ${firstColor}25 40%, ${firstColor}10 100%)
+      `;
+      const secondColor = factorColors[second.key];
+      card.style.borderColor = secondColor;
+      card.style.boxShadow = `0 8px 32px rgba(0,0,0,0.6), 0 0 40px ${secondColor}40, 0 0 80px ${secondColor}20`;
+    }
 
     console.log('背景色:', firstColor, '縁色:', secondColor);
   }
