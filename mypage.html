@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>マイページ — ビッグファイブ3125タイプ診断</title>
 <meta name="description" content="保存した診断結果の一覧。自分の過去の結果や、あの人の性格分析結果を確認できます。">
@@ -489,7 +491,7 @@ function renderOtherResults() {
     const imgCode = `${roundImg(scores.O)}${roundImg(scores.C)}${roundImg(scores.E)}${roundImg(scores.A)}${roundImg(scores.N)}`;
     const charSrc = `images/characters/${gender}/${imgCode}.webp`;
     return `
-      <div class="result-card">
+      <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}" class="result-card">
         <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
           <img src="${charSrc}" alt="${r.name}" style="width:56px;height:56px;object-fit:contain;"
                onerror="this.parentElement.innerHTML='👤';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.fontSize='24px';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
@@ -508,8 +510,8 @@ function renderOtherResults() {
             }).join('')}
           </div>
         </div>
-        <button class="delete-btn" onclick="deleteOtherResult(${i})">削除</button>
-      </div>
+        <button class="delete-btn" onclick="event.preventDefault(); deleteOtherResult(${i})">削除</button>
+      </a>
     `;
   }).join('');
 }
