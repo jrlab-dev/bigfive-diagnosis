@@ -244,6 +244,19 @@
     background: rgba(239,68,68,0.25);
     border-color: rgba(239,68,68,0.5);
   }
+  .partner-btn {
+    padding: 8px 10px;
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 8px;
+    color: #fbbf24;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+  .partner-btn:hover { background: rgba(251,191,36,0.25); border-color: rgba(251,191,36,0.6); }
+  .partner-btn.active { background: rgba(251,191,36,0.3); border-color: #fbbf24; }
 
   /* スコア表示 */
   .score-bars {
@@ -537,6 +550,19 @@ function toggleOtherCheck(index) {
   renderOtherCheckUI();
 }
 
+// トップページに表示するパートナーを設定
+function setPartner(index) {
+  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  const current = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
+  // 同じ人を再タップで解除
+  if (current && current.code === results[index].code && current.name === results[index].name) {
+    localStorage.removeItem('bigfive_selected_partner');
+  } else {
+    localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[index]));
+  }
+  renderOtherResults();
+}
+
 function renderOtherCheckUI() {
   const count = selectedOthers.size;
   const bar = document.getElementById('selectAction');
@@ -585,6 +611,7 @@ function renderOtherResults() {
     <a href="team.html" class="select-action-btn">👥 チーム相性を見る</a>
   </div>`;
 
+  const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
   container.innerHTML = addBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
@@ -595,6 +622,7 @@ function renderOtherResults() {
     const imgCode = `${roundImg(scores.O)}${roundImg(scores.C)}${roundImg(scores.E)}${roundImg(scores.A)}${roundImg(scores.N)}`;
     const charSrc = `images/characters/${gender}/${imgCode}.webp`;
     const isChecked = selectedOthers.has(i);
+    const isPartner = partnerData && partnerData.code === r.code && partnerData.name === r.name;
     return `
       <div class="result-card${isChecked ? ' checked' : ''}">
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '✓' : ''}</div>
@@ -618,6 +646,7 @@ function renderOtherResults() {
             </div>
           </div>
         </a>
+        <button class="partner-btn${isPartner ? ' active' : ''}" title="トップに表示" onclick="event.preventDefault(); event.stopPropagation(); setPartner(${i})">${isPartner ? '★' : '☆'}</button>
         <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteOtherResult(${i})">削除</button>
       </div>
     `;
