@@ -1419,8 +1419,9 @@ setTimeout(() => {
 
 // ===== 説明カード =====
 const { summary, detail, keywords } = genRichDesc(sc);
+const descTitle = isOtherMode ? `📋 ${personName}さんの性格まとめ` : '📋 あなたの性格まとめ';
 document.getElementById('descCard').innerHTML = `
-  <p class="desc-card-title">📋 あなたの性格まとめ</p>
+  <p class="desc-card-title">${descTitle}</p>
   <p class="desc-card-text">${summary}<br>${detail}</p>
   <div class="desc-keywords">${keywords.map(k => `<span class="desc-kw">${k}</span>`).join('')}</div>`;
 
@@ -1566,6 +1567,53 @@ if (otherCode && otherCode.length === 5) {
   setTimeout(() => {
     compatCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 300);
+}
+
+// ===== あの人モード：自分との相性を表示 =====
+if (isOtherMode) {
+  const myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  if (myResults.length > 0) {
+    const myCode = myResults[0].code;
+    if (myCode && myCode.length === 5) {
+      const compatResult = calcCompatibility(myCode, typeCode);
+      const { score, details, components } = compatResult;
+      const labelInfo = getCompatibilityLabel(score);
+      const comment = getCompatibilityComment(myCode, typeCode);
+
+      const compatCard = document.getElementById('compatibilityCard');
+      compatCard.style.display = 'block';
+      document.querySelector('.compatibility-title').textContent = `💕 ${personName}さんとの相性`;
+
+      document.getElementById('compatScore').textContent = score;
+      document.getElementById('compatLabel').textContent = `${labelInfo.label} (${score}点)`;
+      document.getElementById('compatLabel').style.color = labelInfo.color;
+      document.getElementById('compatStars').textContent = labelInfo.stars;
+      document.getElementById('compatComment').textContent = comment;
+
+      const bars = [
+        { label: '自分の安定性', value: (6 - components.myN), max: 5, type: 'positive' },
+        { label: `${personName}さんの安定性`, value: (6 - components.partnerN), max: 5, type: 'positive' },
+        { label: '自分の思いやり', value: components.myA, max: 5, type: 'positive' },
+        { label: `${personName}さんの思いやり`, value: components.partnerA, max: 5, type: 'positive' },
+        { label: '生活スタイル差', value: details.dC, max: 4, type: 'negative' },
+        { label: '社交スタイル差', value: details.dE, max: 4, type: 'negative' },
+      ];
+      let barsHtml = '';
+      bars.forEach(b => {
+        const pct = (b.value / b.max) * 100;
+        const displayVal = b.type === 'negative' ? `差${b.value}` : b.value;
+        barsHtml += `
+          <div class="compat-bar-row">
+            <span class="compat-bar-label">${b.label}</span>
+            <div class="compat-bar-track">
+              <div class="compat-bar-fill ${b.type}" style="width:${pct}%"></div>
+            </div>
+            <span class="compat-bar-value">${displayVal}</span>
+          </div>`;
+      });
+      document.getElementById('compatBars').innerHTML = barsHtml;
+    }
+  }
 }
 
 // ===== 星の生成 =====
