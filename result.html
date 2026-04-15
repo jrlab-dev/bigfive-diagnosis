@@ -1839,7 +1839,7 @@ if (otherCode && otherCode.length === 5) {
 
     // --- 1. エッジハイライト（マウス位置に光の反射）---
     if (edgeLight) {
-      const lx = ((cRy / 18 + 1) / 2 * 100).toFixed(1);
+      const lx = ((-cRy / 18 + 1) / 2 * 100).toFixed(1);
       const ly = ((-cRx / 12 + 1) / 2 * 100).toFixed(1);
       edgeLight.style.setProperty('--ex', lx + '%');
       edgeLight.style.setProperty('--ey', ly + '%');
@@ -1851,8 +1851,8 @@ if (otherCode && otherCode.length === 5) {
     // 手前側を明るく、奥側を暗く
     const topI    = Math.max(0, -cRx / 12);
     const botI    = Math.max(0,  cRx / 12);
-    const leftI   = Math.max(0, -cRy / 18);
-    const rightI  = Math.max(0,  cRy / 18);
+    const leftI   = Math.max(0,  cRy / 18);
+    const rightI  = Math.max(0, -cRy / 18);
     const tB = (0.08 + topI   * 0.32).toFixed(3);
     const bB = (0.08 + botI   * 0.32).toFixed(3);
     const lB = (0.08 + leftI  * 0.32).toFixed(3);
@@ -1867,8 +1867,8 @@ if (otherCode && otherCode.length === 5) {
     const thin  = Math.max(0.5, 2 - (Math.abs(cRx) + Math.abs(cRy)) / 30 * 1).toFixed(1);
     card.style.borderTopWidth    = cRx < -0.5 ? thick + 'px' : cRx > 0.5 ? thin + 'px' : '2px';
     card.style.borderBottomWidth = cRx >  0.5 ? thick + 'px' : cRx < -0.5 ? thin + 'px' : '2px';
-    card.style.borderLeftWidth   = cRy < -0.5 ? thick + 'px' : cRy > 0.5 ? thin + 'px' : '2px';
-    card.style.borderRightWidth  = cRy >  0.5 ? thick + 'px' : cRy < -0.5 ? thin + 'px' : '2px';
+    card.style.borderLeftWidth   = cRy >  0.5 ? thick + 'px' : cRy < -0.5 ? thin + 'px' : '2px';
+    card.style.borderRightWidth  = cRy < -0.5 ? thick + 'px' : cRy > 0.5 ? thin + 'px' : '2px';
 
     // --- キャラクターの影を傾きに連動（立体感演出）---
     const sx = (cRy * 1.2).toFixed(1);
