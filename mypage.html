@@ -611,6 +611,10 @@ function renderOtherResults() {
     <a href="team.html" class="select-action-btn">👥 チーム相性を見る</a>
   </div>`;
 
+  // パートナー未設定なら1番目の人を自動設定
+  if (!localStorage.getItem('bigfive_selected_partner')) {
+    localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
+  }
   const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
   container.innerHTML = addBtn + actionBar + results.map((r, i) => {
     const scores = {
