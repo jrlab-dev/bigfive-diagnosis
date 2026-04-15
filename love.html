@@ -832,7 +832,7 @@ function showResult(preScores, preMainKey) {
     const code = `${bfResult.scores.O}${bfResult.scores.C}${bfResult.scores.E}${bfResult.scores.A}${bfResult.scores.N}`;
     const gender = bfResult.gender || 'F';
     const v = bfResult.version || '10';
-    bfNavBtn.href = `result.html?code=${code}&v=${v}&gender=${gender}`;
+    bfNavBtn.href = `result.html?type=${code}&v=${v}&gender=${gender}`;
     bfNavBtn.textContent = 'ビッグファイブの結果を見る';
   }
 }
