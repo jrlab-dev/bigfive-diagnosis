@@ -106,11 +106,17 @@
   }
   .card {
     position: relative; width: 100%; height: 100%;
-    border-radius: 20px; overflow: hidden;
+    border-radius: 8px; overflow: hidden;
     display: flex; flex-direction: column; align-items: center;
     padding: 24px 20px 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 60px rgba(49,30,90,0.2);
-    border: 1.5px solid transparent;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 60px rgba(49,30,90,0.2),
+      inset 2px 2px 0 rgba(255,255,255,0.12),
+      inset -2px -2px 0 rgba(0,0,0,0.6),
+      inset 0 0 0 2px rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.08);
+    will-change: transform;
   }
   .card-bg {
     position: absolute; inset: 0; z-index: 0;
@@ -179,8 +185,37 @@
   }
   @keyframes holo-spin { to { transform: rotate(360deg); } }
   .rarity-legendary .card {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 40px rgba(139,92,246,0.3), 0 0 80px rgba(245,158,11,0.15);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 40px rgba(139,92,246,0.3),
+      0 0 80px rgba(245,158,11,0.15),
+      inset 2px 2px 0 rgba(255,215,0,0.2),
+      inset -2px -2px 0 rgba(0,0,0,0.7),
+      inset 0 0 0 2px rgba(255,215,0,0.08);
     border-color: rgba(255,215,0,0.3);
+  }
+  .rarity-rare .card {
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 30px rgba(59,130,246,0.2),
+      inset 2px 2px 0 rgba(59,130,246,0.18),
+      inset -2px -2px 0 rgba(0,0,0,0.65),
+      inset 0 0 0 2px rgba(59,130,246,0.06);
+    border-color: rgba(59,130,246,0.2);
+  }
+
+  /* Legendary: 説明文エリア透明化 */
+  .rarity-legendary .card-content {
+    background: linear-gradient(to bottom, transparent 0%, rgba(10,14,39,0.35) 30%, rgba(10,14,39,0.55) 100%);
+  }
+  .rarity-legendary .description {
+    background: rgba(0,0,0,0.15);
+    backdrop-filter: blur(6px);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+  .rarity-legendary .score-label,
+  .rarity-legendary .score-val {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
   }
 
   .glow-overlay {
@@ -217,6 +252,76 @@
     100% { opacity: 1; transform: scale(1.05); }
   }
   .rarity-legendary .glow-overlay { opacity: 1; }
+
+  /* Legendary: 放射光線オーバーレイ */
+  .ray-overlay {
+    position: absolute; inset: 0; z-index: 3;
+    pointer-events: none; opacity: 0; transition: opacity 0.5s;
+    border-radius: inherit;
+    background:
+      conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg, rgba(139,92,246,0.08) 2deg, transparent 4deg,
+        transparent 30deg, rgba(245,158,11,0.06) 32deg, transparent 34deg,
+        transparent 60deg, rgba(59,130,246,0.07) 62deg, transparent 64deg,
+        transparent 90deg, rgba(139,92,246,0.08) 92deg, transparent 94deg,
+        transparent 120deg, rgba(245,158,11,0.06) 122deg, transparent 124deg,
+        transparent 150deg, rgba(59,130,246,0.07) 152deg, transparent 154deg,
+        transparent 180deg, rgba(139,92,246,0.08) 182deg, transparent 184deg,
+        transparent 210deg, rgba(245,158,11,0.06) 212deg, transparent 214deg,
+        transparent 240deg, rgba(59,130,246,0.07) 242deg, transparent 244deg,
+        transparent 270deg, rgba(139,92,246,0.08) 272deg, transparent 274deg,
+        transparent 300deg, rgba(245,158,11,0.06) 302deg, transparent 304deg,
+        transparent 330deg, rgba(59,130,246,0.07) 332deg, transparent 334deg,
+        transparent 360deg
+      );
+    animation: ray-spin 20s linear infinite;
+  }
+  .rarity-legendary .ray-overlay { opacity: 1; }
+  @keyframes ray-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== SECRET: 金ホログラム ===== */
+  #holoBg {
+    position: absolute; inset: 0; z-index: 0;
+    opacity: 0; border-radius: inherit; pointer-events: none;
+  }
+  .rarity-secret #holoBg   { opacity: 1; }
+  .rarity-secret .card-bg  { opacity: 0; }
+  .rarity-secret .stars    { opacity: 0; }
+  .rarity-secret .card {
+    box-shadow:
+      0 12px 50px rgba(0,0,0,0.8),
+      0 0 50px rgba(212,170,0,0.4),
+      0 0 100px rgba(212,170,0,0.15),
+      inset 0 0 30px rgba(212,170,0,0.08);
+    border-color: rgba(212,170,0,0.6);
+  }
+  .rarity-secret .shimmer {
+    opacity: 0.45;
+    background: linear-gradient(125deg, transparent 15%, rgba(255,220,80,0.06) 35%, rgba(255,255,200,0.15) 50%, rgba(255,220,80,0.06) 65%, transparent 85%);
+    animation: shimmer-gold 9s ease-in-out infinite;
+    mix-blend-mode: screen; transition: opacity 0.6s;
+  }
+  .rarity-secret.holo-on .shimmer {
+    opacity: 1;
+    background: linear-gradient(125deg, transparent 15%, rgba(255,220,80,0.12) 35%, rgba(255,255,200,0.32) 50%, rgba(255,220,80,0.12) 65%, transparent 85%);
+    animation: shimmer-gold 6s ease-in-out infinite;
+  }
+  @keyframes shimmer-gold {
+    0%, 100% { transform: translateX(-70%) rotate(20deg); }
+    50%       { transform: translateX(70%) rotate(20deg); }
+  }
+  .rarity-secret .glow-overlay {
+    opacity: 0.4;
+    background: radial-gradient(circle at 50% 50%, rgba(255,220,80,0.04) 0%, transparent 70%);
+    transition: opacity 0.6s;
+  }
+  .rarity-secret.holo-on .glow-overlay {
+    opacity: 1;
+    background: radial-gradient(circle at 50% 50%, rgba(255,220,80,0.09) 0%, transparent 70%);
+  }
   @keyframes glow-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
   /* キャラクター */
@@ -267,7 +372,7 @@
   .score-bar { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
   .score-val { font-size: 10px; color: var(--dim); width: 12px; text-align: right; }
   .description {
-    font-size: 14px; line-height: 1.6; text-align: center;
+    font-size: 14px; line-height: 1.6; text-align: left;
     color: #cbd5e1; padding: 8px 12px;
     background: rgba(0,0,0,0.35); border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.05);
@@ -609,10 +714,12 @@
   <!-- キャラクターカード -->
   <div class="card-wrapper">
     <div class="card" id="card">
+      <canvas id="holoBg"></canvas>
       <div class="card-bg"></div>
       <div class="stars" id="cardStars"></div>
       <div class="shimmer"></div>
       <div class="glow-overlay"></div>
+      <div class="ray-overlay"></div>
 
       <div class="type-name" id="typeName">読み込み中...</div>
       <div class="type-code" id="typeCode"></div>
@@ -715,6 +822,7 @@
 
 </div>
 
+<script src="hidden_characters.js"></script>
 <script>
 // ===== 特性情報 =====
 const traitInfo = {
@@ -1123,15 +1231,39 @@ function getCompatibilityComment(myCode, partnerCode) {
 }
 
 // ===== レアリティ判定 =====
+
+// 診断スコア（1-5）を隠しキャラ照合用の1/3/5スケールに変換
+function toHiddenScale(v) {
+  return v <= 2 ? 1 : v >= 4 ? 5 : 3;
+}
+
+// 隠しキャラ一致チェック（HIDDEN_CHARACTERS は hidden_characters.js で定義）
+function findHiddenCharacter() {
+  if (typeof HIDDEN_CHARACTERS === 'undefined') return null;
+  const os = toHiddenScale(O), cs = toHiddenScale(C);
+  const es = toHiddenScale(E), as = toHiddenScale(A), ns = toHiddenScale(N);
+  return HIDDEN_CHARACTERS.find(ch =>
+    ch.o === os && ch.c === cs && ch.e === es && ch.a === as && ch.n === ns &&
+    (ch.gender === 'any' || ch.gender === gender)
+  ) || null;
+}
+
 function getRarity() {
-  // 10問版は3段階なので常にcommon
+  // 10問：レアなし
   if (version === '10') return 'common';
-  // 極端値の数で判定
-  const scores = [O, C, E, A, N];
-  const extremes = scores.filter(s => s === 1 || s === 5).length;
-  if (extremes >= 4) return 'legendary';
-  if (extremes >= 2) return 'rare';
-  return 'common';
+
+  const hiddenChar = findHiddenCharacter();
+
+  if (version === '30') {
+    if (hiddenChar) return 'legendary';      // 隠しキャラ一致 → LEGENDARY
+    if (Math.random() < 0.05) return 'rare'; // 5%抽選 → RARE
+    return 'common';
+  }
+
+  // 120問
+  if (hiddenChar) return 'secret';           // 隠しキャラ一致 → SECRET
+  if (Math.random() < 0.05) return 'legendary'; // 5%抽選 → LEGENDARY
+  return 'rare';                             // それ以外は全員RARE
 }
 
 // ===== 説明文生成 =====
@@ -1200,7 +1332,7 @@ function renderScores() {
   factors.forEach((f, i) => {
     const val = vals[f.key];
     const pct = val * 20;
-    const span = (i === 4) ? ' style="grid-column: span 2; justify-self: center; max-width: calc(50% - 8px);"' : '';
+    const span = '';
     html += `<div class="score-item"${span}>
       <span class="score-label" style="color:${f.color}">${f.label}</span>
       <div class="score-bar-bg"><div class="score-bar" style="width:${pct}%;background:${f.color}"></div></div>
@@ -1660,6 +1792,123 @@ if (otherCode && otherCode.length === 5) {
 
   // 初期チェック
   checkAlreadySaved();
+})();
+</script>
+
+<!-- ===== SECRET: 金ホログラム + 3D傾きエフェクト ===== -->
+<script>
+(function() {
+  const card    = document.getElementById('card');
+  const wrapper = document.querySelector('.card-wrapper');
+  if (!card || !wrapper) return;
+
+  // SECRETレアリティのみ起動
+  if (!card.classList.contains('rarity-secret')) return;
+
+  // ---- ホログラムcanvas ----
+  const canvas = document.getElementById('holoBg');
+  const ctx    = canvas.getContext('2d');
+  const CELL   = 18, DEPTH = 0.42;
+  let t = 0, W = 0, H = 0, brightness = 0;
+  window.holoHovered = false;
+
+  function syncSize() {
+    const rect = card.getBoundingClientRect();
+    W = rect.width  || 340;
+    H = rect.height || 480;
+    canvas.width  = W * devicePixelRatio;
+    canvas.height = H * devicePixelRatio;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  }
+  syncSize();
+  window.addEventListener('resize', syncSize);
+
+  wrapper.addEventListener('mouseenter', () => { window.holoHovered = true;  card.classList.add('holo-on'); });
+  wrapper.addEventListener('mouseleave', () => { window.holoHovered = false; card.classList.remove('holo-on'); });
+
+  const BASE_HUE = 38;
+
+  function getCellColor(col, row, facetLight) {
+    const cols = Math.ceil(W / CELL) + 1;
+    const rows = Math.ceil(H / CELL) + 1;
+    const x = col / cols, y = row / rows;
+    const wave =
+      Math.sin(x * 6.28 + y * 2.09 + t * 0.00025) * 0.35 +
+      Math.sin(x * 3.71 - y * 5.13 + t * 0.00035) * 0.28 +
+      Math.sin((x - y)  * 4.97      + t * 0.00020) * 0.22 +
+      Math.sin(x * 2.33 + y * 7.81 + t * 0.00030) * 0.15;
+    const hue = BASE_HUE + wave * 18;
+    const sat = 85 + wave * 12;
+    const baseL = facetLight * brightness + facetLight * 0.50 * (1 - brightness);
+    const lit   = baseL + wave * 6;
+    return `hsl(${hue.toFixed(1)},${sat.toFixed(1)}%,${Math.max(4, lit).toFixed(1)}%)`;
+  }
+
+  function drawCell(col, row) {
+    const cx = col * CELL, cy = row * CELL, d = CELL * DEPTH;
+    const tl = [cx, cy], tr = [cx+CELL, cy], bl = [cx, cy+CELL], br = [cx+CELL, cy+CELL];
+    const cc = [cx + CELL/2, cy + CELL/2 - d*0.2];
+    [
+      { pts:[tl,tr,cc], L:75 },
+      { pts:[bl,br,cc], L:18 },
+      { pts:[tl,bl,cc], L:48 },
+      { pts:[tr,br,cc], L:33 },
+    ].forEach(({ pts, L }) => {
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      ctx.lineTo(pts[1][0], pts[1][1]);
+      ctx.lineTo(pts[2][0], pts[2][1]);
+      ctx.closePath();
+      ctx.fillStyle = getCellColor(col, row, L);
+      ctx.fill();
+    });
+  }
+
+  function loop() {
+    if (window.holoHovered) t++;
+    brightness += ((window.holoHovered ? 1 : 0) - brightness) * 0.04;
+    ctx.clearRect(0, 0, W, H);
+    const cols = Math.ceil(W / CELL) + 1;
+    const rows = Math.ceil(H / CELL) + 1;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) drawCell(c, r);
+    ctx.strokeStyle = 'rgba(0,0,0,0.30)';
+    ctx.lineWidth = 0.5;
+    for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(W,r*CELL); ctx.stroke(); }
+    for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,H); ctx.stroke(); }
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // ---- 3D傾きエフェクト ----
+  let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  wrapper.addEventListener('mousemove', e => {
+    const r = wrapper.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width  - 0.5;
+    const my = (e.clientY - r.top)  / r.height - 0.5;
+    tRy =  mx * 18;
+    tRx = -my * 12;
+  });
+  wrapper.addEventListener('mouseleave', () => { tRx = 0; tRy = 0; });
+
+  (function animTilt() {
+    cRx = lerp(cRx, tRx, 0.08);
+    cRy = lerp(cRy, tRy, 0.08);
+    card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
+
+    // キャラクターの影を傾きに連動（立体感演出）
+    const sx = (cRy * 1.2).toFixed(1);
+    const sy = (cRy * 0.3 + cRx * 0.5 + 8).toFixed(1);
+    const blur = (12 + Math.abs(cRy) * 0.8 + Math.abs(cRx) * 0.5).toFixed(1);
+    const shadowFilter = `drop-shadow(${sx}px ${sy}px ${blur}px rgba(0,0,0,1))`;
+    const charImg = document.getElementById('charImg');
+    if (charImg) charImg.style.filter = shadowFilter;
+
+    requestAnimationFrame(animTilt);
+  })();
 })();
 </script>
 <script src="nav.js"></script>
