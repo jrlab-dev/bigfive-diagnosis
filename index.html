@@ -107,8 +107,17 @@
     75%  { transform: scale(1.06) translate(0.5%,0.5%) }
     100% { transform: scale(1)    translate(-0.5%,-1%) }
   }
-  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
-  @keyframes twinkle { 0%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:.5;transform:scale(1)} }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .bg-stars span {
+    position: absolute;
+    border-radius: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: 0.15; transform: translate(-50%,-50%) scale(0.7); }
+    50%       { opacity: 1;    transform: translate(-50%,-50%) scale(1.3); }
+  }
 
   /* ヒーロー内キャラクター */
   .hero-char {
@@ -555,7 +564,6 @@
 <script>
 (function(){
   const el = document.getElementById('bgStars');
-  let css = '';
   const total = 80;
   const bright = new Set();
   const superBright = new Set();
@@ -565,23 +573,39 @@
   while(pinkStars.size < 8){ const n=Math.floor(Math.random()*total); if(!superBright.has(n)&&!bright.has(n)) pinkStars.add(n); }
 
   for(let i=0;i<total;i++){
-    const x=Math.random()*100, y=Math.random()*100;
+    const x = (Math.random()*100).toFixed(2);
+    const y = (Math.random()*100).toFixed(2);
+    const delay    = (Math.random()*7).toFixed(2);
+    const duration = (Math.random()*5+2).toFixed(2);
+
+    const span = document.createElement('span');
+    span.style.left = x + '%';
+    span.style.top  = y + '%';
+    span.style.animation = `star-twinkle ${duration}s ease-in-out ${delay}s infinite`;
+
     if(superBright.has(i)){
-      const s=Math.random()*2+3, o=Math.random()*.2+.8;
-      css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*4}px ${s*4}px at ${x}% ${y}%,rgba(255,210,240,${o*.35}) 0%,transparent 100%),radial-gradient(${s*8}px ${s*8}px at ${x}% ${y}%,rgba(200,160,255,${o*.15}) 0%,transparent 100%)`;
+      const s=(Math.random()*2+3).toFixed(1), o=(Math.random()*.2+.8).toFixed(2);
+      span.style.width  = s+'px'; span.style.height = s+'px';
+      span.style.background = `rgba(255,255,255,${o})`;
+      span.style.boxShadow  = `0 0 ${s*3}px ${s}px rgba(255,210,240,.5),0 0 ${s*7}px ${s*2}px rgba(200,160,255,.25)`;
     } else if(pinkStars.has(i)){
-      const s=Math.random()*2+2, o=Math.random()*.3+.65;
-      css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,220,235,${o}) 0%,transparent 100%),radial-gradient(${s*3}px ${s*3}px at ${x}% ${y}%,rgba(232,121,176,${o*.25}) 0%,transparent 100%)`;
+      const s=(Math.random()*2+2).toFixed(1), o=(Math.random()*.3+.65).toFixed(2);
+      span.style.width  = s+'px'; span.style.height = s+'px';
+      span.style.background = `rgba(255,220,235,${o})`;
+      span.style.boxShadow  = `0 0 ${s*2.5}px ${s}px rgba(232,121,176,.4)`;
     } else if(bright.has(i)){
-      const s=Math.random()*2+2, o=Math.random()*.3+.7;
-      css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*3}px ${s*3}px at ${x}% ${y}%,rgba(180,200,255,${o*.3}) 0%,transparent 100%)`;
+      const s=(Math.random()*2+2).toFixed(1), o=(Math.random()*.3+.7).toFixed(2);
+      span.style.width  = s+'px'; span.style.height = s+'px';
+      span.style.background = `rgba(255,255,255,${o})`;
+      span.style.boxShadow  = `0 0 ${s*2.5}px ${s}px rgba(180,200,255,.4)`;
     } else {
-      const s=Math.random()*1.5+.5, o=Math.random()*.5+.2;
-      css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%)`;
+      const s=(Math.random()*1.5+.5).toFixed(1), o=(Math.random()*.5+.2).toFixed(2);
+      span.style.width  = s+'px'; span.style.height = s+'px';
+      span.style.background = `rgba(255,255,255,${o})`;
     }
-    if(i<total-1) css+=',';
+
+    el.appendChild(span);
   }
-  el.style.backgroundImage = css;
 })();
 
 // ===== 診断済みチェック欄表示 =====
