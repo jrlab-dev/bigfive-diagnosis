@@ -182,18 +182,22 @@
   }
   /* レアリティ判定（スコアの極端さで自動設定） */
   .rarity-common .card-bg {
-    background: linear-gradient(180deg,
-      #f5fbff 0%,
-      #cce9ff 20%,
-      #6bbfee 50%,
-      #2288d4 78%,
-      #0f5faa 100%
+    background: linear-gradient(160deg,
+      #fdf6ec 0%,
+      #f5e6cc 50%,
+      #ead8b4 100%
     );
   }
   .rarity-common .description {
-    background: rgba(15, 70, 140, 0.35);
+    background: rgba(255,255,255,0.88);
     border-radius: 8px;
+    color: #3a2e1e;
   }
+  .rarity-common .type-name,
+  .rarity-common .type-label { color: #3a2e1e; text-shadow: none; }
+  .rarity-common .type-code { color: #6b5740; }
+  .rarity-common .score-label { color: #5a4a35; }
+  .rarity-common .score-val { color: #7a6450; }
   .rarity-common .shimmer { opacity: 0; }
   .rarity-rare .shimmer {
     opacity: 1;
