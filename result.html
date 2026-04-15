@@ -1795,7 +1795,44 @@ if (otherCode && otherCode.length === 5) {
 })();
 </script>
 
-<!-- ===== SECRET: 金ホログラム + 3D傾きエフェクト ===== -->
+<!-- ===== 3D傾きエフェクト（全レアリティ共通）===== -->
+<script>
+(function() {
+  const card    = document.getElementById('card');
+  const wrapper = document.querySelector('.card-wrapper');
+  if (!card || !wrapper) return;
+
+  let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  wrapper.addEventListener('mousemove', e => {
+    const r = wrapper.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width  - 0.5;
+    const my = (e.clientY - r.top)  / r.height - 0.5;
+    tRy =  mx * 18;
+    tRx = -my * 12;
+  });
+  wrapper.addEventListener('mouseleave', () => { tRx = 0; tRy = 0; });
+
+  (function animTilt() {
+    cRx = lerp(cRx, tRx, 0.08);
+    cRy = lerp(cRy, tRy, 0.08);
+    card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
+
+    // キャラクターの影を傾きに連動（立体感演出）
+    const sx = (cRy * 1.2).toFixed(1);
+    const sy = (cRy * 0.3 + cRx * 0.5 + 8).toFixed(1);
+    const blur = (12 + Math.abs(cRy) * 0.8 + Math.abs(cRx) * 0.5).toFixed(1);
+    const shadowFilter = `drop-shadow(${sx}px ${sy}px ${blur}px rgba(0,0,0,1))`;
+    const charImg = document.getElementById('charImg');
+    if (charImg) charImg.style.filter = shadowFilter;
+
+    requestAnimationFrame(animTilt);
+  })();
+})();
+</script>
+
+<!-- ===== SECRET: 金ホログラム（SECRETレアリティのみ）===== -->
 <script>
 (function() {
   const card    = document.getElementById('card');
@@ -1805,7 +1842,6 @@ if (otherCode && otherCode.length === 5) {
   // SECRETレアリティのみ起動
   if (!card.classList.contains('rarity-secret')) return;
 
-  // ---- ホログラムcanvas ----
   const canvas = document.getElementById('holoBg');
   const ctx    = canvas.getContext('2d');
   const CELL   = 18, DEPTH = 0.42;
@@ -1880,35 +1916,6 @@ if (otherCode && otherCode.length === 5) {
     requestAnimationFrame(loop);
   }
   loop();
-
-  // ---- 3D傾きエフェクト ----
-  let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  wrapper.addEventListener('mousemove', e => {
-    const r = wrapper.getBoundingClientRect();
-    const mx = (e.clientX - r.left) / r.width  - 0.5;
-    const my = (e.clientY - r.top)  / r.height - 0.5;
-    tRy =  mx * 18;
-    tRx = -my * 12;
-  });
-  wrapper.addEventListener('mouseleave', () => { tRx = 0; tRy = 0; });
-
-  (function animTilt() {
-    cRx = lerp(cRx, tRx, 0.08);
-    cRy = lerp(cRy, tRy, 0.08);
-    card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
-
-    // キャラクターの影を傾きに連動（立体感演出）
-    const sx = (cRy * 1.2).toFixed(1);
-    const sy = (cRy * 0.3 + cRx * 0.5 + 8).toFixed(1);
-    const blur = (12 + Math.abs(cRy) * 0.8 + Math.abs(cRx) * 0.5).toFixed(1);
-    const shadowFilter = `drop-shadow(${sx}px ${sy}px ${blur}px rgba(0,0,0,1))`;
-    const charImg = document.getElementById('charImg');
-    if (charImg) charImg.style.filter = shadowFilter;
-
-    requestAnimationFrame(animTilt);
-  })();
 })();
 </script>
 <script src="nav.js"></script>
