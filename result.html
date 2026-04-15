@@ -729,6 +729,11 @@
 
 <div class="container">
 
+  <!-- あの人モードバナー -->
+  <div id="otherModeBanner" style="display:none; max-width:480px; width:100%; margin:0 auto 16px; padding:12px 16px; background:rgba(236,72,153,0.12); border:1px solid rgba(236,72,153,0.35); border-radius:12px; text-align:center; font-size:14px; color:#ec4899; font-weight:700;">
+    👁️ <span id="otherModeName"></span>さんの診断結果を表示しています
+  </div>
+
   <!-- キャラクターカード -->
   <div class="card-wrapper">
     <div class="card" id="card">
@@ -936,20 +941,20 @@ function genRichDesc(sc) {
   const e2 = traitDesc[top2][sc[top2]];
 
   const summaries = {
-    EO: 'あなたは明るく社交的でありながら好奇心旺盛な行動派タイプです。',
-    EC: 'あなたは社交的でありながら責任感も強い、信頼されやすいタイプです。',
-    EA: 'あなたは人懐こく思いやり深い、周りを温かくする存在です。',
-    EN: 'あなたは表に出る明るさの裏に繊細な感受性を持ち合わせています。',
-    OC: 'あなたは好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。',
-    OA: 'あなたはオープンマインドで人にも親切な、懐の深いタイプです。',
-    ON: 'あなたは豊かな感受性と好奇心を持つ、感性の鋭いタイプです。',
-    CA: 'あなたは誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。',
-    CN: 'あなたは几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。',
-    AN: 'あなたは共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。',
+    EO: `${subject}は明るく社交的でありながら好奇心旺盛な行動派タイプです。`,
+    EC: `${subject}は社交的でありながら責任感も強い、信頼されやすいタイプです。`,
+    EA: `${subject}は人懐こく思いやり深い、周りを温かくする存在です。`,
+    EN: `${subject}は表に出る明るさの裏に繊細な感受性を持ち合わせています。`,
+    OC: `${subject}は好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。`,
+    OA: `${subject}はオープンマインドで人にも親切な、懐の深いタイプです。`,
+    ON: `${subject}は豊かな感受性と好奇心を持つ、感性の鋭いタイプです。`,
+    CA: `${subject}は誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。`,
+    CN: `${subject}は几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。`,
+    AN: `${subject}は共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。`,
   };
   const keyStr = top1 + top2;
   const revKey = top2 + top1;
-  const summary = summaries[keyStr] || summaries[revKey] || `あなたは${e1.kw[0]}で${e2.kw[0]}な性格傾向があります。`;
+  const summary = summaries[keyStr] || summaries[revKey] || `${subject}は${e1.kw[0]}で${e2.kw[0]}な性格傾向があります。`;
 
   // 全5因子のキーワードを収集
   const allKw = [];
@@ -1128,6 +1133,9 @@ const typeCode = params.get('type') || '33333';
 const version = params.get('v') || '10';
 const otherCode = params.get('other_code'); // 他者診断から来た場合の相手のコード
 const otherName = params.get('other_name') || 'あの人';
+const personName = params.get('name'); // マイページから「あの人の結果」を開いた場合の名前
+const isOtherMode = !!personName;
+const subject = isOtherMode ? personName + 'さん' : 'あなた';
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
 
@@ -1494,6 +1502,22 @@ document.getElementById('retryBtn').href = `quiz.html?v=${version}`;
 
 // あの人診断ボタン（自分のスコアを渡す）
 document.getElementById('otherDiagBtn').href = `other_quiz.html?my=${typeCode}`;
+
+// ===== あの人モードの処理 =====
+if (isOtherMode) {
+  // バナー表示
+  document.getElementById('otherModeBanner').style.display = 'block';
+  document.getElementById('otherModeName').textContent = personName;
+  // 自分向けのボタンを非表示
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('retryBtn').style.display = 'none';
+  document.getElementById('otherDiagBtn').closest('div').style.display = 'none';
+  // 弱点ボタンのテキストを変更
+  const weakBtnText = document.getElementById('weaknessBtnText');
+  if (weakBtnText) weakBtnText.textContent = personName + 'さんの弱点を知る';
+  const weakTitle = document.querySelector('.weakness-card-title');
+  if (weakTitle) weakTitle.textContent = '🔮 ' + personName + 'さんの弱点';
+}
 
 // ===== 相性スコア表示（他者診断から来た場合） =====
 if (otherCode && otherCode.length === 5) {
