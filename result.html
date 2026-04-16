@@ -380,6 +380,7 @@
     letter-spacing: 0.08em; z-index: 6;
     padding: 0 16px; line-height: 1.2;
     white-space: nowrap; overflow: hidden;
+    transform-origin: center top;
   }
   .type-code {
     font-size: 13px; color: #cbd5e1; font-weight: 500;
@@ -1388,6 +1389,14 @@ function renderScores() {
 
 // ===== 初期化 =====
 document.getElementById('typeName').textContent = genTypeName();
+// 名前が見切れる場合は縮小
+const nameEl_r = document.getElementById('typeName');
+requestAnimationFrame(() => {
+  if (nameEl_r.scrollWidth > nameEl_r.clientWidth) {
+    const scale = nameEl_r.clientWidth / nameEl_r.scrollWidth;
+    nameEl_r.style.transform = `scale(${Math.max(scale, 0.7)})`;
+  }
+});
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
 // バージョンラベル表示
 if (version === '120') {
