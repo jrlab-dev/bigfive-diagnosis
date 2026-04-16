@@ -1407,12 +1407,18 @@ card.className = `card rarity-${getRarity()}`;
 // キャラクター画像（30問版はスコアが1-5になるため、画像用に1/3/5に丸める）
 const gender = params.get('gender') || 'F';
 const charImg = document.getElementById('charImg');
-const imgCode = typeCode.split('').map(d => {
-  const n = parseInt(d);
-  return n <= 2 ? '1' : n >= 4 ? '5' : '3';
-}).join('');
-const charSrc = `images/characters/${gender}/${imgCode}.webp`;
-charImg.src = charSrc;
+const hiddenChar = findHiddenCharacter();
+if (hiddenChar && hiddenChar.img) {
+  // 隠しキャラ一致 → 専用画像を読み込み
+  charImg.src = `images/characters/hidden/${hiddenChar.img}`;
+} else {
+  // 通常キャラ
+  const imgCode = typeCode.split('').map(d => {
+    const n = parseInt(d);
+    return n <= 2 ? '1' : n >= 4 ? '5' : '3';
+  }).join('');
+  charImg.src = `images/characters/${gender}/${imgCode}.webp`;
+}
 charImg.style.display = '';
 charImg.onerror = () => { charImg.style.display = 'none'; };
 
@@ -1884,7 +1890,7 @@ if (isOtherMode) {
       const isDuplicate = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
       if (!isDuplicate) {
         myResults.unshift(currentResult);
-        if (myResults.length > 50) myResults.pop();
+        if (myResults.length > 5) myResults.pop();
         localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(myResults));
       }
 
@@ -1894,7 +1900,7 @@ if (isOtherMode) {
         const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
         if (!isOtherDuplicate) {
           others.unshift(otherResult);
-          if (others.length > 100) others.pop();
+          if (others.length > 6) others.pop();
           localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
         }
       }

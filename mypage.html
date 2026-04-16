@@ -123,6 +123,7 @@
     transition: all 0.2s;
     text-decoration: none;
     color: inherit;
+    position: relative;
   }
   .result-card:hover {
     border-color: rgba(139,92,246,0.5);
@@ -456,6 +457,8 @@
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const MAX_MY = 5;
+const MAX_OTHERS = 6;
 
 let currentTab = 'my';
 
@@ -505,14 +508,21 @@ function renderMyResults() {
     return;
   }
 
-  container.innerHTML = results.map((r, i) => {
+  const capacityColor = results.length >= MAX_MY ? '#ef4444' : results.length >= MAX_MY - 1 ? '#f97316' : '#8b5cf6';
+  const capacityHtml = `<div style="text-align:right;font-size:12px;color:${capacityColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_MY}件保存中${results.length >= MAX_MY ? '（上限・古いものから上書きされます）' : ''}</div>`;
+  const activeNoteHtml = `<div style="font-size:12px;color:#a78bfa;margin-bottom:10px;">★ 適用中 = 相性診断などで使われる結果</div>`;
+
+  container.innerHTML = capacityHtml + activeNoteHtml + results.map((r, i) => {
     const scores = r.scores || {};
     const gender = r.gender || 'F';
     const imgCode = r.code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
-    const imgPath = `images/characters/${gender}/${imgCode}.webp`;
+    const hiddenImg = getHiddenCharImg(scores, gender);
+    const imgPath = hiddenImg || `images/characters/${gender}/${imgCode}.webp`;
 
+    const isActive = i === 0;
     return `
-      <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}" class="result-card">
+      <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}" class="result-card" style="${isActive ? 'border:1.5px solid rgba(139,92,246,0.5);padding-top:28px;' : ''}">
+        ${isActive ? '<div style="position:absolute;top:8px;left:12px;background:#8b5cf6;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">★ 適用中</div>' : ''}
         <div class="result-card-icon" style="background: rgba(139,92,246,0.2);">
           <div class="character-thumb">
             <img src="${imgPath}" alt="キャラクター" onerror="this.parentElement.innerHTML='<span class=\'character-thumb-placeholder\'>🧑</span>'">
@@ -604,7 +614,11 @@ function renderOtherResults() {
   // 選択中インデックスを有効範囲内に制限
   selectedOthers = new Set([...selectedOthers].filter(i => i < results.length));
 
-  const addBtn = `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`;
+  const otherCapColor = results.length >= MAX_OTHERS ? '#ef4444' : results.length >= MAX_OTHERS - 1 ? '#f97316' : '#ec4899';
+  const otherCapHtml = `<div style="text-align:right;font-size:12px;color:${otherCapColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_OTHERS}件保存中${results.length >= MAX_OTHERS ? '（上限・古いものから上書きされます）' : ''}</div>`;
+  const addBtn = results.length < MAX_OTHERS
+    ? `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`
+    : `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(239,68,68,0.1);border:1.5px dashed rgba(239,68,68,0.35);color:#ef4444;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">上書き診断する（最も古い結果が削除されます）</a>`;
 
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
@@ -616,7 +630,7 @@ function renderOtherResults() {
     localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
   }
   const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
-  container.innerHTML = addBtn + actionBar + results.map((r, i) => {
+  container.innerHTML = otherCapHtml + addBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
@@ -624,7 +638,8 @@ function renderOtherResults() {
     const gender = r.gender || 'F';
     function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
     const imgCode = `${roundImg(scores.O)}${roundImg(scores.C)}${roundImg(scores.E)}${roundImg(scores.A)}${roundImg(scores.N)}`;
-    const charSrc = `images/characters/${gender}/${imgCode}.webp`;
+    const hiddenImgOther = getHiddenCharImg(scores, gender);
+    const charSrc = hiddenImgOther || `images/characters/${gender}/${imgCode}.webp`;
     const isChecked = selectedOthers.has(i);
     const isPartner = partnerData && partnerData.code === r.code && partnerData.name === r.name;
     return `
@@ -852,6 +867,21 @@ function renderReportBanner() {
 render();
 renderReportBanner();
 </script>
+<script src="hidden_characters.js"></script>
 <script src="nav.js"></script>
+<script>
+// 隠しキャラ画像パスを取得（一致しなければnull）
+function getHiddenCharImg(scores, gender) {
+  if (typeof HIDDEN_CHARACTERS === 'undefined') return null;
+  function toScale(v) { return v <= 2 ? 1 : v >= 4 ? 5 : 3; }
+  const os = toScale(scores.O), cs = toScale(scores.C);
+  const es = toScale(scores.E), as = toScale(scores.A), ns = toScale(scores.N);
+  const ch = HIDDEN_CHARACTERS.find(c =>
+    c.o === os && c.c === cs && c.e === es && c.a === as && c.n === ns &&
+    (c.gender === 'any' || c.gender === gender)
+  );
+  return ch && ch.img ? `images/characters/hidden/${ch.img}` : null;
+}
+</script>
 </body>
 </html>
