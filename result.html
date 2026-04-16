@@ -1900,7 +1900,7 @@ if (isOtherMode) {
         const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
         if (!isOtherDuplicate) {
           others.unshift(otherResult);
-          if (others.length > 6) others.pop();
+          if (others.length > 10) others.pop();
           localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
         }
       }
