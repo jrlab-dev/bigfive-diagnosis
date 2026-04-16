@@ -672,15 +672,15 @@ const ans = new Array(total).fill(null);
 const urlParams = new URLSearchParams(window.location.search);
 let myCode = urlParams.get('my') || '';
 
-// URLパラメータになければ LocalStorageから最新の自分のコードを読み込む
+// URLパラメータになければ LocalStorageから適用中の自分のコードを読み込む
 if (!myCode) {
   try {
     const STORAGE_KEY_MY = 'bigfive_my_results';
     const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
     if (myResults.length > 0) {
-      // 最新の自分の診断結果を使う
-      myCode = myResults[0].code;
-      console.log('LocalStorageから自分のコードを読み込みました:', myCode);
+      const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), myResults.length - 1);
+      myCode = myResults[activeIdx].code;
+      console.log('LocalStorageから自分のコードを読み込みました（適用中）:', myCode);
     }
   } catch (e) {
     console.error('LocalStorage読み込みエラー:', e);
@@ -1097,7 +1097,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 
     if (!isDuplicate) {
       others.unshift(result);
-      if (others.length > 6) others.pop();
+      if (others.length > 10) others.pop();
       localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
     }
 
