@@ -1152,20 +1152,24 @@ const version = params.get('v') || '10';
 const otherCode = params.get('other_code'); // 他者診断から来た場合の相手のコード
 const otherName = params.get('other_name') || 'あの人';
 const personName = params.get('name'); // マイページから「あの人の結果」を開いた場合の名前
+const relation = params.get('rel') || 'friend'; // 関係性（love/work/friend）
 const isOtherMode = !!personName;
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
 
-// ===== 相性スコア計算（学術根拠版） =====
-function calcCompatibility(myCode, partnerCode) {
+// ===== 相性スコア計算（学術根拠版＋関係性重み） =====
+function calcCompatibility(myCode, partnerCode, relation) {
   const [oM, cM, eM, aM, nM] = myCode.split('').map(Number);
   const [oP, cP, eP, aP, nP] = partnerCode.split('').map(Number);
 
-  // デバッグログ
-  console.log('相性計算デバッグ:', { myCode, partnerCode });
-  console.log('自分:', { oM, cM, eM, aM, nM });
-  console.log('相手:', { oP, cP, eP, aP, nP });
+  // 関係性の重み
+  const relWeights = {
+    love:   { E: 1.5, N: 2.0, O: 1.0, C: 0.8, A: 1.5 },
+    work:   { E: 0.8, N: 1.2, O: 1.0, C: 2.0, A: 1.8 },
+    friend: { E: 1.5, N: 1.0, O: 2.0, C: 0.8, A: 1.5 },
+  };
+  const w = relWeights[relation] || relWeights.friend;
 
   // 差分
   const dO = Math.abs(oM - oP);
@@ -1186,34 +1190,20 @@ function calcCompatibility(myCode, partnerCode) {
     (-dE * 3.5) +       // Eスコア差ペナルティ（社交スタイルミスマッチ★強化）
     (-dO * 0.5);        // Oスコア差ペナルティ（効果量最小）
 
-  console.log('生スコア（補正前）:', rawScore);
-
   // 特殊パターン補正
-  if (nM >= 4 && aP <= 2) {
-    console.log('補正適用: 自分N高×相手A低 -15');
-    rawScore -= 15;
-  }
-  if (nP >= 4 && aM <= 2) {
-    console.log('補正適用: 相手N高×自分A低 -15');
-    rawScore -= 15;
-  }
-  if (nM <= 2 && nP <= 2) {
-    console.log('補正適用: 両者安定型 +8');
-    rawScore += 8;
-  }
-  if (aM >= 4 && aP >= 4) {
-    console.log('補正適用: 双方高協調 +8');
-    rawScore += 8;
-  }
+  if (nM >= 4 && aP <= 2) rawScore -= 15;
+  if (nP >= 4 && aM <= 2) rawScore -= 15;
+  if (nM <= 2 && nP <= 2) rawScore += 8;
+  if (aM >= 4 && aP >= 4) rawScore += 8;
 
-  console.log('生スコア（補正後）:', rawScore);
+  // 関係性の重みで差分ペナルティを調整
+  rawScore += (-dN) * w.N * 1.5;
+  rawScore += (-dA) * w.A * 0.5;
 
-  // 正規化: -16〜110 → 0〜100
-  const MIN = -16, MAX = 110;
+  // 正規化: -30〜130 → 0〜100
+  const MIN = -30, MAX = 130;
   const normalizedScore = (rawScore - MIN) / (MAX - MIN) * 100;
   const score = Math.max(0, Math.min(100, normalizedScore));
-
-  console.log('正規化後スコア:', normalizedScore, '→', Math.round(score));
 
   return {
     score: Math.round(score),
@@ -1548,7 +1538,7 @@ if (isOtherMode) {
 
 // ===== 相性スコア表示（他者診断から来た場合） =====
 if (otherCode && otherCode.length === 5) {
-  const compatResult = calcCompatibility(typeCode, otherCode);
+  const compatResult = calcCompatibility(typeCode, otherCode, relation);
   const { score, details, components } = compatResult;
   const labelInfo = getCompatibilityLabel(score);
   const comment = getCompatibilityComment(typeCode, otherCode);
@@ -1556,6 +1546,10 @@ if (otherCode && otherCode.length === 5) {
   // 相性カードを表示
   const compatCard = document.getElementById('compatibilityCard');
   compatCard.style.display = 'block';
+
+  // 関係性に応じたタイトル
+  const relTitles = { love: '💕 恋愛相性', work: '💼 仕事の相性', friend: '👫 友人としての相性' };
+  document.querySelector('.compatibility-title').textContent = relTitles[relation] || '👫 相性';
 
   // スコア・ラベル・星をセット
   document.getElementById('compatScore').textContent = score;
@@ -1601,7 +1595,7 @@ if (isOtherMode) {
   if (myResults.length > 0) {
     const myCode = myResults[0].code;
     if (myCode && myCode.length === 5) {
-      const compatResult = calcCompatibility(myCode, typeCode);
+      const compatResult = calcCompatibility(myCode, typeCode, relation);
       const { score, details, components } = compatResult;
       const labelInfo = getCompatibilityLabel(score);
       const comment = getCompatibilityComment(myCode, typeCode);
