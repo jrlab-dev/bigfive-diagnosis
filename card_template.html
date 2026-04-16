@@ -443,8 +443,7 @@
     z-index: 6;
     padding: 0 16px;
     line-height: 1.2;
-    white-space: nowrap; overflow: hidden;
-    transform-origin: center top;
+    white-space: nowrap; overflow: visible;
     transition: color 0.5s, text-shadow 0.5s;
   }
 
@@ -776,13 +775,16 @@ function updateCard() {
   svg.style.display = '';
   img.src = imgPath;
   document.getElementById('typeName').textContent = ch.name;
-  // 名前が見切れる場合は縮小
+  // 名前が見切れる場合はフォントサイズを縮小
   const nameEl = document.getElementById('typeName');
-  nameEl.style.transform = '';
+  nameEl.style.fontSize = '';
   requestAnimationFrame(() => {
-    if (nameEl.scrollWidth > nameEl.clientWidth) {
-      const scale = nameEl.clientWidth / nameEl.scrollWidth;
-      nameEl.style.transform = `scale(${Math.max(scale, 0.7)})`;
+    const parent = nameEl.parentElement;
+    const maxW = parent.clientWidth - 32;
+    if (nameEl.scrollWidth > maxW) {
+      const ratio = maxW / nameEl.scrollWidth;
+      const currentSize = parseFloat(getComputedStyle(nameEl).fontSize);
+      nameEl.style.fontSize = Math.max(currentSize * ratio, 10) + 'px';
     }
   });
   document.getElementById('typeCode').textContent = `O${ch.o} C${ch.c} E${ch.e} A${ch.a} N${ch.n}`;
