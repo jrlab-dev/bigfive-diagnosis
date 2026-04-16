@@ -1421,7 +1421,7 @@ const sc = { O, C, E, A, N };
 const traitsCard = document.getElementById('traitsCard');
 ['O','C','E','A','N'].forEach(f => {
   const s = sc[f], info = traitInfo[f];
-  const opacity = s === 1 ? 0.2 : s === 3 ? 0.45 : 1;
+  const pct = s === 1 ? 22 : s === 3 ? 55 : 88;
   const lv  = s === 5 ? '高め' : s === 3 ? '普通' : '低め';
   const lvClass = s === 5 ? 'lv-high' : s === 3 ? 'lv-mid' : 'lv-low';
   traitsCard.innerHTML += `
@@ -1430,7 +1430,7 @@ const traitsCard = document.getElementById('traitsCard');
         <span class="trait-label">${info.name}<span class="trait-desc-text">${info.desc}</span></span>
         <span class="trait-level ${lvClass}">${lv}</span>
       </div>
-      <div class="bar-bg"><div class="bar-fill-lg" style="width:0%;background:${info.color};opacity:${opacity};" data-w="100%"></div></div>
+      <div class="bar-bg"><div class="bar-fill-lg" style="width:0%;background:${info.color};" data-w="${pct}%"></div></div>
     </div>`;
 });
 setTimeout(() => {
