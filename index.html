@@ -413,11 +413,22 @@
 
   @media(max-width:600px){
     .features { padding: 0 16px 60px }
-    .feature-cards { grid-template-columns: 1fr }
+    .feature-cards { grid-template-columns: 1fr 1fr; gap: 12px }
+    .feature-card { min-height: auto; padding: 12px; border-radius: 14px }
+    .feature-text-body h3 { font-size: 13px; margin-bottom: 2px }
+    .feature-text-body p { font-size: 11px; line-height: 1.4 }
+    .feature-bg-img { opacity: 0.06 }
+    .feature-chara-bg { display: none }
+    .science-link { margin-top: 4px; font-size: 10px; padding: 4px 8px }
     .cta { padding: 40px 16px 80px }
-    .stats-grid { grid-template-columns: 1fr; gap: 0 }
-    .stat-item::after { display: none }
-    .stat-item:not(:last-child) { border-bottom: 1px solid rgba(6,182,212,0.15) }
+    .stats-section { padding: 16px 16px 48px }
+    .stats-label { margin-bottom: 16px }
+    .stats-grid { grid-template-columns: repeat(3,1fr); gap: 1px }
+    .stat-item { padding: 16px 8px }
+    .stat-number { font-size: 1.6rem }
+    .stat-unit { font-size: 11px }
+    .stat-desc { font-size: 9px }
+    .stat-item::after { top: 15%; bottom: 15% }
     .trust-badges { gap: 8px }
   }
 </style>
