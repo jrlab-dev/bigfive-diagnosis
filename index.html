@@ -442,6 +442,40 @@
     .stat-item::after { top: 15%; bottom: 15% }
     .trust-badges { gap: 8px }
   }
+
+  /* デモモーダル */
+  .demo-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; justify-content:center; align-items:flex-start; padding:20px; overflow-y:auto; backdrop-filter:blur(4px); }
+  .demo-overlay.show { display:flex; }
+  .demo-modal { background:linear-gradient(180deg,#0a0e27 0%,#12082a 100%); border:1px solid rgba(139,92,246,0.2); border-radius:20px; padding:24px; max-width:400px; width:100%; color:#e2e8f0; position:relative; }
+  .demo-close { position:absolute; top:12px; right:16px; background:none; border:none; color:rgba(255,255,255,0.5); font-size:24px; cursor:pointer; z-index:2; }
+  .demo-close:hover { color:#fff; }
+  .demo-eyebrow { font-size:11px; color:var(--rose); letter-spacing:.15em; font-weight:700; margin-bottom:4px; }
+  .demo-header { text-align:center; margin-bottom:16px; }
+  .demo-badge { display:inline-block; padding:3px 12px; background:rgba(236,72,153,0.15); border:1px solid rgba(236,72,153,0.3); border-radius:20px; font-size:11px; color:#f472b6; }
+  .demo-name { font-size:18px; font-weight:700; margin:8px 0 2px; }
+  .demo-name em { color:#fff; font-style:normal; }
+  .demo-sub { font-size:11px; color:var(--dim); }
+  .demo-char { text-align:center; margin-bottom:16px; }
+  .demo-char img { width:120px; height:120px; object-fit:contain; border-radius:12px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); }
+  .demo-char-label { font-size:11px; color:var(--dim); margin-top:6px; }
+  .demo-traits { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; margin-bottom:12px; }
+  .demo-trait-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .demo-trait-row:last-child { margin-bottom:0; }
+  .demo-trait-label { font-size:11px; color:rgba(255,255,255,0.7); min-width:90px; white-space:nowrap; }
+  .demo-trait-label small { color:rgba(255,255,255,0.35); }
+  .demo-bar-track { flex:1; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+  .demo-bar-fill { height:100%; border-radius:3px; transition:width 0.5s; }
+  .demo-trait-lv { font-size:10px; font-weight:700; min-width:32px; text-align:right; }
+  .lv-high { color:#f0a0c8; } .lv-mid { color:#a78bfa; } .lv-low { color:#14b8a6; }
+  .demo-compat { text-align:center; padding:16px; background:rgba(236,72,153,0.06); border:1px solid rgba(236,72,153,0.15); border-radius:12px; margin-bottom:12px; }
+  .demo-compat-title { font-size:13px; font-weight:600; margin-bottom:8px; color:#f472b6; }
+  .demo-compat-score { font-size:48px; font-weight:900; color:#f0a0c8; line-height:1; }
+  .demo-compat-label { font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px; }
+  .demo-desc { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; margin-bottom:16px; }
+  .demo-desc-title { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .demo-desc-text { font-size:12px; color:rgba(255,255,255,0.7); line-height:1.6; }
+  .demo-cta { display:block; text-align:center; padding:14px; background:linear-gradient(135deg,#ec4899,#8b5cf6); border-radius:12px; color:#fff; text-decoration:none; font-weight:700; font-size:14px; transition:opacity .3s; }
+  .demo-cta:hover { opacity:0.85; }
 </style>
 </head>
 <body>
@@ -549,6 +583,7 @@
           <div class="feature-text-body">
             <h3>あの人を分析する</h3>
             <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
+            <a href="#" id="demoOtherBtn" style="display:inline-block;margin-top:4px;font-size:10px;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(236,72,153,0.3);">▼ 结果イメージを見る</a>
           </div>
         </div>
       </div>
@@ -596,6 +631,40 @@
       <p class="cta-note" style="margin-top:10px;">21問で10の価値観カテゴリからあなたの核心がわかります</p>
     </div>
   </section>
+
+  <!-- あの人分析 デモモーダル -->
+  <div class="demo-overlay" id="demoOverlay">
+    <div class="demo-modal">
+      <button class="demo-close" id="demoClose">&times;</button>
+      <p class="demo-eyebrow">👁️ デモ結果イメージ</p>
+      <div class="demo-header">
+        <span class="demo-badge">💕 恋愛・気になる人</span>
+        <p class="demo-name"><em>王子様</em>の推定性格</p>
+        <p class="demo-sub">ビッグファイブ理論による観察分析（デモ）</p>
+      </div>
+      <div class="demo-char">
+        <img src="images/characters/M/35551.webp" alt="王子様キャラクター" onerror="this.style.display='none'">
+        <p class="demo-char-label">王子様の推定キャラクター</p>
+      </div>
+      <div class="demo-traits">
+        <div class="demo-trait-row"><span class="demo-trait-label">外向性 <small>社交的・話好き</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:88%;background:#f97316;"></div></div><span class="demo-trait-lv lv-high">高め</span></div>
+        <div class="demo-trait-row"><span class="demo-trait-label">神経症傾向 <small>感情的・敏感</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:22%;background:#14b8a6;"></div></div><span class="demo-trait-lv lv-low">低め</span></div>
+        <div class="demo-trait-row"><span class="demo-trait-label">開放性 <small>好奇心旺盛</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:55%;background:#8b5cf6;"></div></div><span class="demo-trait-lv lv-mid">普通</span></div>
+        <div class="demo-trait-row"><span class="demo-trait-label">誠実性 <small>計画的・責任感</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:88%;background:#3b82f6;"></div></div><span class="demo-trait-lv lv-high">高め</span></div>
+        <div class="demo-trait-row"><span class="demo-trait-label">協調性 <small>思いやり・協力的</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:88%;background:#f472b6;"></div></div><span class="demo-trait-lv lv-high">高め</span></div>
+      </div>
+      <div class="demo-compat">
+        <p class="demo-compat-title">💕 恋愛相性スコア</p>
+        <div class="demo-compat-score">85<span style="font-size:20px;">%</span></div>
+        <p class="demo-compat-label">相性◎ — 息の合うパートナー</p>
+      </div>
+      <div class="demo-desc">
+        <p class="demo-desc-title">📋 王子様さんの性格まとめ</p>
+        <p class="demo-desc-text">社交的で思いやりがあり、周囲を明るくするタイプ。責任感も強く、約束を守り計画的に行動する。感情的にも安定しており、ストレスでも冷静。チームの中心的存在でありながら、人の気持ちにも寄り添える理想的なリーダー気質。</p>
+      </div>
+      <a href="other_quiz.html" class="demo-cta">👁️ 実際にあの人を分析してみる →</a>
+    </div>
+  </div>
 
   <footer><p>ASOBI LAB — ビッグファイブ 3125タイプ診断</p></footer>
 </div>
@@ -746,5 +815,22 @@
 })();
 </script>
 <script src="nav.js"></script>
+<script>
+document.getElementById('demoOtherBtn').addEventListener('click', e => {
+  e.preventDefault();
+  document.getElementById('demoOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('demoClose').addEventListener('click', () => {
+  document.getElementById('demoOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+});
+document.getElementById('demoOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) {
+    document.getElementById('demoOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+});
+</script>
 </body>
 </html>
