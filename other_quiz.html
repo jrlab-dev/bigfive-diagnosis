@@ -551,76 +551,15 @@
   <div class="compat-card" id="compatCard"></div>
   <div class="accuracy-card" id="resultAccuracyNote"></div>
 
-  <!-- バイアス警告カード -->
-  <div class="bias-warning" id="biasWarning">
-    <p class="bias-warning-text">⚠️ この結果にはあなたの先入観が含まれている可能性があります</p>
-    <div class="bias-btns">
-      <button class="bias-btn-remove" id="biasRemoveBtn">先入観を取り除いて見る →</button>
-      <button class="bias-btn-keep" id="biasKeepBtn">このまま見る</button>
-    </div>
-  </div>
+  <!-- 観察者情報パネル -->
+  <div class="observer-info-card" id="observerInfoCard" style="display:none;"></div>
+
+  <!-- SOKAモデル注釈 -->
+  <div class="soka-note" id="sokaNote" style="display:none;"></div>
 
   <button class="action-btn btn-save" id="saveBtn">💾 結果を保存</button>
   <button class="action-btn btn-primary" id="retryBtn">別の人を診断する</button>
   <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
-</div>
-
-<!-- ===== バイアス説明画面 ===== -->
-<div class="screen" id="biasScreen">
-  <div class="bias-screen-header">
-    <p class="bias-screen-eyebrow">BIAS ANALYSIS</p>
-    <h2 class="bias-screen-title">あなたの先入観を<br>分析します</h2>
-    <p class="bias-screen-sub">人が他者を判断するとき、<br>こんな歪みが無意識に起きています。</p>
-  </div>
-  <div class="bias-list">
-    <div class="bias-item">
-      <div class="bias-num">①</div>
-      <div class="bias-body">
-        <h3>好き嫌いフィルター</h3>
-        <p>好きな人は全部良く見え、嫌いな人は全部悪く見えます。</p>
-      </div>
-    </div>
-    <div class="bias-item">
-      <div class="bias-num">②</div>
-      <div class="bias-body">
-        <h3>自分との比較</h3>
-        <p>自分の性格と「違う部分」を大げさに感じやすくなります。</p>
-      </div>
-    </div>
-    <div class="bias-item">
-      <div class="bias-num">③</div>
-      <div class="bias-body">
-        <h3>第一印象の支配</h3>
-        <p>最初の印象が、その後の判断全体を引きずります。</p>
-      </div>
-    </div>
-    <div class="bias-item">
-      <div class="bias-num">④</div>
-      <div class="bias-body">
-        <h3>状況と性格の混同</h3>
-        <p>その時の状況を性格と判断してしまいます。<br>（例：遅刻した＝だらしない人）</p>
-      </div>
-    </div>
-    <div class="bias-item">
-      <div class="bias-num">⑤</div>
-      <div class="bias-body">
-        <h3>思い込みセット</h3>
-        <p>根拠のない性格パッケージで見てしまいます。<br>（例：外向的な人は協調的なはず）</p>
-      </div>
-    </div>
-  </div>
-  <button class="bias-cta" id="biasCta">補正結果を見る →</button>
-  <button class="bias-back" id="biasBackBtn">← 結果に戻る</button>
-</div>
-
-<!-- プレミアムモーダル -->
-<div class="premium-overlay" id="premiumOverlay">
-  <div class="premium-modal">
-    <div class="premium-icon">🔒</div>
-    <p class="premium-title">準備中です</p>
-    <p class="premium-sub">先入観を補正した本格分析は<br>近日公開予定です。<br>お楽しみに！</p>
-    <button class="premium-close" id="premiumClose">閉じる</button>
-  </div>
 </div>
 
 <script>
@@ -646,6 +585,17 @@ const questions = [
   { text: '趣味や興味の幅が広く、新しい分野を学ぶことを楽しんでいるように見える', factor:'O', dir:'+' },
   { text: '衝動的に行動するより、先を見越して計画を立ててから動くことが多い', factor:'C', dir:'+' },
   { text: '自分が損をしても、相手との関係を壊したくないと考える傾向がある', factor:'A', dir:'+' },
+  // --- 追加10問（各因子2問ずつ） ---
+  { text: '電話やメッセージで、相手よりも多く話す方だと思う', factor:'E', dir:'+' },
+  { text: '人前で笑顔やジェスチャーが多く、表現が豊かな印象がある', factor:'E', dir:'+' },
+  { text: 'プレッシャーがかかる場面で、手が震えたり声が上すがったりすることがある', factor:'N', dir:'+' },
+  { text: '人混みや狭い場所で、落ち着かない様子を見せることがある', factor:'N', dir:'+' },
+  { text: '映画・音楽・アートなどに興味を示し、自分なりの好みを持っている', factor:'O', dir:'+' },
+  { text: '抽象的な議論や「もしも〜だったら」のような話を楽しむ様子がある', factor:'O', dir:'+' },
+  { text: '細かいミスを見逃さず、やり直しをして正確に仕上げようとする傾向がある', factor:'C', dir:'+' },
+  { text: '目標や期限を自分で設定し、それに向けてコツコツ進めるタイプだと思う', factor:'C', dir:'+' },
+  { text: '他人の気持ちに敏感で、相手が不快そうだと察して気遣うことが多い', factor:'A', dir:'+' },
+  { text: 'グループの決定に不満があっても、波風を立てずに従うことが多い', factor:'A', dir:'+' },
 ];
 const total = questions.length;
 
@@ -661,6 +611,10 @@ const relConfig = {
     compatHigh: '💕 とても良い相性です！感情的な波長が合いやすく、自然体でいられる関係です。',
     compatMid:  '🌙 お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
     compatLow:  '⚡ 性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
+    // 信頼度情報（心理学研究に基づく）
+    observerNote: '恋人・パートナーからの評価は、全関係性の中で最も正確です。プライベートな姿も見られるため、特に情緒安定性の評価が信頼できます。',
+    accurateFactors: ['E','N','A','C'],
+    lessAccurateFactors: ['O'],
   },
   work: {
     icon: '💼', label: '仕事・上司・同僚',
@@ -672,6 +626,10 @@ const relConfig = {
     compatHigh: '💼 仕事上の相性は良好です！お互いの強みを活かし合える関係です。',
     compatMid:  '📋 コミュニケーションを丁寧にすれば良いチームワークが生まれます。',
     compatLow:  '🔧 スタイルの違いがあります。役割分担を明確にすると力を発揮しやすくなります。',
+    // 信頼度情報
+    observerNote: '職場関係では、誠実性や協調性の評価が正確です。ただし感情面や内面的な思考は見えにくいため、参考程度にしてください。',
+    accurateFactors: ['C','A'],
+    lessAccurateFactors: ['N','O'],
   },
   friend: {
     icon: '👫', label: '友人・知人',
@@ -683,6 +641,10 @@ const relConfig = {
     compatHigh: '👫 気の合う友人です！話題が合いやすく、一緒にいて楽しい関係です。',
     compatMid:  '🌿 お互いの違いを楽しめれば、刺激し合える良い関係になります。',
     compatLow:  '🌀 タイプは違いますが、だからこそ新しい視点をもらえる関係かもしれません。',
+    // 信頼度情報
+    observerNote: '友人関係では、外向性や開放性の評価が正確です。ただし真面目さや感情面は遊びの場面では見えにくいため、参考程度にしてください。',
+    accurateFactors: ['E','O'],
+    lessAccurateFactors: ['C','N'],
   },
 };
 
@@ -778,6 +740,10 @@ function checkReady() {
 }
 
 startBtn.addEventListener('click', () => {
+  // 1ヶ月未満の場合に警告
+  if (personPeriod === 'short') {
+    if (!confirm('知り合ってまもない相手の評価は、誤差が大きくなりやすいです。\n本当にこのまま進めますか？')) return;
+  }
   personName = nameInput.value.trim();
   const cfg = relConfig[personRel];
   // who bar
@@ -849,7 +815,7 @@ function calcScores() {
   const sc = {};
   for (const [f, vals] of Object.entries(fm)) {
     const sum = vals.reduce((a,b)=>a+b,0); // 3〜15
-    sc[f] = sum<=7 ? 1 : sum<=11 ? 3 : 5;
+    sc[f] = sum<=10 ? 1 : sum<=20 ? 3 : 5;
   }
   return sc;
 }
@@ -1003,8 +969,31 @@ function showResult() {
   // 精度注記
   document.getElementById('resultAccuracyNote').innerHTML =
     `${periodNotes[personPeriod]}<br>
-     ※好きな人・気になる人を診断した場合、実際より良く見えやすい傾向があります（ハロー効果）。<br>
      ※この診断は推定です。本人の実際の性格と異なる場合があります。`;
+
+  // 観察者情報パネル（関係性による信頼度）
+  const observerCard = document.getElementById('observerInfoCard');
+  if (cfg.observerNote) {
+    const accNames = (cfg.accurateFactors || []).map(f => traitInfo[f].name);
+    const lessNames = (cfg.lessAccurateFactors || []).map(f => traitInfo[f].name);
+    observerCard.style.display = 'block';
+    observerCard.innerHTML = `
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <p style="font-size:13px;font-weight:600;margin:0 0 8px;color:rgba(255,255,255,0.7);">🔍 この評価の信頼度</p>
+        <p style="font-size:13px;margin:0 0 10px;color:rgba(255,255,255,0.85);line-height:1.6;">${cfg.observerNote}</p>
+        ${accNames.length ? `<p style="font-size:12px;margin:0 0 4px;color:rgba(255,255,255,0.6);">✅ 信頼しやすい因子：${accNames.join('・')}</p>` : ''}
+        ${lessNames.length ? `<p style="font-size:12px;margin:0;color:rgba(255,255,255,0.6);">⚠️ 参考程度の因子：${lessNames.join('・')}</p>` : ''}
+      </div>`;
+  }
+
+  // SOKAモデル注釈
+  const sokaNote = document.getElementById('sokaNote');
+  sokaNote.style.display = 'block';
+  sokaNote.innerHTML = `
+    <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:12px;line-height:1.6;">
+      💡 性格心理学の研究によると、<strong style="color:rgba(255,255,255,0.6);">協調性・誠実性</strong>は他者からの評価の方が正確で、<br>
+      <strong style="color:rgba(255,255,255,0.6);">情緒安定性・開放性</strong>は本人の自己評価の方が正確と言われています。
+    </div>`;
 
   showScreen('resultScreen');
 
@@ -1034,19 +1023,6 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   accNote.classList.remove('show');
   startBtn.disabled = true;
   showScreen('startScreen');
-});
-
-// ===== バイアス画面 =====
-document.getElementById('biasRemoveBtn').addEventListener('click', () => showScreen('biasScreen'));
-document.getElementById('biasKeepBtn').addEventListener('click', () => {
-  document.getElementById('biasWarning').style.display = 'none';
-});
-document.getElementById('biasBackBtn').addEventListener('click', () => showScreen('resultScreen'));
-document.getElementById('biasCta').addEventListener('click', () => {
-  document.getElementById('premiumOverlay').classList.add('show');
-});
-document.getElementById('premiumClose').addEventListener('click', () => {
-  document.getElementById('premiumOverlay').classList.remove('show');
 });
 
 // ===== 結果保存機能（LocalStorage） =====
