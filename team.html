@@ -932,7 +932,7 @@ function calcPairCompatibility(code1, code2) {
   if (n1 <= 2 && n2 <= 2) raw += 8;
   if (a1 >= 4 && a2 >= 4) raw += 8;
 
-  const MIN = -16, MAX = 110;
+  const MIN = -30, MAX = 130;
   return Math.max(0, Math.min(100, Math.round((raw - MIN) / (MAX - MIN) * 100)));
 }
 
