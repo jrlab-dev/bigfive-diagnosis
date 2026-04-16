@@ -863,9 +863,6 @@ function renderReportBanner() {
   }
 }
 
-// 初期表示
-render();
-renderReportBanner();
 </script>
 <script src="hidden_characters.js"></script>
 <script src="nav.js"></script>
@@ -882,6 +879,10 @@ function getHiddenCharImg(scores, gender) {
   );
   return ch && ch.img ? `images/characters/hidden/${ch.img}` : null;
 }
+
+// 初期表示（全スクリプト読み込み後に実行）
+render();
+renderReportBanner();
 </script>
 </body>
 </html>
