@@ -444,6 +444,7 @@
     padding: 0 16px;
     line-height: 1.2;
     white-space: nowrap; overflow: hidden;
+    transform-origin: center top;
     transition: color 0.5s, text-shadow 0.5s;
   }
 
@@ -775,6 +776,15 @@ function updateCard() {
   svg.style.display = '';
   img.src = imgPath;
   document.getElementById('typeName').textContent = ch.name;
+  // 名前が見切れる場合は縮小
+  const nameEl = document.getElementById('typeName');
+  nameEl.style.transform = '';
+  requestAnimationFrame(() => {
+    if (nameEl.scrollWidth > nameEl.clientWidth) {
+      const scale = nameEl.clientWidth / nameEl.scrollWidth;
+      nameEl.style.transform = `scale(${Math.max(scale, 0.7)})`;
+    }
+  });
   document.getElementById('typeCode').textContent = `O${ch.o} C${ch.c} E${ch.e} A${ch.a} N${ch.n}`;
   document.getElementById('desc').textContent = ch.desc;
   renderScores(ch);

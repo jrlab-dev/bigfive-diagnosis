@@ -740,10 +740,6 @@ function checkReady() {
 }
 
 startBtn.addEventListener('click', () => {
-  // 1ヶ月未満の場合に警告
-  if (personPeriod === 'short') {
-    if (!confirm('知り合ってまもない相手の評価は、誤差が大きくなりやすいです。\n本当にこのまま進めますか？')) return;
-  }
   personName = nameInput.value.trim();
   const cfg = relConfig[personRel];
   // who bar
@@ -967,9 +963,21 @@ function showResult() {
   }
 
   // 精度注記
-  document.getElementById('resultAccuracyNote').innerHTML =
-    `${periodNotes[personPeriod]}<br>
-     ※この診断は推定です。本人の実際の性格と異なる場合があります。`;
+  const accuracyNote = document.getElementById('resultAccuracyNote');
+  if (personPeriod === 'short') {
+    accuracyNote.innerHTML = `
+      <div style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <p style="font-size:14px;font-weight:600;margin:0 0 6px;color:#fca5a5;">⚠️ 観察期間が非常に短いです</p>
+        <p style="font-size:13px;margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">
+          知り合って1ヶ月未満の評価は、誤差が非常に大きくなります。<br>
+          しばらく期間をおいてから再度診断することを<strong>強くお勧め</strong>します。
+        </p>
+      </div>`;
+  } else {
+    accuracyNote.innerHTML =
+      `${periodNotes[personPeriod]}<br>
+       ※この診断は推定です。本人の実際の性格と異なる場合があります。`;
+  }
 
   // 観察者情報パネル（関係性による信頼度）
   const observerCard = document.getElementById('observerInfoCard');
