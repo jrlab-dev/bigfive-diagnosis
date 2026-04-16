@@ -783,6 +783,21 @@
   <!-- 性格説明カード -->
   <div class="desc-card" id="descCard"></div>
 
+  <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
+  <div class="compatibility-card" id="compatibilityCard" style="display:none;">
+    <p class="compatibility-title">💕 あの人との相性</p>
+    <div class="compatibility-score-area">
+      <div class="compatibility-score" id="compatScore">--</div>
+      <p class="compatibility-label" id="compatLabel">計算中...</p>
+      <div class="compatibility-stars" id="compatStars"></div>
+    </div>
+    <p class="compatibility-comment" id="compatComment"></p>
+    <div class="compatibility-detail">
+      <p class="compatibility-detail-title">📊 相性の内訳</p>
+      <div class="compatibility-bars" id="compatBars"></div>
+    </div>
+  </div>
+
   <!-- 弱点カード -->
   <div class="weakness-section" id="weaknessSection">
     <button class="btn btn-weakness" id="weaknessBtn">
@@ -799,21 +814,6 @@
   <!-- おすすめ職種 -->
   <div class="career-section">
     <div class="career-card" id="careerCard"></div>
-  </div>
-
-  <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
-  <div class="compatibility-card" id="compatibilityCard" style="display:none;">
-    <p class="compatibility-title">💕 あの人との相性</p>
-    <div class="compatibility-score-area">
-      <div class="compatibility-score" id="compatScore">--</div>
-      <p class="compatibility-label" id="compatLabel">計算中...</p>
-      <div class="compatibility-stars" id="compatStars"></div>
-    </div>
-    <p class="compatibility-comment" id="compatComment"></p>
-    <div class="compatibility-detail">
-      <p class="compatibility-detail-title">📊 相性の内訳</p>
-      <div class="compatibility-bars" id="compatBars"></div>
-    </div>
   </div>
 
   <!-- ボタン -->
@@ -1379,14 +1379,16 @@ function renderScores() {
 
 // ===== 初期化 =====
 document.getElementById('typeName').textContent = genTypeName();
-// 名前が見切れる場合は縮小
+// 名前が見切れる場合は縮小（レンダリング完了後に実行）
 const nameEl_r = document.getElementById('typeName');
-requestAnimationFrame(() => {
+function shrinkTypeName() {
   if (nameEl_r.scrollWidth > nameEl_r.clientWidth) {
     const scale = nameEl_r.clientWidth / nameEl_r.scrollWidth;
-    nameEl_r.style.transform = `scale(${Math.max(scale, 0.7)})`;
+    nameEl_r.style.transform = `scale(${Math.max(scale, 0.65)})`;
   }
-});
+}
+requestAnimationFrame(() => setTimeout(shrinkTypeName, 100));
+window.addEventListener('load', shrinkTypeName);
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
 // バージョンラベル表示
 if (version === '120') {
