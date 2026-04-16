@@ -379,8 +379,7 @@
     text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.9), 0 0 48px rgba(0,0,0,0.5);
     letter-spacing: 0.08em; z-index: 6;
     padding: 0 16px; line-height: 1.2;
-    white-space: nowrap; overflow: hidden;
-    transform-origin: center top;
+    white-space: nowrap; overflow: visible;
   }
   .type-code {
     font-size: 13px; color: #cbd5e1; font-weight: 500;
@@ -1379,12 +1378,15 @@ function renderScores() {
 
 // ===== 初期化 =====
 document.getElementById('typeName').textContent = genTypeName();
-// 名前が見切れる場合は縮小（レンダリング完了後に実行）
+// 名前が見切れる場合はフォントサイズを縮小
 const nameEl_r = document.getElementById('typeName');
 function shrinkTypeName() {
-  if (nameEl_r.scrollWidth > nameEl_r.clientWidth) {
-    const scale = nameEl_r.clientWidth / nameEl_r.scrollWidth;
-    nameEl_r.style.transform = `scale(${Math.max(scale, 0.65)})`;
+  const parent = nameEl_r.parentElement;
+  const maxW = parent.clientWidth - 32; // padding分引く
+  if (nameEl_r.scrollWidth > maxW) {
+    const ratio = maxW / nameEl_r.scrollWidth;
+    const currentSize = parseFloat(getComputedStyle(nameEl_r).fontSize);
+    nameEl_r.style.fontSize = Math.max(currentSize * ratio, 10) + 'px';
   }
 }
 requestAnimationFrame(() => setTimeout(shrinkTypeName, 100));
