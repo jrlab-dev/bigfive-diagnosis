@@ -1097,7 +1097,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 
     if (!isDuplicate) {
       others.unshift(result);
-      if (others.length > 100) others.pop();
+      if (others.length > 6) others.pop();
       localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
     }
 
