@@ -541,6 +541,46 @@
     padding: 8px 0;
   }
 
+  /* Dラボ紹介バナー */
+  .dlab-banner {
+    margin-top: 14px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.08));
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .dlab-banner-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #60a5fa;
+    margin-bottom: 8px;
+  }
+  .dlab-banner-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .dlab-banner-text {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .dlab-banner-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .dlab-banner-btn:hover { opacity: 0.85; }
+
   /* 空状態 */
   .empty-state {
     text-align: center;
@@ -909,6 +949,12 @@ function genPositionAdviceHtml(members, currentScore) {
     <div class="position-card">
       <p class="position-title">💡 自分が成長することでチームが良くなる</p>
       ${membersHtml}
+      <div class="dlab-banner">
+        <p class="dlab-banner-label">📚 もっと深く学びたい方へ</p>
+        <p class="dlab-banner-title">メンタリストDaiGoのDラボ</p>
+        <p class="dlab-banner-text">ビッグファイブをはじめ、人間関係・習慣・仕事…<br>科学論文をもとに「自分を変えるヒント」を動画で学べます。</p>
+        <a href="https://d-lab.dai-go.com/" class="dlab-banner-btn" target="_blank" rel="noopener">Dラボを見てみる →</a>
+      </div>
     </div>
   `;
 }
