@@ -13,6 +13,7 @@
       <a href="sdt.html" data-page="sdt">⚡ 動機</a>
       <a href="schwartz.html" data-page="schwartz">🌍 価値観</a>
       <a href="hsp.html" data-page="hsp">🌸 HSP</a>
+      <a href="attachment.html" data-page="attachment">🔗 愛着</a>
     </div>
   </div>
 </nav>`;
