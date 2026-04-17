@@ -12,6 +12,7 @@
       <a href="mindset.html" data-page="mindset">🧠 思考</a>
       <a href="sdt.html" data-page="sdt">⚡ 動機</a>
       <a href="schwartz.html" data-page="schwartz">🌍 価値観</a>
+      <a href="hsp.html" data-page="hsp">🌸 HSP</a>
     </div>
   </div>
 </nav>`;
