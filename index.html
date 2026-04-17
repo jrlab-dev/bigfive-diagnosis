@@ -162,7 +162,7 @@
   .content { position: relative; z-index: 1; }
 
   /* ヒーロー */
-  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; position: relative; }
+  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px 40px; position: relative; }
   .hero::before {
     content: ''; position: absolute; top: 50%; left: 50%;
     transform: translate(-50%,-50%);
@@ -595,36 +595,18 @@
       <a href="quiz.html?v=120" class="shimmer-btn cta-btn-premium" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-done-key="bigfive_v120">徹底分析（120問）</a>
     </div>
     <p class="cta-note">※ 30問・120問版はより精度の高い結果が得られます</p>
-    <div class="anohito-section">
+    <div class="anohito-section" id="conciergeSection">
       <p class="anohito-lead">気になる人の性格を見抜きたい方へ</p>
       <a href="other_quiz.html" class="shimmer-btn cta-btn-anohito" data-done-key="bigfive_other">👁️ あの人の性格を分析する</a>
       <p class="cta-note" style="margin-top:10px;">恋愛・仕事・友人関係…相手の性格と相性がわかります</p>
     </div>
-    <div class="anohito-section">
+    <div class="anohito-section" id="teamSection">
       <p class="anohito-lead">グループ・チームで診断したい方へ</p>
       <a href="team.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);">👥 チーム相性を診断する</a>
       <p class="cta-note" style="margin-top:10px;">最大6人のチーム相性がわかります（要：保存済みデータ）</p>
     </div>
-    <div class="anohito-section">
-      <p class="anohito-lead">恋愛の傾向を知りたい方へ</p>
-      <a href="love.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #ec4899, #f43f5e);" data-done-key="love_result">💕 恋愛スタイル診断</a>
-      <p class="cta-note" style="margin-top:10px;">24問（LAS-SF）で「情熱型・友情型・現実型…」あなたの愛し方がわかります</p>
-    </div>
-    <div class="anohito-section">
-      <p class="anohito-lead">思考パターンを知りたい方へ</p>
-      <a href="mindset.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #10b981, #059669);" data-done-key="mindset_result">🧠 マインドセット診断</a>
-      <p class="cta-note" style="margin-top:10px;">8問で「成長型・固定型」あなたの能力観がわかります</p>
-    </div>
-    <div class="anohito-section">
-      <p class="anohito-lead">動機・やる気の源を知りたい方へ</p>
-      <a href="sdt.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);" data-done-key="sdt_result">⚡ 動機タイプ診断</a>
-      <p class="cta-note" style="margin-top:10px;">21問で「自律性・有能感・関係性」あなたを動かす力がわかります</p>
-    </div>
-    <div class="anohito-section">
-      <p class="anohito-lead">自分の価値観を深掘りしたい方へ</p>
-      <a href="schwartz.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #f59e0b, #d97706);" data-done-key="schwartz_result">🌍 価値観タイプ診断</a>
-      <p class="cta-note" style="margin-top:10px;">21問で10の価値観カテゴリからあなたの核心がわかります</p>
-    </div>
+    <!-- 心理コンシェルジュ：動的レンダリングエリア -->
+    <div id="dynamicConcierge"></div>
   </section>
 
   <!-- あの人分析 デモモーダル -->
@@ -809,7 +791,55 @@
   }
 })();
 </script>
+<script src="concierge.js"></script>
 <script src="nav.js"></script>
+<script>
+// ===== トップページ：心理コンシェルジュ動的CTA =====
+(function() {
+  const container = document.getElementById('dynamicConcierge');
+  if (!container || typeof getRecommendations !== 'function') return;
+
+  const bfResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const hasBf = bfResults.length > 0;
+
+  if (!hasBf) {
+    container.innerHTML = `
+      <div class="anohito-section" style="text-align:center;">
+        <p class="anohito-lead" style="font-size:14px; color:var(--dim);">まずはビッグファイブ診断で自分を知りましょう</p>
+        <p class="cta-note">診断結果に基づいて、あなたに最適な心理テストをご提案します</p>
+      </div>`;
+    return;
+  }
+
+  const sc = bfResults[0].scores;
+  const recs = getRecommendations(sc);
+
+  if (recs.length === 0) {
+    container.innerHTML = `
+      <div class="anohito-section" style="text-align:center;">
+        <p class="anohito-lead" style="color:#10b981;">✓ すべての心理テストが完了しています！</p>
+        <a href="report.html" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);">📊 総合レポートを見る</a>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="anohito-section" style="text-align:center; margin-bottom:8px;">
+      <p class="anohito-lead" style="font-size:13px; color:#c4b5fd;">🎯 あなたへのおすすめ</p>
+      <p class="cta-note">ビッグファイブのスコアから選びました</p>
+    </div>
+    ${recs.map(rec => `
+      <div class="anohito-section">
+        <a href="${rec.url}" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,rgba(139,92,246,0.6),rgba(236,72,153,0.4));">
+          ${rec.icon} ${rec.title}
+        </a>
+        <p class="cta-note" style="max-width:300px; margin:10px auto 0;">${rec.message}</p>
+      </div>`).join('')}
+    <div class="anohito-section" style="text-align:center;">
+      <a href="mypage.html" style="font-size:12px; color:var(--dim); text-decoration:none;">すべての心理テストを見る →</a>
+    </div>`;
+})();
+</script>
 <script>
 document.getElementById('demoOtherBtn').addEventListener('click', e => {
   e.preventDefault();

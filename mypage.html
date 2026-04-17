@@ -705,74 +705,13 @@ function deleteOtherResult(index) {
   render();
 }
 
-// ===== 心理テスト結果 =====
-const TEST_META = [
-  {
-    key: 'love_result',
-    title: '恋愛スタイル診断',
-    icon: '💕',
-    url: 'love.html',
-    bgColor: 'rgba(236,72,153,0.15)',
-    getResult: (d) => {
-      const map = {
-        eros: { name: '情熱型', color: '#ec4899' },
-        ludus: { name: '遊び型', color: '#f97316' },
-        storge: { name: '友情型', color: '#22c55e' },
-        pragma: { name: '現実型', color: '#3b82f6' },
-        mania: { name: '執着型', color: '#8b5cf6' },
-        agape: { name: '献身型', color: '#f59e0b' },
-      };
-      return map[d.mainStyle] || { name: d.mainStyle, color: '#ec4899' };
-    }
-  },
-  {
-    key: 'mindset_result',
-    title: 'マインドセット診断',
-    icon: '🧠',
-    url: 'mindset.html',
-    bgColor: 'rgba(16,185,129,0.15)',
-    getResult: (d) => {
-      const map = {
-        growth: { name: '成長マインドセット', color: '#10b981' },
-        mixed:  { name: '混合マインドセット', color: '#8b5cf6' },
-        fixed:  { name: '固定マインドセット', color: '#f97316' },
-      };
-      return map[d.type] || { name: d.type, color: '#10b981' };
-    }
-  },
-  {
-    key: 'sdt_result',
-    title: '動機タイプ診断',
-    icon: '⚡',
-    url: 'sdt.html',
-    bgColor: 'rgba(59,130,246,0.15)',
-    getResult: (d) => {
-      const map = {
-        autonomy:    { name: '自律駆動型', color: '#3b82f6' },
-        competence:  { name: '達成志向型', color: '#f59e0b' },
-        relatedness: { name: '関係重視型', color: '#ec4899' },
-      };
-      return map[d.strongest] || { name: d.strongest, color: '#3b82f6' };
-    }
-  },
-  {
-    key: 'schwartz_result',
-    title: '価値観診断',
-    icon: '🌍',
-    url: 'schwartz.html',
-    bgColor: 'rgba(245,158,11,0.15)',
-    getResult: (d) => {
-      const valJa = {
-        'self-direction': '自己方向性', 'stimulation': '刺激追求', 'hedonism': '快楽主義',
-        'achievement': '達成', 'power': '権力', 'security': '安全',
-        'conformity': '同調', 'tradition': '伝統', 'benevolence': '仁愛', 'universalism': '普遍主義'
-      };
-      const top = d.top3 && d.top3[0] ? valJa[d.top3[0]] || d.top3[0] : '不明';
-      const sub = d.top3 && d.top3[1] ? valJa[d.top3[1]] || d.top3[1] : '';
-      return { name: sub ? `${top}・${sub}重視` : `${top}重視`, color: '#f59e0b' };
-    }
-  },
-];
+// ===== 心理テスト結果（concierge.jsのCONCIERGE_CONFIG.testsを使用）=====
+// getResultを各テストに追加（mypage用の表示名取得）
+const TEST_META = (typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : []).map(t => ({
+  ...t,
+  bgColor: t.bgColor || 'rgba(139,92,246,0.1)',
+  getResult: t.getResult || (() => ({ name: '完了', color: '#10b981' }))
+}));
 
 function renderOtherTests() {
   const container = document.getElementById('otherTestResults');
@@ -848,11 +787,13 @@ function render() {
 function renderReportBanner() {
   const banner = document.getElementById('reportBanner');
   const hasBf  = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
-  const tests  = [
-    { key: 'love_result',     name: '恋愛スタイル診断', url: 'love.html' },
-    { key: 'mindset_result',  name: 'マインドセット診断', url: 'mindset.html' },
-    { key: 'sdt_result',      name: '動機タイプ診断',    url: 'sdt.html' },
-    { key: 'schwartz_result', name: '価値観診断',        url: 'schwartz.html' },
+  const tests = typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : [
+    { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
+    { key: 'mindset_result', name: 'マインドセット診断', url: 'mindset.html' },
+    { key: 'sdt_result', name: '動機タイプ診断', url: 'sdt.html' },
+    { key: 'schwartz_result', name: '価値観診断', url: 'schwartz.html' },
+    { key: 'hsp_result', name: 'HSP感受性チェック', url: 'hsp.html' },
+    { key: 'attachment_result', name: '愛着スタイルチェック', url: 'attachment.html' },
   ];
   const missing = tests.filter(t => !localStorage.getItem(t.key));
   const allDone = hasBf && missing.length === 0;
@@ -860,13 +801,13 @@ function renderReportBanner() {
   if (allDone) {
     banner.innerHTML = `
       <div class="report-banner-title">✦ 全テスト完了！総合レポートが見られます</div>
-      <div class="report-banner-sub">5つのテストを統合した、あなただけの深層分析</div>
+      <div class="report-banner-sub">6つのテストを統合した、あなただけの深層分析</div>
       <a href="report.html" class="report-btn">📊 総合レポートを見る</a>
     `;
   } else {
     const remainCount = missing.length + (hasBf ? 0 : 1);
     const missingLinks = missing.slice(0, 2).map(t =>
-      `<a href="${t.url}">${t.name}</a>`
+      `<a href="${t.url}">${t.title || t.name}</a>`
     ).join('・');
     banner.innerHTML = `
       <div class="report-banner-title">📊 総合レポートを解放しよう</div>
@@ -879,6 +820,7 @@ function renderReportBanner() {
 
 </script>
 <script src="hidden_characters.js"></script>
+<script src="concierge.js"></script>
 <script src="nav.js"></script>
 <script>
 // 隠しキャラ画像パスを取得（一致しなければnull）

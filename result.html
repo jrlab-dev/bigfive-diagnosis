@@ -855,6 +855,21 @@
     <div class="career-card" id="careerCard"></div>
   </div>
 
+  <!-- 心理コンシェルジュ：あなたへのおすすめ -->
+  <div id="conciergeSection" style="display:none; margin:24px auto 0; max-width:480px; width:100%;">
+    <div style="background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(236,72,153,0.06)); border:1px solid rgba(139,92,246,0.2); border-radius:16px; padding:24px 20px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <span style="font-size:20px;">🎯</span>
+        <h3 style="font-size:16px; font-weight:700; color:#c4b5fd; margin:0;" id="conciergeTitle">あなたへのおすすめ</h3>
+      </div>
+      <p style="font-size:12px; color:var(--dim); margin-bottom:16px;">ビッグファイブのスコアから、特に相性の良い心理テストを選びました。</p>
+      <div id="conciergeCards" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <div style="margin-top:14px; text-align:center;">
+        <a href="mypage.html" style="font-size:12px; color:var(--dim); text-decoration:none;">すべての心理テストを見る →</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ボタン -->
   <div class="result-buttons">
     <a href="index.html" class="btn btn-secondary">トップに戻る</a>
@@ -904,6 +919,7 @@
 </div>
 
 <script src="hidden_characters.js"></script>
+<script src="concierge.js"></script>
 <script>
 // ===== 特性情報 =====
 const traitInfo = {
@@ -1578,6 +1594,46 @@ if (version === '10') {
     </div>
   `;
 })();
+
+// ===== 心理コンシェルジュ =====
+if (typeof getRecommendations === 'function') {
+  (function() {
+    const section = document.getElementById('conciergeSection');
+    const container = document.getElementById('conciergeCards');
+    if (!section || !container) return;
+
+    const recs = getRecommendations({ O, C, E, A, N });
+
+    if (recs.length === 0 && typeof isAllTestsCompleted === 'function' && isAllTestsCompleted()) {
+      section.style.display = 'block';
+      container.innerHTML = `
+        <div style="text-align:center; padding:12px 0;">
+          <p style="font-size:14px; color:#10b981; font-weight:700;">✓ すべての心理テストが完了しています！</p>
+          <a href="report.html" style="display:inline-block; margin-top:10px; padding:10px 24px; background:linear-gradient(135deg,#8b5cf6,#ec4899); border-radius:999px; color:#fff; text-decoration:none; font-weight:700; font-size:14px;">📊 総合レポートを見る</a>
+        </div>`;
+      return;
+    }
+
+    if (recs.length === 0) return;
+
+    section.style.display = 'block';
+    const titleEl = document.getElementById('conciergeTitle');
+    if (titleEl) titleEl.textContent = isOtherMode ? `${personName}さんへのおすすめ` : 'あなたへのおすすめ';
+    container.innerHTML = recs.map(rec => `
+      <a href="${rec.url}" style="display:flex; align-items:center; gap:12px; padding:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; text-decoration:none; color:inherit; transition:all 0.2s;"
+         onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(139,92,246,0.3)';"
+         onmouseout="this.style.transform='';this.style.borderColor='rgba(255,255,255,0.08)';">
+        <div style="width:42px; height:42px; border-radius:10px; background:rgba(139,92,246,0.1); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;">
+          ${rec.icon}
+        </div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:14px; font-weight:700; margin-bottom:3px;">${rec.title}</div>
+          <div style="font-size:12px; color:var(--dim); line-height:1.6;">${rec.message}</div>
+        </div>
+        <div style="color:rgba(139,92,246,0.6); font-size:16px; flex-shrink:0;">›</div>
+      </a>`).join('');
+  })();
+}
 
 // リトライボタン
 document.getElementById('retryBtn').href = `quiz.html?v=${version}`;
