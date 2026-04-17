@@ -534,6 +534,14 @@
   .share-btn.copy {
     background: linear-gradient(135deg, rgba(139,92,246,0.8), rgba(59,130,246,0.8));
   }
+  .share-btn.compat {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+    font-size: 14px;
+    padding: 12px 20px;
+  }
   .share-btn svg {
     width: 18px; height: 18px;
   }
@@ -894,10 +902,13 @@
         LINE
       </a>
       <button class="share-btn copy" id="shareCopy">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg>
         URLをコピー
       </button>
     </div>
+    <button class="share-btn compat" id="shareCompat">
+      👥 友達と相性チェックするリンクを作る
+    </button>
   </div>
 
   <div class="copy-toast" id="copyToast">クリップボードにコピーしました！</div>
@@ -1952,6 +1963,33 @@ if (isOtherMode) {
           copyToast.classList.remove('show');
         }, 2000);
       }
+    });
+  }
+
+  // 相性チェックリンク生成
+  const shareCompat = document.getElementById('shareCompat');
+  if (shareCompat) {
+    shareCompat.addEventListener('click', async () => {
+      const typeName = document.getElementById('typeName').textContent;
+      const data = { n: typeName, c: typeCode, g: params.get('gender') || 'F' };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      const compatUrl = `https://bigfive.jr-genius.jp/team.html?share=${encoded}`;
+      try {
+        await navigator.clipboard.writeText(compatUrl);
+      } catch(e) {
+        const input = document.createElement('input');
+        input.value = compatUrl;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+      copyToast.textContent = '相性チェックURLをコピーしました！友達に送ってね👥';
+      copyToast.classList.add('show');
+      setTimeout(() => {
+        copyToast.classList.remove('show');
+        copyToast.textContent = 'クリップボードにコピーしました！';
+      }, 3000);
     });
   }
 })();
