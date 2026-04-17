@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>愛着スタイルチェック — あなたのつながり方を知る</title>
+<meta name="description" content="愛着理論（Attachment Theory）に基づく12問のセルフチェック。不安軸と回避軸の2軸で、あなたの「大切な人との関係のスタイル」を分析します。">
+<meta property="og:title" content="愛着スタイルチェック — あなたのつながり方を知る">
+<meta property="og:description" content="12問で分かる愛着スタイルチェック。2軸（不安・回避）であなたの人間関係のパターンを分析します。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/attachment.html">
+<meta name="twitter:card" content="summary">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --bg: #0a0e27; --text: #e2e8f0; --dim: #94a3b8; --accent: #f472b6; --accent2: #fb7185; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(244,114,182,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(251,113,133,0.07) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate; }
+  @keyframes nebula-drift { 0% { transform: scale(1); } 100% { transform: scale(1.05) translate(-1%,1%); } }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  .top-link { position: fixed; top: 20px; left: 20px; display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 13px; z-index: 10; transition: color .2s; }
+  .top-link:hover { color: var(--text); }
+
+  .quiz-container { position: relative; z-index: 1; width: 100%; max-width: 560px; min-height: 100vh; display: flex; flex-direction: column; padding: 60px 24px 40px; }
+
+  /* ===== イントロ ===== */
+  .intro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(244,114,182,0.1); border: 1px solid rgba(244,114,182,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--accent); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
+  .intro-explain { background: rgba(244,114,182,0.05); border: 1px solid rgba(244,114,182,0.2); border-radius: 12px; padding: 14px 16px; max-width: 380px; text-align: left; }
+  .intro-explain p { font-size: 13px; color: var(--dim); line-height: 1.65; }
+  .intro-explain strong { color: var(--text); }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(244,114,182,0.3); transition: transform .2s; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+
+  /* ===== プログレス ===== */
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s ease; }
+  .progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+
+  /* ===== 質問エリア ===== */
+  .question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .question-num { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 12px; }
+  .question-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 60px; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); margin-bottom: 8px; }
+  .answers { display: flex; gap: 8px; margin-bottom: 40px; }
+  .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim);
+    background: rgba(244,114,182,0.04); border: 1.5px solid rgba(244,114,182,0.15); border-radius: 10px; cursor: pointer; transition: all .2s;
+    min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
+  .answer-btn:hover { background: rgba(244,114,182,0.15); border-color: rgba(244,114,182,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; font-weight: 700; }
+  .answer-btn .answer-label { font-size: 10px; line-height: 1.3; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13px; color: var(--dim); background: none; border: none; cursor: pointer; padding: 8px 0; transition: color .2s; }
+  .back-btn:hover { color: var(--text); }
+
+  /* ===== ローディング ===== */
+  .loading { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; }
+  .loading.active { display: flex; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(244,114,182,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== 結果エリア ===== */
+  .result { display: none; flex-direction: column; align-items: center; gap: 24px; padding-bottom: 60px; }
+  .result.active { display: flex; }
+
+  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(244,114,182,0.3); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+  .result-card-inner { padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); }
+  .result-type-emoji { font-size: 40px; }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--accent); }
+  .result-type-name { font-size: 22px; font-weight: 900; }
+  .result-catch { font-size: 14px; color: var(--accent); font-weight: 700; }
+  .result-desc { font-size: 14px; line-height: 1.8; max-width: 340px; color: var(--dim); padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+  /* ===== 2軸マトリックス ===== */
+  .matrix-wrapper { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .matrix-wrapper h3 { font-size: 13px; font-weight: 700; color: var(--dim); letter-spacing: .08em; }
+  .matrix-row { display: flex; align-items: center; gap: 6px; }
+  .matrix-y-label { font-size: 10px; color: var(--dim); writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .1em; }
+  .matrix-container { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; width: 260px; height: 200px; border-radius: 14px; overflow: hidden; }
+  .matrix-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px; opacity: 0.3; transition: all .6s; background: rgba(255,255,255,0.03); border: 2px solid transparent; }
+  .matrix-cell.active { opacity: 1; background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.5); box-shadow: 0 0 20px rgba(244,114,182,0.15); }
+  .matrix-cell .cell-emoji { font-size: 22px; }
+  .matrix-cell .cell-name { font-size: 10px; font-weight: 700; color: var(--text); }
+  .matrix-cell .cell-label { font-size: 9px; color: var(--dim); }
+  .matrix-x-label { display: flex; justify-content: space-between; width: 260px; font-size: 10px; color: var(--dim); padding: 0 4px; }
+
+  /* ===== 軸スコアバー ===== */
+  .axis-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(244,114,182,0.18); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .axis-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 18px; letter-spacing: .08em; }
+  .axis-row { margin-bottom: 18px; }
+  .axis-row:last-child { margin-bottom: 0; }
+  .axis-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .axis-name { font-size: 13px; font-weight: 700; }
+  .axis-score { font-size: 12px; color: var(--dim); }
+  .axis-bar-bg { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .axis-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .axis-desc-text { font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+  /* ===== 詳細ボックス ===== */
+  .detail-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(244,114,182,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .detail-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .08em; }
+  .detail-section { margin-bottom: 14px; }
+  .detail-section:last-child { margin-bottom: 0; }
+  .detail-label { font-size: 12px; font-weight: 700; color: #f9a8d4; margin-bottom: 4px; }
+  .detail-text { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+  /* ===== Big Five クロス ===== */
+  .cross-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(244,114,182,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .cross-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; letter-spacing: .08em; }
+  .cross-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: rgba(244,114,182,0.15); border: 1px solid rgba(244,114,182,0.3); color: #f9a8d4; margin: 0 2px 4px; }
+
+  /* ===== 免責 ===== */
+  .disclaimer { width: 100%; max-width: 420px; font-size: 11px; color: var(--dim); line-height: 1.7; text-align: center; padding: 12px 12px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+
+  /* ===== ナビ ===== */
+  .result-nav { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+  .nav-btn { width: 100%; padding: 14px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; text-decoration: none; display: block; }
+  .nav-btn-primary { background: linear-gradient(135deg, #f472b6, #fb7185); border: none; color: #fff; }
+  .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
+  .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
+
+<div class="quiz-container">
+
+  <!-- イントロ -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">💕 愛着スタイル</span>
+    <h1>あなたの<span>「つながり方」</span>を知る</h1>
+    <p class="intro-sub">愛着理論に基づく12問のセルフチェック。2つの軸で、あなたが大切な人との関係でどのようなスタイルを持っているかを分析します。</p>
+    <div class="intro-explain">
+      <p><strong>答え方：</strong>最も心を寄せている1人を思い浮かべてください（恋人、家族、親友など、どなたでも構いません）。その人との関係を思い浮かべながら、日頃の自分にどれくらい当てはまるかを直感で選んでください。「正しい答え」はありません。</p>
+    </div>
+    <button class="start-btn" id="startBtn">チェックスタート</button>
+    <p class="intro-note">12問・約3分・無料・登録不要</p>
+  </div>
+
+  <!-- プログレス -->
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/12</span>
+  </div>
+
+  <!-- 質問エリア -->
+  <div class="question-area" id="questionArea" style="display:none;">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="scale-labels"><span>ほぼない</span><span>いつもそう</span></div>
+    <div class="answers" id="answersArea"></div>
+    <button class="back-btn" id="backBtn">&larr; 前の問題に戻る</button>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中&hellip;</p>
+    <p style="font-size:13px;color:var(--dim);">あなたのつながり方を読み解いています</p>
+  </div>
+
+  <!-- 結果エリア -->
+  <div class="result" id="resultArea">
+
+    <div class="result-card">
+      <div class="result-card-inner">
+        <p class="result-label">YOUR ATTACHMENT STYLE</p>
+        <div class="result-type-emoji" id="resultEmoji"></div>
+        <p class="result-type-name" id="resultTypeName"></p>
+        <p class="result-catch" id="resultCatch"></p>
+        <p class="result-desc" id="resultDesc"></p>
+      </div>
+    </div>
+
+    <!-- 2軸マトリックス -->
+    <div class="matrix-wrapper">
+      <h3>2軸マトリックス</h3>
+      <div class="matrix-row">
+        <div class="matrix-y-label">不安軸&nbsp;&nbsp;高&darr;低</div>
+        <div class="matrix-container">
+          <div class="matrix-cell" id="cell-anxious">
+            <span class="cell-emoji">💛</span>
+            <span class="cell-name">つながり重視型</span>
+            <span class="cell-label">不安高 &times; 回避低</span>
+          </div>
+          <div class="matrix-cell" id="cell-fearful">
+            <span class="cell-emoji">🌊</span>
+            <span class="cell-name">繊細なつながり型</span>
+            <span class="cell-label">不安高 &times; 回避高</span>
+          </div>
+          <div class="matrix-cell" id="cell-secure">
+            <span class="cell-emoji">🌿</span>
+            <span class="cell-name">安心ベース型</span>
+            <span class="cell-label">不安低 &times; 回避低</span>
+          </div>
+          <div class="matrix-cell" id="cell-avoidant">
+            <span class="cell-emoji">🌙</span>
+            <span class="cell-name">自律尊重型</span>
+            <span class="cell-label">不安低 &times; 回避高</span>
+          </div>
+        </div>
+      </div>
+      <div class="matrix-x-label"><span>&larr; 回避低</span><span>回避高 &rarr;</span></div>
+    </div>
+
+    <!-- 軸スコア -->
+    <div class="axis-box">
+      <h3>2軸スコア</h3>
+      <div id="axisBars"></div>
+    </div>
+
+    <!-- 詳細 -->
+    <div class="detail-box" id="detailBox">
+      <h3>詳しい分析</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <!-- Big Five クロス -->
+    <div class="cross-box">
+      <h3>ビッグファイブとの組み合わせ分析</h3>
+      <div id="crossContent"></div>
+    </div>
+
+    <div class="disclaimer">
+      このチェックは、愛着理論（Bowlby, 1969 など）に基づく一般向けセルフチェックコンテンツです。医学的・臨床的な診断ではありません。「愛着障害（反応性愛着障害）」は乳幼児期の深刻な養育環境の問題から生じる臨床的な状態であり、このセルフチェックとは異なります。愛着スタイルに「正しい・間違い」はありません。スタイルは関係の仕方の一つであり、変化することもあります。心理的な悩みがある場合は、カウンセラーや公認心理師への相談をお勧めします。
+    </div>
+
+    <div class="result-nav">
+      <a href="quiz.html?v=10" class="nav-btn nav-btn-primary">ビッグファイブ性格診断もやってみる</a>
+      <a href="index.html" class="nav-btn nav-btn-secondary">トップに戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn">もう一度チェックする</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===== 質問データ（交互順：不安・回避を交互に配置） =====
+const QUESTIONS = [
+  { text: '大切な人から連絡がないと、何度も気になって仕方がない',                                           axis: 'anxiety' },
+  { text: '誰かと深く親しくなるにつれ、窮屈さを感じることがある',                                           axis: 'avoidance' },
+  { text: '大切な人が少し冷たい態度をとると、「嫌われたかも」と不安になることがある',                         axis: 'anxiety' },
+  { text: '心が苦しい時でさえ、誰かに頼るのは苦手だと感じる',                                                 axis: 'avoidance' },
+  { text: '大切な人に嫌われたくないあまり、自分の不満を言えずに我慢してしまうことがある',                     axis: 'anxiety' },
+  { text: '大切な人に自分の弱い部分を見せるのは、苦手だと感じる',                                             axis: 'avoidance' },
+  { text: '大切な人が自分に気にかけてくれていないと感じると、落ち着かない',                                   axis: 'anxiety' },
+  { text: '誰かに感情的に近づかれると、知らないうちに距離を置いてしまうことがある',                         axis: 'avoidance' },
+  { text: '大切な人が他の人と親しそうにしていると、嫉妬してしまうことがある',                                 axis: 'anxiety' },
+  { text: '誰かと感情的に深く分かち合える関係は、自分には必要ないと思うことがある',                           axis: 'avoidance' },
+  { text: '大切な人に嫌われることは、あまり気にしていない',                                                   axis: 'anxiety', reverse: true },
+  { text: '大切な人と心を通わせている時、安心して自分を委ねられる',                                           axis: 'avoidance', reverse: true },
+];
+
+const ANSWER_LABELS = ['ほぼ\nない', 'たまに\nある', 'よく\nある', 'いつも\nそう'];
+const AXIS_LABELS = { anxiety: '不安軸', avoidance: '回避軸' };
+const AXIS_COLORS = { anxiety: '#fb923c', avoidance: '#818cf8' };
+const AXIS_DESCS = {
+  anxiety: {
+    high: '見捨てられ不安が強い傾向があります。大切な人の気持ちや行動に敏感になり、安心感を確認したくなる回数が多いかもしれません。この不安は「大切にしたい」という気持ちの裏返しでもあります。',
+    low: '見捨てられ不安が低く、自分の価値に対して安定した感覚を持っている傾向があります。大切な人の気持ちを過度に気にせず、自然な距離感で関係を楽しめるタイプです。'
+  },
+  avoidance: {
+    high: '親密さへの不快感が強い傾向があります。深い関係になると窮屈さを感じたり、一人の時間を大切にしたりする傾向があります。自立心が強いのはあなたの強みでもあります。',
+    low: '親密さへの抵抗が少なく、大切な人との感情的なつながりを自然に受け入れられる傾向があります。人に心を開くことや頼ることに抵抗が少ないタイプです。'
+  }
+};
+
+// ===== タイプ定義 =====
+const TYPES = {
+  secure: {
+    emoji: '🌿', name: '安心ベース型',
+    catch: '自分も大切にできる、自然な絆の持ち主',
+    desc: '不安軸・回避軸ともに低い傾向が見られました。大切な人との関係に安心感を持ち、依存と自立のバランスが取れているタイプです。親密な関係を自然に築き、相手を信頼しつつ自分も大切にできる強みがあります。',
+    strength: '親密な関係を自然に築ける。別れや対立からも比較的早く回復する。相手に依存しすぎず、自分を犠牲にしすぎないバランス感覚がある。',
+    challenge: '「当たり前」だと思って関係を磨くことを忘れると、徐々に距離が生まれることがある。',
+    advice: 'この安定感は大切な資産。相手への感謝や思いやりを意識的に表現することで、絆はさらに深まります。'
+  },
+  anxious: {
+    emoji: '💛', name: 'つながり重視型',
+    catch: '大切な人との繋がりを、何より大切に思う',
+    desc: '不安軸が高く、見捨てられ不安が強い傾向が見られました。大切な人との繋がりを非常に重視し、相手の気持ちや行動に敏感になります。人を深く大切にする力は、あなたの大きな強みです。',
+    strength: '人を深く大切にする力がある。関係に対する真剣さは、長期的な絆を築く基盤になる。相手の気持ちに気づく繊細さを持っている。',
+    challenge: '不安が強い時、確認行動が増えて相手を疲れさせてしまうことがある。「嫌われたかも」が思い込みであることも多い。',
+    advice: '不安が強い時は「事実」と「不安」を分けて考える練習が役立ちます。「嫌われた」と思った時、それが事実なのか不安なのか、一度立ち止まってみて。'
+  },
+  avoidant: {
+    emoji: '🌙', name: '自律尊重型',
+    catch: '自分のペースと自立を、何より大切にする',
+    desc: '回避軸が高く、親密さに不快感を感じやすい傾向が見られました。自立心が強く、一人でいることに心地よさを感じるタイプです。精神的な自立はあなたの強みであり、それは素晴らしいことです。',
+    strength: '精神的に自立しており、他人に依存しない。一人の時間を充実させられる。冷静な判断力を保ちやすい。',
+    challenge: '誰かに心を開く機会を避けてしまうと、本当に理解してくれる人との出会いを逃すことがある。',
+    advice: '一人が好きなのは素晴らしいこと。ただ、誰かに心を開くことで得られる「心の回復」もあることを知っておいて。少しだけハードルを下げてみて。'
+  },
+  fearful: {
+    emoji: '🌊', name: '繊細なつながり型',
+    catch: '近づきたい気持ちと、怖い気持ちの両方を持っている',
+    desc: '不安軸・回避軸ともに高い傾向が見られました。大切な人に寄り添いたい気持ちと、近づくと怖くなる気持ちが同時にあるタイプです。これは「おかしい」ことではなく、複雑な経験を持つ繊細な心の表れです。',
+    strength: '人間関係に対して非常に繊細で、相手の感情を深く読み取る力がある。複雑な経験を通じて培われた感受性は、深い共感力の源になる。',
+    challenge: '「近づきたいけど怖い」の矛盾が苦しい。安心と虚しさが交互に来ることで、関係が不安定になりやすい。',
+    advice: '無理に解決しなくていい。まずは「両方の気持ちがあること」を認めるだけ。もし過去の経験が現在の生活に強く影響していると感じる場合は、カウンセラーや専門家への相談も一つの選択肢です。'
+  }
+};
+
+// ===== クロス解説文 =====
+const CROSS_PATTERNS = [
+  { cond: (bf, tk) => bf.N >= 4 && tk === 'anxious',
+    msg: '返信が来るまでの数分が永遠に感じる。大切な人の言葉の端々に「嫌われたかも」を読み取ってしまう。繋がっていたいのに、不安が強すぎて確認してしまう。繋がりたい気持ちが、かえって相手を遠ざけているかもしれない——その矛盾が苦しい。でも、あなたの「不安」は「大切にしたい」という気持ちの裏返しでもある。人を大切に思う力は間違っていない。ただ、その伝え方を少し変えるだけで、関係はもっと楽になる。' },
+  { cond: (bf, tk) => bf.E <= 2 && tk === 'avoidant',
+    msg: '一人の世界は快適だ。誰にも気を遣わなくていい、干渉されない、自分のペースでいられる。でも、夜ふとスマホを見たとき、誰からも連絡が来ていない画面が、なぜか胸に刺さる。「寂しくない、一人が好きだ」と言い聞かせているのに、身体は正直に反応してしまう。一人が好きなのは事実。でも、誰かを必要とする気持ちがあることも事実だ。その両方を認めるだけで、少しだけ肩の荷が下りる。' },
+  { cond: (bf, tk) => bf.A >= 4 && tk === 'secure',
+    msg: '周りの人の悩みには真剣に向き合える。誰かが「助けて」と言えば迷わず駆けつける。でも自分が弱っている時、その「助けて」が言えない。支える側にいることの方が安心だから。でもそれは、本当に甘えなくていいからなのか、それとも甘えることに恐怖を感じているからなのか。人のために尽くせる優しさは、あなたの強みだ。でも、その優しさを自分にも向けてみて。あなたも「助けて」と言える人でいい。' },
+  { cond: (bf, tk) => bf.N >= 4 && tk === 'fearful',
+    msg: '大切な人ができると嬉しい。でも、関係が深まるにつれて肌が合わない感じがしてくる。近づきたい気持ちと遠ざかりたい気持ちが同時に来る。「また傷つきたくない」という声と「寂しくない」という声が喧嘩する。結果的に一人になって安心するのだけど、その安心にはいつも虚しさが混じっている。この矛盾は、あなたが人間関係に対してとても敏感で、傷つくことを恐れる感受性を持っているから起きる。無理に解決しなくていい。まずは「両方の気持ちがあること」を認めるだけ。' },
+  { cond: (bf, tk) => bf.O >= 4 && tk === 'anxious',
+    msg: '理想的な関係を想像するのは得意だ。「こんな風に繋がっていたい」というビジョンが鮮明にある。でも現実の人間関係は、期待通りにはいかない。相手が理想通りに動かないと「やっぱり理解されていない」と落ち込む。理想の高さが、かえって孤独を深くしている。でも、その理想を持てるのは、あなたが人間関係に対して真剣に向き合う力を持っているから。理想を手放す必要はない。ただ「理想通りにいかなくても、繋がりはある」という発見が、少し世界を変えるかもしれない。' },
+];
+
+// ===== 状態管理 =====
+let current = 0;
+const answers = new Array(QUESTIONS.length).fill(null);
+const STORAGE_KEY = 'attachment_result';
+
+// ===== 星背景 =====
+(function() {
+  const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.15})`;
+    ctx.fill();
+  }
+})();
+
+// ===== スタート =====
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'flex';
+  document.getElementById('questionArea').style.display = 'flex';
+  showQuestion();
+});
+
+// ===== 質問表示 =====
+function showQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('questionNum').textContent = `Q${current + 1}`;
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / QUESTIONS.length) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/${QUESTIONS.length}`;
+
+  const area = document.getElementById('answersArea');
+  area.innerHTML = '';
+  [1,2,3,4].forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn' + (answers[current] === val ? ' selected' : '');
+    btn.innerHTML = `<span style="font-size:16px;font-weight:700;">${val}</span><span class="answer-label">${ANSWER_LABELS[val-1]}</span>`;
+    btn.addEventListener('click', () => selectAnswer(val));
+    area.appendChild(btn);
+  });
+
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答選択 =====
+function selectAnswer(val) {
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach((b, i) => {
+    b.style.transition = 'none';
+    b.classList.toggle('selected', i + 1 === val);
+    requestAnimationFrame(() => { b.style.transition = ''; });
+  });
+  setTimeout(() => {
+    current++;
+    if (current < QUESTIONS.length) showQuestion();
+    else showLoading();
+  }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (current > 0) { current--; showQuestion(); }
+});
+
+// ===== ローディング =====
+function showLoading() {
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(() => showResult(), 1800);
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  let anxiety = 0, avoidance = 0;
+  QUESTIONS.forEach((q, i) => {
+    const val = answers[i] || 2;
+    const score = q.reverse ? (5 - val) : val;
+    if (q.axis === 'anxiety') anxiety += score;
+    else avoidance += score;
+  });
+  return { anxiety, avoidance };
+}
+
+function getTypeKey(anxiety, avoidance) {
+  const highA = anxiety >= 16, highV = avoidance >= 16;
+  if (!highA && !highV) return 'secure';
+  if (highA && !highV) return 'anxious';
+  if (!highA && highV) return 'avoidant';
+  return 'fearful';
+}
+
+// ===== 結果表示 =====
+function showResult(preScores) {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const s = preScores || calcScores();
+  const typeKey = getTypeKey(s.anxiety, s.avoidance);
+  const type = TYPES[typeKey];
+
+  // タイプカード
+  document.getElementById('resultEmoji').textContent = type.emoji;
+  document.getElementById('resultTypeName').textContent = type.name;
+  document.getElementById('resultCatch').textContent = type.catch;
+  document.getElementById('resultDesc').textContent = type.desc;
+
+  // マトリックス
+  ['secure','anxious','avoidant','fearful'].forEach(k => {
+    document.getElementById('cell-' + k).classList.toggle('active', k === typeKey);
+  });
+
+  // 軸スコアバー
+  const axisHTML = ['anxiety','avoidance'].map(axis => {
+    const score = s[axis];
+    const pct = Math.round(((score - 6) / 18) * 100);
+    const level = score >= 16 ? 'high' : 'low';
+    return `<div class="axis-row">
+      <div class="axis-header">
+        <span class="axis-name" style="color:${AXIS_COLORS[axis]}">${AXIS_LABELS[axis]}</span>
+        <span class="axis-score">${score} / 24</span>
+      </div>
+      <div class="axis-bar-bg">
+        <div class="axis-bar-fill" style="width:0%;background:${AXIS_COLORS[axis]}" data-pct="${pct}"></div>
+      </div>
+      <p class="axis-desc-text">${AXIS_DESCS[axis][level]}</p>
+    </div>`;
+  }).join('');
+  document.getElementById('axisBars').innerHTML = axisHTML;
+  setTimeout(() => {
+    document.querySelectorAll('.axis-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+  }, 100);
+
+  // 詳細ボックス
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-section">
+      <p class="detail-label">💪 強み</p>
+      <p class="detail-text">${type.strength}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label">⚠️ 課題</p>
+      <p class="detail-text">${type.challenge}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label">💡 活かし方</p>
+      <p class="detail-text">${type.advice}</p>
+    </div>`;
+
+  // Big Five クロス
+  const bfStored = localStorage.getItem('bigfive_my_results');
+  const crossArea = document.getElementById('crossContent');
+
+  try {
+    const bfArr = bfStored ? JSON.parse(bfStored) : [];
+    const bfResult = Array.isArray(bfArr) && bfArr.length > 0 ? bfArr[0] : null;
+    const bf = bfResult && bfResult.scores ? bfResult.scores : null;
+
+    if (bf) {
+      const highFactors = Object.entries(bf).filter(([,v]) => v >= 4).map(([k]) => k);
+      const badges = highFactors.map(k =>
+        `<span class="cross-badge">${({O:'開放性',C:'誠実性',E:'外向性',A:'協調性',N:'感受性'})[k]}高</span>`
+      ).join('');
+
+      const matched = CROSS_PATTERNS.find(p => p.cond(bf, typeKey));
+      const msg = matched ? matched.msg : 'ビッグファイブの特性と愛着スタイルが組み合わさることで、あなた独自の関係のスタイルが生まれています。';
+
+      crossArea.innerHTML = `<p style="font-size:14px;line-height:1.75;">${badges ? badges + '<br><br>' : ''}${msg}</p>`;
+    } else {
+      crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#f472b6;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
+    }
+  } catch(e) {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#f472b6;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
+  }
+
+  // 保存
+  if (!preScores) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ anxiety: s.anxiety, avoidance: s.avoidance, typeKey, timestamp: Date.now() }));
+  }
+}
+
+// ===== リトライ =====
+document.getElementById('retryBtn').addEventListener('click', () => {
+  localStorage.removeItem(STORAGE_KEY);
+  current = 0;
+  answers.fill(null);
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+  window.scrollTo(0, 0);
+});
+
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.anxiety !== undefined) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult({ anxiety: d.anxiety, avoidance: d.avoidance });
+    }
+  } catch(e) { localStorage.removeItem(STORAGE_KEY); }
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
