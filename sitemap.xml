@@ -4,15 +4,15 @@
   <!-- トップページ -->
   <url>
     <loc>https://bigfive.jr-genius.jp/</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- 診断（10問・30問） -->
+  <!-- ビッグファイブ診断（10問・30問・120問） -->
   <url>
     <loc>https://bigfive.jr-genius.jp/quiz.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -20,7 +20,7 @@
   <!-- 診断結果 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/result.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -28,7 +28,7 @@
   <!-- あの人診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/other_quiz.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -36,15 +36,63 @@
   <!-- チーム相性診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/team.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <!-- 恋愛スタイル診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/love.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- HSP感受性チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/hsp.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- シュワルツ価値観診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/schwartz.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 自己決定度診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/sdt.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- マインドセット診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/mindset.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 総合性格レポート -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/report.html</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <!-- マイページ -->
   <url>
     <loc>https://bigfive.jr-genius.jp/mypage.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -52,7 +100,7 @@
   <!-- 科学的根拠 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/science.html</loc>
-    <lastmod>2026-04-11</lastmod>
+    <lastmod>2026-04-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
