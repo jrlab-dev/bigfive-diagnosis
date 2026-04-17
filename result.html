@@ -358,6 +358,38 @@
   }
   @keyframes glow-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
+  /* ===== SECRET ダーク: 黒ダイヤホログラム ===== */
+  .rarity-secret.dark-secret .card {
+    box-shadow:
+      0 12px 50px rgba(0,0,0,0.9),
+      0 0 50px rgba(40,40,40,0.6),
+      0 0 100px rgba(20,20,20,0.3),
+      inset 0 0 30px rgba(0,0,0,0.15);
+    border-color: rgba(80,80,80,0.7);
+  }
+  .rarity-secret.dark-secret .shimmer {
+    opacity: 1;
+    background: linear-gradient(125deg, transparent 15%, rgba(200,200,200,0.06) 35%, rgba(255,255,255,0.18) 50%, rgba(200,200,200,0.06) 65%, transparent 85%);
+    animation: shimmer-dark 9s ease-in-out infinite;
+  }
+  .rarity-secret.dark-secret.holo-on .shimmer {
+    opacity: 1;
+    background: linear-gradient(125deg, transparent 15%, rgba(200,200,200,0.08) 35%, rgba(255,255,255,0.25) 50%, rgba(200,200,200,0.08) 65%, transparent 85%);
+    animation: shimmer-dark 6s ease-in-out infinite;
+  }
+  @keyframes shimmer-dark {
+    0%, 100% { transform: translateX(-70%) rotate(20deg); }
+    50%       { transform: translateX(70%) rotate(20deg); }
+  }
+  .rarity-secret.dark-secret .glow-overlay {
+    opacity: 1;
+    background: radial-gradient(circle at 50% 50%, rgba(200,200,200,0.06) 0%, transparent 70%);
+  }
+  .rarity-secret.dark-secret.holo-on .glow-overlay {
+    opacity: 1;
+    background: radial-gradient(circle at 50% 50%, rgba(200,200,200,0.06) 0%, transparent 70%);
+  }
+
   /* キャラクター */
   .char-area {
     position: absolute; top: 5%; left: 50%;
@@ -387,6 +419,14 @@
     position: absolute; top: 56px; left: 0; right: 0;
     text-align: center; z-index: 6;
     text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  }
+  .type-code::after {
+    content: attr(data-version);
+    display: block;
+    font-size: 9px;
+    color: rgba(203,213,225,0.35);
+    letter-spacing: 0.08em;
+    margin-top: 1px;
   }
 
   /* 下部コンテンツ */
@@ -1271,14 +1311,23 @@ function toHiddenScale(v) {
   return v <= 2 ? 1 : v >= 4 ? 5 : 3;
 }
 
-// 隠しキャラ一致チェック（HIDDEN_CHARACTERS は hidden_characters.js で定義）
+// 隠しキャラ一致チェック（2段階照合）
+// ① ズバリスコア（1-5）で一致 → ② 1/3/5丸めで一致
 function findHiddenCharacter() {
   if (typeof HIDDEN_CHARACTERS === 'undefined') return null;
+  function matchGender(ch) { return ch.gender === 'any' || ch.gender === gender; }
+
+  // ① ズバリ照合（診断スコアそのまま）
+  const exact = HIDDEN_CHARACTERS.find(ch =>
+    ch.o === O && ch.c === C && ch.e === E && ch.a === A && ch.n === N && matchGender(ch)
+  );
+  if (exact) return exact;
+
+  // ② 丸め照合（1/3/5変換後）
   const os = toHiddenScale(O), cs = toHiddenScale(C);
   const es = toHiddenScale(E), as = toHiddenScale(A), ns = toHiddenScale(N);
   return HIDDEN_CHARACTERS.find(ch =>
-    ch.o === os && ch.c === cs && ch.e === es && ch.a === as && ch.n === ns &&
-    (ch.gender === 'any' || ch.gender === gender)
+    ch.o === os && ch.c === cs && ch.e === es && ch.a === as && ch.n === ns && matchGender(ch)
   ) || null;
 }
 
@@ -1392,22 +1441,28 @@ function shrinkTypeName() {
 requestAnimationFrame(() => setTimeout(shrinkTypeName, 100));
 window.addEventListener('load', shrinkTypeName);
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
-// バージョンラベル表示
-if (version === '120') {
-  const codeEl = document.getElementById('typeCode');
-  codeEl.textContent += '  —  120問版（IPIP-NEO-120）';
-}
+// バージョンラベル（スコアコードの右下に薄く表示）
+const versionLabels = { '10': 'IPIP-10Q', '30': 'IPIP-30Q', '120': 'IPIP-NEO-120' };
+document.getElementById('typeCode').setAttribute('data-version', versionLabels[version] || '');
 renderScores();
 document.getElementById('desc').textContent = genDescription();
 
+// 隠しキャラ判定（レアリティ・画像・ダークホログラムで使用）
+const gender = params.get('gender') || 'F';
+const hiddenChar = findHiddenCharacter();
+
 // レアリティ設定
 const card = document.getElementById('card');
-card.className = `card rarity-${getRarity()}`;
+const rarity = getRarity();
+card.className = `card rarity-${rarity}`;
 
-// キャラクター画像（30問版はスコアが1-5になるため、画像用に1/3/5に丸める）
-const gender = params.get('gender') || 'F';
+// ダークパーソナリティ（A=1）の隠しキャラ → 黒ホログラム
+if (hiddenChar && hiddenChar.a === 1) {
+  card.classList.add('dark-secret');
+}
+
+// キャラクター画像
 const charImg = document.getElementById('charImg');
-const hiddenChar = findHiddenCharacter();
 if (hiddenChar && hiddenChar.img) {
   // 隠しキャラ一致 → 専用画像を読み込み
   charImg.src = `images/characters/hidden/${hiddenChar.img}`;
@@ -2036,7 +2091,8 @@ if (isOtherMode) {
   wrapper.addEventListener('mouseenter', () => { window.holoHovered = true;  card.classList.add('holo-on'); });
   wrapper.addEventListener('mouseleave', () => { window.holoHovered = false; card.classList.remove('holo-on'); });
 
-  const BASE_HUE = 38;
+  const BASE_HUE = card.classList.contains('dark-secret') ? 0 : 38;
+  const IS_DARK = card.classList.contains('dark-secret');
 
   function getCellColor(col, row, facetLight) {
     const cols = Math.ceil(W / CELL) + 1;
@@ -2047,10 +2103,10 @@ if (isOtherMode) {
       Math.sin(x * 3.71 - y * 5.13 + t * 0.00035) * 0.28 +
       Math.sin((x - y)  * 4.97      + t * 0.00020) * 0.22 +
       Math.sin(x * 2.33 + y * 7.81 + t * 0.00030) * 0.15;
-    const hue = BASE_HUE + wave * 18;
-    const sat = 85 + wave * 12;
+    const hue = BASE_HUE + wave * (IS_DARK ? 0 : 18);
+    const sat = IS_DARK ? 0 : (85 + wave * 12);
     const baseL = facetLight * brightness + facetLight * 0.50 * (1 - brightness);
-    const lit   = baseL + wave * 6;
+    const lit   = baseL + wave * (IS_DARK ? 3 : 6);
     return `hsl(${hue.toFixed(1)},${sat.toFixed(1)}%,${Math.max(4, lit).toFixed(1)}%)`;
   }
 
