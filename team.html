@@ -558,6 +558,21 @@
   }
   .empty-state a:hover { text-decoration: underline; }
 
+  /* 共有メンバーバナー */
+  .shared-banner {
+    background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(139,92,246,0.1));
+    border: 1px solid rgba(236,72,153,0.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .shared-banner strong { color: #f9a8d4; }
+  .member-card.shared { border-color: rgba(236,72,153,0.5); }
+  .member-card.shared .member-icon { background: rgba(236,72,153,0.15); }
+
   @media (max-width: 400px) {
     body { padding: 24px 14px 60px; }
     .member-card { padding: 12px 14px; gap: 10px; }
@@ -630,6 +645,26 @@ function formatDate(isoString) {
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 }
 
+// ===== URLの共有データを解析 =====
+let sharedMember = null;
+(function parseShareParam() {
+  try {
+    const raw = new URLSearchParams(location.search).get('share');
+    if (!raw) return;
+    const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    if (!data.c || data.c.length !== 5) return;
+    sharedMember = {
+      id: 'shared_0',
+      name: data.n || `友達 (${data.c})`,
+      code: data.c,
+      scores: codeToScores(data.c),
+      gender: data.g || 'F',
+      type: 'shared',
+      date: new Date().toISOString()
+    };
+  } catch(e) {}
+})();
+
 // ===== メンバー読み込み =====
 let allMembers = [];
 let selectedIds = new Set();
@@ -668,6 +703,11 @@ function loadMembers() {
     });
   });
 
+  // URL共有メンバー（先頭に追加）
+  if (sharedMember) {
+    members.unshift(sharedMember);
+  }
+
   return members;
 }
 
@@ -676,23 +716,40 @@ function renderMembers() {
   const container = document.getElementById('memberList');
   allMembers = loadMembers();
 
+  // 共有バナーの表示
+  const intro = document.querySelector('.intro');
+  const existingBanner = document.getElementById('sharedBanner');
+  if (existingBanner) existingBanner.remove();
+  if (sharedMember) {
+    const banner = document.createElement('div');
+    banner.id = 'sharedBanner';
+    banner.className = 'shared-banner';
+    banner.innerHTML = `👥 <strong>${sharedMember.name}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
+    intro.after(banner);
+  }
+
   if (allMembers.length < MIN_MEMBERS) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <p>診断結果が不足しています（最低${MIN_MEMBERS}人必要）</p>
-        <p><a href="quiz.html">自分を診断する →</a>　<a href="other_quiz.html">あの人を診断する →</a></p>
-      </div>
-    `;
+    const needDiag = sharedMember
+      ? `<p>自分の診断結果がありません。<a href="quiz.html">自分を診断する →</a></p>`
+      : `<p>診断結果が不足しています（最低${MIN_MEMBERS}人必要）</p><p><a href="quiz.html">自分を診断する →</a>　<a href="other_quiz.html">あの人を診断する →</a></p>`;
+    container.innerHTML = `<div class="empty-state">${needDiag}</div>`;
     document.getElementById('selectionInfo').textContent = '';
     document.getElementById('analyzeBtn').disabled = true;
     return;
+  }
+
+  // 共有メンバーがいる場合、初回だけ自動選択
+  if (sharedMember && selectedIds.size === 0) {
+    selectedIds.add('shared_0');
+    const firstMy = allMembers.find(m => m.type === 'my');
+    if (firstMy) selectedIds.add(firstMy.id);
   }
 
   container.innerHTML = allMembers.map(m => {
     const isSelected = selectedIds.has(m.id);
     const isDisabled = !isSelected && selectedIds.size >= MAX_MEMBERS;
     return `
-      <div class="member-card${isSelected ? ' selected' : ''}${isDisabled ? ' disabled' : ''}" data-id="${m.id}">
+      <div class="member-card${isSelected ? ' selected' : ''}${isDisabled ? ' disabled' : ''}${m.type === 'shared' ? ' shared' : ''}" data-id="${m.id}">
         <div class="member-checkbox">${isSelected ? '✓' : ''}</div>
         <div class="member-icon${m.type === 'other' ? ' other' : ''}">
           <img src="images/characters/${m.gender}/${toImgCode(m.code)}.webp" alt=""
