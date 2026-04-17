@@ -8,12 +8,7 @@
       <a href="index.html" data-page="index">🏠 ホーム</a>
       <a href="mypage.html" data-page="mypage">👤 マイページ</a>
       <a href="quiz.html?v=10" data-page="quiz">🧬 性格診断</a>
-      <a href="love.html" data-page="love">💕 恋愛</a>
-      <a href="mindset.html" data-page="mindset">🧠 思考</a>
-      <a href="sdt.html" data-page="sdt">⚡ 動機</a>
-      <a href="schwartz.html" data-page="schwartz">🌍 価値観</a>
-      <a href="hsp.html" data-page="hsp">🌸 HSP</a>
-      <a href="attachment.html" data-page="attachment">🔗 愛着</a>
+      <a href="report.html" data-page="report">📊 総合レポート</a>
     </div>
   </div>
 </nav>`;

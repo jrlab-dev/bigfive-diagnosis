@@ -508,27 +508,44 @@ const VALUES_JA = {
 };
 const FACTOR_COLORS = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
 const FACTOR_LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+const HSP_TYPES = [
+  { min: 12, max: 19, name: '安定型',          color: '#6b7280' },
+  { min: 20, max: 27, name: 'おだやか感受性型', color: '#10b981' },
+  { min: 28, max: 33, name: 'チューリップ型',   color: '#ec4899' },
+  { min: 34, max: 41, name: '蘭型（高め）',     color: '#8b5cf6' },
+  { min: 42, max: 48, name: '蘭型（最高域）',   color: '#f59e0b' },
+];
+const ATTACHMENT_TYPES = {
+  secure:   { name: '安心ベース型',     color: '#10b981' },
+  anxious:  { name: 'つながり重視型',   color: '#f59e0b' },
+  avoidant: { name: '自律尊重型',       color: '#3b82f6' },
+  fearful:  { name: '繊細なつながり型', color: '#8b5cf6' },
+};
 
 // ===== データ読み込み =====
 function loadData() {
   const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
   const bf     = bfList.length > 0 ? bfList[0] : null;
-  let love     = null, mindset = null, sdt = null, schwartz = null;
-  try { love     = JSON.parse(localStorage.getItem('love_result'));     } catch(e) {}
-  try { mindset  = JSON.parse(localStorage.getItem('mindset_result'));  } catch(e) {}
-  try { sdt      = JSON.parse(localStorage.getItem('sdt_result'));      } catch(e) {}
-  try { schwartz = JSON.parse(localStorage.getItem('schwartz_result')); } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz };
+  let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null;
+  try { love       = JSON.parse(localStorage.getItem('love_result'));       } catch(e) {}
+  try { mindset    = JSON.parse(localStorage.getItem('mindset_result'));    } catch(e) {}
+  try { sdt        = JSON.parse(localStorage.getItem('sdt_result'));        } catch(e) {}
+  try { schwartz   = JSON.parse(localStorage.getItem('schwartz_result'));   } catch(e) {}
+  try { hsp        = JSON.parse(localStorage.getItem('hsp_result'));        } catch(e) {}
+  try { attachment = JSON.parse(localStorage.getItem('attachment_result')); } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment };
 }
 
 // ===== 未受診チェック =====
 function checkMissing(data) {
   const missing = [];
-  if (!data.bf)       missing.push({ name: 'ビッグファイブ診断',  url: 'quiz.html?v=10' });
-  if (!data.love)     missing.push({ name: '恋愛スタイル診断',    url: 'love.html' });
-  if (!data.mindset)  missing.push({ name: 'マインドセット診断',  url: 'mindset.html' });
-  if (!data.sdt)      missing.push({ name: '動機タイプ診断',      url: 'sdt.html' });
-  if (!data.schwartz) missing.push({ name: '価値観診断',          url: 'schwartz.html' });
+  if (!data.bf)         missing.push({ name: 'ビッグファイブ診断',   url: 'quiz.html?v=10' });
+  if (!data.love)       missing.push({ name: '恋愛スタイル診断',     url: 'love.html' });
+  if (!data.mindset)    missing.push({ name: 'マインドセット診断',   url: 'mindset.html' });
+  if (!data.sdt)        missing.push({ name: '動機タイプ診断',       url: 'sdt.html' });
+  if (!data.schwartz)   missing.push({ name: '価値観診断',           url: 'schwartz.html' });
+  if (!data.hsp)        missing.push({ name: 'HSP感受性チェック',    url: 'hsp.html' });
+  if (!data.attachment) missing.push({ name: '愛着スタイルチェック', url: 'attachment.html' });
   return missing;
 }
 
@@ -597,6 +614,26 @@ function renderTestsGrid(data) {
         : null,
       color: '#f59e0b', url: 'schwartz.html'
     },
+    {
+      icon: '🌸', label: 'HSP感受性',
+      value: (() => {
+        if (!data.hsp || !data.hsp.scores) return null;
+        const t = HSP_TYPES.find(t => data.hsp.scores.total >= t.min && data.hsp.scores.total <= t.max);
+        return t ? t.name : null;
+      })(),
+      color: (() => {
+        if (!data.hsp || !data.hsp.scores) return '#ec4899';
+        const t = HSP_TYPES.find(t => data.hsp.scores.total >= t.min && data.hsp.scores.total <= t.max);
+        return t ? t.color : '#ec4899';
+      })(),
+      url: 'hsp.html'
+    },
+    {
+      icon: '🤝', label: '愛着スタイル',
+      value: data.attachment ? (ATTACHMENT_TYPES[data.attachment.typeKey] || {}).name || null : null,
+      color: data.attachment ? (ATTACHMENT_TYPES[data.attachment.typeKey] || {}).color || '#8b5cf6' : '#8b5cf6',
+      url: 'attachment.html'
+    },
   ];
 
   document.getElementById('testsGrid').innerHTML = tests.map(t => {
@@ -643,9 +680,11 @@ function buildAnalysis(data) {
   const corePatterns = getCorePattern(O, C, E, A, N);
   blocks.push({ title: '🔬 あなたの核となる性格パターン', text: corePatterns });
 
-  // ── 2. 恋愛・動機との相関 ──
-  if (love || sdt) {
-    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset);
+  // ── 2. 恋愛・動機・HSP・愛着との相関 ──
+  const hspTotal = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
+  const attachKey = data.attachment ? data.attachment.typeKey : null;
+  if (love || sdt || hspTotal || attachKey) {
+    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey);
     if (crossText) blocks.push({ title: '🔗 複数テストが示すあなたの傾向', text: crossText });
   }
 
@@ -662,11 +701,13 @@ function buildAnalysis(data) {
 function buildWeakness(data) {
   const bf = data.bf;
   const s  = bf ? (bf.scores || {}) : {};
-  const love    = data.love    ? data.love.mainStyle    : null;
-  const mindset = data.mindset ? data.mindset.type      : null;
-  const sdt     = data.sdt    ? data.sdt.strongest      : null;
+  const love      = data.love       ? data.love.mainStyle    : null;
+  const mindset   = data.mindset    ? data.mindset.type      : null;
+  const sdt       = data.sdt        ? data.sdt.strongest     : null;
+  const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
+  const attachKey = data.attachment ? data.attachment.typeKey : null;
 
-  return getWeaknesses(s, love, mindset, sdt);
+  return getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey);
 }
 
 // ===== 領域別アドバイスロジック =====
@@ -680,15 +721,17 @@ function buildAdvice(data) {
     return 'mid';
   }
   const O = level(s.O), C = level(s.C), E = level(s.E), A = level(s.A), N = level(s.N);
-  const love    = data.love    ? data.love.mainStyle    : null;
-  const mindset = data.mindset ? data.mindset.type      : null;
-  const sdt     = data.sdt    ? data.sdt.strongest      : null;
-  const topValue = data.schwartz && data.schwartz.top3 ? data.schwartz.top3[0] : null;
+  const love      = data.love       ? data.love.mainStyle    : null;
+  const mindset   = data.mindset    ? data.mindset.type      : null;
+  const sdt       = data.sdt        ? data.sdt.strongest     : null;
+  const topValue  = data.schwartz && data.schwartz.top3 ? data.schwartz.top3[0] : null;
+  const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
+  const attachKey = data.attachment ? data.attachment.typeKey : null;
 
   return {
-    work:  getWorkAdvice(O, C, E, A, N, mindset, sdt),
-    love:  getLoveAdvice(O, C, E, A, N, love),
-    human: getHumanAdvice(O, C, E, A, N, A, sdt, topValue),
+    work:  getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal),
+    love:  getLoveAdvice(O, C, E, A, N, love, attachKey),
+    human: getHumanAdvice(O, C, E, A, N, A, sdt, topValue, attachKey),
   };
 }
 
@@ -696,9 +739,11 @@ function buildAdvice(data) {
 function buildGrowth(data) {
   const bf = data.bf;
   const s  = bf ? (bf.scores || {}) : {};
-  const mindset = data.mindset ? data.mindset.type : null;
+  const mindset   = data.mindset    ? data.mindset.type      : null;
+  const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
+  const attachKey = data.attachment ? data.attachment.typeKey : null;
 
-  return getGrowthSteps(s, mindset);
+  return getGrowthSteps(s, mindset, hspTotal, attachKey);
 }
 
 // ===================================================
@@ -732,7 +777,7 @@ function getCorePattern(O, C, E, A, N) {
   return lines.join('<br><br>');
 }
 
-function getCrossInsight(O, C, E, A, N, love, sdt, mindset) {
+function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey) {
   const parts = [];
 
   // 恋愛 × 神経症的傾向
@@ -765,6 +810,30 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset) {
     parts.push('<strong>固定マインドセット×高い誠実性：</strong>得意分野では非常に高い成果を出せますが、「自分には向いていない」と判断した分野には壁を作りやすい傾向があります。誠実さと責任感は本物ですが、失敗を「学び」として再定義することで、さらに成長の幅が広がります。');
   }
 
+  // HSP × ビッグファイブ
+  if (hspTotal !== null) {
+    if (hspTotal >= 34 && N === 'high') {
+      parts.push('<strong>HSP高感受性×感受性の高さ：</strong>外界の刺激を人より深く受け取り、感情の波も大きい組み合わせです。豊かな感受性は共感力と創造性の源ですが、刺激の多い環境では消耗しやすいです。一人になれる回復時間を意識的に確保することが大切です。');
+    } else if (hspTotal >= 34 && O === 'high') {
+      parts.push('<strong>HSP高感受性×高い開放性：</strong>美しさや深い意味に敏感で、新しい体験や芸術に強く惹かれる組み合わせです。感受性と好奇心が重なり、独自の視点や表現力が生まれやすいです。');
+    } else if (hspTotal <= 19 && N === 'low') {
+      parts.push('<strong>HSP安定型×感情安定：</strong>外界の刺激に揺さぶられにくく、感情的にも安定した、非常に地に足のついた組み合わせです。プレッシャーの多い状況でも冷静に動ける強みがあります。');
+    }
+  }
+
+  // 愛着スタイル × ビッグファイブ
+  if (attachKey) {
+    if (attachKey === 'anxious' && N === 'high') {
+      parts.push('<strong>愛着スタイル「つながり重視型」×感受性の高さ：</strong>大切な人への気持ちが強く、相手の反応にとても敏感です。深く愛せる力は本物ですが、不安が増幅しやすいです。「事実」と「不安が作り出したストーリー」を分ける練習が関係を安定させます。');
+    } else if (attachKey === 'avoidant' && E === 'low') {
+      parts.push('<strong>愛着スタイル「自律尊重型」×内向性：</strong>一人の時間と自分のペースを非常に大切にします。深い関係を築くには時間がかかりますが、一度信頼した人との絆は強固です。');
+    } else if (attachKey === 'secure' && A === 'high') {
+      parts.push('<strong>愛着スタイル「安心ベース型」×高い協調性：</strong>人間関係において最もバランスの良い組み合わせです。依存しすぎず、自分も相手も大切にできる関係を自然に築けます。');
+    } else if (attachKey === 'fearful' && N === 'high') {
+      parts.push('<strong>愛着スタイル「繊細なつながり型」×感受性の高さ：</strong>近づきたい気持ちと怖い気持ちが共存し、感情の揺れが大きくなりやすいです。「両方の気持ちがあること」を認めるだけで、少しずつ楽になれます。');
+    }
+  }
+
   if (parts.length === 0) {
     parts.push('複数のテスト結果を照合した結果、あなたの性格は<strong>バランス型</strong>の傾向を示しています。特定の強烈な偏りがない分、状況に応じた柔軟な対応が得意です。一方で「これが自分の強みだ」と明確に言える核を意識的に育てることが次のステップです。');
   }
@@ -793,7 +862,7 @@ function getValueInsight(O, C, E, A, N, topValue) {
   return `あなたの最上位価値観「${VALUES_JA[topValue] || topValue}」は、性格特性とユニークな形で組み合わさっています。この価値観があなたの判断基準の中心にあることを意識して行動すると、迷いが減るでしょう。`;
 }
 
-function getWeaknesses(s, love, mindset, sdt) {
+function getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey) {
   const items = [];
 
   if ((s.N || 3) >= 4) items.push('感情の波が大きく、ストレスや批判を受けると気持ちの立て直しに時間がかかることがある。反芻思考（グルグル考える癖）に気をつけましょう。');
@@ -807,12 +876,17 @@ function getWeaknesses(s, love, mindset, sdt) {
   if (mindset === 'fixed') items.push('苦手意識のある分野で「自分には無理」と早めにあきらめてしまうことがある。失敗は能力ではなく「まだ成長中」のサインと捉え直してみてください。');
   if (sdt === 'autonomy' && (s.A || 3) <= 2) items.push('「自分でやりたい」という欲求が強すぎると、チームでの協力関係が難しくなることがある。自律性と協力は両立できます。');
 
+  if (hspTotal !== null && hspTotal >= 34) items.push('感受性が高く、刺激の多い環境や長時間の対人接触で消耗しやすい。「疲れているのに動き続ける」パターンに注意。意識的な回復時間の確保が重要です。');
+  if (attachKey === 'anxious') items.push('大切な人への不安が強くなると確認行動が増え、相手との関係に摩擦が生まれやすい。「事実」と「不安が作り出したストーリー」を区別する習慣が助けになります。');
+  if (attachKey === 'avoidant') items.push('深い関係を築くチャンスを逃しやすい。「一人でいる方が楽」という感覚が、本当に求めているものへのブロックになっていないか振り返ってみてください。');
+  if (attachKey === 'fearful') items.push('近づきたい気持ちと怖い気持ちが同時にあり、関係が不安定になりやすい。無理に解決しようとせず、「両方の気持ちがある」と認めるだけで少し楽になります。');
+
   if (items.length === 0) items.push('大きな弱点は見当たりません。ただし、バランスが取れているということは「尖った強み」も作りにくい側面があります。意識的に得意分野を深掘りすることを意識してみてください。');
 
   return items;
 }
 
-function getWorkAdvice(O, C, E, A, N, mindset, sdt) {
+function getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal) {
   const items = [];
 
   if (sdt === 'autonomy') items.push('自分でテーマを決められる役割・プロジェクトで最大の力を発揮します。細かく管理されるよりも、成果で評価される環境を選びましょう。');
@@ -824,12 +898,14 @@ function getWorkAdvice(O, C, E, A, N, mindset, sdt) {
   if (E === 'high') items.push('対人業務・プレゼン・営業など、人と関わる頻度の高い仕事でエネルギーが高まります。会議や交流の場を積極的に活用しましょう。');
   if (E === 'low') items.push('深く集中できる環境での作業が得意です。ノイズの少ない環境で独自の成果を出す仕事スタイルが合っています。');
   if (mindset === 'growth') items.push('新しいスキルの習得や未知の分野への挑戦を積極的に受け入れられます。「未経験だから無理」ではなく「未経験だから成長できる」と捉えて行動しましょう。');
+  if (hspTotal !== null && hspTotal >= 34) items.push('感受性が高い分、騒がしい環境や連続した対人業務は消耗しやすいです。集中できる静かな時間帯・環境を意識的に確保することが、パフォーマンス維持の鍵になります。');
+  if (hspTotal !== null && hspTotal <= 19) items.push('刺激に強く、プレッシャーの高い環境でも安定して動けます。感受性が高い同僚の「見えない消耗」に気づいてあげる視点を持つと、チームとしての成果が上がります。');
 
   if (items.length === 0) items.push('バランスよく様々な仕事環境に適応できます。自分が最もエネルギーを感じる業務に意識的に時間を割くことで、さらに成果が上がるでしょう。');
   return items;
 }
 
-function getLoveAdvice(O, C, E, A, N, love) {
+function getLoveAdvice(O, C, E, A, N, love, attachKey) {
   const items = [];
 
   if (love === 'eros') items.push('直感と情熱を大切にするあなたは、相手への気持ちを率直に伝えることが強みです。ただし、最初の熱が落ち着いたあとの「育てる恋愛」も意識的に取り組んでみてください。');
@@ -842,11 +918,16 @@ function getLoveAdvice(O, C, E, A, N, love) {
   if (N === 'high') items.push('感情が豊かな分、喜びも傷つきも深く感じます。感情の揺れを「自分の感受性の豊かさ」として受け入れつつ、自己調整の習慣（書く・話す・動く）を持ちましょう。');
   if (A === 'high') items.push('相手の気持ちに敏感で、さりげない思いやりができます。ただし、自分の意見や希望を言えずに溜め込まないよう、「伝える練習」を意識してください。');
 
+  if (attachKey === 'secure') items.push('安定した愛着スタイルは恋愛においても大きな強みです。この安心感を当たり前と思わず、相手への感謝と思いやりを意識的に表現することで、関係はさらに豊かになります。');
+  if (attachKey === 'anxious') items.push('「嫌われたかも」という不安が出たとき、すぐに行動する前に「それは事実か、不安か」と一度問いかける習慣を持つと、関係が安定しやすくなります。');
+  if (attachKey === 'avoidant') items.push('心を開くことへのハードルが高めです。「心を開くこと＝自立を失うこと」ではありません。信頼できる人に少しずつ本音を話すことで、関係の深さが変わります。');
+  if (attachKey === 'fearful') items.push('近づきたい気持ちと怖い気持ちが同時にある状態は、矛盾ではなく感受性の証です。「両方あっていい」と認めることから始めてみてください。');
+
   if (items.length === 0) items.push('あなたの恋愛スタイルは状況に応じて柔軟に変化します。大切なのは、相手との対話を続けてお互いの期待値をすり合わせていくことです。');
   return items;
 }
 
-function getHumanAdvice(O, C, E, A, N, a, sdt, topValue) {
+function getHumanAdvice(O, C, E, A, N, a, sdt, topValue, attachKey) {
   const items = [];
 
   if (A === 'high') items.push('相手の気持ちに自然と寄り添えるため、多くの人から信頼されます。ただし「いい人」でいようとするあまり、本音を言えなくなる場面に注意してください。');
@@ -855,12 +936,16 @@ function getHumanAdvice(O, C, E, A, N, a, sdt, topValue) {
   if (E === 'low') items.push('少人数との深い関係を好むあなた。信頼できる人との絆は非常に強固です。広さより深さを大切にする関係構築スタイルを自信を持って続けてください。');
   if (sdt === 'relatedness') items.push('人とのつながりがあなたのエネルギー源です。意識的に感謝を伝え、相手の変化に気づく小さな行動が、深い絆を生み出します。');
   if (topValue && ['benevolence','universalism'].includes(topValue)) items.push('他者や社会への深い関心が行動の根底にあります。その思いやりは周囲に伝わっており、あなたの人間関係の核になっています。');
+  if (attachKey === 'secure') items.push('人間関係において自然に「安全基地」の役割を果たせます。あなたの安定感は周囲の人に安心感を与えており、信頼される存在になりやすいです。');
+  if (attachKey === 'anxious') items.push('人との繋がりを深く大切にするあなたは、周囲から「真剣に向き合ってくれる人」として信頼されます。自分の気持ちも大切にしながら、関係を育てていきましょう。');
+  if (attachKey === 'avoidant') items.push('深い関係よりも、適度な距離感のある繋がりを好みます。無理に親密にならなくても良い。自分のペースで関係を築ける環境を選ぶことが、長続きする繋がりにつながります。');
+  if (attachKey === 'fearful') items.push('関係に対して非常に敏感で、相手の感情を深く読み取る力があります。この感受性は、親密な関係において大きな力になります。安心できる一人との関係から、少しずつ信頼を育ててみてください。');
 
   if (items.length === 0) items.push('様々な人と柔軟に関われるバランス型です。関係の深さと広さのバランスを意識しながら、自分にとって心地よい人間関係を構築していきましょう。');
   return items;
 }
 
-function getGrowthSteps(s, mindset) {
+function getGrowthSteps(s, mindset, hspTotal, attachKey) {
   const steps = [];
 
   // 最も低い因子を特定
@@ -895,6 +980,19 @@ function getGrowthSteps(s, mindset) {
   }
   if (mindset === 'growth') {
     steps.push({ num: steps.length + 1, label: '挑戦の記録をつける', action: '「やってみたこと・学んだこと」を週に一度振り返る習慣を持つ。成長マインドセットをさらに強化できます。' });
+  }
+
+  if (hspTotal !== null && hspTotal >= 34) {
+    steps.push({ num: steps.length + 1, label: '回復時間をスケジュールに入れる', action: '「疲れてから休む」ではなく「疲れる前に回復する」サイクルを作る。週に1〜2時間、何もしない静かな時間を先にブロックしておく。' });
+  }
+  if (attachKey === 'anxious') {
+    steps.push({ num: steps.length + 1, label: '「事実」と「不安」を区別する習慣', action: '不安が出たとき「これは事実？それとも不安が作り出したもの？」と書き出す練習を1週間続けてみる。感情と現実の距離が縮まります。' });
+  }
+  if (attachKey === 'avoidant') {
+    steps.push({ num: steps.length + 1, label: '小さな「開示」を試みる', action: '信頼できる人に、日常の些細なことを一つ話してみる練習を週1回する。心を開くことは、自立を失うことではありません。' });
+  }
+  if (attachKey === 'fearful') {
+    steps.push({ num: steps.length + 1, label: '「両方の気持ち」を認める練習', action: '「近づきたい」と「怖い」が同時にあるとき、どちらも否定せず紙に書き出してみる。矛盾を受け入れることが、次の一歩の土台になります。' });
   }
 
   if (steps.length === 0) {
