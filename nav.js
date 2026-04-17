@@ -89,6 +89,59 @@ body { padding-top: 52px !important; }
   style.textContent = NAV_CSS;
   document.head.appendChild(style);
 
+  // フッターHTML
+  const FOOTER_HTML = `
+<footer id="globalFooter">
+  <div class="footer-inner">
+    <span class="footer-copy">© Jr. Genius</span>
+    <div class="footer-links">
+      <a href="legal.html">プライバシーポリシー・利用規約</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSerzLle9YKVqQD6vaS3YlLsBHETnYRcXfukzgdJ5Rs_2HFaVg/viewform" target="_blank" rel="noopener">お問い合わせ</a>
+    </div>
+  </div>
+</footer>`;
+
+  const FOOTER_CSS = `
+#globalFooter {
+  background: rgba(8,11,32,0.9);
+  border-top: 1px solid rgba(139,92,246,0.12);
+  padding: 16px 20px;
+  margin-top: 40px;
+}
+.footer-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-copy {
+  font-size: 11px;
+  color: #475569;
+}
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+.footer-links a {
+  font-size: 11px;
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #94a3b8; }
+`;
+
+  // フッタースタイル注入
+  const footerStyle = document.createElement('style');
+  footerStyle.textContent = FOOTER_CSS;
+  document.head.appendChild(footerStyle);
+
+  // フッターHTML注入（bodyの末尾）
+  document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
+
   // HTML注入（bodyの先頭）
   document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
 
