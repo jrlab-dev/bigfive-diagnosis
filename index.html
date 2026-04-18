@@ -319,9 +319,12 @@
 
   /* ===== キャラクターカード3Dレイアウト ===== */
   .feature-card--chara {
-    min-height: 360px;
+    min-height: 540px;
     display: flex;
     flex-direction: column;
+  }
+  .feature-card--anohito, .feature-card:not(.feature-card--chara) {
+    min-height: 320px;
   }
   .feature-card--chara .feature-content {
     z-index: 10;
@@ -437,7 +440,9 @@
       opacity: 0.95; right: auto; left: 50%; transform: translate(-50%,-50%);
       width: 100%; height: auto; top: 50%;
     }
-    .card-showcase { height: 120px; top: 4px; }
+    .card-showcase { height: 160px; bottom: 0; top: auto; }
+    .feature-card--chara { min-height: 320px; }
+    .feature-card--anohito, .feature-card:not(.feature-card--chara) { min-height: 200px; }
     .science-label { color: #fff }
     .science-label { margin: 0 auto 3px }
     .science-link { margin-top: 3px; font-size: 9px }
