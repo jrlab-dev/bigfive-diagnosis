@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>子どもの性格診断（4〜9歳）| ビッグファイブ3125タイプ診断</title>
+<meta name="description" content="4〜9歳のお子さんの性格をビッグファイブで診断。保護者が日常の様子をもとに30問回答するだけ。お子さんの強み・楽しみやすい遊び・将来の夢に向けたヒントがわかります。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="子どもの性格診断（4〜9歳）| ビッグファイブ3125タイプ診断">
+<meta property="og:description" content="4〜9歳のお子さんの性格をビッグファイブで診断。お子さんの強みと楽しみやすい遊び・将来の夢に向けたヒントがわかります。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/kodomo.html">
+<meta name="twitter:card" content="summary">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27; --purple: #8b5cf6; --blue: #3b82f6;
+  --pink: #ec4899; --yellow: #fbbf24; --green: #10b981;
+  --text: #e2e8f0; --dim: #94a3b8;
+}
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+.bg-nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 20% 20%, rgba(139,92,246,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 80% 15%, rgba(251,191,36,0.08) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 40% at 50% 75%, rgba(16,185,129,0.06) 0%, transparent 70%);
+}
+
+/* ===== スクリーン管理 ===== */
+.screen { display: none; min-height: 100vh; padding: 40px 24px; max-width: 560px; margin: 0 auto; flex-direction: column; position: relative; z-index: 1; }
+.screen.active { display: flex; }
+
+/* ===== スタート画面 ===== */
+.hero-badge { display: inline-block; font-size: 12px; font-weight: 700; color: var(--yellow); background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; padding: 6px 14px; margin-bottom: 20px; }
+.hero-title { font-size: 28px; font-weight: 900; line-height: 1.4; margin-bottom: 16px; }
+.hero-title em { font-style: normal; background: linear-gradient(135deg, var(--yellow), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 14px; color: var(--dim); line-height: 1.8; margin-bottom: 32px; }
+.feature-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+.feature-item { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: var(--dim); }
+.feature-item .fi-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.feature-item strong { color: var(--text); }
+.start-note { font-size: 11px; color: rgba(255,255,255,0.3); text-align: center; margin-top: 12px; line-height: 1.7; }
+
+/* ===== 入力画面 ===== */
+.input-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.input-sub { font-size: 13px; color: var(--dim); margin-bottom: 32px; line-height: 1.7; }
+.form-group { margin-bottom: 24px; }
+.form-label { display: block; font-size: 13px; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
+.text-input { width: 100%; padding: 14px 18px; background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.2); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 16px; outline: none; transition: border-color .2s; }
+.text-input::placeholder { color: var(--dim); }
+.text-input:focus { border-color: var(--purple); }
+.btn-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-grid-2b { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sel-btn { padding: 14px 8px; border-radius: 12px; background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15); color: var(--dim); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .2s; text-align: center; line-height: 1.5; }
+.sel-btn .sel-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+.sel-btn:hover { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.35); color: var(--text); }
+.sel-btn.selected { border-color: var(--yellow); background: rgba(251,191,36,0.12); color: var(--text); font-weight: 700; }
+.age-note { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; line-height: 1.6; }
+
+/* ===== 共通ボタン ===== */
+.btn-main { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--yellow), #f59e0b); border: none; border-radius: 14px; color: #1a1a1a; font-family: inherit; font-size: 16px; font-weight: 900; cursor: pointer; transition: all .2s; }
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(251,191,36,0.4); }
+.btn-main:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { width: 100%; padding: 14px; background: transparent; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 14px; color: var(--dim); font-family: inherit; font-size: 14px; cursor: pointer; transition: all .2s; }
+.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); font-size: 13px; text-decoration: none; margin-bottom: 28px; cursor: pointer; background: none; border: none; font-family: inherit; }
+.back-link:hover { color: var(--text); }
+
+/* ===== クイズ画面 ===== */
+.who-bar { display: flex; align-items: center; gap: 10px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; }
+.who-icon { font-size: 20px; }
+.who-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.who-sub { font-size: 11px; color: var(--dim); }
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 36px; }
+.progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--yellow), var(--pink)); transition: width .4s ease; }
+.progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+.question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.q-num { font-size: 13px; color: var(--yellow); font-weight: 500; margin-bottom: 10px; }
+.q-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 58px; }
+.answers { display: flex; gap: 8px; margin-bottom: 32px; }
+.answer-btn { flex: 1; padding: 13px 3px; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--dim); background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15); border-radius: 12px; cursor: pointer; transition: all .2s; min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.answer-btn:hover { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.4); color: var(--text); }
+.answer-btn.selected { background: linear-gradient(135deg, var(--yellow), #f59e0b); border-color: transparent; color: #1a1a1a; font-weight: 700; }
+.quiz-back-btn { background: none; border: none; color: var(--dim); font-family: inherit; font-size: 13px; cursor: pointer; padding: 8px 0; }
+.quiz-back-btn:hover { color: var(--text); }
+
+/* ===== ローディング画面 ===== */
+#loadingScreen { align-items: center; justify-content: center; text-align: center; gap: 20px; }
+.loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(251,191,36,0.2); border-top-color: var(--yellow); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 18px; font-weight: 500; }
+.loading-name { color: var(--yellow); }
+.loading-dots::after { content: ''; animation: dots 1.5s infinite; }
+@keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
+
+/* ===== 結果画面 ===== */
+.result-header { text-align: center; margin-bottom: 28px; }
+.result-badge { display: inline-block; font-size: 12px; font-weight: 700; color: var(--yellow); background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 10px; }
+.result-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+.result-title em { font-style: normal; color: var(--yellow); }
+.result-sub { font-size: 13px; color: var(--dim); }
+
+.char-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+.char-img { width: 140px; height: 140px; object-fit: contain; border-radius: 16px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2); }
+.char-label { font-size: 12px; color: var(--dim); margin-top: 6px; }
+
+.section-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+.section-title { font-size: 14px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .03em; }
+
+/* 特性バー */
+.trait-row { margin-bottom: 14px; }
+.trait-row:last-child { margin-bottom: 0; }
+.trait-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.trait-label { font-size: 13px; font-weight: 600; }
+.trait-desc { font-size: 11px; color: var(--dim); margin-left: 6px; font-weight: 400; }
+.trait-level { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.lv-high { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+.lv-mid  { background: rgba(148,163,184,0.15); color: var(--dim); }
+.lv-low  { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.bar-bg { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; width: 0%; }
+
+/* 強み */
+.strength-box { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.strength-box:last-child { margin-bottom: 0; }
+.strength-name { font-size: 13px; font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+.strength-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+/* 遊びのヒント */
+.hint-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+.hint-item:last-child { border-bottom: none; padding-bottom: 0; }
+.hint-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; margin-top: 7px; }
+
+/* 職業カード */
+.career-grid { display: flex; flex-direction: column; gap: 10px; }
+.career-card { display: flex; align-items: center; gap: 12px; background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.12); border-radius: 12px; padding: 14px; }
+.career-icon { font-size: 24px; flex-shrink: 0; }
+.career-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.career-msg { font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+/* 親への一言 */
+.parent-note { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 14px; padding: 16px; margin-bottom: 16px; font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
+.parent-note strong { color: #6ee7b7; }
+
+.disclaimer { font-size: 11px; color: rgba(255,255,255,0.3); text-align: center; line-height: 1.7; margin-bottom: 16px; }
+
+/* アクションボタン */
+.action-btn { display: block; width: 100%; padding: 14px; border-radius: 14px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; margin-bottom: 10px; text-decoration: none; border: none; }
+.btn-save { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.btn-save:hover { box-shadow: 0 8px 32px rgba(16,185,129,0.4); }
+.btn-saved { background: rgba(16,185,129,0.15); border: 1.5px solid #10b981; color: #6ee7b7; }
+.btn-retry { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); color: var(--dim); }
+.btn-retry:hover { color: var(--text); }
+
+@media (max-width: 400px) {
+  .q-text { font-size: 15px; }
+  .answer-btn { font-size: 11px; padding: 11px 2px; }
+  .answers { gap: 5px; }
+  .hero-title { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="bg-nebula"></div>
+
+<!-- ===== スタート画面 ===== -->
+<div class="screen active" id="startScreen">
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    トップに戻る
+  </a>
+  <span class="hero-badge">🧒 子ども性格診断</span>
+  <h1 class="hero-title">お子さんの「個性」を<br><em>科学的に知ろう</em></h1>
+  <p class="hero-sub">
+    ビッグファイブ心理学をもとに、保護者が日常の様子を観察して回答する診断です。<br>
+    お子さんの強みと、楽しみやすい遊び・将来の夢に向けたヒントがわかります。
+  </p>
+
+  <div class="feature-list">
+    <div class="feature-item">
+      <span class="fi-icon">🌟</span>
+      <div><strong>お子さんの強みがわかる</strong><br>5つの特性（好奇心・やり遂げる力・社交性・思いやり・感受性）のバランスを分析</div>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">🎮</span>
+      <div><strong>楽しみやすい遊びのヒント</strong><br>その子の特性に合った遊びや活動をご提案。無理なく個性を伸ばせます</div>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon">🚀</span>
+      <div><strong>将来の夢とつなげる</strong><br>「警察官になりたい」「絵描きになりたい」…夢に向けてどんな経験が役立つか</div>
+    </div>
+  </div>
+
+  <button class="btn-main" onclick="showScreen('inputScreen')">はじめる →</button>
+  <p class="start-note">
+    ※ この診断は保護者の観察をもとにした参考情報です。お子さんの優劣や可能性を断定するものではありません。<br>
+    無料・登録不要・所要時間約5〜8分
+  </p>
+</div>
+
+<!-- ===== 入力画面 ===== -->
+<div class="screen" id="inputScreen">
+  <button class="back-link" onclick="showScreen('startScreen')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    戻る
+  </button>
+  <p class="input-title">お子さんの情報を入力</p>
+  <p class="input-sub">保護者の方がお子さんの日常の様子を思い浮かべながら回答してください。</p>
+
+  <div class="form-group">
+    <label class="form-label" for="childName">お子さんのニックネーム（呼び名）</label>
+    <input type="text" class="text-input" id="childName" placeholder="例：たろう、はなちゃん…" maxlength="20">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">性別</label>
+    <div class="btn-grid-2">
+      <button class="sel-btn" data-gender="F" id="genderF">
+        <span class="sel-icon">👧</span>女の子
+      </button>
+      <button class="sel-btn" data-gender="M" id="genderM">
+        <span class="sel-icon">👦</span>男の子
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">年齢グループ</label>
+    <div class="btn-grid-2b">
+      <button class="sel-btn" data-age="child46" id="age46">
+        <span class="sel-icon">🌱</span>4〜6歳<br><small style="font-size:11px;font-weight:400;">幼稚園・保育園</small>
+      </button>
+      <button class="sel-btn" data-age="child79" id="age79">
+        <span class="sel-icon">🌿</span>7〜9歳<br><small style="font-size:11px;font-weight:400;">小学校低学年</small>
+      </button>
+    </div>
+    <p class="age-note">※ 年齢によって質問の内容が変わります（計30問）</p>
+  </div>
+
+  <button class="btn-main" id="startQuizBtn" disabled onclick="startQuiz()">診断スタート →</button>
+</div>
+
+<!-- ===== クイズ画面 ===== -->
+<div class="screen" id="quizScreen">
+  <div class="who-bar">
+    <span class="who-icon">🧒</span>
+    <div>
+      <div class="who-name" id="whoName">—</div>
+      <div class="who-sub" id="whoSub">の日常の様子を思い浮かべて答えてください</div>
+    </div>
+  </div>
+  <div class="progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/30</span>
+  </div>
+  <div class="question-area">
+    <p class="q-num" id="qNum">Q1</p>
+    <p class="q-text" id="qText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらとも<br>言えない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="quiz-back-btn" id="quizBackBtn">← 前の問題に戻る</button>
+  </div>
+</div>
+
+<!-- ===== ローディング画面 ===== -->
+<div class="screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p class="loading-text"><span class="loading-name" id="loadingName">—</span>の性格を分析中<span class="loading-dots"></span></p>
+  <p style="font-size:13px;color:var(--dim);">観察データから個性を導き出しています</p>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div class="screen" id="resultScreen">
+  <div class="result-header">
+    <span class="result-badge">🧒 子ども性格診断 結果</span>
+    <p class="result-title"><em id="resultName">—</em>の性格プロフィール</p>
+    <p class="result-sub">ビッグファイブ理論による観察分析</p>
+  </div>
+
+  <div class="char-area" id="charArea" style="display:none;">
+    <img class="char-img" id="charImg" src="" alt="キャラクター">
+    <p class="char-label" id="charLabel"></p>
+  </div>
+
+  <!-- 特性バー -->
+  <div class="section-card" id="traitsCard">
+    <p class="section-title">📊 5つの特性バランス</p>
+  </div>
+
+  <!-- 強み -->
+  <div class="section-card" id="strengthCard">
+    <p class="section-title">✨ この子の強み</p>
+  </div>
+
+  <!-- 遊びのヒント -->
+  <div class="section-card" id="hintsCard">
+    <p class="section-title">🎮 楽しみやすい遊びのヒント</p>
+  </div>
+
+  <!-- 将来の夢 -->
+  <div class="section-card" id="careerCard">
+    <p class="section-title">🚀 こんな仕事をする人に似た面があるかも</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:14px;line-height:1.6;">これは可能性の一例です。同じ職業でもさまざまな個性の方が活躍しています。</p>
+    <div class="career-grid" id="careerGrid"></div>
+  </div>
+
+  <!-- 親への一言 -->
+  <div class="parent-note" id="parentNote"></div>
+
+  <p class="disclaimer">この診断は保護者の観察をもとにした参考情報です。お子さんの実際の性格と異なる場合があります。どの結果でもお子さんの可能性は無限大です。</p>
+
+  <button class="action-btn btn-save" id="saveBtn">💾 結果を保存</button>
+  <button class="action-btn btn-retry" onclick="resetAll()">別の子を診断する</button>
+  <a href="index.html" class="action-btn btn-retry" style="display:block;">トップに戻る</a>
+</div>
+
+<script>
+// ===== 質問データ =====
+const questionsFixed15 = [
+  { text: 'この子は、初めて会う人にも自分から話しかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が悲しんでいると一緒に心配します', factor:'A', dir:'+' },
+  { text: 'この子は、やると決めたことを最後までやり遂げます', factor:'C', dir:'+' },
+  { text: 'この子は、嫌なことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、「なぜ？」「どうして？」とよく質問します', factor:'O', dir:'+' },
+  { text: 'この子は、一人遊びや静かな環境を好みます', factor:'E', dir:'-' },
+  { text: 'この子は、おもちゃや道具を友達と分け合えます', factor:'A', dir:'+' },
+  { text: 'この子は、言われなくても使ったものを元の場所に戻します', factor:'C', dir:'+' },
+  { text: 'この子は、気持ちをすぐに切り替えて立ち直れます', factor:'N', dir:'-' },
+  { text: 'この子は、知らない遊びや活動に積極的に挑戦します', factor:'O', dir:'+' },
+  { text: 'この子は、グループの中で意見を積極的に言います', factor:'E', dir:'+' },
+  { text: 'この子は、意見が合わないとき相手に強く言いすぎてしまうことがあります', factor:'A', dir:'-' },
+  { text: 'この子は、決めたルールや約束をきちんと守ります', factor:'C', dir:'+' },
+  { text: 'この子は、予定が変わったり思い通りにならないと不安になりやすいです', factor:'N', dir:'+' },
+  { text: 'この子は、空想やお話をつくるのが好きです', factor:'O', dir:'+' },
+];
+const questionsChild46 = [
+  { text: 'この子は、砂場や外遊びで知らない子にも「一緒に遊ぼう」と声をかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が転んだときにすぐ「大丈夫？」と声をかけます', factor:'A', dir:'+' },
+  { text: 'この子は、幼稚園・保育園のお片付けの時間に自分から片付けます', factor:'C', dir:'+' },
+  { text: 'この子は、思い通りにならないと気持ちをなかなか落ち着かせられません', factor:'N', dir:'+' },
+  { text: 'この子は、虫や花など身近な生き物をじっくり観察します', factor:'O', dir:'+' },
+  { text: 'この子は、友達と遊ぶとき自分からルールや遊び方を提案します', factor:'E', dir:'+' },
+  { text: 'この子は、友達がほしがっているおもちゃを譲ることができます', factor:'A', dir:'+' },
+  { text: 'この子は、先生に言われた手順をきちんと守ろうとします', factor:'C', dir:'+' },
+  { text: 'この子は、新しい場所や初めての行事の前に不安そうな様子を見せます', factor:'N', dir:'+' },
+  { text: 'この子は、絵本や紙芝居の続きを自分なりに考えて話してくれます', factor:'O', dir:'+' },
+  { text: 'この子は、にぎやかな場所やイベントが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、友達とけんかしても自分から謝ることが苦手です', factor:'A', dir:'-' },
+  { text: 'この子は、気が進まない作業は途中でやめてしまうことがあります', factor:'C', dir:'-' },
+  { text: 'この子は、親がそばにいなくても落ち着いて過ごせます', factor:'N', dir:'-' },
+  { text: 'この子は、いつも同じ遊びより、新しい遊び方を試したがります', factor:'O', dir:'+' },
+];
+const questionsChild79 = [
+  { text: 'この子は、休み時間にクラスの友達を誘って一緒に遊びます', factor:'E', dir:'+' },
+  { text: 'この子は、困っているクラスメートがいると自分から手伝おうとします', factor:'A', dir:'+' },
+  { text: 'この子は、宿題を毎日決まった時間に自分から取り組みます', factor:'C', dir:'+' },
+  { text: 'この子は、うまくいかないことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、授業で「もっと知りたい」と思ったことを家でも調べます', factor:'O', dir:'+' },
+  { text: 'この子は、グループ学習のとき自分から発言したり仕切ったりします', factor:'E', dir:'+' },
+  { text: 'この子は、グループの意見に反対でも、相手を傷つけないよう言い方を考えます', factor:'A', dir:'+' },
+  { text: 'この子は、係の仕事や当番を忘れずにこなします', factor:'C', dir:'+' },
+  { text: 'この子は、友達とトラブルがあっても翌日には普通に接することができます', factor:'N', dir:'-' },
+  { text: 'この子は、本や授業で知ったことについて「もっと知りたい」とよく言います', factor:'O', dir:'+' },
+  { text: 'この子は、放課後は一人でいるより友達と過ごすほうが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、自分さえよければいいという行動をとることがあります', factor:'A', dir:'-' },
+  { text: 'この子は、やりたくない課題でも途中で投げ出さずに続けます', factor:'C', dir:'+' },
+  { text: 'この子は、発表や人前に立つ場面でひどく緊張します', factor:'N', dir:'+' },
+  { text: 'この子は、決まったやり方より自分なりのやり方を試したがります', factor:'O', dir:'+' },
+];
+
+// ===== 特性情報 =====
+const traitInfo = {
+  E: { name: '外向性（人と関わる力）', desc: '社交的・積極的・にぎやか好き', color: '#f97316',
+       high: '友だちといると元気になる社交型。グループの中で自然とリードする場面も。',
+       mid:  '一人の時間も友だちとの時間も楽しめるバランス型。',
+       low:  '一人遊びや静かな時間が好き。じっくり深く考える力がある。' },
+  A: { name: '協調性（思いやりの力）', desc: '思いやり・共感・協力的', color: '#f472b6',
+       high: '友だちの気持ちによく気づく、思いやりいっぱいの優しい子。',
+       mid:  '自分の意見も持ちながら、人とも協力できるバランス型。',
+       low:  '自分の意志がはっきりしている。リーダー気質でこだわりが強い。' },
+  C: { name: '誠実性（やり遂げる力）', desc: '計画的・責任感・きちんとした', color: '#3b82f6',
+       high: '決めたことをきちんとやり遂げる、頼もしくてしっかり者。',
+       mid:  'ある程度の計画性はあるが、柔軟に対応することもできる。',
+       low:  '自由な発想で動く直感型。ひらめきと即興力が強み。' },
+  N: { name: '感受性（心の豊かさ）', desc: '豊かな感情・繊細・感じやすい', color: '#14b8a6',
+       high: '感じる力がとても豊か。喜びも感動も人より大きく味わえる繊細な子。',
+       mid:  '感情のバランスが取れている。状況に合わせて対処できる。',
+       low:  '気持ちの切り替えが得意。プレッシャーにも動じにくいたくましさがある。' },
+  O: { name: '開放性（好奇心の力）', desc: '好奇心旺盛・想像力・新しいこと好き', color: '#8b5cf6',
+       high: '「なんで？どうして？」が止まらない好奇心の塊。想像力と発想力が豊か。',
+       mid:  '新しいことも慣れたことも楽しめる実用的タイプ。',
+       low:  '慣れたやり方が好きで安心できる。落ち着いた環境で力を発揮する。' },
+};
+
+// ===== 遊びのヒント =====
+const activityHints = {
+  O: {
+    young: ['図鑑を1ページ開いて、その生き物になりきってみよう（なりきり遊び）', 'えのぐで見たことない色を作って自由に塗ってみよう', 'おうちのものでなんでも楽器にする音遊びをしてみよう'],
+    old:   ['好きなテーマで自分だけのマンガや絵本を作ろう', 'ScratchJrでオリジナルゲームを作ってみよう', '図書館でランダムに本を1冊選んで読む「くじ引き読書」']
+  },
+  C: {
+    young: ['シールを使った自分だけの「今日のスケジュール表」を作ろう', 'タイマーでお片付け競争：何秒でできるかな？', '積み木やブロックで決めた形を丁寧に作り直してみよう'],
+    old:   ['手帳や日記に「今日やったこと」をリストにしよう', 'レシピ通りにお菓子を作る（計量も自分でやってみよう）', 'レゴを説明書通りに正確に組み立てる達成感を味わおう']
+  },
+  E: {
+    young: ['友だちとかくれんぼ・鬼ごっこをたくさんしよう', 'おままごとでお店屋さんになって演じてみよう', 'みんなの前でダンスや歌を披露してみよう'],
+    old:   ['サッカーやドッジボールなどチームスポーツに挑戦しよう', '友だちとクイズ大会や謎解きゲームを企画してみよう', '劇ごっこで主役や司会に挑戦しよう']
+  },
+  A: {
+    young: ['ぬいぐるみを並べて「みんなの気持ち」を考える遊びをしよう', '家族に「今日は何が食べたい？」と聞いてごはんを決めよう', '友だちと砂場で大きなお城を作ろう（役割分担して）'],
+    old:   ['友だちに「ありがとうカード」を書いてみよう', 'グループで絵を描く共同制作をしよう', 'ボードゲームで「みんなが楽しいか」を考えながら遊ぼう']
+  },
+  N: {
+    young: ['好きな音楽を聴きながら、気持ちを絵に描いてみよう（うれしいは何色？）', 'お気に入りのぬいぐるみと静かな時間を過ごそう（安心できる場所づくり）', 'シャボン玉・水遊び・砂遊びなど感触が楽しい遊びをゆっくりと'],
+    old:   ['絵日記に「今日の気持ち」を書いてみよう（うまく書けなくてOK）', '好きな本や映画の感想を親と話し合おう（気持ちを言葉にする練習）', '軽いヨガや深呼吸など、体をゆっくり動かすリラックス遊び']
+  }
+};
+
+// ===== 職業データ =====
+const careers = [
+  { name: '医師・看護師', icon: '🏥', factors: ['C','A'], msg: 'だれかのつらさに気づける心は、人を助ける大きな力になるよ' },
+  { name: '先生・保育士', icon: '📚', factors: ['E','A'], msg: '友だちに教えるのが得意なきみに向いてるかも' },
+  { name: 'エンジニア・プログラマー', icon: '💻', factors: ['C','O'], msg: 'なんで？どうして？が止まらないきみが作るものはすごいかもよ' },
+  { name: '芸術家・デザイナー', icon: '🎨', factors: ['O'], msg: 'きみだけの見え方で世界を形にしてみて' },
+  { name: '音楽家・ミュージシャン', icon: '🎵', factors: ['O','N'], msg: '豊かな感性が音楽で輝く力になるよ' },
+  { name: '研究者・科学者', icon: '🔬', factors: ['O','C'], msg: 'ふしぎをとことん調べる力が、発見につながるよ' },
+  { name: 'スポーツ選手', icon: '⚽', factors: ['C','E'], msg: 'あきらめない気持ちと、仲間と動く力が武器だよ' },
+  { name: '料理人・シェフ', icon: '🍳', factors: ['C','O'], msg: '丁寧さと創造性の両方が活きる仕事だよ' },
+  { name: '獣医・動物飼育員', icon: '🐾', factors: ['A','C'], msg: '動物への思いやりと責任感がぴったりの仕事だよ' },
+  { name: 'ゲームクリエイター', icon: '🎮', factors: ['O','C'], msg: '発想力と作り込む粘り強さが活きるよ' },
+  { name: 'YouTuber・クリエイター', icon: '📹', factors: ['E','O'], msg: '発信力と独自の視点がきみの武器だよ' },
+  { name: 'カウンセラー・相談員', icon: '💙', factors: ['A','N'], msg: '人の気持ちに寄り添える力がだれかの支えになるよ' },
+  { name: '建築家・デザイナー', icon: '🏗️', factors: ['O','C'], msg: '夢を実際に形にできる仕事だよ' },
+  { name: '警察官・消防士', icon: '🚒', factors: ['C'], msg: '約束を守る力と責任感が、人を守る力になるよ' },
+  { name: '作家・ライター', icon: '✍️', factors: ['O','N'], msg: '頭の中の物語を言葉にしてみよう' },
+  { name: '弁護士・社会活動家', icon: '⚖️', factors: ['A','O'], msg: '「おかしい！」と感じる心が世の中を変える力になるよ' },
+];
+
+// ===== 状態 =====
+let childName = '', childGender = '', ageGroup = '';
+let activeQuestions = [], total = 30;
+let current = 0, ans = [];
+
+// ===== 画面制御 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== 入力画面 =====
+document.querySelectorAll('[data-gender]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-gender]').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    childGender = btn.dataset.gender;
+    checkInputReady();
+  });
+});
+document.querySelectorAll('[data-age]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-age]').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    ageGroup = btn.dataset.age;
+    checkInputReady();
+  });
+});
+document.getElementById('childName').addEventListener('input', checkInputReady);
+function checkInputReady() {
+  document.getElementById('startQuizBtn').disabled = !(document.getElementById('childName').value.trim() && childGender && ageGroup);
+}
+
+// ===== クイズ開始 =====
+function startQuiz() {
+  childName = document.getElementById('childName').value.trim();
+  const ageQuestions = ageGroup === 'child46' ? questionsChild46 : questionsChild79;
+  activeQuestions = [...questionsFixed15, ...ageQuestions];
+  total = activeQuestions.length;
+  ans = new Array(total).fill(null);
+  current = 0;
+
+  document.getElementById('whoName').textContent = childName;
+  document.getElementById('loadingName').textContent = childName;
+  document.getElementById('resultName').textContent = childName;
+
+  render();
+  showScreen('quizScreen');
+}
+
+// ===== クイズ描画 =====
+function render() {
+  document.getElementById('progressFill').style.width = `${((current+1)/total)*100}%`;
+  document.getElementById('progressText').textContent = `${current+1}/${total}`;
+  document.getElementById('qNum').textContent = `Q${current+1}`;
+  document.getElementById('qText').textContent = activeQuestions[current].text;
+
+  const saved = ans[current];
+  document.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (saved !== null) {
+    const target = document.querySelector(`.answer-btn[data-val="${saved}"]`);
+    if (target) target.classList.add('selected');
+  }
+  document.getElementById('quizBackBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答 =====
+document.getElementById('answers').addEventListener('click', e => {
+  const btn = e.target.closest('.answer-btn');
+  if (!btn) return;
+  ans[current] = parseInt(btn.dataset.val);
+  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  setTimeout(() => {
+    if (current < total - 1) { current++; render(); }
+    else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
+  }, 300);
+});
+document.getElementById('quizBackBtn').addEventListener('click', () => {
+  if (current > 0) { current--; render(); }
+});
+
+// ===== スコア計算 =====
+function calcScores() {
+  const fm = { E:[], A:[], C:[], N:[], O:[] };
+  activeQuestions.forEach((q, i) => {
+    const raw = ans[i] || 3;
+    const val = q.dir === '-' ? (6 - raw) : raw;
+    fm[q.factor].push(val);
+  });
+  const sc = {};
+  for (const [f, vals] of Object.entries(fm)) {
+    const sum = vals.reduce((a, b) => a + b, 0);
+    sc[f] = sum <= 10 ? 1 : sum <= 20 ? 3 : 5;
+  }
+  return sc;
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  const sc = calcScores();
+
+  // キャラクター画像
+  const charArea = document.getElementById('charArea');
+  const charImg = document.getElementById('charImg');
+  function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
+  const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
+  charImg.src = `images/characters/${childGender}/${imgCode}.webp`;
+  charImg.onerror = () => { charArea.style.display = 'none'; };
+  charImg.onload = () => { charArea.style.display = 'flex'; };
+  document.getElementById('charLabel').textContent = `${childName}の推定キャラクター`;
+
+  // 特性バー
+  const traitsCard = document.getElementById('traitsCard');
+  traitsCard.innerHTML = '<p class="section-title">📊 5つの特性バランス</p>';
+  ['O','C','E','A','N'].forEach(f => {
+    const s = sc[f], info = traitInfo[f];
+    const pct = s === 1 ? 20 : s === 3 ? 55 : 88;
+    const lv = s === 5 ? '高め' : s === 3 ? '普通' : '低め';
+    const lvClass = s === 5 ? 'lv-high' : s === 3 ? 'lv-mid' : 'lv-low';
+    traitsCard.innerHTML += `
+      <div class="trait-row">
+        <div class="trait-header">
+          <span class="trait-label">${info.name}<span class="trait-desc">${info.desc}</span></span>
+          <span class="trait-level ${lvClass}">${lv}</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:0%;background:${info.color};" data-w="${pct}%"></div></div>
+      </div>`;
+  });
+
+  // 強み（スコア5の因子 or スコア1の因子を強みとして表示）
+  const strengthCard = document.getElementById('strengthCard');
+  strengthCard.innerHTML = '<p class="section-title">✨ この子の強み</p>';
+  const topFactors = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 2);
+  topFactors.forEach(([f, s]) => {
+    const info = traitInfo[f];
+    const desc = s === 5 ? info.high : s === 3 ? info.mid : info.low;
+    strengthCard.innerHTML += `
+      <div class="strength-box">
+        <div class="strength-name">${info.name}</div>
+        <div class="strength-text">${desc}</div>
+      </div>`;
+  });
+
+  // 遊びのヒント（スコア最高の因子）
+  const hintsCard = document.getElementById('hintsCard');
+  hintsCard.innerHTML = '<p class="section-title">🎮 楽しみやすい遊びのヒント</p>';
+  const topFactor = topFactors[0][0];
+  const ageKey = ageGroup === 'child46' ? 'young' : 'old';
+  const hints = activityHints[topFactor][ageKey];
+  hints.forEach(h => {
+    hintsCard.innerHTML += `<div class="hint-item"><span class="hint-dot"></span><span>${h}</span></div>`;
+  });
+  // 2番目の因子のヒントも1つ追加
+  if (topFactors[1]) {
+    const hint2 = activityHints[topFactors[1][0]][ageKey][0];
+    hintsCard.innerHTML += `<div class="hint-item"><span class="hint-dot"></span><span>${hint2}</span></div>`;
+  }
+
+  // 職業マッチング（トップ因子と重なるもの上位3件）
+  const topFactorNames = topFactors.map(([f]) => f);
+  const matched = careers
+    .map(c => ({ ...c, score: c.factors.filter(f => topFactorNames.includes(f)).length }))
+    .filter(c => c.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+  const careerGrid = document.getElementById('careerGrid');
+  careerGrid.innerHTML = '';
+  matched.forEach(c => {
+    careerGrid.innerHTML += `
+      <div class="career-card">
+        <span class="career-icon">${c.icon}</span>
+        <div>
+          <div class="career-name">${c.name}</div>
+          <div class="career-msg">${c.msg}</div>
+        </div>
+      </div>`;
+  });
+
+  // 親への一言
+  const parentNote = document.getElementById('parentNote');
+  const topF = topFactors[0][0];
+  const parentMessages = {
+    O: `<strong>${childName}は好奇心旺盛なタイプです。</strong>「なぜ？」という問いを否定せず、一緒に調べてみてください。正解より探求のプロセスを楽しむ姿勢が、この子の力を最大限に引き出します。`,
+    C: `<strong>${childName}はしっかり者のタイプです。</strong>決めたことを守る力がある一方、完璧主義になりやすいことも。「80点でも十分すごい！」という声かけで、動き出しやすくなります。`,
+    E: `<strong>${childName}はエネルギッシュな社交型です。</strong>人と関わることで力を発揮します。発表や友だちとの遊びなど、自己表現できる場をたくさん作ってあげましょう。`,
+    A: `<strong>${childName}は思いやりの深いタイプです。</strong>人に合わせすぎて自分の気持ちを後回しにすることも。「きみはどうしたい？」とこまめに聞いてあげることが大切です。`,
+    N: `<strong>${childName}は感受性が豊かなタイプです。</strong>感じる力の大きさは才能です。気持ちを「そうなんだね」とまず受け止めてあげることで、安心して自分を表現できるようになります。`,
+  };
+  parentNote.innerHTML = parentMessages[topF];
+
+  // 保存用データ
+  window.currentChildResult = {
+    name: childName,
+    code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+    scores: sc,
+    relation: ageGroup,
+    gender: childGender,
+    date: new Date().toISOString()
+  };
+  checkAlreadySaved();
+
+  showScreen('resultScreen');
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+  }, 100);
+}
+
+// ===== 保存 =====
+const STORAGE_KEY = 'bigfive_other_results';
+function checkAlreadySaved() {
+  if (!window.currentChildResult) return;
+  const others = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const isSaved = others.some(r => r.name === window.currentChildResult.name && r.code === window.currentChildResult.code);
+  const btn = document.getElementById('saveBtn');
+  if (isSaved) { btn.textContent = '✓ 保存済み'; btn.className = 'action-btn btn-saved'; }
+}
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!window.currentChildResult) return;
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const r = window.currentChildResult;
+    const isDuplicate = others.some(o => o.name === r.name && o.code === r.code);
+    if (!isDuplicate) {
+      others.unshift(r);
+      if (others.length > 15) others.pop();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(others));
+    }
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '✓ 保存しました！';
+    btn.className = 'action-btn btn-saved';
+    setTimeout(() => { btn.textContent = '✓ 保存済み'; }, 2000);
+  } catch(e) { console.error(e); }
+});
+
+// ===== リセット =====
+function resetAll() {
+  childName = ''; childGender = ''; ageGroup = '';
+  document.getElementById('childName').value = '';
+  document.querySelectorAll('[data-gender],[data-age]').forEach(b => b.classList.remove('selected'));
+  document.getElementById('startQuizBtn').disabled = true;
+  window.currentChildResult = null;
+  showScreen('inputScreen');
+}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

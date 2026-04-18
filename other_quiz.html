@@ -111,7 +111,7 @@
   /* 関係性選択 */
   .rel-label { font-size: 13px; color: var(--dim); text-align: left; width: 100%; margin-bottom: 10px; font-weight: 500; }
   .rel-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 24px; }
-  .rel-options .rel-child-row { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rel-options .rel-btn-child { grid-column: 1 / -1; background: rgba(251,191,36,0.10); border-color: #fbbf24; }
   .rel-btn {
     padding: 16px 6px; border-radius: 14px;
     background: rgba(139,92,246,0.08);
@@ -125,8 +125,7 @@
   .rel-btn.sel-love     { background: rgba(236,72,153,0.15); border-color: var(--pink); }
   .rel-btn.sel-work     { background: rgba(59,130,246,0.15); border-color: var(--blue); }
   .rel-btn.sel-friend   { background: rgba(16,185,129,0.15); border-color: #10b981; }
-  .rel-btn.sel-child46  { background: rgba(251,191,36,0.15); border-color: #fbbf24; }
-  .rel-btn.sel-child79  { background: rgba(251,146,60,0.15); border-color: #fb923c; }
+  .rel-btn.sel-child    { background: rgba(251,191,36,0.20); border-color: #fbbf24; }
 
   /* 名前入力 */
   .input-group { width: 100%; margin-bottom: 18px; text-align: left; }
@@ -472,14 +471,9 @@
     <button class="rel-btn" data-rel="friend">
       <span class="rel-icon">👫</span>友人・<br>知人
     </button>
-    <div class="rel-child-row">
-      <button class="rel-btn" data-rel="child46">
-        <span class="rel-icon">🌱</span>子供<br>（4〜6歳）
-      </button>
-      <button class="rel-btn" data-rel="child79">
-        <span class="rel-icon">🌿</span>子供<br>（7〜9歳）
-      </button>
-    </div>
+    <button class="rel-btn rel-btn-child" data-rel="child" onclick="location.href='kodomo.html'">
+      <span class="rel-icon">🧒</span>子供を<br>診断する
+    </button>
   </div>
 
   <div class="input-group">
@@ -787,14 +781,13 @@ const accNote    = document.getElementById('accuracyNote');
 
 document.querySelectorAll('.rel-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    if (btn.dataset.rel === 'child') return; // kodomo.html へ遷移するので処理しない
     document.querySelectorAll('.rel-btn').forEach(b => {
-      b.classList.remove('selected','sel-love','sel-work','sel-friend','sel-child46','sel-child79');
+      b.classList.remove('selected','sel-love','sel-work','sel-friend');
     });
     btn.classList.add('selected', `sel-${btn.dataset.rel}`);
     personRel = btn.dataset.rel;
-    const isChild = personRel === 'child46' || personRel === 'child79';
-    document.getElementById('periodGroup').style.display = isChild ? 'none' : '';
-    if (isChild) { personPeriod = 'long'; }
+    document.getElementById('periodGroup').style.display = '';
     checkReady();
   });
 });
