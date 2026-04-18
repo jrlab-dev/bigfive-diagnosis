@@ -256,6 +256,38 @@
   }
   .top-link:hover { color: var(--text); }
 
+  /* 途中保存バナー */
+  .resume-banner {
+    display: none;
+    background: rgba(139,92,246,0.12);
+    border: 1.5px solid rgba(139,92,246,0.3);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: var(--dim);
+  }
+  .resume-banner.visible { display: block; }
+  .resume-banner p { margin-bottom: 10px; line-height: 1.6; }
+  .resume-banner strong { color: var(--text); }
+  .resume-btns { display: flex; gap: 10px; }
+  .resume-continue {
+    flex: 1; padding: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none; border-radius: 10px;
+    color: #fff; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+  }
+  .resume-restart {
+    flex: 1; padding: 10px;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    color: var(--dim); font-size: 13px;
+    font-family: inherit; cursor: pointer;
+  }
+  .resume-restart:hover { color: var(--text); }
+
   @media (max-width: 400px) {
     .question-text { font-size: 16px; }
     .answer-btn { font-size: 11px; padding: 12px 2px; }
@@ -274,6 +306,14 @@
 </a>
 
 <div class="quiz-container">
+  <div class="resume-banner" id="resumeBanner">
+    <p>前回の続きがあります。<br><strong id="resumeInfo"></strong></p>
+    <div class="resume-btns">
+      <button class="resume-continue" id="resumeContinue">続きから始める</button>
+      <button class="resume-restart" id="resumeRestart">最初からやり直す</button>
+    </div>
+  </div>
+
   <div class="progress">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <span class="progress-text" id="progressText">1/10</span>
@@ -515,6 +555,26 @@ const total = questions.length;
 let current = 0;
 const answers = new Array(total).fill(null);
 
+// ===== 途中保存（localStorage）=====
+const SAVE_KEY = `bigfive_progress_v${version}`;
+function saveProgress() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ current, answers }));
+  } catch(e) {}
+}
+function clearProgress() {
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+}
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (d && d.answers && d.answers.length === total && d.current > 0) return d;
+  } catch(e) {}
+  return null;
+}
+
 // other_quizから来た場合、LocalStorageから自分のコードを取得
 let myCode = params.get('my') || '';
 const ref = params.get('ref') || '';
@@ -568,12 +628,15 @@ answersEl.addEventListener('click', (e) => {
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 
+  saveProgress();
+
   // 0.3秒後に次の問題へ
   setTimeout(() => {
     if (current < total - 1) {
       current++;
       render();
     } else {
+      clearProgress();
       showResult();
     }
   }, 300);
@@ -696,8 +759,30 @@ function showResult() {
   el.style.backgroundImage = css;
 })();
 
-// ===== 初期表示 =====
-render();
+// ===== 途中保存バナー =====
+(function() {
+  const saved = loadSaved();
+  if (!saved) { render(); return; }
+
+  const banner = document.getElementById('resumeBanner');
+  const info = document.getElementById('resumeInfo');
+  const answered = saved.answers.filter(a => a !== null).length;
+  info.textContent = `Q${answered}/${total} まで回答済み`;
+  banner.classList.add('visible');
+
+  document.getElementById('resumeContinue').addEventListener('click', () => {
+    current = saved.current;
+    saved.answers.forEach((v, i) => { answers[i] = v; });
+    banner.classList.remove('visible');
+    render();
+  });
+
+  document.getElementById('resumeRestart').addEventListener('click', () => {
+    clearProgress();
+    banner.classList.remove('visible');
+    render();
+  });
+})();
 </script>
 <script src="nav.js"></script>
 </body>
