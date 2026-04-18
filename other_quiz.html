@@ -1073,6 +1073,16 @@ function showResult() {
     // 精度注記を子供向けに上書き
     document.getElementById('resultAccuracyNote').innerHTML =
       `※ この診断は保護者の観察をもとにした推定です。お子さんの実際の性格と異なる場合があります。`;
+    // 保存用データをセット（returnの前に必ず実行）
+    window.currentOtherResult = {
+      name: personName,
+      code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+      scores: sc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString()
+    };
+    checkAlreadySaved();
     showScreen('resultScreen');
     setTimeout(() => {
       document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
