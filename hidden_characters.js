@@ -65,4 +65,8 @@ const HIDDEN_CHARACTERS = [
   { id:'asuka',      name:'式波・アスカ・ラングレー',  work:'新世紀エヴァンゲリオン', o:4, c:4, e:5, a:1, n:5, gender:'any', img:'隠し_アスカ・ラングレー.webp' },
   { id:'light',      name:'夜神月',                    work:'デスノート',              o:5, c:5, e:3, a:1, n:1, gender:'any', img:'隠し_夜神月.webp' },
 
+  // ===== オリジナル =====
+  { id:'hikari_f',   name:'光の人',                    work:'（完全人格者）',           o:5, c:5, e:5, a:5, n:1, gender:'F',   img:'隠し_光の人_F.webp' },
+  { id:'hikari_m',   name:'光の人',                    work:'（完全人格者）',           o:5, c:5, e:5, a:5, n:1, gender:'M',   img:'隠し_光の人_M.webp' },
+
 ];
