@@ -16,6 +16,7 @@ test_*.py
 ## デバッグ・一時ファイル
 result*.json
 *.txt
+!robots.txt
 generate_log.txt
 
 ## サイト不要ファイル
