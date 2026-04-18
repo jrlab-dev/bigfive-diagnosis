@@ -111,6 +111,7 @@
   /* 関係性選択 */
   .rel-label { font-size: 13px; color: var(--dim); text-align: left; width: 100%; margin-bottom: 10px; font-weight: 500; }
   .rel-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 24px; }
+  .rel-options .rel-child-row { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .rel-btn {
     padding: 16px 6px; border-radius: 14px;
     background: rgba(139,92,246,0.08);
@@ -121,9 +122,11 @@
   .rel-btn .rel-icon { font-size: 22px; display: block; margin-bottom: 4px; }
   .rel-btn:hover { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.35); color: var(--text); }
   .rel-btn.selected { border-color: var(--purple); color: var(--text); font-weight: 700; }
-  .rel-btn.sel-love    { background: rgba(236,72,153,0.15); border-color: var(--pink); }
-  .rel-btn.sel-work    { background: rgba(59,130,246,0.15); border-color: var(--blue); }
-  .rel-btn.sel-friend  { background: rgba(16,185,129,0.15); border-color: #10b981; }
+  .rel-btn.sel-love     { background: rgba(236,72,153,0.15); border-color: var(--pink); }
+  .rel-btn.sel-work     { background: rgba(59,130,246,0.15); border-color: var(--blue); }
+  .rel-btn.sel-friend   { background: rgba(16,185,129,0.15); border-color: #10b981; }
+  .rel-btn.sel-child46  { background: rgba(251,191,36,0.15); border-color: #fbbf24; }
+  .rel-btn.sel-child79  { background: rgba(251,146,60,0.15); border-color: #fb923c; }
 
   /* 名前入力 */
   .input-group { width: 100%; margin-bottom: 18px; text-align: left; }
@@ -469,6 +472,14 @@
     <button class="rel-btn" data-rel="friend">
       <span class="rel-icon">👫</span>友人・<br>知人
     </button>
+    <div class="rel-child-row">
+      <button class="rel-btn" data-rel="child46">
+        <span class="rel-icon">🌱</span>子供<br>（4〜6歳）
+      </button>
+      <button class="rel-btn" data-rel="child79">
+        <span class="rel-icon">🌿</span>子供<br>（7〜9歳）
+      </button>
+    </div>
   </div>
 
   <div class="input-group">
@@ -476,7 +487,7 @@
     <input type="text" class="text-input" id="personName" placeholder="例：Aさん、田中くん…" maxlength="20">
   </div>
 
-  <div class="input-group" style="margin-bottom:10px;">
+  <div class="input-group" style="margin-bottom:10px;" id="periodGroup">
     <span class="input-label">どのくらいの付き合いですか？</span>
     <div class="period-options">
       <button class="period-btn" data-period="short">1ヶ月未満</button>
@@ -564,6 +575,59 @@
 </div>
 
 <script>
+// ===== 子供用質問データ =====
+const questionsFixed15 = [
+  { text: 'この子は、初めて会う人にも自分から話しかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が悲しんでいると一緒に心配します', factor:'A', dir:'+' },
+  { text: 'この子は、やると決めたことを最後までやり遂げます', factor:'C', dir:'+' },
+  { text: 'この子は、嫌なことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、「なぜ？」「どうして？」とよく質問します', factor:'O', dir:'+' },
+  { text: 'この子は、一人遊びや静かな環境を好みます', factor:'E', dir:'-' },
+  { text: 'この子は、おもちゃや道具を友達と分け合えます', factor:'A', dir:'+' },
+  { text: 'この子は、言われなくても使ったものを元の場所に戻します', factor:'C', dir:'+' },
+  { text: 'この子は、気持ちをすぐに切り替えて立ち直れます', factor:'N', dir:'-' },
+  { text: 'この子は、知らない遊びや活動に積極的に挑戦します', factor:'O', dir:'+' },
+  { text: 'この子は、グループの中で意見を積極的に言います', factor:'E', dir:'+' },
+  { text: 'この子は、意見が合わないとき相手に強く言いすぎてしまうことがあります', factor:'A', dir:'-' },
+  { text: 'この子は、決めたルールや約束をきちんと守ります', factor:'C', dir:'+' },
+  { text: 'この子は、予定が変わったり思い通りにならないと不安になりやすいです', factor:'N', dir:'+' },
+  { text: 'この子は、空想やお話をつくるのが好きです', factor:'O', dir:'+' },
+];
+const questionsChild46 = [
+  { text: 'この子は、砂場や外遊びで知らない子にも「一緒に遊ぼう」と声をかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が転んだときにすぐ「大丈夫？」と声をかけます', factor:'A', dir:'+' },
+  { text: 'この子は、幼稚園・保育園のお片付けの時間に自分から片付けます', factor:'C', dir:'+' },
+  { text: 'この子は、思い通りにならないと気持ちをなかなか落ち着かせられません', factor:'N', dir:'+' },
+  { text: 'この子は、虫や花など身近な生き物をじっくり観察します', factor:'O', dir:'+' },
+  { text: 'この子は、友達と遊ぶとき自分からルールや遊び方を提案します', factor:'E', dir:'+' },
+  { text: 'この子は、友達がほしがっているおもちゃを譲ることができます', factor:'A', dir:'+' },
+  { text: 'この子は、先生に言われた手順をきちんと守ろうとします', factor:'C', dir:'+' },
+  { text: 'この子は、新しい場所や初めての行事の前に不安そうな様子を見せます', factor:'N', dir:'+' },
+  { text: 'この子は、絵本や紙芝居の続きを自分なりに考えて話してくれます', factor:'O', dir:'+' },
+  { text: 'この子は、にぎやかな場所やイベントが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、友達とけんかしても自分から謝ることが苦手です', factor:'A', dir:'-' },
+  { text: 'この子は、やりたくない作業でも途中でやめずに取り組むことが苦手です', factor:'C', dir:'-' },
+  { text: 'この子は、親がそばにいなくても落ち着いて過ごせます', factor:'N', dir:'-' },
+  { text: 'この子は、いつも同じ遊びより、新しい遊び方を試したがります', factor:'O', dir:'+' },
+];
+const questionsChild79 = [
+  { text: 'この子は、休み時間にクラスの友達を誘って一緒に遊びます', factor:'E', dir:'+' },
+  { text: 'この子は、困っているクラスメートがいると自分から手伝おうとします', factor:'A', dir:'+' },
+  { text: 'この子は、宿題を毎日決まった時間に自分から取り組みます', factor:'C', dir:'+' },
+  { text: 'この子は、うまくいかないことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、授業で「もっと知りたい」と思ったことを家でも調べます', factor:'O', dir:'+' },
+  { text: 'この子は、グループ学習のとき自分から発言したり仕切ったりします', factor:'E', dir:'+' },
+  { text: 'この子は、グループの意見に反対でも、相手を傷つけないよう言い方を考えます', factor:'A', dir:'+' },
+  { text: 'この子は、係の仕事や当番を忘れずにこなします', factor:'C', dir:'+' },
+  { text: 'この子は、友達とトラブルがあっても翌日には普通に接することができます', factor:'N', dir:'-' },
+  { text: 'この子は、本や授業で知ったことについて「もっと知りたい」とよく言います', factor:'O', dir:'+' },
+  { text: 'この子は、放課後は一人でいるより友達と過ごすほうが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、自分さえよければいいという行動をとることがあります', factor:'A', dir:'-' },
+  { text: 'この子は、やりたくない課題でも途中で投げ出さずに続けます', factor:'C', dir:'+' },
+  { text: 'この子は、発表や人前に立つ場面でひどく緊張します', factor:'N', dir:'+' },
+  { text: 'この子は、決まったやり方より自分なりのやり方を試したがります', factor:'O', dir:'+' },
+];
+
 // ===== 質問データ（インターリーブ順） =====
 const questions = [
   { text: '初対面の人にも自分から話しかけ、すぐに打ち解けるほうだと思う', factor:'E', dir:'+' },
@@ -598,7 +662,8 @@ const questions = [
   { text: '他人の気持ちに敏感で、相手が不快そうだと察して気遣うことが多い', factor:'A', dir:'+' },
   { text: 'グループの決定に不満があっても、波風を立てずに従うことが多い', factor:'A', dir:'+' },
 ];
-const total = questions.length;
+let activeQuestions = questions;
+let total = questions.length;
 
 // ===== 関係性設定 =====
 const relConfig = {
@@ -637,15 +702,31 @@ const relConfig = {
     badge: '👫 友人・知人', badgeClass: 'badge-friend',
     barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
     compatTitle: '友人としての相性スコア',
-    // 友人は 開放性・外向性のバランス を重視
     compatWeights: { E: 1.5, N: 1.0, O: 2.0, C: 0.8, A: 1.5 },
     compatHigh: '👫 気の合う友人です！話題が合いやすく、一緒にいて楽しい関係です。',
     compatMid:  '🌿 お互いの違いを楽しめれば、刺激し合える良い関係になります。',
     compatLow:  '🌀 タイプは違いますが、だからこそ新しい視点をもらえる関係かもしれません。',
-    // 信頼度情報
     observerNote: '友人関係では、外向性や開放性の評価が正確です。ただし真面目さや感情面は遊びの場面では見えにくいため、参考程度にしてください。',
     accurateFactors: ['E','O'],
     lessAccurateFactors: ['C','N'],
+  },
+  child46: {
+    icon: '🌱', label: '子供（4〜6歳）',
+    badge: '🌱 子供（4〜6歳）', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    isChild: true,
+    observerNote: '親による観察評価は幼児期の主流な測定方法です。外向性・協調性は正確に見えやすい一方、感情の内面は見えにくい場合があります。',
+    accurateFactors: ['E','A'],
+    lessAccurateFactors: ['N','O'],
+  },
+  child79: {
+    icon: '🌿', label: '子供（7〜9歳）',
+    badge: '🌿 子供（7〜9歳）', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    isChild: true,
+    observerNote: '小学校低学年では学校生活が加わり、親が見えない場面も増えます。誠実性・外向性は把握しやすいですが、感情面は参考程度にしてください。',
+    accurateFactors: ['C','E'],
+    lessAccurateFactors: ['N','O'],
   },
 };
 
@@ -707,10 +788,13 @@ const accNote    = document.getElementById('accuracyNote');
 document.querySelectorAll('.rel-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rel-btn').forEach(b => {
-      b.classList.remove('selected','sel-love','sel-work','sel-friend');
+      b.classList.remove('selected','sel-love','sel-work','sel-friend','sel-child46','sel-child79');
     });
     btn.classList.add('selected', `sel-${btn.dataset.rel}`);
     personRel = btn.dataset.rel;
+    const isChild = personRel === 'child46' || personRel === 'child79';
+    document.getElementById('periodGroup').style.display = isChild ? 'none' : '';
+    if (isChild) { personPeriod = 'long'; }
     checkReady();
   });
 });
@@ -743,6 +827,16 @@ function checkReady() {
 startBtn.addEventListener('click', () => {
   personName = nameInput.value.trim();
   const cfg = relConfig[personRel];
+
+  // 子供用は質問セットを切り替え
+  if (personRel === 'child46') {
+    activeQuestions = [...questionsFixed15, ...questionsChild46];
+  } else if (personRel === 'child79') {
+    activeQuestions = [...questionsFixed15, ...questionsChild79];
+  } else {
+    activeQuestions = questions;
+  }
+  total = activeQuestions.length;
   // who bar
   const whoBar = document.getElementById('whoBar');
   whoBar.className = `who-bar ${cfg.whoClass}`;
@@ -761,7 +855,8 @@ startBtn.addEventListener('click', () => {
   badge.textContent = cfg.badge;
   badge.className = `result-rel-badge ${cfg.badgeClass}`;
 
-  current = 0; ans.fill(null);
+  current = 0;
+  ans.length = total; ans.fill(null);
   render();
   showScreen('quizScreen');
 });
@@ -778,7 +873,7 @@ function render() {
   progressFill.style.width = `${((current+1)/total)*100}%`;
   progressText.textContent = `${current+1}/${total}`;
   questionNum.textContent = `Q${current+1}`;
-  questionText.textContent = questions[current].text;
+  questionText.textContent = activeQuestions[current].text;
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
     btn.style.transition = 'none';
     btn.classList.toggle('selected', parseInt(btn.dataset.val) === ans[current]);
@@ -804,7 +899,7 @@ backBtn.addEventListener('click', () => { if (current>0){current--; render();} }
 // ===== スコア計算 =====
 function calcScores() {
   const fm = { E:[], N:[], O:[], C:[], A:[] };
-  questions.forEach((q,i) => {
+  activeQuestions.forEach((q,i) => {
     const raw = ans[i] || 3;
     const val = q.dir==='-' ? (6-raw) : raw;
     fm[q.factor].push(val);
@@ -967,6 +1062,20 @@ function showResult() {
 
   // 相性スコア
   const compatCard = document.getElementById('compatCard');
+  if (cfg.isChild) {
+    compatCard.className = 'compat-prompt';
+    compatCard.innerHTML = `
+      <p class="compat-prompt-title">👶 ${personName}の性格タイプについて</p>
+      <p class="compat-prompt-sub" style="line-height:1.7;">これは保護者から見たお子さんの傾向です。<br>家庭外の姿は反映されない場合があります。<br>結果はあくまで参考としてお使いください。</p>`;
+    // 精度注記を子供向けに上書き
+    document.getElementById('resultAccuracyNote').innerHTML =
+      `※ この診断は保護者の観察をもとにした推定です。お子さんの実際の性格と異なる場合があります。`;
+    showScreen('resultScreen');
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+    }, 100);
+    return;
+  }
   const score = calcCompat(sc, myScores, cfg.compatWeights);
   if (score !== null) {
     // 自分のスコアあり → 相性スコア表示
