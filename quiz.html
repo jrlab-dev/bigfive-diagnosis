@@ -610,11 +610,14 @@ function render() {
   questionText.textContent = q.text;
 
   // 回答状態復元
+  const savedAnswer = answers[current];
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.style.transition = 'none';
-    btn.classList.toggle('selected', parseInt(btn.dataset.val) === answers[current]);
-    requestAnimationFrame(() => { btn.style.transition = ''; });
+    btn.classList.remove('selected');
   });
+  if (savedAnswer !== null) {
+    const target = answersEl.querySelector(`[data-val="${savedAnswer}"]`);
+    if (target) target.classList.add('selected');
+  }
 
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }

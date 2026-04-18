@@ -606,7 +606,7 @@ const questionsChild46 = [
   { text: 'この子は、絵本や紙芝居の続きを自分なりに考えて話してくれます', factor:'O', dir:'+' },
   { text: 'この子は、にぎやかな場所やイベントが好きです', factor:'E', dir:'+' },
   { text: 'この子は、友達とけんかしても自分から謝ることが苦手です', factor:'A', dir:'-' },
-  { text: 'この子は、やりたくない作業でも途中でやめずに取り組むことが苦手です', factor:'C', dir:'-' },
+  { text: 'この子は、気が進まない作業は途中でやめてしまうことがあります', factor:'C', dir:'-' },
   { text: 'この子は、親がそばにいなくても落ち着いて過ごせます', factor:'N', dir:'-' },
   { text: 'この子は、いつも同じ遊びより、新しい遊び方を試したがります', factor:'O', dir:'+' },
 ];
@@ -874,11 +874,14 @@ function render() {
   progressText.textContent = `${current+1}/${total}`;
   questionNum.textContent = `Q${current+1}`;
   questionText.textContent = activeQuestions[current].text;
+  const savedAns = ans[current];
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.style.transition = 'none';
-    btn.classList.toggle('selected', parseInt(btn.dataset.val) === ans[current]);
-    requestAnimationFrame(() => { btn.style.transition = ''; });
+    btn.classList.remove('selected');
   });
+  if (savedAns !== null) {
+    const target = answersEl.querySelector(`[data-val="${savedAns}"]`);
+    if (target) target.classList.add('selected');
+  }
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
