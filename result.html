@@ -1361,6 +1361,10 @@ function findHiddenCharacter() {
 }
 
 function getRarity() {
+  // URLにrarity指定済みならそれを使う（リロード・シェアリンク踏んだ時の再抽選防止）
+  const urlRarity = params.get('rarity');
+  if (urlRarity) return urlRarity;
+
   // 10問：レアなし
   if (version === '10') return 'common';
 
@@ -1486,8 +1490,17 @@ const rarity = getRarity();
 card.className = `card rarity-${rarity}`;
 
 // ダークパーソナリティ（A=1）の隠しキャラ → 黒ホログラム
-if (hiddenChar && hiddenChar.a === 1) {
+const isDarkSecret = hiddenChar && hiddenChar.a === 1;
+if (isDarkSecret) {
   card.classList.add('dark-secret');
+}
+
+// レアリティをURLに固定（シェア用・リロード再抽選防止）
+if (!params.get('rarity')) {
+  const newParams = new URLSearchParams(params);
+  newParams.set('rarity', rarity);
+  if (isDarkSecret) newParams.set('dark', '1');
+  history.replaceState(null, '', `${location.pathname}?${newParams}`);
 }
 
 // キャラクター画像
