@@ -32,6 +32,8 @@ PROMPT_FILES = [
     "キャラクター作成データ/英語プロンプト_Part05_No197-243.md",
 ]
 
+FINGER_RULE = "\n\nFINGERS (critical): Every character must have exactly 5 fingers on each hand — thumb, index, middle, ring, and pinky. Count carefully. Never draw 4 fingers. 5 fingers per hand, no exceptions."
+
 def load_all_prompts():
     items = []
     for path in PROMPT_FILES:
@@ -44,7 +46,7 @@ def load_all_prompts():
             if m:
                 code = m.group(1)
                 prompt_text = re.sub(r"###.*\n", "", sec).strip()
-                items.append((code, prompt_text))
+                items.append((code, prompt_text + FINGER_RULE))
     return items
 
 def find_split_x(img):
