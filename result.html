@@ -913,6 +913,7 @@
   </div>
 
   <div class="copy-toast" id="copyToast">クリップボードにコピーしました！</div>
+  <div class="copy-toast" id="deleteToast" style="background:rgba(245,158,11,0.9);bottom:120px;"></div>
 
   <!-- あの人診断への誘導 -->
   <div style="margin: 16px auto 0; max-width: 480px; width: 100%;">
@@ -2032,6 +2033,17 @@ if (isOtherMode) {
     }
   }
 
+  const MY_LIMIT = 5;
+  const OTHER_LIMIT = 15;
+
+  function showDeleteToast(msg) {
+    const toast = document.getElementById('deleteToast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
   // 保存実行（共通関数）
   function doSave() {
     try {
@@ -2039,7 +2051,10 @@ if (isOtherMode) {
       const isDuplicate = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
       if (!isDuplicate) {
         myResults.unshift(currentResult);
-        if (myResults.length > 5) myResults.pop();
+        if (myResults.length > MY_LIMIT) {
+          myResults.pop();
+          showDeleteToast(`保存上限（${MY_LIMIT}件）のため、古い自分の結果を1件削除しました`);
+        }
         localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(myResults));
       }
       if (otherResult) {
@@ -2047,7 +2062,10 @@ if (isOtherMode) {
         const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
         if (!isOtherDuplicate) {
           others.unshift(otherResult);
-          if (others.length > 10) others.pop();
+          if (others.length > OTHER_LIMIT) {
+            others.pop();
+            showDeleteToast(`保存上限（${OTHER_LIMIT}件）のため、古いあの人の結果を1件削除しました`);
+          }
           localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
         }
       }
