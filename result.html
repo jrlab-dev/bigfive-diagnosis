@@ -932,6 +932,7 @@
 </div>
 
 <script src="hidden_characters.js"></script>
+<script src="album.js"></script>
 <script src="concierge.js"></script>
 <script>
 // ===== 特性情報 =====
@@ -2025,7 +2026,8 @@ if (isOtherMode) {
     typeName: document.getElementById('typeName').textContent,
     date: new Date().toISOString(),
     version: version,
-    gender: params.get('gender') || 'F' // 性別を追加
+    gender: params.get('gender') || 'F',
+    rarity: rarity
   };
 
   // 他者診断から来た場合の相手のデータ
@@ -2033,7 +2035,8 @@ if (isOtherMode) {
     name: otherName,
     code: otherCode,
     date: new Date().toISOString(),
-    gender: 'F' // 相手の性別はデフォルトで女性（後で選択可能に）
+    gender: params.get('other_gender') || 'F',
+    rarity: rarity
   } : null;
 
   // すでに保存済みかチェック（versionも含めてチェック）
@@ -2084,6 +2087,35 @@ if (isOtherMode) {
       }
       saveBtn.textContent = '✓ 保存済み';
       saveBtn.className = 'btn btn-saved';
+
+      // アルバムに追加
+      if (window.AlbumUtils) {
+        var hc = typeof findHiddenCharacter === 'function' ? findHiddenCharacter() : null;
+        window.AlbumUtils.addToAlbum({
+          code: currentResult.code,
+          gender: currentResult.gender,
+          typeName: currentResult.typeName,
+          version: currentResult.version,
+          rarity: currentResult.rarity,
+          isHidden: !!hc,
+          hiddenId: hc ? hc.id : null,
+          date: currentResult.date,
+          source: 'my'
+        });
+        if (otherResult) {
+          window.AlbumUtils.addToAlbum({
+            code: otherResult.code,
+            gender: otherResult.gender,
+            typeName: otherResult.code,
+            version: version,
+            rarity: otherResult.rarity,
+            isHidden: false,
+            hiddenId: null,
+            date: otherResult.date,
+            source: 'other'
+          });
+        }
+      }
     } catch (e) {
       console.error('保存エラー:', e);
     }

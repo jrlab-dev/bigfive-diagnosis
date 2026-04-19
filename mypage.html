@@ -418,6 +418,198 @@
   .clear-all:hover {
     background: rgba(239,68,68,0.2);
   }
+
+  /* ===== アルバム ===== */
+  .album-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .album-progress-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #e2d9f3;
+    margin-bottom: 8px;
+  }
+  .album-progress-text.complete {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .album-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .album-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 480px) {
+    .album-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+  }
+  .album-card {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .album-card:hover {
+    transform: translateY(-2px);
+  }
+  .album-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .album-card.rarity-common {
+    border: 2px solid rgba(255,255,255,0.15);
+  }
+  .album-card.rarity-common:hover {
+    box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+  }
+  .album-card.rarity-rare {
+    border: 2px solid rgba(59,130,246,0.5);
+  }
+  .album-card.rarity-rare:hover {
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+  }
+  .album-card.rarity-legendary {
+    border: 2px solid rgba(255,215,0,0.6);
+  }
+  .album-card.rarity-legendary:hover {
+    box-shadow: 0 4px 16px rgba(255,215,0,0.4);
+  }
+  .album-card.rarity-secret {
+    border: 2px solid rgba(212,170,0,0.7);
+  }
+  .album-card.rarity-secret:hover {
+    box-shadow: 0 4px 16px rgba(212,170,0,0.5);
+  }
+  .album-card-code {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #ccc;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 0;
+  }
+  .album-card-source {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 9px;
+    background: rgba(0,0,0,0.5);
+    color: #aaa;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .album-empty-slot {
+    aspect-ratio: 1;
+    border: 2px dashed rgba(139,92,246,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(139,92,246,0.25);
+    font-size: 24px;
+  }
+  .album-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .album-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+  }
+  .album-badge.locked {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    opacity: 0.4;
+  }
+  .album-badge.bronze { background: linear-gradient(135deg, #cd7f32, #a0522d); border: 2px solid #cd7f32; }
+  .album-badge.silver { background: linear-gradient(135deg, #c0c0c0, #a8a8a8); border: 2px solid #c0c0c0; }
+  .album-badge.gold { background: linear-gradient(135deg, #ffd700, #daa520); border: 2px solid #ffd700; }
+  .album-badge.diamond { background: linear-gradient(135deg, #b9f2ff, #7df9ff, #89cff0); border: 2px solid #7df9ff; }
+  .album-badge-label {
+    position: absolute;
+    bottom: -16px;
+    font-size: 9px;
+    color: #999;
+    white-space: nowrap;
+  }
+  .album-badge.locked .album-badge-label { color: #555; }
+  .album-badge-date {
+    position: absolute;
+    bottom: -28px;
+    font-size: 8px;
+    color: #666;
+    white-space: nowrap;
+  }
+  .stage2-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 30px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .stage2-btn.locked {
+    background: rgba(255,255,255,0.05);
+    color: #555;
+    cursor: not-allowed;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .stage2-btn.unlocked {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+  }
+  .stage2-btn.unlocked:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(139,92,246,0.5);
+  }
+  .album-empty-msg {
+    text-align: center;
+    color: #888;
+    padding: 40px 20px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
 </style>
 </head>
 <body>
@@ -436,11 +628,13 @@
     <button class="tab active" data-tab="my">自分の結果</button>
     <button class="tab" data-tab="others">あの人の結果</button>
     <button class="tab" data-tab="tests">心理テスト</button>
+    <button class="tab" data-tab="album">カードアルバム</button>
   </div>
 
   <div id="myResults" class="results-list"></div>
   <div id="otherResults" class="results-list" style="display: none;"></div>
   <div id="otherTestResults" class="results-list" style="display: none;"></div>
+  <div id="albumContent" class="results-list" style="display: none;"></div>
 
   <!-- 総合レポートバナー -->
   <div class="report-banner" id="reportBanner"></div>
@@ -754,12 +948,91 @@ function deleteTestResult(key) {
   renderOtherTests();
 }
 
+// ===== アルバム =====
+function renderAlbum() {
+  const container = document.getElementById('albumContent');
+  if (!window.AlbumUtils) { container.innerHTML = '<p style="color:#888;padding:40px;text-align:center;">読み込み中...</p>'; return; }
+
+  // 初回アクセス時に既存データを移行
+  const meta = AlbumUtils.getAlbumMeta();
+  if (!meta.migrated) {
+    AlbumUtils.migrateExistingResults();
+  }
+
+  const cards = AlbumUtils.getAlbumCards();
+  const count = cards.length;
+  const max = AlbumUtils.MAX_CARDS;
+  const pct = Math.round((count / max) * 100);
+  const isComplete = count >= max;
+
+  if (count === 0) {
+    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがアルバムに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！</div>';
+    return;
+  }
+
+  let html = '<div class="album-header">';
+  html += `<div class="album-progress-text${isComplete ? ' complete' : ''}">${count} / ${max} 枚${isComplete ? ' COMPLETE!' : ''}</div>`;
+  html += '<div class="album-progress-bar"><div class="album-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '</div>';
+
+  // カードグリッド
+  html += '<div class="album-grid">';
+  cards.forEach(function(card) {
+    const imgPath = AlbumUtils.getCardImagePath(card);
+    const r = card.rarity || 'common';
+    const sourceLabel = card.source === 'my' ? '自分' : card.source === 'other' ? 'あの人' : '';
+    html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '" class="album-card rarity-' + r + '">';
+    html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
+    html += '<div class="album-card-code">' + card.code + '</div>';
+    if (sourceLabel) html += '<div class="album-card-source">' + sourceLabel + '</div>';
+    html += '</a>';
+  });
+  // 空スロット
+  for (var i = count; i < max; i++) {
+    html += '<div class="album-empty-slot">?</div>';
+  }
+  html += '</div>';
+
+  // 実績バッジ
+  html += '<div class="album-badges">';
+  var badgeConfigs = [
+    { threshold: 5, icon: '🥉', cls: 'bronze', label: '5枚' },
+    { threshold: 10, icon: '🥈', cls: 'silver', label: '10枚' },
+    { threshold: 15, icon: '🥇', cls: 'gold', label: '15枚' },
+    { threshold: 20, icon: '💎', cls: 'diamond', label: '20枚' }
+  ];
+  badgeConfigs.forEach(function(b) {
+    var unlocked = meta.milestones && meta.milestones[b.threshold];
+    var dateStr = unlocked ? new Date(unlocked.date).getMonth() + 1 + '/' + new Date(unlocked.date).getDate() : '';
+    html += '<div class="album-badge ' + (unlocked ? b.cls : 'locked') + '">';
+    html += b.icon;
+    html += '<span class="album-badge-label">' + b.label + '</span>';
+    if (dateStr) html += '<span class="album-badge-date">' + dateStr + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Stage 2ボタン
+  var remaining = max - count;
+  if (isComplete) {
+    html += '<button class="stage2-btn unlocked" onclick="alert(\'図鑑は次回アップデートで解放予定です！\')">📖 図鑑を開く（486枚）</button>';
+  } else {
+    html += '<button class="stage2-btn locked" onclick="alert(\'あと' + remaining + '枚コレクトで図鑑が解放されます！\')">🔒 図鑑（あと' + remaining + '枚で解放）</button>';
+  }
+
+  container.innerHTML = html;
+}
+
 // 全削除
 document.getElementById('clearAllBtn').addEventListener('click', () => {
   if (!confirm('すべての保存データを削除しますか？\nこの操作は取り消せません。')) return;
   localStorage.removeItem(STORAGE_KEY_MY);
   localStorage.removeItem(STORAGE_KEY_OTHERS);
   TEST_META.forEach(t => localStorage.removeItem(t.key));
+  if (window.AlbumUtils) {
+    localStorage.removeItem(AlbumUtils.STORAGE_KEY);
+    localStorage.removeItem(AlbumUtils.META_KEY);
+  }
   render();
 });
 
@@ -768,9 +1041,11 @@ function render() {
   const myEl = document.getElementById('myResults');
   const otherEl = document.getElementById('otherResults');
   const testEl = document.getElementById('otherTestResults');
+  const albumEl = document.getElementById('albumContent');
   myEl.style.display = 'none';
   otherEl.style.display = 'none';
   testEl.style.display = 'none';
+  albumEl.style.display = 'none';
 
   if (currentTab === 'my') {
     myEl.style.display = 'flex';
@@ -778,9 +1053,12 @@ function render() {
   } else if (currentTab === 'others') {
     otherEl.style.display = 'flex';
     renderOtherResults();
-  } else {
+  } else if (currentTab === 'tests') {
     testEl.style.display = 'flex';
     renderOtherTests();
+  } else if (currentTab === 'album') {
+    albumEl.style.display = 'flex';
+    renderAlbum();
   }
 }
 
@@ -821,6 +1099,7 @@ function renderReportBanner() {
 
 </script>
 <script src="hidden_characters.js"></script>
+<script src="album.js"></script>
 <script src="concierge.js"></script>
 <script src="nav.js"></script>
 <script>
