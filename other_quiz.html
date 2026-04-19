@@ -1073,7 +1073,8 @@ function showResult() {
       scores: sc,
       relation: personRel,
       gender: personGender,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      rarity: 'common'
     };
     checkAlreadySaved();
     showScreen('resultScreen');
@@ -1160,7 +1161,8 @@ function showResult() {
     scores: sc,
     relation: personRel,
     gender: personGender,
-    date: new Date().toISOString()
+    date: new Date().toISOString(),
+    rarity: 'common'
   };
 
   // 保存済みチェック
@@ -1221,6 +1223,21 @@ document.getElementById('saveBtn').addEventListener('click', () => {
     saveBtn.textContent = '✓ 保存しました！';
     saveBtn.className = 'action-btn btn-saved';
 
+    // アルバムに追加
+    if (window.AlbumUtils) {
+      window.AlbumUtils.addToAlbum({
+        code: result.code,
+        gender: result.gender,
+        typeName: result.code,
+        version: '30',
+        rarity: result.rarity || 'common',
+        isHidden: false,
+        hiddenId: null,
+        date: result.date,
+        source: 'other'
+      });
+    }
+
     setTimeout(() => {
       saveBtn.textContent = '✓ 保存済み';
     }, 2000);
@@ -1248,6 +1265,8 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   el.style.backgroundImage=css;
 })();
 </script>
+<script src="hidden_characters.js"></script>
+<script src="album.js"></script>
 <script src="nav.js"></script>
 </body>
 </html>
