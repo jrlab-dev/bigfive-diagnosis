@@ -1525,9 +1525,9 @@ const sc = { O, C, E, A, N };
 const traitsCard = document.getElementById('traitsCard');
 ['O','C','E','A','N'].forEach(f => {
   const s = sc[f], info = traitInfo[f];
-  const pct = s === 1 ? 22 : s === 3 ? 55 : 88;
-  const lv  = s === 5 ? '高め' : s === 3 ? '普通' : '低め';
-  const lvClass = s === 5 ? 'lv-high' : s === 3 ? 'lv-mid' : 'lv-low';
+  const pct = s === 1 ? 10 : s === 2 ? 30 : s === 3 ? 50 : s === 4 ? 70 : 90;
+  const lv  = s <= 2 ? '低め' : s === 3 ? '普通' : '高め';
+  const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
   traitsCard.innerHTML += `
     <div class="trait-row">
       <div class="trait-header">
@@ -1919,9 +1919,8 @@ if (isOtherMode) {
       const secondColor = factorColors[second.key];
       card.style.borderColor = secondColor;
       card.style.boxShadow = `0 8px 32px rgba(0,0,0,0.6), 0 0 40px ${secondColor}40, 0 0 80px ${secondColor}20`;
+      console.log('背景色:', firstColor, '縁色:', secondColor);
     }
-
-    console.log('背景色:', firstColor, '縁色:', secondColor);
   }
 })();
 
@@ -2065,7 +2064,9 @@ if (isOtherMode) {
     try {
       const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
       const isDuplicate = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
-      if (!isDuplicate) {
+      if (isDuplicate) {
+        showDeleteToast('すでに保存済みです');
+      } else {
         myResults.unshift(currentResult);
         if (myResults.length > MY_LIMIT) {
           myResults.pop();

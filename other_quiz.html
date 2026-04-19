@@ -883,11 +883,12 @@ let timer = null;
 answersEl.addEventListener('click', e => {
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  clearTimeout(timer);
+  if (timer) return;
   ans[current] = parseInt(btn.dataset.val);
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   timer = setTimeout(() => {
+    timer = null;
     answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total-1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
@@ -895,7 +896,7 @@ answersEl.addEventListener('click', e => {
 });
 
 backBtn.addEventListener('click', () => {
-  clearTimeout(timer);
+  if (timer) return;
   if (current>0){current--; render();}
 });
 

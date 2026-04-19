@@ -522,18 +522,19 @@ let timer = null;
 document.getElementById('answers').addEventListener('click', e => {
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  clearTimeout(timer);
+  if (timer) return;
   ans[current] = parseInt(btn.dataset.val);
-  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   timer = setTimeout(() => {
-    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+    timer = null;
+    document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total - 1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
 document.getElementById('quizBackBtn').addEventListener('click', () => {
-  clearTimeout(timer);
+  if (timer) return;
   if (current > 0) { current--; render(); }
 });
 
