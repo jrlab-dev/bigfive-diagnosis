@@ -869,12 +869,16 @@ function render() {
   questionText.textContent = activeQuestions[current].text;
   const savedAns = ans[current];
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.remove('selected');
   });
   if (savedAns !== null) {
     const target = answersEl.querySelector(`[data-val="${savedAns}"]`);
     if (target) target.classList.add('selected');
   }
+  requestAnimationFrame(() => {
+    answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
+  });
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 

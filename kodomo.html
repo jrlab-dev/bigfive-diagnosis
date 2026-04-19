@@ -505,11 +505,18 @@ function render() {
   document.getElementById('qText').textContent = activeQuestions[current].text;
 
   const saved = ans[current];
-  document.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  const answersDiv = document.getElementById('answers');
+  answersDiv.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
+    btn.classList.remove('selected');
+  });
   if (saved !== null) {
-    const target = document.querySelector(`.answer-btn[data-val="${saved}"]`);
+    const target = answersDiv.querySelector(`.answer-btn[data-val="${saved}"]`);
     if (target) target.classList.add('selected');
   }
+  requestAnimationFrame(() => {
+    answersDiv.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
+  });
   document.getElementById('quizBackBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 

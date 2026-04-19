@@ -609,15 +609,19 @@ function render() {
   questionNum.textContent = `Q${current + 1}`;
   questionText.textContent = q.text;
 
-  // 回答状態復元
+  // 回答状態復元（transitionを無効化してから選択解除し、ちらつきを防ぐ）
   const savedAnswer = answers[current];
   answersEl.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.style.transition = 'none';
     btn.classList.remove('selected');
   });
   if (savedAnswer !== null) {
     const target = answersEl.querySelector(`[data-val="${savedAnswer}"]`);
     if (target) target.classList.add('selected');
   }
+  requestAnimationFrame(() => {
+    answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
+  });
 
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
