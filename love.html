@@ -703,10 +703,7 @@ function showQuestion() {
 
   const btns = document.querySelectorAll('.answer-btn');
   btns.forEach(btn => {
-    btn.style.transition = 'none';
     btn.classList.remove('selected');
-    if (answers[current] == btn.dataset.val) btn.classList.add('selected');
-    requestAnimationFrame(() => { btn.style.transition = ''; });
     btn.onclick = () => selectAnswer(parseInt(btn.dataset.val));
   });
 

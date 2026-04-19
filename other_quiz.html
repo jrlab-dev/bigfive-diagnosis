@@ -862,23 +862,19 @@ const questionText = document.getElementById('questionText');
 const answersEl    = document.getElementById('answers');
 const backBtn      = document.getElementById('backBtn');
 
-function render() {
+function render(showSaved = true) {
   progressFill.style.width = `${((current+1)/total)*100}%`;
   progressText.textContent = `${current+1}/${total}`;
   questionNum.textContent = `Q${current+1}`;
   questionText.textContent = activeQuestions[current].text;
-  const savedAns = ans[current];
-  answersEl.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.style.transition = 'none';
-    btn.classList.remove('selected');
-  });
-  if (savedAns !== null) {
-    const target = answersEl.querySelector(`[data-val="${savedAns}"]`);
-    if (target) target.classList.add('selected');
+  answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (showSaved) {
+    const savedAns = ans[current];
+    if (savedAns !== null) {
+      const target = answersEl.querySelector(`[data-val="${savedAns}"]`);
+      if (target) target.classList.add('selected');
+    }
   }
-  requestAnimationFrame(() => {
-    answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
-  });
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
@@ -889,7 +885,7 @@ answersEl.addEventListener('click', e => {
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   setTimeout(() => {
-    if (current < total-1) { current++; render(); }
+    if (current < total-1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
