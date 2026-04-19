@@ -59,7 +59,7 @@
   .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); margin-bottom: 8px; }
   .answers { display: flex; gap: 8px; margin-bottom: 40px; }
   .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim);
-    background: rgba(34,211,238,0.04); border: 1.5px solid rgba(34,211,238,0.15); border-radius: 10px; cursor: pointer; transition: all .2s;
+    background: rgba(34,211,238,0.04); border: 1.5px solid rgba(34,211,238,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
     min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
   .answer-btn:hover { background: rgba(34,211,238,0.15); border-color: rgba(34,211,238,0.4); color: var(--text); }
   .answer-btn.selected { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; font-weight: 700; }
@@ -307,9 +307,7 @@ function showQuestion() {
 function selectAnswer(val) {
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach((b, i) => {
-    b.style.transition = 'none';
     b.classList.toggle('selected', i + 1 === val);
-    requestAnimationFrame(() => { b.style.transition = ''; });
   });
   setTimeout(() => {
     current++;
