@@ -84,7 +84,9 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .q-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 58px; }
 .answers { display: flex; gap: 8px; margin-bottom: 32px; }
 .answer-btn { flex: 1; padding: 13px 3px; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--dim); background: rgba(255,255,255,0.65); border: 1.5px solid rgba(59,158,222,0.2); border-radius: 12px; cursor: pointer; transition: border-color .2s, color .2s; min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; }
-.answer-btn:hover { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: var(--text); }
+@media (hover: hover) {
+  .answer-btn:hover { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: var(--text); }
+}
 .answer-btn.selected { background: linear-gradient(135deg, var(--yellow), #f59e0b); border-color: transparent; color: #fff; font-weight: 700; }
 .quiz-back-btn { background: none; border: none; color: var(--dim); font-family: inherit; font-size: 13px; cursor: pointer; padding: 8px 0; }
 .quiz-back-btn:hover { color: var(--text); }
@@ -522,19 +524,18 @@ let timer = null;
 document.getElementById('answers').addEventListener('click', e => {
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  if (timer) return;
+  clearTimeout(timer);
   ans[current] = parseInt(btn.dataset.val);
   document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   timer = setTimeout(() => {
-    timer = null;
     document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total - 1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
 document.getElementById('quizBackBtn').addEventListener('click', () => {
-  if (timer) return;
+  clearTimeout(timer);
   if (current > 0) { current--; render(); }
 });
 

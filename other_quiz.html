@@ -224,7 +224,9 @@
     border-radius:12px; cursor:pointer; transition:border-color .2s, color .2s;
     min-height:48px; display:flex; align-items:center; justify-content:center; text-align:center;
   }
-  .answer-btn:hover { background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.4); color:var(--text); }
+  @media (hover: hover) {
+    .answer-btn:hover { background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.4); color:var(--text); }
+  }
   .answer-btn.selected { background:linear-gradient(135deg,var(--purple),var(--blue)); border-color:transparent; color:#fff; font-weight:700; }
 
   .back-btn {
@@ -883,12 +885,11 @@ let timer = null;
 answersEl.addEventListener('click', e => {
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  if (timer) return;
+  clearTimeout(timer);
   ans[current] = parseInt(btn.dataset.val);
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   timer = setTimeout(() => {
-    timer = null;
     answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total-1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
@@ -896,7 +897,7 @@ answersEl.addEventListener('click', e => {
 });
 
 backBtn.addEventListener('click', () => {
-  if (timer) return;
+  clearTimeout(timer);
   if (current>0){current--; render();}
 });
 
