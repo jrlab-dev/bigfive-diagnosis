@@ -629,12 +629,13 @@ let timer = null;
 answersEl.addEventListener('click', (e) => {
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  clearTimeout(timer);
+  if (timer) return;
   answers[current] = parseInt(btn.dataset.val);
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   saveProgress();
   timer = setTimeout(() => {
+    timer = null;
     answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total - 1) {
       current++;
@@ -648,7 +649,7 @@ answersEl.addEventListener('click', (e) => {
 
 // ===== 戻る =====
 backBtn.addEventListener('click', () => {
-  clearTimeout(timer);
+  if (timer) return;
   if (current > 0) { current--; render(); }
 });
 
