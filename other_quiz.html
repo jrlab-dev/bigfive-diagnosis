@@ -878,19 +878,30 @@ function render(showSaved = true) {
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
+let processing = false;
+let advanceTimer = null;
+
 answersEl.addEventListener('click', e => {
+  if (processing) return;
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
+  processing = true;
   ans[current] = parseInt(btn.dataset.val);
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  setTimeout(() => {
+  advanceTimer = setTimeout(() => {
+    processing = false;
+    advanceTimer = null;
+    answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total-1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
 
-backBtn.addEventListener('click', () => { if (current>0){current--; render();} });
+backBtn.addEventListener('click', () => {
+  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  if (current>0){current--; render();}
+});
 
 // ===== スコア計算 =====
 function calcScores() {

@@ -304,12 +304,20 @@ function showQuestion() {
 }
 
 // ===== 回答選択 =====
+let processing = false;
+let advanceTimer = null;
+
 function selectAnswer(val) {
+  if (processing) return;
+  processing = true;
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach((b, i) => {
     b.classList.toggle('selected', i + 1 === val);
   });
-  setTimeout(() => {
+  advanceTimer = setTimeout(() => {
+    processing = false;
+    advanceTimer = null;
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     current++;
     if (current < QUESTIONS.length) showQuestion();
     else showLoading();
@@ -317,6 +325,7 @@ function selectAnswer(val) {
 }
 
 document.getElementById('backBtn').addEventListener('click', () => {
+  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
   if (current > 0) { current--; showQuestion(); }
 });
 

@@ -624,9 +624,15 @@ function render(showSaved = true) {
 }
 
 // ===== 回答選択 =====
+let processing = false;
+let advanceTimer = null;
+
 answersEl.addEventListener('click', (e) => {
+  if (processing) return;
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
+
+  processing = true;
   answers[current] = parseInt(btn.dataset.val);
 
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
@@ -634,8 +640,10 @@ answersEl.addEventListener('click', (e) => {
 
   saveProgress();
 
-  // 0.3秒後に次の問題へ（まっさら表示）
-  setTimeout(() => {
+  advanceTimer = setTimeout(() => {
+    processing = false;
+    advanceTimer = null;
+    answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total - 1) {
       current++;
       render(false);
@@ -648,6 +656,11 @@ answersEl.addEventListener('click', (e) => {
 
 // ===== 戻る =====
 backBtn.addEventListener('click', () => {
+  if (advanceTimer !== null) {
+    clearTimeout(advanceTimer);
+    advanceTimer = null;
+    processing = false;
+  }
   if (current > 0) { current--; render(); }
 });
 

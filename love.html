@@ -710,12 +710,20 @@ function showQuestion() {
   document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
+let processing = false;
+let advanceTimer = null;
+
 function selectAnswer(val) {
+  if (processing) return;
+  processing = true;
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
 
-  setTimeout(() => {
+  advanceTimer = setTimeout(() => {
+    processing = false;
+    advanceTimer = null;
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     current++;
     saveProgress();
     if (current < questions.length) {
@@ -727,6 +735,7 @@ function selectAnswer(val) {
 }
 
 document.getElementById('backBtn').addEventListener('click', () => {
+  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
   if (current > 0) { current--; showQuestion(); }
 });
 
