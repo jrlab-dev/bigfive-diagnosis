@@ -602,26 +602,23 @@ const questionArea = document.getElementById('questionArea');
 const loading = document.getElementById('loading');
 
 // ===== 画面更新 =====
-function render() {
+// showSaved=true: 戻るとき・再開時に保存済み回答を表示
+// showSaved=false: 次の問題へ進むとき（まっさら）
+function render(showSaved = true) {
   const q = questions[current];
   progressFill.style.width = `${((current + 1) / total) * 100}%`;
   progressText.textContent = `${current + 1}/${total}`;
   questionNum.textContent = `Q${current + 1}`;
   questionText.textContent = q.text;
 
-  // 回答状態復元（transitionを無効化してから選択解除し、ちらつきを防ぐ）
-  const savedAnswer = answers[current];
-  answersEl.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.style.transition = 'none';
-    btn.classList.remove('selected');
-  });
-  if (savedAnswer !== null) {
-    const target = answersEl.querySelector(`[data-val="${savedAnswer}"]`);
-    if (target) target.classList.add('selected');
+  answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (showSaved) {
+    const savedAnswer = answers[current];
+    if (savedAnswer !== null) {
+      const target = answersEl.querySelector(`[data-val="${savedAnswer}"]`);
+      if (target) target.classList.add('selected');
+    }
   }
-  requestAnimationFrame(() => {
-    answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
-  });
 
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
@@ -637,11 +634,11 @@ answersEl.addEventListener('click', (e) => {
 
   saveProgress();
 
-  // 0.3秒後に次の問題へ
+  // 0.3秒後に次の問題へ（まっさら表示）
   setTimeout(() => {
     if (current < total - 1) {
       current++;
-      render();
+      render(false);
     } else {
       clearProgress();
       showResult();

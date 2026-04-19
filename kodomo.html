@@ -498,25 +498,22 @@ function startQuiz() {
 }
 
 // ===== クイズ描画 =====
-function render() {
+function render(showSaved = true) {
+  const renderShowSaved = showSaved;
   document.getElementById('progressFill').style.width = `${((current+1)/total)*100}%`;
   document.getElementById('progressText').textContent = `${current+1}/${total}`;
   document.getElementById('qNum').textContent = `Q${current+1}`;
   document.getElementById('qText').textContent = activeQuestions[current].text;
 
-  const saved = ans[current];
   const answersDiv = document.getElementById('answers');
-  answersDiv.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.style.transition = 'none';
-    btn.classList.remove('selected');
-  });
-  if (saved !== null) {
-    const target = answersDiv.querySelector(`.answer-btn[data-val="${saved}"]`);
-    if (target) target.classList.add('selected');
+  answersDiv.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (renderShowSaved) {
+    const saved = ans[current];
+    if (saved !== null) {
+      const target = answersDiv.querySelector(`.answer-btn[data-val="${saved}"]`);
+      if (target) target.classList.add('selected');
+    }
   }
-  requestAnimationFrame(() => {
-    answersDiv.querySelectorAll('.answer-btn').forEach(btn => btn.style.transition = '');
-  });
   document.getElementById('quizBackBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
@@ -528,7 +525,7 @@ document.getElementById('answers').addEventListener('click', e => {
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   setTimeout(() => {
-    if (current < total - 1) { current++; render(); }
+    if (current < total - 1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
