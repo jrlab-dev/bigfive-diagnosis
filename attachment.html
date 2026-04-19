@@ -380,19 +380,16 @@ function showQuestion() {
 }
 
 // ===== 回答選択 =====
-let processing = false;
-let advanceTimer = null;
+let timer = null;
 
 function selectAnswer(val) {
-  if (processing) return;
-  processing = true;
+  if (timer) return;
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach((b, i) => {
     b.classList.toggle('selected', i + 1 === val);
   });
-  advanceTimer = setTimeout(() => {
-    processing = false;
-    advanceTimer = null;
+  timer = setTimeout(() => {
+    timer = null;
     document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     current++;
     if (current < QUESTIONS.length) showQuestion();
@@ -401,7 +398,7 @@ function selectAnswer(val) {
 }
 
 document.getElementById('backBtn').addEventListener('click', () => {
-  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  if (timer) { clearTimeout(timer); timer = null; }
   if (current > 0) { current--; showQuestion(); }
 });
 

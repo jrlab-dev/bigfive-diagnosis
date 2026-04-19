@@ -518,26 +518,22 @@ function render(showSaved = true) {
 }
 
 // ===== 回答 =====
-let processing = false;
-let advanceTimer = null;
+let timer = null;
 document.getElementById('answers').addEventListener('click', e => {
-  if (processing) return;
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  processing = true;
+  clearTimeout(timer);
   ans[current] = parseInt(btn.dataset.val);
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  advanceTimer = setTimeout(() => {
-    processing = false;
-    advanceTimer = null;
+  timer = setTimeout(() => {
     document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total - 1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
   }, 300);
 });
 document.getElementById('quizBackBtn').addEventListener('click', () => {
-  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  clearTimeout(timer);
   if (current > 0) { current--; render(); }
 });
 

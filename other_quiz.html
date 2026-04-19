@@ -878,20 +878,16 @@ function render(showSaved = true) {
   backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
-let processing = false;
-let advanceTimer = null;
+let timer = null;
 
 answersEl.addEventListener('click', e => {
-  if (processing) return;
   const btn = e.target.closest('.answer-btn');
   if (!btn) return;
-  processing = true;
+  clearTimeout(timer);
   ans[current] = parseInt(btn.dataset.val);
   answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
-  advanceTimer = setTimeout(() => {
-    processing = false;
-    advanceTimer = null;
+  timer = setTimeout(() => {
     answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     if (current < total-1) { current++; render(false); }
     else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
@@ -899,7 +895,7 @@ answersEl.addEventListener('click', e => {
 });
 
 backBtn.addEventListener('click', () => {
-  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  clearTimeout(timer);
   if (current>0){current--; render();}
 });
 

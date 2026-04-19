@@ -298,25 +298,22 @@ function showQuestion() {
   document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
-let processing = false;
-let advanceTimer = null;
+let timer = null;
 
 function selectAnswer(val) {
-  if (processing) return;
-  processing = true;
+  if (timer) return;
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
-  advanceTimer = setTimeout(() => {
-    processing = false;
-    advanceTimer = null;
+  timer = setTimeout(() => {
+    timer = null;
     document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
     current++; saveProgress(); current < questions.length ? showQuestion() : showLoading();
   }, 280);
 }
 
 document.getElementById('backBtn').addEventListener('click', () => {
-  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  if (timer) { clearTimeout(timer); timer = null; }
   if (current > 0) { current--; showQuestion(); }
 });
 
