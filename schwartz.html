@@ -278,14 +278,27 @@ function showQuestion() {
   document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
 }
 
+let processing = false;
+let advanceTimer = null;
+
 function selectAnswer(val) {
+  if (processing) return;
+  processing = true;
   answers[current] = val;
   document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
   document.querySelector(`.answer-btn[data-val="${val}"]`).classList.add('selected');
-  setTimeout(() => { current++; saveProgress(); current < questions.length ? showQuestion() : showLoading(); }, 280);
+  advanceTimer = setTimeout(() => {
+    processing = false;
+    advanceTimer = null;
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+    current++; saveProgress(); current < questions.length ? showQuestion() : showLoading();
+  }, 280);
 }
 
-document.getElementById('backBtn').addEventListener('click', () => { if (current > 0) { current--; showQuestion(); } });
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (advanceTimer !== null) { clearTimeout(advanceTimer); advanceTimer = null; processing = false; }
+  if (current > 0) { current--; showQuestion(); }
+});
 
 function showLoading() {
   document.getElementById('progressArea').style.display = 'none';
