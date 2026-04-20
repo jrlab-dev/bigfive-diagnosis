@@ -1288,8 +1288,6 @@ const childParentingTips = {
   },
 };
 
-const isChildMode = isOtherMode && (relation === 'child46' || relation === 'child79');
-
 function genRichDesc(sc) {
   const sorted = Object.entries(sc).sort((a, b) => b[1] - a[1]);
   const top1 = sorted[0][0], top2 = sorted[1][0];
@@ -1492,6 +1490,7 @@ const otherName = params.get('other_name') || 'あの人';
 const personName = params.get('name'); // マイページから「あの人の結果」を開いた場合の名前
 const relation = params.get('rel') || 'friend'; // 関係性（love/work/friend）
 const isOtherMode = !!personName;
+const isChildMode = isOtherMode && (relation === 'child46' || relation === 'child79');
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
