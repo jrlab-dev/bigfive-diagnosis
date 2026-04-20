@@ -797,8 +797,8 @@ function calcScores() {
 }
 
 // ===== 結果表示 =====
-function showResult() {
-  const sc = calcScores();
+function showResult(scOverride) {
+  const sc = scOverride || calcScores();
 
   // キャラクター画像
   const charArea = document.getElementById('charArea');
@@ -1055,171 +1055,9 @@ function resetAll() {
     N: parseInt(typeCode[4])
   };
 
-  // calcScores()の代わりに直接スコアを使うためansを偽装
-  // showResult()はcalcScores()を呼ぶので、ans/activeQuestionsをスコアに合わせて上書き
-  // 代わりにshowResultFromScores()で直接描画する
-  showResultFromScores(sc);
+  showResult(sc);
 })();
 
-function showResultFromScores(sc) {
-  // キャラクター画像
-  const charArea = document.getElementById('charArea');
-  const charImg = document.getElementById('charImg');
-  function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
-  const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
-  charImg.src = `images/characters/${childGender}/${imgCode}.webp`;
-  charImg.onerror = () => { charArea.style.display = 'none'; };
-  charImg.onload = () => { charArea.style.display = 'flex'; };
-  document.getElementById('charLabel').textContent = `${childName}の推定キャラクター`;
-
-  // 特性バー
-  const traitsCard = document.getElementById('traitsCard');
-  traitsCard.innerHTML = '<p class="section-title">📊 5つの特性バランス</p>';
-  ['O','C','E','A','N'].forEach(f => {
-    const s = sc[f], info = traitInfo[f];
-    const pct = s === 1 ? 20 : s === 3 ? 55 : 88;
-    const lv = s === 5 ? '高め' : s === 3 ? '普通' : '低め';
-    const lvClass = s === 5 ? 'lv-high' : s === 3 ? 'lv-mid' : 'lv-low';
-    traitsCard.innerHTML += `
-      <div class="trait-row">
-        <div class="trait-header">
-          <span class="trait-label">${info.name}<span class="trait-desc">${info.desc}</span></span>
-          <span class="trait-lv ${lvClass}">${lv}</span>
-        </div>
-        <div class="trait-bar"><div class="bar-fill" data-w="${pct}%" style="width:0%;background:${info.color}"></div></div>
-      </div>`;
-  });
-
-  // 強み・活動ヒント・職業マッチ（showResult()と同じロジック）
-  const topFactors = Object.entries(sc).filter(([,v]) => v === 5).map(([k]) => k);
-  const lowFactors  = Object.entries(sc).filter(([,v]) => v === 1).map(([k]) => k);
-
-  const strengthCard = document.getElementById('strengthCard');
-  if (topFactors.length > 0) {
-    strengthCard.innerHTML = '<p class="section-title">✨ ' + childName + 'の強み</p>';
-    topFactors.forEach(f => {
-      const info = traitInfo[f];
-      strengthCard.innerHTML += `<div class="strength-item"><span class="strength-icon">${info.icon}</span><div><strong>${info.name}が高い</strong><br>${info.strength}</div></div>`;
-    });
-  } else {
-    strengthCard.innerHTML = '<p class="section-title">✨ ' + childName + 'の強み</p><p style="font-size:13px;color:var(--dim)">バランスが取れた性格タイプです。どんな環境にも適応しやすい柔軟さが強みです。</p>';
-  }
-
-  const hintCard = document.getElementById('hintCard');
-  hintCard.innerHTML = '<p class="section-title">🎯 おすすめの活動・遊び</p>';
-  const ageLabel = ageGroup === 'child46' ? '4〜6歳' : '7〜9歳';
-  const allFactors = [...topFactors, ...lowFactors];
-  const hintsShown = new Set();
-  let hintCount = 0;
-  allFactors.forEach(f => {
-    (activityHints[f] || []).forEach(h => {
-      if (hintCount >= 4 || hintsShown.has(h.text)) return;
-      if (!h.age || h.age === ageGroup) {
-        hintsShown.add(h.text);
-        hintCard.innerHTML += `<div class="hint-item"><span>${h.icon}</span><div>${h.text}<span class="age-badge">${ageLabel}</span></div></div>`;
-        hintCount++;
-      }
-    });
-  });
-  if (hintCount === 0) {
-    hintCard.innerHTML += '<div class="hint-item"><span>🎲</span><div>いろんな遊びにチャレンジしてみよう！好きなことを見つけるのが一番の近道です。</div></div>';
-  }
-
-  const careerCard = document.getElementById('careerCard');
-  careerCard.innerHTML = '<p class="section-title">🌟 将来に活きる可能性（親御さん向け）</p>';
-  const matched = careerHints.filter(c => c.factors.some(f => topFactors.includes(f))).slice(0, 3);
-  const careers = matched.length >= 3 ? matched : [...matched, ...careerHints.filter(c => !matched.includes(c))].slice(0, 3);
-  careers.forEach(c => {
-    careerCard.innerHTML += `<div class="career-item"><span class="career-icon">${c.icon}</span><div><strong>${c.name}</strong><br><span style="font-size:12px;color:var(--dim)">${c.msg}</span></div></div>`;
-  });
-
-  const memoCard = document.getElementById('memoCard');
-  memoCard.innerHTML = '<p class="section-title">💌 親御さんへのメモ</p>';
-  if (topFactors.length > 0) {
-    topFactors.forEach(f => {
-      memoCard.innerHTML += `<div class="memo-item">${traitInfo[f].memo}</div>`;
-    });
-  }
-  if (lowFactors.length > 0) {
-    lowFactors.forEach(f => {
-      memoCard.innerHTML += `<div class="memo-item">${traitInfo[f].memoLow || ''}</div>`;
-    });
-  }
-  if (topFactors.length === 0 && lowFactors.length === 0) {
-    memoCard.innerHTML += '<div class="memo-item">バランスの取れた性格です。さまざまな経験を通じて、得意なことを一緒に探してみてください。</div>';
-  }
-
-  // 傾向アコーディオン
-  (function() {
-    const tendencyBtn = document.getElementById('tendencyBtn');
-    const tendencyCard = document.getElementById('tendencyCard');
-    if (!tendencyBtn || !tendencyCard) return;
-    tendencyCard.innerHTML = '';
-    ['O','C','E','A','N'].forEach(f => {
-      const s = sc[f];
-      const d = tendencyDesc[f][s];
-      if (!d) return;
-      tendencyCard.innerHTML += `
-        <div class="tendency-row">
-          <div class="tendency-factor">${traitInfo[f].name}</div>
-          <div class="tendency-label ${s >= 4 ? 'lv-high' : s <= 2 ? 'lv-low' : 'lv-mid'}">${d.label}</div>
-          <div class="tendency-text">${d.text}</div>
-        </div>`;
-    });
-    let isTendencyOpen = false;
-    tendencyBtn.addEventListener('click', () => {
-      isTendencyOpen = !isTendencyOpen;
-      tendencyCard.style.display = isTendencyOpen ? 'block' : 'none';
-      tendencyBtn.classList.toggle('active', isTendencyOpen);
-    });
-  })();
-
-  // 親の関わり方アコーディオン
-  (function() {
-    const parentingBtn = document.getElementById('parentingBtn');
-    const parentingCard = document.getElementById('parentingCard');
-    if (!parentingBtn || !parentingCard) return;
-    const dir = (sc.O + sc.C + sc.E + sc.A) / 4 >= 3 ? 'high' : 'low';
-    ['O','C','E','A','N'].forEach(f => {
-      const body = document.getElementById('parentingBody_' + f);
-      if (!body) return;
-      const tips = parentingTips[f]?.[dir] || [];
-      body.innerHTML = tips.map(t => `<div class="parenting-tip-item">• ${t}</div>`).join('');
-    });
-    document.querySelectorAll('.parenting-factor-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const factor = header.dataset.factor;
-        const body = document.getElementById('parentingBody_' + factor);
-        const arrow = header.querySelector('.parenting-factor-arrow');
-        const open = body.classList.contains('open');
-        body.classList.toggle('open', !open);
-        header.classList.toggle('open', !open);
-        arrow.classList.toggle('open', !open);
-      });
-    });
-    let isParentingOpen = false;
-    parentingBtn.addEventListener('click', () => {
-      isParentingOpen = !isParentingOpen;
-      parentingCard.style.display = isParentingOpen ? 'block' : 'none';
-      parentingBtn.classList.toggle('active', isParentingOpen);
-    });
-  })();
-
-  window.currentChildResult = {
-    name: childName,
-    code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
-    scores: sc,
-    relation: ageGroup,
-    gender: childGender,
-    date: new Date().toISOString()
-  };
-  checkAlreadySaved();
-
-  showScreen('resultScreen');
-  setTimeout(() => {
-    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
-  }, 100);
-}
 </script>
 <script src="nav.js"></script>
 </body>

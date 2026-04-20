@@ -852,16 +852,17 @@ function renderOtherResults() {
     const charSrc = hiddenImgOther || `images/characters/${gender}/${imgCode}.webp`;
     const isChecked = selectedOthers.has(i);
     const isPartner = partnerData && partnerData.code === r.code && partnerData.name === r.name;
+    const isChild = r.relation === 'child46' || r.relation === 'child79';
     return `
-      <div class="result-card${isChecked ? ' checked' : ''}">
+      <div class="result-card${isChecked ? ' checked' : ''}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : ''}">
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '✓' : ''}</div>
-        <a href="${(r.relation === 'child46' || r.relation === 'child79') ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
+        <a href="${isChild ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
             <img src="${charSrc}" alt="${r.name}" style="width:56px;height:56px;object-fit:contain;"
                  onerror="this.parentElement.innerHTML='👤';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.fontSize='24px';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
           </div>
           <div class="result-card-content">
-            <div class="result-card-name">${r.name}</div>
+            <div class="result-card-name">${r.name}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;">🧒 子供</span>' : ''}</div>
             <div class="result-card-meta">
               <span class="result-card-code">${r.code}</span>
               <span class="result-card-date">${formatDate(r.date)}</span>
