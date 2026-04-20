@@ -676,6 +676,87 @@
     font-size: 13px; line-height: 1.8; color: #94a3b8;
   }
 
+  /* ===== 成長ヒントセクション ===== */
+  .btn-growth-tips {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; margin-top: 16px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: #86efac; background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 12px; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-growth-tips:hover {
+    background: rgba(16,185,129,0.15);
+    border-color: rgba(16,185,129,0.4);
+    transform: translateY(-1px);
+  }
+  .btn-growth-tips.active {
+    background: rgba(16,185,129,0.18);
+    border-color: rgba(16,185,129,0.5);
+  }
+  .growth-tips-card {
+    width: 100%;
+    background: rgba(16,30,62,0.5);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 16px; padding: 22px 24px;
+    margin-top: 16px; backdrop-filter: blur(8px);
+    animation: weakness-fadein 0.4s ease-out;
+  }
+  .growth-tips-card-title {
+    font-size: 15px; font-weight: 700; text-align: center;
+    margin-bottom: 6px; color: #86efac;
+  }
+  .growth-tips-note {
+    font-size: 11px; color: var(--dim); text-align: center;
+    margin-bottom: 16px;
+  }
+  .growth-factor-block { margin-bottom: 8px; }
+  .growth-factor-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .growth-factor-header:hover {
+    background: rgba(255,255,255,0.06);
+  }
+  .growth-factor-header.open {
+    border-radius: 10px 10px 0 0;
+    background: rgba(255,255,255,0.05);
+  }
+  .growth-factor-name { font-size: 14px; font-weight: 700; }
+  .growth-factor-arrow {
+    font-size: 12px; color: var(--dim);
+    transition: transform 0.2s ease;
+  }
+  .growth-factor-arrow.open { transform: rotate(180deg); }
+  .growth-factor-body {
+    display: none;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+  .growth-factor-body.open { display: block; }
+  .growth-direction { padding: 12px 14px; }
+  .growth-direction + .growth-direction {
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .growth-direction-title {
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .growth-direction.recommend .growth-direction-title { color: #86efac; }
+  .growth-direction.caution .growth-direction-title { color: #fbbf24; }
+  .growth-tip-item {
+    font-size: 12px; line-height: 1.7; color: #94a3b8;
+    padding: 3px 0 3px 16px; position: relative;
+  }
+  .growth-tip-item::before {
+    content: '•'; position: absolute; left: 4px; color: #64748b;
+  }
+
   /* ===== おすすめ職種 ===== */
   .career-section {
     width: 100%; max-width: 480px;
@@ -856,6 +937,15 @@
       <p class="weakness-card-title">🔮 自分の弱点を知る</p>
       <p class="weakness-card-note">弱点は「悪いところ」ではありません。自分を理解し、成長するためのヒントです。</p>
       <div id="weaknessContent"></div>
+      <button class="btn btn-growth-tips" id="growthTipsBtn" style="display:none;">
+        <span>🌱</span>
+        <span>それぞれの因子に対して改善するには</span>
+      </button>
+      <div class="growth-tips-card" id="growthTipsCard" style="display:none;">
+        <p class="growth-tips-card-title">🌱 成長ヒント</p>
+        <p class="growth-tips-note">性格は大人になってからも変わります。数週間〜数ヶ月の継続で測定可能な変化が報告されています。</p>
+        <div id="growthTipsContent"></div>
+      </div>
     </div>
   </div>
 
@@ -1019,6 +1109,120 @@ const weaknessDesc = {
     4: { text: 'ストレスや不安を感じやすく、少しのことで気分が沈んだり不安になったりすることがあります。過剰に心配して行動できなくなることも。ただし、この繊細さは状況判断力の源でもあります。', tendency: '不安の増大' },
     5: { text: '感情の波が激しく、ストレスに対する耐性が低いことがあります。気分の浮き沈みが激しくて日常生活に影響することも。ただし、この感受性は豊かな感情表現の源でもあります。', tendency: '感情の波' },
   },
+};
+
+// ===== 改善アドバイスデータ =====
+const growthTips = {
+  O: {
+    up: {
+      title: '開放性を高める',
+      tips: [
+        '普段読まない分野の本や記事に触れてみる。特に文学的フィクションは視点取得能力を高める効果がある',
+        '未経験の趣味や活動に挑戦する。絵画、楽器、料理、プログラミングなど「毎日1つ新しいこと」をルールにする',
+        '年齢や職業が異なる人との対話を増やす。読書会やコミュニティ活動に参加すると自然な機会ができる',
+        '通勤ルートや作業順序など、日常のルーティンを意識的に変えて脳に新しい刺激を与える',
+        '「なぜ？」を5回繰り返して日常の当たり前を深く考える癖をつける',
+      ]
+    },
+    down: {
+      title: '開放性が下がる原因を防ぐ',
+      tips: [
+        '毎日同じパターンの生活を避ける。脳はエネルギーを節約するため慣れたルーティンを好むが、意識的に変化を取り入れる',
+        '「自分には才能がない」という固定マインドセットに気づき、「まだ知らないだけ」と捉え直す',
+        'SNSや検索エンジンのアルゴリズムに依存せず、異なるメディアや情報源に意図的に触れる',
+        '慢性的なストレスは認知の柔軟性を低下させる。十分な休息とリラクゼーションを確保する',
+        '失敗を恐れて新しい経験を避けない。「間違えても学びがある」と捉える習慣をつける',
+      ]
+    }
+  },
+  C: {
+    up: {
+      title: '誠実性を高める',
+      tips: [
+        '「朝起きたら(if)ベッドを整える(then)」のように、状況と行動を結びつけるif-thenプランニングを実践する',
+        '既存の習慣に新しい行動をくっつける。例：「コーヒーを淹れたら、その間に今日のタスクを3つ書く」',
+        '2分で終わることは即座にやる。開始のハードルを極端に下げる「5分だけ着手する」ルールも有効',
+        '翌日の優先タスク3つを寝る前に決める。計画性の最もシンプルで効果的な実践',
+        '目標を人に伝えて進捗を共有する。社会的コミットメントが行動を強化する',
+      ]
+    },
+    down: {
+      title: '誠実性が下がる原因を防ぐ',
+      tips: [
+        '睡眠を7〜9時間確保する。睡眠不足は前頭葉の機能低下により計画性と自己制御を直接阻害する',
+        '慢性的な過労やバーンアウトに注意。長期的なストレスでモチベーション基盤が崩壊すると計画性が著しく低下する',
+        'スマホやSNSの即時報酬に依存しない。ドーパミン系の乱れが長期的な目標達成への動機を低下させる',
+        '「完璧にできないならやらない」という回避型完璧主義に気づく。むしろ先延ばしの原因になる',
+        'やるべきことが多すぎると優先順位がつけられなくなる。3つまで絞る習慣をつける',
+      ]
+    }
+  },
+  E: {
+    up: {
+      title: '外向性を高める',
+      tips: [
+        '積極的に会話を始める、グループで発言するなど、不快感があっても意図的に外向的な行動をとる。「行動が先、内面が後から追従」',
+        '読書会、ランニングクラブ、料理教室など共通の目的を持つグループに参加する。構造化された社会的練習の場が効果的',
+        '「1日1回見知らぬ人に話しかける」など具体的な目標を設定し、週単位で進捗を追跡する',
+        '外出の機会を増やす。スケジュールに意識的に外出や活動を組み込む行動活性化が有効',
+        '社交的な場の後、気まずかった点ではなく楽しめた会話を振り返る。ネガティブな反芻が社会的回避を強化するのを防ぐ',
+      ]
+    },
+    down: {
+      title: '外向性が下がる原因を防ぐ',
+      tips: [
+        '対人接触の長期減少が社会的スキルを萎縮させる。意識的に人と交流する機会を作る',
+        '慢性的なストレスは「引きこもり」へシフトさせる。コルチゾールが社会的撤退を促進するため休息が重要',
+        '対人トラウマ（いじめ・拒絶・裏切り）の経験がある場合、専門家のサポートを検討する',
+        'SNSでの対面交流の代替は、社会的比較やFOMOを通じて社会的撤退を促進する可能性がある',
+        'うつ状態や気分障害は正の感情を直接抑制する。2週間以上続く場合は医療機関の受診を検討',
+      ]
+    }
+  },
+  A: {
+    up: {
+      title: '協調性を高める',
+      tips: [
+        '相手の話を遮らず最後まで聞くアクティブ・リスニングを実践する。オウム返しで相手に「聞いてくれている」と感じさせる',
+        '「もし自分があの人の立場ならどう感じるか？」を考える視点転換の練習を日常的に行う',
+        '「ありがとう」を具体的に伝える。感謝日記で他者への感謝を書くこともネガティブ感情を減らす効果がある',
+        '毎日小さな親切を1つ。コーヒーを淹れてあげる、ドアを開ける、メッセージで気遣うなど',
+        '異なる意見を「間違っている」ではなく「違う視点」として受け入れる練習をする',
+      ]
+    },
+    down: {
+      title: '協調性が下がる原因を防ぐ',
+      tips: [
+        '慢性的な対人葛藤は防衛的態度と信頼の低下を生む。対立的な関係から距離を取ることも必要',
+        'ポジティブな対人交流の欠如がシニシズムを高める。信頼できる人との定期的なつながりを維持する',
+        '睡眠不足は衝動的な怒りや攻撃性を抑制できなくする。感情制御のために睡眠を最優先する',
+        'オンライン上の対立への長期暴露が敵対的なコミュニケーションを常態化させる。情報の取り方に注意する',
+        '競争的環境でゼロサム思考が強まると協力意欲が低下する。win-winの再構成を心がける',
+      ]
+    }
+  },
+  N: {
+    up: {
+      title: '情緒安定性を高める（神経症傾向を下げる）',
+      tips: [
+        '非機能的な思考パターンに気づき、「本当にそうか？」「別の見方はないか？」と問い直す認知の再構成を練習する',
+        '不安を避けない練習。不安な状況に段階的に直面し「予期していたほど怖くない」ことを学ぶ。ただし重症の場合は専門家に',
+        '感情を言語化して書き出すジャーナリング。特に否定的な感情を15〜20分書き続ける「エクスプレッシブ・ライティング」が効果的',
+        'ジョギングや水泳など週150分以上の有酸素運動。不安・抑うつを軽減し10年間の縦断研究で神経症傾向の低下が確認されている',
+        '毎日3つの感謝できることを書く感謝の実践。ネガティブ感情を減少させ情緒の安定につながる',
+      ]
+    },
+    down: {
+      title: '情緒が不安定になる原因を防ぐ',
+      tips: [
+        '慢性的なストレスが最も信頼性の高い悪化要因。長期的なコルチゾール上昇が感情的反応性に持続的な変化をもたらす',
+        '睡眠不足は扁桃体を過活動させ、不安・イライラ・気分の変動を増大させる。7〜9時間の睡眠を確保する',
+        '人とのつながりの欠如が不安を悪化させる悪循環。孤独が社会的脅威への過警戒を引き起こす',
+        'ネガティブなニュースやSNSの閲覧時間を制限する。情報の過剰摂取が不安を煽る（ドゥームスクローリング注意）',
+        '感情に蓋をする（表出的抑制）は長期的に生理的覚醒を増加させ情緒不安定を悪化させる。感情を適切に処理する習慣をつける',
+      ]
+    }
+  }
 };
 
 function genRichDesc(sc) {
@@ -1583,7 +1787,77 @@ document.getElementById('descCard').innerHTML = `
     btnText.textContent = isOpen ? '弱点を隠す' : '自分の弱点を知る';
     if (isOpen) {
       setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+      const gb = document.getElementById('growthTipsBtn');
+      if (gb) gb.style.display = 'inline-flex';
     }
+    if (!isOpen) {
+      const gb = document.getElementById('growthTipsBtn');
+      const gc = document.getElementById('growthTipsCard');
+      if (gb) gb.style.display = 'none';
+      if (gc) gc.style.display = 'none';
+    }
+  });
+})();
+
+// ===== 成長ヒント =====
+(function() {
+  if (isOtherMode) return;
+  const growthBtn = document.getElementById('growthTipsBtn');
+  const growthCard = document.getElementById('growthTipsCard');
+  const growthContent = document.getElementById('growthTipsContent');
+  if (!growthBtn || !growthCard) return;
+
+  // 弱点カードが開かれた後に表示する（初期は非表示）
+  // growthBtn.style.display は弱点カードの開閉ロジック側で制御
+
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  let html = '';
+  factors.forEach(f => {
+    const score = sc[f];
+    const info = traitInfo[f];
+    const tips = growthTips[f];
+    const isLow = score <= 2;
+    const isHigh = score >= 4;
+    html += `
+      <div class="growth-factor-block">
+        <div class="growth-factor-header" data-factor="${f}">
+          <span class="growth-factor-name" style="color:${info.color}">${info.name}</span>
+          <span class="growth-factor-arrow">▼</span>
+        </div>
+        <div class="growth-factor-body" id="growthBody_${f}">
+          <div class="growth-direction ${isLow ? 'recommend' : ''}">
+            <p class="growth-direction-title">${isLow ? '⬆️ ' : ''}${tips.up.title}</p>
+            ${tips.up.tips.map(t => `<p class="growth-tip-item">${t}</p>`).join('')}
+          </div>
+          <div class="growth-direction ${isHigh ? 'recommend' : ''}">
+            <p class="growth-direction-title">${isHigh ? '⚠️ ' : ''}${tips.down.title}</p>
+            ${tips.down.tips.map(t => `<p class="growth-tip-item">${t}</p>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  });
+  growthContent.innerHTML = html;
+
+  let isGrowthOpen = false;
+  growthBtn.addEventListener('click', () => {
+    isGrowthOpen = !isGrowthOpen;
+    growthCard.style.display = isGrowthOpen ? 'block' : 'none';
+    growthBtn.classList.toggle('active', isGrowthOpen);
+    if (isGrowthOpen) {
+      setTimeout(() => growthCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+  });
+
+  document.querySelectorAll('.growth-factor-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const factor = header.dataset.factor;
+      const body = document.getElementById('growthBody_' + factor);
+      const arrow = header.querySelector('.growth-factor-arrow');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      header.classList.toggle('open', !isOpen);
+      arrow.classList.toggle('open', !isOpen);
+    });
   });
 })();
 

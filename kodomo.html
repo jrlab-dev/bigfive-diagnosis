@@ -165,6 +165,72 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   .answers { gap: 5px; }
   .hero-title { font-size: 24px; }
 }
+
+/* ===== お子さんの傾向セクション ===== */
+.tendency-section { margin-bottom: 16px; }
+.btn-tendency {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; font-family: inherit; font-size: 13px; font-weight: 700;
+  color: #b45309; background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+}
+.btn-tendency:hover { background: rgba(245,158,11,0.14); transform: translateY(-1px); }
+.btn-tendency.active { background: rgba(245,158,11,0.16); border-color: rgba(245,158,11,0.4); }
+.tendency-card {
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(59,158,222,0.18);
+  border-radius: 14px; padding: 18px 20px; margin-top: 12px;
+  animation: tendency-fadein 0.3s ease-out;
+}
+@keyframes tendency-fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.tendency-card-title { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; color: var(--text); }
+.tendency-card-note { font-size: 11px; color: var(--dim); text-align: center; margin-bottom: 14px; }
+.tendency-row { padding: 12px 0; border-bottom: 1px solid rgba(59,158,222,0.08); }
+.tendency-row:last-child { border-bottom: none; padding-bottom: 0; }
+.tendency-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.tendency-factor-name { font-size: 13px; font-weight: 700; }
+.tendency-label { font-size: 11px; padding: 2px 10px; border-radius: 10px; background: rgba(245,158,11,0.12); color: #b45309; font-weight: 600; }
+.tendency-text { font-size: 12px; line-height: 1.7; color: var(--dim); }
+
+/* ===== 親の関わり方セクション ===== */
+.btn-parenting {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; margin-top: 12px;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: #059669; background: rgba(5,150,105,0.08);
+  border: 1px solid rgba(5,150,105,0.25);
+  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+}
+.btn-parenting:hover { background: rgba(5,150,105,0.14); transform: translateY(-1px); }
+.btn-parenting.active { background: rgba(5,150,105,0.18); border-color: rgba(5,150,105,0.5); }
+.parenting-card {
+  background: rgba(5,150,105,0.05); border: 1px solid rgba(5,150,105,0.18);
+  border-radius: 14px; padding: 18px 20px; margin-top: 12px;
+  animation: tendency-fadein 0.3s ease-out;
+}
+.parenting-card-title { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; color: #059669; }
+.parenting-note { font-size: 11px; color: var(--dim); text-align: center; margin-bottom: 14px; }
+.parenting-factor-block { margin-bottom: 6px; }
+.parenting-factor-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.6); border: 1px solid rgba(59,158,222,0.1);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.parenting-factor-header:hover { background: rgba(255,255,255,0.8); }
+.parenting-factor-header.open { border-radius: 10px 10px 0 0; background: rgba(255,255,255,0.7); }
+.parenting-factor-name { font-size: 13px; font-weight: 700; }
+.parenting-factor-arrow { font-size: 11px; color: var(--dim); transition: transform 0.2s ease; }
+.parenting-factor-arrow.open { transform: rotate(180deg); }
+.parenting-factor-body { display: none; border: 1px solid rgba(59,158,222,0.1); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+.parenting-factor-body.open { display: block; }
+.parenting-direction { padding: 10px 14px; }
+.parenting-direction + .parenting-direction { border-top: 1px solid rgba(59,158,222,0.06); }
+.parenting-direction-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.parenting-direction.recommend .parenting-direction-title { color: #059669; }
+.parenting-direction.caution .parenting-direction-title { color: #b45309; }
+.parenting-tip-item { font-size: 11px; line-height: 1.7; color: var(--dim); padding: 2px 0 2px 14px; position: relative; }
+.parenting-tip-item::before { content: '•'; position: absolute; left: 2px; color: #94a3b8; }
 </style>
 </head>
 <body>
@@ -316,6 +382,28 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
     <div class="career-grid" id="careerGrid"></div>
   </div>
 
+  <!-- お子さんの傾向 -->
+  <div class="tendency-section">
+    <button class="btn-tendency" id="tendencyBtn">
+      <span>🔍</span>
+      <span id="tendencyBtnText">お子さんの傾向を知る</span>
+    </button>
+    <div class="tendency-card" id="tendencyCard" style="display:none;">
+      <p class="tendency-card-title">🔍 お子さんの傾向</p>
+      <p class="tendency-card-note">傾向は「悪いところ」ではありません。個性を理解し、サポートするヒントです。</p>
+      <div id="tendencyContent"></div>
+      <button class="btn-parenting" id="parentingBtn" style="display:none;">
+        <span>🌱</span>
+        <span>それぞれの因子に対して親の関わり方</span>
+      </button>
+      <div class="parenting-card" id="parentingCard" style="display:none;">
+        <p class="parenting-card-title">🌱 親の関わり方ヒント</p>
+        <p class="parenting-note">親の関わりだけで性格を大きく変えられるわけではありません。お子さんの気質を尊重することが最も重要です。</p>
+        <div id="parentingContent"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- 親への一言 -->
   <div class="parent-note" id="parentNote"></div>
 
@@ -402,6 +490,159 @@ const traitInfo = {
        high: '「なんで？どうして？」が止まらない好奇心の塊。想像力と発想力が豊か。',
        mid:  '新しいことも慣れたことも楽しめる実用的タイプ。',
        low:  '慣れたやり方が好きで安心できる。落ち着いた環境で力を発揮する。' },
+};
+
+// ===== お子さんの傾向データ =====
+const tendencyDesc = {
+  O: {
+    1: { text: '慣れたやり方を好み、新しい環境や体験には慎重な面があります。ただし、この安定を好む姿勢は継続力と深い集中力の源です。', label: '新しいことへの慎重さ' },
+    2: { text: '好奇心と安定の両方を求めるため、どちらの方向にも踏み込みにくいことがあります。ただし、この柔軟さは状況に応じた対応力の源です。', label: '好奇心と安定の間' },
+    3: { text: '新しいことも慣れたことも楽しめるバランス型です。ただし、どちらも深く追求する前に興味が移ることもあります。', label: 'バランス型' },
+    4: { text: '好奇心が旺盛で、色々なことに興味を持ちます。興味が次々と移り、一つのことを深く続けるのが苦手なことも。ただし、この広い興味は多才さの源です。', label: '興味の移り変わり' },
+    5: { text: '「なぜ？」「どうして？」が止まらないほど好奇心旺盛です。現実的な制約を忘れて夢中になりすぎることも。ただし、この発想力はイノベーションの源です。', label: '好奇心の爆発' },
+  },
+  C: {
+    1: { text: '自由な発想で動く直感型です。約束や片付けを後回しにすることがあります。ただし、この自由さは柔軟な発想の源でもあります。', label: '自由奔放型' },
+    2: { text: '計画性が少し�足りず、段取りが乱れがちな面があります。ただし、この「適度な手抜き」は効率化の源でもあります。', label: '段組みのゆらぎ' },
+    3: { text: '計画と実行のバランスが取れています。ただし、状況によってどちらかに偏ることもあります。', label: 'バランス型' },
+    4: { text: 'しっかり者で責任感が強いです。完璧主義になりすぎて「できない」と焦ることも。ただし、このこだわりは品質保証の源です。', label: '完璧主義の傾き' },
+    5: { text: 'ルールや計画をとても大切にするタイプです。融通が利かなくなり、予想外のことでパニックになりがち。ただし、この規律力は周囲から信頼される源です。', label: 'ルールへの強いこだわり' },
+  },
+  E: {
+    1: { text: '一人遊びや静かな環境が好きで、自分の世界に没頭するタイプです。人前で自己表現するのが苦手なことも。ただし、この静かさは深い思考の源でもあります。', label: '一人遊びが好き' },
+    2: { text: '人といる時間も一人の時間も両方楽しめますが、大きなグループでは疲れやすい面も。ただし、この両面性はどんな環境でも適応できる力の源です。', label: '小さなグループ派' },
+    3: { text: '社交的な場と静かな時間のバランスが取れています。状況に合わせて切り替えられる柔軟性があります。', label: 'バランス型' },
+    4: { text: '友達といると元気になる社交型です。一人の時間が不足すると内面の整理ができなくなることも。ただし、この親和力は人間関係の源でもあります。', label: '人との時間が多い' },
+    5: { text: 'エネルギッシュで常に誰かといることを求めがちです。刺激を求めすぎて衝動的になることも。ただし、このエネルギーは周囲を巻き込む力の源です。', label: '刺激への強い欲求' },
+  },
+  A: {
+    1: { text: '自分の意志がはっきりしていて、妥協を嫌う面があります。仲間外れになりやすいことも。ただし、このはっきりした意志はリーダーシップの源でもあります。', label: '自分の意志が強い' },
+    2: { text: '自分の気持ちを優先しがちで、周囲とのすれ違いが生じることがあります。ただし、この自分軸は自立心の源でもあります。', label: '自分優先の傾き' },
+    3: { text: '自分の意見と協調のバランスが取れています。ただし、場面によってどちらかに寄せきれないこともあります。', label: 'バランス型' },
+    4: { text: '思いやりが深く、友達に合わせすぎて自分の気持ちを後回しにすることがあります。ただし、この優しさは周囲からの信頼の源でもあります。', label: '我慢の蓄積' },
+    5: { text: 'とても優しく、争いを極端に避ける傾向があります。不満を我慢しすぎて疲弊することも。ただし、この平和主義はグループの調和の源です。', label: '我慢のしすぎ' },
+  },
+  N: {
+    1: { text: '気持ちの切り替えが得意で、プレッシャーにも動じにくいたくましい面があります。ただし、周囲の細やかな気持ちに気づきにくいことも。', label: '感情への鈍感さ' },
+    2: { text: '感情の波が穏やかです。ただし、他人の強い感情に対して「そこまで？」と感じてしまうこともあります。', label: '感情の安定' },
+    3: { text: '感情のバランスが取れています。ただし、嬉しい時の喜びも悲しい時の悲しみも、周囲より少し小さく感じることもあります。', label: 'バランス型' },
+    4: { text: '感じる力が豊かで、少しのことで気分が沈んだり不安になったりすることがあります。ただし、この繊細さは深い共感力の源でもあります。', label: '不安の増大' },
+    5: { text: '感情の波が激しく、ストレスに対する耐性が低い面があります。気分の浮き沈みが激しいことも。ただし、この感受性は豊かな感情表現の源でもあります。', label: '感情の波' },
+  },
+};
+
+// ===== 親の関わり方データ =====
+const parentingTips = {
+  O: {
+    up: {
+      title: '好奇心を伸ばす関わり',
+      tips: [
+        '「なぜ？」「どうして？」に丁寧に応じる。すぐに答えを教えすぎず「一緒に調べよう」と付き添う',
+        '美術館、科学館、自然など多様な体験の場を用意し、何に興味を持つかは子供に決めさせる',
+        '毎日構造化されていない自由遊びの時間を確保する。子供が主導権を持つ場面を作る',
+        '「上手に描けたね」ではなく「どんな風に考えた？」「工夫したね」とプロセスを称賛する',
+        '幅広いジャンルの本に触れさせる。絵本の読み聞かせの際「このキャラクターはどう思ってるかな？」と問いかける',
+      ]
+    },
+    down: {
+      title: '好奇心が削がれる原因を防ぐ',
+      tips: [
+        '「こうやって」「それは違う」と過度に指示すると探索欲求が萎縮する。子供の自発的な活動を尊重する',
+        '点数や出来栄えだけを褒めると「失敗できない」プレッシャーが創造性を阻害する',
+        '「変なことしないで」と奇抜な発想を否定しない。自己表現を控えるようになる',
+        '習い事や塾でスケジュールが詰まると自由に探求する時間がなくなる',
+        '動画の受動的な消費に時間を奪われ、能動的な創造活動が減ることに注意',
+      ]
+    }
+  },
+  C: {
+    up: {
+      title: 'やり遂げる力を伸ばす関わり',
+      tips: [
+        '朝の支度、就寝前など毎日同じパターンのルーティンを確立する。子供と一緒に決める',
+        '年齢に応じたお手伝いを与える。「家族の一員としての貢献」として位置づける',
+        '「今日は絵本を3冊読む」など達成可能な小さな目標を子供自身に立てさせる',
+        '「まず〇〇して、それから〇〇」の順番指導で我慢する力を鍛える',
+        'やり抜いた時は「途中でやめずに最後までやったね」と粘り強さを具体的に認める',
+      ]
+    },
+    down: {
+      title: '自己管理力が削がれる原因を防ぐ',
+      tips: [
+        '片付けや宿題を親がすべてすると、子供は自己管理の機会を得られない',
+        '親の気分でルールが変わると「約束を守っても意味がない」と学習してしまう',
+        '細かく指示しすぎると自律的な計画性が育たない。年齢に応じて任せる',
+        '怒鳴る・体罰によるしつけは表面的な従順しか生まず、内発的な責任感は育たない',
+        '「100点じゃないとダメ」は先延ばしや回避行動を引き起こす',
+      ]
+    }
+  },
+  E: {
+    up: {
+      title: '社会性を伸ばす関わり',
+      tips: [
+        '公園や児童館など他の子供との自然な交流機会を作る。親が同席し安心できる環境からスタート',
+        '習い事やチームスポーツを子供の好みに合わせて選ばせる。無理な参加を強いない',
+        '「今日、友達とどう遊んだ？」「楽しかったことは？」と社会的経験を言語化する',
+        '「今日の夕飯は何がいい？」と意見を求め、自己主張を促す',
+        '内向的な子に「もっと友達を作りなさい」と圧力をかけない。内向性は正常な気質',
+      ]
+    },
+    down: {
+      title: '社会性が削がれる原因を防ぐ',
+      tips: [
+        '友達関係に過度に介入すると、子供の自主的な対人スキルが育たない',
+        '「もっと友達を作りなさい」という圧力は対人不安を逆に高める可能性がある',
+        '親自身が人付き合いを避けると子供もそのモデルを学習する',
+        '習い事や塾で忙しすぎると友達と自由に遊ぶ時間がなくなる',
+        '「泣くのはダメ」と感情表現を制限すると自己表現全体が萎縮する',
+      ]
+    }
+  },
+  A: {
+    up: {
+      title: '思いやりを伸ばす関わり',
+      tips: [
+        '「嬉しいね」「悲しいんだね」と子供の感情を言葉で表現する手助けをする',
+        '絵本の読み聞かせで「このキャラクターはどう思ってるかな？」と登場人物の気持ちを問いかける',
+        'きょうだい喧嘩や友達とのトラブルを即座に仲裁せず「どうすれば嬉しいかな？」と一緒に考える',
+        '子供の話を遮らずに聞く。「そうだったんだね」と受け止める',
+        'ペットや植物の世話で他者のニーズに気づく経験をさせる',
+      ]
+    },
+    down: {
+      title: '思いやりが削がれる原因を防ぐ',
+      tips: [
+        '「そんなことで泣かないの」と感情を否定すると他者の感情も理解できなくなる',
+        '親が他者を批判しているのを子供に見せるとそのモデルを学習する',
+        '体罰は恐怖で従わせるだけで思いやりや共感は育たない',
+        '「お兄ちゃんはできるのに」ときょうだい比較は嫉妬と競争心を生む',
+        '「シェアしたらお菓子をあげる」と物質的報酬で条件付けると内発的動機づけが損なわれる',
+      ]
+    }
+  },
+  N: {
+    up: {
+      title: '情緒の安定を高める関わり',
+      tips: [
+        '一貫した応答性で子供のサインに敏感に反応する。この「安全基地」が安定性の基盤',
+        'エモーションコーチング：感情に気づく→認める→受け止める→名前をつける→落ち着いてから解決を考える',
+        '「不安に思うよね」と感情をそのまま受け止める。「心配しなくていいよ」で否定しない',
+        '予定を事前に伝え、ルーティンを守る。予測可能性が高い環境は不安を減らす',
+        '「いい子にしたら買ってあげる」ではなく存在そのものを肯定する言葉をかける',
+      ]
+    },
+    down: {
+      title: '情緒が不安定になる原因を防ぐ',
+      tips: [
+        '親の応答が一貫しないと「自分は愛されない」という不安が内在化する',
+        '「危ないからダメ」と過度に制限すると「自分にはできない」という無力感が育つ',
+        '「泣いてなんかダメ」と感情を否定すると不安を蓄積する',
+        '成績や行儀の良さに応じて愛情を変えると「条件を満たさないと愛されない」という不安が根付く',
+        '親が常に不安がっていると子供も「世界は危険だ」と学習する',
+      ]
+    }
+  }
 };
 
 // ===== 遊びのヒント =====
@@ -647,6 +888,95 @@ function showResult() {
     N: `<strong>${childName}は感受性が豊かなタイプです。</strong>感じる力の大きさは才能です。気持ちを「そうなんだね」とまず受け止めてあげることで、安心して自分を表現できるようになります。`,
   };
   parentNote.innerHTML = parentMessages[topF];
+
+  // ===== お子さんの傾向カード =====
+  (function() {
+    const btn = document.getElementById('tendencyBtn');
+    const card = document.getElementById('tendencyCard');
+    const content = document.getElementById('tendencyContent');
+    const btnText = document.getElementById('tendencyBtnText');
+    const parentingBtn = document.getElementById('parentingBtn');
+    const parentingCard = document.getElementById('parentingCard');
+    let isOpen = false;
+
+    const factors = ['O', 'C', 'E', 'A', 'N'];
+    let html = '';
+    factors.forEach(f => {
+      const s = sc[f];
+      const info = traitInfo[f];
+      const t = tendencyDesc[f][s];
+      html += `
+        <div class="tendency-row">
+          <div class="tendency-row-header">
+            <span class="tendency-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="tendency-label">${t.label}</span>
+          </div>
+          <p class="tendency-text">${t.text}</p>
+        </div>`;
+    });
+    content.innerHTML = html;
+
+    // 親の関わり方コンテンツ生成
+    let pHtml = '';
+    factors.forEach(f => {
+      const score = sc[f];
+      const info = traitInfo[f];
+      const tips = parentingTips[f];
+      const isLow = score <= 2;
+      const isHigh = score >= 4;
+      pHtml += `
+        <div class="parenting-factor-block">
+          <div class="parenting-factor-header" data-factor="${f}">
+            <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="parenting-factor-arrow">▼</span>
+          </div>
+          <div class="parenting-factor-body" id="parentingBody_${f}">
+            <div class="parenting-direction ${isLow ? 'recommend' : ''}">
+              <p class="parenting-direction-title">${isLow ? '⬆️ ' : ''}${tips.up.title}</p>
+              ${tips.up.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
+            </div>
+            <div class="parenting-direction ${isHigh ? 'recommend' : ''}">
+              <p class="parenting-direction-title">${isHigh ? '⚠️ ' : ''}${tips.down.title}</p>
+              ${tips.down.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    });
+    document.getElementById('parentingContent').innerHTML = pHtml;
+
+    btn.addEventListener('click', () => {
+      isOpen = !isOpen;
+      card.style.display = isOpen ? 'block' : 'none';
+      btn.classList.toggle('active', isOpen);
+      btnText.textContent = isOpen ? '傾向を隠す' : 'お子さんの傾向を知る';
+      if (isOpen) {
+        parentingBtn.style.display = 'inline-flex';
+      }
+      if (!isOpen) {
+        parentingBtn.style.display = 'none';
+        parentingCard.style.display = 'none';
+      }
+    });
+
+    let isParentingOpen = false;
+    parentingBtn.addEventListener('click', () => {
+      isParentingOpen = !isParentingOpen;
+      parentingCard.style.display = isParentingOpen ? 'block' : 'none';
+      parentingBtn.classList.toggle('active', isParentingOpen);
+    });
+
+    document.querySelectorAll('.parenting-factor-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const factor = header.dataset.factor;
+        const body = document.getElementById('parentingBody_' + factor);
+        const arrow = header.querySelector('.parenting-factor-arrow');
+        const open = body.classList.contains('open');
+        body.classList.toggle('open', !open);
+        header.classList.toggle('open', !open);
+        arrow.classList.toggle('open', !open);
+      });
+    });
+  })();
 
   // 保存用データ
   window.currentChildResult = {
