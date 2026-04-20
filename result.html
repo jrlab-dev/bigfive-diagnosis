@@ -2464,8 +2464,10 @@ if (isOtherMode) {
     }
   }
 
-  // 自動保存（ページ表示時）
-  doSave();
+  // 自動保存（自分の結果のみ・あの人閲覧時はスキップ）
+  if (!isOtherMode) {
+    doSave();
+  }
 
   // ボタンは保存済み確認用として残す
   saveBtn.addEventListener('click', () => {
