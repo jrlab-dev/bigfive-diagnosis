@@ -1369,15 +1369,14 @@ function getRarity() {
   // 10問：レアなし
   if (version === '10') return 'common';
 
-  const hiddenChar = findHiddenCharacter();
-
+  // 30問：隠しキャラ判定なし（Common 95% / Rare 5%）
   if (version === '30') {
-    if (hiddenChar) return 'legendary';      // 隠しキャラ一致 → LEGENDARY
-    if (Math.random() < 0.05) return 'rare'; // 5%抽選 → RARE
+    if (Math.random() < 0.05) return 'rare';
     return 'common';
   }
 
-  // 120問
+  // 120問のみ隠しキャラ判定
+  const hiddenChar = findHiddenCharacter();
   if (hiddenChar) return 'secret';           // 隠しキャラ一致 → SECRET
   if (Math.random() < 0.05) return 'legendary'; // 5%抽選 → LEGENDARY
   return 'rare';                             // それ以外は全員RARE
@@ -1481,9 +1480,9 @@ document.getElementById('typeCode').setAttribute('data-version', versionLabels[v
 renderScores();
 document.getElementById('desc').textContent = genDescription();
 
-// 隠しキャラ判定（レアリティ・画像・ダークホログラムで使用）
+// 隠しキャラ判定（120問版のみ。レアリティ・画像・ダークホログラムで使用）
 const gender = params.get('gender') || 'F';
-const hiddenChar = findHiddenCharacter();
+const hiddenChar = (version === '120') ? findHiddenCharacter() : null;
 
 // レアリティ設定
 const card = document.getElementById('card');
@@ -2091,7 +2090,7 @@ if (isOtherMode) {
 
       // アルバムに追加
       if (window.AlbumUtils) {
-        var hc = typeof findHiddenCharacter === 'function' ? findHiddenCharacter() : null;
+        var hc = (version === '120' && typeof findHiddenCharacter === 'function') ? findHiddenCharacter() : null;
         window.AlbumUtils.addToAlbum({
           code: currentResult.code,
           gender: currentResult.gender,
