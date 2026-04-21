@@ -231,6 +231,16 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .parenting-direction.caution .parenting-direction-title { color: #b45309; }
 .parenting-tip-item { font-size: 11px; line-height: 1.7; color: var(--dim); padding: 2px 0 2px 14px; position: relative; }
 .parenting-tip-item::before { content: '•'; position: absolute; left: 2px; color: #94a3b8; }
+.parenting-factor-locked .parenting-factor-header {
+  cursor: default;
+  opacity: 0.45;
+}
+.parenting-factor-locked .parenting-factor-header:hover {
+  background: rgba(255,255,255,0.6);
+}
+.parenting-lock-icon {
+  font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -394,7 +404,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
       <div id="tendencyContent"></div>
       <button class="btn-parenting" id="parentingBtn" style="display:none;">
         <span>🌱</span>
-        <span>それぞれの因子に対して親の関わり方</span>
+        <span>一番の関わりポイントを見る</span>
       </button>
       <div class="parenting-card" id="parentingCard" style="display:none;">
         <p class="parenting-card-title">🌱 親の関わり方ヒント</p>
@@ -917,6 +927,17 @@ function showResult(scOverride) {
     content.innerHTML = html;
 
     // 親の関わり方コンテンツ生成
+    // 一番改善が必要な因子を特定（スコアが3から最も遠い因子）
+    let weakestFactor = factors[0];
+    let maxDeviation = 0;
+    factors.forEach(f => {
+      const deviation = Math.abs(sc[f] - 3);
+      if (deviation > maxDeviation) {
+        maxDeviation = deviation;
+        weakestFactor = f;
+      }
+    });
+
     let pHtml = '';
     factors.forEach(f => {
       const score = sc[f];
@@ -924,13 +945,16 @@ function showResult(scOverride) {
       const tips = parentingTips[f];
       const isLow = score <= 2;
       const isHigh = score >= 4;
-      pHtml += `
+      const isWeakest = f === weakestFactor;
+
+      if (isWeakest) {
+        pHtml += `
         <div class="parenting-factor-block">
-          <div class="parenting-factor-header" data-factor="${f}">
+          <div class="parenting-factor-header open" data-factor="${f}">
             <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
-            <span class="parenting-factor-arrow">▼</span>
+            <span class="parenting-factor-arrow open">▼</span>
           </div>
-          <div class="parenting-factor-body" id="parentingBody_${f}">
+          <div class="parenting-factor-body open" id="parentingBody_${f}">
             <div class="parenting-direction ${isLow ? 'recommend' : ''}">
               <p class="parenting-direction-title">${isLow ? '⬆️ ' : ''}${tips.up.title}</p>
               ${tips.up.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
@@ -941,6 +965,15 @@ function showResult(scOverride) {
             </div>
           </div>
         </div>`;
+      } else {
+        pHtml += `
+        <div class="parenting-factor-block parenting-factor-locked">
+          <div class="parenting-factor-header">
+            <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="parenting-lock-icon">🔒</span>
+          </div>
+        </div>`;
+      }
     });
     document.getElementById('parentingContent').innerHTML = pHtml;
 
@@ -965,17 +998,17 @@ function showResult(scOverride) {
       parentingBtn.classList.toggle('active', isParentingOpen);
     });
 
-    document.querySelectorAll('.parenting-factor-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const factor = header.dataset.factor;
-        const body = document.getElementById('parentingBody_' + factor);
-        const arrow = header.querySelector('.parenting-factor-arrow');
+    const weakestPHeader = document.querySelector(`.parenting-factor-header[data-factor="${weakestFactor}"]`);
+    if (weakestPHeader) {
+      weakestPHeader.addEventListener('click', () => {
+        const body = document.getElementById('parentingBody_' + weakestFactor);
+        const arrow = weakestPHeader.querySelector('.parenting-factor-arrow');
         const open = body.classList.contains('open');
         body.classList.toggle('open', !open);
-        header.classList.toggle('open', !open);
+        weakestPHeader.classList.toggle('open', !open);
         arrow.classList.toggle('open', !open);
       });
-    });
+    }
   })();
 
   // 保存用データ

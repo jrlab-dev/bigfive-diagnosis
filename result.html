@@ -770,6 +770,16 @@
   .growth-tip-item::before {
     content: '•'; position: absolute; left: 4px; color: #64748b;
   }
+  .growth-factor-locked .growth-factor-header {
+    cursor: default;
+    opacity: 0.45;
+  }
+  .growth-factor-locked .growth-factor-header:hover {
+    background: rgba(255,255,255,0.03);
+  }
+  .growth-lock-icon {
+    font-size: 13px;
+  }
 
   /* ===== おすすめ職種 ===== */
   .career-section {
@@ -953,7 +963,7 @@
       <div id="weaknessContent"></div>
       <button class="btn btn-growth-tips" id="growthTipsBtn" style="display:none;">
         <span>🌱</span>
-        <span>それぞれの因子に対して改善するには</span>
+        <span>一番の改善ポイントを見る</span>
       </button>
       <div class="growth-tips-card" id="growthTipsCard" style="display:none;">
         <p class="growth-tips-card-title">🌱 成長ヒント</p>
@@ -1881,7 +1891,7 @@ document.getElementById('descCard').innerHTML = `
 (function() {
   if (isOtherMode && !isChildMode) return;
   if (isChildMode) {
-    document.getElementById('growthTipsBtn').querySelector('span:last-child').textContent = 'それぞれの因子に対して親の関わり方';
+    document.getElementById('growthTipsBtn').querySelector('span:last-child').textContent = '一番の関わりポイントを見る';
     document.querySelector('.growth-tips-card-title').textContent = '🌱 親の関わり方ヒント';
     document.querySelector('.growth-tips-note').textContent = '親の関わりだけで性格を大きく変えられるわけではありません。お子さんの気質を尊重することが最も重要です。';
   }
@@ -1894,20 +1904,35 @@ document.getElementById('descCard').innerHTML = `
   // growthBtn.style.display は弱点カードの開閉ロジック側で制御
 
   const factors = ['O', 'C', 'E', 'A', 'N'];
+
+  // 一番改善が必要な因子を特定（スコアが3から最も遠い因子）
+  let weakestFactor = factors[0];
+  let maxDeviation = 0;
+  factors.forEach(f => {
+    const deviation = Math.abs(sc[f] - 3);
+    if (deviation > maxDeviation) {
+      maxDeviation = deviation;
+      weakestFactor = f;
+    }
+  });
+
   let html = '';
   factors.forEach(f => {
     const score = sc[f];
     const info = traitInfo[f];
+    const isWeakest = f === weakestFactor;
     const tips = isChildMode ? childParentingTips[f] : growthTips[f];
     const isLow = score <= 2;
     const isHigh = score >= 4;
-    html += `
+
+    if (isWeakest) {
+      html += `
       <div class="growth-factor-block">
-        <div class="growth-factor-header" data-factor="${f}">
+        <div class="growth-factor-header open" data-factor="${f}">
           <span class="growth-factor-name" style="color:${info.color}">${info.name}</span>
-          <span class="growth-factor-arrow">▼</span>
+          <span class="growth-factor-arrow open">▼</span>
         </div>
-        <div class="growth-factor-body" id="growthBody_${f}">
+        <div class="growth-factor-body open" id="growthBody_${f}">
           <div class="growth-direction ${isLow ? 'recommend' : ''}">
             <p class="growth-direction-title">${isLow ? '⬆️ ' : ''}${tips.up.title}</p>
             ${tips.up.tips.map(t => `<p class="growth-tip-item">${t}</p>`).join('')}
@@ -1918,6 +1943,15 @@ document.getElementById('descCard').innerHTML = `
           </div>
         </div>
       </div>`;
+    } else {
+      html += `
+      <div class="growth-factor-block growth-factor-locked">
+        <div class="growth-factor-header">
+          <span class="growth-factor-name" style="color:${info.color}">${info.name}</span>
+          <span class="growth-lock-icon">🔒</span>
+        </div>
+      </div>`;
+    }
   });
   growthContent.innerHTML = html;
 
@@ -1931,17 +1965,17 @@ document.getElementById('descCard').innerHTML = `
     }
   });
 
-  document.querySelectorAll('.growth-factor-header').forEach(header => {
-    header.addEventListener('click', () => {
-      const factor = header.dataset.factor;
-      const body = document.getElementById('growthBody_' + factor);
-      const arrow = header.querySelector('.growth-factor-arrow');
+  const weakestHeader = document.querySelector(`.growth-factor-header[data-factor="${weakestFactor}"]`);
+  if (weakestHeader) {
+    weakestHeader.addEventListener('click', () => {
+      const body = document.getElementById('growthBody_' + weakestFactor);
+      const arrow = weakestHeader.querySelector('.growth-factor-arrow');
       const isOpen = body.classList.contains('open');
       body.classList.toggle('open', !isOpen);
-      header.classList.toggle('open', !isOpen);
+      weakestHeader.classList.toggle('open', !isOpen);
       arrow.classList.toggle('open', !isOpen);
     });
-  });
+  }
 })();
 
 // 10問版→30問版誘導 / 30問版→120問版誘導
