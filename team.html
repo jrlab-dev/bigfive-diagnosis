@@ -509,31 +509,6 @@
     border: 1px solid rgba(16,185,129,0.15);
     border-radius: 8px;
   }
-  .position-tip.locked {
-    filter: blur(5px);
-    user-select: none;
-    pointer-events: none;
-  }
-  .position-lock-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    border-radius: 8px;
-    background: rgba(10,14,39,0.4);
-    cursor: pointer;
-  }
-  .position-lock-icon {
-    font-size: 20px;
-  }
-  .position-lock-text {
-    font-size: 11px;
-    color: var(--purple);
-    font-weight: 600;
-  }
   .position-good {
     font-size: 13px;
     line-height: 1.7;
@@ -946,11 +921,7 @@ function genPositionAdviceHtml(members, currentScore) {
         </div>
         <div class="position-advice">${a.text}</div>
         <div class="position-tip-area">
-          <div class="position-tip locked">${tip}</div>
-          <div class="position-lock-overlay">
-            <span class="position-lock-icon">🔒</span>
-            <span class="position-lock-text">改善ヒントを見る（有料機能）</span>
-          </div>
+          <div class="position-tip">${tip}</div>
         </div>
       </div>
     `;
