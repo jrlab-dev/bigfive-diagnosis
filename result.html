@@ -2428,6 +2428,16 @@ if (isOtherMode) {
     rarity: rarity
   } : null;
 
+  // すでに保存済みかチェック
+  function checkAlreadySaved() {
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    const isSaved = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
+    if (isSaved) {
+      saveBtn.textContent = '✓ 保存済み';
+      saveBtn.className = 'btn btn-saved';
+    }
+  }
+
   const MY_LIMIT = 5;
   const OTHER_LIMIT = 15;
 
@@ -2452,6 +2462,8 @@ if (isOtherMode) {
         }
         localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(myResults));
       }
+      saveBtn.textContent = '✓ 保存済み';
+      saveBtn.className = 'btn btn-saved';
       if (otherResult) {
         const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
         const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
@@ -2502,10 +2514,12 @@ if (isOtherMode) {
     doSave();
   }
 
-  // ボタンは手動保存用として残す
+  // ボタンは保存済み確認用として残す
   saveBtn.addEventListener('click', () => {
     doSave();
   });
+
+  checkAlreadySaved();
 })();
 </script>
 
