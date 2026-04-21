@@ -691,11 +691,12 @@ function loadMembers() {
 
   const members = [];
 
-  // 自分の結果（最新のみ、または全件？→全件表示）
-  myResults.forEach((r, i) => {
+  // 自分の結果（最新1件のみ）
+  if (myResults.length > 0) {
+    const r = myResults[0];
     const scores = r.scores || codeToScores(r.code);
     members.push({
-      id: `my_${i}`,
+      id: 'my_0',
       name: r.typeName || `自分 (${r.code})`,
       code: r.code,
       scores,
@@ -703,7 +704,7 @@ function loadMembers() {
       type: 'my',
       date: r.date
     });
-  });
+  }
 
   // 他人の結果
   otherResults.forEach((r, i) => {
