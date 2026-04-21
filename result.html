@@ -14,9 +14,23 @@
 <meta property="og:title" content="診断結果 — ビッグファイブ3125タイプ診断">
 <meta property="og:description" content="あなたのビッグファイブ診断結果です。3125通りの性格タイプからあなたの個性を詳しく解説。友達にシェアして比べてみよう。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/result.html">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="診断結果 — ビッグファイブ3125タイプ診断">
 <meta name="twitter:description" content="あなたのビッグファイブ診断結果です。3125通りの性格タイプからあなたの個性を詳しく解説。友達にシェアして比べてみよう。">
+<script>
+(function(){
+  var p=new URLSearchParams(location.search);
+  var t=p.get('type'),g=p.get('gender')||'F',r=p.get('rarity')||'common';
+  var c=p.get('char'),d=p.get('dark');
+  var src;
+  if(c){src='https://bigfive.jr-genius.jp/ogp-image?char='+encodeURIComponent(c)+'&dark='+(d||'0');}
+  else if(t){src='https://bigfive.jr-genius.jp/ogp-image?type='+encodeURIComponent(t)+'&gender='+g+'&rarity='+r;}
+  if(src){
+    var m=document.createElement('meta');m.setAttribute('property','og:image');m.setAttribute('content',src);document.head.appendChild(m);
+    var m2=document.createElement('meta');m2.setAttribute('name','twitter:image');m2.setAttribute('content',src);document.head.appendChild(m2);
+  }
+})();
+</script>
 
 <!-- 構造化データ（JSON-LD） -->
 <script type="application/ld+json">
