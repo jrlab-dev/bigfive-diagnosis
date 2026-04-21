@@ -828,10 +828,12 @@
 // ===== キャラクター表示切り替え（星ボタン） =====
 (function() {
   const KEY = 'bigfive_hide_chars';
+  if (localStorage.getItem(KEY) === null) localStorage.setItem(KEY, '1');
+
   const btn = document.createElement('button');
   btn.className = 'char-toggle' + (localStorage.getItem(KEY) === '1' ? ' hidden-chars' : '');
   btn.textContent = '⭐';
-  btn.title = 'キャラクターを隠す';
+  btn.title = 'キャラクターを表示する';
   btn.setAttribute('aria-label', 'キャラクター表示切り替え');
   document.body.appendChild(btn);
 
