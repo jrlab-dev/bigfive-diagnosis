@@ -109,6 +109,18 @@
     100% { transform: scale(1)    translate(-0.5%,-1%) }
   }
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .char-toggle {
+    position: fixed; top: 12px; right: 12px; z-index: 50;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(10,14,39,0.6); color: rgba(255,255,255,0.6);
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px); transition: all 0.3s;
+    padding: 0; line-height: 1;
+  }
+  .char-toggle:hover { background: rgba(10,14,39,0.8); color: rgba(255,255,255,0.9); }
+  .char-toggle.hidden-chars { color: rgba(255,255,255,0.2); }
   .bg-stars span {
     position: absolute;
     border-radius: 50%;
@@ -811,6 +823,32 @@
     const partnerGender = partnerData.gender || 'F';
     setHeroChar(rightDiv, partnerData.code, partnerGender);
   }
+})();
+
+// ===== キャラクター表示切り替え（星ボタン） =====
+(function() {
+  const KEY = 'bigfive_hide_chars';
+  const btn = document.createElement('button');
+  btn.className = 'char-toggle' + (localStorage.getItem(KEY) === '1' ? ' hidden-chars' : '');
+  btn.textContent = '⭐';
+  btn.title = 'キャラクターを隠す';
+  btn.setAttribute('aria-label', 'キャラクター表示切り替え');
+  document.body.appendChild(btn);
+
+  function applyState() {
+    const hide = localStorage.getItem(KEY) === '1';
+    document.querySelectorAll('.hero-char').forEach(function(el) { el.style.display = hide ? 'none' : ''; });
+    btn.classList.toggle('hidden-chars', hide);
+    btn.title = hide ? 'キャラクターを表示する' : 'キャラクターを隠す';
+  }
+
+  btn.addEventListener('click', function() {
+    const hide = localStorage.getItem(KEY) !== '1';
+    localStorage.setItem(KEY, hide ? '1' : '0');
+    applyState();
+  });
+
+  applyState();
 })();
 </script>
 <script src="concierge.js"></script>
