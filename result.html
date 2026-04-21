@@ -1905,13 +1905,14 @@ document.getElementById('descCard').innerHTML = `
 
   const factors = ['O', 'C', 'E', 'A', 'N'];
 
-  // 一番改善が必要な因子を特定（スコアが3から最も遠い因子）
+  // 一番改善が必要な因子を特定
+  // O/C/E/A: 低いほど改善が必要（3 - score）、N: 高いほど改善が必要（score - 3）
   let weakestFactor = factors[0];
-  let maxDeviation = 0;
+  let maxNeed = -Infinity;
   factors.forEach(f => {
-    const deviation = Math.abs(sc[f] - 3);
-    if (deviation > maxDeviation) {
-      maxDeviation = deviation;
+    const need = f === 'N' ? (sc[f] - 3) : (3 - sc[f]);
+    if (need > maxNeed) {
+      maxNeed = need;
       weakestFactor = f;
     }
   });
