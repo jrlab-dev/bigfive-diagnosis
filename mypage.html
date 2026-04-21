@@ -402,6 +402,28 @@
   }
   .report-missing-note a { color: var(--purple); font-weight: 600; text-decoration: none; }
 
+  /* 設定行 */
+  .setting-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; margin-top: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .setting-label { font-size: 13px; color: var(--dim); }
+  .setting-toggle {
+    position: relative; width: 44px; height: 24px;
+    background: rgba(255,255,255,0.1); border-radius: 12px;
+    cursor: pointer; transition: background 0.3s; border: none; padding: 0;
+  }
+  .setting-toggle.on { background: rgba(139,92,246,0.6); }
+  .setting-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; transition: transform 0.3s;
+  }
+  .setting-toggle.on::after { transform: translateX(20px); }
+
   /* クリアボタン */
   .clear-all {
     margin-top: 24px;
@@ -639,6 +661,11 @@
 
   <!-- 総合レポートバナー -->
   <div class="report-banner" id="reportBanner"></div>
+
+  <div class="setting-row">
+    <span class="setting-label">⭐ トップページのキャラクターを表示</span>
+    <button class="setting-toggle" id="charToggleBtn" aria-label="キャラクター表示切り替え"></button>
+  </div>
 
   <button class="clear-all" id="clearAllBtn">🗑️ すべてのデータを削除</button>
 
@@ -1024,6 +1051,20 @@ function renderAlbum() {
 
   container.innerHTML = html;
 }
+
+// ===== キャラクター表示設定 =====
+(function() {
+  const KEY = 'bigfive_hide_chars';
+  const btn = document.getElementById('charToggleBtn');
+  const isHidden = localStorage.getItem(KEY) === '1';
+  btn.classList.toggle('on', !isHidden);
+
+  btn.addEventListener('click', function() {
+    const currentlyHidden = localStorage.getItem(KEY) === '1';
+    localStorage.setItem(KEY, currentlyHidden ? '0' : '1');
+    btn.classList.toggle('on', currentlyHidden);
+  });
+})();
 
 // 全削除
 document.getElementById('clearAllBtn').addEventListener('click', () => {
