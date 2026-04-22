@@ -996,6 +996,13 @@ function calcTeamScore(members) {
     raw += Math.min(totalVariance * 0.5, 4);
   }
 
+  // 大人数ペナルティ（5人超：コミュニケーション経路が n*(n-1)/2 通りに急増するため）
+  // 5人=10通りを基準に、超過した経路数×1.2点を減算（最大22点）
+  if (n > 5) {
+    const extraPaths = (n * (n - 1) / 2) - 10;
+    raw -= Math.min(extraPaths * 1.2, 22);
+  }
+
   // 2人チームはペア相性を重視
   if (n === 2) {
     const pairScore = calcPairCompatibility(members[0].code, members[1].code);
@@ -1073,7 +1080,7 @@ function genFactorComments(avg, variance) {
 }
 
 // ===== 総合コメント生成 =====
-function genSummary(score, avg, variance, bestPair, worstPair) {
+function genSummary(score, avg, variance, bestPair, worstPair, n) {
   let rank, rankClass, summaryText;
 
   if (score >= 80) {
@@ -1104,6 +1111,7 @@ function genSummary(score, avg, variance, bestPair, worstPair) {
   if (avg.A <= 2.5) cautions.push('意見の衝突と意思決定の遅れ');
   if (avg.A >= 4.5) cautions.push('反対意見が出にくい傾向');
   if (avg.C <= 2.5) cautions.push('段取りや計画の不在');
+  if (n >= 6) cautions.push(`人数が多い（${n}人）ためコミュニケーションコスト増加`);
 
   return { rank, rankClass, summaryText, strengths, cautions };
 }
@@ -1125,7 +1133,7 @@ function renderResults() {
     }
   }
 
-  const summary = genSummary(score, avg, variance, bestPair, worstPair);
+  const summary = genSummary(score, avg, variance, bestPair, worstPair, selected.length);
 
   const container = document.getElementById('resultSection');
 
