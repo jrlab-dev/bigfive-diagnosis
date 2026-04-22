@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブ3125タイプ診断">
 <meta property="og:title" content="チーム相性診断 — ビッグファイブ3125タイプ診断">
-<meta property="og:description" content="最大6人のチーム相性を無料で診断。因子ごとの分析や最適なペア組み合わせがわかります。">
+<meta property="og:description" content="最大8人のチーム相性を無料で診断。因子ごとの分析や最適なペア組み合わせがわかります。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/team.html">
 <meta name="twitter:card" content="summary">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
@@ -609,7 +609,7 @@
   </header>
 
   <div class="intro">
-    <p>保存した診断結果からメンバーを選んで（2〜6人）<br>チーム全体の相性を診断します</p>
+    <p>保存した診断結果からメンバーを選んで（2〜8人）<br>チーム全体の相性を診断します</p>
   </div>
 
   <!-- メンバー選択 -->
@@ -627,7 +627,7 @@
 // ===== 定数 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
-const MAX_MEMBERS = 6;
+const MAX_MEMBERS = 8;
 const MIN_MEMBERS = 2;
 
 const traitInfo = {
@@ -806,6 +806,20 @@ function renderMembers() {
   const count = selectedIds.size;
   if (count === 0) {
     info.innerHTML = `メンバーを選択してください（${MIN_MEMBERS}〜${MAX_MEMBERS}人）`;
+  } else if (count >= 6) {
+    const commPaths = (count * (count - 1)) / 2;
+    info.innerHTML = `
+      <span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）
+      <div style="margin-top:10px;padding:12px 14px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:left;font-size:12px;line-height:1.8;color:#fbbf24;">
+        ⚠️ <strong>チームの人数について</strong><br>
+        <span style="color:var(--dim);">
+          心理学の研究では、<strong style="color:var(--text);">5人前後が最も機能しやすいチームサイズ</strong>とされています。
+          ${count}人では会話の経路が<strong style="color:var(--text);">${commPaths}通り</strong>に増え、コミュニケーションコストが急増します。<br>
+          また「リングルマン効果」により、人数が増えるほど個人の貢献量が下がる傾向があります。
+          6人以上では意思決定が遅くなるリスクも高まります。
+        </span>
+      </div>
+    `;
   } else {
     info.innerHTML = `<span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）`;
   }
