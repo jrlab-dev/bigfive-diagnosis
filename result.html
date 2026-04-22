@@ -436,12 +436,7 @@
     text-shadow: 0 1px 6px rgba(0,0,0,0.8);
   }
   .type-code::after {
-    content: attr(data-version);
-    display: block;
-    font-size: 9px;
-    color: rgba(203,213,225,0.35);
-    letter-spacing: 0.08em;
-    margin-top: 1px;
+    content: none;
   }
 
   /* 下部コンテンツ */
@@ -1768,7 +1763,7 @@ window.addEventListener('load', shrinkTypeName);
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
 // バージョンラベル（スコアコードの右下に薄く表示）
 const versionLabels = { '10': 'IPIP-10Q', '30': 'IPIP-30Q', '120': 'IPIP-NEO-120' };
-document.getElementById('typeCode').setAttribute('data-version', versionLabels[version] || '');
+// version label removed from card display
 renderScores();
 document.getElementById('desc').textContent = genDescription();
 

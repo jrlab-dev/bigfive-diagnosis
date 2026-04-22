@@ -749,7 +749,9 @@
     if (key === 'bigfive_v10' || key === 'bigfive_v30' || key === 'bigfive_v120') {
       const v = key.replace('bigfive_v', '');
       const arr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
-      return arr.some(function(r) { return String(r.version) === v; });
+      // version未設定の古いデータは '10' 扱い。保存済み or やり直し途中でもチェックを維持
+      if (arr.some(function(r) { return String(r.version || '10') === v; })) return true;
+      return !!localStorage.getItem('bigfive_progress_v' + v);
     }
     if (key === 'bigfive_other') {
       return JSON.parse(localStorage.getItem('bigfive_other_results') || '[]').length > 0;
