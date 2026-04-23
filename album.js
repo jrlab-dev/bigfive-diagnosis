@@ -12,7 +12,7 @@
   var OTHER_KEY = 'bigfive_other_results';
   var MAX_CARDS = 20;
 
-  var RARITY_RANK = { common: 1, rare: 2, legendary: 3, secret: 4 };
+  var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, common: 1, rare: 2, legendary: 3, secret: 4 };
 
   // --- ユーティリティ ---
 
@@ -53,12 +53,43 @@
   }
 
   function computeRarityForAlbum(code, version, gender) {
-    if (version === '10') return 'common';
-    var scores = { O: +code[0], C: +code[1], E: +code[2], A: +code[3], N: +code[4] };
-    var hc = findHiddenCharForAlbum(scores, gender);
-    if (version === '30') return hc ? 'legendary' : 'common';
-    if (version === '120') return hc ? 'secret' : 'rare';
-    return 'common';
+    // 10問版：r0固定
+    if (version === '10') return 'r0';
+
+    // MAX因子判定ヘルパー
+    function isMax(factor, value) {
+      if (factor === 'N') return value === 1;
+      if (factor === 'E' || factor === 'A') return value === 1 || value === 5;
+      return value === 5;
+    }
+
+    // 120問版のみ隠しキャラ判定
+    if (version === '120') {
+      var scores = { O: +code[0], C: +code[1], E: +code[2], A: +code[3], N: +code[4] };
+      var hc = findHiddenCharForAlbum(scores, gender);
+      if (hc) {
+        return hc.a === 1 ? 'r7' : 'r6';
+      }
+    }
+
+    // MAX因子カウント方式でレア度判定
+    var maxCount = 0;
+    if (isMax('O', +code[0])) maxCount++;
+    if (isMax('C', +code[1])) maxCount++;
+    if (isMax('E', +code[2])) maxCount++;
+    if (isMax('A', +code[3])) maxCount++;
+    if (isMax('N', +code[4])) maxCount++;
+
+    // R1: MAX 0個 → R1
+    if (maxCount === 0) return 'r1';
+    // R2: MAX 1個 → R2
+    if (maxCount === 1) return 'r2';
+    // R3: MAX 2個 → R3
+    if (maxCount === 2) return 'r3';
+    // R4: MAX 3個 → R4
+    if (maxCount === 3) return 'r4';
+    // R5: MAX 4-5個 → R5
+    return 'r5';
   }
 
   // --- タイプ名取得 ---
