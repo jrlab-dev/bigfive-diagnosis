@@ -2362,9 +2362,19 @@ if (isOtherMode) {
   if (!card || !wrapper) return;
 
   let tRx = 0, tRy = 0, cRx = 0, cRy = 0;
+  let isInteracting = false;
   const isTouchDevice = 'ontouchstart' in window;
   const lerpSpeed = isTouchDevice ? 0.15 : 0.08;
   function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // ジャイロ（スマホ傾き）
+  let hasGyroTilt = false, gyroTRx = 0, gyroTRy = 0;
+  window.addEventListener('deviceorientation', e => {
+    if (e.gamma === null) return;
+    hasGyroTilt = true;
+    gyroTRx = -(Math.max(-30, Math.min(30, e.beta || 0))) * 0.4;
+    gyroTRy =  (Math.max(-45, Math.min(45, e.gamma))) * 0.4;
+  }, { passive: true });
 
   function updateTarget(cx, cy) {
     const r = wrapper.getBoundingClientRect();
@@ -2374,17 +2384,20 @@ if (isOtherMode) {
     tRx = -my * 12;
   }
 
-  wrapper.addEventListener('mousemove', e => updateTarget(e.clientX, e.clientY));
-  wrapper.addEventListener('mouseleave', () => { tRx = 0; tRy = 0; });
+  wrapper.addEventListener('mousemove', e => { isInteracting = true; updateTarget(e.clientX, e.clientY); });
+  wrapper.addEventListener('mouseleave', () => { isInteracting = false; tRx = 0; tRy = 0; });
   wrapper.addEventListener('touchmove', e => {
     e.preventDefault();
+    isInteracting = true;
     updateTarget(e.touches[0].clientX, e.touches[0].clientY);
   }, { passive: false });
-  wrapper.addEventListener('touchend', () => { tRx = 0; tRy = 0; });
+  wrapper.addEventListener('touchend', () => { isInteracting = false; tRx = 0; tRy = 0; });
 
   (function animTilt() {
-    cRx = lerp(cRx, tRx, lerpSpeed);
-    cRy = lerp(cRy, tRy, lerpSpeed);
+    const targetRx = isInteracting ? tRx : hasGyroTilt ? gyroTRx : tRx;
+    const targetRy = isInteracting ? tRy : hasGyroTilt ? gyroTRy : tRy;
+    cRx = lerp(cRx, targetRx, lerpSpeed);
+    cRy = lerp(cRy, targetRy, lerpSpeed);
     card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
 
     // --- 1. エッジハイライト（マウス位置に光の反射）---
@@ -2453,6 +2466,26 @@ if (isOtherMode) {
   });
   wrapper.addEventListener('mouseenter', () => { hovered = true; });
   wrapper.addEventListener('mouseleave', () => { mx = 0.5; my = 0.5; hovered = false; });
+
+  // タッチ対応（スマホ指ドラッグ）
+  wrapper.addEventListener('touchmove', e => {
+    if (e.touches.length > 0) {
+      const r = card.getBoundingClientRect();
+      mx = Math.max(0, Math.min(1, (e.touches[0].clientX - r.left) / r.width));
+      my = Math.max(0, Math.min(1, (e.touches[0].clientY - r.top) / r.height));
+    }
+  }, { passive: true });
+  wrapper.addEventListener('touchstart', () => { hovered = true; }, { passive: true });
+  wrapper.addEventListener('touchend', () => { hovered = false; });
+
+  // ジャイロ対応（スマホ傾き）
+  let gyroX = 0.5, gyroY = 0.5, hasGyro = false;
+  window.addEventListener('deviceorientation', e => {
+    if (e.gamma === null) return;
+    hasGyro = true;
+    gyroX = (Math.max(-45, Math.min(45, e.gamma)) + 45) / 90;
+    gyroY = (Math.max(-30, Math.min(30, e.beta || 0)) + 30) / 60;
+  }, { passive: true });
 
   // レアリティを取得
   let rarity = 'r0';
@@ -2531,8 +2564,11 @@ if (isOtherMode) {
     function frame() {
       tick++;
       ctx.clearRect(0, 0, W, H);
-      const defaultAngle = 0.4;
-      const lightAngle = hovered ? Math.atan2(my - .5, mx - .5) : defaultAngle;
+      const lightAngle = hovered
+        ? Math.atan2(my - .5, mx - .5)
+        : hasGyro
+          ? Math.atan2(gyroY - .5, gyroX - .5)
+          : tick * 0.002;
 
       sparkles.forEach(s => {
         let diff = lightAngle - s.catchAngle;
@@ -2542,7 +2578,7 @@ if (isOtherMode) {
         const directional = Math.max(0, raw) * s.intensity;
         const twinkle = .06 * Math.sin(tick * .012 * s.intensity + s.catchAngle * 3);
         const ambient = .2 + s.intensity * .15;
-        const boost = directional * (hovered ? 1.4 : .5);
+        const boost = directional * ((hovered || hasGyro) ? 1.4 : 0.9);
         const brightness = Math.min(1, ambient + boost + twinkle);
         if (brightness < .04) return;
 
@@ -2608,8 +2644,8 @@ if (isOtherMode) {
 
         const wobbleX = Math.sin(tick * .008) * .05;
         const wobbleY = Math.cos(tick * .006) * .04;
-        const smx = hovered ? mx : (.5 + wobbleX);
-        const smy = hovered ? my : (.5 + wobbleY);
+        const smx = hovered ? mx : hasGyro ? gyroX : (.5 + wobbleX);
+        const smy = hovered ? my : hasGyro ? gyroY : (.5 + wobbleY);
         const bx = smx * cardW + 100, by = smy * cardH + 100;
 
         const hexToRgb = (hex) => {
