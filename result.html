@@ -161,65 +161,65 @@
   }
   /* ===== 新レアリティシステム ===== */
   /* R0: Common (10問版) — ベージュ背景 */
-  .rarity-r0 .card {
+  .card.rarity-r0 {
     box-shadow: 0 4px 20px rgba(0,0,0,.15);
     border-color: rgba(180,140,90,.4);
   }
-  .rarity-r0 .card-bg {
+  .card.rarity-r0 .card-bg {
     background: linear-gradient(160deg, #fdf6ec 0%, #f5e6cc 50%, #ead8b4 100%);
   }
-  .rarity-r0 .card-content {
+  .card.rarity-r0 .card-content {
     background: linear-gradient(to top, rgba(234,216,180,.95) 0%, rgba(224,200,154,.9) 30%, transparent 100%);
   }
-  .rarity-r0 .type-name, .rarity-r0 .type-label {
+  .card.rarity-r0 .type-name, .card.rarity-r0 .type-label {
     color: #3a2e1e; text-shadow: none;
   }
-  .rarity-r0 .type-code, .rarity-r0 .score-label, .rarity-r0 .score-val {
+  .card.rarity-r0 .type-code, .card.rarity-r0 .score-label, .card.rarity-r0 .score-val {
     color: #3a2e1e; text-shadow: none;
   }
-  .rarity-r0 .description {
+  .card.rarity-r0 .description {
     background: rgba(255,255,255,.92); border-radius: 8px; color: #3a2e1e;
   }
-  .rarity-r0 .shimmer { opacity: 0; }
+  .card.rarity-r0 .shimmer { opacity: 0; }
 
   /* R1: グリッターのみ */
-  .rarity-r1 .card {
+  .card.rarity-r1 {
     box-shadow: 0 4px 20px rgba(0,0,0,.5);
     border-color: rgba(255,255,255,.06);
   }
 
   /* R2: グリッター + 金属箔（MAX因子色反映） */
-  .rarity-r2 .card {
+  .card.rarity-r2 {
     box-shadow: 0 4px 20px rgba(0,0,0,.5), 0 0 20px rgba(212,190,140,.15);
     border-color: rgba(200,180,120,.2);
   }
 
   /* R3: レインボー/オーロラ */
-  .rarity-r3 .card {
+  .card.rarity-r3 {
     box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 35px rgba(255,215,0,.2), 0 0 60px rgba(139,92,246,.1);
     border-color: rgba(255,215,0,.35);
   }
 
   /* R4: ダイヤモンドホログラム（金） */
-  .rarity-r4 .card {
+  .card.rarity-r4 {
     box-shadow: 0 8px 40px rgba(0,0,0,.8), 0 0 60px rgba(255,200,50,.4), 0 0 100px rgba(255,180,0,.2);
     border-color: rgba(255,210,80,.6);
   }
 
   /* R5: サンドホログラム */
-  .rarity-r5 .card {
+  .card.rarity-r5 {
     box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 35px rgba(59,130,246,.25), 0 0 60px rgba(14,184,166,.1);
     border-color: rgba(59,130,246,.35);
   }
 
   /* R6: Secret（ランダムホログラム） */
-  .rarity-r6 .card {
+  .card.rarity-r6 {
     box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 40px rgba(139,92,246,.25), 0 0 40px rgba(245,158,11,.15), 0 0 60px rgba(59,130,246,.1);
     border-color: rgba(139,92,246,.4);
   }
 
   /* R7: Dark Secret（ダークランダムホログラム） */
-  .rarity-r7 .card {
+  .card.rarity-r7 {
     box-shadow: 0 8px 40px rgba(0,0,0,.95), 0 0 50px rgba(160,160,200,.18), 0 0 80px rgba(80,80,120,.15);
     border-color: rgba(180,180,210,.3);
   }
@@ -230,11 +230,11 @@
     opacity: 0; transition: opacity .5s; border-radius: inherit;
   }
   .card:hover .glow { opacity: 1 !important; }
-  .rarity-r3 .glow { opacity: .4; background: radial-gradient(circle at 50% 50%, rgba(255,215,0,.05) 0%, transparent 70%); }
-  .rarity-r4 .glow { opacity: .7; background: radial-gradient(circle at 50% 50%, rgba(255,200,50,.12) 0%, transparent 70%); }
-  .rarity-r5 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,.05) 0%, transparent 70%); }
-  .rarity-r6 .glow { opacity: .6; background: radial-gradient(circle at 50% 50%, rgba(139,92,246,.06) 0%, transparent 70%); }
-  .rarity-r7 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(180,180,220,.05) 0%, transparent 70%); }
+  .card.rarity-r3 .glow { opacity: .4; background: radial-gradient(circle at 50% 50%, rgba(255,215,0,.05) 0%, transparent 70%); }
+  .card.rarity-r4 .glow { opacity: .7; background: radial-gradient(circle at 50% 50%, rgba(255,200,50,.12) 0%, transparent 70%); }
+  .card.rarity-r5 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,.05) 0%, transparent 70%); }
+  .card.rarity-r6 .glow { opacity: .6; background: radial-gradient(circle at 50% 50%, rgba(139,92,246,.06) 0%, transparent 70%); }
+  .card.rarity-r7 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(180,180,220,.05) 0%, transparent 70%); }
   .stars {
     position: absolute; inset: 0; z-index: 1;
     pointer-events: none;
