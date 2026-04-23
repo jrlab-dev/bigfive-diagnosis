@@ -247,6 +247,10 @@
     position: absolute; inset: -100%; z-index: 2;
     pointer-events: none; opacity: 0; transition: opacity 0.5s;
   }
+  /* ===== 新レアリティ演出Canvas ===== */
+  .holo-cv { position: absolute; inset: -100px; z-index: 1; border-radius: inherit; pointer-events: none; }
+  .foil-cv { position: absolute; inset: -100px; z-index: 1; border-radius: inherit; pointer-events: none; }
+  .glitter-cv { position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none; }
 
 
   .rarity-secret.holo-on .glow-overlay {
@@ -2563,17 +2567,16 @@ if (isOtherMode) {
   }
 
   // ============================================================
-  // R1: グリッターのみ
+  // R1: グリッターのみ / R2: グリッター + 金属箔
   // ============================================================
-  if (rarity === 'r1' || rarity === 'r2' || rarity === 'r3') {
+  if (rarity === 'r1' || rarity === 'r2') {
     createGlitter(glitterCv);
   }
 
   // ============================================================
-  // R2: 金属箔 + グリッター（MAX因子色反映）
+  // R2: 金属箔（MAX因子色反映）
   // ============================================================
   if (rarity === 'r2') {
-    createGlitter(glitterCv);
 
     if (foilCv) {
       const ctx = foilCv.getContext('2d');
