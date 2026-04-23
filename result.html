@@ -211,6 +211,12 @@
     box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 35px rgba(59,130,246,.25), 0 0 60px rgba(14,184,166,.1);
     border-color: rgba(59,130,246,.35);
   }
+  .card.rarity-r5 .card-bg {
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 30%, rgba(14,184,166,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 75% 70%, rgba(59,130,246,0.18) 0%, transparent 55%),
+      linear-gradient(160deg, #071c28 0%, #0a2540 35%, #061e30 70%, #040e18 100%);
+  }
 
   /* R6: Secret（ランダムホログラム） */
   .card.rarity-r6 {
@@ -1556,8 +1562,9 @@ function getMaxFactor() {
 
 function getRarity() {
   // URLにrarity指定済みならそれを使う（リロード・シェアリンク踏んだ時の再抽選防止）
+  // 新形式（r0〜r7）のみ有効、旧形式（common/rare等）は無視して再計算
   const urlRarity = params.get('rarity');
-  if (urlRarity) return urlRarity;
+  if (urlRarity && /^r[0-7]$/.test(urlRarity)) return urlRarity;
 
   // 10問：common固定
   if (version === '10') return 'r0';
@@ -2748,10 +2755,42 @@ if (isOtherMode) {
       frame();
     }
 
-    // R4: ダイヤモンドホログラム（金）
+    // R4: ダイヤモンドホログラム（金・角度対応）
     if (rarity === 'r4') {
       const CELL = 18, DEPTH = 0.42, BASE_HUE = 38;
-      function getCellColor(col, row, facetLight) {
+
+      // ジャイロ（スマホの傾き）対応
+      let gyroX4 = 0.5, gyroY4 = 0.5, hasGyro4 = false;
+      window.addEventListener('deviceorientation', e => {
+        if (e.gamma === null) return;
+        hasGyro4 = true;
+        gyroX4 = (Math.max(-45, Math.min(45, e.gamma)) + 45) / 90;
+        gyroY4 = (Math.max(-30, Math.min(30, e.beta || 0)) + 30) / 60;
+      }, { passive: true });
+
+      // 光源位置を取得（マウス優先 → ジャイロ → 自動揺動）
+      function getLightPos4() {
+        if (hovered) return [mx, my];
+        if (hasGyro4) return [gyroX4, gyroY4];
+        const a = t * 0.003;
+        return [0.5 + Math.sin(a) * 0.4, 0.5 + Math.cos(a * 0.7) * 0.3];
+      }
+
+      // 各ファセットの明度を光源方向から計算
+      // faceIdx: 0=上 1=下 2=左 3=右
+      function getFacetL(faceIdx, lx, ly) {
+        const dx = (lx - 0.5) * 2; // -1〜1
+        const dy = (ly - 0.5) * 2; // -1〜1
+        switch(faceIdx) {
+          case 0: return 55 + Math.max(0, -dy) * 38; // 上面：光が上から来るほど明るい
+          case 1: return 12 + Math.max(0,  dy) * 28; // 下面：光が下から来るほど明るい
+          case 2: return 35 + Math.max(0, -dx) * 32; // 左面：光が左から来るほど明るい
+          case 3: return 22 + Math.max(0,  dx) * 32; // 右面：光が右から来るほど明るい
+        }
+      }
+
+      function getCellColor(col, row, faceIdx) {
+        const [lx, ly] = getLightPos4();
         const cols = Math.ceil(W / CELL) + 1;
         const rows = Math.ceil(H / CELL) + 1;
         const x = col / cols, y = row / rows;
@@ -2762,30 +2801,31 @@ if (isOtherMode) {
           Math.sin(x * 2.33 + y * 7.81 + t * 0.00030) * 0.15;
         const hue = BASE_HUE + wave * 18;
         const sat = 85 + wave * 12;
-        const baseL = facetLight * brightness + facetLight * 0.50 * (1 - brightness);
-        const lit   = baseL + wave * 6;
+        const facetL = getFacetL(faceIdx, lx, ly);
+        const lit = facetL + wave * 8;
         return `hsl(${hue.toFixed(1)},${sat.toFixed(1)}%,${Math.max(4, lit).toFixed(1)}%)`;
       }
+
       function drawCell(col, row) {
         const cx = col * CELL, cy = row * CELL, d = CELL * DEPTH;
         const tl = [cx, cy], tr = [cx+CELL, cy], bl = [cx, cy+CELL], br = [cx+CELL, cy+CELL];
         const cc = [cx + CELL/2, cy + CELL/2 - d*0.2];
         [
-          { pts:[tl,tr,cc], L:75 }, { pts:[bl,br,cc], L:18 },
-          { pts:[tl,bl,cc], L:48 }, { pts:[tr,br,cc], L:33 },
-        ].forEach(({ pts, L }) => {
+          { pts:[tl,tr,cc], fi:0 }, { pts:[bl,br,cc], fi:1 },
+          { pts:[tl,bl,cc], fi:2 }, { pts:[tr,br,cc], fi:3 },
+        ].forEach(({ pts, fi }) => {
           ctx.beginPath();
           ctx.moveTo(pts[0][0], pts[0][1]);
           ctx.lineTo(pts[1][0], pts[1][1]);
           ctx.lineTo(pts[2][0], pts[2][1]);
           ctx.closePath();
-          ctx.fillStyle = getCellColor(col, row, L);
+          ctx.fillStyle = getCellColor(col, row, fi);
           ctx.fill();
         });
       }
+
       function frame() {
-        if (hovered) t++;
-        brightness += ((hovered ? 1 : 0) - brightness) * 0.04;
+        t++; // 常にアニメーション
         ctx.clearRect(0, 0, W, H);
         const cols = Math.ceil(W / CELL) + 1;
         const rows = Math.ceil(H / CELL) + 1;
@@ -2794,7 +2834,7 @@ if (isOtherMode) {
             drawCell(c, r);
           }
         }
-        ctx.strokeStyle = 'rgba(0,0,0,0.30)';
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
         ctx.lineWidth = 0.5;
         for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(W,r*CELL); ctx.stroke(); }
         for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,H); ctx.stroke(); }
@@ -2810,17 +2850,24 @@ if (isOtherMode) {
       const bgImg = new Image();
       bgImg.src = 'images/holo/sand.jpg';
 
+      // ジャイロ（スマホの傾き）対応
+      let gyroX5 = 0.5, gyroY5 = 0.5, hasGyro5 = false;
+      window.addEventListener('deviceorientation', e => {
+        if (e.gamma === null) return;
+        hasGyro5 = true;
+        gyroX5 = (Math.max(-45, Math.min(45, e.gamma)) + 45) / 90;
+        gyroY5 = (Math.max(-30, Math.min(30, e.beta || 0)) + 30) / 60;
+      }, { passive: true });
+
       function generateParticles() {
         particles.length = 0;
-        const defaultAngle = 0.4;
         for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const nearDefault = Math.random() > 0.7;
           particles.push({
             x: Math.random() * W, y: Math.random() * H,
             size: Math.random() * 3.5 + 0.5,
-            catchAngle: nearDefault ? defaultAngle + (Math.random() - 0.5) * 0.6 : Math.random() * Math.PI * 2,
+            catchAngle: Math.random() * Math.PI * 2, // 全方向に均等分布
             catchWidth: Math.random() * 0.5 + 0.25,
-            catchIntensity: nearDefault ? Math.random() * 0.3 + 0.7 : Math.random() * 0.5 + 0.3,
+            catchIntensity: Math.random() * 0.5 + 0.5,
             hue: Math.random() * 360,
           });
         }
@@ -2828,14 +2875,20 @@ if (isOtherMode) {
       generateParticles();
 
       function frame() {
+        t++; // 常にアニメーション
         ctx.clearRect(0, 0, W, H);
         if (bgImg.complete && bgImg.naturalWidth > 0) {
+          ctx.globalAlpha = 0.55; // CSS背景が透けて見えるよう半透明で描画
           ctx.drawImage(bgImg, 0, 0, W, H);
+          ctx.globalAlpha = 1;
         }
-        const smx = hovered ? mx : .5;
-        const smy = hovered ? my : .5;
-        const defaultAngle = 0.4;
-        const lightAngle = hovered ? Math.atan2(smy - .5, smx - .5) : defaultAngle;
+
+        const smx = hovered ? mx : hasGyro5 ? gyroX5 : 0.5;
+        const smy = hovered ? my : hasGyro5 ? gyroY5 : 0.5;
+        // ホバー/ジャイロ時は位置から角度計算、それ以外は時間で自動回転
+        const lightAngle = (hovered || hasGyro5)
+          ? Math.atan2(smy - .5, smx - .5)
+          : t * 0.002;
         const hueShift = (smx - .5) * 40 + (smy - .5) * 20;
 
         ctx.globalCompositeOperation = 'screen';
