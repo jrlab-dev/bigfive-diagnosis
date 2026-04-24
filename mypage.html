@@ -658,6 +658,7 @@
     font-weight: bold;
     cursor: pointer;
     text-align: center;
+    text-decoration: none;
     transition: all 0.2s;
   }
   .stage2-btn.locked {
@@ -1101,7 +1102,7 @@ function renderAlbum() {
   // Stage 2ボタン
   var remaining = max - count;
   if (isComplete) {
-    html += '<button class="stage2-btn unlocked" onclick="alert(\'図鑑は次回アップデートで解放予定です！\')">📖 図鑑を開く（486枚）</button>';
+    html += '<a href="zukan.html" class="stage2-btn unlocked">📖 図鑑を開く</a>';
   } else {
     html += '<button class="stage2-btn locked" onclick="alert(\'あと' + remaining + '枚コレクトで図鑑が解放されます！\')">🔒 図鑑（あと' + remaining + '枚で解放）</button>';
   }

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カード図鑑 | ビッグファイブ3125タイプ診断</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0e27;
+      color: #e2e8f0;
+      font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      padding: 68px 16px 12px;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #a78bfa, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .progress-wrap {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .progress-text {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .progress-bar-bg {
+      background: #1e293b;
+      border-radius: 999px;
+      height: 5px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #ec4899);
+      border-radius: 999px;
+      transition: width 0.5s;
+      width: 0%;
+    }
+
+    /* フィルタータブ */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 16px 16px 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid #334155;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-tab.active {
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      border-color: transparent;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .count-label {
+      text-align: center;
+      font-size: 0.74rem;
+      color: #475569;
+      padding: 4px 0 10px;
+    }
+
+    /* カードグリッド */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 0 10px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    @media (min-width: 420px) {
+      .card-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 520px) {
+      .card-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    /* カードサムネイル */
+    .zukan-card {
+      aspect-ratio: 1/1;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid #1e293b;
+      cursor: pointer;
+      transition: transform 0.12s;
+      background: #0f172a;
+    }
+    .zukan-card:active { transform: scale(0.93); }
+    .zukan-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .zukan-card.unowned img { filter: brightness(0); }
+    .zukan-card .card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.72);
+      font-size: 0.52rem;
+      text-align: center;
+      padding: 2px 1px;
+      line-height: 1.4;
+    }
+    .zukan-card.owned .card-label { color: #cbd5e1; }
+    .zukan-card.unowned .card-label { color: #334155; }
+
+    /* レアリティ枠色（入手済みのみ色付き） */
+    .zukan-card.owned.rarity-r1 { border-color: #60a5fa; }
+    .zukan-card.owned.rarity-r2 { border-color: #a78bfa; }
+    .zukan-card.owned.rarity-r3 { border-color: #34d399; }
+    .zukan-card.owned.rarity-r4 { border-color: #fbbf24; }
+    .zukan-card.owned.rarity-r5 { border-color: #f87171; }
+    .zukan-card.owned.rarity-r6 { border-color: #f9a8d4; box-shadow: 0 0 6px rgba(249,168,212,0.4); }
+    .zukan-card.owned.rarity-r7 { border-color: #7c3aed; box-shadow: 0 0 6px rgba(124,58,237,0.4); }
+
+    /* ページネーション */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 16px;
+    }
+    .page-nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .page-nav-btn:hover:not(:disabled) { border-color: #8b5cf6; color: #a78bfa; }
+    .page-nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .page-info {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    /* セクション見出し */
+    .section-title {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #a78bfa;
+      padding: 28px 16px 12px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    /* 空状態 */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 16px;
+      color: #475569;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    /* 戻るリンク */
+    .back-link {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📖 カード図鑑</h1>
+  <div class="progress-wrap">
+    <div class="progress-text" id="progressText">読み込み中...</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-tabs">
+  <button class="filter-tab active" data-filter="code">コード順</button>
+  <button class="filter-tab" data-filter="owned">持っているもの</button>
+  <button class="filter-tab" data-filter="rarity">レア度順</button>
+</div>
+<div class="count-label" id="countLabel"></div>
+
+<div class="card-grid" id="cardGrid"></div>
+<div class="pagination" id="pagination"></div>
+
+<div class="section-title">✨ 隠しキャラクター</div>
+<div class="card-grid" id="hiddenGrid"></div>
+
+<a href="mypage.html" class="back-link">← マイページに戻る</a>
+
+<script src="nav.js"></script>
+<script src="hidden_characters.js"></script>
+<script src="album.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var PER_PAGE = 120;
+  var currentFilter = 'code';
+  var currentPage = 0;
+  var allCards = [];
+  var filteredCards = [];
+
+  function toScale(v) { return v <= 2 ? 1 : v >= 4 ? 5 : 3; }
+
+  function isMax(factor, value) {
+    if (factor === 'N') return value === 1;
+    if (factor === 'E' || factor === 'A') return value === 1 || value === 5;
+    return value === 5;
+  }
+
+  function computeRarity(code) {
+    var o = +code[0], c = +code[1], e = +code[2], a = +code[3], n = +code[4];
+    var mc = 0;
+    if (isMax('O', o)) mc++;
+    if (isMax('C', c)) mc++;
+    if (isMax('E', e)) mc++;
+    if (isMax('A', a)) mc++;
+    if (isMax('N', n)) mc++;
+    if (mc === 0) return 'r1';
+    if (mc === 1) return 'r2';
+    if (mc === 2) return 'r3';
+    if (mc === 3) return 'r4';
+    return 'r5';
+  }
+
+  function getImagePath(code, gender) {
+    var imgCode = [0,1,2,3,4].map(function(i) { return toScale(+code[i]); }).join('');
+    return 'images/characters/' + gender + '/' + imgCode + '.webp';
+  }
+
+  function init() {
+    if (typeof AlbumUtils !== 'undefined') AlbumUtils.migrateExistingResults();
+
+    var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
+    var ownedSet = {};
+    var ownedHiddenSet = {};
+    albumCards.forEach(function(c) {
+      ownedSet[c.code + '_' + c.gender] = true;
+      if (c.isHidden && c.hiddenId) ownedHiddenSet[c.hiddenId] = true;
+    });
+
+    // 全6250カード生成（コード順）
+    allCards = [];
+    for (var o=1;o<=5;o++)
+    for (var c=1;c<=5;c++)
+    for (var e=1;e<=5;e++)
+    for (var a=1;a<=5;a++)
+    for (var n=1;n<=5;n++) {
+      var code = '' + o + c + e + a + n;
+      var rarity = computeRarity(code);
+      ['M','F'].forEach(function(gender) {
+        allCards.push({
+          code: code,
+          gender: gender,
+          rarity: rarity,
+          owned: !!ownedSet[code + '_' + gender]
+        });
+      });
+    }
+
+    // 進捗表示（アルバム内の枚数）
+    var ownedCount = albumCards.length;
+    document.getElementById('progressText').textContent = ownedCount + ' / 6,250 枚コレクト';
+    document.getElementById('progressBar').style.width = (ownedCount / 6250 * 100).toFixed(1) + '%';
+
+    // フィルタータブ
+    document.querySelectorAll('.filter-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        currentPage = 0;
+        applyFilter();
+        render();
+      });
+    });
+
+    renderHidden(ownedHiddenSet);
+    applyFilter();
+    render();
+  }
+
+  function applyFilter() {
+    var RARITY_ORDER = {r7:0,r6:1,r5:2,r4:3,r3:4,r2:5,r1:6,r0:7};
+    if (currentFilter === 'owned') {
+      filteredCards = allCards.filter(function(c) { return c.owned; });
+    } else if (currentFilter === 'rarity') {
+      filteredCards = allCards.filter(function(c) { return c.owned; })
+        .sort(function(a, b) {
+          return (RARITY_ORDER[a.rarity] || 9) - (RARITY_ORDER[b.rarity] || 9);
+        });
+    } else {
+      filteredCards = allCards;
+    }
+  }
+
+  function render() {
+    var grid = document.getElementById('cardGrid');
+    var pagEl = document.getElementById('pagination');
+    var countEl = document.getElementById('countLabel');
+
+    var usePagination = (currentFilter === 'code');
+    var pageCards = usePagination
+      ? filteredCards.slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
+      : filteredCards;
+    var totalPages = Math.ceil(filteredCards.length / PER_PAGE);
+
+    if (usePagination) {
+      countEl.textContent = '全6,250枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
+    } else {
+      countEl.textContent = filteredCards.length + '枚';
+    }
+
+    // グリッド描画
+    grid.innerHTML = '';
+    if (filteredCards.length === 0) {
+      grid.innerHTML = '<div class="empty-state">まだカードがありません<br>診断を受けてカードをゲットしよう！</div>';
+      pagEl.innerHTML = '';
+      return;
+    }
+
+    pageCards.forEach(function(card) {
+      var el = document.createElement('div');
+      el.className = 'zukan-card ' + (card.owned ? 'owned' : 'unowned') + ' rarity-' + card.rarity;
+
+      var img = document.createElement('img');
+      img.src = getImagePath(card.code, card.gender);
+      img.loading = 'lazy';
+      img.alt = '';
+
+      var label = document.createElement('div');
+      label.className = 'card-label';
+      label.textContent = card.owned
+        ? card.code + (card.gender === 'M' ? ' ♂' : ' ♀')
+        : '???';
+
+      el.appendChild(img);
+      el.appendChild(label);
+      grid.appendChild(el);
+    });
+
+    // ページネーション（コード順のみ）
+    pagEl.innerHTML = '';
+    if (usePagination) {
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'page-nav-btn';
+      prevBtn.textContent = '◀ 前へ';
+      prevBtn.disabled = currentPage === 0;
+      prevBtn.addEventListener('click', function() {
+        currentPage--;
+        render();
+        window.scrollTo(0, 0);
+      });
+
+      var info = document.createElement('div');
+      info.className = 'page-info';
+      info.textContent = (currentPage + 1) + ' / ' + totalPages;
+
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'page-nav-btn';
+      nextBtn.textContent = '次へ ▶';
+      nextBtn.disabled = currentPage >= totalPages - 1;
+      nextBtn.addEventListener('click', function() {
+        currentPage++;
+        render();
+        window.scrollTo(0, 0);
+      });
+
+      pagEl.appendChild(prevBtn);
+      pagEl.appendChild(info);
+      pagEl.appendChild(nextBtn);
+    }
+  }
+
+  function renderHidden(ownedHiddenSet) {
+    var grid = document.getElementById('hiddenGrid');
+    if (typeof HIDDEN_CHARACTERS === 'undefined' || !HIDDEN_CHARACTERS.length) {
+      grid.innerHTML = '<div class="empty-state">データなし</div>';
+      return;
+    }
+    HIDDEN_CHARACTERS.forEach(function(hc) {
+      var owned = !!ownedHiddenSet[hc.id];
+      var rarity = hc.a === 1 ? 'r7' : 'r6';
+      var el = document.createElement('div');
+      el.className = 'zukan-card ' + (owned ? 'owned' : 'unowned') + ' rarity-' + rarity;
+
+      var img = document.createElement('img');
+      img.src = 'images/characters/hidden/' + hc.img;
+      img.loading = 'lazy';
+      img.alt = '';
+
+      var label = document.createElement('div');
+      label.className = 'card-label';
+      label.textContent = owned ? hc.id : '???';
+
+      el.appendChild(img);
+      el.appendChild(label);
+      grid.appendChild(el);
+    });
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
