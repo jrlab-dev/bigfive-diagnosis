@@ -2730,8 +2730,8 @@ if (isOtherMode) {
     if (rarity === 'r3') {
       function frame() {
         ctx.clearRect(0, 0, W, H);
-        const smx = hovered ? mx : .5;
-        const smy = hovered ? my : .5;
+        const smx = hovered ? mx : hasGyro ? gyroX : .5;
+        const smy = hovered ? my : hasGyro ? gyroY : .5;
         const curtainCount = 5;
         for (let i = 0; i < curtainCount; i++) {
           const baseX = (W / (curtainCount + 1)) * (i + 1);
@@ -2991,14 +2991,14 @@ if (isOtherMode) {
       generateTiles();
 
       function frame() {
+        t++;
         ctx.clearRect(0, 0, W, H);
         if (bgImg.complete && bgImg.naturalWidth > 0) {
           ctx.drawImage(bgImg, 0, 0, W, H);
         }
-        const smx = hovered ? mx : .5;
-        const smy = hovered ? my : .5;
-        const defaultAngle = 0.4;
-        const lightAngle = hovered ? Math.atan2(smy - .5, smx - .5) : defaultAngle;
+        const smx = hovered ? mx : hasGyro ? gyroX : .5;
+        const smy = hovered ? my : hasGyro ? gyroY : .5;
+        const lightAngle = (hovered || hasGyro) ? Math.atan2(smy - .5, smx - .5) : t * 0.002;
 
         ctx.globalCompositeOperation = 'screen';
         quads.forEach(q => {
