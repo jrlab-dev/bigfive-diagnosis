@@ -2367,12 +2367,19 @@ if (isOtherMode) {
   const lerpSpeed = isTouchDevice ? 0.15 : 0.08;
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  // ジャイロ（スマホ傾き）— 最初の角度を基準に差分のみ使う
+  // ジャイロ（スマホ傾き）— 最初の10回を平均して基準にする
   let hasGyroTilt = false, gyroTRx = 0, gyroTRy = 0;
   let betaBase = null, gammaBase = null;
+  const gyroSamples = [];
   window.addEventListener('deviceorientation', e => {
     if (e.gamma === null) return;
-    if (betaBase === null) { betaBase = e.beta || 0; gammaBase = e.gamma; return; }
+    if (betaBase === null) {
+      gyroSamples.push({ beta: e.beta || 0, gamma: e.gamma });
+      if (gyroSamples.length < 10) return;
+      betaBase  = gyroSamples.reduce((s, v) => s + v.beta,  0) / gyroSamples.length;
+      gammaBase = gyroSamples.reduce((s, v) => s + v.gamma, 0) / gyroSamples.length;
+      return;
+    }
     hasGyroTilt = true;
     const db = Math.max(-30, Math.min(30, (e.beta || 0) - betaBase));
     const dg = Math.max(-45, Math.min(45, e.gamma - gammaBase));
