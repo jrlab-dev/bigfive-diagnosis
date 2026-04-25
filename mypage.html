@@ -424,6 +424,69 @@
   }
   .setting-toggle.on::after { transform: translateX(20px); }
 
+  /* 端末引継ぎ */
+  .sync-section {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(99,102,241,0.07);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 12px;
+  }
+  .sync-title { font-size: 14px; font-weight: 600; color: #a5b4fc; margin-bottom: 4px; }
+  .sync-desc { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
+  .sync-btn {
+    width: 100%; padding: 11px; border-radius: 8px; font-size: 13px;
+    cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .sync-btn.save {
+    background: rgba(99,102,241,0.3); color: #c7d2fe;
+    border: 1px solid rgba(99,102,241,0.4);
+  }
+  .sync-btn.save:hover { background: rgba(99,102,241,0.45); }
+  .sync-btn.load {
+    background: rgba(16,185,129,0.2); color: #6ee7b7;
+    border: 1px solid rgba(16,185,129,0.3); white-space: nowrap;
+    padding: 11px 14px;
+  }
+  .sync-btn.load:hover { background: rgba(16,185,129,0.3); }
+  .sync-id-box {
+    margin-top: 12px; padding: 12px;
+    background: rgba(0,0,0,0.3); border-radius: 8px;
+    border: 1px solid rgba(99,102,241,0.25);
+  }
+  .sync-id-label { font-size: 11px; color: var(--dim); margin-bottom: 4px; }
+  .sync-id-text {
+    font-family: monospace; font-size: 13px; color: #e0e7ff;
+    word-break: break-all; margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+  .sync-copy-btn {
+    padding: 6px 14px; background: rgba(99,102,241,0.3);
+    border: 1px solid rgba(99,102,241,0.4); border-radius: 6px;
+    color: #c7d2fe; font-size: 12px; cursor: pointer;
+  }
+  .sync-copy-btn:hover { background: rgba(99,102,241,0.5); }
+  .sync-id-note { font-size: 11px; color: var(--dim); margin-top: 8px; }
+  .sync-divider {
+    text-align: center; font-size: 12px; color: var(--dim);
+    margin: 14px 0; position: relative;
+  }
+  .sync-divider::before, .sync-divider::after {
+    content: ''; position: absolute; top: 50%; width: 38%; height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+  .sync-divider::before { left: 0; }
+  .sync-divider::after { right: 0; }
+  .sync-input-row { display: flex; gap: 8px; }
+  .sync-input {
+    flex: 1; padding: 10px 12px; background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+    color: #fff; font-size: 13px; font-family: monospace;
+  }
+  .sync-input::placeholder { color: var(--dim); font-family: sans-serif; }
+  .sync-status { font-size: 12px; margin-top: 10px; min-height: 18px; text-align: center; }
+  .sync-status.ok { color: #6ee7b7; }
+  .sync-status.err { color: #f87171; }
+
   /* クリアボタン */
   .clear-all {
     margin-top: 24px;
@@ -715,6 +778,25 @@
   <div class="setting-row">
     <span class="setting-label">⭐ トップページのキャラクターを表示</span>
     <button class="setting-toggle" id="charToggleBtn" aria-label="キャラクター表示切り替え"></button>
+  </div>
+
+  <!-- 端末引継ぎ -->
+  <div class="sync-section">
+    <div class="sync-title">📱 端末引継ぎ</div>
+    <div class="sync-desc">IDを使って別のスマホ・PCにデータを引き継げます</div>
+    <button class="sync-btn save" id="syncSaveBtn">このデバイスのデータを保存する</button>
+    <div class="sync-id-box" id="syncIdBox" style="display:none">
+      <div class="sync-id-label">引継ぎID</div>
+      <div class="sync-id-text" id="syncIdText"></div>
+      <button class="sync-copy-btn" id="syncCopyBtn">コピー</button>
+      <div class="sync-id-note">このIDを別のデバイスで下の欄に入力してください</div>
+    </div>
+    <div class="sync-divider">または</div>
+    <div class="sync-input-row">
+      <input type="text" class="sync-input" id="syncIdInput" placeholder="引継ぎIDを入力">
+      <button class="sync-btn load" id="syncLoadBtn">引き継ぐ</button>
+    </div>
+    <div class="sync-status" id="syncStatus"></div>
   </div>
 
   <button class="clear-all" id="clearAllBtn">🗑️ すべてのデータを削除</button>
@@ -1136,6 +1218,117 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   }
   render();
 });
+
+// ===== 端末引継ぎ =====
+const SYNC_ID_KEY = 'bigfive_sync_id';
+const SYNC_API = 'https://bigfive.jr-genius.jp/api';
+const SYNC_DATA_KEYS = [
+  'bigfive_my_results', 'bigfive_other_results',
+  'bigfive_album', 'bigfive_album_meta',
+  'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
+];
+
+function getSyncId() {
+  let id = localStorage.getItem(SYNC_ID_KEY);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(SYNC_ID_KEY, id);
+  }
+  return id;
+}
+
+function collectLocalData() {
+  const data = {};
+  SYNC_DATA_KEYS.forEach(k => {
+    const v = localStorage.getItem(k);
+    if (v) data[k] = v;
+  });
+  // bigfive_ で始まる残りのキーも収集
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('bigfive_') && !data[k]) {
+      data[k] = localStorage.getItem(k);
+    }
+  }
+  return data;
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById('syncStatus');
+  el.textContent = msg;
+  el.className = 'sync-status ' + (type || '');
+}
+
+document.getElementById('syncSaveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('syncSaveBtn');
+  btn.disabled = true;
+  btn.textContent = '保存中...';
+  setStatus('', '');
+  try {
+    const id = getSyncId();
+    const data = collectLocalData();
+    const res = await fetch(`${SYNC_API}/save`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: id, data }),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'エラー');
+    document.getElementById('syncIdText').textContent = id;
+    document.getElementById('syncIdBox').style.display = 'block';
+    setStatus('保存しました！', 'ok');
+  } catch (e) {
+    setStatus('保存に失敗しました: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'このデバイスのデータを保存する';
+  }
+});
+
+document.getElementById('syncCopyBtn').addEventListener('click', () => {
+  const id = document.getElementById('syncIdText').textContent;
+  navigator.clipboard.writeText(id).then(() => {
+    const btn = document.getElementById('syncCopyBtn');
+    btn.textContent = 'コピーしました！';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+  });
+});
+
+document.getElementById('syncLoadBtn').addEventListener('click', async () => {
+  const input = document.getElementById('syncIdInput').value.trim();
+  if (!input) { setStatus('IDを入力してください', 'err'); return; }
+
+  const btn = document.getElementById('syncLoadBtn');
+  btn.disabled = true;
+  btn.textContent = '読み込み中...';
+  setStatus('', '');
+  try {
+    const res = await fetch(`${SYNC_API}/load?id=${encodeURIComponent(input)}`);
+    if (res.status === 404) throw new Error('IDが見つかりません');
+    if (!res.ok) throw new Error('サーバーエラー');
+    const json = await res.json();
+    if (!json.found) throw new Error('IDが見つかりません');
+    if (!confirm('このIDのデータを引き継ぎます。\n現在のデータは上書きされます。よろしいですか？')) return;
+    Object.entries(json.data).forEach(([k, v]) => localStorage.setItem(k, v));
+    localStorage.setItem(SYNC_ID_KEY, input);
+    setStatus('引き継ぎ完了！ページを再読み込みします...', 'ok');
+    setTimeout(() => location.reload(), 1500);
+  } catch (e) {
+    setStatus('失敗しました: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '引き継ぐ';
+  }
+});
+
+// 既存のIDがあれば表示
+(function() {
+  const existingId = localStorage.getItem(SYNC_ID_KEY);
+  if (existingId) {
+    document.getElementById('syncIdText').textContent = existingId;
+    document.getElementById('syncIdBox').style.display = 'block';
+  }
+})();
 
 // レンダリング
 function render() {
