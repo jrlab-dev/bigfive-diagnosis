@@ -724,7 +724,7 @@ function showResult() {
     const ref = params.get('ref') || '';
     const otherCode = params.get('other_code') || '';
     const otherName = params.get('other_name') || '';
-    let url = `result.html?type=${result.code}&v=${version}&gender=${gender}`;
+    let url = `result.html?code=${result.code}&v=${version}&gender=${gender}`;
     if (ref) url += `&ref=${ref}`;
     if (otherCode) url += `&other_code=${otherCode}`;
     if (otherName) url += `&other_name=${encodeURIComponent(otherName)}`;

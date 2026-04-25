@@ -1396,7 +1396,7 @@ function genCareerSection(sc) {
 
 // ===== URLパラメータ取得 =====
 const params = new URLSearchParams(window.location.search);
-const typeCode = params.get('type') || '33333';
+const typeCode = params.get('code') || params.get('type') || '33333';
 const version = params.get('v') || '10';
 const otherCode = params.get('other_code'); // 他者診断から来た場合の相手のコード
 const otherName = params.get('other_name') || 'あの人';
