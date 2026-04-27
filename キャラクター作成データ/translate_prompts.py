@@ -3,7 +3,7 @@
 """
 import re, os
 
-PROMPT_DIR = "C:/Users/user/Desktop/Claude Code/ウェブサイト/あそびラボ_プロジェクト/ビックファイブ診断サイト/キャラクター作成データ"
+PROMPT_DIR = "G:/マイドライブ/Claude Code/ウェブサイト/あそびラボ_プロジェクト/ビックファイブ診断サイト/キャラクター作成データ"
 OUTPUT_DIR = PROMPT_DIR
 
 ENGLISH_BASE = """Create two chibi characters in Nendoroid / Q-version / Super Deformed (SD) style. High quality professional anime illustration. Clean cel-shaded art with soft glossy highlights and smooth shadows. Vibrant colors. Game icon quality.

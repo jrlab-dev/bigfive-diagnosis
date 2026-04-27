@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Card Image Generator</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e27;padding:60px 40px;font-family:'Segoe UI',sans-serif}
+.card-section{margin-bottom:80px;display:flex;justify-content:center}
+.card-section-label{color:#64748b;font-size:12px;text-align:center;margin-bottom:8px;letter-spacing:.1em}
+
+:root{--c-O:#8b5cf6;--c-C:#3b82f6;--c-E:#f97316;--c-A:#f472b6;--c-N:#14b8a6}
+
+/* ===== カード共通 ===== */
+.card-wrapper{position:relative;width:480px;aspect-ratio:1/1;perspective:1000px;perspective-origin:50% 50%}
+.card{position:relative;width:100%;height:100%;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.6),0 0 60px rgba(49,30,90,0.2),inset 2px 2px 0 rgba(255,255,255,0.12),inset -2px -2px 0 rgba(0,0,0,0.6),inset 0 0 0 2px rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.08);will-change:transform}
+
+/* ===== 傾き ===== */
+.tilt-left .card{transform:rotateY(30deg)}
+.tilt-right .card{transform:rotateY(-30deg)}
+
+/* ===== カード背景 ===== */
+.card-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 25% 20%,rgba(139,92,246,0.35) 0%,transparent 60%),radial-gradient(ellipse 70% 50% at 80% 75%,rgba(59,130,246,0.25) 0%,transparent 55%),radial-gradient(ellipse 40% 30% at 60% 40%,rgba(26,10,62,0.8) 0%,transparent 70%),linear-gradient(160deg,#0a0e27 0%,#1a0a3e 40%,#0f172a 100%)}
+.stars{position:absolute;inset:0;z-index:1;pointer-events:none;animation:star-twinkle 4s ease-in-out infinite alternate}
+@keyframes star-twinkle{0%{opacity:.7}100%{opacity:1}}
+.shimmer{position:absolute;inset:-100%;z-index:2;pointer-events:none;opacity:0;transition:opacity .5s}
+.glow-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .5s;border-radius:inherit;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.05) 0%,transparent 70%);animation:glow-pulse 3s ease-in-out infinite}
+.glow-overlay.active{opacity:1}
+@keyframes glow-pulse{0%,100%{opacity:.6;transform:scale(.98)}50%{opacity:1;transform:scale(1)}}
+.ray-overlay{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .5s;border-radius:inherit;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(139,92,246,0.08) 2deg,transparent 4deg,transparent 30deg,rgba(245,158,11,0.06) 32deg,transparent 34deg,transparent 60deg,rgba(59,130,246,0.07) 62deg,transparent 64deg,transparent 90deg,rgba(139,92,246,0.08) 92deg,transparent 94deg,transparent 120deg,rgba(245,158,11,0.06) 122deg,transparent 124deg,transparent 150deg,rgba(59,130,246,0.07) 152deg,transparent 154deg,transparent 180deg,rgba(139,92,246,0.08) 182deg,transparent 184deg,transparent 210deg,rgba(245,158,11,0.06) 212deg,transparent 214deg,transparent 240deg,rgba(59,130,246,0.07) 242deg,transparent 244deg,transparent 270deg,rgba(139,92,246,0.08) 272deg,transparent 274deg,transparent 300deg,rgba(245,158,11,0.06) 302deg,transparent 304deg,transparent 330deg,rgba(59,130,246,0.07) 332deg,transparent 334deg,transparent 360deg);animation:ray-spin 20s linear infinite}
+@keyframes ray-spin{to{transform:rotate(360deg)}}
+
+/* ===== COMMON ===== */
+.rarity-common .card-content{background:linear-gradient(to bottom,transparent 0%,transparent 45%,#ead8b4 70%,#e0c89a 100%)}
+.rarity-common .description{background:rgba(255,255,255,0.92);border-radius:8px;color:#3a2e1e;border:none}
+.rarity-common .type-name,.rarity-common .type-label{color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000}
+.rarity-common .type-code{color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000}
+.rarity-common .score-label{color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000}
+.rarity-common .score-val{color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000}
+.rarity-common .shimmer{opacity:0}
+.rarity-common .score-bar-bg{background:rgba(0,0,0,0.25)}
+
+/* ===== LEGENDARY ===== */
+.rarity-legendary .shimmer{opacity:1;background:repeating-linear-gradient(45deg,transparent 0px,transparent 3px,rgba(255,100,150,0.16) 3px,rgba(255,100,150,0.16) 6px),repeating-linear-gradient(-45deg,transparent 0px,transparent 3px,rgba(100,200,255,0.16) 3px,rgba(100,200,255,0.16) 6px),conic-gradient(from 0deg at 50% 50%,rgba(255,50,50,0.25),rgba(255,200,0,0.25),rgba(50,255,100,0.25),rgba(50,100,255,0.25),rgba(200,50,255,0.25),rgba(255,50,50,0.25));animation:holo-spin 8s linear infinite;mix-blend-mode:color-dodge}
+@keyframes holo-spin{to{transform:rotate(360deg)}}
+.rarity-legendary .card-content{background:linear-gradient(to bottom,transparent 0%,rgba(10,14,39,0.35) 30%,rgba(10,14,39,0.55) 100%)}
+.rarity-legendary .description{background:rgba(0,0,0,0.15);backdrop-filter:blur(6px);text-shadow:0 1px 4px rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.05)}
+.rarity-legendary .score-label,.rarity-legendary .score-val{text-shadow:0 1px 3px rgba(0,0,0,0.8)}
+.rarity-legendary .glow-overlay{opacity:1}
+.rarity-legendary .ray-overlay{opacity:1}
+
+/* ===== SECRET ===== */
+#holoBg1,#holoBg3{position:absolute;inset:0;z-index:0;opacity:1;border-radius:inherit;pointer-events:none}
+.rarity-secret .card-bg{opacity:0}
+.rarity-secret .stars{opacity:0}
+.rarity-secret .card{box-shadow:0 12px 50px rgba(0,0,0,0.8),0 0 50px rgba(40,40,40,0.6),0 0 100px rgba(20,20,20,0.3),inset 0 0 30px rgba(0,0,0,0.15);border-color:rgba(80,80,80,0.7)}
+.rarity-secret .shimmer{opacity:1;background:linear-gradient(125deg,transparent 15%,rgba(200,200,200,0.06) 35%,rgba(255,255,255,0.18) 50%,rgba(200,200,200,0.06) 65%,transparent 85%);animation:shimmer-dark 9s ease-in-out infinite}
+.rarity-secret.holo-on .shimmer{opacity:1;background:linear-gradient(125deg,transparent 15%,rgba(200,200,200,0.08) 35%,rgba(255,255,255,0.25) 50%,rgba(200,200,200,0.08) 65%,transparent 85%);animation:shimmer-dark 6s ease-in-out infinite}
+@keyframes shimmer-dark{0%,100%{transform:translateX(-70%) rotate(20deg)}50%{transform:translateX(70%) rotate(20deg)}}
+.rarity-secret .glow-overlay{opacity:1;background:radial-gradient(circle at 50% 50%,rgba(200,200,200,0.06) 0%,transparent 70%)}
+
+/* ===== テキスト・スコア ===== */
+.type-name{position:absolute;top:8px;left:0;right:0;font-size:clamp(14px,7vw,42px);font-weight:900;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,0.9),0 0 24px rgba(0,0,0,0.9),0 0 48px rgba(0,0,0,0.5);letter-spacing:.08em;z-index:6;padding:0 16px;line-height:1.2;white-space:nowrap;overflow:visible;color:#e2e8f0}
+.type-code{font-size:13px;color:#cbd5e1;font-weight:500;letter-spacing:.15em;position:absolute;top:56px;left:0;right:0;text-align:center;z-index:6;text-shadow:0 1px 6px rgba(0,0,0,0.8)}
+.type-code::after{content:attr(data-version);display:block;font-size:9px;color:rgba(203,213,225,0.35);letter-spacing:.08em;margin-top:1px}
+.card-content{position:absolute;bottom:0;left:0;right:0;z-index:5;display:flex;flex-direction:column;align-items:center;padding:0 20px 20px;background:linear-gradient(to bottom,transparent 0%,rgba(10,14,39,0.7) 20%,rgba(10,14,39,0.85) 100%)}
+.scores{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:10px}
+.score-item{display:flex;align-items:center;gap:6px}
+.score-label{font-size:11px;font-weight:700;width:14px;text-align:center}
+.score-bar-bg{flex:1;height:6px;background:rgba(255,255,255,0.4);border-radius:3px;overflow:hidden}
+.score-bar{height:100%;border-radius:3px;transition:width .8s ease}
+.score-val{font-size:10px;color:#94a3b8;width:12px;text-align:right}
+.description{font-size:14px;line-height:1.6;text-align:left;color:#cbd5e1;padding:8px 12px;background:rgba(0,0,0,0.35);border-radius:8px;border:1px solid rgba(255,255,255,0.05);width:100%;backdrop-filter:blur(4px)}
+
+/* ===== キャラクター ===== */
+.char-area{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:90%;height:85%;display:flex;align-items:flex-start;justify-content:center;z-index:3;pointer-events:none}
+.char-img{height:100%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5))}
+</style>
+</head>
+<body>
+
+<!-- ===== Card 1: 夜神月 (SECRET dark-secret, 傾き左) ===== -->
+<div class="card-section-label">LEFT: 夜神月 — SECRET (KIRA)</div>
+<div class="card-section">
+  <div class="card-wrapper tilt-left" id="wrapper1">
+    <div class="card rarity-secret dark-secret holo-on" id="card1">
+      <canvas id="holoBg1"></canvas>
+      <div class="card-bg"></div>
+      <div class="stars" id="stars1"></div>
+      <div class="shimmer"></div>
+      <div class="glow-overlay active"></div>
+      <div class="ray-overlay"></div>
+      <div class="type-name">規律派・探求者</div>
+      <div class="type-code" data-version="IPIP-NEO-120">O5 C5 E3 A1 N1</div>
+      <div class="card-content">
+        <div class="scores">
+          <div class="score-item"><span class="score-label" style="color:#8b5cf6">O</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#8b5cf6"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#3b82f6">C</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#3b82f6"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f97316">E</span><div class="score-bar-bg"><div class="score-bar" style="width:60%;background:#f97316"></div></div><span class="score-val">3</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f472b6">A</span><div class="score-bar-bg"><div class="score-bar" style="width:20%;background:#f472b6"></div></div><span class="score-val">1</span></div>
+          <div class="score-item"><span class="score-label" style="color:#14b8a6">N</span><div class="score-bar-bg"><div class="score-bar" style="width:20%;background:#14b8a6"></div></div><span class="score-val">1</span></div>
+        </div>
+        <div class="description">豊かな想像力と強い知的好奇心で、常に新しい視点を探求する。自己主張が明確で、競争的な場面でも主張を崩さない。</div>
+      </div>
+      <div class="char-area"><img class="char-img" src="images/characters/hidden/隠し_夜神月.webp" alt="夜神月"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Card 2: 一般カード (COMMON, 正面) ===== -->
+<div class="card-section-label">CENTER: 一般カード — COMMON</div>
+<div class="card-section">
+  <div class="card-wrapper" id="wrapper2">
+    <div class="card rarity-common" id="card2">
+      <div class="card-bg" id="bg2"></div>
+      <div class="stars" id="stars2"></div>
+      <div class="shimmer"></div>
+      <div class="glow-overlay"></div>
+      <div class="ray-overlay"></div>
+      <div class="type-name">規律派・探求者</div>
+      <div class="type-code" data-version="IPIP-NEO-120">O5 C5 E5 A1 N1</div>
+      <div class="card-content">
+        <div class="scores">
+          <div class="score-item"><span class="score-label" style="color:#8b5cf6">O</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#8b5cf6"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#3b82f6">C</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#3b82f6"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f97316">E</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#f97316"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f472b6">A</span><div class="score-bar-bg"><div class="score-bar" style="width:20%;background:#f472b6"></div></div><span class="score-val">1</span></div>
+          <div class="score-item"><span class="score-label" style="color:#14b8a6">N</span><div class="score-bar-bg"><div class="score-bar" style="width:20%;background:#14b8a6"></div></div><span class="score-val">1</span></div>
+        </div>
+        <div class="description">豊かな想像力と強い知的好奇心で、常に新しい視点を探求する。高い自己規律と計画性で、何事も確実にやり遂げる。</div>
+      </div>
+      <div class="char-area"><img class="char-img" src="images/characters/M/15113.png" alt="キャラクター"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Card 3: 爽子 (SECRET gold, 傾き右) ===== -->
+<div class="card-section-label">RIGHT: 黒沼爽子 — SECRET (Gold)</div>
+<div class="card-section">
+  <div class="card-wrapper tilt-right" id="wrapper3">
+    <div class="card rarity-secret holo-on" id="card3">
+      <canvas id="holoBg3"></canvas>
+      <div class="card-bg" id="bg3"></div>
+      <div class="stars" id="stars3"></div>
+      <div class="shimmer"></div>
+      <div class="glow-overlay active"></div>
+      <div class="ray-overlay"></div>
+      <div class="type-name">思考家・調停者</div>
+      <div class="type-code" data-version="IPIP-NEO-120">O2 C4 E1 A5 N4</div>
+      <div class="card-content">
+        <div class="scores">
+          <div class="score-item"><span class="score-label" style="color:#8b5cf6">O</span><div class="score-bar-bg"><div class="score-bar" style="width:40%;background:#8b5cf6"></div></div><span class="score-val">2</span></div>
+          <div class="score-item"><span class="score-label" style="color:#3b82f6">C</span><div class="score-bar-bg"><div class="score-bar" style="width:80%;background:#3b82f6"></div></div><span class="score-val">4</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f97316">E</span><div class="score-bar-bg"><div class="score-bar" style="width:20%;background:#f97316"></div></div><span class="score-val">1</span></div>
+          <div class="score-item"><span class="score-label" style="color:#f472b6">A</span><div class="score-bar-bg"><div class="score-bar" style="width:100%;background:#f472b6"></div></div><span class="score-val">5</span></div>
+          <div class="score-item"><span class="score-label" style="color:#14b8a6">N</span><div class="score-bar-bg"><div class="score-bar" style="width:80%;background:#14b8a6"></div></div><span class="score-val">4</span></div>
+        </div>
+        <div class="description">一人の時間を大切にし、深い内省と集中を好む。深い共感力と利他性を持ち、他者のために動くことを自然に行う。</div>
+      </div>
+      <div class="char-area"><img class="char-img" src="images/characters/hidden/隠し_爽子.webp" alt="黒沼爽子"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 星生成 =====
+function genStars(el) {
+  let css = '';
+  for (let i = 0; i < 30; i++) {
+    const x = Math.random()*100, y = Math.random()*100;
+    const s = Math.random()+0.5, o = Math.random()*0.5+0.2;
+    css += `radial-gradient(${s}px ${s}px at ${x}% ${y}%, rgba(255,255,255,${o}) 0%, transparent 100%)`;
+    if (i < 29) css += ', ';
+  }
+  el.style.backgroundImage = css;
+}
+genStars(document.getElementById('stars1'));
+genStars(document.getElementById('stars2'));
+genStars(document.getElementById('stars3'));
+
+// ===== 一般カード ベージュ背景 =====
+document.getElementById('bg2').style.background = 'linear-gradient(160deg, #fdf6ec 0%, #f5e6cc 50%, #ead8b4 100%)';
+document.getElementById('card2').style.borderColor = 'rgba(180,140,90,0.4)';
+document.getElementById('card2').style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
+
+// ===== SECRET ホログラムキャンバス (爽子: gold) =====
+(function() {
+  const card = document.getElementById('card3');
+  const canvas = document.getElementById('holoBg3');
+  const ctx = canvas.getContext('2d');
+  const CELL = 18, DEPTH = 0.42;
+  let t = 500, W = 0, H = 0, brightness = 1;
+  const IS_DARK = false, BASE_HUE = 38;
+
+  function syncSize() {
+    const rect = card.getBoundingClientRect();
+    W = rect.width || 480; H = rect.height || 480;
+    canvas.width = W * devicePixelRatio; canvas.height = H * devicePixelRatio;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  }
+  syncSize();
+
+  function getCellColor(col, row, facetLight) {
+    const cols = Math.ceil(W/CELL)+1, rows = Math.ceil(H/CELL)+1;
+    const x = col/cols, y = row/rows;
+    const wave = Math.sin(x*6.28+y*2.09+t*0.00025)*0.35+Math.sin(x*3.71-y*5.13+t*0.00035)*0.28+Math.sin((x-y)*4.97+t*0.00020)*0.22+Math.sin(x*2.33+y*7.81+t*0.00030)*0.15;
+    const hue = BASE_HUE + wave * (IS_DARK ? 0 : 18);
+    const sat = IS_DARK ? 0 : (85 + wave * 12);
+    const baseL = facetLight * brightness + facetLight * 0.50 * (1 - brightness);
+    const lit = baseL + wave * (IS_DARK ? 3 : 6);
+    return `hsl(${hue.toFixed(1)},${sat.toFixed(1)}%,${Math.max(4, lit).toFixed(1)}%)`;
+  }
+
+  function drawCell(col, row) {
+    const cx = col*CELL, cy = row*CELL, d = CELL*DEPTH;
+    const tl=[cx,cy], tr=[cx+CELL,cy], bl=[cx,cy+CELL], br=[cx+CELL,cy+CELL];
+    const cc=[cx+CELL/2, cy+CELL/2-d*0.2];
+    [{pts:[tl,tr,cc],L:75},{pts:[bl,br,cc],L:18},{pts:[tl,bl,cc],L:48},{pts:[tr,br,cc],L:33}].forEach(({pts,L})=>{
+      ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); ctx.lineTo(pts[1][0],pts[1][1]); ctx.lineTo(pts[2][0],pts[2][1]); ctx.closePath();
+      ctx.fillStyle = getCellColor(col, row, L); ctx.fill();
+    });
+  }
+
+  function loop() {
+    t++; brightness = 1;
+    ctx.clearRect(0, 0, W, H);
+    const cols = Math.ceil(W/CELL)+1, rows = Math.ceil(H/CELL)+1;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) drawCell(c, r);
+    ctx.strokeStyle = 'rgba(0,0,0,0.30)'; ctx.lineWidth = 0.5;
+    for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(W,r*CELL); ctx.stroke(); }
+    for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,H); ctx.stroke(); }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// ===== SECRET ホログラムキャンバス (夜神月: dark-secret) =====
+(function() {
+  const card = document.getElementById('card1');
+  const canvas = document.getElementById('holoBg1');
+  const ctx = canvas.getContext('2d');
+  const CELL = 18, DEPTH = 0.42;
+  let t = 500, W = 0, H = 0, brightness = 1;
+  const IS_DARK = true, BASE_HUE = 0;
+
+  function syncSize() {
+    const rect = card.getBoundingClientRect();
+    W = rect.width || 480; H = rect.height || 480;
+    canvas.width = W * devicePixelRatio; canvas.height = H * devicePixelRatio;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  }
+  syncSize();
+
+  function getCellColor(col, row, facetLight) {
+    const cols = Math.ceil(W/CELL)+1, rows = Math.ceil(H/CELL)+1;
+    const x = col/cols, y = row/rows;
+    const wave = Math.sin(x*6.28+y*2.09+t*0.00025)*0.35+Math.sin(x*3.71-y*5.13+t*0.00035)*0.28+Math.sin((x-y)*4.97+t*0.00020)*0.22+Math.sin(x*2.33+y*7.81+t*0.00030)*0.15;
+    const hue = BASE_HUE + wave * (IS_DARK ? 0 : 18);
+    const sat = IS_DARK ? 0 : (85 + wave * 12);
+    const baseL = facetLight * brightness + facetLight * 0.50 * (1 - brightness);
+    const lit = baseL + wave * (IS_DARK ? 3 : 6);
+    return `hsl(${hue.toFixed(1)},${sat.toFixed(1)}%,${Math.max(4, lit).toFixed(1)}%)`;
+  }
+
+  function drawCell(col, row) {
+    const cx = col*CELL, cy = row*CELL, d = CELL*DEPTH;
+    const tl=[cx,cy], tr=[cx+CELL,cy], bl=[cx,cy+CELL], br=[cx+CELL,cy+CELL];
+    const cc=[cx+CELL/2, cy+CELL/2-d*0.2];
+    [{pts:[tl,tr,cc],L:75},{pts:[bl,br,cc],L:18},{pts:[tl,bl,cc],L:48},{pts:[tr,br,cc],L:33}].forEach(({pts,L})=>{
+      ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); ctx.lineTo(pts[1][0],pts[1][1]); ctx.lineTo(pts[2][0],pts[2][1]); ctx.closePath();
+      ctx.fillStyle = getCellColor(col, row, L); ctx.fill();
+    });
+  }
+
+  function loop() {
+    t++; brightness = 1;
+    ctx.clearRect(0, 0, W, H);
+    const cols = Math.ceil(W/CELL)+1, rows = Math.ceil(H/CELL)+1;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) drawCell(c, r);
+    ctx.strokeStyle = 'rgba(0,0,0,0.30)'; ctx.lineWidth = 0.5;
+    for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(W,r*CELL); ctx.stroke(); }
+    for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,H); ctx.stroke(); }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// ===== 画像読み込み完了を検知 =====
+window._imagesLoaded = 0;
+window._totalImages = 3;
+document.querySelectorAll('.char-img').forEach(img => {
+  if (img.complete) { window._imagesLoaded++; } else {
+    img.addEventListener('load', () => { window._imagesLoaded++; });
+    img.addEventListener('error', () => { window._imagesLoaded++; });
+  }
+});
+</script>
+</body>
+</html>

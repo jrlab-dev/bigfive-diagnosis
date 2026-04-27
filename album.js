@@ -1,5 +1,5 @@
 /**
- * カード図鑑 Stage 1 — アルバム（20枚）
+ * カード図鑑 Stage 1 — アルバム（15枚）
  *
  * album.js は hidden_characters.js の後に読み込むこと。
  */
@@ -10,7 +10,7 @@
   var META_KEY = 'bigfive_album_meta';
   var MY_KEY = 'bigfive_my_results';
   var OTHER_KEY = 'bigfive_other_results';
-  var MAX_CARDS = 20;
+  var MAX_CARDS = 15;
 
   var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, common: 1, rare: 2, legendary: 3, secret: 4 };
 

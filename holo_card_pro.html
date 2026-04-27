@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ホログラムカード - 本格版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: radial-gradient(ellipse at center, #0d0d2b 0%, #020208 100%);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+
+  /* 背景の星 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .scene {
+    perspective: 1000px;
+    perspective-origin: 50% 50%;
+  }
+
+  .card-wrapper {
+    width: 300px;
+    height: 420px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.08s ease-out;
+    will-change: transform;
+    cursor: pointer;
+  }
+
+  /* ── カード本体 ── */
+  .card-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #12122a 0%, #1a1a3e 40%, #0e0e28 100%);
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.8),
+      0 0 40px rgba(80,80,255,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* ── ホログラムグリッド ── */
+  .holo-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 8px 8px;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    border-radius: 18px;
+  }
+
+  /* ── 虹色グラデ（メイン）── */
+  .holo-rainbow {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: conic-gradient(
+      from var(--hue-rotate, 0deg) at var(--mx, 50%) var(--my, 50%),
+      hsla(0,   100%, 70%, 0.9),
+      hsla(40,  100%, 70%, 0.9),
+      hsla(80,  100%, 70%, 0.9),
+      hsla(120, 100%, 70%, 0.9),
+      hsla(160, 100%, 70%, 0.9),
+      hsla(200, 100%, 70%, 0.9),
+      hsla(240, 100%, 70%, 0.9),
+      hsla(280, 100%, 70%, 0.9),
+      hsla(320, 100%, 70%, 0.9),
+      hsla(360, 100%, 70%, 0.9)
+    );
+    mix-blend-mode: color-dodge;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  /* ── 光の反射スポット ── */
+  .holo-spot {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255,255,255,0.5) 0%,
+      rgba(255,255,255,0.2) 8%,
+      rgba(255,200,255,0.1) 15%,
+      transparent 35%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  /* ── キラキラグリッタースパークル ── */
+  .sparkle-container {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 4px 2px rgba(255,255,255,0.8);
+    animation: sparkle-anim var(--dur, 2s) var(--delay, 0s) infinite ease-in-out;
+  }
+
+  @keyframes sparkle-anim {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* ── ホバー時に全部表示 ── */
+  .card-wrapper:hover .holo-grid { opacity: 1; }
+  .card-wrapper:hover .holo-rainbow { opacity: 0.25; }
+  .card-wrapper:hover .holo-spot { opacity: 1; }
+  .card-wrapper:hover .sparkle-container { opacity: 1; }
+
+  /* ── カードコンテンツ ── */
+  .card-content {
+    position: relative;
+    z-index: 10;
+    padding: 14px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .name-block {}
+  .card-name {
+    color: #ffe566;
+    font-size: 19px;
+    font-weight: 900;
+    text-shadow:
+      0 0 10px rgba(255,220,0,0.9),
+      0 0 20px rgba(255,180,0,0.5);
+    letter-spacing: 0.5px;
+  }
+  .card-subname {
+    color: #88aaff;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  .hp-block {
+    text-align: right;
+  }
+  .hp-label {
+    color: #888;
+    font-size: 9px;
+  }
+  .hp-value {
+    color: #ff4444;
+    font-size: 22px;
+    font-weight: 900;
+    text-shadow: 0 0 8px rgba(255,50,50,0.7);
+    line-height: 1;
+  }
+
+  /* イラストエリア */
+  .card-art {
+    flex: 0 0 175px;
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(100,100,255,0.3), transparent 60%),
+      radial-gradient(ellipse at 70% 70%, rgba(255,50,100,0.2), transparent 60%),
+      linear-gradient(135deg, #0e1a3a, #1a2a5e, #0a1228);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(100,120,255,0.3);
+  }
+
+  /* アート内のキラキラ層 */
+  .card-art::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 45% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 75% 35%, rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 25% 65%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 75%, rgba(255,255,255,0.8) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 85% 60%, rgba(255,255,255,0.9) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 35% 85%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(2px 2px at 55% 50%, rgba(255,220,100,0.8) 0%, transparent 100%);
+    animation: twinkle 3s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
+  .card-art::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -30%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.12), transparent 70%);
+    animation: art-shine 4s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes art-shine {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(100%, 20%); }
+    50% { transform: translate(180%, 120%); }
+    75% { transform: translate(60%, 150%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* タイプ */
+  .card-type-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .type-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .type-fire {
+    background: linear-gradient(90deg, #ff4400, #ff8800);
+    color: white;
+    box-shadow: 0 0 8px rgba(255,100,0,0.5);
+  }
+
+  .type-legend {
+    background: linear-gradient(90deg, #7700ff, #cc00ff);
+    color: white;
+    box-shadow: 0 0 8px rgba(150,0,255,0.5);
+  }
+
+  .rarity-stars {
+    margin-left: auto;
+    color: #ffd700;
+    font-size: 12px;
+    text-shadow: 0 0 6px rgba(255,210,0,0.8);
+  }
+
+  /* スペック */
+  .card-specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .spec {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 5px 2px;
+    text-align: center;
+  }
+
+  .spec-label {
+    color: #667799;
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .spec-value {
+    color: #eef;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 1px;
+  }
+
+  /* スキル */
+  .skill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,100,100,0.2);
+    border-left: 3px solid rgba(255,80,80,0.7);
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+
+  .skill-name {
+    color: #ff9966;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .skill-power {
+    color: #ffd700;
+    font-size: 18px;
+    font-weight: 900;
+    text-shadow: 0 0 6px rgba(255,210,0,0.6);
+  }
+
+  .skill-desc {
+    color: #8899bb;
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  /* フッター */
+  .card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-id { color: #445; font-size: 9px; }
+  .footer-edition {
+    color: #667;
+    font-size: 9px;
+    font-style: italic;
+  }
+
+  /* ── 虹枠（回転）── */
+  .card-frame {
+    position: absolute;
+    inset: -1px;
+    border-radius: 19px;
+    background:
+      linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0)) padding-box,
+      conic-gradient(
+        from var(--frame-angle, 0deg),
+        #ff0080 0%,
+        #ff8800 15%,
+        #ffee00 30%,
+        #00ff88 45%,
+        #00aaff 60%,
+        #8800ff 75%,
+        #ff0080 90%
+      ) border-box;
+    border: 2px solid transparent;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  /* 説明 */
+  .hint {
+    margin-top: 24px;
+    color: #334;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="card-wrapper" id="card">
+
+    <!-- 虹枠 -->
+    <div class="card-frame" id="cardFrame"></div>
+
+    <!-- カード本体 -->
+    <div class="card-base"></div>
+
+    <!-- ホログラムレイヤー群 -->
+    <div class="holo-grid"></div>
+    <div class="holo-rainbow" id="rainbow"></div>
+    <div class="holo-spot" id="spot"></div>
+
+    <!-- グリッタースパークル -->
+    <div class="sparkle-container" id="sparkleContainer"></div>
+
+    <!-- カードコンテンツ -->
+    <div class="card-content">
+      <div class="card-header">
+        <div class="name-block">
+          <div class="card-name">炎帝龍 レヴァナス</div>
+          <div class="card-subname">LEVANATH · THE FLAME EMPEROR</div>
+        </div>
+        <div class="hp-block">
+          <div class="hp-label">HP</div>
+          <div class="hp-value">180</div>
+        </div>
+      </div>
+
+      <div class="card-art">🔥</div>
+
+      <div class="card-type-bar">
+        <span class="type-badge type-fire">FIRE</span>
+        <span class="type-badge type-legend">LEGEND</span>
+        <span class="rarity-stars">★★★★★</span>
+      </div>
+
+      <div class="card-specs">
+        <div class="spec">
+          <div class="spec-label">ATK</div>
+          <div class="spec-value">142</div>
+        </div>
+        <div class="spec">
+          <div class="spec-label">DEF</div>
+          <div class="spec-value">88</div>
+        </div>
+        <div class="spec">
+          <div class="spec-label">SPD</div>
+          <div class="spec-value">115</div>
+        </div>
+        <div class="spec">
+          <div class="spec-label">MAG</div>
+          <div class="spec-value">160</div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-header">
+          <span class="skill-name">🔥 業火の裁き</span>
+          <span class="skill-power">120</span>
+        </div>
+        <div class="skill-desc">全フィールドに炎を放ち、相手全体に120ダメージ。<br>さらに「燃焼」状態を付与し毎ターン20ダメージを与える。</div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-header">
+          <span class="skill-name">⚡ 滅炎龍鱗</span>
+          <span class="skill-power">200</span>
+        </div>
+        <div class="skill-desc">究極奥義。全エネルギーを消費し、単体に200の絶大ダメージ。</div>
+      </div>
+
+      <div class="card-footer">
+        <span class="footer-id">No.EX-001 · Legend Series</span>
+        <span class="footer-edition">2026 1st Edition</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p class="hint">▶ マウスをカードの上で動かしてください</p>
+
+<script>
+  const card = document.getElementById('card');
+  const rainbow = document.getElementById('rainbow');
+  const spot = document.getElementById('spot');
+  const frame = document.getElementById('cardFrame');
+  const sparkleContainer = document.getElementById('sparkleContainer');
+
+  // ── スパークル生成 ──
+  const SPARKLE_COUNT = 40;
+  for (let i = 0; i < SPARKLE_COUNT; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.setProperty('--dur', (1.5 + Math.random() * 3) + 's');
+    s.style.setProperty('--delay', (Math.random() * 3) + 's');
+    // ランダム色（白・黄・水色）
+    const colors = ['255,255,255', '255,230,100', '100,200,255', '255,150,255'];
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    s.style.background = `rgb(${c})`;
+    s.style.boxShadow = `0 0 5px 2px rgba(${c},0.9)`;
+    sparkleContainer.appendChild(s);
+  }
+
+  // ── フレームの回転 ──
+  let frameAngle = 0;
+  setInterval(() => {
+    frameAngle = (frameAngle + 1.5) % 360;
+    frame.style.setProperty('--frame-angle', frameAngle + 'deg');
+  }, 16);
+
+  // ── マウス追従 ──
+  let targetRx = 0, targetRy = 0;
+  let currentRx = 0, currentRy = 0;
+  let isHover = false;
+  let animFrame;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function animate() {
+    currentRx = lerp(currentRx, targetRx, 0.12);
+    currentRy = lerp(currentRy, targetRy, 0.12);
+    card.style.transform = `rotateX(${currentRx}deg) rotateY(${currentRy}deg)`;
+    animFrame = requestAnimationFrame(animate);
+  }
+  animate();
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+
+    targetRx = (-dy / rect.height) * 25;
+    targetRy = (dx / rect.width) * 25;
+
+    // 虹・スポットの位置をマウスに合わせる
+    const mx = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+    const my = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+
+    rainbow.style.setProperty('--mx', mx + '%');
+    rainbow.style.setProperty('--my', my + '%');
+    spot.style.setProperty('--mx', mx + '%');
+    spot.style.setProperty('--my', my + '%');
+  });
+
+  card.addEventListener('mouseenter', () => { isHover = true; });
+
+  card.addEventListener('mouseleave', () => {
+    isHover = false;
+    targetRx = 0;
+    targetRy = 0;
+  });
+
+  // ── ダブルクリックでフラッシュ演出 ──
+  card.addEventListener('dblclick', () => {
+    card.style.filter = 'brightness(3)';
+    setTimeout(() => { card.style.filter = ''; }, 150);
+  });
+</script>
+
+</body>
+</html>

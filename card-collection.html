@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コレクション | ビッグファイブ3125タイプ診断</title>
+  <meta name="description" content="ビッグファイブ3125タイプ診断のカードコレクション。入手したカードをレア度ごとに確認できます。">
+  <meta property="og:title" content="コレクション | ビッグファイブ3125タイプ診断">
+  <meta property="og:description" content="入手したカードをレア度ごとに確認できます。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bigfive.jr-genius.jp/card-collection.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/card-collection.html">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0e27;
+      color: #e2e8f0;
+      font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      padding: 68px 16px 12px;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #a78bfa, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .progress-wrap {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .progress-text {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .progress-bar-bg {
+      background: #1e293b;
+      border-radius: 999px;
+      height: 5px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #ec4899);
+      border-radius: 999px;
+      transition: width 0.5s;
+      width: 0%;
+    }
+
+    /* フィルタータブ */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 16px 16px 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid #334155;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-tab.active {
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      border-color: transparent;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .count-label {
+      text-align: center;
+      font-size: 0.74rem;
+      color: #475569;
+      padding: 4px 0 10px;
+    }
+
+    /* カードグリッド */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 0 10px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    @media (min-width: 420px) {
+      .card-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 520px) {
+      .card-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    /* カードサムネイル */
+    .collection-card {
+      aspect-ratio: 1/1;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid #1e293b;
+      cursor: pointer;
+      transition: transform 0.12s;
+      background: #0f172a;
+      text-decoration: none;
+      display: block;
+    }
+    .collection-card:active { transform: scale(0.93); }
+    .collection-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #0f172a;
+    }
+    .collection-card .card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.72);
+      font-size: 0.52rem;
+      text-align: center;
+      padding: 2px 1px;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    /* レアリティ枠色 */
+    .collection-card.rarity-r1 { border-color: #60a5fa; }
+    .collection-card.rarity-r2 { border-color: #a78bfa; }
+    .collection-card.rarity-r3 { border-color: #34d399; }
+    .collection-card.rarity-r4 { border-color: #fbbf24; }
+    .collection-card.rarity-r5 { border-color: #f87171; }
+    .collection-card.rarity-r6 { border-color: #f9a8d4; box-shadow: 0 0 6px rgba(249,168,212,0.4); }
+    .collection-card.rarity-r7 { border-color: #7c3aed; box-shadow: 0 0 6px rgba(124,58,237,0.4); }
+
+    /* 空状態 */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 16px;
+      color: #475569;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    /* 全種類図鑑ボタン */
+    .full-zukan-btn {
+      display: block;
+      max-width: 300px;
+      margin: 32px auto 16px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid #8b5cf6;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .full-zukan-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+    }
+
+    /* 戻るリンク */
+    .back-link {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📚 コレクション</h1>
+  <div class="progress-wrap">
+    <div class="progress-text" id="progressText">読み込み中...</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-tabs">
+  <button class="filter-tab active" data-filter="all">全体</button>
+  <button class="filter-tab" data-filter="r1">R1</button>
+  <button class="filter-tab" data-filter="r2">R2</button>
+  <button class="filter-tab" data-filter="r3">R3</button>
+  <button class="filter-tab" data-filter="r4">R4</button>
+  <button class="filter-tab" data-filter="r5">R5</button>
+</div>
+<div class="count-label" id="countLabel"></div>
+
+<div class="card-grid" id="cardGrid"></div>
+
+<a href="zukan.html" class="full-zukan-btn">📖 全種類図鑑を開く</a>
+
+<a href="mypage.html" class="back-link">← マイページに戻る</a>
+
+<script src="nav.js"></script>
+<script src="album.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var currentFilter = 'all';
+  var ownedCards = [];
+
+  function isMax(factor, value) {
+    if (factor === 'N') return value === 1;
+    if (factor === 'E' || factor === 'A') return value === 1 || value === 5;
+    return value === 5;
+  }
+
+  function computeRarity(code) {
+    var o = +code[0], c = +code[1], e = +code[2], a = +code[3], n = +code[4];
+    var mc = 0;
+    if (isMax('O', o)) mc++;
+    if (isMax('C', c)) mc++;
+    if (isMax('E', e)) mc++;
+    if (isMax('A', a)) mc++;
+    if (isMax('N', n)) mc++;
+    if (mc === 0) return 'r1';
+    if (mc === 1) return 'r2';
+    if (mc === 2) return 'r3';
+    if (mc === 3) return 'r4';
+    return 'r5';
+  }
+
+  function init() {
+    if (typeof AlbumUtils !== 'undefined') AlbumUtils.migrateExistingResults();
+
+    // アルバムからカードデータを取得
+    var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
+    ownedCards = albumCards;
+
+    // 進捗表示
+    var ownedCount = albumCards.length;
+    document.getElementById('progressText').textContent = ownedCount + ' 枚コレクト';
+    document.getElementById('progressBar').style.width = Math.min(ownedCount / 15 * 100, 100).toFixed(1) + '%';
+
+    // フィルタータブ
+    document.querySelectorAll('.filter-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    render();
+  }
+
+  function applyFilter() {
+    if (currentFilter === 'all') {
+      return ownedCards;
+    }
+    return ownedCards.filter(function(c) {
+      return c.rarity === currentFilter;
+    });
+  }
+
+  function render() {
+    var grid = document.getElementById('cardGrid');
+    var countEl = document.getElementById('countLabel');
+    var filtered = applyFilter();
+
+    countEl.textContent = filtered.length + '枚';
+
+    // グリッド描画
+    grid.innerHTML = '';
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state">カードがありません<br>診断を受けてカードをゲットしよう！</div>';
+      return;
+    }
+
+    filtered.forEach(function(card) {
+      var el = document.createElement('a');
+      el.className = 'collection-card rarity-' + card.rarity;
+      el.href = 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender;
+
+      var img = document.createElement('img');
+      img.src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender;
+      img.loading = 'lazy';
+      img.alt = '';
+
+      var label = document.createElement('div');
+      label.className = 'card-label';
+      label.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀');
+
+      el.appendChild(img);
+      el.appendChild(label);
+      grid.appendChild(el);
+    });
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>

@@ -116,7 +116,15 @@
   <!-- マイページ -->
   <url>
     <loc>https://bigfive.jr-genius.jp/mypage.html</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-04-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- カードコレクション -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/card-collection.html</loc>
+    <lastmod>2026-04-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -124,7 +132,7 @@
   <!-- キャラクター図鑑 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/zukan.html</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-04-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
