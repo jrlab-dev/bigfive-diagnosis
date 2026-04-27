@@ -247,6 +247,11 @@
     background: rgba(239,68,68,0.25);
     border-color: rgba(239,68,68,0.5);
   }
+
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+
   .partner-btn {
     padding: 8px 10px;
     background: rgba(251,191,36,0.1);
@@ -757,7 +762,15 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       トップに戻る
     </a>
-    <h1 class="page-title">📋 マイページ</h1>
+    <h1 class="page-title">
+      <span class="icon-with-text">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+        </svg>
+        マイページ
+      </span>
+    </h1>
     <div style="width: 80px;"></div>
   </header>
 
@@ -804,7 +817,14 @@
 
   <div style="margin-top: 20px; text-align: center;">
     <a href="team.html" class="back-link" style="font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
-      👥 チーム相性を診断する →
+      <span class="icon-with-text">
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+  </svg>
+  チーム相性
+</span>を診断する →
     </a>
   </div>
 </div>
@@ -974,7 +994,14 @@ function renderOtherCheckUI() {
   if (count > 0) {
     bar.style.display = 'flex';
     countEl.textContent = `${count}人選択中`;
-    btnEl.textContent = '👥 チーム相性を見る';
+    btnEl.textContent = '<span class="icon-with-text">
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+  </svg>
+  チーム相性
+</span>を見る';
   } else {
     bar.style.display = 'none';
   }
@@ -1011,7 +1038,14 @@ function renderOtherResults() {
 
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
-    <a href="team.html" class="select-action-btn">👥 チーム相性を見る</a>
+    <a href="team.html" class="select-action-btn"><span class="icon-with-text">
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+  </svg>
+  チーム相性
+</span>を見る</a>
   </div>`;
 
   // パートナー未設定なら1番目の人を自動設定

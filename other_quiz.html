@@ -451,6 +451,11 @@
     font-family: inherit; font-size: 14px; cursor: pointer; transition: color .2s;
   }
   .premium-close:hover { color: var(--text); }
+
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
 </style>
 </head>
 <body>
@@ -459,14 +464,25 @@
 
 <!-- ===== スタート画面 ===== -->
 <div class="screen active" id="startScreen">
-  <p class="start-eyebrow">👁️ Big Five 他者分析</p>
+  <p class="start-eyebrow">
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      Big Five 他者分析
+    </span>
+  </p>
   <h1 class="start-title">あの人の性格を<br><em>科学的に推測する</em></h1>
   <p class="start-sub">行動・言動の観察をもとにビッグファイブ理論で<br>その人の性格を推定します</p>
 
   <span class="input-label" style="width:100%;text-align:left;">どんな関係ですか？</span>
   <div class="rel-options">
     <button class="rel-btn" data-rel="love">
-      <span class="rel-icon">💕</span>恋愛・<br>気になる人
+      <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;margin-bottom:4px;">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+      恋愛・<br>気になる人
     </button>
     <button class="rel-btn" data-rel="work">
       <span class="rel-icon">💼</span>仕事・<br>上司・同僚
@@ -513,7 +529,10 @@
 <!-- ===== クイズ画面 ===== -->
 <div class="screen" id="quizScreen">
   <div class="who-bar" id="whoBar">
-    <span class="who-icon" id="whoIcon">👁️</span>
+    <svg class="who-icon icon" id="whoIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
     <div>
       <div class="who-name-txt" id="whoName">—</div>
       <div class="who-sub-txt" id="whoSub">を観察して答えてください</div>
@@ -566,7 +585,15 @@
   <!-- SOKAモデル注釈 -->
   <div class="soka-note" id="sokaNote" style="display:none;"></div>
 
-  <button class="action-btn btn-save" id="saveBtn">💾 結果を保存</button>
+  <button class="action-btn btn-save" id="saveBtn">
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+        <path d="M17 21v-8H7v8M7 3v5h8"/>
+      </svg>
+      結果を保存
+    </span>
+  </button>
   <button class="action-btn btn-primary" id="retryBtn">別の人を診断する</button>
   <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
 </div>
@@ -665,15 +692,15 @@ let total = questions.length;
 // ===== 関係性設定 =====
 const relConfig = {
   love: {
-    icon: '💕', label: '恋愛・気になる人',
-    badge: '💕 恋愛・気になる人', badgeClass: 'badge-love',
+    icon: '', label: '恋愛・気になる人',
+    badge: '恋愛・気になる人', badgeClass: 'badge-love',
     barClass: 'rel-love-bar', whoClass: 'rel-love', qClass: 'rel-love',
     compatTitle: '恋愛相性スコア',
     // 恋愛は 神経症傾向の差・外向性の一致・協調性の高さ を重視
     compatWeights: { E: 1.5, N: 2.0, O: 1.0, C: 0.8, A: 1.5 },
-    compatHigh: '💕 とても良い相性です！感情的な波長が合いやすく、自然体でいられる関係です。',
-    compatMid:  '🌙 お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
-    compatLow:  '⚡ 性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
+    compatHigh: 'とても良い相性です！感情的な波長が合いやすく、自然体でいられる関係です。',
+    compatMid:  'お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
+    compatLow:  '性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
     // 信頼度情報（心理学研究に基づく）
     observerNote: '恋人・パートナーからの評価は、全関係性の中で最も正確です。プライベートな姿も見られるため、特に情緒安定性の評価が信頼できます。',
     accurateFactors: ['E','N','A','C'],
