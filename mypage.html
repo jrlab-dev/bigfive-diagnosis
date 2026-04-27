@@ -247,11 +247,6 @@
     background: rgba(239,68,68,0.25);
     border-color: rgba(239,68,68,0.5);
   }
-
-  /* シックなアイコン */
-  .icon { width: 18px; height: 18px; flex-shrink: 0; }
-  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
-
   .partner-btn {
     padding: 8px 10px;
     background: rgba(251,191,36,0.1);
@@ -762,15 +757,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       トップに戻る
     </a>
-    <h1 class="page-title">
-      <span class="icon-with-text">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-        </svg>
-        マイページ
-      </span>
-    </h1>
+    <h1 class="page-title">📋 マイページ</h1>
     <div style="width: 80px;"></div>
   </header>
 
@@ -817,14 +804,7 @@
 
   <div style="margin-top: 20px; text-align: center;">
     <a href="team.html" class="back-link" style="font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
-      <span class="icon-with-text">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-        </svg>
-        チーム相性を診断する
-      </span> →
+      👥 チーム相性を診断する →
     </a>
   </div>
 </div>
@@ -833,14 +813,8 @@
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
-const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
 const MAX_MY = 5;
-const MAX_OTHERS_BASE = 10;
-const MAX_OTHERS_UNLOCKED = 30;
-// 開放状態に応じた上限を取得
-function getMaxOthers() {
-  return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
-}
+const MAX_OTHERS = 10;
 const STORAGE_KEY_ACTIVE_MY = 'bigfive_active_my_index';
 
 let currentTab = 'my';
@@ -994,14 +968,7 @@ function renderOtherCheckUI() {
   if (count > 0) {
     bar.style.display = 'flex';
     countEl.textContent = `${count}人選択中`;
-    btnEl.innerHTML = '<span class="icon-with-text">
-  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-    <circle cx="9" cy="7" r="4"/>
-    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-  </svg>
-  チーム相性
-</span>を見る';
+    btnEl.textContent = '👥 チーム相性を見る';
   } else {
     bar.style.display = 'none';
   }
@@ -1025,27 +992,15 @@ function renderOtherResults() {
   // 選択中インデックスを有効範囲内に制限
   selectedOthers = new Set([...selectedOthers].filter(i => i < results.length));
 
-  const maxOthers = getMaxOthers();
-  const isUnlocked = localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED);
-  const otherCapColor = results.length >= maxOthers ? '#ef4444' : results.length >= maxOthers - 1 ? '#f97316' : '#ec4899';
-  const otherCapHtml = `<div style="text-align:right;font-size:12px;color:${otherCapColor};margin-bottom:8px;font-weight:600;">${results.length}/${maxOthers}件保存中${results.length >= maxOthers ? '（上限・古いものから上書きされます）' : ''}</div>`;
-  const addBtn = results.length < maxOthers
+  const otherCapColor = results.length >= MAX_OTHERS ? '#ef4444' : results.length >= MAX_OTHERS - 1 ? '#f97316' : '#ec4899';
+  const otherCapHtml = `<div style="text-align:right;font-size:12px;color:${otherCapColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_OTHERS}件保存中${results.length >= MAX_OTHERS ? '（上限・古いものから上書きされます）' : ''}</div>`;
+  const addBtn = results.length < MAX_OTHERS
     ? `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`
     : `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(239,68,68,0.1);border:1.5px dashed rgba(239,68,68,0.35);color:#ef4444;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">上書き診断する（最も古い結果が削除されます）</a>`;
 
-  // 開放ボタン（未開放時かつ10名に到達した場合のみ表示）
-  const unlockBtn = !isUnlocked && results.length >= 10 ? `<button onclick="unlockOthersLimit()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;font-size:14px;font-weight:700;text-align:center;cursor:pointer;margin-bottom:12px;box-shadow:0 4px 12px rgba(245,158,11,0.3);"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>保存数を30名に増やす（無料）</button>` : '';
-
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
-    <a href="team.html" class="select-action-btn"><span class="icon-with-text">
-  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-    <circle cx="9" cy="7" r="4"/>
-    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-  </svg>
-  チーム相性
-</span>を見る</a>
+    <a href="team.html" class="select-action-btn">👥 チーム相性を見る</a>
   </div>`;
 
   // パートナー未設定なら1番目の人を自動設定
@@ -1053,7 +1008,7 @@ function renderOtherResults() {
     localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
   }
   const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
-  container.innerHTML = otherCapHtml + addBtn + unlockBtn + actionBar + results.map((r, i) => {
+  container.innerHTML = otherCapHtml + addBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
@@ -1265,15 +1220,6 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   render();
 });
 
-// あの人の保存数を30名に増やす
-function unlockOthersLimit() {
-  if (confirm('保存数を30名に増やします。\n（よろしいですか？）')) {
-    localStorage.setItem(STORAGE_KEY_OTHERS_UNLOCKED, '1');
-    render();
-    setStatus('🎉 保存数が30名に増えました！', 'ok');
-  }
-}
-
 // ===== 端末引継ぎ =====
 const SYNC_ID_KEY = 'bigfive_sync_id';
 const SYNC_API = 'https://bigfive.jr-genius.jp/api';
@@ -1447,10 +1393,10 @@ function renderReportBanner() {
 }
 
 </script>
-<script src="hidden_characters.js" defer></script>
-<script src="album.js" defer></script>
-<script src="concierge.js" defer></script>
-<script src="nav.js" defer></script>
+<script src="hidden_characters.js"></script>
+<script src="album.js"></script>
+<script src="concierge.js"></script>
+<script src="nav.js"></script>
 <script>
 // 隠しキャラ画像パスを取得（一致しなければnull）120問版のみ呼ぶこと
 function getHiddenCharImg(scores, gender) {
@@ -1471,15 +1417,9 @@ function getHiddenCharImg(scores, gender) {
   return ch && ch.img ? `images/characters/hidden/${ch.img}` : null;
 }
 
-// 初期表示（DOM読み込み後に実行）
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    render();
-    renderReportBanner();
-  } catch (e) {
-    console.error('初期化エラー:', e);
-  }
-});
+// 初期表示（全スクリプト読み込み後に実行）
+render();
+renderReportBanner();
 </script>
 </body>
 </html>
