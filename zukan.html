@@ -385,7 +385,7 @@
         // 入手済みカードはリンクにする
         el = document.createElement('a');
         el.className = 'zukan-card owned rarity-' + card.rarity;
-        el.href = 'result.html?type=' + card.code + '&v=120&gender=' + card.gender;
+        el.href = 'result.html?type=' + card.code + '&v=120&gender=' + card.gender + '&saved=1';
       } else {
         // 未入手カードはdivのまま
         el = document.createElement('div');
@@ -455,7 +455,7 @@
         // 入手済みカードはリンクにする
         el = document.createElement('a');
         el.className = 'zukan-card owned rarity-' + rarity;
-        el.href = 'result.html?char=' + hc.id + '&v=120';
+        el.href = 'result.html?char=' + hc.id + '&v=120&saved=1';
       } else {
         // 未入手カードはdivのまま
         el = document.createElement('div');

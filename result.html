@@ -2339,8 +2339,10 @@ if (isOtherMode) {
     }
   }
 
-  // 自動保存（自分の結果のみ・あの人閲覧時はスキップ）
-  if (!isOtherMode) {
+  // 自動保存（自分の結果のみ・あの人閲覧時はスキップ・保存済み閲覧時もスキップ）
+  var params = new URLSearchParams(location.search);
+  var isSavedView = params.get('saved') === '1';
+  if (!isOtherMode && !isSavedView) {
     doSave();
   }
 
