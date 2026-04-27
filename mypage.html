@@ -1151,7 +1151,7 @@ function renderAlbum() {
     const imgPath = AlbumUtils.getCardImagePath(card);
     const r = card.rarity || 'common';
     const sourceLabel = card.source === 'my' ? '自分' : card.source === 'other' ? 'あの人' : '';
-    html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '" class="album-card rarity-' + r + '">';
+    html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="album-card rarity-' + r + '">';
     html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
     html += '<div class="album-card-code">' + card.code + '</div>';
     if (sourceLabel) html += '<div class="album-card-source">' + sourceLabel + '</div>';
