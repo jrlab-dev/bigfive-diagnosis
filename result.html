@@ -778,6 +778,11 @@
     .scores { gap: 4px 12px; }
     .result-buttons { flex-direction: column; align-items: center; }
   }
+
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
 </style>
 </head>
 <body>
@@ -789,7 +794,13 @@
 
   <!-- あの人モードバナー -->
   <div id="otherModeBanner" style="display:none; max-width:480px; width:100%; margin:0 auto 16px; padding:12px 16px; background:rgba(236,72,153,0.12); border:1px solid rgba(236,72,153,0.35); border-radius:12px; text-align:center; font-size:14px; color:#ec4899; font-weight:700;">
-    👁️ <span id="otherModeName"></span>さんの診断結果を表示しています
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span id="otherModeName"></span>さんの診断結果を表示しています
+    </span>
   </div>
 
   <!-- キャラクターカード -->
@@ -827,7 +838,14 @@
 
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
   <div class="compatibility-card" id="compatibilityCard" style="display:none;">
-    <p class="compatibility-title">💕 あの人との相性</p>
+    <p class="compatibility-title">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+        あの人との相性
+      </span>
+    </p>
     <div class="compatibility-score-area">
       <div class="compatibility-score" id="compatScore">--</div>
       <p class="compatibility-label" id="compatLabel">計算中...</p>
@@ -843,7 +861,10 @@
   <!-- 弱点カード -->
   <div class="weakness-section" id="weaknessSection">
     <button class="btn btn-weakness" id="weaknessBtn">
-      <span id="weaknessBtnIcon">🔓</span>
+      <svg class="icon-sm" id="weaknessBtnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
       <span id="weaknessBtnText">自分の弱点を知る</span>
     </button>
     <div class="weakness-card" id="weaknessCard" style="display:none;">
@@ -886,7 +907,15 @@
   <div class="result-buttons">
     <a href="index.html" class="btn btn-secondary">トップに戻る</a>
     <a href="#" class="btn btn-primary" id="retryBtn">もう一度診断する</a>
-    <button class="btn btn-save" id="saveBtn">💾 結果を保存</button>
+    <button class="btn btn-save" id="saveBtn">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+          <path d="M17 21v-8H7v8M7 3v5h8"/>
+        </svg>
+        結果を保存
+      </span>
+    </button>
   </div>
 
   <!-- SNSシェア -->
@@ -911,7 +940,14 @@
       </button>
     </div>
     <button class="share-btn compat" id="shareCompat">
-      👥 友達と相性チェックするリンクを作る
+      <span class="icon-with-text">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        友達と相性チェックするリンクを作る
+      </span>
     </button>
   </div>
 
@@ -921,7 +957,13 @@
   <!-- あの人診断への誘導 -->
   <div style="margin: 16px auto 0; max-width: 480px; width: 100%;">
     <a href="#" class="btn btn-primary" id="otherDiagBtn" style="display:block; width:100%; text-align:center; background: linear-gradient(135deg, #ec4899, #8b5cf6); margin-bottom:8px;">
-      👁️ あの人の性格も分析する →
+      <span class="icon-with-text">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        あの人の性格も分析する →
+      </span>
     </a>
     <p style="font-size:12px; color:var(--dim); text-align:center;">恋愛・仕事・友人…気になる人の性格を推測できます</p>
   </div>
@@ -1761,7 +1803,7 @@ setTimeout(() => {
 
 // ===== 説明カード =====
 const { summary, detail, keywords } = genRichDesc(sc);
-const descTitle = isOtherMode ? `📋 ${personName}さんの性格まとめ` : '📋 あなたの性格まとめ';
+const descTitle = isOtherMode ? `${personName}さんの性格まとめ` : 'あなたの性格まとめ';
 document.getElementById('descCard').innerHTML = `
   <p class="desc-card-title">${descTitle}</p>
   <p class="desc-card-text">${summary}<br>${detail}</p>
@@ -1798,7 +1840,7 @@ document.getElementById('descCard').innerHTML = `
     isOpen = !isOpen;
     card.style.display = isOpen ? 'block' : 'none';
     btn.classList.toggle('active', isOpen);
-    btnIcon.textContent = isOpen ? '🔒' : '🔓';
+    btnIcon.innerHTML = isOpen ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="11" width="12" height="13" rx="2"/><path d="M12 11V7a5 5 0 0110 0v4"/></svg>' : '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
     btnText.textContent = isOpen ? (isChildMode ? '傾向を隠す' : '弱点を隠す') : (isChildMode ? personName + 'さんの傾向を知る' : '自分の弱点を知る');
     if (isOpen) {
       setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
@@ -2014,8 +2056,8 @@ if (otherCode && otherCode.length === 5) {
   compatCard.style.display = 'block';
 
   // 関係性に応じたタイトル
-  const relTitles = { love: '💕 恋愛相性', work: '💼 仕事の相性', friend: '👫 友人としての相性' };
-  document.querySelector('.compatibility-title').textContent = relTitles[relation] || '👫 相性';
+  const relTitles = { love: '恋愛相性', work: '仕事の相性', friend: '友人としての相性' };
+  document.querySelector('.compatibility-title').innerHTML = '<span class="icon-with-text"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' + (relTitles[relation] || '相性') + '</span>';
 
   // スコア・ラベル・星をセット
   document.getElementById('compatScore').textContent = score;
@@ -2068,7 +2110,7 @@ if (isOtherMode) {
 
       const compatCard = document.getElementById('compatibilityCard');
       compatCard.style.display = 'block';
-      document.querySelector('.compatibility-title').textContent = `💕 ${personName}さんとの相性`;
+      document.querySelector('.compatibility-title').innerHTML = '<span class="icon-with-text"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' + personName + 'さんとの相性</span>';
 
       document.getElementById('compatScore').textContent = score;
       document.getElementById('compatLabel').textContent = `${labelInfo.label} (${score}点)`;
@@ -2219,7 +2261,7 @@ if (isOtherMode) {
         document.execCommand('copy');
         document.body.removeChild(input);
       }
-      copyToast.textContent = '相性チェックURLをコピーしました！友達に送ってね👥';
+      copyToast.textContent = '相性チェックURLをコピーしました！友達に送ってね';
       copyToast.classList.add('show');
       setTimeout(() => {
         copyToast.classList.remove('show');
