@@ -115,11 +115,16 @@
       overflow: hidden;
       position: relative;
       border: 2px solid #1e293b;
-      cursor: pointer;
       transition: transform 0.12s;
       background: #0f172a;
     }
-    .zukan-card:active { transform: scale(0.93); }
+    .zukan-card.owned {
+      cursor: pointer;
+    }
+    .zukan-card.owned:active { transform: scale(0.93); }
+    .zukan-card.unowned {
+      cursor: default;
+    }
     .zukan-card img {
       width: 100%;
       height: 100%;
@@ -375,8 +380,17 @@
     }
 
     pageCards.forEach(function(card) {
-      var el = document.createElement('div');
-      el.className = 'zukan-card ' + (card.owned ? 'owned' : 'unowned') + ' rarity-' + card.rarity;
+      var el;
+      if (card.owned) {
+        // 入手済みカードはリンクにする
+        el = document.createElement('a');
+        el.className = 'zukan-card owned rarity-' + card.rarity;
+        el.href = 'result.html?type=' + card.code + '&v=120&gender=' + card.gender;
+      } else {
+        // 未入手カードはdivのまま
+        el = document.createElement('div');
+        el.className = 'zukan-card unowned rarity-' + card.rarity;
+      }
 
       var img = document.createElement('img');
       img.src = getImagePath(card.code, card.gender, card.owned);
@@ -436,8 +450,17 @@
     HIDDEN_CHARACTERS.forEach(function(hc) {
       var owned = !!ownedHiddenSet[hc.id];
       var rarity = hc.a === 1 ? 'r7' : 'r6';
-      var el = document.createElement('div');
-      el.className = 'zukan-card ' + (owned ? 'owned' : 'unowned') + ' rarity-' + rarity;
+      var el;
+      if (owned) {
+        // 入手済みカードはリンクにする
+        el = document.createElement('a');
+        el.className = 'zukan-card owned rarity-' + rarity;
+        el.href = 'result.html?char=' + hc.id + '&v=120';
+      } else {
+        // 未入手カードはdivのまま
+        el = document.createElement('div');
+        el.className = 'zukan-card unowned rarity-' + rarity;
+      }
 
       var img = document.createElement('img');
       // 入手済みはR2のカード画像、未入手はキャラクター画像（シルエット用）

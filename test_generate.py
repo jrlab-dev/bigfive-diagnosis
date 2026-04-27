@@ -35,7 +35,7 @@ Nose is just a dot or tiny shadow. Arms and legs are short and rounded. Body hei
 
 Both characters share the same color palette and clothing vibe."""
 
-OUTPUT_PATH = r"C:\Users\user\Desktop\Claude Code\ウェブサイト\あそびラボ_プロジェクト\ビックファイブ診断サイト\画像\キャラクター（商用利用可）\31111.png"
+OUTPUT_PATH = r"G:\マイドライブ\Claude Code\ウェブサイト\あそびラボ_プロジェクト\ビックファイブ診断サイト\画像\キャラクター（商用利用可）\31111.png"
 
 print("生成開始: 31111（無頑着・内向的）")
 print("モデル: gpt-image-1 / quality: medium")

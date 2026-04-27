@@ -1185,9 +1185,9 @@ function renderAlbum() {
   // Stage 2ボタン
   var remaining = max - count;
   if (isComplete) {
-    html += '<a href="zukan.html" class="stage2-btn unlocked">📖 図鑑を開く</a>';
+    html += '<a href="card-collection.html" class="stage2-btn unlocked">📚 コレクションを開く</a>';
   } else {
-    html += '<button class="stage2-btn locked" onclick="alert(\'あと' + remaining + '枚コレクトで図鑑が解放されます！\')">🔒 図鑑（あと' + remaining + '枚で解放）</button>';
+    html += '<button class="stage2-btn locked" onclick="alert(\'あと' + remaining + '枚コレクトでコレクションが解放されます！\')">🔒 コレクション（あと' + remaining + '枚で解放）</button>';
   }
 
   container.innerHTML = html;
