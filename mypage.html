@@ -1447,10 +1447,10 @@ function renderReportBanner() {
 }
 
 </script>
-<script src="hidden_characters.js"></script>
-<script src="album.js"></script>
-<script src="concierge.js"></script>
-<script src="nav.js"></script>
+<script src="hidden_characters.js" defer></script>
+<script src="album.js" defer></script>
+<script src="concierge.js" defer></script>
+<script src="nav.js" defer></script>
 <script>
 // 隠しキャラ画像パスを取得（一致しなければnull）120問版のみ呼ぶこと
 function getHiddenCharImg(scores, gender) {
@@ -1471,9 +1471,15 @@ function getHiddenCharImg(scores, gender) {
   return ch && ch.img ? `images/characters/hidden/${ch.img}` : null;
 }
 
-// 初期表示（全スクリプト読み込み後に実行）
-render();
-renderReportBanner();
+// 初期表示（DOM読み込み後に実行）
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    render();
+    renderReportBanner();
+  } catch (e) {
+    console.error('初期化エラー:', e);
+  }
+});
 </script>
 </body>
 </html>
