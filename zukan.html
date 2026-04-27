@@ -123,8 +123,9 @@
     .zukan-card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; /* カード全体が見えるように */
       display: block;
+      background: #0f172a;
     }
     .zukan-card.unowned img { filter: brightness(0); }
     .zukan-card .card-label {
@@ -272,7 +273,12 @@
     return 'r5';
   }
 
-  function getImagePath(code, gender) {
+  function getImagePath(code, gender, owned) {
+    // 入手済みカードはR2のカード画像を使用
+    if (owned) {
+      return 'https://bigfive.jr-genius.jp/ogp-image?code=' + code + '&gender=' + gender;
+    }
+    // 未入手カードはキャラクター画像（シルエット表示用）
     var imgCode = [0,1,2,3,4].map(function(i) { return toScale(+code[i]); }).join('');
     return 'images/characters/' + gender + '/' + imgCode + '.webp';
   }
@@ -373,7 +379,7 @@
       el.className = 'zukan-card ' + (card.owned ? 'owned' : 'unowned') + ' rarity-' + card.rarity;
 
       var img = document.createElement('img');
-      img.src = getImagePath(card.code, card.gender);
+      img.src = getImagePath(card.code, card.gender, card.owned);
       img.loading = 'lazy';
       img.alt = '';
 
@@ -434,7 +440,12 @@
       el.className = 'zukan-card ' + (owned ? 'owned' : 'unowned') + ' rarity-' + rarity;
 
       var img = document.createElement('img');
-      img.src = 'images/characters/hidden/' + hc.img;
+      // 入手済みはR2のカード画像、未入手はキャラクター画像（シルエット用）
+      if (owned) {
+        img.src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + hc.id;
+      } else {
+        img.src = 'images/characters/hidden/' + hc.img;
+      }
       img.loading = 'lazy';
       img.alt = '';
 
