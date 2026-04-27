@@ -431,6 +431,48 @@
 
   footer { text-align: center; padding: 30px 20px; border-top: 1px solid rgba(139,92,246,0.08); font-size: 12px; color: rgba(148,163,184,0.4); }
 
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+
+  /* ソーシャルプルーフ */
+  .social-proof { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+  .proof-label {
+    text-align: center; font-size: 11px; font-weight: 700; color: var(--purple);
+    letter-spacing: .25em; margin-bottom: 32px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .proof-label::before, .proof-label::after {
+    content: ''; display: block; height: 1px; width: 40px;
+    background: linear-gradient(to right, transparent, rgba(139,92,246,0.4));
+  }
+  .proof-label::after { background: linear-gradient(to left, transparent, rgba(139,92,246,0.4)); }
+  .proof-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
+  }
+  .proof-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 20px; backdrop-filter: blur(8px);
+    position: relative; overflow: hidden;
+  }
+  .proof-card::before {
+    content: '"'; position: absolute; top: 8px; left: 16px;
+    font-size: 48px; color: rgba(139,92,246,0.15); font-family: Georgia, serif;
+  }
+  .proof-text {
+    font-size: 13px; color: var(--text); line-height: 1.7;
+    padding-left: 20px; margin-bottom: 12px; font-style: italic;
+  }
+  .proof-user {
+    font-size: 11px; color: var(--dim); text-align: right;
+    padding-left: 20px; display: flex; align-items: center; justify-content: flex-end; gap: 6px;
+  }
+  .proof-user::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+  }
+
   /* ===== パーソナライズ表示 ===== */
   .personalized-section {
     display: none;
@@ -454,7 +496,7 @@
     .science-label { color: #fff }
     .science-label { margin: 0 auto 3px }
     .science-link { margin-top: 3px; font-size: 9px }
-    .cta { padding: 40px 16px 80px }
+    .cta { padding: 40px 16px 100px }
     .stats-section { padding: 0 16px 40px }
     .stats-label { margin-bottom: 16px }
     .stats-grid { grid-template-columns: repeat(3,1fr); gap: 1px }
@@ -464,6 +506,8 @@
     .stat-desc { font-size: 9px }
     .stat-item::after { top: 15%; bottom: 15% }
     .trust-badges { gap: 8px }
+    .social-proof { padding: 40px 16px; }
+    .proof-grid { grid-template-columns: 1fr; }
   }
 
   /* デモモーダル */
@@ -612,6 +656,29 @@
     </div>
   </section>
 
+  <!-- ソーシャルプルーフ -->
+  <section class="social-proof">
+    <p class="proof-label">VOICE</p>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <p class="proof-text">「初めて自分を客観的に理解できた。今の仕事が合わない理由がわかった」</p>
+        <p class="proof-user">20代女性・事務職</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-text">「チーム相性診断で配置転換がスムーズに。部下とのコミュニケーションが改善」</p>
+        <p class="proof-user">30代男性・マネージャー</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-text">「夫婦相性がわかって喧嘩が減った。相手の見方も変わりました」</p>
+        <p class="proof-user">40代女性・主婦</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-text">「就活活動で自分の強みを言語化できるようになった」</p>
+        <p class="proof-user">20代男性・学生</p>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta" id="versionSelect">
     <p class="cta-text">診断を選んでください。</p>
@@ -620,16 +687,41 @@
       <a href="quiz.html?v=30" class="shimmer-btn cta-btn-premium" data-done-key="bigfive_v30">本格診断（30問）</a>
       <a href="quiz.html?v=120" class="shimmer-btn cta-btn-premium" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-done-key="bigfive_v120">徹底分析（120問）</a>
     </div>
-    <p class="cta-note" style="margin-top:8px;">💾 自動保存つき ― 隙間時間に少しずつ進められます</p>
+    <p class="cta-note" style="margin-top:8px;">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+          <path d="M17 21v-8H7v8M7 3v5h8"/>
+        </svg>
+        自動保存つき ― 隙間時間に少しずつ進められます
+      </span>
+    </p>
     <p class="cta-note">※ 30問・120問版はより精度の高い結果が得られます</p>
     <div class="anohito-section" id="conciergeSection">
       <p class="anohito-lead">気になる人の性格を見抜きたい方へ</p>
-      <a href="other_quiz.html" class="shimmer-btn cta-btn-anohito" data-done-key="bigfive_other">👁️ あの人の性格を分析する</a>
+      <a href="other_quiz.html" class="shimmer-btn cta-btn-anohito" data-done-key="bigfive_other">
+        <span class="icon-with-text">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          あの人の性格を分析する
+        </span>
+      </a>
       <p class="cta-note" style="margin-top:10px;">恋愛・仕事・友人関係…相手の性格と相性がわかります</p>
     </div>
     <div class="anohito-section" id="teamSection">
       <p class="anohito-lead">グループ・チームで診断したい方へ</p>
-      <a href="team.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);">👥 チーム相性を診断する</a>
+      <a href="team.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);">
+        <span class="icon-with-text">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+          チーム相性を診断する
+        </span>
+      </a>
       <p class="cta-note" style="margin-top:10px;">最大8人のチーム相性がわかります（要：保存済みデータ）</p>
     </div>
     <!-- 心理コンシェルジュ：動的レンダリングエリア -->
@@ -640,9 +732,24 @@
   <div class="demo-overlay" id="demoOverlay">
     <div class="demo-modal">
       <button class="demo-close" id="demoClose">&times;</button>
-      <p class="demo-eyebrow">👁️ デモ結果イメージ</p>
+      <p class="demo-eyebrow">
+        <span class="icon-with-text">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          デモ結果イメージ
+        </span>
+      </p>
       <div class="demo-header">
-        <span class="demo-badge">💕 恋愛・気になる人</span>
+        <span class="demo-badge">
+          <span class="icon-with-text">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+            恋愛・気になる人
+          </span>
+        </span>
         <p class="demo-name"><em>王子様</em>の推定性格</p>
         <p class="demo-sub">ビッグファイブ理論による観察分析（デモ）</p>
       </div>
@@ -658,15 +765,38 @@
         <div class="demo-trait-row"><span class="demo-trait-label">協調性 <small>思いやり・協力的</small></span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:22%;background:#f472b6;"></div></div><span class="demo-trait-lv lv-low">低め</span></div>
       </div>
       <div class="demo-compat">
-        <p class="demo-compat-title">💕 恋愛相性スコア</p>
+        <p class="demo-compat-title">
+          <span class="icon-with-text">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+            恋愛相性スコア
+          </span>
+        </p>
         <div class="demo-compat-score">85<span style="font-size:20px;">%</span></div>
         <p class="demo-compat-label">相性◎ — 息の合うパートナー</p>
       </div>
       <div class="demo-desc">
-        <p class="demo-desc-title">📋 性格まとめ</p>
+        <p class="demo-desc-title">
+          <span class="icon-with-text">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+            </svg>
+            性格まとめ
+          </span>
+        </p>
         <p class="demo-desc-text">社交的で創造力に富み、新しいことにも積極的に挑戦するタイプ。自分の意見をしっかり持ち、周囲に流されない芯の強さがある。計画的すぎる束縛より自由な関係を好む傾向も。</p>
       </div>
-      <a href="other_quiz.html" class="demo-cta">👁️ 実際にあの人を分析してみる →</a>
+      <a href="other_quiz.html" class="demo-cta">
+        <span class="icon-with-text">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          実際にあの人を分析してみる →
+        </span>
+      </a>
     </div>
   </div>
 

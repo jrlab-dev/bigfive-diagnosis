@@ -1007,7 +1007,7 @@ function renderOtherResults() {
     : `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(239,68,68,0.1);border:1.5px dashed rgba(239,68,68,0.35);color:#ef4444;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">上書き診断する（最も古い結果が削除されます）</a>`;
 
   // 開放ボタン（未開放時かつ10名に到達した場合のみ表示）
-  const unlockBtn = !isUnlocked && results.length >= 10 ? `<button onclick="unlockOthersLimit()" style="display:block;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;font-size:14px;font-weight:700;text-align:center;cursor:pointer;margin-bottom:12px;box-shadow:0 4px 12px rgba(245,158,11,0.3);">🔓 保存数を30名に増やす（無料）</button>` : '';
+  const unlockBtn = !isUnlocked && results.length >= 10 ? `<button onclick="unlockOthersLimit()" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;font-size:14px;font-weight:700;text-align:center;cursor:pointer;margin-bottom:12px;box-shadow:0 4px 12px rgba(245,158,11,0.3);"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>保存数を30名に増やす（無料）</button>` : '';
 
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
