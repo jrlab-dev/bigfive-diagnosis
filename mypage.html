@@ -813,8 +813,14 @@
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
 const MAX_MY = 5;
-const MAX_OTHERS = 10;
+const MAX_OTHERS_BASE = 10;
+const MAX_OTHERS_UNLOCKED = 30;
+// 開放状態に応じた上限を取得
+function getMaxOthers() {
+  return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
+}
 const STORAGE_KEY_ACTIVE_MY = 'bigfive_active_my_index';
 
 let currentTab = 'my';
@@ -992,11 +998,16 @@ function renderOtherResults() {
   // 選択中インデックスを有効範囲内に制限
   selectedOthers = new Set([...selectedOthers].filter(i => i < results.length));
 
-  const otherCapColor = results.length >= MAX_OTHERS ? '#ef4444' : results.length >= MAX_OTHERS - 1 ? '#f97316' : '#ec4899';
-  const otherCapHtml = `<div style="text-align:right;font-size:12px;color:${otherCapColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_OTHERS}件保存中${results.length >= MAX_OTHERS ? '（上限・古いものから上書きされます）' : ''}</div>`;
-  const addBtn = results.length < MAX_OTHERS
+  const maxOthers = getMaxOthers();
+  const isUnlocked = localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED);
+  const otherCapColor = results.length >= maxOthers ? '#ef4444' : results.length >= maxOthers - 1 ? '#f97316' : '#ec4899';
+  const otherCapHtml = `<div style="text-align:right;font-size:12px;color:${otherCapColor};margin-bottom:8px;font-weight:600;">${results.length}/${maxOthers}件保存中${results.length >= maxOthers ? '（上限・古いものから上書きされます）' : ''}</div>`;
+  const addBtn = results.length < maxOthers
     ? `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`
     : `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(239,68,68,0.1);border:1.5px dashed rgba(239,68,68,0.35);color:#ef4444;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">上書き診断する（最も古い結果が削除されます）</a>`;
+
+  // 開放ボタン（未開放時のみ表示）
+  const unlockBtn = !isUnlocked ? `<button onclick="unlockOthersLimit()" style="display:block;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;color:#fff;font-size:14px;font-weight:700;text-align:center;cursor:pointer;margin-bottom:12px;box-shadow:0 4px 12px rgba(245,158,11,0.3);">🔓 保存数を30名に増やす（無料）</button>` : '';
 
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
@@ -1008,7 +1019,7 @@ function renderOtherResults() {
     localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
   }
   const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
-  container.innerHTML = otherCapHtml + addBtn + actionBar + results.map((r, i) => {
+  container.innerHTML = otherCapHtml + addBtn + unlockBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
@@ -1219,6 +1230,15 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   }
   render();
 });
+
+// あの人の保存数を30名に増やす
+function unlockOthersLimit() {
+  if (confirm('保存数を30名に増やします。\n（よろしいですか？）')) {
+    localStorage.setItem(STORAGE_KEY_OTHERS_UNLOCKED, '1');
+    render();
+    setStatus('🎉 保存数が30名に増えました！', 'ok');
+  }
+}
 
 // ===== 端末引継ぎ =====
 const SYNC_ID_KEY = 'bigfive_sync_id';

@@ -2269,7 +2269,14 @@ if (isOtherMode) {
   }
 
   const MY_LIMIT = 5;
-  const OTHER_LIMIT = 15;
+  const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
+  const MAX_OTHERS_BASE = 10;
+  const MAX_OTHERS_UNLOCKED = 30;
+  // 開放状態に応じた上限を取得
+  function getMaxOthers() {
+    return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
+  }
+  const OTHER_LIMIT = getMaxOthers();
 
   function showDeleteToast(msg) {
     const toast = document.getElementById('deleteToast');
@@ -2299,9 +2306,10 @@ if (isOtherMode) {
         const isOtherDuplicate = others.some(r => r.name === otherResult.name && r.code === otherResult.code);
         if (!isOtherDuplicate) {
           others.unshift(otherResult);
-          if (others.length > OTHER_LIMIT) {
+          const maxOthers = getMaxOthers();
+          if (others.length > maxOthers) {
             others.pop();
-            showDeleteToast(`保存上限（${OTHER_LIMIT}件）のため、古いあの人の結果を1件削除しました`);
+            showDeleteToast(`保存上限（${maxOthers}件）のため、古いあの人の結果を1件削除しました`);
           }
           localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
         }
