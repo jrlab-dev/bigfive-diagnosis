@@ -23,8 +23,8 @@
   var code=p.get('code')||p.get('type'),g=p.get('gender')||'F';
   var c=p.get('char');
   var src;
-  if(c){src='https://bigfive.jr-genius.jp/ogp-image?char='+encodeURIComponent(c);}
-  else if(code){src='https://bigfive.jr-genius.jp/ogp-image?code='+encodeURIComponent(code)+'&gender='+g;}
+  if(c){src='https://bigfive.jr-genius.jp/ogp-image?char='+encodeURIComponent(c)+'&type=share';}
+  else if(code){src='https://bigfive.jr-genius.jp/ogp-image?code='+encodeURIComponent(code)+'&gender='+g+'&type=share';}
   if(src){
     var m=document.createElement('meta');m.setAttribute('property','og:image');m.setAttribute('content',src);document.head.appendChild(m);
     var m2=document.createElement('meta');m2.setAttribute('name','twitter:image');m2.setAttribute('content',src);document.head.appendChild(m2);
