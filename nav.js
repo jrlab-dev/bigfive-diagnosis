@@ -19,7 +19,7 @@
     <div class="nav-links" id="navLinks">
       <a href="index.html" data-page="index">🏠 ホーム</a>
       <a href="mypage.html" data-page="mypage">👤 マイページ</a>
-      <a href="diagnoses.html" data-page="diagnoses">🧪 心理学診断</a>
+      <a href="diagnoses.html" data-page="diagnoses">🧪 性格診断</a>
       <a href="report.html" data-page="report">📊 総合レポート</a>
     </div>
   </div>
