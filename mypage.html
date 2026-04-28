@@ -505,6 +505,11 @@
     background: rgba(239,68,68,0.2);
   }
 
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+
   /* ===== アルバム ===== */
   .album-header {
     text-align: center;
@@ -757,7 +762,14 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       トップに戻る
     </a>
-    <h1 class="page-title">📋 マイページ</h1>
+    <h1 class="page-title">
+      <span class="icon-with-text">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        マイページ
+      </span>
+    </h1>
     <div style="width: 80px;"></div>
   </header>
 
@@ -777,13 +789,28 @@
   <div class="report-banner" id="reportBanner"></div>
 
   <div class="setting-row">
-    <span class="setting-label">⭐ トップページのキャラクターを表示</span>
+    <span class="setting-label">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        トップページのキャラクターを表示
+      </span>
+    </span>
     <button class="setting-toggle" id="charToggleBtn" aria-label="キャラクター表示切り替え"></button>
   </div>
 
   <!-- 端末引継ぎ -->
   <div class="sync-section">
-    <div class="sync-title">📱 端末引継ぎ</div>
+    <div class="sync-title">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+          <line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+        端末引継ぎ
+      </span>
+    </div>
     <div class="sync-desc">IDを使って別のスマホ・PCにデータを引き継げます</div>
     <button class="sync-btn save" id="syncSaveBtn">このデバイスのデータを保存する</button>
     <div class="sync-id-box" id="syncIdBox" style="display:none">
@@ -800,11 +827,26 @@
     <div class="sync-status" id="syncStatus"></div>
   </div>
 
-  <button class="clear-all" id="clearAllBtn">🗑️ すべてのデータを削除</button>
+  <button class="clear-all" id="clearAllBtn">
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+        <line x1="10" y1="11" x2="10" y2="17"/>
+        <line x1="14" y1="11" x2="14" y2="17"/>
+      </svg>
+      すべてのデータを削除
+    </span>
+  </button>
 
   <div style="margin-top: 20px; text-align: center;">
     <a href="team.html" class="back-link" style="font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
-      👥 チーム相性を診断する →
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        チーム相性を診断する →
+      </span>
     </a>
   </div>
 </div>
@@ -879,7 +921,7 @@ function renderMyResults() {
   const activeIdx = getActiveMyIndex();
   const capacityColor = results.length >= MAX_MY ? '#ef4444' : results.length >= MAX_MY - 1 ? '#f97316' : '#8b5cf6';
   const capacityHtml = `<div style="text-align:right;font-size:12px;color:${capacityColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_MY}件保存中${results.length >= MAX_MY ? '（上限・古いものから上書きされます）' : ''}</div>`;
-  const activeNoteHtml = `<div style="font-size:12px;color:#a78bfa;margin-bottom:10px;">★ 適用中 = 相性診断などで使われる結果。タップして切替可</div>`;
+  const activeNoteHtml = `<div style="font-size:12px;color:#a78bfa;margin-bottom:10px;"><span class="icon-with-text"><svg class="icon-sm" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>適用中 = 相性診断などで使われる結果。タップして切替可</span></div>`;
 
   const vBadgeColors = { '10': '#64748b', '30': '#3b82f6', '120': '#8b5cf6' };
   container.innerHTML = capacityHtml + activeNoteHtml + results.map((r, i) => {
@@ -898,10 +940,10 @@ function renderMyResults() {
     const isActive = i === activeIdx;
     return `
       <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}" class="result-card" style="${isActive ? 'border:1.5px solid rgba(139,92,246,0.5);padding-top:28px;' : ''}">
-        ${isActive ? '<div style="position:absolute;top:8px;left:12px;background:#8b5cf6;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;">★ 適用中</div>' : ''}
+        ${isActive ? '<div style="position:absolute;top:8px;left:12px;background:#8b5cf6;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>適用中</span></div>' : ''}
         <div class="result-card-icon" style="background: rgba(139,92,246,0.2);">
           <div class="character-thumb">
-            <img src="${imgPath}" alt="キャラクター" onerror="this.parentElement.innerHTML='<span class=\'character-thumb-placeholder\'>🧑</span>'">
+            <img src="${imgPath}" alt="キャラクター" onerror="this.parentElement.innerHTML='<span class=\'character-thumb-placeholder\'><svg class=\'icon-sm\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2\'/></svg></span>'">
           </div>
         </div>
         <div class="result-card-content">
@@ -919,7 +961,7 @@ function renderMyResults() {
             }).join('')}
           </div>
         </div>
-        <button class="partner-btn${isActive ? ' active' : ''}" title="適用中に設定" onclick="event.preventDefault(); setActiveMyIndex(${i}); renderMyResults();">${isActive ? '★' : '☆'}</button>
+        <button class="partner-btn${isActive ? ' active' : ''}" title="適用中に設定" onclick="event.preventDefault(); setActiveMyIndex(${i}); renderMyResults();">${isActive ? '<svg class="icon-sm" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' : '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'}</button>
         <button class="delete-btn" onclick="event.preventDefault(); deleteMyResult(${i})">削除</button>
       </a>
     `;
@@ -959,7 +1001,7 @@ function renderOtherCheckUI() {
   document.querySelectorAll('.other-check').forEach((el, i) => {
     const isChecked = selectedOthers.has(i);
     el.classList.toggle('checked', isChecked);
-    el.textContent = isChecked ? '✓' : '';
+    el.innerHTML = isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : '';
     el.closest('.result-card').classList.toggle('checked', isChecked);
   });
 
@@ -968,7 +1010,7 @@ function renderOtherCheckUI() {
   if (count > 0) {
     bar.style.display = 'flex';
     countEl.textContent = `${count}人選択中`;
-    btnEl.textContent = '👥 チーム相性を見る';
+    btnEl.innerHTML = `<span class="icon-with-text"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>チーム相性を見る</span>`;
   } else {
     bar.style.display = 'none';
   }
@@ -1000,7 +1042,14 @@ function renderOtherResults() {
 
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
-    <a href="team.html" class="select-action-btn">👥 チーム相性を見る</a>
+    <a href="team.html" class="select-action-btn">
+      <span class="icon-with-text">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        チーム相性を見る
+      </span>
+    </a>
   </div>`;
 
   // パートナー未設定なら1番目の人を自動設定
@@ -1023,14 +1072,14 @@ function renderOtherResults() {
     const isChild = r.relation === 'child46' || r.relation === 'child79';
     return `
       <div class="result-card${isChecked ? ' checked' : ''}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : ''}">
-        <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '✓' : ''}</div>
+        <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
         <a href="${isChild ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
             <img src="${charSrc}" alt="${r.name}" style="width:56px;height:56px;object-fit:contain;"
-                 onerror="this.parentElement.innerHTML='👤';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.fontSize='24px';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
+                 onerror="this.parentElement.innerHTML='<svg class=\\'icon\\' style=\\'color:#ec4899\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><path d=\\'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\\'/><circle cx=\\'12\\' cy=\\'7\\' r=\\'4\\'/></svg>';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
           </div>
           <div class="result-card-content">
-            <div class="result-card-name">${r.name}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;">🧒 子供</span>' : ''}</div>
+            <div class="result-card-name">${r.name}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.7 2.8 1.7 3.7C6.5 11 5 13 5 15.5V20c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4.5c0-2.5-1.5-4.5-4.2-5.3 1-.9 1.7-2.2 1.7-3.7C16.5 4 14.5 2 12 2z"/><circle cx="9" cy="5" r="1.5" fill="#fbbf24"/><path d="M8 4.5L7 3M10 4.5L11 3" stroke="#fbbf24" stroke-width="1" stroke-linecap="round"/></svg>子供</span></span>' : ''}</div>
             <div class="result-card-meta">
               <span class="result-card-code">${r.code}</span>
               <span class="result-card-date">${formatDate(r.date)}</span>
@@ -1044,7 +1093,7 @@ function renderOtherResults() {
             </div>
           </div>
         </a>
-        <button class="partner-btn${isPartner ? ' active' : ''}" title="トップに表示" onclick="event.preventDefault(); event.stopPropagation(); setPartner(${i})">${isPartner ? '★' : '☆'}</button>
+        <button class="partner-btn${isPartner ? ' active' : ''}" title="トップに表示" onclick="event.preventDefault(); event.stopPropagation(); setPartner(${i})">${isPartner ? '<svg class="icon-sm" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' : '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'}</button>
         <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteOtherResult(${i})">削除</button>
       </div>
     `;
@@ -1374,9 +1423,25 @@ function renderReportBanner() {
 
   if (allDone) {
     banner.innerHTML = `
-      <div class="report-banner-title">✦ 全テスト完了！総合レポートが見られます</div>
+      <div class="report-banner-title">
+        <span class="icon-with-text">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          全テスト完了！総合レポートが見られます
+        </span>
+      </div>
       <div class="report-banner-sub">6つのテストを統合した、あなただけの深層分析</div>
-      <a href="report.html" class="report-btn">📊 総合レポートを見る</a>
+      <a href="report.html" class="report-btn">
+        <span class="icon-with-text">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+          総合レポートを見る
+        </span>
+      </a>
     `;
   } else {
     const remainCount = missing.length + (hasBf ? 0 : 1);
@@ -1384,9 +1449,27 @@ function renderReportBanner() {
       `<a href="${t.url}">${t.title || t.name}</a>`
     ).join('・');
     banner.innerHTML = `
-      <div class="report-banner-title">📊 総合レポートを解放しよう</div>
+      <div class="report-banner-title">
+        <span class="icon-with-text">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+          総合レポートを解放しよう
+        </span>
+      </div>
       <div class="report-banner-sub">あと ${remainCount} つのテストで全テスト統合レポートが見られます</div>
-      <a href="report.html" class="report-btn" style="opacity:0.6;">📊 レポートを見る（一部）</a>
+      <a href="report.html" class="report-btn" style="opacity:0.6;">
+        <span class="icon-with-text">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+          レポートを見る（一部）
+        </span>
+      </a>
       <div class="report-missing-note">未受診: ${missingLinks}${missing.length > 2 ? '…' : ''}</div>
     `;
   }
