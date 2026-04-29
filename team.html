@@ -219,6 +219,46 @@
     font-weight: 700;
   }
 
+  /* チーム名入力 */
+  .team-name-wrap {
+    margin-bottom: 16px;
+  }
+  .team-name-label {
+    display: block;
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .team-name-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .team-name-input::placeholder { color: rgba(148,163,184,0.4); font-weight: 400; }
+  .team-name-input:focus { border-color: var(--purple); }
+
+  /* 結果ヘッダー（チーム名表示） */
+  .result-team-name {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   /* 診断ボタン */
   .btn-analyze {
     display: block;
@@ -645,6 +685,10 @@
   <div id="memberSection">
     <div class="member-list" id="memberList"></div>
     <div class="selection-info" id="selectionInfo"></div>
+    <div class="team-name-wrap">
+      <label class="team-name-label" for="teamNameInput">チーム名（任意）</label>
+      <input type="text" id="teamNameInput" class="team-name-input" placeholder="例：営業チーム、開発班…" maxlength="30">
+    </div>
     <button class="btn-analyze" id="analyzeBtn" disabled>チーム相性を診断する</button>
   </div>
 
@@ -1156,6 +1200,7 @@ function renderResults() {
 
   const summary = genSummary(score, avg, variance, bestPair, worstPair, selected.length);
 
+  const teamName = document.getElementById('teamNameInput').value.trim();
   const container = document.getElementById('resultSection');
 
   // ペア表示（3人以上の場合のみ）
@@ -1196,6 +1241,8 @@ function renderResults() {
   }
 
   container.innerHTML = `
+    ${teamName ? `<p class="result-team-name">👥 ${teamName}</p>` : ''}
+
     <!-- チームスコア -->
     <div class="team-card">
       <p class="team-card-title">📊 チーム全体スコア</p>
