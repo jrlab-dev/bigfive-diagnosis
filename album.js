@@ -118,7 +118,8 @@
     var existingIdx = -1;
 
     for (var i = 0; i < cards.length; i++) {
-      if (cards[i].code === cardData.code && cards[i].gender === cardData.gender) {
+      // versionも含めて判定（10問版と30問版の同じコードは別カードとして扱う）
+      if (cards[i].code === cardData.code && cards[i].gender === cardData.gender && cards[i].version === (cardData.version || '30')) {
         existingIdx = i;
         break;
       }

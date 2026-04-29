@@ -278,24 +278,26 @@
     return 'r5';
   }
 
-  function getImagePath(code, gender, owned) {
+  function getImagePath(card) {
     // 入手済みカードはR2のカード画像を使用
-    if (owned) {
-      return 'https://bigfive.jr-genius.jp/ogp-image?code=' + code + '&gender=' + gender;
+    if (card.owned) {
+      return 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender;
     }
     // 未入手カードはキャラクター画像（シルエット表示用）
-    var imgCode = [0,1,2,3,4].map(function(i) { return toScale(+code[i]); }).join('');
-    return 'images/characters/' + gender + '/' + imgCode + '.webp';
+    var imgCode = [0,1,2,3,4].map(function(i) { return toScale(+card.code[i]); }).join('');
+    return 'images/characters/' + card.gender + '/' + imgCode + '.webp';
   }
 
   function init() {
     if (typeof AlbumUtils !== 'undefined') AlbumUtils.migrateExistingResults();
 
     var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
-    var ownedSet = {};
+    // versionを含めて管理（10問版と30問版の同じコードは別カード）
+    var ownedCardsMap = {};
     var ownedHiddenSet = {};
     albumCards.forEach(function(c) {
-      ownedSet[c.code + '_' + c.gender] = true;
+      var key = c.code + '_' + c.gender + '_' + (c.version || '30');
+      ownedCardsMap[key] = c; // カードデータ全体を保存
       if (c.isHidden && c.hiddenId) ownedHiddenSet[c.hiddenId] = true;
     });
 
@@ -307,21 +309,39 @@
     for (var a=1;a<=5;a++)
     for (var n=1;n<=5;n++) {
       var code = '' + o + c + e + a + n;
-      var rarity = computeRarity(code);
       ['M','F'].forEach(function(gender) {
-        allCards.push({
-          code: code,
-          gender: gender,
-          rarity: rarity,
-          owned: !!ownedSet[code + '_' + gender]
+        // 10問版・30問版・120問版それぞれのカードを生成
+        var versions = ['10', '30', '120'];
+        versions.forEach(function(version) {
+          var key = code + '_' + gender + '_' + version;
+          var ownedCard = ownedCardsMap[key];
+          var rarity;
+          if (ownedCard) {
+            // 入手済みカードはアルバムのデータを使用
+            rarity = ownedCard.rarity;
+          } else {
+            // 未入手カードはデフォルト（30問版基準）
+            rarity = computeRarity(code);
+            // 10問版はr0固定
+            if (version === '10') rarity = 'r0';
+          }
+          allCards.push({
+            code: code,
+            gender: gender,
+            version: version,
+            rarity: rarity,
+            owned: !!ownedCard
+          });
         });
       });
     }
 
     // 進捗表示（アルバム内の枚数）
+    // 全18,750枚（3,125コード × 男女 × 3バージョン）
     var ownedCount = albumCards.length;
-    document.getElementById('progressText').textContent = ownedCount + ' / 6,250 枚コレクト';
-    document.getElementById('progressBar').style.width = (ownedCount / 6250 * 100).toFixed(1) + '%';
+    var totalCards = 18750;
+    document.getElementById('progressText').textContent = ownedCount + ' / ' + totalCards.toLocaleString() + ' 枚コレクト';
+    document.getElementById('progressBar').style.width = (ownedCount / totalCards * 100).toFixed(1) + '%';
 
     // フィルタータブ
     document.querySelectorAll('.filter-tab').forEach(function(btn) {
@@ -366,7 +386,7 @@
     var totalPages = Math.ceil(filteredCards.length / PER_PAGE);
 
     if (usePagination) {
-      countEl.textContent = '全6,250枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
+      countEl.textContent = '全18,750枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
     } else {
       countEl.textContent = filteredCards.length + '枚';
     }
@@ -382,10 +402,10 @@
     pageCards.forEach(function(card) {
       var el;
       if (card.owned) {
-        // 入手済みカードはリンクにする
+        // 入手済みカードはリンクにする（versionパラメータを含める）
         el = document.createElement('a');
         el.className = 'zukan-card owned rarity-' + card.rarity;
-        el.href = 'result.html?type=' + card.code + '&v=120&gender=' + card.gender + '&saved=1';
+        el.href = 'result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&saved=1';
       } else {
         // 未入手カードはdivのまま
         el = document.createElement('div');
@@ -393,7 +413,7 @@
       }
 
       var img = document.createElement('img');
-      img.src = getImagePath(card.code, card.gender, card.owned);
+      img.src = getImagePath(card);
       img.loading = 'lazy';
       img.alt = '';
 
