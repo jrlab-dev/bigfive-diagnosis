@@ -1180,23 +1180,24 @@ function renderAlbum() {
 
   const cards = AlbumUtils.getAlbumCards();
   const count = cards.length;
-  const max = AlbumUtils.MAX_CARDS;
-  const pct = Math.round((count / max) * 100);
-  const isComplete = count >= max;
+  const TOTAL = 8298;
+  const pct = Math.round((count / TOTAL) * 100);
+  const isComplete = count >= TOTAL;
 
   if (count === 0) {
-    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがアルバムに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！</div>';
+    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがアルバムに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！<br><br>友達に結果をシェアしてもらうと図鑑が埋まります！</div>';
     return;
   }
 
   let html = '<div class="album-header">';
-  html += `<div class="album-progress-text${isComplete ? ' complete' : ''}">${count} / ${max} 枚${isComplete ? ' COMPLETE!' : ''}</div>`;
+  html += `<div class="album-progress-text${isComplete ? ' complete' : ''}">${count.toLocaleString()} / ${TOTAL.toLocaleString()} 枚${isComplete ? ' COMPLETE!' : ''}</div>`;
   html += '<div class="album-progress-bar"><div class="album-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '</div>';
 
-  // カードグリッド
+  // カードグリッド（直近20枚まで表示）
   html += '<div class="album-grid">';
-  cards.forEach(function(card) {
+  var displayCards = cards.slice(0, 20);
+  displayCards.forEach(function(card) {
     const imgPath = AlbumUtils.getCardImagePath(card);
     const r = card.rarity || 'common';
     const sourceLabel = card.source === 'my' ? '自分' : card.source === 'other' ? 'あの人' : '';
@@ -1207,18 +1208,23 @@ function renderAlbum() {
     html += '</a>';
   });
   // 空スロット
-  for (var i = count; i < max; i++) {
+  for (var i = displayCards.length; i < 20; i++) {
     html += '<div class="album-empty-slot">?</div>';
+  }
+  if (count > 20) {
+    html += '<div style="grid-column:1/-1;text-align:center;font-size:12px;color:#64748b;padding:4px;">...他 ' + (count - 20) + ' 枚</div>';
   }
   html += '</div>';
 
   // 実績バッジ
   html += '<div class="album-badges">';
   var badgeConfigs = [
-    { threshold: 5, icon: '🥉', cls: 'bronze', label: '5枚' },
-    { threshold: 10, icon: '🥈', cls: 'silver', label: '10枚' },
-    { threshold: 15, icon: '🥇', cls: 'gold', label: '15枚' },
-    { threshold: 20, icon: '💎', cls: 'diamond', label: '20枚' }
+    { threshold: 10, icon: '🥉', cls: 'bronze', label: '10枚' },
+    { threshold: 50, icon: '🥈', cls: 'silver', label: '50枚' },
+    { threshold: 100, icon: '🥇', cls: 'gold', label: '100枚' },
+    { threshold: 500, icon: '💎', cls: 'diamond', label: '500枚' },
+    { threshold: 1000, icon: '👑', cls: 'diamond', label: '1000枚' },
+    { threshold: 5000, icon: '🏆', cls: 'diamond', label: '5000枚' }
   ];
   badgeConfigs.forEach(function(b) {
     var unlocked = meta.milestones && meta.milestones[b.threshold];
@@ -1231,13 +1237,9 @@ function renderAlbum() {
   });
   html += '</div>';
 
-  // Stage 2ボタン
-  var remaining = max - count;
-  if (isComplete) {
-    html += '<a href="card-collection.html" class="stage2-btn unlocked">📚 コレクションを開く</a>';
-  } else {
-    html += '<button class="stage2-btn locked" onclick="alert(\'あと' + remaining + '枚コレクトでコレクションが解放されます！\')">🔒 コレクション（あと' + remaining + '枚で解放）</button>';
-  }
+  // コレクション・図鑑ボタン
+  html += '<a href="card-collection.html" class="stage2-btn unlocked" style="margin-top:12px;">📚 コレクションを開く</a>';
+  html += '<a href="zukan.html" class="stage2-btn unlocked" style="margin-top:8px;">📖 全種類図鑑を開く</a>';
 
   container.innerHTML = html;
 }
