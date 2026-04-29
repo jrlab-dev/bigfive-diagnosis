@@ -335,6 +335,14 @@
 
     // アルバムからカードデータを取得
     var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
+
+    // 保存されたrarityが間違っている可能性があるため、コードから再計算
+    albumCards.forEach(function(card) {
+      var correctRarity = (card.version === '10') ? 'r0' : computeRarity(card.code);
+      if (card.isHidden && card.hiddenId) correctRarity = 'r6';
+      card.rarity = correctRarity;
+    });
+
     ownedCards = albumCards;
 
     // 進捗表示
@@ -379,6 +387,11 @@
     }
 
     filtered.forEach(function(card) {
+      // 保存されたrarityではなくコードから正しいrarityを再計算
+      var correctRarity = (card.version === '10') ? 'r0' : computeRarity(card.code);
+      if (card.isHidden && card.hiddenId) correctRarity = 'r6'; // Secret
+      card.rarity = correctRarity;
+
       var el = document.createElement('a');
       el.className = 'collection-card rarity-' + card.rarity;
       el.href = 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender + '&saved=1';
