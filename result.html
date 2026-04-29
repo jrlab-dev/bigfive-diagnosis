@@ -951,7 +951,25 @@
     </button>
   </div>
 
+  <!-- 図鑑に追加（共有リンクから来た場合に表示） -->
+  <div id="addToZukanSection" style="display:none;">
+    <div style="margin:20px auto 0;max-width:480px;width:100%;text-align:center;">
+      <p style="font-size:14px;color:#a78bfa;margin-bottom:12px;">このカードを自分の図鑑に追加しよう！</p>
+      <button id="addToZukanBtn" style="width:100%;padding:14px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;box-shadow:0 4px 15px rgba(139,92,246,0.4);transition:opacity 0.2s;">
+        図鑑に追加する
+      </button>
+      <p id="addToZukanHint" style="font-size:12px;color:var(--dim);margin-top:8px;">自分の図鑑（全8,298種）にこのカードが追加されます</p>
+      <a href="index.html" style="display:inline-block;margin-top:16px;font-size:14px;color:#8b5cf6;text-decoration:none;">自分も診断してカードをゲット！ →</a>
+    </div>
+  </div>
+
+  <!-- シェア促進メッセージ（通常の診断結果時に表示） -->
+  <div id="shareEncourage" style="display:none;">
+    <p style="font-size:13px;color:#a78bfa;text-align:center;margin:8px auto 0;max-width:480px;">このカードをシェアして、友達の図鑑を埋めよう！</p>
+  </div>
+
   <div class="copy-toast" id="copyToast">クリップボードにコピーしました！</div>
+  <div class="copy-toast" id="zukanToast" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6);bottom:120px;display:none;"></div>
   <div class="copy-toast" id="deleteToast" style="background:rgba(245,158,11,0.9);bottom:120px;"></div>
 
   <!-- あの人診断への誘導 -->
@@ -2188,7 +2206,11 @@ if (isOtherMode) {
 
 // ===== SNSシェア機能 =====
 (function() {
-  const currentUrl = window.location.href;
+  var currentUrl = window.location.href;
+  // シェアURLにfrom=shareを付加（共有リンク経由と判定するため）
+  if (currentUrl.indexOf('from=') === -1) {
+    currentUrl += (currentUrl.indexOf('?') === -1 ? '?' : '&') + 'from=share';
+  }
   const typeName = document.getElementById('typeName').textContent;
   const typeCode = document.getElementById('typeCode').textContent;
 
@@ -2389,10 +2411,11 @@ if (isOtherMode) {
     }
   }
 
-  // 自動保存（自分の結果のみ・あの人閲覧時はスキップ・保存済み閲覧時もスキップ）
+  // 自動保存（自分の結果のみ・あの人閲覧時はスキップ・保存済み閲覧時もスキップ・共有リンク時もスキップ）
   var params = new URLSearchParams(location.search);
   var isSavedView = params.get('saved') === '1';
-  if (!isOtherMode && !isSavedView) {
+  var isSharedView = params.get('from') === 'share';
+  if (!isOtherMode && !isSavedView && !isSharedView) {
     doSave();
   }
 
@@ -2402,6 +2425,96 @@ if (isOtherMode) {
   });
 
   checkAlreadySaved();
+})();
+</script>
+
+<!-- ===== 図鑑に追加（共有リンクから） ===== -->
+<script>
+(function() {
+  var sp = new URLSearchParams(location.search);
+  var isSharedView = sp.get('from') === 'share';
+  var section = document.getElementById('addToZukanSection');
+  var encourage = document.getElementById('shareEncourage');
+
+  if (isSharedView && section) {
+    // 共有リンク経由: 図鑑に追加セクションを表示
+    section.style.display = 'block';
+
+    // 保存・リトライボタンを非表示
+    var saveBtn = document.getElementById('saveBtn');
+    var retryBtn = document.getElementById('retryBtn');
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (retryBtn) retryBtn.style.display = 'none';
+
+    var btn = document.getElementById('addToZukanBtn');
+    var hint = document.getElementById('addToZukanHint');
+    var code = typeCode;
+    var ver = sp.get('v') || '30';
+    var g = sp.get('gender') || 'F';
+
+    // 既にアルバムにあるかチェック
+    if (window.AlbumUtils) {
+      var cards = AlbumUtils.getAlbumCards();
+      var existing = cards.find(function(c) {
+        return c.code === code && c.gender === g && c.version === ver;
+      });
+      if (existing) {
+        markAsAdded(btn, hint, cards.length);
+      }
+    }
+
+    btn.addEventListener('click', function() {
+      if (!window.AlbumUtils || btn.disabled) return;
+
+      var rarityVal = sp.get('rarity') || (window.AlbumUtils.computeRarityForAlbum(code, ver, g));
+      var hc = null;
+      if (ver === '120' && typeof findHiddenCharacter === 'function') {
+        hc = findHiddenCharacter();
+      }
+
+      var added = AlbumUtils.addToAlbum({
+        code: code,
+        gender: g,
+        typeName: document.getElementById('typeName').textContent || code,
+        version: ver,
+        rarity: rarityVal,
+        isHidden: !!hc,
+        hiddenId: hc ? hc.id : null,
+        date: new Date().toISOString(),
+        source: 'share'
+      });
+
+      var count = AlbumUtils.getAlbumCards().length;
+      if (added) {
+        markAsAdded(btn, hint, count);
+        showZukanToast('図鑑に追加しました！ (' + count.toLocaleString() + ' / 8,298枚)');
+      } else {
+        markAsAdded(btn, hint, count);
+      }
+    });
+  } else if (encourage) {
+    // 通常の診断結果: シェア促進メッセージを表示
+    encourage.style.display = 'block';
+  }
+
+  function markAsAdded(btn, hint, count) {
+    btn.textContent = '✓ 図鑑に追加済み';
+    btn.style.background = '#374151';
+    btn.style.cursor = 'default';
+    btn.disabled = true;
+    hint.textContent = '図鑑に登録済み（' + count.toLocaleString() + ' / 8,298枚）';
+  }
+
+  function showZukanToast(msg) {
+    var toast = document.getElementById('zukanToast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 3000);
+  }
 })();
 </script>
 

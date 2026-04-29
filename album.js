@@ -1,5 +1,5 @@
 /**
- * カード図鑑 Stage 1 — アルバム（15枚）
+ * カード図鑑 — アルバム管理
  *
  * album.js は hidden_characters.js の後に読み込むこと。
  */
@@ -10,7 +10,7 @@
   var META_KEY = 'bigfive_album_meta';
   var MY_KEY = 'bigfive_my_results';
   var OTHER_KEY = 'bigfive_other_results';
-  var MAX_CARDS = 15;
+  var MAX_CARDS = 8300;
 
   var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, common: 1, rare: 2, legendary: 3, secret: 4 };
 
@@ -167,7 +167,7 @@
 
   function checkMilestones(count) {
     var meta = getAlbumMeta();
-    var thresholds = [5, 10, 15, 20];
+    var thresholds = [10, 50, 100, 500, 1000, 5000];
     var changed = false;
 
     thresholds.forEach(function(t) {
@@ -183,10 +183,12 @@
 
   function showMilestoneToast(milestone) {
     var messages = {
-      5: '5枚コレクト！ ブロンズ取得',
-      10: '10枚コレクト！ シルバー取得',
-      15: '15枚コレクト！ ゴールド取得',
-      20: '20枚コレクト！ ダイヤモンド取得'
+      10: '10枚コレクト！ ブロンズバッジ取得',
+      50: '50枚コレクト！ シルバーバッジ取得',
+      100: '100枚コレクト！ ゴールドバッジ取得',
+      500: '500枚コレクト！ プラチナバッジ取得',
+      1000: '1000枚コレクト！ ダイヤモンドバッジ取得',
+      5000: '5000枚コレクト！ マスターバッジ取得'
     };
     var toast = document.getElementById('albumToast');
     if (!toast) {

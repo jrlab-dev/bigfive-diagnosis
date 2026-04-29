@@ -143,6 +143,7 @@
     }
 
     /* レアリティ枠色 */
+    .collection-card.rarity-r0 { border-color: #78716c; }
     .collection-card.rarity-r1 { border-color: #60a5fa; }
     .collection-card.rarity-r2 { border-color: #a78bfa; }
     .collection-card.rarity-r3 { border-color: #34d399; }
@@ -213,6 +214,8 @@
   <button class="filter-tab" data-filter="r3">R3</button>
   <button class="filter-tab" data-filter="r4">R4</button>
   <button class="filter-tab" data-filter="r5">R5</button>
+  <button class="filter-tab" data-filter="r6">Secret</button>
+  <button class="filter-tab" data-filter="r7">Dark</button>
 </div>
 <div class="count-label" id="countLabel"></div>
 
@@ -261,8 +264,8 @@
 
     // 進捗表示
     var ownedCount = albumCards.length;
-    document.getElementById('progressText').textContent = ownedCount + ' 枚コレクト';
-    document.getElementById('progressBar').style.width = Math.min(ownedCount / 15 * 100, 100).toFixed(1) + '%';
+    document.getElementById('progressText').textContent = ownedCount.toLocaleString() + ' / 8,298 枚コレクト';
+    document.getElementById('progressBar').style.width = Math.min(ownedCount / 8298 * 100, 100).toFixed(1) + '%';
 
     // フィルタータブ
     document.querySelectorAll('.filter-tab').forEach(function(btn) {
