@@ -805,12 +805,14 @@
     <button class="tab active" data-tab="my">自分の結果</button>
     <button class="tab" data-tab="others">あの人の結果</button>
     <button class="tab" data-tab="tests">心理テスト</button>
-    <button class="tab" data-tab="album">カードアルバム</button>
+    <button class="tab" data-tab="team">チーム</button>
+    <button class="tab" data-tab="album">アルバム</button>
   </div>
 
   <div id="myResults" class="results-list"></div>
   <div id="otherResults" class="results-list" style="display: none;"></div>
   <div id="otherTestResults" class="results-list" style="display: none;"></div>
+  <div id="teamResults" class="results-list" style="display: none;"></div>
   <div id="albumContent" class="results-list" style="display: none;"></div>
 
   <!-- 総合レポートバナー -->
@@ -1147,6 +1149,59 @@ function deleteOtherResult(index) {
   render();
 }
 
+// ===== チーム診断結果 =====
+const STORAGE_KEY_TEAMS = 'bigfive_team_results';
+const RANK_COLORS = { S: '#fbbf24', A: '#a78bfa', B: '#60a5fa', C: '#94a3b8' };
+
+function renderTeamResults() {
+  const container = document.getElementById('teamResults');
+  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+
+  if (teams.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <p>保存されたチーム診断がありません</p>
+        <p><a href="team.html">チーム相性を診断する →</a></p>
+      </div>
+    `;
+    return;
+  }
+
+  const addBtn = `<a href="team.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(139,92,246,0.1);border:1.5px dashed rgba(139,92,246,0.35);color:#8b5cf6;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ 新しいチームを診断する</a>`;
+
+  container.innerHTML = addBtn + teams.map((t, i) => {
+    const label = t.teamName || 'チーム診断';
+    const memberNames = t.members.map(m => m.name).join('・');
+    const rankColor = RANK_COLORS[t.rank] || '#94a3b8';
+    return `
+      <div class="result-card" style="cursor:default;">
+        <div class="result-card-icon" style="background:rgba(139,92,246,0.15);font-size:22px;justify-content:center;">👥</div>
+        <div class="result-card-content">
+          <div class="result-card-name">${label}</div>
+          <div class="result-card-meta" style="margin-bottom:4px;">
+            <span style="font-size:18px;font-weight:900;color:${rankColor};">${t.score}点</span>
+            <span style="font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;background:${rankColor}22;color:${rankColor};border:1px solid ${rankColor}55;margin-left:6px;">${t.rank}ランク</span>
+            <span class="result-card-date">${formatDate(t.date)}</span>
+          </div>
+          <div style="font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.members.length}人 — ${memberNames}</div>
+        </div>
+        <button class="delete-btn" onclick="deleteTeamResult(${i})">削除</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function deleteTeamResult(index) {
+  if (!confirm('この結果を削除しますか？')) return;
+  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+  teams.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
+  renderTeamResults();
+}
+
 // ===== 心理テスト結果（concierge.jsのCONCIERGE_CONFIG.testsを使用）=====
 // getResultを各テストに追加（mypage用の表示名取得）
 const TEST_META = (typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : []).map(t => ({
@@ -1291,6 +1346,7 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   if (!confirm('すべての保存データを削除しますか？\nこの操作は取り消せません。')) return;
   localStorage.removeItem(STORAGE_KEY_MY);
   localStorage.removeItem(STORAGE_KEY_OTHERS);
+  localStorage.removeItem(STORAGE_KEY_TEAMS);
   TEST_META.forEach(t => localStorage.removeItem(t.key));
   if (window.AlbumUtils) {
     localStorage.removeItem(AlbumUtils.STORAGE_KEY);
@@ -1415,10 +1471,12 @@ function render() {
   const myEl = document.getElementById('myResults');
   const otherEl = document.getElementById('otherResults');
   const testEl = document.getElementById('otherTestResults');
+  const teamEl = document.getElementById('teamResults');
   const albumEl = document.getElementById('albumContent');
   myEl.style.display = 'none';
   otherEl.style.display = 'none';
   testEl.style.display = 'none';
+  teamEl.style.display = 'none';
   albumEl.style.display = 'none';
 
   if (currentTab === 'my') {
@@ -1430,6 +1488,9 @@ function render() {
   } else if (currentTab === 'tests') {
     testEl.style.display = 'flex';
     renderOtherTests();
+  } else if (currentTab === 'team') {
+    teamEl.style.display = 'flex';
+    renderTeamResults();
   } else if (currentTab === 'album') {
     albumEl.style.display = 'flex';
     renderAlbum();

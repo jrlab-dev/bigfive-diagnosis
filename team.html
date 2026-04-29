@@ -500,6 +500,25 @@
   .summary-strengths strong { color: #34d399; }
   .summary-cautions strong { color: #fbbf24; }
 
+  /* 保存ボタン */
+  .btn-save-team {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(139,92,246,0.7), rgba(59,130,246,0.7));
+    border: 1px solid rgba(139,92,246,0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .btn-save-team:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-save-team:disabled { opacity: 0.4; cursor: default; transform: none; }
+
   /* 再選択ボタン */
   .btn-reselect {
     display: block;
@@ -700,7 +719,9 @@
 // ===== 定数 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const STORAGE_KEY_TEAMS = 'bigfive_team_results';
 const MAX_MEMBERS = 8;
+const MAX_TEAMS = 10;
 const MIN_MEMBERS = 2;
 
 const traitInfo = {
@@ -1295,6 +1316,7 @@ function renderResults() {
     <!-- ポジションアドバイス -->
     ${genPositionAdviceHtml(selected, score)}
 
+    <button class="btn-save-team" id="saveTeamBtn">💾 このチームをマイページに保存する</button>
     <button class="btn-reselect" id="reselectBtn">🔄 メンバーを選び直す</button>
   `;
 
@@ -1308,6 +1330,26 @@ function renderResults() {
       b.style.width = b.dataset.w;
     });
   }, 100);
+
+  // 保存ボタン
+  document.getElementById('saveTeamBtn').addEventListener('click', () => {
+    const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+    const entry = {
+      id: 'team_' + Date.now(),
+      teamName: teamName || '',
+      score,
+      rank: summary.rank,
+      rankClass: summary.rankClass,
+      members: selected.map(m => ({ name: m.name, code: m.code, type: m.type })),
+      date: new Date().toISOString()
+    };
+    teams.unshift(entry);
+    if (teams.length > MAX_TEAMS) teams.length = MAX_TEAMS;
+    localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
+    const btn = document.getElementById('saveTeamBtn');
+    btn.textContent = '✓ 保存しました！';
+    btn.disabled = true;
+  });
 
   // 再選択ボタン
   document.getElementById('reselectBtn').addEventListener('click', () => {
