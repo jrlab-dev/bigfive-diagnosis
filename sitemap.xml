@@ -52,7 +52,7 @@
   <!-- 恋愛スタイル診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/love.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -60,7 +60,7 @@
   <!-- HSP感受性チェック -->
   <url>
     <loc>https://bigfive.jr-genius.jp/hsp.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -68,7 +68,7 @@
   <!-- 愛着スタイルチェック -->
   <url>
     <loc>https://bigfive.jr-genius.jp/attachment.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -76,7 +76,7 @@
   <!-- シュワルツ価値観診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/schwartz.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -84,7 +84,7 @@
   <!-- 動機タイプ診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/sdt.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -92,7 +92,7 @@
   <!-- マインドセット診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/mindset.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -100,7 +100,7 @@
   <!-- 心理学診断 一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/diagnoses.html</loc>
-    <lastmod>2026-04-28</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -108,7 +108,7 @@
   <!-- 総合性格レポート -->
   <url>
     <loc>https://bigfive.jr-genius.jp/report.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -116,7 +116,7 @@
   <!-- マイページ -->
   <url>
     <loc>https://bigfive.jr-genius.jp/mypage.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -124,7 +124,7 @@
   <!-- カードコレクション -->
   <url>
     <loc>https://bigfive.jr-genius.jp/card-collection.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -132,7 +132,7 @@
   <!-- キャラクター図鑑 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/zukan.html</loc>
-    <lastmod>2026-04-27</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -140,7 +140,7 @@
   <!-- 科学的根拠 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/science.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
