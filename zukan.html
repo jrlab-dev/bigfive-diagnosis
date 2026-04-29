@@ -326,7 +326,7 @@
       });
     }
 
-    // 30問版・120問版：全3125パターン
+    // 30問版・120問版共通：全3125パターン（隠しキャラの有無だけが違い）
     for (var o=1;o<=5;o++)
     for (var c=1;c<=5;c++)
     for (var e=1;e<=5;e++)
@@ -334,25 +334,30 @@
     for (var n=1;n<=5;n++) {
       var code = '' + o + c + e + a + n;
       ['M','F'].forEach(function(gender) {
-        // 30問版と120問版を生成
-        ['30', '120'].forEach(function(version) {
-          var key = code + '_' + gender + '_' + version;
-          var ownedCard = ownedCardsMap[key];
-          allCards.push({
-            code: code,
-            gender: gender,
-            version: version,
-            rarity: ownedCard ? ownedCard.rarity : computeRarity(code),
-            owned: !!ownedCard
-          });
+        // 30問版または120問版のどちらかで入手していれば入手済み
+        var key30 = code + '_' + gender + '_30';
+        var key120 = code + '_' + gender + '_120';
+        var ownedCard30 = ownedCardsMap[key30];
+        var ownedCard120 = ownedCardsMap[key120];
+        var ownedCard = ownedCard30 || ownedCard120;
+
+        // versionは入手した方を優先（両方入手している場合は120を優先）
+        var version = ownedCard120 ? '120' : (ownedCard30 ? '30' : '30');
+
+        allCards.push({
+          code: code,
+          gender: gender,
+          version: version,
+          rarity: ownedCard ? ownedCard.rarity : computeRarity(code),
+          owned: !!ownedCard
         });
       });
     }
 
     // 進捗表示（アルバム内の枚数）
-    // 総カード数：10問版(1,024×2) + 30問版(3,125×2) + 120問版(3,125×2) = 14,548枚
+    // 総カード数：10問版(1,024×2) + 30問版・120問版共通(3,125×2) = 8,298枚
     var ownedCount = albumCards.length;
-    var totalCards = 14548;
+    var totalCards = 8298;
     document.getElementById('progressText').textContent = ownedCount + ' / ' + totalCards.toLocaleString() + ' 枚コレクト';
     document.getElementById('progressBar').style.width = (ownedCount / totalCards * 100).toFixed(1) + '%';
 
@@ -399,7 +404,7 @@
     var totalPages = Math.ceil(filteredCards.length / PER_PAGE);
 
     if (usePagination) {
-      countEl.textContent = '全14,548枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
+      countEl.textContent = '全8,298枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
     } else {
       countEl.textContent = filteredCards.length + '枚';
     }
