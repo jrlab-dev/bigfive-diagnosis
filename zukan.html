@@ -301,8 +301,31 @@
       if (c.isHidden && c.hiddenId) ownedHiddenSet[c.hiddenId] = true;
     });
 
-    // 全6250カード生成（コード順）
+    // 全カード生成（コード順）
     allCards = [];
+
+    // 10問版：各因子4通り {1,3,4,5} のみ出現（2段階が出ない）
+    var tenValues = [1, 3, 4, 5];
+    for (var oi=0;oi<tenValues.length;oi++)
+    for (var ci=0;ci<tenValues.length;ci++)
+    for (var ei=0;ei<tenValues.length;ei++)
+    for (var ai=0;ai<tenValues.length;ai++)
+    for (var ni=0;ni<tenValues.length;ni++) {
+      var code = '' + tenValues[oi] + tenValues[ci] + tenValues[ei] + tenValues[ai] + tenValues[ni];
+      ['M','F'].forEach(function(gender) {
+        var key = code + '_' + gender + '_10';
+        var ownedCard = ownedCardsMap[key];
+        allCards.push({
+          code: code,
+          gender: gender,
+          version: '10',
+          rarity: ownedCard ? ownedCard.rarity : 'r0',
+          owned: !!ownedCard
+        });
+      });
+    }
+
+    // 30問版・120問版：全3125パターン
     for (var o=1;o<=5;o++)
     for (var c=1;c<=5;c++)
     for (var e=1;e<=5;e++)
@@ -310,26 +333,15 @@
     for (var n=1;n<=5;n++) {
       var code = '' + o + c + e + a + n;
       ['M','F'].forEach(function(gender) {
-        // 10問版・30問版・120問版それぞれのカードを生成
-        var versions = ['10', '30', '120'];
-        versions.forEach(function(version) {
+        // 30問版と120問版を生成
+        ['30', '120'].forEach(function(version) {
           var key = code + '_' + gender + '_' + version;
           var ownedCard = ownedCardsMap[key];
-          var rarity;
-          if (ownedCard) {
-            // 入手済みカードはアルバムのデータを使用
-            rarity = ownedCard.rarity;
-          } else {
-            // 未入手カードはデフォルト（30問版基準）
-            rarity = computeRarity(code);
-            // 10問版はr0固定
-            if (version === '10') rarity = 'r0';
-          }
           allCards.push({
             code: code,
             gender: gender,
             version: version,
-            rarity: rarity,
+            rarity: ownedCard ? ownedCard.rarity : computeRarity(code),
             owned: !!ownedCard
           });
         });
@@ -337,9 +349,9 @@
     }
 
     // 進捗表示（アルバム内の枚数）
-    // 全18,750枚（3,125コード × 男女 × 3バージョン）
+    // 総カード数：10問版(1,024×2) + 30問版(3,125×2) + 120問版(3,125×2) = 14,548枚
     var ownedCount = albumCards.length;
-    var totalCards = 18750;
+    var totalCards = 14548;
     document.getElementById('progressText').textContent = ownedCount + ' / ' + totalCards.toLocaleString() + ' 枚コレクト';
     document.getElementById('progressBar').style.width = (ownedCount / totalCards * 100).toFixed(1) + '%';
 
@@ -386,7 +398,7 @@
     var totalPages = Math.ceil(filteredCards.length / PER_PAGE);
 
     if (usePagination) {
-      countEl.textContent = '全18,750枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
+      countEl.textContent = '全14,548枚 ／ ' + (currentPage + 1) + ' / ' + totalPages + ' ページ';
     } else {
       countEl.textContent = filteredCards.length + '枚';
     }
