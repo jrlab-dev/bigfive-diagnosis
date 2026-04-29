@@ -152,6 +152,33 @@
     .collection-card.rarity-r6 { border-color: #f9a8d4; box-shadow: 0 0 6px rgba(249,168,212,0.4); }
     .collection-card.rarity-r7 { border-color: #7c3aed; box-shadow: 0 0 6px rgba(124,58,237,0.4); }
 
+    /* 削除確認 */
+    .delete-confirm {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+    }
+    .delete-confirm.show { display: flex; }
+    .delete-confirm-box {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 300px;
+      width: 90%;
+      text-align: center;
+    }
+    .delete-confirm-box p { margin-bottom: 16px; font-size: 14px; line-height: 1.6; }
+    .delete-confirm-box .btn-row { display: flex; gap: 10px; }
+    .delete-confirm-box button {
+      flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; cursor: pointer;
+    }
+    .delete-confirm-box .btn-cancel { background: #334155; color: #94a3b8; }
+    .delete-confirm-box .btn-delete { background: #ef4444; color: #fff; }
+
     /* 空状態 */
     .empty-state {
       grid-column: 1 / -1;
@@ -221,6 +248,17 @@
 
 <div class="card-grid" id="cardGrid"></div>
 
+<!-- 削除確認モーダル -->
+<div class="delete-confirm" id="deleteConfirm">
+  <div class="delete-confirm-box">
+    <p>このカードをコレクションから削除しますか？<br><span id="deleteTarget" style="color:#a78bfa;font-size:12px;"></span></p>
+    <div class="btn-row">
+      <button class="btn-cancel" id="deleteCancel">キャンセル</button>
+      <button class="btn-delete" id="deleteBtn">削除</button>
+    </div>
+  </div>
+</div>
+
 <a href="zukan.html" class="full-zukan-btn">📖 全種類図鑑を開く</a>
 
 <a href="mypage.html" class="back-link">← マイページに戻る</a>
@@ -233,6 +271,26 @@
 
   var currentFilter = 'all';
   var ownedCards = [];
+  var deleteTarget = null;
+
+  // 削除確認モーダル
+  var confirmEl = document.getElementById('deleteConfirm');
+  var targetEl = document.getElementById('deleteTarget');
+  document.getElementById('deleteCancel').addEventListener('click', function() {
+    confirmEl.classList.remove('show');
+    deleteTarget = null;
+  });
+  document.getElementById('deleteBtn').addEventListener('click', function() {
+    if (!deleteTarget || !window.AlbumUtils) return;
+    var cards = AlbumUtils.getAlbumCards();
+    cards = cards.filter(function(c) {
+      return !(c.code === deleteTarget.code && c.gender === deleteTarget.gender && c.version === deleteTarget.version);
+    });
+    localStorage.setItem(AlbumUtils.STORAGE_KEY, JSON.stringify(cards));
+    confirmEl.classList.remove('show');
+    deleteTarget = null;
+    init();
+  });
 
   function isMax(factor, value) {
     if (factor === 'N') return value === 1;
@@ -307,6 +365,25 @@
       var el = document.createElement('a');
       el.className = 'collection-card rarity-' + card.rarity;
       el.href = 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender + '&saved=1';
+
+      // 長押しで削除
+      var timer = null;
+      el.addEventListener('touchstart', function(e) {
+        timer = setTimeout(function() {
+          e.preventDefault();
+          deleteTarget = card;
+          targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+          confirmEl.classList.add('show');
+        }, 500);
+      }, { passive: true });
+      el.addEventListener('touchend', function() { clearTimeout(timer); });
+      el.addEventListener('touchmove', function() { clearTimeout(timer); });
+      el.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        deleteTarget = card;
+        targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+        confirmEl.classList.add('show');
+      });
 
       var img = document.createElement('img');
       img.src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender;
