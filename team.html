@@ -886,9 +886,6 @@ function genPositionAdvice(members, currentScore) {
   const advice = [];
 
   members.forEach((member, idx) => {
-    // 他人（other/shared）は表示しない
-    if (member.type === 'other' || member.type === 'shared') return;
-
     let bestImprovement = 0;
     let bestFactor = null;
     let bestDirection = 0;
@@ -917,7 +914,6 @@ function genPositionAdvice(members, currentScore) {
         name: member.name,
         factor: bestFactor,
         factorName: traitInfo[bestFactor].name,
-        direction: bestDirection > 0 ? '上げる' : '下げる',
         improvement: bestImprovement,
         text: `${traitInfo[bestFactor].name}を${bestDirection > 0 ? '<b>伸ばす</b>' : '<b>他に活かす</b>'}ことでチームスコアが<b>+${bestImprovement}点</b>になります`,
         tipKey: bestFactor,
@@ -926,7 +922,7 @@ function genPositionAdvice(members, currentScore) {
     } else {
       advice.push({
         name: member.name,
-        text: '現在のあなたの特性はチームに良い影響を与えています',
+        text: '現在の特性はチームに良い影響を与えています',
         factor: null, tipKey: null
       });
     }
@@ -946,7 +942,8 @@ function genPositionAdviceHtml(members, currentScore) {
     if (!a.factor) {
       return `
         <div class="position-member">
-          <div class="position-good">現在のあなたの特性はチームに良い影響を与えています ✓</div>
+          <div class="position-name">${a.name}</div>
+          <div class="position-good">現在の特性はチームに良い影響を与えています ✓</div>
         </div>
       `;
     }
@@ -955,6 +952,7 @@ function genPositionAdviceHtml(members, currentScore) {
     return `
       <div class="position-member">
         <div class="position-name">
+          ${a.name}
           <span class="factor-tag" style="background:${color}">${a.factorName}</span>
         </div>
         <div class="position-advice">${a.text}</div>
@@ -967,7 +965,7 @@ function genPositionAdviceHtml(members, currentScore) {
 
   return `
     <div class="position-card">
-      <p class="position-title">💡 自分が成長することでチームが良くなる</p>
+      <p class="position-title">💡 チームとして伸びるポイント</p>
       ${membersHtml}
     </div>
   `;
