@@ -2378,27 +2378,29 @@ if (isOtherMode) {
           localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
         }
       }
-      // アルバムに追加
+      // アルバムに追加（rarityはURL由来ではなくコードから再計算）
       if (window.AlbumUtils) {
         var hc = (version === '120' && typeof findHiddenCharacter === 'function') ? findHiddenCharacter() : null;
+        var albumRarity = AlbumUtils.computeRarityForAlbum(currentResult.code, currentResult.version, currentResult.gender);
         window.AlbumUtils.addToAlbum({
           code: currentResult.code,
           gender: currentResult.gender,
           typeName: currentResult.typeName,
           version: currentResult.version,
-          rarity: currentResult.rarity,
+          rarity: albumRarity,
           isHidden: !!hc,
           hiddenId: hc ? hc.id : null,
           date: currentResult.date,
           source: 'my'
         });
         if (otherResult) {
+          var otherAlbumRarity = AlbumUtils.computeRarityForAlbum(otherResult.code, version, otherResult.gender);
           window.AlbumUtils.addToAlbum({
             code: otherResult.code,
             gender: otherResult.gender,
             typeName: otherResult.code,
             version: version,
-            rarity: otherResult.rarity,
+            rarity: otherAlbumRarity,
             isHidden: false,
             hiddenId: null,
             date: otherResult.date,
@@ -2466,7 +2468,7 @@ if (isOtherMode) {
     btn.addEventListener('click', function() {
       if (!window.AlbumUtils || btn.disabled) return;
 
-      var rarityVal = sp.get('rarity') || (window.AlbumUtils.computeRarityForAlbum(code, ver, g));
+      var rarityVal = AlbumUtils.computeRarityForAlbum(code, ver, g);
       var hc = null;
       if (ver === '120' && typeof findHiddenCharacter === 'function') {
         hc = findHiddenCharacter();
