@@ -272,16 +272,30 @@
   var currentFilter = 'all';
   var ownedCards = [];
   var deleteTarget = null;
+  var deleteConfirmStep = 0;
 
-  // 削除確認モーダル
+  // 削除確認モーダル（二重承認）
   var confirmEl = document.getElementById('deleteConfirm');
   var targetEl = document.getElementById('deleteTarget');
+  var deleteBtnEl = document.getElementById('deleteBtn');
+
   document.getElementById('deleteCancel').addEventListener('click', function() {
     confirmEl.classList.remove('show');
     deleteTarget = null;
+    deleteConfirmStep = 0;
+    deleteBtnEl.textContent = '削除';
+    deleteBtnEl.style.background = '#ef4444';
   });
-  document.getElementById('deleteBtn').addEventListener('click', function() {
+
+  deleteBtnEl.addEventListener('click', function() {
     if (!deleteTarget || !window.AlbumUtils) return;
+    if (deleteConfirmStep === 0) {
+      deleteConfirmStep = 1;
+      deleteBtnEl.textContent = '本当に削除';
+      deleteBtnEl.style.background = '#991b1b';
+      return;
+    }
+    // step 1: 実行
     var cards = AlbumUtils.getAlbumCards();
     cards = cards.filter(function(c) {
       return !(c.code === deleteTarget.code && c.gender === deleteTarget.gender && c.version === deleteTarget.version);
@@ -289,6 +303,9 @@
     localStorage.setItem(AlbumUtils.STORAGE_KEY, JSON.stringify(cards));
     confirmEl.classList.remove('show');
     deleteTarget = null;
+    deleteConfirmStep = 0;
+    deleteBtnEl.textContent = '削除';
+    deleteBtnEl.style.background = '#ef4444';
     init();
   });
 
@@ -374,7 +391,7 @@
           deleteTarget = card;
           targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
           confirmEl.classList.add('show');
-        }, 500);
+        }, 1000);
       }, { passive: true });
       el.addEventListener('touchend', function() { clearTimeout(timer); });
       el.addEventListener('touchmove', function() { clearTimeout(timer); });
