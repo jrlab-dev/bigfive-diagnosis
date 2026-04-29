@@ -886,15 +886,8 @@ function genPositionAdvice(members, currentScore) {
   const advice = [];
 
   members.forEach((member, idx) => {
-    // 他人の改善ヒントは非表示（他人は自分が変えられるものではない）
-    if (member.type === 'other') {
-      advice.push({
-        name: member.name,
-        text: '現在の特性はチームに良い影響を与えています',
-        factor: null, tipKey: null
-      });
-      return;
-    }
+    // 他人（other/shared）は表示しない
+    if (member.type === 'other' || member.type === 'shared') return;
 
     let bestImprovement = 0;
     let bestFactor = null;
@@ -946,12 +939,14 @@ function genPositionAdvice(members, currentScore) {
 function genPositionAdviceHtml(members, currentScore) {
   const adviceList = genPositionAdvice(members, currentScore);
 
+  // 表示対象がなければセクション自体を非表示
+  if (adviceList.length === 0) return '';
+
   const membersHtml = adviceList.map(a => {
     if (!a.factor) {
       return `
         <div class="position-member">
-          <div class="position-name">${a.name}</div>
-          <div class="position-good">現在の特性はチームに良い影響を与えています ✓</div>
+          <div class="position-good">現在のあなたの特性はチームに良い影響を与えています ✓</div>
         </div>
       `;
     }
@@ -960,7 +955,6 @@ function genPositionAdviceHtml(members, currentScore) {
     return `
       <div class="position-member">
         <div class="position-name">
-          ${a.name}
           <span class="factor-tag" style="background:${color}">${a.factorName}</span>
         </div>
         <div class="position-advice">${a.text}</div>
