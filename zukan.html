@@ -321,7 +321,7 @@
           code: code,
           gender: gender,
           version: '10',
-          rarity: ownedCard ? ownedCard.rarity : 'r0',
+          rarity: 'r0',
           owned: !!ownedCard
         });
       });
@@ -349,7 +349,7 @@
           code: code,
           gender: gender,
           version: version,
-          rarity: ownedCard ? ownedCard.rarity : computeRarity(code),
+          rarity: computeRarity(code),
           owned: !!ownedCard
         });
       });
