@@ -511,6 +511,26 @@
     color: var(--purple); font-weight: 500;
   }
 
+  /* ===== ブログリンクカード ===== */
+  .blog-links-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px; padding: 22px 24px;
+    margin-bottom: 20px; backdrop-filter: blur(8px);
+    width: 100%; max-width: 480px;
+  }
+  .blog-links-title { font-size: 13px; color: var(--dim); margin-bottom: 14px; font-weight: 500; }
+  .blog-links-list { display: flex; flex-direction: column; gap: 10px; }
+  .blog-link-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.15);
+    text-decoration: none; transition: background 0.2s;
+  }
+  .blog-link-item:hover { background: rgba(139,92,246,0.16); }
+  .blog-link-num { font-size: 11px; color: var(--purple); font-weight: 700; min-width: 20px; padding-top: 2px; }
+  .blog-link-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+
   /* ===== 弱点セクション ===== */
   .weakness-section {
     width: 100%; max-width: 480px;
@@ -878,6 +898,9 @@
 
   <!-- 性格説明カード -->
   <div class="desc-card" id="descCard"></div>
+
+  <!-- ブログリンクカード（高A×高N の自分モードのみ） -->
+  <div class="blog-links-card" id="blogLinksCard" style="display:none;"></div>
 
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
   <div class="compatibility-card" id="compatibilityCard" style="display:none;">
@@ -1960,6 +1983,28 @@ document.getElementById('descCard').innerHTML = `
   <p class="desc-card-title">${descTitle}</p>
   <p class="desc-card-text">${summary}<br>${detail}</p>
   <div class="desc-keywords">${keywords.map(k => `<span class="desc-kw">${k}</span>`).join('')}</div>`;
+
+// ===== ブログリンクカード（高A×高N の自分モードのみ） =====
+if (!isOtherMode && sc.A >= 4 && sc.N >= 4) {
+  const blogCard = document.getElementById('blogLinksCard');
+  blogCard.style.display = 'block';
+  blogCard.innerHTML = `
+    <p class="blog-links-title">あなたと同じ性格タイプの人に読まれている記事</p>
+    <div class="blog-links-list">
+      <a href="/blog/kiwo-tsukaisu.html" class="blog-link-item">
+        <span class="blog-link-num">01</span>
+        <span class="blog-link-text">気を使いすぎて疲れる人が知るべき、自分の性格の正体</span>
+      </a>
+      <a href="/blog/kiwotsukaisugiru-baka-riyu.html" class="blog-link-item">
+        <span class="blog-link-num">02</span>
+        <span class="blog-link-text">気を使いすぎる人がバカに見られる、本当の理由</span>
+      </a>
+      <a href="/blog/kiwotsukaisugiru-jikokoteikan.html" class="blog-link-item">
+        <span class="blog-link-num">03</span>
+        <span class="blog-link-text">気を使いすぎる人が自己肯定感を上げると、なぜか「行動できる人」に好かれる</span>
+      </a>
+    </div>`;
+}
 
 // ===== 弱点カード =====
 (function() {
