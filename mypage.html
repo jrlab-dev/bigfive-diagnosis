@@ -1177,7 +1177,7 @@ function renderTeamResults() {
     const memberNames = t.members.map(m => m.name).join('・');
     const rankColor = RANK_COLORS[t.rank] || '#94a3b8';
     return `
-      <div class="result-card" style="cursor:default;">
+      <div class="result-card" style="cursor:pointer;" onclick="openTeamResult(${i})">
         <div class="result-card-icon" style="background:rgba(139,92,246,0.15);font-size:22px;justify-content:center;">👥</div>
         <div class="result-card-content">
           <div class="result-card-name">${label}</div>
@@ -1188,10 +1188,25 @@ function renderTeamResults() {
           </div>
           <div style="font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.members.length}人 — ${memberNames}</div>
         </div>
-        <button class="delete-btn" onclick="deleteTeamResult(${i})">削除</button>
+        <button class="delete-btn" onclick="event.stopPropagation(); deleteTeamResult(${i})">削除</button>
       </div>
     `;
   }).join('');
+}
+
+function openTeamResult(index) {
+  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+  const t = teams[index];
+  if (!t) return;
+  const params = new URLSearchParams();
+  params.set('teamName', t.teamName || '');
+  t.members.forEach(m => {
+    params.append('m', m.code);
+    params.append('n', m.name);
+    params.append('g', m.gender || 'F');
+    params.append('t', m.type || 'other');
+  });
+  location.href = 'team.html?view=' + encodeURIComponent(params.toString());
 }
 
 function deleteTeamResult(index) {
