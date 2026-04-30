@@ -767,6 +767,49 @@
   .compat-bar-fill.positive { background: linear-gradient(90deg, #10b981, #34d399); }
   .compat-bar-fill.negative { background: linear-gradient(90deg, #f43f5e, #fb7185); }
   .compat-bar-fill.neutral { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+
+  /* 接し方アドバイスカード */
+  .advice-section {
+    margin: 24px 0;
+  }
+  .advice-card {
+    background: linear-gradient(145deg, rgba(236,72,153,0.12) 0%, rgba(139,92,246,0.08) 100%);
+    border: 1px solid rgba(236,72,153,0.25);
+    border-radius: 16px;
+    padding: 22px 24px;
+    backdrop-filter: blur(8px);
+  }
+  .advice-card.work {
+    background: linear-gradient(145deg, rgba(59,130,246,0.12) 0%, rgba(139,92,246,0.08) 100%);
+    border-color: rgba(59,130,246,0.25);
+  }
+  .advice-card.friend {
+    background: linear-gradient(145deg, rgba(16,185,129,0.12) 0%, rgba(59,130,246,0.08) 100%);
+    border-color: rgba(16,185,129,0.25);
+  }
+  .advice-title {
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .advice-item {
+    margin-bottom: 16px;
+  }
+  .advice-item:last-child {
+    margin-bottom: 0;
+  }
+  .advice-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .advice-item-text {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--dim);
+  }
   .compat-bar-value {
     font-size: 11px; width: 32px; text-align: right; color: var(--dim);
   }
@@ -855,6 +898,14 @@
     <div class="compatibility-detail">
       <p class="compatibility-detail-title">📊 相性の内訳</p>
       <div class="compatibility-bars" id="compatBars"></div>
+    </div>
+  </div>
+
+  <!-- 接し方アドバイスカード（あの人分析用） -->
+  <div class="advice-section" id="adviceSection" style="display:none;">
+    <div class="advice-card" id="adviceCard">
+      <p class="advice-title" id="adviceTitle">🤝 接し方アドバイス</p>
+      <div id="adviceContent"></div>
     </div>
   </div>
 
@@ -1575,6 +1626,36 @@ function getCompatibilityComment(myCode, partnerCode) {
   return comments.length > 0 ? comments.join(' ') : "基本の相性は良好です。コミュニケーションを大切にしてください。";
 }
 
+// ===== 接し方アドバイス生成 =====
+function generateAdvice(relation, partnerScores, name) {
+  const items = [];
+
+  // 関係性ごとの基本アドバイス
+  if (relation === 'love') {
+    items.push({ title: '💕 コミュニケーションの取り方', text: partnerScores.E >= 4 ? '社交的でエネルギッシュなタイプです。にぎやかな場所やデート、アクティビティを一緒に楽しむと関係が深まります。' : '一人の時間を大切にするタイプです。静かなカフェやお家デート、落ち着ける環境での過ごし方がおすすめです。' });
+    items.push({ title: '💭 感情の受け止め方', text: partnerScores.N >= 4 ? '繊細で感受性が豊かなタイプです。気持ちの変化に寄り添い、否定せずに傾聴してあげることが大切です。' : '精神的に安定したタイプです。些細なことでは動じないので、サッパリとした接い方が相性が良いです。' });
+    if (partnerScores.A <= 2) {
+      items.push({ title: '⚖️ 意見の違いへの対応', text: '自己主張がはっきりしているタイプです。正直な意見を交わし合える関係ですが、衝突時は「どちらが正しいか」より「関係を大切にする」視点を持つと良いでしょう。' });
+    }
+  } else if (relation === 'work') {
+    items.push({ title: '📋 仕事の依頼方', text: partnerScores.C >= 4 ? '計画性が高く責任感の強いタイプです。期限と目的を明確に伝えると、確実に成果を出してくれます。' : '柔軟性があり即興力のあるタイプです。大まかな方向性を伝え、やり方を任せると力を発揮します。' });
+    items.push({ title: '🤝 チームワーク', text: partnerScores.A >= 4 ? '協調性が高くチームの和を重視するタイプです。褒めて励ますモチベーションが高まり、チームの潤滑油になれます。' : '率直で建設的な意見を言うタイプです。遠慮なく議論に参加してもらうと、良いアイデアが出てきます。' });
+    items.push({ title: '📧 コミュニケーション', text: partnerScores.E >= 4 ? 'コミュニケーションが得意なタイプです。対面やオンラインで積極的に関わり、情報共有を促すとスムーズです。' : '一人で集中して作業するのが得意なタイプです。メールやチャットなど、文章でのやり取りを好む傾向があります。' });
+  } else if (relation === 'friend') {
+    items.push({ title: '🎯 遊びの提案', text: partnerScores.O >= 4 ? '新しいことへの好奇心が強いタイプです。新しい店、新しいアクティビティ、興味深いイベントに誘うと喜ばれます。' : '安定を好むタイプです。慣れ親しんだ場所や定番のプラン、予測可能な過ごし方が安心感を与えます。' });
+    items.push({ title: '🗣️ 会話のスタイル', text: partnerScores.E >= 4 ? '話すことで活力を得るタイプです。盛り上がる話題や共通の趣味、最新のニュースなどで楽しくお喋りをしましょう。' : '深い話や内省的な話を好むタイプです。落ち着いた環境で、人生観や価値観についての対話が楽しめます。' });
+    items.push({ title: '💆 ストレス発散', text: partnerScores.N >= 4 ? 'ストレスを感じやすいタイプです。愚痴を聞いてあげたり、リラックスできる時間を作ってあげると感謝されます。' : 'メンタルが強いタイプです。アクティビティや新しいチャレンジなど、一緒に盛り上がる遊びが相性良いです。' });
+  }
+
+  // HTML生成
+  return items.map(item => `
+    <div class="advice-item">
+      <p class="advice-item-title">${item.title}</p>
+      <p class="advice-item-text">${item.text}</p>
+    </div>
+  `).join('');
+}
+
 // ===== レアリティ判定 =====
 
 // 診断スコア（1-5）を隠しキャラ照合用の1/3/5スケールに変換
@@ -2112,6 +2193,19 @@ if (otherCode && otherCode.length === 5) {
   });
   document.getElementById('compatBars').innerHTML = barsHtml;
 
+  // 接し方アドバイスを表示（あの人モードのみ）
+  const adviceSection = document.getElementById('adviceSection');
+  const adviceCard = document.getElementById('adviceCard');
+  const adviceContent = document.getElementById('adviceContent');
+  if (adviceSection && adviceCard && adviceContent) {
+    const partnerScores = { O: parseInt(typeCode[0]), C: parseInt(typeCode[1]), E: parseInt(typeCode[2]), A: parseInt(typeCode[3]), N: parseInt(typeCode[4]) };
+    adviceSection.style.display = 'block';
+    adviceCard.className = 'advice-card';
+    if (relation === 'work') adviceCard.classList.add('work');
+    if (relation === 'friend') adviceCard.classList.add('friend');
+    adviceContent.innerHTML = generateAdvice(relation, partnerScores, personName);
+  }
+
   // スクロールして相性カードが見えるように
   setTimeout(() => {
     compatCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2161,6 +2255,19 @@ if (isOtherMode) {
           </div>`;
       });
       document.getElementById('compatBars').innerHTML = barsHtml;
+
+      // 接し方アドバイスを表示
+      const adviceSection = document.getElementById('adviceSection');
+      const adviceCard = document.getElementById('adviceCard');
+      const adviceContent = document.getElementById('adviceContent');
+      if (adviceSection && adviceCard && adviceContent) {
+        const partnerScores = { O: parseInt(typeCode[0]), C: parseInt(typeCode[1]), E: parseInt(typeCode[2]), A: parseInt(typeCode[3]), N: parseInt(typeCode[4]) };
+        adviceSection.style.display = 'block';
+        adviceCard.className = 'advice-card';
+        if (relation === 'work') adviceCard.classList.add('work');
+        if (relation === 'friend') adviceCard.classList.add('friend');
+        adviceContent.innerHTML = generateAdvice(relation, partnerScores, personName);
+      }
     }
   }
 }
