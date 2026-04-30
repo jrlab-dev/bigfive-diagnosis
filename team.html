@@ -757,8 +757,35 @@ function formatDate(isoString) {
 
 // ===== URLの共有データを解析 =====
 let sharedMember = null;
+let viewTeamData = null;
 (function parseShareParam() {
   try {
+    // マイページから保存済みチームを表示
+    const viewRaw = new URLSearchParams(location.search).get('view');
+    if (viewRaw) {
+      const params = new URLSearchParams(decodeURIComponent(viewRaw));
+      const members = [];
+      const codes = params.getAll('m');
+      const names = params.getAll('n');
+      const genders = params.getAll('g');
+      const types = params.getAll('t');
+      codes.forEach((c, i) => {
+        members.push({
+          code: c,
+          name: names[i] || `メンバー (${c})`,
+          gender: genders[i] || 'F',
+          type: types[i] || 'other'
+        });
+      });
+      if (members.length >= 2) {
+        viewTeamData = {
+          teamName: params.get('teamName') || '',
+          members
+        };
+      }
+      return;
+    }
+    // 共有リンクからのメンバー
     const raw = new URLSearchParams(location.search).get('share');
     if (!raw) return;
     const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
@@ -780,6 +807,19 @@ let allMembers = [];
 let selectedIds = new Set();
 
 function loadMembers() {
+  // マイページからの保存済みチーム表示
+  if (viewTeamData) {
+    return viewTeamData.members.map((m, i) => ({
+      id: `view_${i}`,
+      name: m.name,
+      code: m.code,
+      scores: codeToScores(m.code),
+      gender: m.gender || 'F',
+      type: m.type || 'other',
+      date: new Date().toISOString()
+    }));
+  }
+
   const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
   const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
 
@@ -1227,6 +1267,25 @@ function renderResults() {
   // ペア表示（3人以上の場合のみ）
   let pairHtml = '';
   if (bestPair && selected.length >= 3) {
+    const scoreDiff = bestPair.score - (worstPair ? worstPair.score : 0);
+    let worstSectionHtml = '';
+    if (worstPair && scoreDiff >= 15) {
+      worstSectionHtml = `
+        <div class="pair-section">
+          <p class="pair-label">⚠️ 注意が必要なペア</p>
+          <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
+          <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
+          <p class="pair-comment">この2人の相性スコアがチーム内で最も低いです。コミュニケーション方法を工夫し、互いの違いを理解することがチーム改善のポイントです。</p>
+        </div>
+      `;
+    } else {
+      worstSectionHtml = `
+        <div class="pair-section">
+          <p class="pair-label">💬 ペア相性のバランス</p>
+          <p class="pair-comment">チーム内のペア相性に大きな偏りはありません。全体的にバランスの取れたチームです。</p>
+        </div>
+      `;
+    }
     pairHtml = `
       <div class="pair-card">
         <div class="pair-section">
@@ -1234,10 +1293,7 @@ function renderResults() {
           <p class="pair-names">${bestPair.a.name} × ${bestPair.b.name}</p>
           <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
         </div>
-        <div class="pair-section">
-          <p class="pair-label">💬 ペア相性にばらつきがあります</p>
-          <p class="pair-comment">チーム内でペア相性の差があります。コミュニケーションの工夫でカバーしましょう。</p>
-        </div>
+        ${worstSectionHtml}
         <p style="font-size:11px;color:rgba(255,255,255,0.35);margin:8px 0 0;text-align:center;">※ チーム相性は総合的な評価です。「あの人の分析」の相性（恋愛・仕事・友人別）とはスコアが異なる場合があります。</p>
       </div>
     `;
@@ -1340,7 +1396,7 @@ function renderResults() {
       score,
       rank: summary.rank,
       rankClass: summary.rankClass,
-      members: selected.map(m => ({ name: m.name, code: m.code, type: m.type })),
+      members: selected.map(m => ({ name: m.name, code: m.code, type: m.type, gender: m.gender || 'F' })),
       date: new Date().toISOString()
     };
     teams.unshift(entry);
@@ -1367,6 +1423,21 @@ document.getElementById('analyzeBtn').addEventListener('click', () => {
 
 // ===== 初期化 =====
 renderMembers();
+
+// マイページからの保存済みチーム表示：全員自動選択＋即分析
+if (viewTeamData && allMembers.length >= 2) {
+  allMembers.forEach(m => selectedIds.add(m.id));
+  if (viewTeamData.teamName) {
+    document.getElementById('teamNameInput').value = viewTeamData.teamName;
+  }
+  renderMembers();
+  renderResults();
+  // イントロを隠して結果セクションにスクロール
+  document.querySelector('.intro').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
 </script>
 <script src="nav.js"></script>
 </body>
