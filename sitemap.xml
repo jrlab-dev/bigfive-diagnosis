@@ -169,4 +169,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：気を使いすぎる人が自己肯定感を上げると、なぜか「行動できる人」に好かれる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kiwotsukaisugiru-jikokoteikan.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
