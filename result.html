@@ -1862,8 +1862,11 @@ document.getElementById('descCard').innerHTML = `
     btnText.textContent = isOpen ? (isChildMode ? '傾向を隠す' : '弱点を隠す') : (isChildMode ? personName + 'さんの傾向を知る' : '自分の弱点を知る');
     if (isOpen) {
       setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-      const gb = document.getElementById('growthTipsBtn');
-      if (gb) gb.style.display = 'inline-flex';
+      // あの人の分析では成長ヒントボタンを表示しない
+      if (!isOtherMode || isChildMode) {
+        const gb = document.getElementById('growthTipsBtn');
+        if (gb) gb.style.display = 'inline-flex';
+      }
     }
     if (!isOpen) {
       const gb = document.getElementById('growthTipsBtn');
