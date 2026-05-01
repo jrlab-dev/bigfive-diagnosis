@@ -312,7 +312,8 @@
   function getImagePath(card) {
     // 入手済みカードはR2のカード画像を使用
     if (card.owned) {
-      return 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity;
+      var themeParam = document.body.classList.contains('theme-light') ? '&theme=light' : '';
+      return 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity + themeParam;
     }
     // 未入手カードはキャラクター画像（シルエット表示用）
     var imgCode = [0,1,2,3,4].map(function(i) { return toScale(+card.code[i]); }).join('');
@@ -533,7 +534,8 @@
       var img = document.createElement('img');
       // 入手済みはR2のカード画像、未入手はキャラクター画像（シルエット用）
       if (owned) {
-        img.src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + hc.id;
+        var hcThemeParam = document.body.classList.contains('theme-light') ? '&theme=light' : '';
+        img.src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + hc.id + hcThemeParam;
       } else {
         img.src = 'images/characters/hidden/' + hc.img;
       }
@@ -551,6 +553,7 @@
   }
 
   init();
+  window._themeChangedCallback = function() { init(); };
 })();
 </script>
 
