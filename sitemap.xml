@@ -185,4 +185,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：完璧主義の人が一番やっていないこと——それは「始めること」 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kanpeki-shugi-hajimenai.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
