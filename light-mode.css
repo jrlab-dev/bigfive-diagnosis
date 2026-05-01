@@ -290,3 +290,201 @@ body.theme-light .theme-toggle {
   border-color: oklch(0.35 0.12 260 / 0.4);
   color: oklch(0.35 0.12 260);
 }
+
+/* ─── チーム相性ページ ─── */
+body.theme-light .header {
+  border-bottom-color: var(--card-border) !important;
+}
+body.theme-light .back-link {
+  color: var(--dim) !important;
+}
+body.theme-light .back-link:hover {
+  color: var(--text) !important;
+}
+body.theme-light .intro {
+  color: var(--dim) !important;
+}
+
+/* メンバーカード */
+body.theme-light .member-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+body.theme-light .member-card.selected {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+  border-color: oklch(0.48 0.22 285) !important;
+}
+body.theme-light .member-checkbox {
+  border-color: oklch(0.58 0.22 285 / 0.4) !important;
+}
+body.theme-light .member-card.selected .member-checkbox {
+  background: oklch(0.48 0.22 285) !important;
+  border-color: oklch(0.48 0.22 285) !important;
+}
+body.theme-light .member-icon {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+}
+body.theme-light .member-icon.other {
+  background: oklch(0.72 0.18 340 / 0.15) !important;
+}
+body.theme-light .member-code {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+  color: oklch(0.48 0.22 285) !important;
+}
+body.theme-light .member-sbar {
+  background: oklch(0.88 0.03 270 / 0.3) !important;
+}
+
+/* チーム名入力 */
+body.theme-light .team-name-label {
+  color: var(--dim) !important;
+}
+
+/* 結果カード系 */
+body.theme-light .team-card,
+body.theme-light .factor-comments,
+body.theme-light .pair-card,
+body.theme-light .position-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+body.theme-light .team-card-title,
+body.theme-light .factor-comments-title,
+body.theme-light .position-title {
+  color: var(--text) !important;
+}
+body.theme-light .team-score-area {
+  border-bottom-color: var(--card-border) !important;
+}
+body.theme-light .team-score-value {
+  background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.65 0.22 340)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+body.theme-light .team-score-label {
+  color: var(--text) !important;
+}
+body.theme-light .rank-s { background: rgba(217,119,6,0.12) !important; color: #b45309 !important; }
+body.theme-light .rank-a { background: oklch(0.58 0.22 285 / 0.12) !important; color: oklch(0.42 0.22 285) !important; }
+body.theme-light .rank-b { background: oklch(0.58 0.18 260 / 0.12) !important; color: oklch(0.42 0.18 260) !important; }
+body.theme-light .rank-c { background: oklch(0.88 0.03 270 / 0.15) !important; color: var(--dim) !important; }
+
+/* 因子バー */
+body.theme-light .factor-bar-track {
+  background: oklch(0.88 0.03 270 / 0.3) !important;
+}
+body.theme-light .factor-label,
+body.theme-light .factor-avg {
+  color: var(--text) !important;
+}
+body.theme-light .factor-comment {
+  color: var(--dim) !important;
+}
+body.theme-light .factor-comment strong {
+  color: var(--text) !important;
+}
+
+/* ペアカード */
+body.theme-light .pair-section {
+  border-bottom-color: var(--card-border) !important;
+}
+body.theme-light .pair-label {
+  color: var(--dim) !important;
+}
+body.theme-light .pair-comment {
+  color: var(--dim) !important;
+}
+
+/* 総合コメント */
+body.theme-light .summary-card {
+  background: linear-gradient(145deg, oklch(0.58 0.22 285 / 0.08), oklch(0.58 0.18 260 / 0.05)) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+}
+body.theme-light .summary-title {
+  color: var(--text) !important;
+}
+body.theme-light .summary-text {
+  color: var(--text) !important;
+}
+body.theme-light .summary-strengths {
+  background: oklch(0.7 0.17 162 / 0.1) !important;
+  border-color: oklch(0.7 0.17 162 / 0.2) !important;
+}
+body.theme-light .summary-cautions {
+  background: oklch(0.82 0.16 85 / 0.12) !important;
+  border-color: oklch(0.82 0.16 85 / 0.2) !important;
+}
+body.theme-light .summary-strengths strong { color: oklch(0.55 0.17 162) !important; }
+body.theme-light .summary-cautions strong { color: oklch(0.62 0.16 85) !important; }
+
+/* ポジションアドバイス */
+body.theme-light .position-member {
+  background: oklch(0.58 0.22 285 / 0.06) !important;
+  border-color: oklch(0.58 0.22 285 / 0.15) !important;
+}
+body.theme-light .position-advice {
+  color: var(--dim) !important;
+}
+body.theme-light .position-advice strong {
+  color: var(--text) !important;
+}
+body.theme-light .position-tip {
+  background: oklch(0.7 0.17 162 / 0.08) !important;
+  border-color: oklch(0.7 0.17 162 / 0.15) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .position-good {
+  color: oklch(0.55 0.17 162) !important;
+}
+
+/* 保存・再選択ボタン */
+body.theme-light .btn-save-team {
+  background: linear-gradient(135deg, oklch(0.58 0.22 285 / 0.15), oklch(0.58 0.18 260 / 0.1)) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+  color: oklch(0.35 0.12 260) !important;
+}
+body.theme-light .btn-reselect {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: var(--card-border) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .btn-reselect:hover {
+  background: oklch(0.88 0.03 270) !important;
+  color: var(--text) !important;
+}
+
+/* Dラボバナー */
+body.theme-light .dlab-banner {
+  background: linear-gradient(135deg, oklch(0.58 0.18 260 / 0.08), oklch(0.58 0.22 285 / 0.05)) !important;
+  border-color: oklch(0.58 0.18 260 / 0.25) !important;
+}
+body.theme-light .dlab-banner-label {
+  color: oklch(0.48 0.18 260) !important;
+}
+body.theme-light .dlab-banner-title {
+  color: var(--text) !important;
+}
+body.theme-light .dlab-banner-text {
+  color: var(--dim) !important;
+}
+
+/* 共有バナー */
+body.theme-light .shared-banner {
+  background: linear-gradient(135deg, oklch(0.72 0.18 340 / 0.08), oklch(0.58 0.22 285 / 0.06)) !important;
+  border-color: oklch(0.72 0.18 340 / 0.25) !important;
+}
+body.theme-light .shared-banner strong {
+  color: oklch(0.55 0.22 340) !important;
+}
+
+/* 空状態 */
+body.theme-light .empty-state {
+  color: var(--dim) !important;
+}
+body.theme-light .empty-state a {
+  color: oklch(0.48 0.22 285) !important;
+}
