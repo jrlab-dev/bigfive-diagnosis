@@ -781,8 +781,16 @@
     line-height: 1.8;
   }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 
 <div class="container">
   <header class="header">
@@ -817,18 +825,6 @@
 
   <!-- 総合レポートバナー -->
   <div class="report-banner" id="reportBanner"></div>
-
-  <div class="setting-row">
-    <span class="setting-label">
-      <span class="icon-with-text">
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-        </svg>
-        トップページのキャラクターを表示
-      </span>
-    </span>
-    <button class="setting-toggle" id="charToggleBtn" aria-label="キャラクター表示切り替え"></button>
-  </div>
 
   <!-- 端末引継ぎ -->
   <div class="sync-section">
@@ -1178,7 +1174,7 @@ function renderTeamResults() {
     const rankColor = RANK_COLORS[t.rank] || '#94a3b8';
     return `
       <div class="result-card" style="cursor:pointer;" onclick="openTeamResult(${i})">
-        <div class="result-card-icon" style="background:rgba(139,92,246,0.15);font-size:22px;justify-content:center;">👥</div>
+        <div class="result-card-icon" style="background:rgba(139,92,246,0.15);font-size:22px;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
         <div class="result-card-content">
           <div class="result-card-name">${label}</div>
           <div class="result-card-meta" style="margin-bottom:4px;">
@@ -1316,13 +1312,17 @@ function renderAlbum() {
 
   // 実績バッジ
   html += '<div class="album-badges">';
+  var awardSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>';
+  var layersSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+  var crownSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M5 16v4h14v-4"/></svg>';
+  var trophySvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>';
   var badgeConfigs = [
-    { threshold: 10, icon: '🥉', cls: 'bronze', label: '10枚' },
-    { threshold: 50, icon: '🥈', cls: 'silver', label: '50枚' },
-    { threshold: 100, icon: '🥇', cls: 'gold', label: '100枚' },
-    { threshold: 500, icon: '💎', cls: 'diamond', label: '500枚' },
-    { threshold: 1000, icon: '👑', cls: 'diamond', label: '1000枚' },
-    { threshold: 5000, icon: '🏆', cls: 'diamond', label: '5000枚' }
+    { threshold: 10, icon: awardSvg, cls: 'bronze', label: '10枚' },
+    { threshold: 50, icon: awardSvg, cls: 'silver', label: '50枚' },
+    { threshold: 100, icon: awardSvg, cls: 'gold', label: '100枚' },
+    { threshold: 500, icon: layersSvg, cls: 'diamond', label: '500枚' },
+    { threshold: 1000, icon: crownSvg, cls: 'diamond', label: '1000枚' },
+    { threshold: 5000, icon: trophySvg, cls: 'diamond', label: '5000枚' }
   ];
   badgeConfigs.forEach(function(b) {
     var unlocked = meta.milestones && meta.milestones[b.threshold];
@@ -1336,25 +1336,14 @@ function renderAlbum() {
   html += '</div>';
 
   // コレクション・図鑑ボタン
-  html += '<a href="card-collection.html" class="stage2-btn unlocked" style="margin-top:12px;">📚 コレクションを開く</a>';
-  html += '<a href="zukan.html" class="stage2-btn unlocked" style="margin-top:8px;">📖 全種類図鑑を開く</a>';
+  var bookSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>';
+  var bookOpenSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>';
+  html += '<a href="card-collection.html" class="stage2-btn unlocked" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookSvg + ' コレクションを開く</a>';
+  html += '<a href="zukan.html" class="stage2-btn unlocked" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookOpenSvg + ' 全種類図鑑を開く</a>';
 
   container.innerHTML = html;
 }
 
-// ===== キャラクター表示設定 =====
-(function() {
-  const KEY = 'bigfive_hide_chars';
-  const btn = document.getElementById('charToggleBtn');
-  const isHidden = localStorage.getItem(KEY) === '1';
-  btn.classList.toggle('on', !isHidden);
-
-  btn.addEventListener('click', function() {
-    const currentlyHidden = localStorage.getItem(KEY) === '1';
-    localStorage.setItem(KEY, currentlyHidden ? '0' : '1');
-    btn.classList.toggle('on', currentlyHidden);
-  });
-})();
 
 // 全削除
 document.getElementById('clearAllBtn').addEventListener('click', () => {
