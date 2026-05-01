@@ -193,4 +193,84 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- 性格解説：開放性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：開放性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：誠実性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：誠実性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：外向性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：外向性が低い（内向的）人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：協調性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：協調性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：感受性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：感受性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
