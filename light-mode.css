@@ -1,6 +1,32 @@
 /* ===== ビッグファイブ診断 ライトモード ===== */
 /* body.theme-light がある場合のみ適用 */
 
+/* ─── ライトモード背景blob ─── */
+.bg-light-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+body:not(.theme-light) .bg-light-blobs { display: none; }
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  animation: drift 20s ease-in-out infinite alternate;
+}
+.blob-1 { width: 520px; height: 520px; background: #6A0DAD; top: -60px; left: 20%; animation-duration: 22s; }
+.blob-2 { width: 380px; height: 380px; background: #1E90FF; top: 200px; right: 25%; animation-duration: 18s; animation-delay: -5s; }
+.blob-3 { width: 350px; height: 350px; background: #00BFFF; top: 500px; left: 30%; animation-duration: 25s; animation-delay: -10s; }
+.blob-4 { width: 480px; height: 480px; background: #FFA500; top: 800px; right: 20%; animation-duration: 20s; animation-delay: -3s; }
+.blob-5 { width: 440px; height: 440px; background: #FF1493; top: 600px; left: 45%; animation-duration: 17s; animation-delay: -8s; }
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.08); }
+}
+
 /* ─── CSS変数上書き ─── */
 body.theme-light {
   --bg: oklch(0.97 0.01 270);
@@ -487,4 +513,123 @@ body.theme-light .empty-state {
 }
 body.theme-light .empty-state a {
   color: oklch(0.48 0.22 285) !important;
+}
+
+/* ─── コレクション・図鑑ページ（card-collection / zukan 共通） ─── */
+
+/* ヘッダー */
+body.theme-light .page-header h1 {
+  background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.65 0.22 340)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+body.theme-light .progress-text {
+  color: var(--dim) !important;
+}
+body.theme-light .progress-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.5) !important;
+}
+
+/* レアリティ名 */
+body.theme-light .rarity-name {
+  color: var(--text) !important;
+}
+
+/* フィルタータブ */
+body.theme-light .filter-tab {
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+  background: transparent !important;
+}
+body.theme-light .filter-tab:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+  color: oklch(0.48 0.22 285) !important;
+}
+body.theme-light .filter-tab.active {
+  background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.65 0.22 340)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* カウントラベル */
+body.theme-light .count-label {
+  color: var(--dim) !important;
+}
+
+/* カードサムネイル（コレクション） */
+body.theme-light .collection-card {
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+  background: oklch(0.97 0.01 270) !important;
+}
+body.theme-light .collection-card img {
+  background: oklch(0.97 0.01 270) !important;
+}
+body.theme-light .collection-card .card-label {
+  background: oklch(0.15 0.03 270 / 0.65) !important;
+  color: oklch(0.85 0.02 270) !important;
+}
+
+/* カードサムネイル（図鑑） */
+body.theme-light .zukan-card {
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+  background: oklch(0.97 0.01 270) !important;
+}
+body.theme-light .zukan-card img {
+  background: oklch(0.97 0.01 270) !important;
+}
+body.theme-light .zukan-card .card-label {
+  background: oklch(0.15 0.03 270 / 0.65) !important;
+}
+body.theme-light .zukan-card.owned .card-label {
+  color: oklch(0.85 0.02 270) !important;
+}
+body.theme-light .zukan-card.unowned .card-label {
+  color: oklch(0.55 0.03 270) !important;
+}
+
+/* ページネーション */
+body.theme-light .page-nav-btn {
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+  background: transparent !important;
+}
+body.theme-light .page-nav-btn:hover:not(:disabled) {
+  border-color: oklch(0.48 0.22 285) !important;
+  color: oklch(0.48 0.22 285) !important;
+}
+body.theme-light .page-info {
+  color: var(--dim) !important;
+}
+
+/* セクション見出し（図鑑） */
+body.theme-light .section-title {
+  color: oklch(0.48 0.22 285) !important;
+}
+
+/* 削除確認モーダル */
+body.theme-light .delete-confirm {
+  background: oklch(0.1 0.05 270 / 0.5) !important;
+}
+body.theme-light .delete-confirm-box {
+  background: oklch(0.98 0.005 270) !important;
+  color: var(--text) !important;
+}
+body.theme-light .delete-confirm-box p {
+  color: var(--text) !important;
+}
+body.theme-light .delete-confirm-box .btn-cancel {
+  background: oklch(0.88 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+
+/* 全種類図鑑ボタン */
+body.theme-light .full-zukan-btn {
+  background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.65 0.22 340)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* 戻るリンク */
+body.theme-light .back-link {
+  color: var(--dim) !important;
 }
