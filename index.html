@@ -144,29 +144,6 @@
     100% { opacity: 0;   transform: translateX(-650px) translateY(650px) rotate(135deg); }
   }
 
-  /* ヒーロー内キャラクター */
-  .hero-char {
-    position: absolute;
-    top: 6%;
-    width: 175px;
-    opacity: 0;
-    transition: opacity 1.2s ease;
-    pointer-events: none;
-    filter: drop-shadow(0 0 30px rgba(139,92,246,0.4)) drop-shadow(0 0 10px rgba(232,121,176,0.25));
-  }
-  .hero-char.visible { opacity: 0.28; }
-  #heroCharLeft  { left: 3%;  animation: floatCharL 7s ease-in-out infinite; }
-  #heroCharRight { right: 3%; animation: floatCharR 7s ease-in-out infinite; animation-delay: 1.8s; }
-  .hero-char img { width: 100%; height: auto; display: block; }
-  @keyframes floatCharL {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-22px); }
-  }
-  @keyframes floatCharR {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-22px); }
-  }
-
   .content { position: relative; z-index: 1; }
 
   /* ヒーロー */
@@ -458,13 +435,9 @@
     border-radius: 16px; padding: 20px; backdrop-filter: blur(8px);
     position: relative; overflow: hidden;
   }
-  .proof-card::before {
-    content: '"'; position: absolute; top: 8px; left: 16px;
-    font-size: 48px; color: rgba(139,92,246,0.15); font-family: Georgia, serif;
-  }
   .proof-text {
     font-size: 13px; color: var(--text); line-height: 1.7;
-    padding-left: 20px; margin-bottom: 12px; font-style: italic;
+    margin-bottom: 12px; font-style: italic;
   }
   .proof-user {
     font-size: 11px; color: var(--dim); text-align: right;
@@ -473,11 +446,6 @@
   .proof-user::before {
     content: ''; width: 8px; height: 8px; border-radius: 50%;
     background: linear-gradient(135deg, var(--purple), var(--pink));
-  }
-
-  /* ===== パーソナライズ表示 ===== */
-  .personalized-section {
-    display: none;
   }
 
   @media(max-width:600px){
@@ -546,16 +514,20 @@
   .demo-cta { display:block; text-align:center; padding:14px; background:linear-gradient(135deg,#ec4899,#8b5cf6); border-radius:12px; color:#fff; text-decoration:none; font-weight:700; font-size:14px; transition:opacity .3s; }
   .demo-cta:hover { opacity:0.85; }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
-<div class="bg-nebula"></div>
-<div class="bg-stars" id="bgStars"></div>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="content">
 
   <!-- ヒーロー -->
   <section class="hero">
-    <div id="heroCharLeft"  class="hero-char"></div>
-    <div id="heroCharRight" class="hero-char"></div>
     <span class="hero-badge">SCIENCE-BASED PERSONALITY ANALYSIS</span>
     <div class="trust-badges">
       <span class="trust-badge"><span class="dot"></span>心理学研究に基づく</span>
@@ -567,9 +539,6 @@
     <p class="hero-authority">心理学者によって開発 ／ 世界的に認められた理論</p>
     <button class="shimmer-btn hero-btn" id="startQuizBtn" onclick="document.getElementById('versionSelect').scrollIntoView({behavior:'smooth'})">診断を始める</button>
   </section>
-
-  <!-- パーソナライズ表示（保存済みの場合に表示） -->
-  <section class="personalized-section" id="personalizedSection"></section>
 
   <!-- 数字セクション -->
   <section class="stats-section">
@@ -803,7 +772,7 @@
   </div>
 
   <footer>
-    <p>ASOBI LAB — ビッグファイブ 3125タイプ診断</p>
+    <p>ビッグファイブ診断</p>
     <p style="font-size:10px;color:rgba(148,163,184,0.2);margin-top:4px;">
       <a href="faq.html" style="color:rgba(148,163,184,0.4);text-decoration:none;">よくある質問</a>
       <span style="margin:0 8px;color:rgba(148,163,184,0.2);">|</span>
@@ -927,47 +896,6 @@
   });
 })();
 
-// ===== パーソナライズ表示 =====
-(function() {
-  const STORAGE_KEY_MY = 'bigfive_my_results';
-
-  const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
-  if (myResults.length === 0) return;
-
-  const leftDiv = document.getElementById('heroCharLeft');
-  const myResult = myResults[0];
-  const myGender = myResult.gender || 'F';
-
-  // コードを画像用に丸める（1/3/5のみ存在）
-  function toImgCode(code) {
-    return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
-  }
-
-  // ヒーロー内キャラを更新
-  function setHeroChar(div, code, gender) {
-    const imgCode = toImgCode(code);
-    div.classList.remove('visible');
-    div.innerHTML = `<img src="images/characters/${gender}/${imgCode}.webp" alt="" onload="this.closest('.hero-char').classList.add('visible')">`;
-  }
-
-  // 自分のキャラを左に表示
-  setHeroChar(leftDiv, myResult.code, myGender);
-
-  // あの人のキャラを右に表示（マイページでチェックした人）
-  const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
-  if (partnerData && partnerData.code) {
-    const rightDiv = document.getElementById('heroCharRight');
-    const partnerGender = partnerData.gender || 'F';
-    setHeroChar(rightDiv, partnerData.code, partnerGender);
-  }
-})();
-
-// ===== キャラクター非表示設定を反映 =====
-(function() {
-  if (localStorage.getItem('bigfive_hide_chars') === '1') {
-    document.querySelectorAll('.hero-char').forEach(function(el) { el.style.display = 'none'; });
-  }
-})();
 </script>
 <script src="concierge.js"></script>
 <script src="nav.js"></script>
@@ -996,14 +924,14 @@
     container.innerHTML = `
       <div class="anohito-section" style="text-align:center;">
         <p class="anohito-lead" style="color:#10b981;">✓ すべての心理テストが完了しています！</p>
-        <a href="report.html" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);">📊 総合レポートを見る</a>
+        <a href="report.html" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 総合レポートを見る</a>
       </div>`;
     return;
   }
 
   container.innerHTML = `
     <div class="anohito-section" style="text-align:center; margin-bottom:8px;">
-      <p class="anohito-lead" style="font-size:13px; color:#c4b5fd;">🎯 あなたへのおすすめ</p>
+      <p class="anohito-lead" style="font-size:13px; color:#c4b5fd;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> あなたへのおすすめ</p>
       <p class="cta-note">ビッグファイブのスコアから選びました</p>
     </div>
     ${recs.map(rec => `

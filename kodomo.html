@@ -283,8 +283,16 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   font-size: 13px;
 }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="bg-nebula"></div>
 
 <!-- ===== スタート画面 ===== -->
@@ -293,7 +301,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     トップに戻る
   </a>
-  <span class="hero-badge">🧒 子ども性格診断</span>
+  <span class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 子ども性格診断</span>
   <h1 class="hero-title">お子さんの「個性」を<br><em>科学的に知ろう</em></h1>
   <p class="hero-sub">
     ビッグファイブ心理学をもとに、保護者が日常の様子を観察して回答する診断です。<br>
@@ -302,15 +310,15 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
   <div class="feature-list">
     <div class="feature-item">
-      <span class="fi-icon">🌟</span>
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
       <div><strong>お子さんの強みがわかる</strong><br>5つの特性（好奇心・やり遂げる力・社交性・思いやり・感受性）のバランスを分析</div>
     </div>
     <div class="feature-item">
-      <span class="fi-icon">🎮</span>
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg></span>
       <div><strong>楽しみやすい遊びのヒント</strong><br>その子の特性に合った遊びや活動をご提案。無理なく個性を伸ばせます</div>
     </div>
     <div class="feature-item">
-      <span class="fi-icon">🚀</span>
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
       <div><strong>将来の夢とつなげる</strong><br>「警察官になりたい」「絵描きになりたい」…夢に向けてどんな経験が役立つか</div>
     </div>
   </div>
@@ -340,10 +348,10 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
     <label class="form-label">性別</label>
     <div class="btn-grid-2">
       <button class="sel-btn" data-gender="F" id="genderF">
-        <span class="sel-icon">👧</span>女の子
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>女の子
       </button>
       <button class="sel-btn" data-gender="M" id="genderM">
-        <span class="sel-icon">👦</span>男の子
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>男の子
       </button>
     </div>
   </div>
@@ -352,10 +360,10 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
     <label class="form-label">年齢グループ</label>
     <div class="btn-grid-2b">
       <button class="sel-btn" data-age="child46" id="age46">
-        <span class="sel-icon">🌱</span>4〜6歳<br><small style="font-size:11px;font-weight:400;">幼稚園・保育園</small>
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>4〜6歳<br><small style="font-size:11px;font-weight:400;">幼稚園・保育園</small>
       </button>
       <button class="sel-btn" data-age="child79" id="age79">
-        <span class="sel-icon">🌿</span>7〜9歳<br><small style="font-size:11px;font-weight:400;">小学校低学年</small>
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>7〜9歳<br><small style="font-size:11px;font-weight:400;">小学校低学年</small>
       </button>
     </div>
     <p class="age-note">※ 年齢によって質問の内容が変わります（計30問）</p>
@@ -367,7 +375,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 <!-- ===== クイズ画面 ===== -->
 <div class="screen" id="quizScreen">
   <div class="who-bar">
-    <span class="who-icon">🧒</span>
+    <span class="who-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
     <div>
       <div class="who-name" id="whoName">—</div>
       <div class="who-sub" id="whoSub">の日常の様子を思い浮かべて答えてください</div>
@@ -401,7 +409,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 <!-- ===== 結果画面 ===== -->
 <div class="screen" id="resultScreen">
   <div class="result-header">
-    <span class="result-badge">🧒 子ども性格診断 結果</span>
+    <span class="result-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 子ども性格診断 結果</span>
     <p class="result-title"><em id="resultName">—</em>の性格プロフィール</p>
     <p class="result-sub">ビッグファイブ理論による観察分析</p>
   </div>
@@ -413,22 +421,22 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
   <!-- 特性バー -->
   <div class="section-card" id="traitsCard">
-    <p class="section-title">📊 5つの特性バランス</p>
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 5つの特性バランス</p>
   </div>
 
   <!-- 強み -->
   <div class="section-card" id="strengthCard">
-    <p class="section-title">✨ この子の強み</p>
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> この子の強み</p>
   </div>
 
   <!-- 遊びのヒント -->
   <div class="section-card" id="hintsCard">
-    <p class="section-title">🎮 楽しみやすい遊びのヒント</p>
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg> 楽しみやすい遊びのヒント</p>
   </div>
 
   <!-- 将来の夢 -->
   <div class="section-card" id="careerCard">
-    <p class="section-title">🚀 こんな仕事をする人に似た面があるかも</p>
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> こんな仕事をする人に似た面があるかも</p>
     <p style="font-size:11px;color:rgba(15,45,74,0.4);margin-bottom:14px;line-height:1.6;">これは可能性の一例です。同じ職業でもさまざまな個性の方が活躍しています。</p>
     <div class="career-grid" id="careerGrid"></div>
   </div>
@@ -436,19 +444,19 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <!-- お子さんの傾向 -->
   <div class="tendency-section">
     <button class="btn-tendency" id="tendencyBtn">
-      <span>🔍</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
       <span id="tendencyBtnText">お子さんの傾向を知る</span>
     </button>
     <div class="tendency-card" id="tendencyCard" style="display:none;">
-      <p class="tendency-card-title">🔍 お子さんの傾向</p>
+      <p class="tendency-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> お子さんの傾向</p>
       <p class="tendency-card-note">傾向は「悪いところ」ではありません。個性を理解し、サポートするヒントです。</p>
       <div id="tendencyContent"></div>
       <button class="btn-parenting" id="parentingBtn" style="display:none;">
-        <span>🌱</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
         <span>一番の関わりポイントを見る</span>
       </button>
       <div class="parenting-card" id="parentingCard" style="display:none;">
-        <p class="parenting-card-title">🌱 親の関わり方ヒント</p>
+        <p class="parenting-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 親の関わり方ヒント</p>
         <p class="parenting-note">親の関わりだけで性格を大きく変えられるわけではありません。お子さんの気質を尊重することが最も重要です。</p>
         <div id="parentingContent"></div>
       </div>
@@ -460,7 +468,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
   <p class="disclaimer">この診断は保護者の観察をもとにした参考情報です。お子さんの実際の性格と異なる場合があります。どの結果でもお子さんの可能性は無限大です。</p>
 
-  <button class="action-btn btn-save" id="saveBtn">💾 結果を保存</button>
+  <button class="action-btn btn-save" id="saveBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 結果を保存</button>
   <button class="action-btn btn-retry" onclick="resetAll()">別の子を診断する</button>
   <a href="index.html" class="action-btn btn-retry" style="display:block;">トップに戻る</a>
 </div>
@@ -722,22 +730,22 @@ const activityHints = {
 
 // ===== 職業データ =====
 const careers = [
-  { name: '医師・看護師', icon: '🏥', factors: ['C','A'], msg: 'だれかのつらさに気づける心は、人を助ける大きな力になるよ' },
-  { name: '先生・保育士', icon: '📚', factors: ['E','A'], msg: '友だちに教えるのが得意なきみに向いてるかも' },
-  { name: 'エンジニア・プログラマー', icon: '💻', factors: ['C','O'], msg: 'なんで？どうして？が止まらないきみが作るものはすごいかもよ' },
-  { name: '芸術家・デザイナー', icon: '🎨', factors: ['O'], msg: 'きみだけの見え方で世界を形にしてみて' },
-  { name: '音楽家・ミュージシャン', icon: '🎵', factors: ['O','N'], msg: '豊かな感性が音楽で輝く力になるよ' },
-  { name: '研究者・科学者', icon: '🔬', factors: ['O','C'], msg: 'ふしぎをとことん調べる力が、発見につながるよ' },
-  { name: 'スポーツ選手', icon: '⚽', factors: ['C','E'], msg: 'あきらめない気持ちと、仲間と動く力が武器だよ' },
-  { name: '料理人・シェフ', icon: '🍳', factors: ['C','O'], msg: '丁寧さと創造性の両方が活きる仕事だよ' },
-  { name: '獣医・動物飼育員', icon: '🐾', factors: ['A','C'], msg: '動物への思いやりと責任感がぴったりの仕事だよ' },
-  { name: 'ゲームクリエイター', icon: '🎮', factors: ['O','C'], msg: '発想力と作り込む粘り強さが活きるよ' },
-  { name: 'YouTuber・クリエイター', icon: '📹', factors: ['E','O'], msg: '発信力と独自の視点がきみの武器だよ' },
-  { name: 'カウンセラー・相談員', icon: '💙', factors: ['A','N'], msg: '人の気持ちに寄り添える力がだれかの支えになるよ' },
-  { name: '建築家・デザイナー', icon: '🏗️', factors: ['O','C'], msg: '夢を実際に形にできる仕事だよ' },
-  { name: '警察官・消防士', icon: '🚒', factors: ['C'], msg: '約束を守る力と責任感が、人を守る力になるよ' },
-  { name: '作家・ライター', icon: '✍️', factors: ['O','N'], msg: '頭の中の物語を言葉にしてみよう' },
-  { name: '弁護士・社会活動家', icon: '⚖️', factors: ['A','O'], msg: '「おかしい！」と感じる心が世の中を変える力になるよ' },
+  { name: '医師・看護師', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', factors: ['C','A'], msg: 'だれかのつらさに気づける心は、人を助ける大きな力になるよ' },
+  { name: '先生・保育士', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>', factors: ['E','A'], msg: '友だちに教えるのが得意なきみに向いてるかも' },
+  { name: 'エンジニア・プログラマー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>', factors: ['C','O'], msg: 'なんで？どうして？が止まらないきみが作るものはすごいかもよ' },
+  { name: '芸術家・デザイナー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M2 20c2-4 6-6 10-6 4 0 8 2 10 6"/></svg>', factors: ['O'], msg: 'きみだけの見え方で世界を形にしてみて' },
+  { name: '音楽家・ミュージシャン', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', factors: ['O','N'], msg: '豊かな感性が音楽で輝く力になるよ' },
+  { name: '研究者・科学者', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', factors: ['O','C'], msg: 'ふしぎをとことん調べる力が、発見につながるよ' },
+  { name: 'スポーツ選手', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><path d="M2 12h20"/></svg>', factors: ['C','E'], msg: 'あきらめない気持ちと、仲間と動く力が武器だよ' },
+  { name: '料理人・シェフ', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>', factors: ['C','O'], msg: '丁寧さと創造性の両方が活きる仕事だよ' },
+  { name: '獣医・動物飼育員', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><path d="M12 14c-4 0-8 2-8 6 0 1.5 1 2 2 2h12c1 0 2-.5 2-2 0-4-4-6-8-6z"/></svg>', factors: ['A','C'], msg: '動物への思いやりと責任感がぴったりの仕事だよ' },
+  { name: 'ゲームクリエイター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg>', factors: ['O','C'], msg: '発想力と作り込む粘り強さが活きるよ' },
+  { name: 'YouTuber・クリエイター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>', factors: ['E','O'], msg: '発信力と独自の視点がきみの武器だよ' },
+  { name: 'カウンセラー・相談員', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', factors: ['A','N'], msg: '人の気持ちに寄り添える力がだれかの支えになるよ' },
+  { name: '建築家・デザイナー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>', factors: ['O','C'], msg: '夢を実際に形にできる仕事だよ' },
+  { name: '警察官・消防士', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 3 20 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>', factors: ['C'], msg: '約束を守る力と責任感が、人を守る力になるよ' },
+  { name: '作家・ライター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>', factors: ['O','N'], msg: '頭の中の物語を言葉にしてみよう' },
+  { name: '弁護士・社会活動家', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M4 8l4-5 4 5"/><path d="M16 8l4-5 4 5"/><path d="M2 8h6v4a3 3 0 01-6 0V8zM14 8h6v4a3 3 0 01-6 0V8z"/></svg>', factors: ['A','O'], msg: '「おかしい！」と感じる心が世の中を変える力になるよ' },
 ];
 
 // ===== 状態 =====
@@ -863,7 +871,7 @@ function showResult(scOverride) {
 
   // 特性バー
   const traitsCard = document.getElementById('traitsCard');
-  traitsCard.innerHTML = '<p class="section-title">📊 5つの特性バランス</p>';
+  traitsCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 5つの特性バランス</p>';
   ['O','C','E','A','N'].forEach(f => {
     const s = sc[f], info = traitInfo[f];
     const pct = s === 1 ? 20 : s === 3 ? 55 : 88;
@@ -881,7 +889,7 @@ function showResult(scOverride) {
 
   // 強み（スコア5の因子 or スコア1の因子を強みとして表示）
   const strengthCard = document.getElementById('strengthCard');
-  strengthCard.innerHTML = '<p class="section-title">✨ この子の強み</p>';
+  strengthCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> この子の強み</p>';
   const topFactors = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 2);
   topFactors.forEach(([f, s]) => {
     const info = traitInfo[f];
@@ -895,7 +903,7 @@ function showResult(scOverride) {
 
   // 遊びのヒント（スコア最高の因子）
   const hintsCard = document.getElementById('hintsCard');
-  hintsCard.innerHTML = '<p class="section-title">🎮 楽しみやすい遊びのヒント</p>';
+  hintsCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg> 楽しみやすい遊びのヒント</p>';
   const topFactor = topFactors[0][0];
   const ageKey = ageGroup === 'child46' ? 'young' : 'old';
   const hints = activityHints[topFactor][ageKey];
@@ -998,11 +1006,11 @@ function showResult(scOverride) {
           </div>
           <div class="parenting-factor-body open" id="parentingBody_${f}">
             <div class="parenting-direction ${isLow ? 'recommend' : ''}">
-              <p class="parenting-direction-title">${isLow ? '⬆️ ' : ''}${tips.up.title}</p>
+              <p class="parenting-direction-title">${isLow ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:2px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> ' : ''}${tips.up.title}</p>
               ${tips.up.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
             </div>
             <div class="parenting-direction ${isHigh ? 'recommend' : ''}">
-              <p class="parenting-direction-title">${isHigh ? '⚠️ ' : ''}${tips.down.title}</p>
+              <p class="parenting-direction-title">${isHigh ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ' : ''}${tips.down.title}</p>
               ${tips.down.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
             </div>
           </div>
@@ -1012,7 +1020,7 @@ function showResult(scOverride) {
         <div class="parenting-factor-block parenting-factor-locked">
           <div class="parenting-factor-header">
             <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
-            <span class="parenting-lock-icon">🔒</span>
+            <span class="parenting-lock-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
           </div>
         </div>`;
       }

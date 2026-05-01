@@ -132,8 +132,16 @@
   .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
   .disclaimer { width: 100%; max-width: 420px; font-size: 11px; color: var(--dim); line-height: 1.6; text-align: center; padding: 0 12px; }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="bg-nebula"></div>
 <canvas class="bg-stars" id="bgStars"></canvas>
 <a href="index.html" class="top-link">
@@ -143,7 +151,7 @@
 
 <div class="quiz-container">
   <div class="intro" id="introArea">
-    <span class="intro-badge">⚡ 動機心理学</span>
+    <span class="intro-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 動機心理学</span>
     <h1>何が<span>あなたを動かす</span>のか</h1>
     <p class="intro-sub">Deci & Ryanの自己決定理論（SDT）に基づき、あなたの「3つの心理的欲求」の充足度を21問で科学的に測定します。</p>
     <div class="three-needs">
@@ -259,7 +267,7 @@ const questions = [
 
 const needLabels = { autonomy: '自律性', competence: '有能感', relatedness: '関係性' };
 const needColors = { autonomy: '#3b82f6', competence: '#f59e0b', relatedness: '#ec4899' };
-const needEmoji = { autonomy: '🔵', competence: '🟡', relatedness: '🩷' };
+const needEmoji = { autonomy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#3b82f6"><circle cx="12" cy="12" r="10"/></svg>', competence: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="10"/></svg>', relatedness: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#ec4899"><circle cx="12" cy="12" r="10"/></svg>' };
 
 let current = 0;
 const answers = new Array(questions.length).fill(null);
@@ -322,7 +330,7 @@ document.getElementById('startBtn').addEventListener('click', () => {
 function showQuestion() {
   const q = questions[current];
   const color = needColors[q.need];
-  document.getElementById('needIndicator').textContent = needEmoji[q.need] + ' ' + needLabels[q.need];
+  document.getElementById('needIndicator').innerHTML = needEmoji[q.need] + ' ' + needLabels[q.need];
   document.getElementById('needIndicator').style.color = color;
   document.getElementById('questionNum').textContent = `Q${current + 1}`;
   document.getElementById('questionNum').style.color = color;

@@ -450,9 +450,16 @@
     .answers { gap: 6px; }
   }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
-
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="bg-nebula"></div>
 <canvas class="bg-stars" id="bgStars"></canvas>
 
@@ -465,7 +472,7 @@
 
   <!-- タイトル画面 -->
   <div class="intro" id="introArea">
-    <span class="intro-badge">💕 恋愛心理学</span>
+    <span class="intro-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> 恋愛心理学</span>
     <h1>あなたの<span>恋愛スタイル</span>は？</h1>
     <p class="intro-sub">
       Lee（1973）の恋愛スタイル理論をベースに、<br>
@@ -597,8 +604,8 @@ const styles = {
     desc: '一目惚れを信じ、運命の出会いを大切にするロマンチスト。外見・雰囲気への強い惹かれを恋愛の入口にします。感情が豊かで、愛に全力投球するタイプです。',
     keywords: ['一目惚れ', '運命', 'ロマンチスト', '情熱的', '感情豊か'],
     compat: [
-      { style: 'agape', icon: '💛', reason: '献身的な相手が情熱を受け止めてくれる' },
-      { style: 'storge', icon: '💚', reason: '深い絆と情熱が融合した理想的な関係に' },
+      { style: 'agape', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '献身的な相手が情熱を受け止めてくれる' },
+      { style: 'storge', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '深い絆と情熱が融合した理想的な関係に' },
     ],
     bigfive: { high: ['E', 'O'], text: '外向的で開放的な性格のあなたにとって、Erosは自然な恋愛スタイルです。感情表現が得意で、相手を積極的に引き付ける力があります。' }
   },
@@ -607,8 +614,8 @@ const styles = {
     desc: '恋愛をゲームとして楽しむ自由人。特定の相手に束縛されることを好まず、軽やかに複数の関係を楽しむ傾向があります。相手を傷つけないための誠実さも持ち合わせています。',
     keywords: ['自由', '軽やか', 'マイペース', '束縛されない', '楽しむ'],
     compat: [
-      { style: 'ludus', icon: '🧡', reason: 'お互いの自由を尊重できる対等な関係' },
-      { style: 'pragma', icon: '💙', reason: '現実的な相手がうまくバランスを取れる' },
+      { style: 'ludus', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: 'お互いの自由を尊重できる対等な関係' },
+      { style: 'pragma', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '現実的な相手がうまくバランスを取れる' },
     ],
     bigfive: { high: ['E'], low: ['A'], text: '外向的で協調性を重視しすぎないあなたは、Ludusの自由な恋愛観と相性がよい傾向にあります。ただし、相手への配慮も忘れずに。' }
   },
@@ -617,8 +624,8 @@ const styles = {
     desc: '友情の延長線上に愛を育てる堅実なタイプ。ゆっくりと信頼を積み重ね、深い絆を大切にします。派手さはないけれど、長く続く安定した関係を築くのが得意です。',
     keywords: ['友情', '信頼', '長続き', '安定', 'ゆっくり'],
     compat: [
-      { style: 'storge', icon: '💚', reason: '同じペースで信頼を積み重ねられる' },
-      { style: 'pragma', icon: '💙', reason: '現実的な価値観を共有できる' },
+      { style: 'storge', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '同じペースで信頼を積み重ねられる' },
+      { style: 'pragma', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '現実的な価値観を共有できる' },
     ],
     bigfive: { high: ['A', 'C'], text: '協調性が高く誠実なあなたは、Storgeの「友情を育てる恋愛」と深く共鳴します。信頼を大切にする姿勢が長期的な関係を支えます。' }
   },
@@ -627,8 +634,8 @@ const styles = {
     desc: '条件・相性・将来性を冷静に見極める戦略家。感情に流されず、理性的なパートナー選びをします。長期的な視点で安定した関係を築くことを最重視します。',
     keywords: ['冷静', '計画的', '現実的', '将来設計', '安定志向'],
     compat: [
-      { style: 'storge', icon: '💚', reason: '友情ベースの安定した関係観が一致する' },
-      { style: 'agape', icon: '💛', reason: '献身的な相手が安心感を与えてくれる' },
+      { style: 'storge', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '友情ベースの安定した関係観が一致する' },
+      { style: 'agape', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '献身的な相手が安心感を与えてくれる' },
     ],
     bigfive: { high: ['C'], low: ['N'], text: '誠実で感情が安定しているあなたは、Pragmaの現実的な恋愛観と一致します。計画性と安定を重視する姿勢が長期的な関係に強みを発揮します。' }
   },
@@ -637,8 +644,8 @@ const styles = {
     desc: '愛の喜びと不安が共存する激しいタイプ。相手への強い執着と不安から、嫉妬や独占欲が生じやすいです。その裏には深い愛情と傷つきへの恐れがあります。',
     keywords: ['強い愛情', '嫉妬', '不安', '独占欲', '深く愛する'],
     compat: [
-      { style: 'agape', icon: '💛', reason: '献身的な相手が不安を包み込んでくれる' },
-      { style: 'eros', icon: '💗', reason: '情熱的な愛でManiaの激しさを受け止める' },
+      { style: 'agape', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '献身的な相手が不安を包み込んでくれる' },
+      { style: 'eros', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '情熱的な愛でManiaの激しさを受け止める' },
     ],
     bigfive: { high: ['N'], low: ['A'], text: '感受性が高いあなたは、Maniaの「強く愛するほど不安も大きくなる」パターンに共感できるかもしれません。感情をコントロールする意識が関係改善につながります。' }
   },
@@ -647,8 +654,8 @@ const styles = {
     desc: '相手の幸せを自分よりも優先する無償の愛を持つタイプ。見返りを求めず、ただ相手のために尽くします。その深い愛情は相手に大きな安心感を与えます。',
     keywords: ['無償の愛', '献身', '自己犠牲', '思いやり', '深い愛'],
     compat: [
-      { style: 'eros', icon: '💗', reason: '情熱型の愛をしっかり受け止め支えられる' },
-      { style: 'mania', icon: '💜', reason: '不安な相手を献身的に包み込める' },
+      { style: 'eros', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '情熱型の愛をしっかり受け止め支えられる' },
+      { style: 'mania', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', reason: '不安な相手を献身的に包み込める' },
     ],
     bigfive: { high: ['A'], low: ['N'], text: '協調性が高く感情が安定しているあなたは、Agapeの「相手ファースト」な愛し方と深く共鳴します。自分自身を大切にすることも忘れずに。' }
   }

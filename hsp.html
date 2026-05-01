@@ -157,8 +157,16 @@
   .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
   .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="bg-nebula"></div>
 <canvas class="bg-stars" id="bgStars"></canvas>
 <a href="index.html" class="top-link">
@@ -170,7 +178,7 @@
 
   <!-- イントロ -->
   <div class="intro" id="introArea">
-    <span class="intro-badge">🌸 感覚処理感受性</span>
+    <span class="intro-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg> 感覚処理感受性</span>
     <h1>あなたの<span>「感じる力」</span>はどのくらい？</h1>
     <p class="intro-sub">感覚処理感受性（SPS）の心理学研究をもとにした12問のセルフチェック。3つの因子であなたの感受性の特徴を分析します。</p>
     <div class="intro-explain">
@@ -272,23 +280,23 @@ const FACTOR_DESCS  = {
 
 // ===== 全体タイプ定義 =====
 const TYPES = [
-  { min: 12, max: 19, emoji: '🪨', name: '安定型',         catch: '刺激に揺さぶられない、地に足のついた感覚の持ち主',
+  { min: 12, max: 19, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', name: '安定型',         catch: '刺激に揺さぶられない、地に足のついた感覚の持ち主',
     desc: '感覚処理感受性のスコアは低い傾向が見られました。外界の刺激を受け取る際のフィルターが厚く、ストレス耐性の高さやどんな環境でも落ち着いて動ける安定感が特徴です。',
     strength: '騒がしい環境・タイトなスケジュールでもパフォーマンスを落とさず動ける。変化に動じにくく、現場では「頼れる存在」になりやすい。',
     advice: '感受性が高い人の「見えない消耗」に気づきにくい場合がある。自分が平気だからといって周囲も同じとは限らない。' },
-  { min: 20, max: 27, emoji: '🌿', name: 'おだやか感受性タイプ', catch: '感じる力と強さを、バランスよく持ち合わせている',
+  { min: 20, max: 27, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>', name: 'おだやか感受性タイプ', catch: '感じる力と強さを、バランスよく持ち合わせている',
     desc: '感覚処理感受性がやや低め〜平均の傾向が見られました。ほとんどの環境に適応でき、刺激に強い部分を持ちながら細やかな感覚も一定程度働いている状態です。',
     strength: '感受性が高すぎないことで、客観的な判断や安定した行動力を維持しやすい。それでいて美しいものや大切な人の気持ちはきちんと受け取れる。',
     advice: '疲れを感じにくい分、無意識に限界を超えることがある。ときどき自分の状態をチェックする習慣が役立つ。' },
-  { min: 28, max: 33, emoji: '🌷', name: 'チューリップ型',     catch: '感じる力と、現実を渡る力を両方持っている',
+  { min: 28, max: 33, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>', name: 'チューリップ型',     catch: '感じる力と、現実を渡る力を両方持っている',
     desc: '感覚処理感受性のスコアが中間帯にありました。これは人口の中で最も多いゾーンです。細かいことに気づく繊細さと日常をうまく乗り越えるたくましさをバランスよく持ち合わせています。',
     strength: '繊細さとタフさを状況に応じて使い分けられる。感受性が高い人の気持ちも低い人の論理も、両方ある程度理解できる橋渡し役になれる。',
     advice: '「なんとかなっている」ように見えて実は気疲れが蓄積しているケースもある。「なんか疲れた」を無視しないで。' },
-  { min: 34, max: 41, emoji: '🌸', name: '蘭型（高め）',       catch: '世界を、人より一段深く受け取っている',
+  { min: 34, max: 41, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>', name: '蘭型（高め）',       catch: '世界を、人より一段深く受け取っている',
     desc: '感覚処理感受性が高い傾向が見られました。光・音・人の表情・場の空気・芸術の細部など、多くの情報を深く処理する神経系の働きが強い可能性があります。',
     strength: '他の人が見落とすニュアンスや美しさをキャッチできる。人の気持ちに寄り添う力が高く、アートや表現・対人支援の分野で力を発揮しやすい。',
     advice: '刺激の多い環境では回復に時間がかかることがある。一人で静かに過ごす時間は贅沢ではなく、必要なメンテナンス。' },
-  { min: 42, max: 48, emoji: '✨', name: '蘭型（最高域）',     catch: '感じる深さが、あなたの最大の才能',
+  { min: 42, max: 48, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', name: '蘭型（最高域）',     catch: '感じる深さが、あなたの最大の才能',
     desc: '感覚処理感受性が非常に高い傾向が見られました。音楽一曲で情景が浮かび、人の小さな変化に気づき、美しさに胸が締まる——そんな体験が多い人かもしれません。',
     strength: '創造・共感・観察・直感において卓越した力を発揮できる可能性がある。深く味わえる分、人生の喜びも人より豊か。',
     advice: '感受性の高さは「直すもの」ではなく「活かすもの」。自分に合う環境・仕事・関係を積極的に選んでいくことが大切。' },
@@ -389,7 +397,7 @@ function showResult(preScores) {
   const type = TYPES.find(t => s.total >= t.min && s.total <= t.max) || TYPES[TYPES.length - 1];
 
   // タイプカード
-  document.getElementById('resultEmoji').textContent = type.emoji;
+  document.getElementById('resultEmoji').innerHTML = type.emoji;
   document.getElementById('resultTypeName').textContent = type.name;
   document.getElementById('resultCatch').textContent = type.catch;
   document.getElementById('resultDesc').textContent = s.total + '点 — ' + type.desc;
@@ -418,11 +426,11 @@ function showResult(preScores) {
   // 詳細ボックス
   document.getElementById('detailContent').innerHTML = `
     <div class="detail-section">
-      <p class="detail-label">💪 強み</p>
+      <p class="detail-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>強み</p>
       <p class="detail-text">${type.strength}</p>
     </div>
     <div class="detail-section">
-      <p class="detail-label">💡 アドバイス</p>
+      <p class="detail-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>アドバイス</p>
       <p class="detail-text">${type.advice}</p>
     </div>`;
 

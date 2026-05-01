@@ -15,7 +15,7 @@
   const NAV_HTML = `
 <nav id="globalNav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">✦ BIG5</a>
+    <a href="index.html" class="nav-logo"><img src="uploads/ロゴ.png" alt="V BiG" style="height:28px;width:auto;"></a>
     <div class="nav-links" id="navLinks">
       <a href="index.html" data-page="index"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ホーム</a>
       <a href="mypage.html" data-page="mypage"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> マイページ</a>
@@ -195,4 +195,46 @@ body { padding-top: 52px !important; }
   if (window.scrollY < 60) {
     nav.classList.add('nav-visible');
   }
+})();
+
+// ===== テーマ切り替え =====
+(function() {
+  var THEME_KEY = 'bigfive_theme';
+  var saved = localStorage.getItem(THEME_KEY);
+
+  function setThemeImages(isLight) {
+    document.querySelectorAll('.feature-bg-img').forEach(function(img) {
+      var src = img.getAttribute('src');
+      if (!src) return;
+      if (isLight) {
+        img.src = src.replace('.webp', '-light.webp');
+      } else {
+        img.src = src.replace('-light.webp', '.webp');
+      }
+    });
+  }
+
+  // 初期テーマ適用
+  if (saved === 'light') {
+    document.body.classList.add('theme-light');
+  }
+
+  // ボタン生成
+  var btn = document.createElement('button');
+  btn.className = 'theme-toggle';
+  btn.setAttribute('aria-label', 'テーマ切り替え');
+  btn.textContent = saved === 'light' ? 'DARK' : 'LIGHT';
+  document.body.appendChild(btn);
+
+  // 初期表示時に画像も切り替え
+  if (saved === 'light') {
+    setThemeImages(true);
+  }
+
+  btn.addEventListener('click', function() {
+    var isLight = document.body.classList.toggle('theme-light');
+    localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+    btn.textContent = isLight ? 'DARK' : 'LIGHT';
+    setThemeImages(isLight);
+  });
 })();

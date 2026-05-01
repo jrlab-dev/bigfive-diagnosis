@@ -692,7 +692,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       トップに戻る
     </a>
-    <h1 class="page-title">👥 チーム相性診断</h1>
+    <h1 class="page-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> チーム相性診断</h1>
     <div style="width: 80px;"></div>
   </header>
 
@@ -875,7 +875,7 @@ function renderMembers() {
     const banner = document.createElement('div');
     banner.id = 'sharedBanner';
     banner.className = 'shared-banner';
-    banner.innerHTML = `👥 <strong>${sharedMember.name}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
+    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${sharedMember.name}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
     intro.after(banner);
   }
 
@@ -904,7 +904,7 @@ function renderMembers() {
         <div class="member-checkbox">${isSelected ? '✓' : ''}</div>
         <div class="member-icon${m.type === 'other' ? ' other' : ''}">
           <img src="images/characters/${m.gender}/${toImgCode(m.code)}.webp" alt=""
-               onerror="this.parentElement.textContent='${m.type === 'my' ? '🧑' : '👤'}'">
+               onerror="this.parentElement.innerHTML='<svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2&quot;/><circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/></svg>'">
         </div>
         <div class="member-info">
           <div class="member-name">${m.name}</div>
@@ -945,7 +945,7 @@ function renderMembers() {
     info.innerHTML = `
       <span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）
       <div style="margin-top:10px;padding:12px 14px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:left;font-size:12px;line-height:1.8;color:#fbbf24;">
-        ⚠️ <strong>チームの人数について</strong><br>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <strong>チームの人数について</strong><br>
         <span style="color:var(--dim);">
           心理学の研究では、<strong style="color:var(--text);">5人前後が最も機能しやすいチームサイズ</strong>とされています。
           ${count}人では会話の経路が<strong style="color:var(--text);">${commPaths}通り</strong>に増え、コミュニケーションコストが急増します。<br>
@@ -1070,7 +1070,7 @@ function genPositionAdviceHtml(members, currentScore) {
 
   return `
     <div class="position-card">
-      <p class="position-title">💡 チームとして伸びるポイント</p>
+      <p class="position-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> チームとして伸びるポイント</p>
       ${membersHtml}
     </div>
   `;
@@ -1169,37 +1169,37 @@ function genFactorComments(avg, variance) {
 
   // 誠実性
   if (avg.C >= 4.0) {
-    comments.push({ icon: '💪', text: `<strong>誠実性が高いチーム</strong>です。計画的に物事を進め、期限や約束を守る組織です。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', text: `<strong>誠実性が高いチーム</strong>です。計画的に物事を進め、期限や約束を守る組織です。` });
   } else if (avg.C >= 2.5) {
-    comments.push({ icon: '📋', text: `<strong>適度な計画性</strong>のあるチームです。柔軟さと計画性のバランスが取れています。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>', text: `<strong>適度な計画性</strong>のあるチームです。柔軟さと計画性のバランスが取れています。` });
   } else {
-    comments.push({ icon: '🎨', text: `<strong>自由度が高いチーム</strong>です。柔軟で創造的ですが、段取りの役割分担が必要です。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M2 20c2-4 6-6 10-6 4 0 8 2 10 6"/></svg>', text: `<strong>自由度が高いチーム</strong>です。柔軟で創造的ですが、段取りの役割分担が必要です。` });
   }
 
   // 協調性
   if (avg.A >= 4.0) {
-    comments.push({ icon: '🤝', text: `<strong>協力し合えるチーム</strong>です。対立が少なく、和やかに進められます。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>', text: `<strong>協力し合えるチーム</strong>です。対立が少なく、和やかに進められます。` });
   } else if (avg.A >= 2.5) {
-    comments.push({ icon: '⚖️', text: `<strong>意見の交わるチーム</strong>です。協力しつつも、建設的な議論ができるバランスがあります。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M4 8l4-5 4 5"/><path d="M16 8l4-5 4 5"/><path d="M2 8h6v4a3 3 0 01-6 0V8zM14 8h6v4a3 3 0 01-6 0V8z"/></svg>', text: `<strong>意見の交わるチーム</strong>です。協力しつつも、建設的な議論ができるバランスがあります。` });
   } else {
-    comments.push({ icon: '🎯', text: `<strong>個性が強いチーム</strong>です。率直な意見が出やすい分、ルールを決めておくとスムーズです。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', text: `<strong>個性が強いチーム</strong>です。率直な意見が出やすい分、ルールを決めておくとスムーズです。` });
   }
 
   // 感受性
   if (avg.N >= 4.0) {
-    comments.push({ icon: '🌊', text: `<strong>感受性が高いチーム</strong>です。ストレス管理や、定期的な振り返りの場を設けるのがおすすめです。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-3 4-5 6-5s4 2 6 2 4.5-2 6-2"/><path d="M2 18c1.5-3 4-5 6-5s4 2 6 2 4.5-2 6-2"/></svg>', text: `<strong>感受性が高いチーム</strong>です。ストレス管理や、定期的な振り返りの場を設けるのがおすすめです。` });
   } else if (avg.N >= 2.5) {
-    comments.push({ icon: '🔄', text: `<strong>感情のバランスが取れたチーム</strong>です。普段は落ち着いていますが、重要な場面では熱量を出せます。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>', text: `<strong>感情のバランスが取れたチーム</strong>です。普段は落ち着いていますが、重要な場面では熱量を出せます。` });
   } else {
-    comments.push({ icon: '🧊', text: `<strong>精神的に安定したチーム</strong>です。困難な状況でも冷静に対処できる強みがあります。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', text: `<strong>精神的に安定したチーム</strong>です。困難な状況でも冷静に対処できる強みがあります。` });
   }
 
   // 分散系（条件付き）
   if (variance.C >= 1.0) {
-    comments.push({ icon: '⏰', text: `生活リズムや計画性に<strong>ばらつきがあります</strong>。締切や役割の認識合わせをしっかりしましょう。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', text: `生活リズムや計画性に<strong>ばらつきがあります</strong>。締切や役割の認識合わせをしっかりしましょう。` });
   }
   if (variance.O >= 1.0) {
-    comments.push({ icon: '💡', text: `<strong>多様な視点を持つチーム</strong>です。創造的なアイデアが生まれやすい環境です。` });
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>', text: `<strong>多様な視点を持つチーム</strong>です。創造的なアイデアが生まれやすい環境です。` });
   }
 
   return comments;
@@ -1272,7 +1272,7 @@ function renderResults() {
     if (worstPair && scoreDiff >= 15) {
       worstSectionHtml = `
         <div class="pair-section">
-          <p class="pair-label">⚠️ 注意が必要なペア</p>
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 注意が必要なペア</p>
           <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
           <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
           <p class="pair-comment">この2人の相性スコアがチーム内で最も低いです。コミュニケーション方法を工夫し、互いの違いを理解することがチーム改善のポイントです。</p>
@@ -1281,7 +1281,7 @@ function renderResults() {
     } else {
       worstSectionHtml = `
         <div class="pair-section">
-          <p class="pair-label">💬 ペア相性のバランス</p>
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> ペア相性のバランス</p>
           <p class="pair-comment">チーム内のペア相性に大きな偏りはありません。全体的にバランスの取れたチームです。</p>
         </div>
       `;
@@ -1289,7 +1289,7 @@ function renderResults() {
     pairHtml = `
       <div class="pair-card">
         <div class="pair-section">
-          <p class="pair-label">🏆 最も相性が良いペア</p>
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> 最も相性が良いペア</p>
           <p class="pair-names">${bestPair.a.name} × ${bestPair.b.name}</p>
           <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
         </div>
@@ -1318,11 +1318,11 @@ function renderResults() {
   }
 
   container.innerHTML = `
-    ${teamName ? `<p class="result-team-name">👥 ${teamName}</p>` : ''}
+    ${teamName ? `<p class="result-team-name"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${teamName}</p>` : ''}
 
     <!-- チームスコア -->
     <div class="team-card">
-      <p class="team-card-title">📊 チーム全体スコア</p>
+      <p class="team-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> チーム全体スコア</p>
       <div class="team-score-area">
         <div class="team-score-value">${score}</div>
         <p class="team-score-label">/ 100点</p>
@@ -1349,7 +1349,7 @@ function renderResults() {
 
     <!-- 因子コメント -->
     <div class="factor-comments">
-      <p class="factor-comments-title">📝 チーム分析</p>
+      <p class="factor-comments-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> チーム分析</p>
       ${comments.map(c => `
         <div class="factor-comment">
           <span class="factor-comment-icon">${c.icon}</span>
@@ -1363,7 +1363,7 @@ function renderResults() {
 
     <!-- 総合コメント -->
     <div class="summary-card">
-      <p class="summary-title">🎯 総合コメント</p>
+      <p class="summary-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 総合コメント</p>
       <p class="summary-text">${summary.summaryText}</p>
       ${strengthsHtml}
       ${cautionsHtml}
@@ -1372,8 +1372,8 @@ function renderResults() {
     <!-- ポジションアドバイス -->
     ${genPositionAdviceHtml(selected, score)}
 
-    <button class="btn-save-team" id="saveTeamBtn">💾 このチームをマイページに保存する</button>
-    <button class="btn-reselect" id="reselectBtn">🔄 メンバーを選び直す</button>
+    <button class="btn-save-team" id="saveTeamBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> このチームをマイページに保存する</button>
+    <button class="btn-reselect" id="reselectBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> メンバーを選び直す</button>
   `;
 
   // メンバーセクションを隠して結果を表示

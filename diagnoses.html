@@ -91,17 +91,25 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .tag-done { background: rgba(16,185,129,0.12); color: #6ee7b7; }
 .diag-arrow { font-size: 18px; color: var(--dim); flex-shrink: 0; margin-top: 6px; }
 </style>
+<link rel="stylesheet" href="light-mode.css">
 </head>
 <body>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
 <div class="bg-nebula"></div>
 <div class="page-wrap">
-  <span class="page-badge">🧪 心理学診断 一覧</span>
+  <span class="page-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 9V3h4v6l5 11H5l5-11z"/></svg> 心理学診断 一覧</span>
   <h1 class="page-title">科学に基づく<br><em>9つの心理学診断</em></h1>
   <p class="page-sub">すべて無料・登録不要。各診断は独立して受けられます。<br>ビッグファイブの結果がある方には、あなたに合ったおすすめを表示します。</p>
 
   <!-- おすすめセクション（ビッグファイブ結果がある場合のみ表示） -->
   <section id="recSection">
-    <p class="rec-header">⭐ あなたへのおすすめ</p>
+    <p class="rec-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> あなたへのおすすめ</p>
     <div class="rec-grid" id="recGrid"></div>
     <div style="height:1px;background:rgba(255,255,255,0.07);margin:28px 0;"></div>
   </section>
@@ -115,7 +123,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 const DIAGNOSES = [
   {
     id: 'bigfive',
-    icon: '🧬',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
     name: 'ビッグファイブ性格診断',
     desc: '心理学で最も信頼性が高い5因子モデル。開放性・誠実性・外向性・協調性・感受性のバランスから3125タイプを判定。',
     url: 'quiz.html?v=10',
@@ -124,7 +132,7 @@ const DIAGNOSES = [
   },
   {
     id: 'hsp',
-    icon: '🌙',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>',
     name: 'HSP 感受性チェック',
     desc: 'あなたの感じ方の深さを分析。EOE（感覚過敏）・AES（美的感受性）・LST（低感覚耐性）の3因子で特徴がわかる。',
     url: 'hsp.html',
@@ -134,7 +142,7 @@ const DIAGNOSES = [
   },
   {
     id: 'attachment',
-    icon: '🤝',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
     name: '愛着スタイル チェック',
     desc: '大切な人との関わり方のパターンを分析。安心型・不安型・回避型・恐れ型の4スタイルから自分の傾向がわかる。',
     url: 'attachment.html',
@@ -144,7 +152,7 @@ const DIAGNOSES = [
   },
   {
     id: 'love',
-    icon: '💕',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
     name: '恋愛スタイル診断',
     desc: '情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせも。',
     url: 'love.html',
@@ -154,7 +162,7 @@ const DIAGNOSES = [
   },
   {
     id: 'mindset',
-    icon: '🌱',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
     name: 'マインドセット診断',
     desc: 'ドゥエック博士の理論に基づく診断。「成長型」か「固定型」かを8問で分析。才能観・努力観があなたの行動にどう影響するかがわかる。',
     url: 'mindset.html',
@@ -164,7 +172,7 @@ const DIAGNOSES = [
   },
   {
     id: 'schwartz',
-    icon: '🧭',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
     name: '価値観タイプ診断',
     desc: 'シュワーツの価値理論（80カ国で検証）に基づく21問診断。安全・達成・普遍主義など10カテゴリであなたの核心的な価値観を分析。',
     url: 'schwartz.html',
@@ -174,7 +182,7 @@ const DIAGNOSES = [
   },
   {
     id: 'sdt',
-    icon: '⚡',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
     name: '動機タイプ診断',
     desc: 'Deci & Ryanの自己決定理論による21問診断。自律性・有能感・関係性の3欲求から「何があなたを動かすか」を科学的に分析。',
     url: 'sdt.html',
@@ -184,7 +192,7 @@ const DIAGNOSES = [
   },
   {
     id: 'kodomo',
-    icon: '🧒',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
     name: 'お子さんの性格診断',
     desc: '4〜9歳の子どもを持つ保護者向け。30問の観察ベース診断でお子さんの強み・楽しみやすい遊び・将来の夢へのヒントがわかる。',
     url: 'kodomo.html',
@@ -193,7 +201,7 @@ const DIAGNOSES = [
   },
   {
     id: 'other',
-    icon: '👥',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
     name: 'あの人を診断する',
     desc: 'パートナー・友人・家族など「あの人」の性格をビッグファイブで診断。診断後はチーム相性分析にも使えます。',
     url: 'other_quiz.html',
@@ -250,8 +258,8 @@ function diagCardHTML(d, done) {
         <div class="diag-name">${d.name}</div>
         <div class="diag-desc">${d.desc}</div>
         <div class="diag-meta">
-          <span class="diag-tag tag-q">📝 ${d.questions}問</span>
-          <span class="diag-tag tag-time">⏱ 約${d.minutes}分</span>
+          <span class="diag-tag tag-q"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${d.questions}問</span>
+          <span class="diag-tag tag-time"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 約${d.minutes}分</span>
           ${isDone ? '<span class="diag-tag tag-done">✓ 受診済み</span>' : ''}
         </div>
       </div>
