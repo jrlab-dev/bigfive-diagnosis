@@ -236,9 +236,5 @@ body { padding-top: 52px !important; }
     localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
     btn.textContent = isLight ? 'DARK' : 'LIGHT';
     setThemeImages(isLight);
-    // カード画像等のtheme=lightパラメータを反映するためリロード
-    if (typeof window._themeChangedCallback === 'function') {
-      window._themeChangedCallback(isLight);
-    }
   });
 })();
