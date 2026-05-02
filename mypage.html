@@ -882,7 +882,7 @@
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 const MAX_MY = 5;
-const MAX_OTHERS = 10;
+const MAX_OTHERS = 20;
 const STORAGE_KEY_ACTIVE_MY = 'bigfive_active_my_index';
 
 let currentTab = 'my';
@@ -951,7 +951,7 @@ function renderMyResults() {
 
   const vBadgeColors = { '10': '#64748b', '30': '#3b82f6', '120': '#8b5cf6' };
   container.innerHTML = capacityHtml + activeNoteHtml + results.map((r, i) => {
-    const scores = r.scores || {
+    const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
     };
