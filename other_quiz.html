@@ -858,7 +858,7 @@ document.querySelectorAll('.period-btn').forEach(btn => {
     document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     personPeriod = btn.dataset.period;
-    accNote.textContent = periodNotes[personPeriod];
+    accNote.innerHTML = periodNotes[personPeriod];
     accNote.classList.add('show');
     checkReady();
   });
