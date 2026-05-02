@@ -1967,7 +1967,7 @@ const sc = { O, C, E, A, N };
 const traitsCard = document.getElementById('traitsCard');
 ['O','C','E','A','N'].forEach(f => {
   const s = sc[f], info = traitInfo[f];
-  const pct = s === 1 ? 10 : s === 2 ? 30 : s === 3 ? 50 : s === 4 ? 70 : 90;
+  const pct = s * 20;
   const lv  = s <= 2 ? '低め' : s === 3 ? '普通' : '高め';
   const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
   traitsCard.innerHTML += `
