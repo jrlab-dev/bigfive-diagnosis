@@ -556,6 +556,26 @@ body.theme-light .count-label {
   color: var(--dim) !important;
 }
 
+/* アルバムカード（mypage.html） */
+body.theme-light .album-card {
+  background: oklch(0.93 0.02 270) !important;
+}
+body.theme-light .album-card img {
+  transform: scale(1.2);
+}
+body.theme-light .album-card-code {
+  background: rgba(100, 80, 150, 0.25) !important;
+  color: oklch(0.38 0.05 270) !important;
+}
+body.theme-light .album-card-source {
+  background: rgba(100, 80, 150, 0.25) !important;
+  color: oklch(0.38 0.05 270) !important;
+}
+body.theme-light .album-empty-slot {
+  border-color: oklch(0.72 0.08 270 / 0.45) !important;
+  color: oklch(0.72 0.08 270 / 0.45) !important;
+}
+
 /* カードサムネイル（コレクション） */
 body.theme-light .collection-card {
   border-color: oklch(0.88 0.03 270 / 0.5) !important;
