@@ -2321,7 +2321,8 @@ if (otherCode && otherCode.length === 5) {
 if (isOtherMode) {
   const myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
   if (myResults.length > 0) {
-    const myCode = myResults[0].code;
+    const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), myResults.length - 1);
+    const myCode = myResults[activeIdx].code;
     if (myCode && myCode.length === 5) {
       const compatResult = calcCompatibility(myCode, typeCode, relation);
       const { score, details, components } = compatResult;
