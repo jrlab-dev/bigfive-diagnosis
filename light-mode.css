@@ -84,17 +84,17 @@ body.theme-light .nav-links a.nav-current {
 
 /* ─── グローバルフッター（nav.js上書き） ─── */
 body.theme-light #globalFooter {
-  background: oklch(0.14 0.03 270) !important;
-  border-top: 1px solid oklch(0.25 0.03 270) !important;
+  background: oklch(0.94 0.01 270) !important;
+  border-top: 1px solid oklch(0.86 0.02 270) !important;
 }
 body.theme-light .footer-copy {
-  color: oklch(0.55 0.03 270) !important;
+  color: oklch(0.52 0.03 270) !important;
 }
 body.theme-light .footer-links a {
-  color: oklch(0.55 0.03 270) !important;
+  color: oklch(0.42 0.03 270) !important;
 }
 body.theme-light .footer-links a:hover {
-  color: oklch(0.75 0.04 270) !important;
+  color: oklch(0.25 0.03 270) !important;
 }
 
 /* ─── 共通コンポーネント上書き ─── */
