@@ -761,3 +761,1063 @@ body.theme-light .footer-link {
 body.theme-light .footer-link:hover {
   color: oklch(0.42 0.18 260) !important;
 }
+
+/* ===================================================
+   以下、2026-05-02 全ページ追加修正
+   =================================================== */
+
+/* ─── quiz.html ─── */
+
+/* 進行バー背景 */
+body.theme-light .progress-bar {
+  background: oklch(0.88 0.03 270 / 0.4) !important;
+}
+
+/* 回答ボタン */
+body.theme-light .answer-btn {
+  background: oklch(0.97 0.01 270 / 0.8) !important;
+  border-color: oklch(0.82 0.08 285 / 0.35) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .answer-btn:hover {
+  background: oklch(0.93 0.04 285 / 0.5) !important;
+  border-color: oklch(0.58 0.22 285 / 0.4) !important;
+  color: var(--text) !important;
+}
+body.theme-light .answer-btn.selected {
+  background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.55 0.18 260)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+/* 途中保存バナー */
+body.theme-light .resume-banner {
+  background: oklch(0.58 0.22 285 / 0.08) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .resume-banner strong {
+  color: var(--text) !important;
+}
+body.theme-light .resume-restart {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .resume-restart:hover {
+  color: var(--text) !important;
+}
+
+/* 性別選択ボタン */
+body.theme-light .gender-btn {
+  border-color: oklch(0.48 0.22 285) !important;
+  background: transparent !important;
+  color: var(--text) !important;
+}
+body.theme-light .gender-btn:hover {
+  background: oklch(0.48 0.22 285) !important;
+  color: #fff !important;
+}
+
+/* ローディング */
+body.theme-light .loading-text {
+  color: var(--text) !important;
+}
+body.theme-light .loading-sub {
+  color: var(--dim) !important;
+}
+
+/* トップリンク */
+body.theme-light .top-link {
+  color: var(--dim) !important;
+}
+body.theme-light .top-link:hover {
+  color: var(--text) !important;
+}
+
+/* ─── result.html ─── */
+
+/* カードコンテンツ（キャラクターカード下部グラデーション）は変更なし（ダーク素材なので） */
+
+/* 特性詳細カード */
+body.theme-light .traits-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .lv-high {
+  background: rgba(236,72,153,0.12) !important;
+  color: oklch(0.48 0.22 340) !important;
+}
+body.theme-light .lv-mid {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .lv-low {
+  background: oklch(0.88 0.03 270 / 0.3) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .bar-bg {
+  background: oklch(0.88 0.03 270 / 0.4) !important;
+}
+body.theme-light .trait-desc-text {
+  color: var(--dim) !important;
+}
+
+/* 説明カード・ブログリンクカード */
+body.theme-light .desc-card,
+body.theme-light .blog-links-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .desc-card-title,
+body.theme-light .blog-links-title {
+  color: var(--dim) !important;
+}
+body.theme-light .desc-card-text {
+  color: var(--text) !important;
+}
+body.theme-light .desc-kw {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .blog-link-item {
+  background: oklch(0.58 0.22 285 / 0.06) !important;
+  border-color: oklch(0.58 0.22 285 / 0.12) !important;
+}
+body.theme-light .blog-link-item:hover {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+}
+body.theme-light .blog-link-num {
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .blog-link-text {
+  color: var(--text) !important;
+}
+
+/* 弱点セクション */
+body.theme-light .btn-weakness {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .btn-weakness:hover,
+body.theme-light .btn-weakness.active {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  border-color: oklch(0.58 0.22 285 / 0.3) !important;
+  color: var(--text) !important;
+}
+body.theme-light .weakness-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+}
+body.theme-light .weakness-card-title {
+  color: var(--text) !important;
+}
+body.theme-light .weakness-card-note {
+  color: var(--dim) !important;
+}
+body.theme-light .weakness-row {
+  border-bottom-color: oklch(0.88 0.03 270 / 0.4) !important;
+}
+body.theme-light .weakness-factor-name {
+  color: var(--text) !important;
+}
+body.theme-light .weakness-text {
+  color: var(--dim) !important;
+}
+
+/* 成長ヒント */
+body.theme-light .btn-growth-tips {
+  background: oklch(0.7 0.17 162 / 0.08) !important;
+  border-color: oklch(0.7 0.17 162 / 0.2) !important;
+  color: oklch(0.45 0.17 162) !important;
+}
+body.theme-light .btn-growth-tips:hover,
+body.theme-light .btn-growth-tips.active {
+  background: oklch(0.7 0.17 162 / 0.15) !important;
+  border-color: oklch(0.7 0.17 162 / 0.35) !important;
+}
+body.theme-light .growth-tips-card {
+  background: oklch(0.97 0.01 162 / 0.5) !important;
+  border-color: oklch(0.7 0.17 162 / 0.2) !important;
+}
+body.theme-light .growth-tips-card-title {
+  color: oklch(0.45 0.17 162) !important;
+}
+body.theme-light .growth-tips-note {
+  color: var(--dim) !important;
+}
+body.theme-light .growth-factor-header {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+}
+body.theme-light .growth-factor-header:hover,
+body.theme-light .growth-factor-header.open {
+  background: oklch(0.93 0.02 270) !important;
+}
+body.theme-light .growth-factor-name {
+  color: var(--text) !important;
+}
+body.theme-light .growth-factor-arrow {
+  color: var(--dim) !important;
+}
+body.theme-light .growth-factor-body {
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+}
+body.theme-light .growth-direction {
+  background: oklch(0.97 0.01 270) !important;
+}
+body.theme-light .growth-tip-item {
+  color: var(--dim) !important;
+}
+body.theme-light .growth-tip-item::before {
+  color: oklch(0.62 0.05 270) !important;
+}
+
+/* おすすめ職種カード */
+body.theme-light .career-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+}
+body.theme-light .career-title {
+  color: var(--text) !important;
+}
+body.theme-light .career-tag {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .career-reason {
+  color: var(--dim) !important;
+  border-left-color: oklch(0.58 0.22 285 / 0.25) !important;
+}
+
+/* 相性カード */
+body.theme-light .compatibility-card {
+  background: linear-gradient(145deg, oklch(0.72 0.18 340 / 0.08), oklch(0.58 0.22 285 / 0.05)) !important;
+  border-color: oklch(0.72 0.18 340 / 0.25) !important;
+}
+body.theme-light .compatibility-title {
+  color: oklch(0.48 0.20 340) !important;
+}
+body.theme-light .compatibility-label {
+  color: var(--text) !important;
+}
+body.theme-light .compatibility-comment {
+  background: oklch(0.95 0.01 270 / 0.6) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .compatibility-detail {
+  border-top-color: oklch(0.72 0.18 340 / 0.2) !important;
+}
+body.theme-light .compatibility-detail-title {
+  color: var(--dim) !important;
+}
+body.theme-light .compat-bar-track {
+  background: oklch(0.88 0.03 270 / 0.3) !important;
+}
+body.theme-light .compat-bar-label {
+  color: var(--dim) !important;
+}
+
+/* 接し方アドバイスカード */
+body.theme-light .advice-card {
+  background: linear-gradient(145deg, oklch(0.72 0.18 340 / 0.07), oklch(0.58 0.22 285 / 0.04)) !important;
+  border-color: oklch(0.72 0.18 340 / 0.2) !important;
+}
+
+/* アップグレードバナー */
+body.theme-light .upgrade-banner {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .upgrade-banner p {
+  color: var(--dim) !important;
+}
+
+/* セカンダリボタン */
+body.theme-light .btn-secondary {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .btn-secondary:hover {
+  background: oklch(0.88 0.03 270) !important;
+  color: var(--text) !important;
+}
+
+/* result.htmlの result-desc */
+body.theme-light .result-desc h2 {
+  color: var(--text) !important;
+}
+body.theme-light .result-desc p {
+  color: var(--dim) !important;
+}
+
+/* シェアセクション */
+body.theme-light .share-title {
+  color: var(--dim) !important;
+}
+
+/* スコアバー背景 */
+body.theme-light .score-bar-bg {
+  background: oklch(0.82 0.03 270 / 0.4) !important;
+}
+
+/* ─── mypage.html ─── */
+
+/* タブ */
+body.theme-light .tabs {
+  border-bottom-color: oklch(0.82 0.08 285 / 0.3) !important;
+}
+body.theme-light .tab {
+  color: var(--dim) !important;
+}
+body.theme-light .tab:hover {
+  color: var(--text) !important;
+}
+body.theme-light .tab.active {
+  color: oklch(0.42 0.22 285) !important;
+  border-bottom-color: oklch(0.48 0.22 285) !important;
+}
+
+/* 結果カード（mypage用） */
+body.theme-light .result-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .result-card:hover {
+  border-color: oklch(0.58 0.22 285 / 0.45) !important;
+  box-shadow: 0 8px 24px oklch(0.58 0.22 285 / 0.1) !important;
+}
+body.theme-light .result-card.checked {
+  border-color: oklch(0.72 0.18 340 / 0.4) !important;
+  background: oklch(0.72 0.18 340 / 0.06) !important;
+}
+
+/* チェックボックス */
+body.theme-light .card-checkbox {
+  background: white !important;
+  border-color: oklch(0.82 0.08 285 / 0.4) !important;
+}
+body.theme-light .card-checkbox.checked {
+  background: oklch(0.72 0.18 340 / 0.15) !important;
+  border-color: oklch(0.55 0.20 340) !important;
+  color: oklch(0.48 0.20 340) !important;
+}
+
+/* 選択アクションバー */
+body.theme-light .select-action {
+  background: oklch(0.72 0.18 340 / 0.06) !important;
+  border-color: oklch(0.72 0.18 340 / 0.2) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .select-action-count {
+  color: oklch(0.48 0.20 340) !important;
+}
+body.theme-light .select-action-btn {
+  background: oklch(0.72 0.18 340 / 0.1) !important;
+  border-color: oklch(0.72 0.18 340 / 0.25) !important;
+  color: oklch(0.48 0.20 340) !important;
+}
+
+/* 結果カードコード */
+body.theme-light .result-card-code {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .result-card-meta,
+body.theme-light .result-card-date {
+  color: var(--dim) !important;
+}
+body.theme-light .result-card-name {
+  color: var(--text) !important;
+}
+
+/* テストカード（mypage） */
+body.theme-light .test-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .test-card:hover {
+  border-color: oklch(0.58 0.22 285 / 0.45) !important;
+}
+body.theme-light .test-card-title {
+  color: var(--dim) !important;
+}
+body.theme-light .test-card-result {
+  color: var(--text) !important;
+}
+body.theme-light .test-card-date {
+  color: var(--dim) !important;
+}
+body.theme-light .test-card-cta {
+  color: oklch(0.42 0.22 285) !important;
+}
+
+/* 総合レポートバナー */
+body.theme-light .report-banner {
+  background: linear-gradient(135deg, oklch(0.58 0.22 285 / 0.1), oklch(0.72 0.18 340 / 0.07)) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+}
+body.theme-light .report-banner-title {
+  color: var(--text) !important;
+}
+body.theme-light .report-banner-sub {
+  color: var(--dim) !important;
+}
+body.theme-light .report-missing-note {
+  color: var(--dim) !important;
+}
+body.theme-light .report-missing-note a {
+  color: oklch(0.42 0.22 285) !important;
+}
+
+/* 設定行 */
+body.theme-light .setting-row {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+}
+body.theme-light .setting-label {
+  color: var(--dim) !important;
+}
+body.theme-light .setting-toggle {
+  background: oklch(0.82 0.03 270 / 0.4) !important;
+}
+body.theme-light .setting-toggle.on {
+  background: oklch(0.58 0.22 285 / 0.55) !important;
+}
+
+/* 端末引継ぎ */
+body.theme-light .sync-section {
+  background: oklch(0.58 0.22 260 / 0.06) !important;
+  border-color: oklch(0.58 0.22 260 / 0.2) !important;
+}
+body.theme-light .sync-title {
+  color: oklch(0.42 0.18 260) !important;
+}
+body.theme-light .sync-desc {
+  color: var(--dim) !important;
+}
+body.theme-light .sync-btn.save {
+  background: oklch(0.58 0.22 260 / 0.18) !important;
+  border-color: oklch(0.58 0.22 260 / 0.3) !important;
+  color: oklch(0.35 0.18 260) !important;
+}
+body.theme-light .sync-btn.load {
+  background: oklch(0.7 0.17 162 / 0.15) !important;
+  border-color: oklch(0.7 0.17 162 / 0.25) !important;
+  color: oklch(0.42 0.17 162) !important;
+}
+body.theme-light .sync-id-box {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.58 0.22 260 / 0.2) !important;
+}
+body.theme-light .sync-id-label {
+  color: var(--dim) !important;
+}
+body.theme-light .sync-id-text {
+  color: var(--text) !important;
+}
+body.theme-light .sync-copy-btn {
+  background: oklch(0.58 0.22 260 / 0.18) !important;
+  border-color: oklch(0.58 0.22 260 / 0.3) !important;
+  color: oklch(0.35 0.18 260) !important;
+}
+body.theme-light .sync-id-note {
+  color: var(--dim) !important;
+}
+
+/* キャラクターサムネイル */
+body.theme-light .character-thumb {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: var(--card-border) !important;
+}
+
+/* ─── report.html ─── */
+
+/* プロフィールカード */
+body.theme-light .profile-card {
+  background: oklch(1.0 0.0 0 / 0.82) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+}
+body.theme-light .profile-type-code {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .profile-type-name {
+  color: var(--text) !important;
+}
+body.theme-light .profile-char {
+  background: oklch(0.58 0.22 285 / 0.08) !important;
+  border-color: oklch(0.58 0.22 285 / 0.15) !important;
+}
+body.theme-light .profile-subtitle {
+  color: var(--dim) !important;
+}
+body.theme-light .factor-label {
+  color: var(--text) !important;
+}
+body.theme-light .factor-score {
+  color: var(--dim) !important;
+}
+body.theme-light .factor-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.35) !important;
+}
+
+/* テストサマリーカード */
+body.theme-light .test-summary-card {
+  background: oklch(1.0 0.0 0 / 0.72) !important;
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+}
+body.theme-light .test-summary-label {
+  color: var(--dim) !important;
+}
+body.theme-light .test-summary-value {
+  color: var(--text) !important;
+}
+
+/* 分析ブロック */
+body.theme-light .analysis-block {
+  background: oklch(1.0 0.0 0 / 0.75) !important;
+  border-color: oklch(0.58 0.22 285 / 0.12) !important;
+}
+body.theme-light .analysis-block-title {
+  color: var(--text) !important;
+}
+body.theme-light .analysis-text {
+  color: var(--dim) !important;
+}
+body.theme-light .analysis-text strong {
+  color: var(--text) !important;
+}
+
+/* 弱点ブロック */
+body.theme-light .weakness-block {
+  background: oklch(0.97 0.01 15 / 0.4) !important;
+  border-color: oklch(0.65 0.18 15 / 0.2) !important;
+}
+body.theme-light .weakness-block-title {
+  color: oklch(0.48 0.18 15) !important;
+}
+body.theme-light .weakness-item {
+  color: var(--dim) !important;
+}
+body.theme-light .weakness-item::before {
+  color: oklch(0.52 0.18 15) !important;
+}
+
+/* アドバイスタブ */
+body.theme-light .advice-tab {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.4) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .advice-tab:hover {
+  color: var(--text) !important;
+  border-color: oklch(0.58 0.22 285 / 0.3) !important;
+}
+body.theme-light .advice-tab.active {
+  background: oklch(0.58 0.22 285 / 0.12) !important;
+  border-color: oklch(0.58 0.22 285 / 0.35) !important;
+  color: oklch(0.38 0.22 285) !important;
+}
+body.theme-light .advice-block {
+  background: oklch(1.0 0.0 0 / 0.72) !important;
+  border-color: oklch(0.58 0.22 285 / 0.12) !important;
+}
+body.theme-light .advice-item {
+  color: var(--dim) !important;
+}
+body.theme-light .advice-item::before {
+  color: oklch(0.52 0.22 285) !important;
+}
+
+/* 成長ロードマップ */
+body.theme-light .growth-block {
+  background: linear-gradient(135deg, oklch(0.7 0.17 162 / 0.07), oklch(0.58 0.18 260 / 0.05)) !important;
+  border-color: oklch(0.7 0.17 162 / 0.15) !important;
+}
+body.theme-light .growth-text {
+  color: var(--dim) !important;
+}
+body.theme-light .growth-text strong {
+  color: var(--text) !important;
+}
+
+/* 未受診バナー */
+body.theme-light .missing-banner {
+  background: oklch(0.82 0.16 85 / 0.08) !important;
+  border-color: oklch(0.82 0.16 85 / 0.2) !important;
+}
+body.theme-light .missing-banner-title {
+  color: oklch(0.52 0.16 85) !important;
+}
+
+/* ページバッジ（report） */
+body.theme-light .page-badge {
+  background: linear-gradient(135deg, oklch(0.58 0.22 285 / 0.12), oklch(0.72 0.18 340 / 0.08)) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+  color: oklch(0.38 0.22 285) !important;
+}
+
+/* セクションラベル（report） */
+body.theme-light .section-label {
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .section-label::after {
+  background: linear-gradient(to right, oklch(0.58 0.22 285 / 0.25), transparent) !important;
+}
+
+/* ─── diagnoses.html ─── */
+
+/* 診断カード */
+body.theme-light .diag-card {
+  background: oklch(0.98 0.005 270 / 0.8) !important;
+  border-color: oklch(0.88 0.03 270 / 0.5) !important;
+}
+body.theme-light .diag-card:hover {
+  background: oklch(0.58 0.22 285 / 0.06) !important;
+  border-color: oklch(0.58 0.22 285 / 0.25) !important;
+}
+body.theme-light .diag-name {
+  color: var(--text) !important;
+}
+body.theme-light .diag-desc {
+  color: var(--dim) !important;
+}
+body.theme-light .tag-q {
+  background: oklch(0.58 0.18 260 / 0.1) !important;
+  color: oklch(0.42 0.18 260) !important;
+}
+body.theme-light .tag-done {
+  background: oklch(0.7 0.17 162 / 0.1) !important;
+  color: oklch(0.45 0.17 162) !important;
+}
+body.theme-light .tag-time {
+  background: oklch(0.88 0.03 270 / 0.3) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .diag-arrow {
+  color: var(--dim) !important;
+}
+
+/* おすすめカード */
+body.theme-light .rec-card {
+  background: oklch(0.82 0.12 85 / 0.06) !important;
+  border-color: oklch(0.72 0.12 85 / 0.25) !important;
+}
+body.theme-light .rec-card:hover {
+  background: oklch(0.82 0.12 85 / 0.12) !important;
+}
+body.theme-light .rec-name {
+  color: var(--text) !important;
+}
+body.theme-light .rec-reason {
+  color: oklch(0.52 0.12 85) !important;
+}
+body.theme-light .rec-header {
+  color: oklch(0.52 0.12 85) !important;
+}
+body.theme-light .page-sub {
+  color: var(--dim) !important;
+}
+
+/* ─── faq.html ─── */
+
+/* FAQアイテム */
+body.theme-light .faq-item {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.82 0.08 285 / 0.3) !important;
+}
+body.theme-light .faq-item:hover {
+  border-color: oklch(0.58 0.22 285 / 0.4) !important;
+}
+body.theme-light .faq-question {
+  color: var(--text) !important;
+}
+body.theme-light .faq-question:hover {
+  color: oklch(0.38 0.22 285) !important;
+}
+body.theme-light .faq-answer {
+  color: oklch(0.25 0.02 270) !important;
+}
+
+/* FAQ検索ボックス */
+body.theme-light .search-input {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.82 0.08 285 / 0.3) !important;
+  color: var(--text) !important;
+}
+body.theme-light .search-input::placeholder {
+  color: var(--dim) !important;
+}
+
+/* FAQ CTA */
+body.theme-light .cta {
+  background: oklch(0.58 0.22 285 / 0.06) !important;
+  border-color: oklch(0.58 0.22 285 / 0.18) !important;
+}
+body.theme-light .cta-title {
+  color: var(--text) !important;
+}
+
+/* ─── SDT / Schwartz / Mindset / HSP / Attachment / Love 共通 ─── */
+
+/* result-card-inner（ダーク背景を明るく） */
+body.theme-light .result-card-inner {
+  background: oklch(1.0 0.0 0 / 0.85) !important;
+}
+
+/* needs-box / profile-box / bigfive-cross（SDT用） */
+body.theme-light .needs-box,
+body.theme-light .profile-box,
+body.theme-light .bigfive-cross {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .needs-box h3,
+body.theme-light .profile-box h3,
+body.theme-light .bigfive-cross h3 {
+  color: var(--dim) !important;
+}
+body.theme-light .profile-text {
+  color: var(--text) !important;
+}
+body.theme-light .need-row-label,
+body.theme-light .need-row-score {
+  color: var(--text) !important;
+}
+body.theme-light .need-row-desc {
+  color: var(--dim) !important;
+}
+body.theme-light .need-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.35) !important;
+}
+
+/* セカンダリナビボタン */
+body.theme-light .nav-btn-secondary {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .nav-btn-secondary:hover {
+  background: oklch(0.88 0.03 270) !important;
+  color: var(--text) !important;
+}
+
+/* 免責テキスト */
+body.theme-light .disclaimer {
+  color: var(--dim) !important;
+}
+
+/* need-chip（SDT スタート画面） */
+body.theme-light .need-chip .need-desc {
+  color: var(--dim) !important;
+}
+
+/* quiz-container内の intro-sub */
+body.theme-light .intro-sub {
+  color: var(--dim) !important;
+}
+body.theme-light .intro-note {
+  color: var(--dim) !important;
+}
+
+/* love.html 結果カード */
+body.theme-light .result-card-bg {
+  opacity: 0.12 !important;
+}
+body.theme-light .kw-tag {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: oklch(0.82 0.03 270 / 0.5) !important;
+  color: var(--dim) !important;
+}
+
+/* 6スタイルバー */
+body.theme-light .style-bars {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .style-bars h3 {
+  color: var(--dim) !important;
+}
+body.theme-light .bar-bg {
+  background: oklch(0.88 0.03 270 / 0.4) !important;
+}
+body.theme-light .bar-score {
+  color: var(--dim) !important;
+}
+
+/* other_quiz.html */
+body.theme-light .start-eyebrow {
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .start-sub {
+  color: var(--dim) !important;
+}
+body.theme-light .rel-btn {
+  background: oklch(0.97 0.01 270 / 0.8) !important;
+  border-color: oklch(0.82 0.08 285 / 0.2) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .rel-btn:hover {
+  background: oklch(0.93 0.04 285 / 0.4) !important;
+  border-color: oklch(0.58 0.22 285 / 0.35) !important;
+  color: var(--text) !important;
+}
+body.theme-light .rel-btn.selected {
+  color: var(--text) !important;
+}
+
+/* premiumモーダル */
+body.theme-light .premium-modal {
+  background: oklch(0.97 0.01 270) !important;
+  border-color: oklch(0.72 0.14 85 / 0.3) !important;
+}
+body.theme-light .premium-title {
+  color: var(--text) !important;
+}
+body.theme-light .premium-sub {
+  color: var(--dim) !important;
+}
+body.theme-light .premium-close {
+  border-color: oklch(0.82 0.03 270 / 0.4) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .premium-close:hover {
+  color: var(--text) !important;
+}
+
+/* ─── science.html ─── */
+
+/* ヒーローバッジ */
+body.theme-light .hero-badge {
+  border-color: oklch(0.55 0.18 210 / 0.3) !important;
+  color: oklch(0.42 0.18 210) !important;
+  background: oklch(0.55 0.18 210 / 0.06) !important;
+}
+body.theme-light .hero-desc {
+  color: var(--dim) !important;
+}
+body.theme-light .hero-meta {
+  color: oklch(0.55 0.18 210 / 0.7) !important;
+}
+
+/* 目次（science.html） */
+body.theme-light .toc {
+  background: oklch(0.96 0.01 270) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .toc-title {
+  color: oklch(0.42 0.18 210) !important;
+}
+body.theme-light .toc a {
+  color: var(--dim) !important;
+}
+body.theme-light .toc a:hover {
+  color: oklch(0.42 0.18 210) !important;
+}
+
+/* 因子カード */
+body.theme-light .trait-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .trait-desc {
+  color: var(--dim) !important;
+}
+body.theme-light .data-item {
+  background: oklch(0.95 0.01 270) !important;
+}
+body.theme-light .data-item .data-title {
+  color: var(--text) !important;
+}
+body.theme-light .data-item .data-body {
+  color: var(--dim) !important;
+}
+body.theme-light .data-item .data-cite {
+  color: oklch(0.62 0.03 270 / 0.5) !important;
+}
+
+/* 誤解リスト */
+body.theme-light .myth-item {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .myth-item p {
+  color: var(--dim) !important;
+}
+
+/* 比較テーブル */
+body.theme-light .compare-table th {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  color: var(--text) !important;
+  border-color: oklch(0.58 0.22 285 / 0.15) !important;
+}
+body.theme-light .compare-table td {
+  border-color: oklch(0.58 0.22 285 / 0.1) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .compare-table tr:nth-child(even) td {
+  background: oklch(0.58 0.22 285 / 0.03) !important;
+}
+
+/* タイムライン */
+body.theme-light .timeline-item h3 {
+  color: var(--text) !important;
+}
+body.theme-light .timeline-item p {
+  color: var(--dim) !important;
+}
+body.theme-light .timeline-item::before {
+  border-color: oklch(0.97 0.01 270) !important;
+}
+
+/* section p strong（science）*/
+body.theme-light .section p {
+  color: var(--dim) !important;
+}
+body.theme-light .section p strong {
+  color: var(--text) !important;
+}
+
+/* nav-back（science） */
+body.theme-light .nav-back {
+  color: var(--dim) !important;
+}
+body.theme-light .nav-back:hover {
+  color: oklch(0.42 0.18 210) !important;
+}
+
+/* ─── blog/index.html ─── */
+
+/* カード */
+body.theme-light .card {
+  background: oklch(0.97 0.01 270) !important;
+  border-color: oklch(0.86 0.04 210 / 0.35) !important;
+}
+body.theme-light .card:hover {
+  border-color: oklch(0.55 0.18 210 / 0.45) !important;
+}
+body.theme-light .card-tag {
+  color: oklch(0.42 0.18 210) !important;
+}
+body.theme-light .card-title {
+  color: var(--text) !important;
+}
+body.theme-light .page-eyebrow {
+  color: oklch(0.42 0.18 210) !important;
+}
+
+/* ─── legal.html ─── */
+body.theme-light .legal-body,
+body.theme-light .legal-content {
+  color: var(--text) !important;
+}
+
+/* ─── コンシェルジュ / 汎用 ─── */
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3 {
+  color: var(--text);
+}
+/* ただし gradient テキストは除外 (background-clip:text を使っているものは除く) */
+
+/* body直下 .container 内のpタグ（汎用dim） */
+body.theme-light p {
+  color: inherit;
+}
+
+/* ─── index.html 追加 ─── */
+
+/* stats-grid ボーダー */
+body.theme-light .stats-grid {
+  background: oklch(0.58 0.18 210 / 0.06) !important;
+  border-color: oklch(0.58 0.18 210 / 0.15) !important;
+}
+
+/* feature-card 変種（ダーク系背景を持つカード） */
+body.theme-light .feature-card--chara {
+  background: linear-gradient(145deg, oklch(0.72 0.18 340 / 0.07), oklch(0.96 0.01 270 / 0.7)) !important;
+  border-color: oklch(0.72 0.18 340 / 0.3) !important;
+}
+body.theme-light .feature-card--anohito {
+  background: linear-gradient(145deg, oklch(0.72 0.18 340 / 0.07), oklch(0.96 0.01 270 / 0.7)) !important;
+  border-color: oklch(0.72 0.18 340 / 0.3) !important;
+}
+
+/* feature-text-body（ダーク rgba を上書き） */
+body.theme-light .feature-text-body {
+  background: oklch(1.0 0.0 0 / 0.7) !important;
+}
+body.theme-light .feature-card--chara .feature-text-body h3 {
+  color: var(--text) !important;
+}
+body.theme-light .feature-card--chara .feature-text-body p {
+  color: var(--dim) !important;
+}
+
+/* ─── science.html 追加 ─── */
+
+/* traits-overview-label */
+body.theme-light .traits-overview-label {
+  color: oklch(0.42 0.18 210) !important;
+}
+
+/* trait-circle */
+body.theme-light .trait-circle.O { border-color: oklch(0.58 0.22 285 / 0.5) !important; }
+body.theme-light .trait-circle.C { border-color: oklch(0.55 0.18 260 / 0.5) !important; }
+body.theme-light .trait-circle.E { border-color: oklch(0.65 0.18 55 / 0.5) !important; }
+body.theme-light .trait-circle.A { border-color: oklch(0.65 0.18 340 / 0.5) !important; }
+body.theme-light .trait-circle.N { border-color: oklch(0.55 0.17 195 / 0.5) !important; }
+body.theme-light .tc-keywords span {
+  background: oklch(0.18 0.02 270 / 0.65) !important;
+  color: oklch(0.9 0.01 270) !important;
+}
+
+/* 参考文献 */
+body.theme-light .ref-item {
+  background: oklch(0.95 0.01 270) !important;
+  border-left-color: oklch(0.58 0.22 285 / 0.3) !important;
+  color: oklch(0.52 0.03 270) !important;
+}
+body.theme-light .ref-item strong {
+  color: var(--dim) !important;
+}
+
+/* cta-section（science） */
+body.theme-light .cta-section {
+  background: linear-gradient(135deg, oklch(0.58 0.22 285 / 0.07), oklch(0.55 0.18 260 / 0.06)) !important;
+  border-color: oklch(0.58 0.22 285 / 0.15) !important;
+}
+body.theme-light .cta-section h2 {
+  color: var(--text) !important;
+}
+body.theme-light .cta-section p {
+  color: var(--dim) !important;
+}
+
+/* ─── ブログ記事追加 ─── */
+
+/* site-header（ダーク rgba 上書き済みだが念のため再確認） */
+/* ブログ共通: ダーク系 toc 背景（--bg2 = #0f1535）*/
+body.theme-light .toc {
+  background: oklch(0.96 0.01 270) !important;
+  border-color: oklch(0.86 0.04 210 / 0.3) !important;
+}
+
+/* ブログ: article-body hr */
+body.theme-light .article-body hr {
+  border-top-color: oklch(0.86 0.02 270 / 0.4) !important;
+}
+
+/* 페이지 헤더 상세 */
+body.theme-light .header-sub {
+  color: var(--dim) !important;
+}
+
+/* kodomo.html（子ども向けはデフォルトがライト系なので、ライトモードCSS変数で上書きされる部分を戻す） */
+/* kodomo.html は --bg が #e6f3ff、--text が #0f2d4a と既にライトなので追加対応なし */
+/* feature-item は白半透明背景なので問題なし */
