@@ -289,4 +289,20 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：優しい人が太りやすい理由と、それを変える方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-neuroticism-high.html</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：真面目な人ほどダイエットで詰まる理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-conscientiousness-high.html</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
