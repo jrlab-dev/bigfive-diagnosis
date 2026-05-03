@@ -214,16 +214,19 @@ body { padding-top: 52px !important; }
     });
   }
 
-  // 初期テーマ適用
-  if (saved === 'light') {
+  // 初期テーマ適用（bodyにtheme-lightがあればそのページのデフォルトはlight）
+  var defaultLight = document.body.classList.contains('theme-light');
+  if (saved === 'light' || (saved === null && defaultLight)) {
     document.body.classList.add('theme-light');
+  } else if (saved === 'dark') {
+    document.body.classList.remove('theme-light');
   }
 
   // ボタン生成
   var btn = document.createElement('button');
   btn.className = 'theme-toggle';
   btn.setAttribute('aria-label', 'テーマ切り替え');
-  btn.textContent = saved === 'light' ? 'DARK' : 'LIGHT';
+  btn.textContent = document.body.classList.contains('theme-light') ? 'DARK' : 'LIGHT';
   document.body.appendChild(btn);
 
   // 初期表示時に画像も切り替え
