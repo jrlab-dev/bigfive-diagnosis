@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ブログ｜ビッグファイブ診断</title>
+<meta name="description" content="性格と行動の関係を科学的な視点で解説するブログ。ダイエット・HSP・MBTI比較・自己肯定感など、ビッグファイブ心理学に基づいた記事を掲載しています。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  .page-header { margin-bottom: 40px; }
+  .page-eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .page-title {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 900; line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .page-desc { font-size: 15px; color: var(--dim); }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    color: var(--accent); text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 8px;
+  }
+  .card {
+    display: block;
+    text-decoration: none;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform .2s, border-color .2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34,211,238,0.35);
+  }
+  .card-img {
+    width: 100%; aspect-ratio: 16/9;
+    object-fit: cover; display: block;
+    background: var(--bg2);
+  }
+  .card-body { padding: 16px 18px 20px; }
+  .card-tag {
+    font-size: 11px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .card-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--text); line-height: 1.5;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light">
+<div class="bg-nebula"></div>
+
+<main class="main-wrap">
+
+  <header class="page-header">
+    <p class="page-eyebrow">Blog</p>
+    <h1 class="page-title">性格と行動の話</h1>
+    <p class="page-desc">ビッグファイブ心理学をベースに、日常の行動・習慣・人間関係を読み解く記事を書いています。</p>
+  </header>
+
+  <!-- ダイエット×性格 -->
+  <p class="section-label">ダイエット × 性格</p>
+  <div class="card-grid">
+    <a href="diet-neuroticism-high.html" class="card">
+      <img class="card-img" src="../images/blog/diet-neuroticism-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">感受性 × ダイエット</span>
+        <p class="card-title">優しい人が太りやすい理由と、それを変える方法</p>
+      </div>
+    </a>
+    <a href="diet-conscientiousness-high.html" class="card">
+      <img class="card-img" src="../images/blog/diet-conscientiousness-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">誠実性 × ダイエット</span>
+        <p class="card-title">真面目な人ほどダイエットで詰まる理由</p>
+      </div>
+    </a>
+    <a href="diet-extraversion-high.html" class="card">
+      <img class="card-img" src="../images/blog/diet-extraversion-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">外向性 × ダイエット</span>
+        <p class="card-title">一人でやるから続かない　外向的な人のダイエット設計</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- 性格の悩み -->
+  <p class="section-label">性格の悩み</p>
+  <div class="card-grid">
+    <a href="kiwo-tsukaisu.html" class="card">
+      <img class="card-img" src="../images/blog/kiwo-tsukaisu.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">協調性 × 自己肯定感</span>
+        <p class="card-title">気を使いすぎて疲れる人が知るべき、自分の性格の正体</p>
+      </div>
+    </a>
+    <a href="kiwotsukaisugiru-baka-riyu.html" class="card">
+      <img class="card-img" src="../images/blog/kiwotsukaisugiru-baka-riyu.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">協調性 × 人間関係</span>
+        <p class="card-title">気を使いすぎる人がバカに見られる、本当の理由</p>
+      </div>
+    </a>
+    <a href="kiwotsukaisugiru-jikokoteikan.html" class="card">
+      <img class="card-img" src="../images/blog/kiwotsukaisugiru-jikokoteikan.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">協調性 × 自己肯定感</span>
+        <p class="card-title">気を使いすぎる人が自己肯定感を上げると、なぜか「行動できる人」に好かれる</p>
+      </div>
+    </a>
+    <a href="kanpeki-shugi-hajimenai.html" class="card">
+      <img class="card-img" src="../images/blog/kanpeki-shugi-hajimenai.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">誠実性 × 行動</span>
+        <p class="card-title">完璧主義の人が一番やっていないこと——それは「始めること」</p>
+      </div>
+    </a>
+    <a href="seikaku-kaereru.html" class="card">
+      <img class="card-img" src="../images/blog/seikaku-kaereru.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">性格 × 変化</span>
+        <p class="card-title">性格は変えられる？心理学が出した、正直な答え</p>
+      </div>
+    </a>
+    <a href="hsp-toha-kiso-chishiki.html" class="card">
+      <img class="card-img" src="../images/blog/hsp-toha-kiso-chishiki.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">HSP × 基礎知識</span>
+        <p class="card-title">HSPとは？繊細な自分を理解するための基礎知識</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- 性格診断の知識 -->
+  <p class="section-label">性格診断の知識</p>
+  <div class="card-grid">
+    <a href="mbti-vs-bigfive.html" class="card">
+      <img class="card-img" src="../images/blog/mbti-vs-bigfive.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">MBTI × ビッグファイブ</span>
+        <p class="card-title">MBTIの診断結果、嘘じゃない？ビッグファイブとの違いを心理学の観点から解説</p>
+      </div>
+    </a>
+    <a href="openness-high.html" class="card">
+      <img class="card-img" src="../images/blog/openness-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">開放性 高い</span>
+        <p class="card-title">開放性が高い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="openness-low.html" class="card">
+      <img class="card-img" src="../images/blog/openness-low.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">開放性 低い</span>
+        <p class="card-title">開放性が低い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="conscientiousness-high.html" class="card">
+      <img class="card-img" src="../images/blog/conscientiousness-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">誠実性 高い</span>
+        <p class="card-title">誠実性が高い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="conscientiousness-low.html" class="card">
+      <img class="card-img" src="../images/blog/conscientiousness-low.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">誠実性 低い</span>
+        <p class="card-title">誠実性が低い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="extraversion-high.html" class="card">
+      <img class="card-img" src="../images/blog/extraversion-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">外向性 高い</span>
+        <p class="card-title">外向性が高い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="extraversion-low.html" class="card">
+      <img class="card-img" src="../images/blog/extraversion-low.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">外向性 低い</span>
+        <p class="card-title">外向性が低い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="agreeableness-high.html" class="card">
+      <img class="card-img" src="../images/blog/agreeableness-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">協調性 高い</span>
+        <p class="card-title">協調性が高い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="agreeableness-low.html" class="card">
+      <img class="card-img" src="../images/blog/agreeableness-low.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">協調性 低い</span>
+        <p class="card-title">協調性が低い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="neuroticism-high.html" class="card">
+      <img class="card-img" src="../images/blog/neuroticism-high.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">神経症傾向 高い</span>
+        <p class="card-title">神経症傾向が高い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+    <a href="neuroticism-low.html" class="card">
+      <img class="card-img" src="../images/blog/neuroticism-low.jpg" alt="" loading="lazy" width="560" height="315">
+      <div class="card-body">
+        <span class="card-tag">神経症傾向 低い</span>
+        <p class="card-title">神経症傾向が低い人の特徴と強み・弱み</p>
+      </div>
+    </a>
+  </div>
+
+</main>
+</body>
+</html>
