@@ -305,4 +305,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：一人でやるから続かない　外向的な人のダイエット設計 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-extraversion-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
