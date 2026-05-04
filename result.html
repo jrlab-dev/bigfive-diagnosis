@@ -335,23 +335,23 @@
   .card-content {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
     display: flex; flex-direction: column; align-items: center;
-    padding: 0 20px 20px;
+    padding: 0 16px 12px;
     background: linear-gradient(to bottom, transparent 0%, rgba(10,14,39,0.7) 20%, rgba(10,14,39,0.85) 100%);
   }
   .scores {
     width: 100%; display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px 16px; margin-bottom: 10px;
+    gap: 3px 12px; margin-bottom: 6px;
   }
-  .score-item { display: flex; align-items: center; gap: 6px; }
+  .score-item { display: flex; align-items: center; gap: 4px; }
   .score-label { font-size: 11px; font-weight: 700; width: 14px; text-align: center; }
-  .score-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.4); border-radius: 3px; overflow: hidden; }
+  .score-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.4); border-radius: 3px; overflow: hidden; }
   .score-bar { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
   .score-val { font-size: 10px; color: var(--dim); width: 12px; text-align: right; }
   .description {
     font-size: 14px; line-height: 1.6; text-align: left;
-    color: #cbd5e1; padding: 8px 12px;
-    background: rgba(0,0,0,0.18); border-radius: 8px;
+    color: #cbd5e1; padding: 6px 10px;
+    background: rgba(0,0,0,0.10); border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.05);
     width: 100%; backdrop-filter: blur(4px);
   }

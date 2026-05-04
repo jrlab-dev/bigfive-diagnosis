@@ -107,8 +107,7 @@ body.theme-light .container {
 
 /* カード系 */
 body.theme-light .feature-card,
-body.theme-light .proof-card,
-body.theme-light .card-bg {
+body.theme-light .proof-card {
   background: var(--card-bg) !important;
   border-color: var(--card-border) !important;
   backdrop-filter: blur(16px);
