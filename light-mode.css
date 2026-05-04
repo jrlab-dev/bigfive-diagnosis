@@ -1699,11 +1699,11 @@ body.theme-light .nav-back:hover {
 /* ─── blog/index.html ─── */
 
 /* カード */
-body.theme-light .card {
+body.theme-light .card-grid .card {
   background: oklch(0.97 0.01 270) !important;
   border-color: oklch(0.86 0.04 210 / 0.35) !important;
 }
-body.theme-light .card:hover {
+body.theme-light .card-grid .card:hover {
   border-color: oklch(0.55 0.18 210 / 0.45) !important;
 }
 body.theme-light .card-tag {
