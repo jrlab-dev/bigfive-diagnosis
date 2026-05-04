@@ -215,12 +215,8 @@ body { padding-top: 52px !important; }
     });
   }
 
-  // 初期テーマ適用（bodyにtheme-lightがあればそのページのデフォルトはlight）
-  var defaultLight = document.body.classList.contains('theme-light');
-  // デフォルトがライトのページ（ブログ等）はユーザーのダーク設定に関わらずライトモードを維持
-  if (defaultLight || saved === 'light') {
-    document.body.classList.add('theme-light');
-  } else if (saved === 'dark') {
+  // ダーク明示保存時のみダーク、それ以外は全ページライト
+  if (saved === 'dark') {
     document.body.classList.remove('theme-light');
   }
 
@@ -232,7 +228,7 @@ body { padding-top: 52px !important; }
   document.body.appendChild(btn);
 
   // 初期表示時に画像も切り替え
-  if (saved === 'light' || defaultLight) {
+  if (saved !== 'dark') {
     setThemeImages(true);
   }
 
