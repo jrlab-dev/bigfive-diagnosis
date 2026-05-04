@@ -581,7 +581,7 @@ body.theme-light .collection-card {
 }
 body.theme-light .collection-card img {
   background: oklch(0.97 0.01 270) !important;
-  transform: scale(1.17);
+  clip-path: inset(7.2%);
 }
 body.theme-light .collection-card .card-label {
   background: oklch(0.15 0.03 270 / 0.65) !important;
@@ -595,7 +595,7 @@ body.theme-light .zukan-card {
 }
 body.theme-light .zukan-card img {
   background: oklch(0.97 0.01 270) !important;
-  transform: scale(1.17);
+  clip-path: inset(7.2%);
 }
 body.theme-light .zukan-card .card-label {
   background: oklch(0.15 0.03 270 / 0.65) !important;
@@ -1133,6 +1133,12 @@ body.theme-light .result-card-date {
 }
 body.theme-light .result-card-name {
   color: var(--text) !important;
+}
+
+/* タイプ名はキャラクターカード画像の上に乗るため常に白 */
+body.theme-light .type-name {
+  color: #fff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.9) !important;
 }
 
 /* テストカード（mypage） */
