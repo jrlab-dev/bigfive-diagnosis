@@ -731,6 +731,21 @@ body.theme-light .highlight-box {
   border-color: oklch(0.58 0.18 260 / 0.2) !important;
 }
 
+/* キーワードカード */
+body.theme-light .keyword-card {
+  background: oklch(0.96 0.01 270) !important;
+  border-color: oklch(0.86 0.04 210 / 0.35) !important;
+}
+body.theme-light .keyword-card-title {
+  color: oklch(0.42 0.18 260) !important;
+}
+body.theme-light .keyword-card .merit {
+  color: oklch(0.38 0.18 148) !important;
+}
+body.theme-light .keyword-card .demerit {
+  color: oklch(0.48 0.20 10) !important;
+}
+
 /* CTAボックス */
 body.theme-light .cta-box {
   background: linear-gradient(135deg, oklch(0.58 0.18 260 / 0.08), oklch(0.48 0.18 260 / 0.04)) !important;
