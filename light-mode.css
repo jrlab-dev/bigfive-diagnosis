@@ -1137,7 +1137,7 @@ body.theme-light .result-card-name {
 /* タイプ名はキャラクターカード画像の上に乗るため常に白 */
 body.theme-light .type-name {
   color: #fff !important;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.9) !important;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 2px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.9) !important;
 }
 
 /* テストカード（mypage） */
