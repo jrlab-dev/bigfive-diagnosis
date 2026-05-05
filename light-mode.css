@@ -222,9 +222,9 @@ body.theme-light .anohito-lead {
 
 /* トップページフッター */
 body.theme-light footer {
-  background: oklch(0.14 0.03 270) !important;
-  color: oklch(0.72 0.04 270) !important;
-  border-top-color: oklch(0.25 0.03 270) !important;
+  background: transparent !important;
+  color: oklch(0.52 0.03 270) !important;
+  border-top-color: oklch(0.86 0.02 270) !important;
 }
 
 /* ─── デモモーダル ─── */
