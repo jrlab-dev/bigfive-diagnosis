@@ -206,7 +206,7 @@ body { padding-top: 52px !important; }
   var saved = localStorage.getItem(THEME_KEY);
 
   function setThemeImages(isLight) {
-    document.querySelectorAll('.feature-bg-img').forEach(function(img) {
+    document.querySelectorAll('.feature-bg-img, .card-showcase img').forEach(function(img) {
       var src = img.getAttribute('src');
       if (!src) return;
       if (isLight) {
