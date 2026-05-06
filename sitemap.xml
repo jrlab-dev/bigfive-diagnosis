@@ -337,6 +337,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：空気を読む人が太りやすい本当の理由　断らない人のためのダイエット設計 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-agreeableness-high.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：自分流を曲げない人のダイエット　競争心を正しく使う方法 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/diet-agreeableness-low.html</loc>
