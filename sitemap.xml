@@ -321,6 +321,46 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：飽き性の人のダイエットが続かない本当の理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-openness-high.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：同じことを続けられる人が、ダイエットで一番やってはいけないこと -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-openness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：自分流を曲げない人のダイエット　競争心を正しく使う方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-agreeableness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：メンタルが安定している人がダイエットで陥る、意外な落とし穴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-neuroticism-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：三日坊主の人がダイエットを続けるには、意志力より先にやることがある -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-conscientiousness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
