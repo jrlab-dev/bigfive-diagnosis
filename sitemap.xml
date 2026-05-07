@@ -377,6 +377,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：考えすぎて動けない人の恋愛——感受性が高い人が一番損をしてる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-neuroticism-high.html</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
