@@ -1134,9 +1134,9 @@ function showResult() {
   card.innerHTML = '';
   ['E','N','O','C','A'].forEach(f => {
     const s = sc[f], info = traitInfo[f];
-    const pct = s===1 ? 22 : s===3 ? 55 : 88;
-    const lv  = s===5 ? '高め' : s===3 ? '普通' : '低め';
-    const lvClass = s===5 ? 'lv-high' : s===3 ? 'lv-mid' : 'lv-low';
+    const pct = s * 20;
+    const lv  = s <= 2 ? '低め' : s === 3 ? '普通' : '高め';
+    const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
     card.innerHTML += `
       <div class="trait-row">
         <div class="trait-header">
