@@ -2652,7 +2652,6 @@ if (isOtherMode) {
   }
 
   // 自動保存（自分の結果のみ・あの人閲覧時はスキップ・保存済み閲覧時もスキップ・共有リンク時もスキップ）
-  var params = new URLSearchParams(location.search);
   var isSavedView = params.get('saved') === '1';
   var isSharedView = params.get('from') === 'share';
   if (!isOtherMode && !isSavedView && !isSharedView) {
