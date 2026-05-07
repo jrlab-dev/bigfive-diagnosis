@@ -498,6 +498,8 @@ body { line-height: 1.8; }
 
 </div>
 
+<script src="bigfive-constants.js"></script>
+<script src="bigfive-utils.js"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -523,8 +525,8 @@ const VALUES_JA = {
   'achievement':'達成','power':'権力','security':'安全',
   'conformity':'同調','tradition':'伝統','benevolence':'仁愛','universalism':'普遍主義'
 };
-const FACTOR_COLORS = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
-const FACTOR_LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+/* FACTOR_COLORS は bigfive-constants.js で定義済み */
+const FACTOR_LABELS = FACTOR_NAMES;
 const HSP_TYPES = [
   { min: 12, max: 19, name: '安定型',          color: '#6b7280' },
   { min: 20, max: 27, name: 'おだやか感受性型', color: '#10b981' },
@@ -541,7 +543,7 @@ const ATTACHMENT_TYPES = {
 
 // ===== データ読み込み =====
 function loadData() {
-  const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const bfList = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
   const bf     = bfList.length > 0 ? bfList[0] : null;
   let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null;
   try { love       = JSON.parse(localStorage.getItem('love_result'));       } catch(e) {}
@@ -571,10 +573,7 @@ function renderProfile(bf) {
   if (!bf) return;
   const scores  = bf.scores || {};
   const gender  = bf.gender || 'F';
-  const imgCode = bf.code.split('').map(d => {
-    const n = parseInt(d);
-    return n <= 2 ? '1' : n >= 4 ? '5' : '3';
-  }).join('');
+  const imgCode = imgCodeFromScores(bf.code);
   const imgPath = `images/characters/${gender}/${imgCode}.webp`;
 
   const charEl = document.getElementById('profileChar');
