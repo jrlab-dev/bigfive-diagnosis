@@ -867,13 +867,14 @@
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
       <div class="ai-examples">
-        <p class="ai-examples-title">使い方例（AIに貼り付けて質問）</p>
+        <p class="ai-examples-title">使い方（ChatGPTやClaudeなどのAIに貼り付けて質問）</p>
         <ul>
           <li>この性格を踏まえて、仕事でのストレス対策をアドバイスしてください</li>
           <li>この性格の人に合った恋愛のアドバイスをください</li>
           <li>この性格の強みを活かせる仕事・職場を提案してください</li>
           <li>この性格の傾向を踏まえて、人間関係で気をつけるべきことを教えてください</li>
         </ul>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6;">※ 心理テストを受けるほどAIに渡せる情報が増え、より精密なアドバイスがもらえます。</p>
       </div>
     </div>
   </div>
@@ -1728,12 +1729,6 @@ function renderAIProfile() {
       lines.push('');
     } catch(e) {}
   }
-
-  // フッター
-  lines.push('---');
-  lines.push('このプロフィールをAI（ChatGPT・Claude等）に貼り付けて、');
-  lines.push('「この性格を踏まえて〇〇についてアドバイスしてください」と質問すると、');
-  lines.push('あなたに合ったアドバイスがもらえます。');
 
   textarea.value = lines.join('\n');
 
