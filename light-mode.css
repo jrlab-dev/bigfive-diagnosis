@@ -1421,6 +1421,9 @@ body.theme-light .tag-time {
 body.theme-light .diag-arrow {
   color: var(--dim) !important;
 }
+body.theme-light .section-sub-note {
+  color: var(--dim) !important;
+}
 
 /* おすすめカード */
 body.theme-light .rec-card {
