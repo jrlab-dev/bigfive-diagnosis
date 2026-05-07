@@ -453,6 +453,39 @@
   }
   .setting-toggle.on::after { transform: translateX(20px); }
 
+  /* AIプロフィール出力 */
+  .ai-profile-card {
+    margin-top: 20px; padding: 16px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+  .ai-profile-card .section-label { margin-bottom: 6px; }
+  .ai-profile-desc { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 12px; }
+  .ai-profile-text {
+    width: 100%; min-height: 120px; padding: 12px;
+    background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: var(--text); font-family: inherit; font-size: 12px;
+    line-height: 1.7; resize: none; outline: none;
+  }
+  .ai-copy-btn {
+    width: 100%; padding: 12px; margin-top: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: opacity .2s;
+  }
+  .ai-copy-btn:hover { opacity: .9; }
+  .ai-copy-btn.copied { background: linear-gradient(135deg, #10b981, #059669); }
+  .ai-examples { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.07); }
+  .ai-examples-title { font-size: 12px; font-weight: 600; color: var(--dim); margin-bottom: 8px; }
+  .ai-examples ul { list-style: none; padding: 0; }
+  .ai-examples li {
+    font-size: 12px; color: var(--dim); line-height: 1.6; padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .ai-examples li::before {
+    content: '→'; position: absolute; left: 0; color: var(--purple);
+  }
+
   /* 端末引継ぎ */
   .sync-section {
     margin-top: 20px;
@@ -825,6 +858,25 @@
 
   <!-- 総合レポートバナー -->
   <div class="report-banner" id="reportBanner"></div>
+
+  <!-- AIプロフィール出力 -->
+  <div id="aiProfileSection" style="display:none;">
+    <div class="ai-profile-card">
+      <p class="section-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> AIに相談する用プロフィール</p>
+      <p class="ai-profile-desc">あなたの性格データをワンクリックでコピー。ChatGPTやClaudeなどのAIに貼り付けて、あなたに合ったアドバイスがもらえます。</p>
+      <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
+      <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
+      <div class="ai-examples">
+        <p class="ai-examples-title">使い方例（AIに貼り付けて質問）</p>
+        <ul>
+          <li>この性格を踏まえて、仕事でのストレス対策をアドバイスしてください</li>
+          <li>この性格の人に合った恋愛のアドバイスをください</li>
+          <li>この性格の強みを活かせる仕事・職場を提案してください</li>
+          <li>この性格の傾向を踏まえて、人間関係で気をつけるべきことを教えてください</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- 端末引継ぎ -->
   <div class="sync-section">
@@ -1570,7 +1622,138 @@ function renderReportBanner() {
   }
 }
 
-</script>
+// ===== AIプロフィール出力 =====
+function renderAIProfile() {
+  const section = document.getElementById('aiProfileSection');
+  const textarea = document.getElementById('aiProfileText');
+
+  // ビッグファイブ
+  const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), bfList.length - 1);
+  const bf = bfList.length > 0 ? bfList[activeIdx] : null;
+
+  // 受診済みのテストがなければ非表示
+  const hasHSP = !!localStorage.getItem('hsp_result');
+  const hasAtt = !!localStorage.getItem('attachment_result');
+  const hasLove = !!localStorage.getItem('love_result');
+  const hasMind = !!localStorage.getItem('mindset_result');
+  const hasSch = !!localStorage.getItem('schwartz_result');
+  const hasSDT = !!localStorage.getItem('sdt_result');
+
+  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT) return;
+  section.style.display = 'block';
+
+  // マッピング
+  const bfNames = { O: '開放性', C: '誠実性', E: '外向性', A: '協調性', N: '神経症傾向' };
+  const attNames = { secure: '安心ベース型', anxious: 'つながり重視型', avoidant: '自律尊重型', fearful: '繊細なつながり型' };
+  const loveNames = { eros: '情熱型', ludus: '遊び型', storge: '友情型', pragma: '現実型', mania: '執着型', agape: '献身型' };
+  const mindNames = { growth: '成長マインドセット', mixed: '混合マインドセット', fixed: '固定マインドセット' };
+  const schNames = { 'self-direction': '自己方向性', stimulation: '刺激追求', hedonism: '快楽主義', achievement: '達成', power: '権力', security: '安全', conformity: '同調', tradition: '伝統', benevolence: '仁愛', universalism: '普遍主義' };
+  const sdtNames = { autonomy: '自律性（自分で決めたい）', competence: '有能感（上手にやりたい）', relatedness: '関係性（人と繋がりたい）' };
+
+  let lines = ['【私の性格プロフィール】', ''];
+
+  // ビッグファイブ
+  if (bf) {
+    const s = bf.scores || {};
+    const typeName = bf.typeName || '';
+    lines.push('■ ビッグファイブ性格診断');
+    if (typeName) lines.push(`タイプ: ${typeName}（${bf.code}）`);
+    else lines.push(`タイプコード: ${bf.code}`);
+    lines.push(`開放性: ${s.O || '?'} / 誠実性: ${s.C || '?'} / 外向性: ${s.E || '?'} / 協調性: ${s.A || '?'} / 神経症傾向: ${s.N || '?'}`);
+    lines.push('');
+  }
+
+  // HSP
+  if (hasHSP) {
+    try {
+      const d = JSON.parse(localStorage.getItem('hsp_result'));
+      const total = d.scores.total;
+      const lvl = total >= 42 ? '高感受性（蘭型）' : total >= 34 ? 'やや高感受性（蘭型）' : total >= 28 ? '中感受性（チューリップ型）' : total >= 20 ? 'おだやか感受性型' : '低感受性（安定型）';
+      lines.push('■ HSP 感受性チェック');
+      lines.push(`合計スコア: ${total}点（${lvl}）`);
+      if (d.scores.EOE !== undefined) lines.push(`易興奮性: ${d.scores.EOE} / 美的感受性: ${d.scores.AES} / 低感覚閾値: ${d.scores.LST}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 愛着
+  if (hasAtt) {
+    try {
+      const d = JSON.parse(localStorage.getItem('attachment_result'));
+      lines.push('■ 愛着スタイル');
+      lines.push(`タイプ: ${attNames[d.typeKey] || d.typeKey}`);
+      if (d.anxiety !== undefined) lines.push(`不安軸: ${d.anxiety.toFixed(1)} / 回避軸: ${d.avoidance.toFixed(1)}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 恋愛
+  if (hasLove) {
+    try {
+      const d = JSON.parse(localStorage.getItem('love_result'));
+      lines.push('■ 恋愛スタイル');
+      lines.push(`メインスタイル: ${loveNames[d.mainStyle] || d.mainStyle}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // マインドセット
+  if (hasMind) {
+    try {
+      const d = JSON.parse(localStorage.getItem('mindset_result'));
+      lines.push('■ マインドセット');
+      lines.push(`タイプ: ${mindNames[d.type] || d.type}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 価値観
+  if (hasSch) {
+    try {
+      const d = JSON.parse(localStorage.getItem('schwartz_result'));
+      const top3 = (d.top3 || []).map(k => schNames[k] || k);
+      lines.push('■ 価値観タイプ');
+      lines.push(`上位価値観: ${top3.join('、')}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 動機
+  if (hasSDT) {
+    try {
+      const d = JSON.parse(localStorage.getItem('sdt_result'));
+      lines.push('■ 動機タイプ');
+      lines.push(`最も強い欲求: ${sdtNames[d.strongest] || d.strongest}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // フッター
+  lines.push('---');
+  lines.push('このプロフィールをAI（ChatGPT・Claude等）に貼り付けて、');
+  lines.push('「この性格を踏まえて〇〇についてアドバイスしてください」と質問すると、');
+  lines.push('あなたに合ったアドバイスがもらえます。');
+
+  textarea.value = lines.join('\n');
+
+  // コピー機能
+  document.getElementById('aiCopyBtn').addEventListener('click', function() {
+    const btn = this;
+    navigator.clipboard.writeText(textarea.value).then(() => {
+      btn.textContent = 'コピーしました ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
+    }).catch(() => {
+      textarea.select();
+      document.execCommand('copy');
+      btn.textContent = 'コピーしました ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+}
+renderAIProfile();
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
 <script src="concierge.js"></script>
