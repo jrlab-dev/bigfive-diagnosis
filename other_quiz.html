@@ -892,7 +892,7 @@ startBtn.addEventListener('click', () => {
   // who bar
   const whoBar = document.getElementById('whoBar');
   whoBar.className = `who-bar ${cfg.whoClass}`;
-  document.getElementById('whoIcon').textContent = cfg.icon;
+  document.getElementById('whoIcon').innerHTML = cfg.icon;
   document.getElementById('whoName').textContent = personName;
   document.getElementById('whoSub').textContent = `を観察して答えてください（${cfg.label}）`;
   // progress color
@@ -904,7 +904,7 @@ startBtn.addEventListener('click', () => {
   document.getElementById('resultName').textContent = personName;
   // rel badge
   const badge = document.getElementById('relBadge');
-  badge.textContent = cfg.badge;
+  badge.innerHTML = cfg.badge;
   badge.className = `result-rel-badge ${cfg.badgeClass}`;
 
   current = 0;
