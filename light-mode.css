@@ -1597,6 +1597,10 @@ body.theme-light .rel-btn.sel-friend   { background: rgba(16,185,129,0.15) !impo
 body.theme-light .rel-btn.sel-child    { background: rgba(251,191,36,0.20) !important; border-color: #fbbf24 !important; }
 body.theme-light .gender-btn.selected  { background: rgba(139,92,246,0.2) !important; border-color: var(--purple) !important; color: var(--text) !important; font-weight: 700; }
 body.theme-light .period-btn.selected  { background: rgba(139,92,246,0.2) !important; border-color: var(--purple) !important; color: var(--text) !important; font-weight: 700; }
+body.theme-light .accuracy-card { background: var(--card-bg) !important; border-color: var(--card-border) !important; }
+body.theme-light .bar-bg { background: oklch(0.88 0.03 270 / 0.4) !important; }
+body.theme-light .bias-item { background: var(--card-bg) !important; border-color: var(--card-border) !important; }
+body.theme-light .bias-btn-keep { background: oklch(0.97 0.01 270 / 0.8) !important; border-color: var(--card-border) !important; }
 
 /* premiumモーダル */
 body.theme-light .premium-modal {
