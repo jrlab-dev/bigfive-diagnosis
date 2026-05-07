@@ -1,0 +1,48 @@
+/* ===== ビッグファイブ診断サイト 共通CSS基盤 ===== */
+
+/* リセット */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* CSS変数（全ページ共通コア） */
+:root {
+  --bg: #0a0e27;
+  --purple: #8b5cf6;
+  --blue: #3b82f6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --yellow: #fbbf24;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --sky: #3b9ede;
+  --c-O: #8b5cf6;
+  --c-C: #3b82f6;
+  --c-E: #f97316;
+  --c-A: #f472b6;
+  --c-N: #14b8a6;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --card-bg: rgba(255,255,255,0.05);
+  --card-border: rgba(255,255,255,0.08);
+}
+
+/* body基本 */
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 背景効果（構造） — 各ページの <style> で background/animation を追加 */
+.bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.bg-stars  { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ユーティリティ */
+.icon          { width: 18px; height: 18px; flex-shrink: 0; }
+.icon-sm       { width: 14px; height: 14px; flex-shrink: 0; }
+.icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+
+/* 画面切替（quiz系ページ） */
+.screen { display: none; flex-direction: column; padding: 40px 24px; position: relative; z-index: 1; width: 100%; max-width: 560px; min-height: 100vh; margin: 0 auto; }
+.screen.active { display: flex; }
