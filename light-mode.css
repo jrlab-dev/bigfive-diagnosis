@@ -1588,7 +1588,15 @@ body.theme-light .rel-btn:hover {
 }
 body.theme-light .rel-btn.selected {
   color: var(--text) !important;
+  border-color: var(--purple) !important;
+  font-weight: 700;
 }
+body.theme-light .rel-btn.sel-love     { background: rgba(236,72,153,0.15) !important; border-color: var(--pink) !important; }
+body.theme-light .rel-btn.sel-work     { background: rgba(59,130,246,0.15) !important; border-color: var(--blue) !important; }
+body.theme-light .rel-btn.sel-friend   { background: rgba(16,185,129,0.15) !important; border-color: #10b981 !important; }
+body.theme-light .rel-btn.sel-child    { background: rgba(251,191,36,0.20) !important; border-color: #fbbf24 !important; }
+body.theme-light .gender-btn.selected  { background: rgba(139,92,246,0.2) !important; border-color: var(--purple) !important; color: var(--text) !important; font-weight: 700; }
+body.theme-light .period-btn.selected  { background: rgba(139,92,246,0.2) !important; border-color: var(--purple) !important; color: var(--text) !important; font-weight: 700; }
 
 /* premiumモーダル */
 body.theme-light .premium-modal {
