@@ -59,14 +59,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #0a0e27;
     --purple: #8b5cf6;
     --blue: #3b82f6;
-    --text: #e2e8f0;
-    --dim: #94a3b8;
   }
 
   body {
@@ -89,52 +84,18 @@
       radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.08) 0%, transparent 70%);
     animation: nebula-drift 25s ease-in-out infinite alternate;
   }
-  @keyframes nebula-drift {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.05) translate(-1%, 1%); }
-  }
   .bg-stars {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     animation: twinkle 4s ease-in-out infinite alternate;
   }
-  @keyframes twinkle {
-    0% { opacity: 0.5; } 100% { opacity: 1; }
-  }
-
-  /* メイン */
-  .quiz-container {
-    position: relative; z-index: 1;
-    width: 100%; max-width: 560px;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    padding: 40px 24px;
-  }
 
   /* プログレスバー */
-  .progress {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 40px;
-  }
-  .progress-bar {
-    flex: 1; height: 6px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 3px; overflow: hidden;
-  }
   .progress-fill {
     height: 100%; border-radius: 3px;
     background: linear-gradient(90deg, var(--purple), var(--blue));
     transition: width 0.4s ease;
   }
-  .progress-text {
-    font-size: 13px; color: var(--dim);
-    font-weight: 500; min-width: 40px; text-align: right;
-  }
 
-  /* 質問エリア */
-  .question-area {
-    flex: 1; display: flex; flex-direction: column;
-    justify-content: center;
-  }
   .question-num {
     font-size: 13px; color: var(--purple);
     font-weight: 500; margin-bottom: 12px;
@@ -181,24 +142,7 @@
     font-weight: 700;
   }
 
-  /* 戻るボタン */
-  .back-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: inherit; font-size: 13px;
-    color: var(--dim); background: none; border: none;
-    cursor: pointer; padding: 8px 0;
-    transition: color 0.2s;
-  }
-  .back-btn:hover { color: var(--text); }
-
   /* ローディング */
-  .loading {
-    display: none;
-    flex: 1; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 24px; text-align: center;
-  }
-  .loading.active { display: flex; }
   .loading-text {
     font-size: 18px; font-weight: 500;
     color: var(--text);
@@ -223,7 +167,6 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
 
   /* 性別選択 */
   .gender-select {
