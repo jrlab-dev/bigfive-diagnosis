@@ -56,7 +56,6 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
   --bg: #e6f3ff; --sky: #3b9ede; --blue: #0ea5e9;
   --pink: #f472b6; --yellow: #f59e0b; --green: #059669;
@@ -120,7 +119,6 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .progress-bar { flex: 1; height: 6px; background: rgba(15,45,74,0.1); border-radius: 3px; overflow: hidden; }
 .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--yellow), var(--pink)); transition: width .4s ease; }
 .progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
-.question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .q-num { font-size: 13px; color: #b45309; font-weight: 500; margin-bottom: 10px; }
 .q-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 58px; }
 .answers { display: flex; gap: 8px; margin-bottom: 32px; }
@@ -135,12 +133,9 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 /* ===== ローディング画面 ===== */
 #loadingScreen { align-items: center; justify-content: center; text-align: center; gap: 20px; }
 .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(59,158,222,0.2); border-top-color: var(--sky); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 .loading-text { font-size: 18px; font-weight: 500; }
 .loading-name { color: #b45309; }
 .loading-dots::after { content: ''; animation: dots 1.5s infinite; }
-@keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
-
 /* ===== 結果画面 ===== */
 .result-header { text-align: center; margin-bottom: 28px; }
 .result-badge { display: inline-block; font-size: 12px; font-weight: 700; color: #b45309; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 10px; }
