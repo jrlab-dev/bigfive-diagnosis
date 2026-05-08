@@ -55,14 +55,10 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0a0e27;
     --purple: #8b5cf6;
     --blue: #3b82f6;
     --pink: #ec4899;
-    --text: #e2e8f0;
-    --dim: #94a3b8;
     --card-bg: rgba(26,10,62,0.45);
     --card-border: rgba(139,92,246,0.2);
   }
@@ -83,9 +79,7 @@
       radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.08) 0%, transparent 70%);
     animation: nebula-drift 25s ease-in-out infinite alternate;
   }
-  @keyframes nebula-drift { 0%{transform:scale(1)} 100%{transform:scale(1.05) translate(-1%,1%)} }
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
-  @keyframes twinkle { 0%{opacity:.5} 100%{opacity:1} }
 
   /* ===== 共通 ===== */
   .screen {
@@ -207,15 +201,11 @@
   .rel-friend .who-name-txt { color: #10b981; }
   .who-sub-txt { font-size: 12px; color: var(--dim); }
 
-  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
-  .progress-bar { flex:1; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:3px; transition: width .4s ease; }
   .rel-love-bar   .progress-fill { background: linear-gradient(90deg, var(--pink), var(--purple)); }
   .rel-work-bar   .progress-fill { background: linear-gradient(90deg, var(--blue), var(--purple)); }
   .rel-friend-bar .progress-fill { background: linear-gradient(90deg, #10b981, var(--blue)); }
-  .progress-text { font-size:13px; color:var(--dim); font-weight:500; min-width:40px; text-align:right; }
 
-  .question-area { flex:1; display:flex; flex-direction:column; justify-content:center; }
   .question-num { font-size:13px; font-weight:500; margin-bottom:12px; }
   .rel-love   .question-num { color: var(--pink); }
   .rel-work   .question-num { color: var(--blue); }
@@ -234,12 +224,6 @@
   }
   .answer-btn.selected { background:linear-gradient(135deg,var(--purple),var(--blue)); border-color:transparent; color:#fff; font-weight:700; }
 
-  .back-btn {
-    display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:13px;
-    color:var(--dim); background:none; border:none; cursor:pointer; padding:8px 0; transition:color .2s;
-  }
-  .back-btn:hover { color:var(--text); }
-
   /* ===== ローディング ===== */
   #loadingScreen { justify-content:center; align-items:center; text-align:center; gap:24px; }
   .loading-spinner {
@@ -247,12 +231,10 @@
     border-top-color:var(--purple); border-radius:50%;
     animation:spin 1s linear infinite;
   }
-  @keyframes spin { to{transform:rotate(360deg)} }
   .loading-text { font-size:20px; font-weight:700; }
   .loading-name { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .loading-sub { font-size:14px; color:var(--dim); }
   .loading-dots::after { content:''; animation:dots 1.5s infinite; }
-  @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
 
   /* ===== 結果画面 ===== */
   #resultScreen { justify-content:flex-start; padding-top:48px; }
