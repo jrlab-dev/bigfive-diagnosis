@@ -1536,6 +1536,17 @@ function render() {
   teamEl.style.display = 'none';
   albumEl.style.display = 'none';
 
+  // AIプロフィール・総合レポートバナーは「自分の結果」タブのみ表示
+  const aiSection = document.getElementById('aiProfileSection');
+  const banner = document.getElementById('reportBanner');
+  if (currentTab === 'my') {
+    if (aiSection) renderAIProfile();
+    if (banner) renderReportBanner();
+  } else {
+    if (aiSection) aiSection.style.display = 'none';
+    if (banner) banner.style.display = 'none';
+  }
+
   if (currentTab === 'my') {
     myEl.style.display = 'flex';
     renderMyResults();
@@ -1732,8 +1743,8 @@ function renderAIProfile() {
 
   textarea.value = lines.join('\n');
 
-  // コピー機能
-  document.getElementById('aiCopyBtn').addEventListener('click', function() {
+  // コピー機能（onclickで重複登録を防ぐ）
+  document.getElementById('aiCopyBtn').onclick = function() {
     const btn = this;
     navigator.clipboard.writeText(textarea.value).then(() => {
       btn.textContent = 'コピーしました ✓';
@@ -1746,9 +1757,8 @@ function renderAIProfile() {
       btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
     });
-  });
+  };
 }
-renderAIProfile();
 </script>
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
@@ -1776,7 +1786,6 @@ function getHiddenCharImg(scores, gender) {
 
 // 初期表示（全スクリプト読み込み後に実行）
 render();
-renderReportBanner();
 </script>
 </body>
 </html>
