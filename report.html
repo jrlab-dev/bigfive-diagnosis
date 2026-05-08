@@ -41,13 +41,36 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="base.css">
 <style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --purple: #8b5cf6;
+  --blue: #3b82f6;
+  --pink: #ec4899;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --c-O: #8b5cf6;
+  --c-C: #3b82f6;
+  --c-E: #f97316;
+  --c-A: #f472b6;
+  --c-N: #14b8a6;
+}
 html { scroll-behavior: smooth; }
-body { line-height: 1.8; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.8;
+}
 
 /* ===== 背景 ===== */
 .bg-nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
     radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.12) 0%, transparent 70%),
     radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.1) 0%, transparent 70%),

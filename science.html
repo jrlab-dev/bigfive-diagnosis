@@ -53,13 +53,31 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="base.css">
 <style>
-  :root { --pink: #e879b0; --card-bg: rgba(26,10,62,0.45); --card-border: rgba(139,92,246,0.2); }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --pink: #e879b0;
+    --mauve: #c084a8;
+    --rose: #f0a0c8;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --card-bg: rgba(26,10,62,0.45);
+    --card-border: rgba(139,92,246,0.2);
+    --c-O: #8b5cf6;
+    --c-C: #3b82f6;
+    --c-E: #f97316;
+    --c-A: #f472b6;
+    --c-N: #14b8a6;
+  }
   html { scroll-behavior: smooth; }
-  body { line-height: 1.8; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; overflow-x: hidden; }
 
   .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
       radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.08) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.07) 0%, transparent 70%),
@@ -72,7 +90,7 @@
     50%  { transform: scale(1.03) translate(-1%,1.5%) }
     100% { transform: scale(1) translate(-0.5%,-1%) }
   }
-  .bg-stars { animation: twinkle 4s ease-in-out infinite alternate; }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
   @keyframes twinkle { 0%{opacity:.5} 100%{opacity:1} }
 
   .content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 24px 120px; }

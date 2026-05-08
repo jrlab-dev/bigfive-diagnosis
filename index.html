@@ -79,14 +79,27 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="base.css">
 <style>
-  :root { --pink: #e879b0; --card-bg: rgba(26,10,62,0.45); --card-border: rgba(139,92,246,0.2); }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --pink: #e879b0;
+    --mauve: #c084a8;
+    --rose: #f0a0c8;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --card-bg: rgba(26,10,62,0.45);
+    --card-border: rgba(139,92,246,0.2);
+  }
   html { scroll-behavior: smooth; }
-  body { line-height: 1.8; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.8; }
 
   /* 星雲：すっきり＋ピンク混ぜ */
   .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
       radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.08) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.07) 0%, transparent 70%),
@@ -103,7 +116,7 @@
     75%  { transform: scale(1.06) translate(0.5%,0.5%) }
     100% { transform: scale(1)    translate(-0.5%,-1%) }
   }
-  .bg-stars { z-index: 2; }
+  .bg-stars { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
   .bg-stars span {
     position: absolute;
     border-radius: 50%;
