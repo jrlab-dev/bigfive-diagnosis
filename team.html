@@ -704,28 +704,44 @@
   <div class="result-section" id="resultSection"></div>
 </div>
 
-<script src="bigfive-constants.js"></script>
-<script src="bigfive-utils.js"></script>
 <script>
 // ===== 定数 =====
+const STORAGE_KEY_MY = 'bigfive_my_results';
+const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 const STORAGE_KEY_TEAMS = 'bigfive_team_results';
+const MAX_MEMBERS = 8;
+const MAX_TEAMS = 10;
+const MIN_MEMBERS = 2;
 
 const traitInfo = {
-  O: { name: FACTOR_NAMES.O, color: FACTOR_COLORS.O },
-  C: { name: FACTOR_NAMES.C, color: FACTOR_COLORS.C },
-  E: { name: FACTOR_NAMES.E, color: FACTOR_COLORS.E },
-  A: { name: FACTOR_NAMES.A, color: FACTOR_COLORS.A },
-  N: { name: FACTOR_NAMES.N, color: FACTOR_COLORS.N },
+  O: { name: '開放性', color: '#8b5cf6' },
+  C: { name: '誠実性', color: '#3b82f6' },
+  E: { name: '外向性', color: '#f97316' },
+  A: { name: '協調性', color: '#f472b6' },
+  N: { name: '感受性', color: '#14b8a6' },
 };
 
 // ===== ユーティリティ =====
-function toImgCode(code) { return imgCodeFromScores(code); }
+function toImgCode(code) {
+  return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+}
 
 function codeToScores(code) {
   return {
     O: parseInt(code[0]), C: parseInt(code[1]),
     E: parseInt(code[2]), A: parseInt(code[3]), N: parseInt(code[4])
   };
+}
+
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return '今日';
+  if (diffDays === 1) return '昨日';
+  if (diffDays < 7) return `${diffDays}日前`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}週間前`;
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 }
 
 // ===== URLの共有データを解析 =====

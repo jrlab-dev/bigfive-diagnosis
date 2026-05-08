@@ -602,8 +602,6 @@
   <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
 </div>
 
-<script src="bigfive-constants.js"></script>
-<script src="bigfive-utils.js"></script>
 <script>
 // ===== 子供用質問データ =====
 const questionsFixed15 = [
@@ -761,11 +759,11 @@ const relConfig = {
 };
 
 const traitInfo = {
-  E: { name: '外向性',     desc: '社交的・話好き・積極的',         color: FACTOR_COLORS.E },
-  N: { name: '神経症傾向', desc: '感情的・不安になりやすい・敏感', color: FACTOR_COLORS.N },
-  O: { name: '開放性',     desc: '好奇心旺盛・創造的・変化好き',   color: FACTOR_COLORS.O },
-  C: { name: '誠実性',     desc: '計画的・責任感・几帳面',         color: FACTOR_COLORS.C },
-  A: { name: '協調性',     desc: '思いやり・協力的・争い回避',     color: FACTOR_COLORS.A },
+  E: { name: '外向性',     desc: '社交的・話好き・積極的',         color: '#f97316' },
+  N: { name: '神経症傾向', desc: '感情的・不安になりやすい・敏感', color: '#14b8a6' },
+  O: { name: '開放性',     desc: '好奇心旺盛・創造的・変化好き',   color: '#8b5cf6' },
+  C: { name: '誠実性',     desc: '計画的・責任感・几帳面',         color: '#3b82f6' },
+  A: { name: '協調性',     desc: '思いやり・協力的・争い回避',     color: '#f472b6' },
 };
 
 const periodNotes = {
@@ -787,9 +785,10 @@ let myCode = urlParams.get('my') || '';
 // URLパラメータになければ LocalStorageから適用中の自分のコードを読み込む
 if (!myCode) {
   try {
+    const STORAGE_KEY_MY = 'bigfive_my_results';
     const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
     if (myResults.length > 0) {
-      const activeIdx = Math.min(parseInt(localStorage.getItem(STORAGE_KEY_ACTIVE_MY) || '0'), myResults.length - 1);
+      const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), myResults.length - 1);
       myCode = myResults[activeIdx].code;
       console.log('LocalStorageから自分のコードを読み込みました（適用中）:', myCode);
     }
@@ -802,6 +801,12 @@ const myScores = myCode.length === 5 ? {
   O: parseInt(myCode[0]), C: parseInt(myCode[1]),
   E: parseInt(myCode[2]), A: parseInt(myCode[3]), N: parseInt(myCode[4])
 } : null;
+
+// ===== 画面切替 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
 // ===== スタート画面 =====
 const nameInput  = document.getElementById('personName');
