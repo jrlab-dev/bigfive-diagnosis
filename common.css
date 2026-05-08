@@ -1,0 +1,43 @@
+/* ===== ビッグファイブ診断 共通スタイル ===== */
+
+/* --- リセット --- */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* --- 共通CSS変数 --- */
+:root {
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+}
+
+/* --- アニメーション --- */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes nebula-drift { 0% { transform: scale(1); } 100% { transform: scale(1.05) translate(-1%, 1%); } }
+@keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
+
+/* --- クイズページレイアウト --- */
+.quiz-container { position: relative; z-index: 1; width: 100%; max-width: 560px; min-height: 100vh; display: flex; flex-direction: column; padding: 60px 24px 40px; }
+.top-link { position: fixed; top: 20px; left: 20px; display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 13px; z-index: 10; transition: color .2s; }
+.top-link:hover { color: var(--text); }
+.back-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13px; color: var(--dim); background: none; border: none; cursor: pointer; padding: 8px 0; transition: color .2s; }
+.back-btn:hover { color: var(--text); }
+
+/* --- クイズUI --- */
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+.progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+.progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+.question-area { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); margin-bottom: 8px; }
+.answers { display: flex; gap: 8px; margin-bottom: 40px; }
+
+/* --- ローディング --- */
+.loading { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; }
+.loading.active { display: flex; }
+
+/* --- イントロ --- */
+.intro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; }
+
+/* --- 結果ベース --- */
+.result { display: none; flex-direction: column; align-items: center; gap: 24px; padding-bottom: 60px; }
+.result.active { display: flex; }
