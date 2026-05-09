@@ -9,11 +9,11 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>グループ分け — ビッグファイブ診断【公式】</title>
-<meta name="description" content="ビッグファイブ診断コードをもとに、性格バランスを考慮したグループ分けができるツール。クラス・遠足・チーム編成に。最大50人対応。">
+<meta name="description" content="ビッグファイブ診断コードをもとに、性格バランスを考慮したグループ分けができるツール。クラス・遠足・チーム編成に。最大100人対応。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="性格診断【公式】">
 <meta property="og:title" content="グループ分け — ビッグファイブ診断【公式】">
-<meta property="og:description" content="診断コードをもとに性格バランスを考慮したグループ分け。クラス・遠足・チーム編成に最大50人対応。">
+<meta property="og:description" content="診断コードをもとに性格バランスを考慮したグループ分け。複数名簿対応・最大100人。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/group.html">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 <meta property="og:image:width" content="1200">
@@ -27,315 +27,195 @@
     --purple: #8b5cf6;
     --blue: #3b82f6;
     --pink: #ec4899;
-    --green: #10b981;
-    --c-O: #8b5cf6;
-    --c-C: #3b82f6;
-    --c-E: #f97316;
-    --c-A: #f472b6;
-    --c-N: #14b8a6;
+    --c-O: #8b5cf6; --c-C: #3b82f6; --c-E: #f97316; --c-A: #f472b6; --c-N: #14b8a6;
   }
   body {
     font-family: 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 40px 20px 80px;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 40px 20px 80px;
   }
   .container { max-width: 600px; margin: 0 auto; }
 
   /* ヘッダー */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 28px;
-  }
-  .back-link {
-    display: inline-flex; align-items: center; gap: 6px;
-    color: var(--dim); text-decoration: none; font-size: 14px;
-    transition: color .2s;
-  }
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 14px; transition: color .2s; }
   .back-link:hover { color: var(--text); }
   .page-title { font-size: 20px; font-weight: 700; }
 
   /* タブ */
-  .tabs {
-    display: flex; gap: 4px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 12px; padding: 4px;
-    margin-bottom: 24px;
-  }
-  .tab-btn {
-    flex: 1; padding: 10px;
-    font-family: inherit; font-size: 14px; font-weight: 700;
-    color: var(--dim); background: none; border: none;
-    border-radius: 9px; cursor: pointer; transition: all .2s;
-  }
-  .tab-btn.active {
-    color: var(--text);
-    background: rgba(139,92,246,0.2);
-    box-shadow: 0 0 12px rgba(139,92,246,0.15);
-  }
+  .tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+  .tab-btn { flex: 1; padding: 10px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dim); background: none; border: none; border-radius: 9px; cursor: pointer; transition: all .2s; }
+  .tab-btn.active { color: var(--text); background: rgba(139,92,246,0.2); box-shadow: 0 0 12px rgba(139,92,246,0.15); }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
-  /* ===== 名簿タブ ===== */
-  .roster-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px;
-  }
-  .roster-count {
-    font-size: 13px; color: var(--dim);
-  }
-  .roster-count span { color: var(--purple); font-weight: 700; }
-
-  /* 追加フォーム */
-  .add-form {
-    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
-  }
-  .add-input {
-    flex: 1; min-width: 0;
-    padding: 10px 14px;
-    font-family: inherit; font-size: 14px;
-    color: var(--text);
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(139,92,246,0.25);
-    border-radius: 10px; outline: none;
-    transition: border-color .2s;
-  }
-  .add-input::placeholder { color: rgba(148,163,184,0.4); }
-  .add-input:focus { border-color: var(--purple); }
-  .add-input.code { flex: 0 0 90px; font-family: monospace; letter-spacing: .1em; }
-  .add-btn {
-    padding: 10px 18px;
-    font-family: inherit; font-size: 14px; font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, var(--purple), var(--blue));
-    border: none; border-radius: 10px; cursor: pointer;
-    transition: all .2s; white-space: nowrap;
-  }
-  .add-btn:hover { opacity: .85; transform: translateY(-1px); }
-  .add-error {
-    font-size: 12px; color: #f87171;
-    margin: -8px 0 10px; min-height: 18px;
-  }
-
-  /* 生徒リスト */
-  .student-list {
-    display: flex; flex-direction: column; gap: 8px;
-    margin-bottom: 20px;
-  }
-  .student-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px;
+  /* ===== 名簿セレクター ===== */
+  .roster-selector {
+    display: flex; align-items: center; gap: 8px;
     background: rgba(26,10,62,0.4);
-    border: 1px solid rgba(139,92,246,0.15);
-    border-radius: 12px;
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px; padding: 12px 16px;
+    margin-bottom: 14px;
   }
-  .student-num {
-    font-size: 11px; color: var(--dim);
-    min-width: 20px; text-align: right;
+  .roster-label { font-size: 12px; color: var(--dim); white-space: nowrap; }
+  .roster-select {
+    flex: 1; min-width: 0;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    color: var(--text); background: transparent;
+    border: none; outline: none; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
   }
-  .student-name {
-    flex: 1; font-size: 14px; font-weight: 500;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .student-code {
-    font-family: monospace; font-size: 12px;
-    background: rgba(139,92,246,0.15);
-    color: var(--purple);
-    padding: 2px 8px; border-radius: 6px; letter-spacing: .1em;
-  }
-  .student-bars {
-    display: flex; gap: 3px; align-items: center;
-  }
-  .sbar {
-    width: 4px; border-radius: 2px;
-    transition: height .2s;
-  }
-  .del-btn {
+  .roster-select option { background: #1a0a3e; color: #e2e8f0; }
+  .roster-icon-btn {
     background: none; border: none; cursor: pointer;
-    color: var(--dim); font-size: 16px; padding: 2px 4px;
-    transition: color .2s; line-height: 1;
+    color: var(--dim); padding: 4px; font-size: 16px;
+    transition: color .2s; line-height: 1; border-radius: 6px;
   }
-  .del-btn:hover { color: #f87171; }
-
-  .empty-roster {
-    text-align: center; padding: 48px 20px;
-    color: var(--dim); font-size: 14px; line-height: 1.8;
-  }
-
-  /* 全削除ボタン */
-  .import-btn {
+  .roster-icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+  .roster-icon-btn.danger:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+  .btn-new-roster {
     display: block; width: 100%;
-    padding: 11px;
+    padding: 9px;
     font-family: inherit; font-size: 13px; font-weight: 600;
     color: var(--purple);
     background: rgba(139,92,246,0.07);
-    border: 1px solid rgba(139,92,246,0.25);
+    border: 1px dashed rgba(139,92,246,0.3);
     border-radius: 10px; cursor: pointer; transition: all .2s;
-    margin-top: 8px;
+    margin-bottom: 14px;
   }
+  .btn-new-roster:hover { background: rgba(139,92,246,0.15); }
+
+  /* 追加フォーム */
+  .roster-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .roster-count { font-size: 13px; color: var(--dim); }
+  .roster-count span { color: var(--purple); font-weight: 700; }
+  .add-form { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .add-input { flex: 1; min-width: 0; padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--text); background: rgba(255,255,255,0.05); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; outline: none; transition: border-color .2s; }
+  .add-input::placeholder { color: rgba(148,163,184,0.4); }
+  .add-input:focus { border-color: var(--purple); }
+  .add-input.code { flex: 0 0 90px; font-family: monospace; letter-spacing: .1em; }
+  .add-btn { padding: 10px 18px; font-family: inherit; font-size: 14px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 10px; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .add-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .add-error { font-size: 12px; color: #f87171; margin-bottom: 10px; min-height: 18px; }
+
+  /* 取り込みボタン */
+  .import-btn { display: block; width: 100%; padding: 11px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--purple); background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; transition: all .2s; margin-bottom: 14px; }
   .import-btn:hover { background: rgba(139,92,246,0.15); }
 
-  .clear-btn {
-    display: block; width: 100%;
-    padding: 10px;
-    font-family: inherit; font-size: 13px; font-weight: 500;
-    color: var(--dim);
-    background: none;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; cursor: pointer; transition: all .2s;
-    margin-top: 8px;
-  }
+  /* 生徒リスト */
+  .student-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .student-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 12px; }
+  .student-num { font-size: 11px; color: var(--dim); min-width: 20px; text-align: right; }
+  .student-name { flex: 1; font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .student-code { font-family: monospace; font-size: 12px; background: rgba(139,92,246,0.15); color: var(--purple); padding: 2px 8px; border-radius: 6px; letter-spacing: .1em; }
+  .student-bars { display: flex; gap: 3px; align-items: flex-end; height: 20px; }
+  .sbar { width: 4px; border-radius: 2px; }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--dim); font-size: 16px; padding: 2px 4px; transition: color .2s; line-height: 1; }
+  .del-btn:hover { color: #f87171; }
+  .empty-roster { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
+  .clear-btn { display: block; width: 100%; padding: 10px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--dim); background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 4px; }
   .clear-btn:hover { border-color: #f87171; color: #f87171; }
 
-  /* ===== グループ分けタブ ===== */
-  .group-settings {
-    background: rgba(26,10,62,0.4);
-    border: 1px solid rgba(139,92,246,0.15);
-    border-radius: 14px; padding: 20px;
-    margin-bottom: 20px;
+  /* ===== インポートモーダル ===== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    align-items: flex-end; justify-content: center;
   }
-  .settings-row {
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    width: 100%; max-width: 600px;
+    background: var(--bg2, #0f1535);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 40px;
+    max-height: 80vh; display: flex; flex-direction: column;
+    animation: slideup .25s ease-out;
+  }
+  @keyframes slideup { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 20px; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-size: 12px; color: var(--dim); margin-bottom: 16px; }
+  .modal-actions { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; }
+  .modal-action-btn { padding: 7px 14px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--dim); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: all .2s; }
+  .modal-action-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+  .modal-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .modal-item {
     display: flex; align-items: center; gap: 12px;
-    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(139,92,246,0.1);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+    user-select: none;
   }
-  .settings-row:last-child { margin-bottom: 0; }
-  .settings-label {
-    font-size: 13px; color: var(--dim);
-    min-width: 90px;
+  .modal-item.checked { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.35); }
+  .modal-item.already { opacity: .4; pointer-events: none; }
+  .modal-checkbox {
+    width: 20px; height: 20px; border-radius: 5px;
+    border: 2px solid rgba(139,92,246,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .2s; font-size: 11px;
   }
-  .num-input {
-    width: 70px;
-    padding: 8px 12px;
-    font-family: inherit; font-size: 15px; font-weight: 700;
-    color: var(--text); text-align: center;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(139,92,246,0.25);
-    border-radius: 8px; outline: none;
-    transition: border-color .2s;
-  }
-  .num-input:focus { border-color: var(--purple); }
-  .settings-hint {
-    font-size: 12px; color: var(--dim);
-  }
-  .settings-warn {
-    font-size: 12px; color: #fbbf24;
-    margin-top: 8px;
-  }
+  .modal-item.checked .modal-checkbox { background: var(--purple); border-color: var(--purple); }
+  .modal-item-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .modal-item-code { font-family: monospace; font-size: 11px; color: var(--dim); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 5px; }
+  .modal-item-tag { font-size: 10px; color: var(--dim); background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 10px; }
+  .modal-footer { flex-shrink: 0; }
+  .modal-confirm-btn { display: block; width: 100%; padding: 14px; font-family: inherit; font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 12px; cursor: pointer; transition: all .2s; }
+  .modal-confirm-btn:hover:not(:disabled) { opacity: .85; }
+  .modal-confirm-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .modal-cancel { display: block; text-align: center; margin-top: 10px; font-size: 13px; color: var(--dim); cursor: pointer; padding: 6px; }
+  .modal-cancel:hover { color: var(--text); }
 
-  .btn-generate {
-    display: block; width: 100%;
-    padding: 16px;
-    font-family: inherit; font-size: 16px; font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, var(--purple), var(--blue));
-    border: none; border-radius: 14px; cursor: pointer;
-    transition: all .3s; margin-bottom: 28px;
+  /* ===== グループ分けタブ ===== */
+  .group-settings { background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .settings-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .settings-row:last-child { margin-bottom: 0; }
+  .settings-label { font-size: 13px; color: var(--dim); min-width: 90px; }
+  .num-input { width: 70px; padding: 8px 12px; font-family: inherit; font-size: 15px; font-weight: 700; color: var(--text); text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(139,92,246,0.25); border-radius: 8px; outline: none; transition: border-color .2s; }
+  .num-input:focus { border-color: var(--purple); }
+  .settings-hint { font-size: 12px; color: var(--dim); }
+  .settings-warn { font-size: 12px; color: #fbbf24; margin-top: 6px; }
+
+  /* 名簿選択（グループ分けタブ） */
+  .grouping-roster-info {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--dim);
+    margin-bottom: 16px; padding: 10px 14px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 10px;
   }
-  .btn-generate:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(139,92,246,0.4);
-  }
+  .grouping-roster-name { color: var(--purple); font-weight: 700; }
+
+  .btn-generate { display: block; width: 100%; padding: 16px; font-family: inherit; font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 14px; cursor: pointer; transition: all .3s; margin-bottom: 28px; }
+  .btn-generate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(139,92,246,0.4); }
   .btn-generate:disabled { opacity: .4; cursor: not-allowed; }
 
-  /* グループ結果 */
+  /* 結果 */
   .result-area { display: none; }
   .result-area.visible { display: block; animation: fadein .4s ease-out; }
-  @keyframes fadein {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .result-top {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 16px;
-  }
+  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .result-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .result-title { font-size: 16px; font-weight: 700; }
-  .btn-shuffle {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 14px;
-    font-family: inherit; font-size: 13px; font-weight: 600;
-    color: var(--purple);
-    background: rgba(139,92,246,0.1);
-    border: 1px solid rgba(139,92,246,0.3);
-    border-radius: 8px; cursor: pointer; transition: all .2s;
-  }
+  .btn-shuffle { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--purple); background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; cursor: pointer; transition: all .2s; }
   .btn-shuffle:hover { background: rgba(139,92,246,0.2); }
-
-  .group-cards {
-    display: flex; flex-direction: column; gap: 14px;
-  }
-  .group-card {
-    background: rgba(26,10,62,0.45);
-    border: 1px solid rgba(139,92,246,0.2);
-    border-radius: 14px; padding: 18px;
-  }
-  .group-card-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px;
-  }
-  .group-name {
-    font-size: 15px; font-weight: 700;
-  }
-  .group-count {
-    font-size: 12px; color: var(--dim);
-    background: rgba(255,255,255,0.07);
-    padding: 3px 10px; border-radius: 20px;
-  }
-
-  .group-members {
-    display: flex; flex-wrap: wrap; gap: 6px;
-    margin-bottom: 14px;
-  }
-  .group-member-chip {
-    font-size: 12px; font-weight: 500;
-    padding: 4px 10px;
-    background: rgba(139,92,246,0.1);
-    border: 1px solid rgba(139,92,246,0.2);
-    border-radius: 20px;
-  }
-
-  /* 因子バーチャート */
-  .factor-bars {
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .factor-row {
-    display: flex; align-items: center; gap: 10px;
-  }
-  .factor-label {
-    font-size: 11px; color: var(--dim);
-    min-width: 40px;
-  }
-  .factor-bar-bg {
-    flex: 1; height: 8px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 4px; overflow: hidden;
-  }
-  .factor-bar-fill {
-    height: 100%; border-radius: 4px;
-    transition: width .5s ease-out;
-  }
-  .factor-val {
-    font-size: 11px; color: var(--dim);
-    min-width: 28px; text-align: right;
-    font-family: monospace;
-  }
-
-  .empty-group {
-    text-align: center; padding: 48px 20px;
-    color: var(--dim); font-size: 14px; line-height: 1.8;
-  }
-
-  /* ライトモード調整 */
-  @media (prefers-color-scheme: light) {
-    .student-item, .group-card, .group-settings {
-      background: rgba(255,255,255,0.6);
-    }
-  }
+  .group-cards { display: flex; flex-direction: column; gap: 14px; }
+  .group-card { background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 14px; padding: 18px; }
+  .group-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .group-name { font-size: 15px; font-weight: 700; }
+  .group-count { font-size: 12px; color: var(--dim); background: rgba(255,255,255,0.07); padding: 3px 10px; border-radius: 20px; }
+  .group-members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .group-member-chip { font-size: 12px; font-weight: 500; padding: 4px 10px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); border-radius: 20px; }
+  .factor-bars { display: flex; flex-direction: column; gap: 6px; }
+  .factor-row { display: flex; align-items: center; gap: 10px; }
+  .factor-label { font-size: 11px; color: var(--dim); min-width: 40px; }
+  .factor-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+  .factor-bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease-out; }
+  .factor-val { font-size: 11px; color: var(--dim); min-width: 28px; text-align: right; font-family: monospace; }
+  .empty-group { text-align: center; padding: 48px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
 
   @media (max-width: 400px) {
     body { padding: 24px 14px 60px; }
-    .add-form { gap: 6px; }
     .add-input.code { flex: 0 0 80px; }
   }
 </style>
@@ -360,7 +240,6 @@
     <div style="width:80px"></div>
   </header>
 
-  <!-- タブ -->
   <div class="tabs">
     <button class="tab-btn active" data-tab="roster">👤 名簿管理</button>
     <button class="tab-btn" data-tab="grouping">🔀 グループ分け</button>
@@ -368,8 +247,18 @@
 
   <!-- 名簿管理 -->
   <div class="tab-panel active" id="tab-roster">
+
+    <!-- 名簿セレクター -->
+    <div class="roster-selector">
+      <span class="roster-label">名簿：</span>
+      <select class="roster-select" id="rosterSelect"></select>
+      <button class="roster-icon-btn" id="renameRosterBtn" title="名前を変更">✏️</button>
+      <button class="roster-icon-btn danger" id="deleteRosterBtn" title="この名簿を削除">🗑</button>
+    </div>
+    <button class="btn-new-roster" id="newRosterBtn">＋ 新しい名簿を作る</button>
+
     <div class="roster-header">
-      <span class="roster-count">登録人数 <span id="rosterCount">0</span> / 50人</span>
+      <span class="roster-count">登録人数 <span id="rosterCount">0</span> / 100人</span>
     </div>
 
     <div class="add-form">
@@ -379,21 +268,23 @@
     </div>
     <div class="add-error" id="addError"></div>
 
-    <button class="import-btn" id="importBtn">📋 「あの人」リストから取り込む</button>
+    <button class="import-btn" id="importBtn">📋 「あの人」リストから選んで取り込む</button>
 
     <div class="student-list" id="studentList"></div>
     <div class="empty-roster" id="emptyRoster">
       <p>まだ登録されていません。<br>名前と診断コード（5桁）を入力するか<br>「あの人」リストから取り込んでください。</p>
     </div>
-    <button class="clear-btn" id="clearBtn" style="display:none">名簿を全て削除する</button>
+    <button class="clear-btn" id="clearBtn" style="display:none">この名簿を全て削除する</button>
   </div>
 
   <!-- グループ分け -->
   <div class="tab-panel" id="tab-grouping">
+    <div class="grouping-roster-info" id="groupingRosterInfo"></div>
+
     <div class="group-settings">
       <div class="settings-row">
         <span class="settings-label">グループ数</span>
-        <input type="number" id="groupCount" class="num-input" value="4" min="2" max="10">
+        <input type="number" id="groupCount" class="num-input" value="4" min="2" max="20">
         <span class="settings-hint">グループ</span>
       </div>
       <div class="settings-warn" id="settingsWarn"></div>
@@ -418,54 +309,139 @@
   </div>
 </div>
 
-<script>
-const STORAGE_KEY = 'bigfive_group_roster_v1';
-const MAX_STUDENTS = 100;
+<!-- インポートモーダル -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">「あの人」リストから取り込む</div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="modal-actions">
+      <button class="modal-action-btn" id="selectAllBtn">全選択</button>
+      <button class="modal-action-btn" id="deselectAllBtn">全解除</button>
+    </div>
+    <div class="modal-list" id="modalList"></div>
+    <div class="modal-footer">
+      <button class="modal-confirm-btn" id="modalConfirmBtn" disabled>取り込む</button>
+      <div class="modal-cancel" id="modalCancelBtn">キャンセル</div>
+    </div>
+  </div>
+</div>
 
-const traitKeys = ['O','C','E','A','N'];
-const traitNames = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+<script>
+const STORAGE_KEY   = 'bigfive_group_rosters_v2';
+const ACTIVE_KEY    = 'bigfive_group_active_roster';
+const OTHERS_KEY    = 'bigfive_other_results';
+const MAX_STUDENTS  = 100;
+
+const traitKeys   = ['O','C','E','A','N'];
+const traitNames  = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
 const traitColors = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
 
 function codeToScores(code) {
   return { O:+code[0], C:+code[1], E:+code[2], A:+code[3], N:+code[4] };
 }
+function isValidCode(code) { return /^[1-5]{5}$/.test(code); }
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
-function isValidCode(code) {
-  return /^[1-5]{5}$/.test(code);
+// ===== 名簿データ管理 =====
+function loadRosters() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (Array.isArray(raw) && raw.length > 0) return raw;
+  } catch(e) {}
+  // 旧データ（v1）を移行
+  try {
+    const old = JSON.parse(localStorage.getItem('bigfive_group_roster_v1') || '[]');
+    if (old.length > 0) return [{ id: uid(), name: 'メンバー', students: old }];
+  } catch(e) {}
+  return [{ id: uid(), name: 'メンバー', students: [] }];
+}
+function saveRosters() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rosters));
+}
+function getActiveId() {
+  return localStorage.getItem(ACTIVE_KEY) || rosters[0]?.id;
+}
+function setActiveId(id) {
+  localStorage.setItem(ACTIVE_KEY, id);
+}
+function getActiveRoster() {
+  return rosters.find(r => r.id === getActiveId()) || rosters[0];
 }
 
-// ===== ストレージ =====
-function loadRoster() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch(e) { return []; }
-}
-function saveRoster(students) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+let rosters = loadRosters();
+
+// ===== 名簿セレクター描画 =====
+function renderRosterSelect() {
+  const sel = document.getElementById('rosterSelect');
+  const activeId = getActiveId();
+  sel.innerHTML = rosters.map(r =>
+    `<option value="${escHtml(r.id)}" ${r.id === activeId ? 'selected' : ''}>${escHtml(r.name)}（${r.students.length}人）</option>`
+  ).join('');
+  document.getElementById('deleteRosterBtn').disabled = rosters.length <= 1;
 }
 
-// ===== 名簿管理 =====
-let students = loadRoster();
+document.getElementById('rosterSelect').addEventListener('change', e => {
+  setActiveId(e.target.value);
+  renderAll();
+});
 
+document.getElementById('newRosterBtn').addEventListener('click', () => {
+  const name = prompt('新しい名簿の名前を入力してください', '新しい名簿');
+  if (!name?.trim()) return;
+  const roster = { id: uid(), name: name.trim(), students: [] };
+  rosters.push(roster);
+  setActiveId(roster.id);
+  saveRosters();
+  renderAll();
+});
+
+document.getElementById('renameRosterBtn').addEventListener('click', () => {
+  const r = getActiveRoster();
+  const name = prompt('名簿名を変更', r.name);
+  if (!name?.trim() || name.trim() === r.name) return;
+  r.name = name.trim();
+  saveRosters();
+  renderAll();
+});
+
+document.getElementById('deleteRosterBtn').addEventListener('click', () => {
+  if (rosters.length <= 1) return;
+  const r = getActiveRoster();
+  if (!confirm(`「${r.name}」を削除しますか？\nこの名簿のデータはすべて消えます。`)) return;
+  rosters = rosters.filter(x => x.id !== r.id);
+  setActiveId(rosters[0].id);
+  saveRosters();
+  renderAll();
+});
+
+// ===== 名簿（生徒リスト）描画 =====
 function renderRoster() {
-  const list = document.getElementById('studentList');
-  const empty = document.getElementById('emptyRoster');
-  const clearBtn = document.getElementById('clearBtn');
+  const r = getActiveRoster();
+  const students = r.students;
   document.getElementById('rosterCount').textContent = students.length;
+
+  const list  = document.getElementById('studentList');
+  const empty = document.getElementById('emptyRoster');
+  const clrBtn = document.getElementById('clearBtn');
 
   if (students.length === 0) {
     list.innerHTML = '';
     empty.style.display = '';
-    clearBtn.style.display = 'none';
+    clrBtn.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
-  clearBtn.style.display = '';
+  clrBtn.style.display = '';
 
   list.innerHTML = students.map((s, i) => {
     const sc = codeToScores(s.code);
     const bars = traitKeys.map(k => {
-      const h = (sc[k] / 5) * 24 + 4;
-      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.7"></div>`;
+      const h = Math.round((sc[k] / 5) * 20 + 2);
+      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75"></div>`;
     }).join('');
     return `
       <div class="student-item">
@@ -478,10 +454,16 @@ function renderRoster() {
   }).join('');
 
   list.querySelectorAll('.del-btn').forEach(btn => {
-    btn.addEventListener('click', () => deleteStudent(btn.dataset.id));
+    btn.addEventListener('click', () => {
+      const r2 = getActiveRoster();
+      r2.students = r2.students.filter(s => s.id !== btn.dataset.id);
+      saveRosters();
+      renderAll();
+    });
   });
 }
 
+// ===== 生徒追加 =====
 function addStudent() {
   const nameEl = document.getElementById('inputName');
   const codeEl = document.getElementById('inputCode');
@@ -490,78 +472,155 @@ function addStudent() {
   const code = codeEl.value.trim();
 
   if (!name) { errEl.textContent = '名前を入力してください'; return; }
-  if (!isValidCode(code)) { errEl.textContent = 'コードは1〜5の数字5桁で入力してください（例：34213）'; return; }
-  if (students.length >= MAX_STUDENTS) { errEl.textContent = `最大${MAX_STUDENTS}人まで登録できます`; return; }
+  if (!isValidCode(code)) { errEl.textContent = 'コードは1〜5の数字5桁（例：34213）'; return; }
+  const r = getActiveRoster();
+  if (r.students.length >= MAX_STUDENTS) { errEl.textContent = `上限${MAX_STUDENTS}人です`; return; }
   errEl.textContent = '';
 
-  students.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), name, code });
-  saveRoster(students);
-  renderRoster();
+  r.students.push({ id: uid(), name, code });
+  saveRosters();
+  renderAll();
   nameEl.value = '';
   codeEl.value = '';
   nameEl.focus();
 }
 
-function deleteStudent(id) {
-  students = students.filter(s => s.id !== id);
-  saveRoster(students);
-  renderRoster();
-  updateGroupingUI();
-}
-
 document.getElementById('addBtn').addEventListener('click', addStudent);
 document.getElementById('inputCode').addEventListener('keydown', e => { if (e.key === 'Enter') addStudent(); });
 document.getElementById('inputName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('inputCode').focus(); });
+
 document.getElementById('clearBtn').addEventListener('click', () => {
-  if (!confirm(`名簿の全${students.length}人を削除しますか？`)) return;
-  students = [];
-  saveRoster(students);
-  renderRoster();
-  updateGroupingUI();
+  const r = getActiveRoster();
+  if (!confirm(`「${r.name}」の全${r.students.length}人を削除しますか？`)) return;
+  r.students = [];
+  saveRosters();
+  renderAll();
 });
 
-document.getElementById('importBtn').addEventListener('click', () => {
+// ===== インポートモーダル =====
+let modalChecked = new Set();
+
+document.getElementById('importBtn').addEventListener('click', openImportModal);
+
+function openImportModal() {
   const others = (() => {
-    try { return JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); }
+    try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); }
     catch(e) { return []; }
   })();
 
   if (others.length === 0) {
-    alert('「あの人」に保存されているデータがありません。\n先にあの人の診断結果を保存してください。');
+    alert('「あの人」に保存されているデータがありません。');
     return;
   }
 
-  const remaining = MAX_STUDENTS - students.length;
-  if (remaining <= 0) {
-    alert(`名簿が上限（${MAX_STUDENTS}人）に達しています。`);
-    return;
+  const r = getActiveRoster();
+  const existingIds = new Set(r.students.map(s => s.id));
+  const remaining = MAX_STUDENTS - r.students.length;
+
+  document.getElementById('modalSub').textContent =
+    `あの人リスト ${others.length}件 ／ あと${remaining}人追加可能`;
+
+  modalChecked = new Set();
+
+  const list = document.getElementById('modalList');
+  list.innerHTML = others.map(o => {
+    const alreadyImported = existingIds.has('other_' + o.id);
+    const sc = codeToScores(o.code);
+    const bars = traitKeys.map(k => {
+      const h = Math.round((sc[k] / 5) * 18 + 2);
+      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75;display:inline-block;width:4px;border-radius:2px;vertical-align:bottom"></div>`;
+    }).join('');
+    return `
+      <div class="modal-item${alreadyImported ? ' already' : ''}" data-id="${escHtml(o.id)}" data-name="${escHtml(o.name||'')}" data-code="${escHtml(o.code)}">
+        <div class="modal-checkbox">${alreadyImported ? '✓' : ''}</div>
+        <span class="modal-item-name">${escHtml(o.name || `あの人(${o.code})`)}</span>
+        <span style="display:flex;gap:2px;align-items:flex-end;height:20px">${bars}</span>
+        <span class="modal-item-code">${o.code}</span>
+        ${alreadyImported ? '<span class="modal-item-tag">取込済</span>' : ''}
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.id;
+      if (modalChecked.has(id)) {
+        modalChecked.delete(id);
+        item.classList.remove('checked');
+        item.querySelector('.modal-checkbox').textContent = '';
+      } else {
+        modalChecked.add(id);
+        item.classList.add('checked');
+        item.querySelector('.modal-checkbox').textContent = '✓';
+      }
+      updateModalConfirmBtn(remaining);
+    });
+  });
+
+  updateModalConfirmBtn(remaining);
+  document.getElementById('importModal').classList.add('open');
+}
+
+function updateModalConfirmBtn(remaining) {
+  const btn = document.getElementById('modalConfirmBtn');
+  const n = Math.min(modalChecked.size, remaining);
+  btn.disabled = modalChecked.size === 0;
+  btn.textContent = modalChecked.size > 0
+    ? `${n}人を取り込む${modalChecked.size > remaining ? `（上限のため${remaining}人まで）` : ''}`
+    : '取り込む';
+}
+
+document.getElementById('selectAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    modalChecked.add(item.dataset.id);
+    item.classList.add('checked');
+    item.querySelector('.modal-checkbox').textContent = '✓';
+  });
+  const r = getActiveRoster();
+  updateModalConfirmBtn(MAX_STUDENTS - r.students.length);
+});
+
+document.getElementById('deselectAllBtn').addEventListener('click', () => {
+  modalChecked.clear();
+  document.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    item.classList.remove('checked');
+    item.querySelector('.modal-checkbox').textContent = '';
+  });
+  const r = getActiveRoster();
+  updateModalConfirmBtn(MAX_STUDENTS - r.students.length);
+});
+
+document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+  const others = (() => {
+    try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); }
+    catch(e) { return []; }
+  })();
+  const r = getActiveRoster();
+  const remaining = MAX_STUDENTS - r.students.length;
+  let added = 0;
+
+  for (const o of others) {
+    if (!modalChecked.has(o.id)) continue;
+    if (added >= remaining) break;
+    r.students.push({ id: 'other_' + o.id, name: o.name || `あの人(${o.code})`, code: o.code });
+    added++;
   }
 
-  const existingIds = new Set(students.map(s => s.id));
-  const toImport = others.filter(o => !existingIds.has('other_' + o.id));
-
-  if (toImport.length === 0) {
-    alert('「あの人」リストのデータはすでに全員取り込み済みです。');
-    return;
+  saveRosters();
+  closeModal();
+  renderAll();
+  if (added > 0) {
+    const skipped = modalChecked.size - added;
+    alert(skipped > 0 ? `${added}人を取り込みました（上限のため${skipped}人スキップ）` : `${added}人を取り込みました`);
   }
+});
 
-  const limited = toImport.slice(0, remaining);
-  const added = limited.map(o => ({
-    id: 'other_' + o.id,
-    name: o.name || `あの人(${o.code})`,
-    code: o.code
-  }));
-
-  students = [...students, ...added];
-  saveRoster(students);
-  renderRoster();
-  updateGroupingUI();
-
-  const skipped = toImport.length - limited.length;
-  const msg = skipped > 0
-    ? `${added.length}人を取り込みました。\n（上限のため${skipped}人はスキップされました）`
-    : `${added.length}人を取り込みました。`;
-  alert(msg);
+function closeModal() {
+  document.getElementById('importModal').classList.remove('open');
+  modalChecked.clear();
+}
+document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+document.getElementById('importModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('importModal')) closeModal();
 });
 
 // ===== タブ切り替え =====
@@ -577,10 +636,14 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ===== グループ分け =====
 function updateGroupingUI() {
-  const n = students.length;
+  const r = getActiveRoster();
+  const n = r.students.length;
   const g = parseInt(document.getElementById('groupCount').value) || 2;
   const warn = document.getElementById('settingsWarn');
-  const btn = document.getElementById('generateBtn');
+  const btn  = document.getElementById('generateBtn');
+
+  document.getElementById('groupingRosterInfo').innerHTML =
+    `使用中の名簿：<span class="grouping-roster-name">${escHtml(r.name)}</span>　<span style="color:var(--dim)">${n}人</span>`;
 
   if (n < 2) {
     warn.textContent = '名簿にメンバーを2人以上登録してください';
@@ -589,7 +652,7 @@ function updateGroupingUI() {
     warn.textContent = `登録人数（${n}人）よりグループ数が多いです`;
     btn.disabled = true;
   } else if (g * 2 > n) {
-    warn.textContent = `1グループあたり1人になる場合があります`;
+    warn.textContent = '1グループあたり1人になる場合があります';
     btn.disabled = false;
   } else {
     warn.textContent = '';
@@ -600,18 +663,17 @@ function updateGroupingUI() {
 document.getElementById('groupCount').addEventListener('input', updateGroupingUI);
 
 function generateGroups(seed) {
-  const g = Math.max(2, Math.min(10, parseInt(document.getElementById('groupCount').value) || 4));
-  const shuffled = [...students];
+  const r = getActiveRoster();
+  const g = Math.max(2, Math.min(20, parseInt(document.getElementById('groupCount').value) || 4));
+  const shuffled = [...r.students];
 
-  // シードつきシャッフル（同じ結果を再現しないための簡易乱数）
-  let r = seed || Date.now();
-  const rand = () => { r = (r * 1664525 + 1013904223) & 0xffffffff; return (r >>> 0) / 0xffffffff; };
+  let rng = seed || Date.now();
+  const rand = () => { rng = (rng * 1664525 + 1013904223) & 0xffffffff; return (rng >>> 0) / 0xffffffff; };
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
-  // 合計スコアでソートしてスネークドラフト配分（バランス調整）
   shuffled.sort((a, b) => {
     const sa = Object.values(codeToScores(a.code)).reduce((x,y) => x+y, 0);
     const sb = Object.values(codeToScores(b.code)).reduce((x,y) => x+y, 0);
@@ -624,41 +686,30 @@ function generateGroups(seed) {
     const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
     groups[pos].push(s);
   });
-
   return groups;
 }
 
 function renderGroups(groups) {
-  const area = document.getElementById('resultArea');
+  const r = getActiveRoster();
+  const area  = document.getElementById('resultArea');
   const cards = document.getElementById('groupCards');
-  document.getElementById('resultTitle').textContent = `${groups.length}グループ / ${students.length}人`;
+  document.getElementById('resultTitle').textContent =
+    `${escHtml(r.name)}　${groups.length}グループ / ${r.students.length}人`;
   area.classList.add('visible');
 
   cards.innerHTML = groups.map((members, gi) => {
     if (members.length === 0) return '';
-
-    // 因子平均
     const avgs = {};
     traitKeys.forEach(k => {
       avgs[k] = members.reduce((s, m) => s + codeToScores(m.code)[k], 0) / members.length;
     });
-
-    const chips = members.map(m =>
-      `<span class="group-member-chip">${escHtml(m.name)}</span>`
-    ).join('');
-
-    const bars = traitKeys.map(k => {
-      const pct = (avgs[k] / 5) * 100;
-      return `
-        <div class="factor-row">
-          <span class="factor-label">${traitNames[k]}</span>
-          <div class="factor-bar-bg">
-            <div class="factor-bar-fill" style="width:${pct}%;background:${traitColors[k]}"></div>
-          </div>
-          <span class="factor-val">${avgs[k].toFixed(1)}</span>
-        </div>`;
-    }).join('');
-
+    const chips = members.map(m => `<span class="group-member-chip">${escHtml(m.name)}</span>`).join('');
+    const bars  = traitKeys.map(k => `
+      <div class="factor-row">
+        <span class="factor-label">${traitNames[k]}</span>
+        <div class="factor-bar-bg"><div class="factor-bar-fill" style="width:${(avgs[k]/5)*100}%;background:${traitColors[k]}"></div></div>
+        <span class="factor-val">${avgs[k].toFixed(1)}</span>
+      </div>`).join('');
     return `
       <div class="group-card">
         <div class="group-card-header">
@@ -672,24 +723,21 @@ function renderGroups(groups) {
 }
 
 document.getElementById('generateBtn').addEventListener('click', () => {
-  if (students.length < 2) return;
   const groups = generateGroups();
   renderGroups(groups);
 });
-
 document.getElementById('shuffleBtn').addEventListener('click', () => {
-  const groups = generateGroups(Date.now() + Math.random());
-  renderGroups(groups);
+  renderGroups(generateGroups(Date.now() + Math.random()));
 });
 
-// ===== ユーティリティ =====
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ===== 全描画 =====
+function renderAll() {
+  renderRosterSelect();
+  renderRoster();
+  updateGroupingUI();
 }
 
-// ===== 初期化 =====
-renderRoster();
-updateGroupingUI();
+renderAll();
 </script>
 </body>
 </html>
