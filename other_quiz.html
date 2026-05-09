@@ -1035,7 +1035,7 @@ function genPersonDesc(sc, name) {
 
   // キーワード収集（全特性から）
   const allKw = [];
-  for (const f of ['E','N','O','C','A']) {
+  for (const f of ['O','C','E','A','N']) {
     allKw.push(...(traitDesc[f][sc[f]]?.kw || []).slice(0,1));
   }
 
@@ -1067,7 +1067,7 @@ function showResult() {
   // 特性バー
   const card = document.getElementById('traitsCard');
   card.innerHTML = '';
-  ['E','N','O','C','A'].forEach(f => {
+  ['O','C','E','A','N'].forEach(f => {
     const s = sc[f], info = traitInfo[f];
     const pct = s * 20;
     const lv  = s <= 2 ? '低め' : s === 3 ? '普通' : '高め';
