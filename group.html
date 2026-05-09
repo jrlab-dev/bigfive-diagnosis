@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/group.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グループ分け — ビッグファイブ診断【公式】</title>
+<meta name="description" content="ビッグファイブ診断コードをもとに、性格バランスを考慮したグループ分けができるツール。クラス・遠足・チーム編成に。最大50人対応。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="性格診断【公式】">
+<meta property="og:title" content="グループ分け — ビッグファイブ診断【公式】">
+<meta property="og:description" content="診断コードをもとに性格バランスを考慮したグループ分け。クラス・遠足・チーム編成に最大50人対応。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/group.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  :root {
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --green: #10b981;
+    --c-O: #8b5cf6;
+    --c-C: #3b82f6;
+    --c-E: #f97316;
+    --c-A: #f472b6;
+    --c-N: #14b8a6;
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 600px; margin: 0 auto; }
+
+  /* ヘッダー */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--text); }
+  .page-title { font-size: 20px; font-weight: 700; }
+
+  /* タブ */
+  .tabs {
+    display: flex; gap: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 4px;
+    margin-bottom: 24px;
+  }
+  .tab-btn {
+    flex: 1; padding: 10px;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    color: var(--dim); background: none; border: none;
+    border-radius: 9px; cursor: pointer; transition: all .2s;
+  }
+  .tab-btn.active {
+    color: var(--text);
+    background: rgba(139,92,246,0.2);
+    box-shadow: 0 0 12px rgba(139,92,246,0.15);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== 名簿タブ ===== */
+  .roster-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .roster-count {
+    font-size: 13px; color: var(--dim);
+  }
+  .roster-count span { color: var(--purple); font-weight: 700; }
+
+  /* 追加フォーム */
+  .add-form {
+    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .add-input {
+    flex: 1; min-width: 0;
+    padding: 10px 14px;
+    font-family: inherit; font-size: 14px;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 10px; outline: none;
+    transition: border-color .2s;
+  }
+  .add-input::placeholder { color: rgba(148,163,184,0.4); }
+  .add-input:focus { border-color: var(--purple); }
+  .add-input.code { flex: 0 0 90px; font-family: monospace; letter-spacing: .1em; }
+  .add-btn {
+    padding: 10px 18px;
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none; border-radius: 10px; cursor: pointer;
+    transition: all .2s; white-space: nowrap;
+  }
+  .add-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .add-error {
+    font-size: 12px; color: #f87171;
+    margin: -8px 0 10px; min-height: 18px;
+  }
+
+  /* 生徒リスト */
+  .student-list {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .student-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(26,10,62,0.4);
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 12px;
+  }
+  .student-num {
+    font-size: 11px; color: var(--dim);
+    min-width: 20px; text-align: right;
+  }
+  .student-name {
+    flex: 1; font-size: 14px; font-weight: 500;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .student-code {
+    font-family: monospace; font-size: 12px;
+    background: rgba(139,92,246,0.15);
+    color: var(--purple);
+    padding: 2px 8px; border-radius: 6px; letter-spacing: .1em;
+  }
+  .student-bars {
+    display: flex; gap: 3px; align-items: center;
+  }
+  .sbar {
+    width: 4px; border-radius: 2px;
+    transition: height .2s;
+  }
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--dim); font-size: 16px; padding: 2px 4px;
+    transition: color .2s; line-height: 1;
+  }
+  .del-btn:hover { color: #f87171; }
+
+  .empty-roster {
+    text-align: center; padding: 48px 20px;
+    color: var(--dim); font-size: 14px; line-height: 1.8;
+  }
+
+  /* 全削除ボタン */
+  .clear-btn {
+    display: block; width: 100%;
+    padding: 10px;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    color: var(--dim);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+    margin-top: 8px;
+  }
+  .clear-btn:hover { border-color: #f87171; color: #f87171; }
+
+  /* ===== グループ分けタブ ===== */
+  .group-settings {
+    background: rgba(26,10,62,0.4);
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 14px; padding: 20px;
+    margin-bottom: 20px;
+  }
+  .settings-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .settings-row:last-child { margin-bottom: 0; }
+  .settings-label {
+    font-size: 13px; color: var(--dim);
+    min-width: 90px;
+  }
+  .num-input {
+    width: 70px;
+    padding: 8px 12px;
+    font-family: inherit; font-size: 15px; font-weight: 700;
+    color: var(--text); text-align: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 8px; outline: none;
+    transition: border-color .2s;
+  }
+  .num-input:focus { border-color: var(--purple); }
+  .settings-hint {
+    font-size: 12px; color: var(--dim);
+  }
+  .settings-warn {
+    font-size: 12px; color: #fbbf24;
+    margin-top: 8px;
+  }
+
+  .btn-generate {
+    display: block; width: 100%;
+    padding: 16px;
+    font-family: inherit; font-size: 16px; font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none; border-radius: 14px; cursor: pointer;
+    transition: all .3s; margin-bottom: 28px;
+  }
+  .btn-generate:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+  }
+  .btn-generate:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* グループ結果 */
+  .result-area { display: none; }
+  .result-area.visible { display: block; animation: fadein .4s ease-out; }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .result-title { font-size: 16px; font-weight: 700; }
+  .btn-shuffle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--purple);
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 8px; cursor: pointer; transition: all .2s;
+  }
+  .btn-shuffle:hover { background: rgba(139,92,246,0.2); }
+
+  .group-cards {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .group-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 14px; padding: 18px;
+  }
+  .group-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .group-name {
+    font-size: 15px; font-weight: 700;
+  }
+  .group-count {
+    font-size: 12px; color: var(--dim);
+    background: rgba(255,255,255,0.07);
+    padding: 3px 10px; border-radius: 20px;
+  }
+
+  .group-members {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 14px;
+  }
+  .group-member-chip {
+    font-size: 12px; font-weight: 500;
+    padding: 4px 10px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 20px;
+  }
+
+  /* 因子バーチャート */
+  .factor-bars {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .factor-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .factor-label {
+    font-size: 11px; color: var(--dim);
+    min-width: 40px;
+  }
+  .factor-bar-bg {
+    flex: 1; height: 8px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 4px; overflow: hidden;
+  }
+  .factor-bar-fill {
+    height: 100%; border-radius: 4px;
+    transition: width .5s ease-out;
+  }
+  .factor-val {
+    font-size: 11px; color: var(--dim);
+    min-width: 28px; text-align: right;
+    font-family: monospace;
+  }
+
+  .empty-group {
+    text-align: center; padding: 48px 20px;
+    color: var(--dim); font-size: 14px; line-height: 1.8;
+  }
+
+  /* ライトモード調整 */
+  @media (prefers-color-scheme: light) {
+    .student-item, .group-card, .group-settings {
+      background: rgba(255,255,255,0.6);
+    }
+  }
+
+  @media (max-width: 400px) {
+    body { padding: 24px 14px 60px; }
+    .add-form { gap: 6px; }
+    .add-input.code { flex: 0 0 80px; }
+  }
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-3"></div><div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<div class="container">
+  <header class="header">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      トップに戻る
+    </a>
+    <h1 class="page-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      グループ分け
+    </h1>
+    <div style="width:80px"></div>
+  </header>
+
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="roster">👤 名簿管理</button>
+    <button class="tab-btn" data-tab="grouping">🔀 グループ分け</button>
+  </div>
+
+  <!-- 名簿管理 -->
+  <div class="tab-panel active" id="tab-roster">
+    <div class="roster-header">
+      <span class="roster-count">登録人数 <span id="rosterCount">0</span> / 50人</span>
+    </div>
+
+    <div class="add-form">
+      <input type="text" id="inputName" class="add-input" placeholder="名前" maxlength="20">
+      <input type="text" id="inputCode" class="add-input code" placeholder="コード" maxlength="5" inputmode="numeric">
+      <button class="add-btn" id="addBtn">追加</button>
+    </div>
+    <div class="add-error" id="addError"></div>
+
+    <div class="student-list" id="studentList"></div>
+    <div class="empty-roster" id="emptyRoster">
+      <p>まだ登録されていません。<br>名前と診断コード（5桁）を入力して追加してください。</p>
+    </div>
+    <button class="clear-btn" id="clearBtn" style="display:none">名簿を全て削除する</button>
+  </div>
+
+  <!-- グループ分け -->
+  <div class="tab-panel" id="tab-grouping">
+    <div class="group-settings">
+      <div class="settings-row">
+        <span class="settings-label">グループ数</span>
+        <input type="number" id="groupCount" class="num-input" value="4" min="2" max="10">
+        <span class="settings-hint">グループ</span>
+      </div>
+      <div class="settings-warn" id="settingsWarn"></div>
+    </div>
+
+    <button class="btn-generate" id="generateBtn">バランスよくグループ分けする</button>
+
+    <div class="result-area" id="resultArea">
+      <div class="result-top">
+        <span class="result-title" id="resultTitle"></span>
+        <button class="btn-shuffle" id="shuffleBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          シャッフル
+        </button>
+      </div>
+      <div class="group-cards" id="groupCards"></div>
+    </div>
+
+    <div class="empty-group" id="emptyGroup" style="display:none">
+      <p>名簿にメンバーを登録してから<br>グループ分けを実行してください。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'bigfive_group_roster_v1';
+const MAX_STUDENTS = 50;
+
+const traitKeys = ['O','C','E','A','N'];
+const traitNames = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+const traitColors = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
+
+function codeToScores(code) {
+  return { O:+code[0], C:+code[1], E:+code[2], A:+code[3], N:+code[4] };
+}
+
+function isValidCode(code) {
+  return /^[1-5]{5}$/.test(code);
+}
+
+// ===== ストレージ =====
+function loadRoster() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveRoster(students) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+}
+
+// ===== 名簿管理 =====
+let students = loadRoster();
+
+function renderRoster() {
+  const list = document.getElementById('studentList');
+  const empty = document.getElementById('emptyRoster');
+  const clearBtn = document.getElementById('clearBtn');
+  document.getElementById('rosterCount').textContent = students.length;
+
+  if (students.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    clearBtn.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  clearBtn.style.display = '';
+
+  list.innerHTML = students.map((s, i) => {
+    const sc = codeToScores(s.code);
+    const bars = traitKeys.map(k => {
+      const h = (sc[k] / 5) * 24 + 4;
+      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.7"></div>`;
+    }).join('');
+    return `
+      <div class="student-item">
+        <span class="student-num">${i+1}</span>
+        <span class="student-name">${escHtml(s.name)}</span>
+        <span class="student-code">${s.code}</span>
+        <div class="student-bars">${bars}</div>
+        <button class="del-btn" data-id="${s.id}" title="削除">×</button>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.del-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteStudent(btn.dataset.id));
+  });
+}
+
+function addStudent() {
+  const nameEl = document.getElementById('inputName');
+  const codeEl = document.getElementById('inputCode');
+  const errEl  = document.getElementById('addError');
+  const name = nameEl.value.trim();
+  const code = codeEl.value.trim();
+
+  if (!name) { errEl.textContent = '名前を入力してください'; return; }
+  if (!isValidCode(code)) { errEl.textContent = 'コードは1〜5の数字5桁で入力してください（例：34213）'; return; }
+  if (students.length >= MAX_STUDENTS) { errEl.textContent = `最大${MAX_STUDENTS}人まで登録できます`; return; }
+  errEl.textContent = '';
+
+  students.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), name, code });
+  saveRoster(students);
+  renderRoster();
+  nameEl.value = '';
+  codeEl.value = '';
+  nameEl.focus();
+}
+
+function deleteStudent(id) {
+  students = students.filter(s => s.id !== id);
+  saveRoster(students);
+  renderRoster();
+  updateGroupingUI();
+}
+
+document.getElementById('addBtn').addEventListener('click', addStudent);
+document.getElementById('inputCode').addEventListener('keydown', e => { if (e.key === 'Enter') addStudent(); });
+document.getElementById('inputName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('inputCode').focus(); });
+document.getElementById('clearBtn').addEventListener('click', () => {
+  if (!confirm(`名簿の全${students.length}人を削除しますか？`)) return;
+  students = [];
+  saveRoster(students);
+  renderRoster();
+  updateGroupingUI();
+});
+
+// ===== タブ切り替え =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'grouping') updateGroupingUI();
+  });
+});
+
+// ===== グループ分け =====
+function updateGroupingUI() {
+  const n = students.length;
+  const g = parseInt(document.getElementById('groupCount').value) || 2;
+  const warn = document.getElementById('settingsWarn');
+  const btn = document.getElementById('generateBtn');
+
+  if (n < 2) {
+    warn.textContent = '名簿にメンバーを2人以上登録してください';
+    btn.disabled = true;
+  } else if (g > n) {
+    warn.textContent = `登録人数（${n}人）よりグループ数が多いです`;
+    btn.disabled = true;
+  } else if (g * 2 > n) {
+    warn.textContent = `1グループあたり1人になる場合があります`;
+    btn.disabled = false;
+  } else {
+    warn.textContent = '';
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('groupCount').addEventListener('input', updateGroupingUI);
+
+function generateGroups(seed) {
+  const g = Math.max(2, Math.min(10, parseInt(document.getElementById('groupCount').value) || 4));
+  const shuffled = [...students];
+
+  // シードつきシャッフル（同じ結果を再現しないための簡易乱数）
+  let r = seed || Date.now();
+  const rand = () => { r = (r * 1664525 + 1013904223) & 0xffffffff; return (r >>> 0) / 0xffffffff; };
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  // 合計スコアでソートしてスネークドラフト配分（バランス調整）
+  shuffled.sort((a, b) => {
+    const sa = Object.values(codeToScores(a.code)).reduce((x,y) => x+y, 0);
+    const sb = Object.values(codeToScores(b.code)).reduce((x,y) => x+y, 0);
+    return sb - sa;
+  });
+
+  const groups = Array.from({ length: g }, () => []);
+  shuffled.forEach((s, i) => {
+    const round = Math.floor(i / g);
+    const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
+    groups[pos].push(s);
+  });
+
+  return groups;
+}
+
+function renderGroups(groups) {
+  const area = document.getElementById('resultArea');
+  const cards = document.getElementById('groupCards');
+  document.getElementById('resultTitle').textContent = `${groups.length}グループ / ${students.length}人`;
+  area.classList.add('visible');
+
+  cards.innerHTML = groups.map((members, gi) => {
+    if (members.length === 0) return '';
+
+    // 因子平均
+    const avgs = {};
+    traitKeys.forEach(k => {
+      avgs[k] = members.reduce((s, m) => s + codeToScores(m.code)[k], 0) / members.length;
+    });
+
+    const chips = members.map(m =>
+      `<span class="group-member-chip">${escHtml(m.name)}</span>`
+    ).join('');
+
+    const bars = traitKeys.map(k => {
+      const pct = (avgs[k] / 5) * 100;
+      return `
+        <div class="factor-row">
+          <span class="factor-label">${traitNames[k]}</span>
+          <div class="factor-bar-bg">
+            <div class="factor-bar-fill" style="width:${pct}%;background:${traitColors[k]}"></div>
+          </div>
+          <span class="factor-val">${avgs[k].toFixed(1)}</span>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="group-card">
+        <div class="group-card-header">
+          <span class="group-name">グループ ${gi + 1}</span>
+          <span class="group-count">${members.length}人</span>
+        </div>
+        <div class="group-members">${chips}</div>
+        <div class="factor-bars">${bars}</div>
+      </div>`;
+  }).join('');
+}
+
+document.getElementById('generateBtn').addEventListener('click', () => {
+  if (students.length < 2) return;
+  const groups = generateGroups();
+  renderGroups(groups);
+});
+
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  const groups = generateGroups(Date.now() + Math.random());
+  renderGroups(groups);
+});
+
+// ===== ユーティリティ =====
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ===== 初期化 =====
+renderRoster();
+updateGroupingUI();
+</script>
+</body>
+</html>
