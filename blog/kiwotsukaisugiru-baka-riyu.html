@@ -302,6 +302,37 @@
     box-shadow: 0 0 36px rgba(34,211,238,0.5);
     transform: translateY(-2px);
   }
+  /* 関連記事 */
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
 
   .article-footer {
     margin-top: 64px;
@@ -587,6 +618,19 @@
       <p>自分の数値を見るだけで、「なぜ自分はこう動くのか」が少し客観的に見えてきます。</p>
       <br>
       <a href="https://bigfive.jr-genius.jp/" class="cta-btn">無料でビッグファイブ診断を受ける →</a>
+    </section>
+
+  
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+      <li><a href="agreeableness-high.html">協調性が高い人の特徴</a></li>
+      <li><a href="agreeableness-low.html">協調性が低い人の特徴</a></li>
+      <li><a href="diet-agreeableness-high.html">空気を読む人が太りやすい理由</a></li>
+      <li><a href="diet-agreeableness-low.html">自分流を曲げない人のダイエット</a></li>
+      <li><a href="kiwo-tsukaisu.html">気を使いすぎて疲れる人の性格の正体</a></li>
+      <li><a href="kiwotsukaisugiru-jikokoteikan.html">気を使いすぎる人が自己肯定感を上げると</a></li>
+      </ul>
     </section>
 
   </article>

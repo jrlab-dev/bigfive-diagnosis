@@ -358,6 +358,37 @@
     box-shadow: 0 0 36px rgba(34,211,238,0.5);
     transform: translateY(-2px);
   }
+  /* 関連記事 */
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
 
   .article-footer {
     margin-top: 64px;
@@ -626,6 +657,17 @@
       <p>自分の「才能観」がどんな傾向にあるのか、2分で確認できます。</p>
       <br>
       <a href="https://bigfive.jr-genius.jp/mindset.html" class="cta-btn">無料でマインドセット診断を受ける &rarr;</a>
+    </section>
+
+  
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+      <li><a href="yaruki-no-seitai.html">やる気の正体——動く人と動かない人の違い</a></li>
+      <li><a href="kachikan-no-kagaku.html">価値観を科学する——シュワルツ理論</a></li>
+      <li><a href="seikaku-kaereru.html">性格は変えられる？心理学が出した答え</a></li>
+      <li><a href="chatgpt-seikaku-data.html">ChatGPTに相談したことがある人へ</a></li>
+      </ul>
     </section>
 
   </article>
