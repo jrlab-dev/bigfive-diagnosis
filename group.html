@@ -81,9 +81,42 @@
     background: rgba(139,92,246,0.07);
     border: 1px dashed rgba(139,92,246,0.3);
     border-radius: 10px; cursor: pointer; transition: all .2s;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
   .btn-new-roster:hover { background: rgba(139,92,246,0.15); }
+
+  /* インライン名前入力フォーム */
+  .inline-name-form {
+    display: none;
+    gap: 8px; margin-bottom: 14px;
+  }
+  .inline-name-form.open { display: flex; }
+  .inline-name-input {
+    flex: 1; padding: 9px 14px;
+    font-family: inherit; font-size: 14px;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 10px; outline: none;
+    transition: border-color .2s;
+  }
+  .inline-name-input:focus { border-color: var(--purple); }
+  .inline-ok-btn {
+    padding: 9px 16px;
+    font-family: inherit; font-size: 13px; font-weight: 700;
+    color: #fff; background: var(--purple);
+    border: none; border-radius: 10px; cursor: pointer; transition: opacity .2s;
+    white-space: nowrap;
+  }
+  .inline-ok-btn:hover { opacity: .85; }
+  .inline-cancel-btn {
+    padding: 9px 12px;
+    font-family: inherit; font-size: 13px;
+    color: var(--dim); background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+  }
+  .inline-cancel-btn:hover { color: var(--text); }
 
   /* 追加フォーム */
   .roster-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -256,6 +289,16 @@
       <button class="roster-icon-btn danger" id="deleteRosterBtn" title="この名簿を削除">🗑</button>
     </div>
     <button class="btn-new-roster" id="newRosterBtn">＋ 新しい名簿を作る</button>
+    <div class="inline-name-form" id="newRosterForm">
+      <input type="text" class="inline-name-input" id="newRosterInput" placeholder="名簿名（例：1年A組）" maxlength="20">
+      <button class="inline-ok-btn" id="newRosterOk">作成</button>
+      <button class="inline-cancel-btn" id="newRosterCancel">✕</button>
+    </div>
+    <div class="inline-name-form" id="renameRosterForm">
+      <input type="text" class="inline-name-input" id="renameRosterInput" placeholder="新しい名前" maxlength="20">
+      <button class="inline-ok-btn" id="renameRosterOk">変更</button>
+      <button class="inline-cancel-btn" id="renameRosterCancel">✕</button>
+    </div>
 
     <div class="roster-header">
       <span class="roster-count">登録人数 <span id="rosterCount">0</span> / 100人</span>
@@ -390,28 +433,73 @@ document.getElementById('rosterSelect').addEventListener('change', e => {
   renderAll();
 });
 
+// ===== 新しい名簿フォーム =====
+function closeAllInlineForms() {
+  document.getElementById('newRosterForm').classList.remove('open');
+  document.getElementById('renameRosterForm').classList.remove('open');
+}
+
 document.getElementById('newRosterBtn').addEventListener('click', () => {
-  const name = prompt('新しい名簿の名前を入力してください', '新しい名簿');
-  if (!name?.trim()) return;
-  const roster = { id: uid(), name: name.trim(), students: [] };
+  closeAllInlineForms();
+  const form = document.getElementById('newRosterForm');
+  const input = document.getElementById('newRosterInput');
+  form.classList.add('open');
+  input.value = '';
+  input.focus();
+});
+document.getElementById('newRosterCancel').addEventListener('click', () => {
+  closeAllInlineForms();
+});
+function confirmNewRoster() {
+  const name = document.getElementById('newRosterInput').value.trim();
+  if (!name) return;
+  closeAllInlineForms();
+  const roster = { id: uid(), name, students: [] };
   rosters.push(roster);
   setActiveId(roster.id);
   saveRosters();
   renderAll();
+}
+document.getElementById('newRosterOk').addEventListener('click', confirmNewRoster);
+document.getElementById('newRosterInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmNewRoster();
+  if (e.key === 'Escape') closeAllInlineForms();
 });
 
+// ===== リネームフォーム =====
 document.getElementById('renameRosterBtn').addEventListener('click', () => {
+  closeAllInlineForms();
   const r = getActiveRoster();
-  const name = prompt('名簿名を変更', r.name);
-  if (!name?.trim() || name.trim() === r.name) return;
-  r.name = name.trim();
+  const form = document.getElementById('renameRosterForm');
+  const input = document.getElementById('renameRosterInput');
+  form.classList.add('open');
+  input.value = r.name;
+  input.select();
+  input.focus();
+});
+document.getElementById('renameRosterCancel').addEventListener('click', () => {
+  closeAllInlineForms();
+});
+function confirmRename() {
+  const name = document.getElementById('renameRosterInput').value.trim();
+  if (!name) return;
+  closeAllInlineForms();
+  const r = getActiveRoster();
+  r.name = name;
   saveRosters();
   renderAll();
+}
+document.getElementById('renameRosterOk').addEventListener('click', confirmRename);
+document.getElementById('renameRosterInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmRename();
+  if (e.key === 'Escape') closeAllInlineForms();
 });
 
+// ===== 名簿削除 =====
 document.getElementById('deleteRosterBtn').addEventListener('click', () => {
   if (rosters.length <= 1) return;
   const r = getActiveRoster();
+  // confirm()は使ってもページリセットのリスクが低いため維持
   if (!confirm(`「${r.name}」を削除しますか？\nこの名簿のデータはすべて消えます。`)) return;
   rosters = rosters.filter(x => x.id !== r.id);
   setActiveId(rosters[0].id);
