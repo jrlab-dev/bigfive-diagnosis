@@ -1264,15 +1264,17 @@ function deleteTeamResult(index) {
 }
 
 // ===== 心理テスト結果（concierge.jsのCONCIERGE_CONFIG.testsを使用）=====
-// getResultを各テストに追加（mypage用の表示名取得）
-const TEST_META = (typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : []).map(t => ({
-  ...t,
-  bgColor: t.bgColor || 'rgba(139,92,246,0.1)',
-  getResult: t.getResult || (() => ({ name: '完了', color: '#10b981' }))
-}));
+function getTestMeta() {
+  return (typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : []).map(t => ({
+    ...t,
+    bgColor: t.bgColor || 'rgba(139,92,246,0.1)',
+    getResult: t.getResult || (() => ({ name: '完了', color: '#10b981' }))
+  }));
+}
 
 function renderOtherTests() {
   const container = document.getElementById('otherTestResults');
+  const TEST_META = getTestMeta();
   container.innerHTML = TEST_META.map((test, i) => {
     let stored = null;
     try { stored = JSON.parse(localStorage.getItem(test.key)); } catch(e) {}
