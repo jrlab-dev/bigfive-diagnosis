@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/mbti-kekka-kawaru.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTIの診断結果、なぜ変わるのか——科学的に見た3つの弱点｜ビッグファイブ診断</title>
+<meta name="description" content="MBTIの結果が変わる理由を心理学のデータから解説。再検査信頼性の低さ、社会的望ましさのバイアス、16タイプ分類の限界という3つの弱点を詳しく紹介します。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブ診断【公式】">
+<meta property="og:title" content="MBTIの診断結果、なぜ変わるのか——科学的に見た3つの弱点">
+<meta property="og:description" content="MBTIの結果が変わる理由を心理学のデータから解説。再検査信頼性、社会的望ましさのバイアス、16タイプ分類の限界を詳しく紹介。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/mbti-kekka-kawaru.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/mbti-kekka-kawaru.webp">
+<meta property="og:image:width" content="1792">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MBTIの診断結果、なぜ変わるのか——科学的に見た3つの弱点">
+<meta name="twitter:description" content="MBTIの結果が変わる理由を心理学のデータから解説。3つの弱点を詳しく紹介。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "MBTIの診断結果、なぜ変わるのか——科学的に見た3つの弱点",
+  "description": "MBTIの結果が変わる理由を心理学のデータから解説。再検査信頼性の低さ、社会的望ましさのバイアス、16タイプ分類の限界という3つの弱点を詳しく紹介します。",
+  "url": "https://bigfive.jr-genius.jp/blog/mbti-kekka-kawaru.html",
+  "datePublished": "2026-05-09",
+  "dateModified": "2026-05-09",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "MBTI" },
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "性格診断" },
+    { "@type": "Thing", "name": "心理学" },
+    { "@type": "Thing", "name": "再検査信頼性" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ブログ",
+      "item": "https://bigfive.jr-genius.jp/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "MBTIの診断結果、なぜ変わるのか——科学的に見た3つの弱点",
+      "item": "https://bigfive.jr-genius.jp/blog/mbti-kekka-kawaru.html"
+    }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  /* 背景 */
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  /* ヘッダー */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  /* メインレイアウト */
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* 記事ヘッダー */
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  /* 目次 */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  /* 記事本文 */
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* ハイライトボックス */
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  /* 強調テキスト */
+  .big-text {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.5;
+    text-align: center;
+    padding: 32px 24px;
+    margin: 40px 0;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .big-text span { color: var(--accent); }
+
+  /* CTAボックス */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* 関連記事 */
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  /* フッター */
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img {
+    width: 100%; max-width: 720px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: block;
+    height: auto;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+</head>
+<body class="theme-light">
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="index.html" class="back-link">&larr; ブログ一覧へ</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <!-- 記事ヘッダー -->
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">性格診断</span>
+        <span class="tag">MBTI</span>
+        <span class="tag">ビッグファイブ</span>
+        <span class="tag">心理学</span>
+      </div>
+      <h1 class="article-title">MBTIの診断結果、<span>なぜ変わるのか</span>——科学的に見た3つの弱点</h1>
+      <p class="article-lead">MBTIは世界中で愛されている性格診断ですが、心理学の観点から見ると「結果が変わる」「なりたい自分が出る」「16タイプに押し込める」という3つの弱点があります。その理由をデータと一緒に解説します。</p>
+      <p class="article-meta">公開：2026年5月9日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/mbti-kekka-kawaru.webp"
+      alt="MBTIの診断結果が変わる理由を科学的に解説する画像"
+      width="1792" height="1024"
+      loading="eager"
+    >
+
+    <!-- 目次 -->
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">「また変わった」——MBTIあるある</a></li>
+        <li><a href="#sec2">弱点1：結果が安定しない</a></li>
+        <li><a href="#sec3">弱点2：なりたい自分が出てしまう</a></li>
+        <li><a href="#sec4">弱点3：16タイプに押し込める問題</a></li>
+        <li><a href="#sec5">科学は嫌いじゃない。測り方が違かっただけ</a></li>
+      </ol>
+    </nav>
+
+    <!-- 本文 -->
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>「また変わった」——MBTIあるある</h2>
+        <p>MBTIを受けたことがある人に、聞きたいことがある。</p>
+        <p>前回と結果が変わったこと、ないだろうか。三ヶ月前にINTJだったのに、今日やったらENFPになっていた。半年前にINFJだったのが、今はISFP。前の方がしっくりきてたのに、今回は違う自分が出てしまった。</p>
+        <p>これ、結構多くの人が経験しているはずだ。SNSで「MBTI結果変わった」と検索すると、同じように悩んでいる人がごろごろ出てくる。「自分がどのタイプかまだ確定できない」と何度も受け直している人もいる。</p>
+        <p>気になるのは、性格ってそんなに短期間でガラッと変わるものなのか、ということだ。昨日は内向的だったのに今日は外向的。先週は直感型だったのに今週は感覚型。そんなはずはない。</p>
+        <p>でも「結果が変わる」こと自体は、そこまで深刻な問題ではないかもしれない。MBTIは娯楽として楽しむものだし、その時の気分で少し答えが傾くのは当然だ。</p>
+        <p>問題は、その結果を使って何かを判断しようとした時だ。「この仕事に向いてる」「この人との相性がいい」「自分の強みはこれだ」——ここまで踏み込むと、結果が変わる事実は無視できなくなる。</p>
+        <p>この記事では、MBTIの結果がなぜ変わるのか、そして科学的な視点から見たときにどんな弱点があるのかを、3つのポイントで整理する。</p>
+      </section>
+
+      <section id="sec2">
+        <h2>弱点1：結果が安定しない</h2>
+        <p>心理学には「再検査信頼性」という言葉がある。同じ人に同じテストを2回受けさせて、同じ結果が出るかを確かめる方法だ。当然、ちゃんとしたテストなら同じ結果になる。測っているのは性格だから、数週間で変わるはずがない。</p>
+        <p>MBTIでこの検証をすると、かなりの確率で結果が変わる。</p>
+        <p>ある研究では、5週間後に同じ人にMBTIを受け直してもらったところ、約50%の人が別のタイプに分類された。半分だ。テストを受けた半分の人が、別の性格タイプになっている。</p>
+
+        <div class="big-text">
+          これが何を意味しているかというと、<br>
+          <span>MBTIの分類軸は「境界線」で人を切っている</span>ということだ。
+        </div>
+
+        <p>たとえば外向性と内向性の境界線。60点だと外向的、40点だと内向的、というふうに真ん中で切る。でも自分が55点だった場合、今日は少し元気だから60点を超えて外向的になるし、疲れている日は50点を下回って内向的になる。本質は何も変わっていないのに、結果だけが変わってしまう。</p>
+        <p>ビッグファイブでは、この境界線で切らない。外向性が55点なら55点とそのまま出す。58点の日も52点の日も、「やや外向的寄り」という同じ位置にいる。数字が少し揺れるだけで、分類そのものは変わらない。</p>
+        <p>「あなたはEです」「あなたはIです」という二択はわかりやすい。でも、そのわかりやすさの裏で、境界線付近にいる多くの人が毎回違う自分を見せられている。</p>
+      </section>
+
+      <section id="sec3">
+        <h2>弱点2：なりたい自分が出てしまう</h2>
+        <p>MBTIの質問を見たとき、「こう答えたらこういうタイプになるな」と感じたことがあるだろう。</p>
+        <p>「あなたは計画的ですか？」「人の前で話すのは好きですか？」「新しいアイデアを思いつきますか？」</p>
+        <p>これらの質問、何が起きているかというと、自分がどうありたいかで答えが変わってしまうのだ。</p>
+        <p>自分を「計画的な人間だと思いたい」人は「はい」と答える。自分を「アイデアマンだと思いたい」人も「はい」と答える。質問が直接的すぎて、自分の理想像がそのまま結果に反映されてしまう。</p>
+        <p>心理学ではこれを「社会的望ましさのバイアス」と呼んでいる。自分がどうあるかではなく、どうあるべきかで答えてしまう現象だ。誰も「私は全く計画的ではありません」とは答えたくない。</p>
+
+        <div class="highlight-box">
+          <p>実際にあった話を一つ。</p>
+          <p>ある人がMBTIを受けて「リーダーに向いているタイプ」という結果が出た。その人はずっとリーダーに向いていると思っていたから、この結果を見て嬉しかった。同僚にも「やっぱり私ってリーダー向きなんだって」とアピールしていた。</p>
+          <p>でも周りの人は、全く逆の印象を持っていた。人の話を聞かない、決断が独断的、チームの意見をまとめるのが苦手。MBTIの結果と、周りが見ている本人の姿が、まるで違っていた。</p>
+        </div>
+
+        <p>ここで一つ気づいてほしいことがある。</p>
+        <p>この「なりたい自分が結果に出る」という仕組みこそが、MBTIがあんなに広まった理由だとしたらどうだろう。</p>
+        <p>結果を見て「やっぱりね！」と思うから、SNSに載せたくなる。自分を肯定してくれるから、友達にもやりたくなる。「あなたはINFJです。希少なタイプで、人の気持ちがわかる繊細な性格です」と言われたら、嬉しくない人は少ないだろう。</p>
+        <p>つまりMBTIは、<strong>エンタメとしては本当に優秀</strong>なのだ。自分を気持ちよく肯定してくれる。話のネタになる。人と比べたくなる。共有したくなる。</p>
+        <p>でも、「自分がなりたい結果」が出ているということは、「実際の自分」が出ているわけではない。エンタメとして優秀なことと、性格を正しく測れていることは、別の話だ。</p>
+        <p>ビッグファイブの質問は、この問題を減らす作りになっている。「あなたは計画的ですか」と聞くのではなく、「自分の部屋を片付けたことがある」「約束の時間に遅れたことがある」といった具体的な行動を聞く。なりたい自分で答える余裕が少ない。</p>
+        <p>全くなくなるわけではない。でも、MBTIよりは「実際の自分」に近い数字が出る確率が高い。</p>
+      </section>
+
+      <section id="sec4">
+        <h2>弱点3：16タイプに押し込める問題</h2>
+        <p>MBTIは人を16のタイプに分ける。</p>
+        <p>4つの軸（外向・内向、感覚・直感、思考・感情、判断・知覚）を二択で判定して、その組み合わせで16通り。INTJ、ENFP、ISTP……というやつだ。</p>
+
+        <div class="big-text">
+          16通り。<br>
+          <span>世界中に80億人がいて、16通り。</span>
+        </div>
+
+        <p>これだけで少し違和感があるかもしれない。でも問題は数だけではない。二択で切るという仕組み自体に無理がある。</p>
+        <p>たとえば、外向的でも内向的でもない人はどこに行くのか。</p>
+        <p>大勢の中では話せるけれど、一人でいる時間も好き。初対面では静かだけど、仲良くなるとよくしゃべる。飲み会には行くけど、翌日は一人で回復しないと動けない。</p>
+        <p>この人は外向的か、内向的か。</p>
+        <p>現実には、こんな人はごまんといる。外向性と内向性の間にいて、場面によってどちらにも傾く。これが普通だ。性格はグラデーションなのだ。</p>
+        <p>でもMBTIは、この人を強制的にどちらかに分類する。今回のテストで外向性が52点だったら「E」。48点だったら「I」。2点の違いで、別のタイプになってしまう。</p>
+        <p>しかも、この2点の違いが他の軸とも組み合わさる。外向性が変わるだけで、INTJがENTJになる。ISTPがESTPになる。結果として、全体像がガラッと変わってしまう。</p>
+        <p>ビッグファイブでは、これを「グラデーションのまま」扱う。外向性は3段階でも5段階でもなく、連続した数字で出す。「あなたの外向性は55点です」という結果を見れば、自分がどのあたりにいるのかがわかる。境界線のこっち側かあっち側か、という議論自体が不要になる。</p>
+        <p>16タイプの分類は、話題としては面白い。「あなたは何タイプ？」と聞き合うのは楽しい。でも、その16の箱に自分を無理やり入れ続ける必要はない。人間はもっと複雑で、もっと面白い。</p>
+      </section>
+
+      <section id="sec5">
+        <h2>科学は嫌いじゃない。測り方が違かっただけ</h2>
+        <p>ここまで3つの弱点を書いてきたけど、MBTIを否定したいわけではない。</p>
+        <p>実際、MBTIは娯楽としてはすごく良くできている。友達と「何タイプ？」と盛り上がれる。SNSで自己紹介代わりに使える。自分を知るきっかけになる。それ自体は悪いことじゃない。</p>
+        <p>ただ、知っておいてほしいことがある。</p>
+        <p>MBTIは「自分を分類して楽しむ」ために作られたもので、「自分を正しく測る」ために作られたものではない。ユングの性格理論をもとに、母娘が自分たちの観察で作った分類だ。彼女たちが悪いわけではない。ただ、科学的な検証を経た測定ツールではない。</p>
+        <p>ビッグファイブは、そこが逆だ。</p>
+        <p>最初から「性格をどう測るか」をデータから探した。世界中の研究者が何十年もかけて、何千人もの人を調べて、「この5つの要素で性格の大部分を説明できる」と結論づけた。論文の数は数千本。再現性の検証も何度もされている。</p>
+        <p>だからビッグファイブだと、三ヶ月前に受けた結果と今日の結果が大きくは変わらない。自分がなりたい結果ではなく、実際の行動傾向に近い数字が出る。グラデーションのまま結果が出るので、16の箱に押し込められない。</p>
+
+        <div class="highlight-box">
+          <p>「MBTIが好きなら、それでいい」と思う。楽しいからやる、というのは立派な理由だ。</p>
+          <p>ただ、「自分をちゃんと知りたい」「仕事選びの参考にしたい」「人間関係のヒントが欲しい」と思っているなら、測り方を選ぶといい。目的に合った道具を使う。それだけの話だ。</p>
+        </div>
+      </section>
+
+    </div><!-- /.article-body -->
+
+    <!-- CTA -->
+    <section class="cta-box">
+      <h2>ビッグファイブ診断に挑戦してみる</h2>
+      <p>自分をちゃんと知りたいと思ったら、まずはやってみるのが一番です。ビッグファイブ診断は無料で、5分程度で終わります。結果は5つの因子のスコアで表示されるので、自分の性格がグラデーションで見えてきます。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">約5分</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+        <span class="cta-badge">科学的根拠あり</span>
+      </div>
+      <br>
+      <a href="https://bigfive.jr-genius.jp/quiz.html" class="cta-btn">無料でビッグファイブ診断を受ける &rarr;</a>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="mbti-vs-bigfive.html">MBTIの診断結果、嘘じゃない？ビッグファイブとの違い</a></li>
+        <li><a href="seikaku-kaereru.html">性格は変えられる？心理学が出した、正直な答え</a></li>
+        <li><a href="moteru-seikaku-shinjitsu.html">「性格が良い人」がモテない本当の理由</a></li>
+        <li><a href="kachikan-no-kagaku.html">価値観を科学する——シュワルツ理論</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">&larr; ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>
