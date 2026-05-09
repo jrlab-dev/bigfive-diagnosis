@@ -1067,6 +1067,7 @@
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
 <script src="concierge.js"></script>
+<script src="rarity.js"></script>
 <script>
 // ===== 特性情報 =====
 const traitInfo = {
@@ -1756,12 +1757,6 @@ function findHiddenCharacter() {
 }
 
 // MAX因子判定ヘルパー
-function isMax(factor, value) {
-  if (factor === 'N') return value === 1;
-  if (factor === 'E' || factor === 'A') return value === 1 || value === 5;
-  return value === 5;
-}
-
 // MAX因子を取得（R2用：因子1個がMAXの場合のみ）
 function getMaxFactor() {
   const maxFactors = [];
