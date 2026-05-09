@@ -268,7 +268,7 @@
     </div>
     <div class="add-error" id="addError"></div>
 
-    <button class="import-btn" id="importBtn">📋 「あの人」リストから選んで取り込む</button>
+    <button class="import-btn" id="importBtn">📋 保存データ（自分・あの人）から選んで取り込む</button>
 
     <div class="student-list" id="studentList"></div>
     <div class="empty-roster" id="emptyRoster">
@@ -313,7 +313,7 @@
 <div class="modal-overlay" id="importModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">「あの人」リストから取り込む</div>
+    <div class="modal-title">保存データから取り込む</div>
     <div class="modal-sub" id="modalSub"></div>
     <div class="modal-actions">
       <button class="modal-action-btn" id="selectAllBtn">全選択</button>
@@ -331,6 +331,7 @@
 const STORAGE_KEY   = 'bigfive_group_rosters_v2';
 const ACTIVE_KEY    = 'bigfive_group_active_roster';
 const OTHERS_KEY    = 'bigfive_other_results';
+const MY_KEY        = 'bigfive_my_results';
 const MAX_STUDENTS  = 100;
 
 const traitKeys   = ['O','C','E','A','N'];
@@ -502,53 +503,64 @@ let modalChecked = new Set();
 
 document.getElementById('importBtn').addEventListener('click', openImportModal);
 
-function openImportModal() {
-  const others = (() => {
-    try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); }
-    catch(e) { return []; }
-  })();
+function loadAllSaved() {
+  const myRaw = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch(e) { return []; } })();
+  const othersRaw = (() => { try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); } catch(e) { return []; } })();
+  const all = [];
+  myRaw.forEach((o, i) => {
+    all.push({ uid: 'my_' + i, id: o.id || ('my_' + i), name: o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
+  });
+  othersRaw.forEach(o => {
+    all.push({ uid: 'other_' + o.id, id: o.id, name: o.name || `あの人(${o.code})`, code: o.code, tag: 'あの人' });
+  });
+  return all;
+}
 
-  if (others.length === 0) {
-    alert('「あの人」に保存されているデータがありません。');
+function openImportModal() {
+  const all = loadAllSaved();
+
+  if (all.length === 0) {
+    alert('保存されているデータがありません。\n先に診断を受けて結果を保存してください。');
     return;
   }
 
   const r = getActiveRoster();
-  const existingIds = new Set(r.students.map(s => s.id));
+  const existingUids = new Set(r.students.map(s => s.id));
   const remaining = MAX_STUDENTS - r.students.length;
 
   document.getElementById('modalSub').textContent =
-    `あの人リスト ${others.length}件 ／ あと${remaining}人追加可能`;
+    `保存データ ${all.length}件 ／ あと${remaining}人追加可能`;
 
   modalChecked = new Set();
 
   const list = document.getElementById('modalList');
-  list.innerHTML = others.map(o => {
-    const alreadyImported = existingIds.has('other_' + o.id);
+  list.innerHTML = all.map(o => {
+    const already = existingUids.has(o.uid);
     const sc = codeToScores(o.code);
     const bars = traitKeys.map(k => {
       const h = Math.round((sc[k] / 5) * 18 + 2);
       return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75;display:inline-block;width:4px;border-radius:2px;vertical-align:bottom"></div>`;
     }).join('');
+    const tagColor = o.tag === '自分' ? 'rgba(16,185,129,0.2);color:#34d399' : 'rgba(139,92,246,0.15);color:#a78bfa';
     return `
-      <div class="modal-item${alreadyImported ? ' already' : ''}" data-id="${escHtml(o.id)}" data-name="${escHtml(o.name||'')}" data-code="${escHtml(o.code)}">
-        <div class="modal-checkbox">${alreadyImported ? '✓' : ''}</div>
-        <span class="modal-item-name">${escHtml(o.name || `あの人(${o.code})`)}</span>
+      <div class="modal-item${already ? ' already' : ''}" data-uid="${escHtml(o.uid)}" data-name="${escHtml(o.name)}" data-code="${escHtml(o.code)}">
+        <div class="modal-checkbox">${already ? '✓' : ''}</div>
+        <span class="modal-item-name">${escHtml(o.name)}</span>
         <span style="display:flex;gap:2px;align-items:flex-end;height:20px">${bars}</span>
         <span class="modal-item-code">${o.code}</span>
-        ${alreadyImported ? '<span class="modal-item-tag">取込済</span>' : ''}
+        <span class="modal-item-tag" style="background:${tagColor}">${already ? '取込済' : o.tag}</span>
       </div>`;
   }).join('');
 
   list.querySelectorAll('.modal-item:not(.already)').forEach(item => {
     item.addEventListener('click', () => {
-      const id = item.dataset.id;
-      if (modalChecked.has(id)) {
-        modalChecked.delete(id);
+      const uid = item.dataset.uid;
+      if (modalChecked.has(uid)) {
+        modalChecked.delete(uid);
         item.classList.remove('checked');
         item.querySelector('.modal-checkbox').textContent = '';
       } else {
-        modalChecked.add(id);
+        modalChecked.add(uid);
         item.classList.add('checked');
         item.querySelector('.modal-checkbox').textContent = '✓';
       }
@@ -571,7 +583,7 @@ function updateModalConfirmBtn(remaining) {
 
 document.getElementById('selectAllBtn').addEventListener('click', () => {
   document.querySelectorAll('.modal-item:not(.already)').forEach(item => {
-    modalChecked.add(item.dataset.id);
+    modalChecked.add(item.dataset.uid);
     item.classList.add('checked');
     item.querySelector('.modal-checkbox').textContent = '✓';
   });
@@ -590,18 +602,15 @@ document.getElementById('deselectAllBtn').addEventListener('click', () => {
 });
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => {
-  const others = (() => {
-    try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); }
-    catch(e) { return []; }
-  })();
+  const all = loadAllSaved();
   const r = getActiveRoster();
   const remaining = MAX_STUDENTS - r.students.length;
   let added = 0;
 
-  for (const o of others) {
-    if (!modalChecked.has(o.id)) continue;
+  for (const o of all) {
+    if (!modalChecked.has(o.uid)) continue;
     if (added >= remaining) break;
-    r.students.push({ id: 'other_' + o.id, name: o.name || `あの人(${o.code})`, code: o.code });
+    r.students.push({ id: o.uid, name: o.name, code: o.code });
     added++;
   }
 
