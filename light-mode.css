@@ -1518,6 +1518,73 @@ body.theme-light .need-bar-bg {
   background: oklch(0.88 0.03 270 / 0.35) !important;
 }
 
+/* factor-box / detail-box（HSP用） */
+body.theme-light .factor-box,
+body.theme-light .detail-box {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .factor-box h3,
+body.theme-light .detail-box h3 {
+  color: var(--dim) !important;
+}
+body.theme-light .factor-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.35) !important;
+}
+body.theme-light .factor-score {
+  color: var(--dim) !important;
+}
+body.theme-light .factor-desc-text {
+  color: var(--dim) !important;
+}
+body.theme-light .detail-section p {
+  color: var(--dim) !important;
+}
+
+/* values-box / axis-box（Schwartz用） */
+body.theme-light .values-box,
+body.theme-light .axis-box {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .values-box h3,
+body.theme-light .axis-box h3 {
+  color: var(--dim) !important;
+}
+body.theme-light .val-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.35) !important;
+}
+body.theme-light .val-score {
+  color: var(--dim) !important;
+}
+body.theme-light .val-label {
+  color: var(--text) !important;
+}
+
+/* meter-box（Mindset用） */
+body.theme-light .meter-box {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .meter-box h3 {
+  color: var(--dim) !important;
+}
+body.theme-light .meter-labels {
+  color: var(--dim) !important;
+}
+body.theme-light .meter-needle {
+  box-shadow: 0 0 8px rgba(0,0,0,0.3) !important;
+}
+
+/* cross-box（Attachment用） */
+body.theme-light .cross-box {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .cross-box h3 {
+  color: var(--dim) !important;
+}
+
 /* セカンダリナビボタン */
 body.theme-light .nav-btn-secondary {
   background: oklch(0.93 0.02 270) !important;
