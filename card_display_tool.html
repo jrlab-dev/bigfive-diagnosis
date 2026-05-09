@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Display Tool</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: #050510;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── コントロールパネル ── */
+  .controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(5,5,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    transition: opacity 0.3s;
+  }
+  .controls.hidden { opacity: 0; pointer-events: none; }
+  .ctrl-group { display: flex; align-items: center; gap: 6px; }
+  .ctrl-label { color: #556; font-size: 11px; letter-spacing: 0.05em; white-space: nowrap; }
+  .ctrl-input {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: #ccc;
+    padding: 5px 10px;
+    font-size: 12px;
+    width: 280px;
+    outline: none;
+  }
+  .ctrl-input:focus { border-color: rgba(139,92,246,0.5); }
+  .ctrl-btn {
+    padding: 5px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    color: #aaa;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .ctrl-btn.active { background: rgba(139,92,246,0.3); border-color: rgba(139,92,246,0.5); color: #e0d0ff; }
+  .ctrl-range { width: 80px; cursor: pointer; accent-color: #8b5cf6; }
+  .ctrl-val { color: #8b5cf6; font-size: 11px; min-width: 30px; }
+  .toggle-hide {
+    position: fixed;
+    top: 8px;
+    right: 16px;
+    z-index: 101;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #556;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .toggle-hide:hover { color: #aaa; }
+
+  /* ── 表示エリア ── */
+  .stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    perspective: 1200px;
+  }
+
+  /* ── カード外枠（3D変形のみ担当） ── */
+  .card-outer {
+    position: relative;
+    width: var(--card-w, 320px);
+    height: var(--card-h, 420px);
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tiltX, 8deg)) rotateY(var(--tiltY, -15deg));
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.7));
+  }
+
+  /* ── カード内枠（クリッピング担当） ── */
+  .card-wrapper {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  /* ── カードベース ── */
+  .card-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #12122a 0%, #1a1a3e 40%, #0e0e28 100%);
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.8),
+      0 0 40px rgba(80,80,255,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  /* ── キャラクター画像 ── */
+  .card-image {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    z-index: 2;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── ホログラムレイヤー群 ── */
+  .holo-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* 光の反射スポット（内側80%に制限） */
+  .holo-spot {
+    inset: 10%;
+    background: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255,255,255,0.45) 0%,
+      rgba(255,255,255,0.15) 8%,
+      rgba(255,200,255,0.08) 15%,
+      transparent 35%
+    );
+    mix-blend-mode: screen;
+    opacity: var(--spot-opacity, 0.8);
+  }
+
+  /* 光沢スイープ（内側に制限） */
+  .holo-gloss {
+    inset: 10%;
+    background: linear-gradient(
+      135deg,
+      transparent 30%,
+      rgba(255,255,255,0.08) 45%,
+      rgba(255,255,255,0.15) 50%,
+      rgba(255,255,255,0.08) 55%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    opacity: var(--gloss-opacity, 0.6);
+  }
+
+  /* キラキラスパークル（内側80%に制限） */
+  .sparkle-container {
+    overflow: hidden;
+    opacity: var(--sparkle-opacity, 0.9);
+    inset: 10%;
+  }
+  .sparkle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 4px 2px rgba(255,255,255,0.8);
+    animation: sparkle-anim var(--dur, 2s) var(--delay, 0s) infinite ease-in-out;
+  }
+  @keyframes sparkle-anim {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* 背景の星 */
+  .bg-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg-stars span {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    animation: twinkle var(--dur, 3s) var(--delay, 0s) infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.8; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 背景の星 -->
+<div class="bg-stars" id="bgStars"></div>
+
+<!-- コントロールパネル -->
+<div class="controls" id="controls">
+  <div class="ctrl-group">
+    <span class="ctrl-label">画像</span>
+    <input class="ctrl-input" id="imgPath" value="_private/ogp_images_v2/M/54343.webp">
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">左右</span>
+    <input class="ctrl-range" id="tiltYRange" type="range" min="-35" max="35" value="-15">
+    <span class="ctrl-val" id="tiltYVal">-15°</span>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">上下</span>
+    <input class="ctrl-range" id="tiltXRange" type="range" min="-25" max="25" value="8">
+    <span class="ctrl-val" id="tiltXVal">8°</span>
+  </div>
+  <div class="ctrl-group">
+    <button class="ctrl-btn active" id="btnLeft" onclick="setPreset(-15,8)">左奥</button>
+    <button class="ctrl-btn" id="btnRight" onclick="setPreset(15,8)">右奥</button>
+    <button class="ctrl-btn" id="btnFlat" onclick="setPreset(0,0)">正面</button>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">キラ</span>
+    <input class="ctrl-range" id="sparkleRange" type="range" min="0" max="100" value="90">
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">サイズ</span>
+    <input class="ctrl-range" id="sizeRange" type="range" min="200" max="2000" value="800">
+    <span class="ctrl-val" id="sizeVal">800</span>
+    <button class="ctrl-btn" id="btnFit" onclick="autoFit()">画面に合わせる</button>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">比率</span>
+    <input class="ctrl-range" id="ratioRange" type="range" min="100" max="160" value="131" step="1">
+    <span class="ctrl-val" id="ratioVal">1.31</span>
+  </div>
+</div>
+<button class="toggle-hide" id="toggleHide" onclick="toggleControls()">H</button>
+
+<!-- 表示ステージ -->
+<div class="stage">
+  <div class="card-outer" id="cardOuter">
+  <div class="card-wrapper" id="cardWrapper">
+    <!-- カードベース -->
+    <div class="card-base"></div>
+
+    <!-- キャラクター画像 -->
+    <div class="card-image" id="cardImage">
+      <img id="charImg" src="_private/ogp_images_v2/M/54343.webp" alt="character">
+    </div>
+
+    <!-- ホログラムレイヤー群 -->
+    <div class="holo-layer holo-gloss" id="holoGloss"></div>
+    <div class="holo-layer holo-spot" id="holoSpot"></div>
+    <div class="holo-layer sparkle-container" id="sparkleContainer"></div>
+  </div>
+  </div>
+
+<script>
+const outer = document.getElementById('cardOuter');
+const wrapper = document.getElementById('cardWrapper');
+const charImg = document.getElementById('charImg');
+const spot = document.getElementById('holoSpot');
+const sparkleContainer = document.getElementById('sparkleContainer');
+
+// ── 背景の星を生成 ──
+(function() {
+  const el = document.getElementById('bgStars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    const size = (Math.random() * 1.5 + 0.5).toFixed(1);
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.setProperty('--dur', (Math.random() * 4 + 2).toFixed(1) + 's');
+    s.style.setProperty('--delay', (Math.random() * 4).toFixed(1) + 's');
+    el.appendChild(s);
+  }
+})();
+
+// ── スパークル生成 ──
+function createSparkles() {
+  sparkleContainer.innerHTML = '';
+  const count = 100;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.setProperty('--dur', (1.5 + Math.random() * 3) + 's');
+    s.style.setProperty('--delay', (Math.random() * 3) + 's');
+    const colors = ['255,255,255', '255,230,100', '100,200,255', '255,150,255'];
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    s.style.background = 'rgb(' + c + ')';
+    s.style.boxShadow = '0 0 5px 2px rgba(' + c + ',0.9)';
+    sparkleContainer.appendChild(s);
+  }
+}
+createSparkles();
+
+// ── マウス追従（光の位置） ──
+document.addEventListener('mousemove', function(e) {
+  const mx = (e.clientX / window.innerWidth * 100).toFixed(1);
+  const my = (e.clientY / window.innerHeight * 100).toFixed(1);
+  spot.style.setProperty('--mx', mx + '%');
+  spot.style.setProperty('--my', my + '%');
+});
+
+// ── 画像パス変更 ──
+document.getElementById('imgPath').addEventListener('change', function() {
+  charImg.src = this.value;
+});
+
+// ── 3D傾きコントロール ──
+function setPreset(y, x) {
+  document.getElementById('tiltYRange').value = y;
+  document.getElementById('tiltXRange').value = x;
+  apply3D(y, x);
+  document.querySelectorAll('#btnLeft,#btnRight,#btnFlat').forEach(function(b) { b.classList.remove('active'); });
+  if (y < 0) document.getElementById('btnLeft').classList.add('active');
+  else if (y > 0) document.getElementById('btnRight').classList.add('active');
+  else document.getElementById('btnFlat').classList.add('active');
+}
+
+function apply3D(y, x) {
+  outer.style.setProperty('--tiltY', y + 'deg');
+  outer.style.setProperty('--tiltX', x + 'deg');
+  document.getElementById('tiltYVal').textContent = y + '°';
+  document.getElementById('tiltXVal').textContent = x + '°';
+}
+
+document.getElementById('tiltYRange').addEventListener('input', function() {
+  apply3D(+this.value, +document.getElementById('tiltXRange').value);
+  document.querySelectorAll('#btnLeft,#btnRight,#btnFlat').forEach(function(b) { b.classList.remove('active'); });
+});
+document.getElementById('tiltXRange').addEventListener('input', function() {
+  apply3D(+document.getElementById('tiltYRange').value, +this.value);
+  document.querySelectorAll('#btnLeft,#btnRight,#btnFlat').forEach(function(b) { b.classList.remove('active'); });
+});
+
+// ── エフェクト強度 ──
+document.getElementById('sparkleRange').addEventListener('input', function() {
+  wrapper.style.setProperty('--sparkle-opacity', (this.value / 100).toFixed(2));
+});
+
+// ── サイズ ──
+document.getElementById('sizeRange').addEventListener('input', function() {
+  const w = +this.value;
+  const ratio = +document.getElementById('ratioRange').value / 100;
+  outer.style.setProperty('--card-w', w + 'px');
+  outer.style.setProperty('--card-h', Math.round(w * ratio) + 'px');
+  document.getElementById('sizeVal').textContent = w;
+});
+
+document.getElementById('ratioRange').addEventListener('input', function() {
+  const ratio = this.value / 100;
+  const w = +document.getElementById('sizeRange').value;
+  outer.style.setProperty('--card-w', w + 'px');
+  outer.style.setProperty('--card-h', Math.round(w * ratio) + 'px');
+  document.getElementById('ratioVal').textContent = ratio.toFixed(2);
+});
+
+// ── 画面に合わせる（余白を画面外へ押し出す） ──
+function autoFit() {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const ratio = +document.getElementById('ratioRange').value / 100;
+  const tiltY = Math.abs(+document.getElementById('tiltYRange').value);
+  const tiltX = Math.abs(+document.getElementById('tiltXRange').value);
+
+  // 3D傾き + パースペクティブ分を大きめに補正（1.5倍の余裕）
+  const multY = 1 / Math.cos(tiltY * Math.PI / 180) * 1.5;
+  const multX = 1 / Math.cos(tiltX * Math.PI / 180) * 1.5;
+
+  let w = vw * multY;
+  let h = w * ratio;
+  if (h < vh * multX) {
+    h = vh * multX;
+    w = h / ratio;
+  }
+
+  outer.style.setProperty('--card-w', Math.round(w) + 'px');
+  outer.style.setProperty('--card-h', Math.round(h) + 'px');
+  document.getElementById('sizeRange').value = Math.min(Math.round(w), 2000);
+  document.getElementById('sizeVal').textContent = Math.round(w);
+}
+
+autoFit();
+window.addEventListener('resize', autoFit);
+
+// ── コントロール表示/非表示 ──
+function toggleControls() {
+  document.getElementById('controls').classList.toggle('hidden');
+}
+
+// 初期状態
+setPreset(-15, 8);
+</script>
+
+</body>
+</html>
