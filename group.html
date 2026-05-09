@@ -164,6 +164,18 @@
   }
 
   /* 全削除ボタン */
+  .import-btn {
+    display: block; width: 100%;
+    padding: 11px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--purple);
+    background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+    margin-top: 8px;
+  }
+  .import-btn:hover { background: rgba(139,92,246,0.15); }
+
   .clear-btn {
     display: block; width: 100%;
     padding: 10px;
@@ -367,9 +379,11 @@
     </div>
     <div class="add-error" id="addError"></div>
 
+    <button class="import-btn" id="importBtn">📋 「あの人」リストから取り込む</button>
+
     <div class="student-list" id="studentList"></div>
     <div class="empty-roster" id="emptyRoster">
-      <p>まだ登録されていません。<br>名前と診断コード（5桁）を入力して追加してください。</p>
+      <p>まだ登録されていません。<br>名前と診断コード（5桁）を入力するか<br>「あの人」リストから取り込んでください。</p>
     </div>
     <button class="clear-btn" id="clearBtn" style="display:none">名簿を全て削除する</button>
   </div>
@@ -406,7 +420,7 @@
 
 <script>
 const STORAGE_KEY = 'bigfive_group_roster_v1';
-const MAX_STUDENTS = 50;
+const MAX_STUDENTS = 100;
 
 const traitKeys = ['O','C','E','A','N'];
 const traitNames = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
@@ -504,6 +518,50 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   saveRoster(students);
   renderRoster();
   updateGroupingUI();
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  const others = (() => {
+    try { return JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); }
+    catch(e) { return []; }
+  })();
+
+  if (others.length === 0) {
+    alert('「あの人」に保存されているデータがありません。\n先にあの人の診断結果を保存してください。');
+    return;
+  }
+
+  const remaining = MAX_STUDENTS - students.length;
+  if (remaining <= 0) {
+    alert(`名簿が上限（${MAX_STUDENTS}人）に達しています。`);
+    return;
+  }
+
+  const existingIds = new Set(students.map(s => s.id));
+  const toImport = others.filter(o => !existingIds.has('other_' + o.id));
+
+  if (toImport.length === 0) {
+    alert('「あの人」リストのデータはすでに全員取り込み済みです。');
+    return;
+  }
+
+  const limited = toImport.slice(0, remaining);
+  const added = limited.map(o => ({
+    id: 'other_' + o.id,
+    name: o.name || `あの人(${o.code})`,
+    code: o.code
+  }));
+
+  students = [...students, ...added];
+  saveRoster(students);
+  renderRoster();
+  updateGroupingUI();
+
+  const skipped = toImport.length - limited.length;
+  const msg = skipped > 0
+    ? `${added.length}人を取り込みました。\n（上限のため${skipped}人はスキップされました）`
+    : `${added.length}人を取り込みました。`;
+  alert(msg);
 });
 
 // ===== タブ切り替え =====
