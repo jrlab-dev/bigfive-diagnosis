@@ -500,6 +500,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 
 // ===== インポートモーダル =====
 let modalChecked = new Set();
+let modalItems = []; // モーダル表示中のアイテムキャッシュ
 
 document.getElementById('importBtn').addEventListener('click', openImportModal);
 
@@ -507,35 +508,38 @@ function loadAllSaved() {
   const myRaw = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch(e) { return []; } })();
   const othersRaw = (() => { try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); } catch(e) { return []; } })();
   const all = [];
+  // インデックスベースのUIDで重複を防ぐ
   myRaw.forEach((o, i) => {
-    all.push({ uid: 'my_' + i, id: o.id || ('my_' + i), name: o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
+    all.push({ uid: 'my_' + i, name: o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
   });
-  othersRaw.forEach(o => {
-    all.push({ uid: 'other_' + o.id, id: o.id, name: o.name || `あの人(${o.code})`, code: o.code, tag: 'あの人' });
+  othersRaw.forEach((o, i) => {
+    all.push({ uid: 'oth_' + i, name: o.name || `あの人(${o.code})`, code: o.code, tag: 'あの人' });
   });
   return all;
 }
 
 function openImportModal() {
-  const all = loadAllSaved();
+  modalItems = loadAllSaved();
 
-  if (all.length === 0) {
+  if (modalItems.length === 0) {
     alert('保存されているデータがありません。\n先に診断を受けて結果を保存してください。');
     return;
   }
 
   const r = getActiveRoster();
-  const existingUids = new Set(r.students.map(s => s.id));
+  // 名前＋コードで取込済み判定（uid変化に依存しない）
+  const existingKeys = new Set(r.students.map(s => s.name + '|' + s.code));
   const remaining = MAX_STUDENTS - r.students.length;
 
   document.getElementById('modalSub').textContent =
-    `保存データ ${all.length}件 ／ あと${remaining}人追加可能`;
+    `保存データ ${modalItems.length}件 ／ あと${remaining}人追加可能`;
 
   modalChecked = new Set();
+  const all = modalItems;
 
   const list = document.getElementById('modalList');
   list.innerHTML = all.map(o => {
-    const already = existingUids.has(o.uid);
+    const already = existingKeys.has(o.name + '|' + o.code);
     const sc = codeToScores(o.code);
     const bars = traitKeys.map(k => {
       const h = Math.round((sc[k] / 5) * 18 + 2);
@@ -574,11 +578,16 @@ function openImportModal() {
 
 function updateModalConfirmBtn(remaining) {
   const btn = document.getElementById('modalConfirmBtn');
-  const n = Math.min(modalChecked.size, remaining);
-  btn.disabled = modalChecked.size === 0;
-  btn.textContent = modalChecked.size > 0
-    ? `${n}人を取り込む${modalChecked.size > remaining ? `（上限のため${remaining}人まで）` : ''}`
-    : '取り込む';
+  const sel = modalChecked.size;
+  const n = Math.min(sel, remaining);
+  btn.disabled = sel === 0;
+  if (sel === 0) {
+    btn.textContent = '取り込む';
+  } else if (sel > remaining) {
+    btn.textContent = `選択した${sel}人を取り込む（上限のため${remaining}人まで）`;
+  } else {
+    btn.textContent = `選択した${sel}人を取り込む`;
+  }
 }
 
 document.getElementById('selectAllBtn').addEventListener('click', () => {
@@ -602,15 +611,14 @@ document.getElementById('deselectAllBtn').addEventListener('click', () => {
 });
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => {
-  const all = loadAllSaved();
   const r = getActiveRoster();
   const remaining = MAX_STUDENTS - r.students.length;
   let added = 0;
 
-  for (const o of all) {
+  for (const o of modalItems) {
     if (!modalChecked.has(o.uid)) continue;
     if (added >= remaining) break;
-    r.students.push({ id: o.uid, name: o.name, code: o.code });
+    r.students.push({ id: uid(), name: o.name, code: o.code });
     added++;
   }
 
