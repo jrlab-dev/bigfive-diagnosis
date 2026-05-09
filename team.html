@@ -1150,22 +1150,10 @@ function calcTeamScore(members) {
 function calcPairCompatibility(code1, code2) {
   const [o1, c1, e1, a1, n1] = code1.split('').map(Number);
   const [o2, c2, e2, a2, n2] = code2.split('').map(Number);
-
-  let raw =
-    (6 - n1) * 5 + (6 - n2) * 4 +
-    a1 * 5 + a2 * 3.5 +
-    c1 * 3 + c2 * 1.5 +
-    (-Math.abs(c1 - c2) * 2) +
-    (-Math.abs(e1 - e2) * 3.5) +
-    (-Math.abs(o1 - o2) * 0.5);
-
-  if (n1 >= 4 && a2 <= 2) raw -= 15;
-  if (n2 >= 4 && a1 <= 2) raw -= 15;
-  if (n1 <= 2 && n2 <= 2) raw += 8;
-  if (a1 >= 4 && a2 >= 4) raw += 8;
-
-  const MIN = -30, MAX = 130;
-  return Math.max(0, Math.min(100, Math.round((raw - MIN) / (MAX - MIN) * 100)));
+  return Math.round(calcCompatCore(
+    { O: o1, C: c1, E: e1, A: a1, N: n1 },
+    { O: o2, C: c2, E: e2, A: a2, N: n2 }
+  ));
 }
 
 // ===== 因子コメント生成 =====
@@ -1444,6 +1432,7 @@ if (viewTeamData && allMembers.length >= 2) {
   }, 150);
 }
 </script>
+<script src="compat.js"></script>
 <script src="nav.js"></script>
 </body>
 </html>

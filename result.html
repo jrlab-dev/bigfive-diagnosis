@@ -1068,6 +1068,7 @@
 <script src="album.js"></script>
 <script src="concierge.js"></script>
 <script src="rarity.js"></script>
+<script src="compat.js"></script>
 <script>
 // ===== 特性情報 =====
 const traitInfo = {
@@ -1597,7 +1598,6 @@ function calcCompatibility(myCode, partnerCode, relation) {
   const [oM, cM, eM, aM, nM] = myCode.split('').map(Number);
   const [oP, cP, eP, aP, nP] = partnerCode.split('').map(Number);
 
-  // 関係性の重み
   const relWeights = {
     love:   { E: 1.5, N: 2.0, O: 1.0, C: 0.8, A: 1.5 },
     work:   { E: 0.8, N: 1.2, O: 1.0, C: 2.0, A: 1.8 },
@@ -1605,43 +1605,19 @@ function calcCompatibility(myCode, partnerCode, relation) {
   };
   const w = relWeights[relation] || relWeights.friend;
 
-  // 差分
-  const dO = Math.abs(oM - oP);
-  const dC = Math.abs(cM - cP);
-  const dE = Math.abs(eM - eP);
-  const dA = Math.abs(aM - aP);
-  const dN = Math.abs(nM - nP);
-
-  // 生スコア計算（Actor効果 + Partner効果 + 差分ペナルティ）
-  let rawScore =
-    (6 - nM) * 5.0 +   // 自分のN低さ（Actor効果 ρ=-.29）
-    (6 - nP) * 4.0 +   // 相手のN低さ（Partner効果 r=-.22）
-    aM * 5.0 +          // 自分のA高さ（Actor効果 ρ=+.29）
-    aP * 3.5 +          // 相手のA高さ（Partner効果 r=+.15）
-    cM * 3.0 +          // 自分のC高さ（Actor効果 ρ=+.25）
-    cP * 1.5 +          // 相手のC高さ（Partner効果 r=+.12）
-    (-dC * 2.0) +       // Cスコア差ペナルティ（生活スタイルミスマッチ）
-    (-dE * 3.5) +       // Eスコア差ペナルティ（社交スタイルミスマッチ★強化）
-    (-dO * 0.5);        // Oスコア差ペナルティ（効果量最小）
-
-  // 特殊パターン補正
-  if (nM >= 4 && aP <= 2) rawScore -= 15;
-  if (nP >= 4 && aM <= 2) rawScore -= 15;
-  if (nM <= 2 && nP <= 2) rawScore += 8;
-  if (aM >= 4 && aP >= 4) rawScore += 8;
-
-  // 関係性の重みで差分ペナルティを調整
-  rawScore += (-dN) * w.N * 1.5;
-  rawScore += (-dA) * w.A * 0.5;
-
-  // 正規化: -30〜130 → 0〜100
-  const MIN = -30, MAX = 130;
-  const normalizedScore = (rawScore - MIN) / (MAX - MIN) * 100;
-  const score = Math.max(0, Math.min(100, normalizedScore));
+  const score = Math.round(calcCompatCore(
+    { O: oM, C: cM, E: eM, A: aM, N: nM },
+    { O: oP, C: cP, E: eP, A: aP, N: nP },
+    w
+  ));
 
   return {
-    score: Math.round(score),
-    details: { dO, dC, dE, dA, dN },
+    score,
+    details: {
+      dO: Math.abs(oM - oP), dC: Math.abs(cM - cP),
+      dE: Math.abs(eM - eP), dA: Math.abs(aM - aP),
+      dN: Math.abs(nM - nP)
+    },
     components: {
       myN: nM, partnerN: nP,
       myA: aM, partnerA: aP,
