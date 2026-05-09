@@ -353,6 +353,37 @@
     box-shadow: 0 0 36px rgba(34,211,238,0.5);
     transform: translateY(-2px);
   }
+  /* 関連記事 */
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
 
   /* フッター */
   .article-footer {
@@ -636,6 +667,16 @@
       <p>あなたの好奇心と創造性が、どこから来ているのか。5つの因子の組み合わせで、あなただけの性格プロフィールが見えてきます。</p>
       <br>
       <a href="https://bigfive.jr-genius.jp/" class="cta-btn">無料でビッグファイブ診断を受ける &rarr;</a>
+    </section>
+
+  
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+      <li><a href="openness-low.html">開放性が低い人の特徴</a></li>
+      <li><a href="diet-openness-high.html">飽き性のダイエットが続かない本当の理由</a></li>
+      <li><a href="diet-openness-low.html">同じことを続けられる人のダイエット</a></li>
+      </ul>
     </section>
 
   </article>
