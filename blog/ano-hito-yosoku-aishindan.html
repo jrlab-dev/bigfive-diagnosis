@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/ano-hito-yosoku-aishindan.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>相性診断、相手に頼めなかった話——あの人の性格（ビッグファイブスコア）を自分で予測する方法｜ビッグファイブ診断</title>
+<meta name="description" content="好きな人や職場の苦手な人に「診断してほしい」と言えなくても、相性はわかる。あの人についての質問に答えるだけで、ビッグファイブスコアが予測できる方法を紹介します。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="相性診断、相手に頼めなかった話——あの人の性格を自分で予測する方法">
+<meta property="og:description" content="好きな人や職場の苦手な人に「診断してほしい」と言えなくても、相性はわかる。あの人についての質問に答えるだけでスコアが予測できます。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/ano-hito-yosoku-aishindan.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/ano-hito-yosoku-aishindan.webp">
+<meta property="og:image:width" content="1792">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="相性診断、相手に頼めなかった話——あの人の性格を自分で予測する方法">
+<meta name="twitter:description" content="好きな人や職場の苦手な人に「診断してほしい」と言えなくても、相性はわかる。あの人についての質問に答えるだけでスコアが予測できます。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "相性診断、相手に頼めなかった話——あの人の性格（ビッグファイブスコア）を自分で予測する方法",
+  "description": "好きな人や職場の苦手な人に「診断してほしい」と言えなくても、相性はわかる。あの人についての質問に答えるだけで、ビッグファイブスコアが予測できる方法を紹介します。",
+  "url": "https://bigfive.jr-genius.jp/blog/ano-hito-yosoku-aishindan.html",
+  "datePublished": "2026-05-11",
+  "dateModified": "2026-05-11",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "相性診断" },
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "性格予測" },
+    { "@type": "Thing", "name": "人間関係" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  .big-text {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.5;
+    text-align: center;
+    padding: 32px 24px;
+    margin: 40px 0;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .big-text span { color: var(--accent); }
+
+  .keyword-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  @media (max-width: 560px) {
+    .keyword-block { grid-template-columns: 1fr; }
+  }
+  .keyword-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .keyword-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: .05em;
+  }
+  .keyword-card p {
+    font-size: 14px;
+    color: var(--dim);
+    margin-bottom: 0;
+    line-height: 1.7;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img {
+    width: 100%; max-width: 720px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: block;
+    height: auto;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ブログ",
+      "item": "https://bigfive.jr-genius.jp/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "相性診断、相手に頼めなかった話",
+      "item": "https://bigfive.jr-genius.jp/blog/ano-hito-yosoku-aishindan.html"
+    }
+  ]
+}
+</script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">← トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">相性診断</span>
+        <span class="tag">あの人機能</span>
+        <span class="tag">ビッグファイブ</span>
+      </div>
+      <h1 class="article-title">相性診断、<span>相手に頼めなかった</span>話——あの人の性格（ビッグファイブスコア）を自分で予測する方法</h1>
+      <p class="article-lead">好きな人に頼めなかった。職場の苦手な人には言えなかった。そんな状況でも、相性はわかる。あの人についての質問に答えるだけで、ビッグファイブスコアが予測できます。</p>
+      <p class="article-meta">公開：2026年5月11日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/ano-hito-yosoku-aishindan.webp"
+      alt="あの人の性格を予測して相性診断する方法の解説画像"
+      width="1792" height="1024"
+      loading="eager"
+    >
+
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">性格診断を、相手に頼めなかった話</a></li>
+        <li><a href="#sec2">既存の相性診断は、2人で受ける前提になっている</a></li>
+        <li><a href="#sec3">あの人のスコアを、自分が予測できる</a></li>
+        <li><a href="#sec4">こんな人たちが使っている</a></li>
+        <li><a href="#sec5">人を分析したくなるのは、ヤバいことじゃない</a></li>
+        <li><a href="#sec6">あの人との相性を確かめてみる</a></li>
+      </ol>
+    </nav>
+
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>性格診断を、相手に頼めなかった話</h2>
+
+        <p>好きな人に「一緒にやってみない？」と言ったら「なんで？」って思われそうで怖い。職場で苦手な人のことを誰かに相談するわけにもいかない。子どもに受けさせたくても、まだ意味を理解できる年齢じゃない。そもそも相手は診断に興味すらない——そういう状況は、思っているよりずっと多い。</p>
+
+        <p>性格診断に興味を持つのは、たいてい何かで悩んでいる人だ。人間関係がうまくいかない、なぜかこの人と話すたびに疲れる、好きなのに近づけない——そういう引っかかりがあるから、「相手を理解したい」という気持ちが生まれる。</p>
+
+        <p>逆に言うと、悩んでいない人はここに来ない。</p>
+
+        <p>外向的で、あまり傷つかなくて、「考えすぎないで動けばよくない？」と思っているタイプ——そういう人は、性格診断をやっている人を見て不思議そうな顔をする。悪意はない。ただ、そもそもそういう発想がない。</p>
+
+        <p>そして厄介なのは、関係に悩む相手がまさにそのタイプだったりすることだ。</p>
+
+        <p>一番理解したい相手ほど、頼めない。</p>
+
+        <div class="big-text">
+          相性を知りたいけど、<span>相手に頼めない。</span><br>
+          それが出発点だった。
+        </div>
+      </section>
+
+      <section id="sec2">
+        <h2>既存の相性診断は、2人で受ける前提になっている</h2>
+
+        <p>相性診断サービスは、今やいくらでもある。</p>
+
+        <p>MBTIの相性、血液型占い、エニアグラム、ストレングスファインダー——調べれば出てくる出てくる。でも使ってみると、ほぼ全部に同じ前提が埋め込まれている。</p>
+
+        <p><strong>「2人で受けてください」。</strong></p>
+
+        <p>相手のタイプを入力する欄があっても、それは「相手がすでに結果を持っている」前提だ。相手がINFJだと知っている、相手が診断済みだ——そういう状況を想定している。</p>
+
+        <p>日本で人気のビッグファイブ診断サービスを10サイト調べてみた。相手の性格を自分で予測して相性を確認できる機能を持つサービスは、ほぼなかった。</p>
+
+        <p>当たり前といえば当たり前かもしれない。相性診断を「一緒にやるコンテンツ」として設計すれば、シェアが生まれる。バイラルになる。ビジネスとしては正解だ。</p>
+
+        <p>でも、それだと解決できない人たちがいる。</p>
+
+        <p>相手に頼めない人たちが。</p>
+      </section>
+
+      <section id="sec3">
+        <h2>あの人のスコアを、自分が予測できる</h2>
+
+        <p>このサイトには「あの人」という機能がある。</p>
+
+        <p>自分のビッグファイブ診断を受けたあと、今度はあの人についての質問に答えていく。「知らない人に話しかける方だと思う？」「締め切りや約束を守る人？」「落ち込むことが多そう？」——スコアを入力するんじゃない。ただ、あの人の印象について答えるだけでいい。</p>
+
+        <p>その回答から、あの人のビッグファイブスコアが予測される。</p>
+
+        <p><strong>相手はこのサイトを知らなくていい。診断を受けなくていい。スマホすら触らなくていい。</strong>あなたが、あの人を観察してきた記憶だけで動く。</p>
+
+        <p>予測スコアが出たら、自分との相性レポートが生成される。どこが噛み合っていて、どこがすれ違いやすいか。なぜあの人と話すと疲れるのか、なぜ一緒にいると安心するのか。</p>
+
+        <p>言語化できなかった何かが、少し形になる。</p>
+
+        <div class="highlight-box">
+          <p><strong>1人でできる。</strong>相手に何も言わなくていい。</p>
+          <p>それだけで、「頼めないから諦める」以外の選択肢が生まれる。</p>
+        </div>
+      </section>
+
+      <section id="sec4">
+        <h2>こんな人たちが使っている</h2>
+
+        <p>どんな場面で使えるか、少し具体的に書いてみる。</p>
+
+        <h3>好きな人のこと、もっとわかりたい</h3>
+
+        <p>付き合う前の相手、気になっている人。LINEの返信速度、グループでの立ち回り、ちょっとした発言——そういう断片から、その人のことを考え続けている人は多い。でも「相性診断やろう」とは言えない。早すぎる、重い、ひく。だから1人でやる。1人でやって、「やっぱりこういう人なんだ」と少し腑に落ちる。それだけでも、次の一歩が少し楽になる。</p>
+
+        <h3>職場でどうしても合わない人がいる</h3>
+
+        <p>悪い人じゃないのに、なぜかこの人と話すと消耗する。なぜか自分だけ詰められる気がする。相性の問題なのか、自分がおかしいのか——それを「個人の感情」じゃなく「因子の組み合わせ」として見られると、少し楽になることがある。あいつが悪いんじゃなく、<strong>構造的にすれ違いやすい2人だった</strong>、と。</p>
+
+        <h3>子どもの気質を理解したい</h3>
+
+        <p>小学生低学年くらいまでの子どもには、自分で診断を受けさせるのは難しい。でも親は毎日観察している。この子はどういう場面で不安になるか、何をしているときに生き生きしているか。その観察を言語化する入口として使える。</p>
+      </section>
+
+      <section id="sec5">
+        <h2>人を分析したくなるのは、ヤバいことじゃない</h2>
+
+        <p>ここまで読んで、少し後ろめたくなった人がいるかもしれない。</p>
+
+        <p>相手に内緒で性格を分析するって、なんかストーカーっぽくない？と。</p>
+
+        <p>でも考えてみてほしい。あなたはなぜあの人のことを分析したいのか。支配したいから？傷つけたいから？違う。理解したいからだ。もっとうまくやりたいからだ。関係を壊したくないからだ。</p>
+
+        <p><strong>人を観察して、理解しようとする力は、弱さじゃない。</strong></p>
+
+        <p>「考えすぎないで動けばよくない？」と言える側の人間は、他者を傷つけていることに気づきにくい。鈍感さが行動力に見えているだけで、その人が残した傷を誰かが密かに処理していたりする。</p>
+
+        <p>そしてもう一つ。</p>
+
+        <p>この機能をいろんな人で使っていくうちに、たぶん気づく。ツールを使わなくても、人を見抜く精度が上がっていることに。「この人、外向性高そうだな」「神経症傾向あるな」という直感が、だんだん言語化できるようになってくる。</p>
+
+        <p>人を観察する力は、使えば使うほど育つ。</p>
+
+        <p>もともとあなたが持っていたその能力を、このサイトは少し整理して返してくれるだけだ。</p>
+
+        <div class="big-text">
+          <span>分析は、諦めの反対だ。</span>
+        </div>
+      </section>
+
+    </div>
+
+    <section id="sec6" class="cta-box">
+      <h2>あの人との相性を、こっそり確かめてみる</h2>
+      <p>まず自分のビッグファイブ診断を受けてみてほしい。</p>
+      <p>そのあと、あの人についての質問に答えてみる。結果が完璧に正確である必要はない。あの人をどう見ているか——それを言葉にするプロセス自体に、きっと意味がある。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">約5分</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+        <span class="cta-badge">科学的根拠あり</span>
+      </div>
+      <a href="https://bigfive.jr-genius.jp/quiz.html" class="cta-btn">ビッグファイブ診断に挑戦してみる →</a>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="rennai-style-6-shurui.html">「好き」にも6種類ある——恋愛スタイル理論でわかる、あなたの愛し方</a></li>
+        <li><a href="aichaku-style-toha.html">愛着スタイルとは？人との距離を決める心理学の仕組み</a></li>
+        <li><a href="moteru-seikaku-shinjitsu.html">「性格が良い人」がモテない本当の理由</a></li>
+        <li><a href="mbti-vs-bigfive.html">MBTIとビッグファイブの違い——診断結果の信頼性を比べる</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>
