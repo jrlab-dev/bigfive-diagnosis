@@ -51,7 +51,55 @@ user-invocable: true
 ### SEO要素
 - タイトルは「誰かが検索しそうな悩み」を含める（例：「気を使いすぎて疲れる」「完璧主義が原因で始められない」）
 - メタディスクリプションを設定する
-- 構造化データ（JSON-LD）を含める
+- 構造化データ（JSON-LD）を含める（Article + BreadcrumbList）
+
+### CTAセクション（記事の最後に必須）
+記事の最後、`</article>` の直前にCTAボックスを入れる。因子ごとに文言を変える：
+
+| グループ | CTA見出しの例 |
+|---|---|
+| 開放性 | 「自分の開放性を測定してみよう」 |
+| 勤勉性 | 「自分の勤勉性スコアを知ろう」 |
+| 外向性 | 「自分の外向性を知ろう」 |
+| 協調性 | 「自分の協調性を知ろう」 |
+| 神経症性 | 「自分の感受性を知ろう」 |
+| その他 | 「ビッグファイブ診断に挑戦してみる」 |
+
+ボタンリンク先は `https://bigfive.jr-genius.jp/` または `https://bigfive.jr-genius.jp/quiz.html`。
+バッジ（約5分・無料・登録不要・科学的根拠あり）を含める。
+デザインは控えめな角丸ボックス。既存記事の `cta-box` クラスをコピーして使用。
+
+### 関連記事セクション（CTAの直後に必須）
+CTAの直後に、同じ因子グループの他記事へのリンクを入れる。
+
+```html
+<section class="related-articles">
+  <h2>関連記事</h2>
+  <ul>
+    <li><a href="xxx.html">記事タイトル</a></li>
+    ...
+  </ul>
+</section>
+```
+
+**因子グループ分類（既存記事）：**
+- **開放性**: openness-high, openness-low, diet-openness-high, diet-openness-low
+- **勤勉性**: conscientiousness-high, conscientiousness-low, diet-conscientiousness-high, diet-conscientiousness-low, kanpeki-shugi-hajimenai
+- **外向性**: extraversion-high, extraversion-low, diet-extraversion-high, diet-extraversion-low
+- **協調性**: agreeableness-high, agreeableness-low, diet-agreeableness-high, diet-agreeableness-low, kiwo-tsukaisu, kiwotsukaisugiru-baka-riyu, kiwotsukaisugiru-jikokoteikan
+- **神経症性**: neuroticism-high, neuroticism-low, diet-neuroticism-high, diet-neuroticism-low, love-neuroticism-high, hsp-toha-kiso-chishiki
+- **その他**: aichaku-style-toha, chatgpt-seikaku-data, kachikan-no-kagaku, mbti-vs-bigfive, mindset-toha, moteru-seikaku-shinjitsu, rennai-style-6-shurui, seikaku-kaereru, shigoto-muki-fumuki, yaruki-no-seitai
+
+新記事がどのグループに属するか判断し、同グループの既存記事をリンクする。
+「その他」グループの記事は、テーマ的に近い記事を4〜5本選ぶ。
+
+CSS（`.related-articles`）は既存記事のインラインスタイルからコピー。
+
+### 新記事作成後の必須作業
+1. `blog/index.html` にカードを追加
+2. `sitemap.xml` にURLを追記
+3. **同じ因子グループの既存記事の「関連記事」セクションにも新記事へのリンクを追加する**（相互リンク）
+4. 該当する因子の場合、`science.html` の因子カードにもリンクを追加する
 
 ## 出力
 完成したHTMLファイルを `blog/<ファイル名>.html` に保存する。ファイル名は英語のハイフン繋ぎ（例：`hsp-renai-keikou.html`）。
