@@ -1261,6 +1261,9 @@ body.theme-light .sync-copy-btn {
 body.theme-light .sync-id-note {
   color: var(--dim) !important;
 }
+body.theme-light .delete-trigger-label {
+  color: #dc2626 !important;
+}
 
 /* キャラクターサムネイル */
 body.theme-light .character-thumb {
