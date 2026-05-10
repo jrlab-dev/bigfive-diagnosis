@@ -417,18 +417,23 @@ function getActiveRoster() {
 }
 
 let rosters = loadRosters();
+let preventSelectChange = false;
 
 // ===== 名簿セレクター描画 =====
 function renderRosterSelect() {
+  preventSelectChange = true;
   const sel = document.getElementById('rosterSelect');
   const activeId = getActiveId();
   sel.innerHTML = rosters.map(r =>
     `<option value="${escHtml(r.id)}" ${r.id === activeId ? 'selected' : ''}>${escHtml(r.name)}（${r.students.length}人）</option>`
   ).join('');
+  sel.value = activeId; // innerHTML書き換え後に明示的にセット
   document.getElementById('deleteRosterBtn').disabled = rosters.length <= 1;
+  preventSelectChange = false;
 }
 
 document.getElementById('rosterSelect').addEventListener('change', e => {
+  if (preventSelectChange) return;
   setActiveId(e.target.value);
   renderAll();
 });
