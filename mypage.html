@@ -544,6 +544,31 @@
   .sync-status { font-size: 12px; margin-top: 10px; min-height: 18px; text-align: center; }
   .sync-status.ok { color: #6ee7b7; }
   .sync-status.err { color: #f87171; }
+  .sync-choice {
+    margin-top: 12px; padding: 14px;
+    background: rgba(0,0,0,0.35); border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .sync-choice-msg { font-size: 13px; color: #e0e7ff; margin-bottom: 12px; line-height: 1.6; }
+  .sync-choice-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sync-btn.overwrite {
+    flex: 1; min-width: 100px;
+    background: rgba(245,158,11,0.2); color: #fbbf24;
+    border: 1px solid rgba(245,158,11,0.3);
+  }
+  .sync-btn.overwrite:hover { background: rgba(245,158,11,0.35); }
+  .sync-btn.merge {
+    flex: 1; min-width: 100px;
+    background: rgba(16,185,129,0.2); color: #6ee7b7;
+    border: 1px solid rgba(16,185,129,0.3);
+  }
+  .sync-btn.merge:hover { background: rgba(16,185,129,0.35); }
+  .sync-btn.cancel {
+    flex: 0; min-width: 70px;
+    background: rgba(255,255,255,0.05); color: var(--dim);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .sync-btn.cancel:hover { background: rgba(255,255,255,0.1); }
 
   /* クリアボタン */
   .clear-all {
@@ -921,6 +946,14 @@
       <button class="sync-btn load" id="syncLoadBtn">引き継ぐ</button>
     </div>
     <div class="sync-status" id="syncStatus"></div>
+    <div class="sync-choice" id="syncChoice" style="display:none">
+      <p class="sync-choice-msg" id="syncChoiceMsg">データを見つけました。どうしますか？</p>
+      <div class="sync-choice-btns">
+        <button class="sync-btn overwrite" id="syncOverwriteBtn">上書きする</button>
+        <button class="sync-btn merge" id="syncMergeBtn">統合する</button>
+        <button class="sync-btn cancel" id="syncCancelBtn">キャンセル</button>
+      </div>
+    </div>
   </div>
 
   <button class="clear-all" id="clearAllBtn">
@@ -1506,9 +1539,59 @@ document.getElementById('syncCopyBtn').addEventListener('click', () => {
   });
 });
 
+let _pendingSyncData = null;
+
+function hideSyncChoice() {
+  document.getElementById('syncChoice').style.display = 'none';
+  _pendingSyncData = null;
+}
+
+function applySyncData(loadedData, mode) {
+  if (mode === 'overwrite') {
+    Object.entries(loadedData).forEach(([k, v]) => localStorage.setItem(k, v));
+  } else {
+    // 統合モード：配列データは結合して重複排除
+    const ARRAY_KEYS = [
+      'bigfive_my_results', 'bigfive_other_results',
+      'bigfive_album', 'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
+    ];
+    const LIMITS = {
+      'bigfive_my_results': 5,
+      'bigfive_other_results': 50,
+      'bigfive_album': 8300,
+    };
+    Object.entries(loadedData).forEach(([k, v]) => {
+      if (ARRAY_KEYS.includes(k)) {
+        try {
+          const current = JSON.parse(localStorage.getItem(k) || '[]');
+          const loaded = JSON.parse(v);
+          if (!Array.isArray(current) || !Array.isArray(loaded)) {
+            localStorage.setItem(k, v);
+            return;
+          }
+          const seen = new Set();
+          const merged = [];
+          for (const item of [...current, ...loaded]) {
+            const key = JSON.stringify(item);
+            if (!seen.has(key)) { seen.add(key); merged.push(item); }
+          }
+          const limit = LIMITS[k];
+          const trimmed = limit && merged.length > limit ? merged.slice(0, limit) : merged;
+          localStorage.setItem(k, JSON.stringify(trimmed));
+        } catch (e) {
+          localStorage.setItem(k, v);
+        }
+      } else {
+        localStorage.setItem(k, v);
+      }
+    });
+  }
+}
+
 document.getElementById('syncLoadBtn').addEventListener('click', async () => {
   const input = document.getElementById('syncIdInput').value.trim();
   if (!input) { setStatus('IDを入力してください', 'err'); return; }
+  hideSyncChoice();
 
   const btn = document.getElementById('syncLoadBtn');
   btn.disabled = true;
@@ -1520,17 +1603,49 @@ document.getElementById('syncLoadBtn').addEventListener('click', async () => {
     if (!res.ok) throw new Error('サーバーエラー');
     const json = await res.json();
     if (!json.found) throw new Error('IDが見つかりません');
-    if (!confirm('このIDのデータを引き継ぎます。\n現在のデータは上書きされます。よろしいですか？')) return;
-    Object.entries(json.data).forEach(([k, v]) => localStorage.setItem(k, v));
-    localStorage.setItem(SYNC_ID_KEY, input);
-    setStatus('引き継ぎ完了！ページを再読み込みします...', 'ok');
-    setTimeout(() => location.reload(), 1500);
+
+    // データを一時保存して選択UIを表示
+    _pendingSyncData = json.data;
+    const keys = Object.keys(json.data);
+    const arrCount = keys.filter(k => {
+      try { return Array.isArray(JSON.parse(json.data[k])); } catch { return false; }
+    }).length;
+    document.getElementById('syncChoiceMsg').textContent =
+      `データを見つけました（${keys.length}件）。どうしますか？` +
+      (arrCount > 0 ? `\n「統合する」で両方のデータを結合します。` : '');
+    document.getElementById('syncChoice').style.display = 'block';
+    setStatus('', '');
   } catch (e) {
     setStatus('失敗しました: ' + e.message, 'err');
   } finally {
     btn.disabled = false;
     btn.textContent = '引き継ぐ';
   }
+});
+
+document.getElementById('syncOverwriteBtn').addEventListener('click', () => {
+  if (!_pendingSyncData) return;
+  applySyncData(_pendingSyncData, 'overwrite');
+  const id = document.getElementById('syncIdInput').value.trim();
+  localStorage.setItem(SYNC_ID_KEY, id);
+  hideSyncChoice();
+  setStatus('上書き完了！ページを再読み込みします...', 'ok');
+  setTimeout(() => location.reload(), 1500);
+});
+
+document.getElementById('syncMergeBtn').addEventListener('click', () => {
+  if (!_pendingSyncData) return;
+  applySyncData(_pendingSyncData, 'merge');
+  const id = document.getElementById('syncIdInput').value.trim();
+  localStorage.setItem(SYNC_ID_KEY, id);
+  hideSyncChoice();
+  setStatus('統合完了！ページを再読み込みします...', 'ok');
+  setTimeout(() => location.reload(), 1500);
+});
+
+document.getElementById('syncCancelBtn').addEventListener('click', () => {
+  hideSyncChoice();
+  setStatus('キャンセルしました', '');
 });
 
 // 既存のIDがあれば表示
