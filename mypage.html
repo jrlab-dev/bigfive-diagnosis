@@ -582,7 +582,8 @@
   }
   .delete-trigger-label {
     color: #f87171;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 700;
   }
   .delete-trigger-btn {
     display: flex;
@@ -659,31 +660,31 @@
     border: none;
   }
   .dmb-icon.cancel {
-    background: rgba(255,255,255,0.12);
-    color: var(--text);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: #fff;
+    color: #111;
+    border: 1.5px solid rgba(0,0,0,0.7);
   }
-  .dmb-icon.cancel:hover { background: rgba(255,255,255,0.2); }
+  .dmb-icon.cancel:hover { background: #e8e8e8; }
   .dmb-icon.top {
-    background: rgba(139,92,246,0.2);
-    color: #a78bfa;
-    border: 1px solid rgba(139,92,246,0.35);
+    background: #7c3aed;
+    color: #fff;
+    border: 1.5px solid #ef4444;
   }
-  .dmb-icon.top:hover { background: rgba(139,92,246,0.32); }
+  .dmb-icon.top:hover { background: #6d28d9; }
   .dmb-icon.danger {
-    background: transparent;
-    color: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.05);
+    color: rgba(248,113,113,0.35);
+    border: 1.5px solid rgba(0,0,0,0.55);
   }
-  .dmb-icon.danger:hover { background: rgba(239,68,68,0.08); color: rgba(248,113,113,0.5); }
+  .dmb-icon.danger:hover { background: rgba(239,68,68,0.08); color: rgba(248,113,113,0.6); }
   .dmb-label {
     font-size: 13px;
     font-weight: 700;
-    color: var(--text);
+    color: #fff;
   }
   .dmb-label.danger {
-    color: rgba(255,255,255,0.25);
-    font-weight: 400;
+    color: #f87171;
+    font-weight: 700;
     font-size: 11px;
   }
 
@@ -1097,7 +1098,7 @@
           <a class="dmb-icon top" href="index.html">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </a>
-          <span class="dmb-label" style="color:#a78bfa;">トップページ</span>
+          <span class="dmb-label" style="color:#a78bfa; font-weight:700;">トップページ</span>
         </div>
         <div class="dmb-wrap">
           <button class="dmb-icon danger" id="deleteModalConfirm">
