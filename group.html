@@ -136,14 +136,14 @@
   .import-btn:hover { background: rgba(139,92,246,0.15); }
 
   /* 生徒リスト */
-  .student-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-  .student-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 12px; }
-  .student-num { font-size: 11px; color: var(--dim); min-width: 20px; text-align: right; }
-  .student-name { flex: 1; font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .student-code { font-family: monospace; font-size: 12px; background: rgba(139,92,246,0.15); color: var(--purple); padding: 2px 8px; border-radius: 6px; letter-spacing: .1em; }
-  .student-bars { display: flex; gap: 3px; align-items: flex-end; height: 20px; }
+  .student-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 16px; }
+  .student-item { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 10px; min-width: 0; }
+  .student-num { font-size: 10px; color: var(--dim); min-width: 16px; text-align: right; flex-shrink: 0; }
+  .student-name { flex: 1; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .student-code { font-family: monospace; font-size: 10px; background: rgba(139,92,246,0.15); color: var(--purple); padding: 1px 5px; border-radius: 5px; letter-spacing: .05em; flex-shrink: 0; }
+  .student-bars { display: none; }
   .sbar { width: 4px; border-radius: 2px; }
-  .del-btn { background: none; border: none; cursor: pointer; color: var(--dim); font-size: 16px; padding: 2px 4px; transition: color .2s; line-height: 1; }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--dim); font-size: 14px; padding: 1px 3px; transition: color .2s; line-height: 1; flex-shrink: 0; }
   .del-btn:hover { color: #f87171; }
   .empty-roster { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
   .clear-btn { display: block; width: 100%; padding: 10px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--dim); background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 4px; }
