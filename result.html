@@ -1946,7 +1946,7 @@ document.getElementById('descCard').innerHTML = `
 
 // ===== ブログリンクカード =====
 (function() {
-  if (isSavedView || isSharedView) return;
+  if (isSavedView || isSharedView || isOtherMode) return;
   const blogCard = document.getElementById('blogLinksCard');
   const articles = [];
 
@@ -2168,7 +2168,7 @@ if (version === '10') {
 // ===== 心理コンシェルジュ =====
 if (typeof getRecommendations === 'function') {
   (function() {
-    if (isSavedView || isSharedView) return;
+    if (isSavedView || isSharedView || isOtherMode) return;
     const section = document.getElementById('conciergeSection');
     const container = document.getElementById('conciergeCards');
     if (!section || !container) return;
