@@ -1611,6 +1611,8 @@ const relation = params.get('rel') || 'friend'; // 関係性（love/work/friend�
 const isOtherMode = !!personName;
 const isChildMode = isOtherMode && (relation === 'child46' || relation === 'child79');
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
+const isSavedView = params.get('saved') === '1';
+const isSharedView = params.get('from') === 'share';
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
 
@@ -1944,6 +1946,7 @@ document.getElementById('descCard').innerHTML = `
 
 // ===== ブログリンクカード =====
 (function() {
+  if (isSavedView || isSharedView) return;
   const blogCard = document.getElementById('blogLinksCard');
   const articles = [];
 
@@ -2165,6 +2168,7 @@ if (version === '10') {
 // ===== 心理コンシェルジュ =====
 if (typeof getRecommendations === 'function') {
   (function() {
+    if (isSavedView || isSharedView) return;
     const section = document.getElementById('conciergeSection');
     const container = document.getElementById('conciergeCards');
     if (!section || !container) return;
@@ -2207,6 +2211,9 @@ document.getElementById('retryBtn').href = `quiz.html?v=${version}`;
 
 // あの人診断ボタン（自分のスコアを渡す）
 document.getElementById('otherDiagBtn').href = `other_quiz.html?my=${typeCode}`;
+
+// ===== コレクション・共有ビューの保存ボタン非表示 =====
+if (isSavedView) document.getElementById('saveBtn').style.display = 'none';
 
 // ===== あの人モードの処理 =====
 if (isOtherMode) {
