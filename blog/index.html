@@ -102,6 +102,25 @@
   }
   .section-label:first-of-type { margin-top: 0; }
 
+  .cat-nav {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 32px;
+  }
+  .cat-nav a {
+    font-size: 12px; font-weight: 700; letter-spacing: .04em;
+    color: var(--accent); text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .cat-nav a:hover {
+    background: rgba(34,211,238,0.08);
+    border-color: rgba(34,211,238,0.4);
+  }
+  html { scroll-behavior: smooth; }
+
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -153,8 +172,17 @@
     <p class="page-desc">ビッグファイブ心理学をベースに、日常の行動・習慣・人間関係を読み解く記事を書いています。</p>
   </header>
 
+  <nav class="cat-nav">
+    <a href="#cat-diet">ダイエット × 性格</a>
+    <a href="#cat-worry">性格の悩み</a>
+    <a href="#cat-love">恋愛 × 性格</a>
+    <a href="#cat-work">仕事・キャリア</a>
+    <a href="#cat-knowledge">性格診断の知識</a>
+    <a href="#cat-ai">AI × 性格データ</a>
+  </nav>
+
   <!-- ダイエット × 性格 -->
-  <p class="section-label">ダイエット × 性格</p>
+  <p class="section-label" id="cat-diet">ダイエット × 性格</p>
   <div class="card-grid">
     <a href="diet-seikaku-type-guide.html" class="card">
       <img class="card-img" src="../images/blog/diet-seikaku-type-guide.webp" alt="性格タイプ別ダイエット完全ガイドの解説画像" loading="lazy" width="1792" height="1024">
@@ -235,8 +263,7 @@
     </a>
   </div>
 
-  <!-- 性格の悩み -->
-  <p class="section-label">性格の悩み</p>
+  <p class="section-label" id="cat-worry">性格の悩み</p>
   <div class="card-grid">
     <a href="kiwo-tsukaisu.html" class="card">
       <img class="card-img" src="../images/blog/kiwo-tsukaisu.webp" alt="気を使いすぎて疲れる人の性格の正体の解説画像" loading="lazy" width="1792" height="1024">
@@ -289,8 +316,7 @@
     </a>
   </div>
 
-  <!-- 恋愛 × 性格 -->
-  <p class="section-label">恋愛 × 性格</p>
+  <p class="section-label" id="cat-love">恋愛 × 性格</p>
   <div class="card-grid">
     <a href="moteru-seikaku-shinjitsu.html" class="card">
       <img class="card-img" src="../images/blog/moteru-seikaku-shinjitsu.webp" alt="性格が良い人がモテない本当の理由の解説画像" loading="lazy" width="1792" height="1024">
@@ -320,10 +346,16 @@
         <p class="card-title">「好き」にも6種類ある——恋愛スタイル理論でわかる、あなたの愛し方</p>
       </div>
     </a>
+    <a href="love-seikaku-junban.html" class="card">
+      <img class="card-img" src="../images/blog/love-seikaku-junban.webp" alt="恋愛の正しい順番は性格によって違う 片思いで終わる人の解説画像" loading="lazy" width="1792" height="1024">
+      <div class="card-body">
+        <span class="card-tag">恋愛 × 性格</span>
+        <p class="card-title">片思いで終わる人、付き合ってから好きになる人——恋愛の「正しい順番」は性格によって違う</p>
+      </div>
+    </a>
   </div>
 
-  <!-- 仕事・キャリア -->
-  <p class="section-label">仕事・キャリア</p>
+  <p class="section-label" id="cat-work">仕事・キャリア</p>
   <div class="card-grid">
     <a href="shigoto-muki-fumuki.html" class="card">
       <img class="card-img" src="../images/blog/shigoto-muki-fumuki.webp" alt="ビッグファイブで分かる向いている仕事と向いていない仕事の解説画像" loading="lazy" width="1792" height="1024">
@@ -348,8 +380,7 @@
     </a>
   </div>
 
-  <!-- 性格診断の知識 -->
-  <p class="section-label">性格診断の知識</p>
+  <p class="section-label" id="cat-knowledge">性格診断の知識</p>
   <div class="card-grid">
     <a href="ano-hito-yosoku-aishindan.html" class="card">
       <img class="card-img" src="../images/blog/ano-hito-yosoku-aishindan.webp" alt="あの人の性格を予測して相性診断する方法の解説画像" loading="lazy" width="1792" height="1024">
@@ -444,8 +475,7 @@
     </a>
   </div>
 
-  <!-- AI × 性格データ -->
-  <p class="section-label">AI × 性格データ</p>
+  <p class="section-label" id="cat-ai">AI × 性格データ</p>
   <div class="card-grid">
     <a href="chatgpt-seikaku-data.html" class="card">
       <img class="card-img" src="../images/blog/chatgpt-seikaku-data.webp" alt="ChatGPTに相談したことがある人へ 返ってくる答えが変わる方法の解説画像" loading="lazy" width="1792" height="1008">
