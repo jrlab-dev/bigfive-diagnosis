@@ -401,6 +401,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：片思いで終わる人、付き合ってから好きになる人——恋愛の「正しい順番」は性格によって違う -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-seikaku-junban.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
