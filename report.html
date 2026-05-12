@@ -463,7 +463,7 @@ body {
   <div class="page-header">
     <div class="page-badge">✦ PREMIUM REPORT</div>
     <h1 class="page-title">総合性格レポート</h1>
-    <p class="page-subtitle">8つの心理テストを統合した、あなただけの深層分析</p>
+    <p class="page-subtitle">10の心理テストを統合した、あなただけの深層分析</p>
   </div>
 
   <!-- 未受診バナー（受診が足りない場合に表示） -->
@@ -577,6 +577,29 @@ const ATTACHMENT_TYPES = {
   anxious:  { name: 'つながり重視型',   color: '#f59e0b' },
   avoidant: { name: '自律尊重型',       color: '#3b82f6' },
   fearful:  { name: '繊細なつながり型', color: '#8b5cf6' },
+};
+const LOCUS_TYPES = {
+  internal: { name: '内的統制型', color: '#3b82f6' },
+  balanced: { name: 'バランス型', color: '#8b5cf6' },
+  external: { name: '外的統制型', color: '#f97316' },
+};
+const EQ_LEVELS = {
+  very_high: { name: 'EQ非常に高い', color: '#10b981' },
+  high:      { name: 'EQ高い',       color: '#22c55e' },
+  average:   { name: 'EQ標準的',     color: '#3b82f6' },
+  growth:    { name: 'EQ伸びしろ',   color: '#f59e0b' },
+};
+const EQ_FACTORS = {
+  awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル'
+};
+const IMPOSTOR_LEVELS = {
+  high:     { name: '傾向強い', color: '#ef4444' },
+  moderate: { name: '中程度',   color: '#f59e0b' },
+  low:      { name: '傾向低い', color: '#10b981' },
+};
+const IMPOSTOR_TYPES = {
+  perfectionist: '完璧主義型', superhero: 'スーパーヒーロー型',
+  naturalGenius: '天才型', soloist: '単独行動型', expert: '専門家型'
 };
 
 // ===== データ読み込み =====
@@ -697,6 +720,24 @@ function renderTestsGrid(data) {
       color: data.attachment ? (ATTACHMENT_TYPES[data.attachment.typeKey] || {}).color || '#8b5cf6' : '#8b5cf6',
       url: 'attachment.html'
     },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>', label: '統制の所在',
+      value: data.locus ? (LOCUS_TYPES[data.locus.type] || {}).name : null,
+      color: data.locus ? (LOCUS_TYPES[data.locus.type] || {}).color : '#3b82f6',
+      url: 'locus.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', label: '感情知能(EQ)',
+      value: data.eq ? data.eq.levelName : null,
+      color: data.eq ? (EQ_LEVELS[data.eq.level] || {}).color : '#10b981',
+      url: 'eq.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', label: 'インポスター',
+      value: data.impostor ? '傾向' + (data.impostor.severityName || '') : null,
+      color: data.impostor ? (IMPOSTOR_LEVELS[data.impostor.severityLevel] || {}).color : '#f59e0b',
+      url: 'impostor.html'
+    },
   ];
 
   document.getElementById('testsGrid').innerHTML = tests.map(t => {
@@ -746,8 +787,13 @@ function buildAnalysis(data) {
   // ── 2. 恋愛・動機・HSP・愛着との相関 ──
   const hspTotal = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
   const attachKey = data.attachment ? data.attachment.typeKey : null;
-  if (love || sdt || hspTotal || attachKey) {
-    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey);
+  const locusType = data.locus ? data.locus.type : null;
+  const eqLevel = data.eq ? data.eq.level : null;
+  const eqWeakest = data.eq ? data.eq.weakest : null;
+  const impostorSev = data.impostor ? data.impostor.severityLevel : null;
+  const impostorDom = data.impostor ? data.impostor.dominantType : null;
+  if (love || sdt || hspTotal || attachKey || locusType || eqLevel || impostorSev) {
+    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
     if (crossText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> 複数テストが示すあなたの傾向', text: crossText });
   }
 
@@ -769,8 +815,13 @@ function buildWeakness(data) {
   const sdt       = data.sdt        ? data.sdt.strongest     : null;
   const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
   const attachKey = data.attachment ? data.attachment.typeKey : null;
+  const locusType = data.locus      ? data.locus.type        : null;
+  const eqLevel   = data.eq         ? data.eq.level          : null;
+  const eqWeakest = data.eq         ? data.eq.weakest        : null;
+  const impostorSev = data.impostor ? data.impostor.severityLevel : null;
+  const impostorDom = data.impostor ? data.impostor.dominantType  : null;
 
-  return getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey);
+  return getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
 }
 
 // ===== 領域別アドバイスロジック =====
@@ -790,11 +841,17 @@ function buildAdvice(data) {
   const topValue  = data.schwartz && data.schwartz.top3 ? data.schwartz.top3[0] : null;
   const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
   const attachKey = data.attachment ? data.attachment.typeKey : null;
+  const locusType = data.locus      ? data.locus.type        : null;
+  const eqLevel   = data.eq         ? data.eq.level          : null;
+  const eqStrongest = data.eq       ? data.eq.strongest      : null;
+  const eqWeakest = data.eq         ? data.eq.weakest        : null;
+  const impostorSev = data.impostor ? data.impostor.severityLevel : null;
+  const impostorDom = data.impostor ? data.impostor.dominantType  : null;
 
   return {
-    work:  getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal),
-    love:  getLoveAdvice(O, C, E, A, N, love, attachKey),
-    human: getHumanAdvice(O, C, E, A, N, A, sdt, topValue, attachKey),
+    work:  getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal, locusType, eqLevel, eqStrongest, impostorSev, impostorDom),
+    love:  getLoveAdvice(O, C, E, A, N, love, attachKey, eqLevel, impostorSev),
+    human: getHumanAdvice(O, C, E, A, N, A, sdt, topValue, attachKey, eqLevel, eqWeakest, impostorDom),
   };
 }
 
@@ -805,8 +862,12 @@ function buildGrowth(data) {
   const mindset   = data.mindset    ? data.mindset.type      : null;
   const hspTotal  = data.hsp && data.hsp.scores ? data.hsp.scores.total : null;
   const attachKey = data.attachment ? data.attachment.typeKey : null;
+  const locusType = data.locus      ? data.locus.type        : null;
+  const eqLevel   = data.eq         ? data.eq.level          : null;
+  const eqWeakest = data.eq         ? data.eq.weakest        : null;
+  const impostorSev = data.impostor ? data.impostor.severityLevel : null;
 
-  return getGrowthSteps(s, mindset, hspTotal, attachKey);
+  return getGrowthSteps(s, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev);
 }
 
 // ===================================================
@@ -840,7 +901,7 @@ function getCorePattern(O, C, E, A, N) {
   return lines.join('<br><br>');
 }
 
-function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey) {
+function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom) {
   const parts = [];
 
   // 恋愛 × 神経症的傾向
@@ -897,6 +958,51 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey)
     }
   }
 
+  // 統制の所在 × ビッグファイブ
+  if (locusType === 'external' && N === 'high') {
+    parts.push('<strong>外的統制型×感受性の高さ：</strong>「どうせ自分では変えられない」と思いがちな傾向と、不安を感じやすい性格が重なっています。小さな行動で「自分にもできた」経験を積み重ねることが、自信の土台になります。');
+  }
+  if (locusType === 'internal' && C === 'high') {
+    parts.push('<strong>内的統制型×高い誠実性：</strong>「自分でコントロールできる」という信念と、計画的に実行する力が掛け合わさっています。目標達成において非常に強い組み合わせですが、すべてを自分の責任と抱え込みすぎないよう注意も必要です。');
+  }
+  if (locusType === 'internal' && E === 'low') {
+    parts.push('<strong>内的統制型×内向性：</strong>自分の内側に判断軸を持ち、他人の評価に左右されにくい自立したタイプです。独自のペースで着実に成果を出せますが、客観的なフィードバックを取り入れることで視野がさらに広がります。');
+  }
+
+  // EQ × ビッグファイブ
+  if (eqLevel === 'growth' && N === 'high') {
+    parts.push('<strong>EQ伸びしろ×感受性の高さ：</strong>感情の波を体験する機会が多いため、感情を理解する力は自然に育まれやすいです。感情を言語化する練習（ジャーナリング等）を続けることで、EQは比較的早く向上する可能性があります。');
+  }
+  if (eqLevel && ['very_high', 'high'].includes(eqLevel) && A === 'high') {
+    parts.push('<strong>高いEQ×高い協調性：</strong>相手の気持ちを的確に読み取り、思いやりを行動に移せる稀有な組み合わせです。チームの調整役や、人の間に立つ役割で特に力を発揮します。');
+  }
+  if (eqLevel === 'growth' && locusType === 'external') {
+    parts.push('<strong>EQ伸びしろ×外的統制型：</strong>対人スキルの課題を「自分には無理」と捉えがちですが、EQは訓練で伸びる力です。「できない」ではなく「まだ練習中」と捉え直すことで、着実に成長できます。');
+  }
+  if (eqWeakest === 'empathy' && A === 'low') {
+    parts.push('<strong>共感力がEQの最弱因子×低い協調性：</strong>相手の立場に立つ練習が、人間関係の質を大きく変える鍵になります。「相手は何を感じているか」を意識的に問いかける習慣をつけてみてください。');
+  }
+  if (eqWeakest === 'regulation' && N === 'high') {
+    parts.push('<strong>感情管理がEQの最弱因子×感受性の高さ：</strong>感情の波は激しいものの、それをコントロールする力がまだ追いついていない状態です。深呼吸・一時離脱・書き出しなど、具体的な「感情の逃がし方」を1つ見つけることが最初のステップです。');
+  }
+
+  // インポスター症候群 × ビッグファイブ
+  if (impostorSev === 'high' && C === 'high') {
+    parts.push('<strong>インポスター傾向強い×高い誠実性：</strong>真面目で責任感が強いからこそ、「自分はまだ不足している」と思いやすい組み合わせです。努力家であること自体が实力の証明ですが、完璧を求めすぎず「70%できたら合格」という基準を持つと楽になります。');
+  }
+  if (impostorSev === 'high' && N === 'high') {
+    parts.push('<strong>インポスター傾向強い×感受性の高さ：</strong>批判や失敗に対する感度が高く、「見捨てられるかも」という不安が自己評価を下げやすいです。客観的な事実（実際の成果・評価）と感情を分けて見る練習が、自己評価の歪みを正します。');
+  }
+  if (impostorDom === 'perfectionist' && C === 'high') {
+    parts.push('<strong>インポスター「完璧主義型」×高い誠実性：</strong>100%でなければ認めない基準が、成果を正当評価する邪魔をしています。「終わったら振り返り、できたことを3つ書き出す」習慣で、自分への評価の偏りに気づけるようになります。');
+  }
+  if (impostorDom === 'soloist' && E === 'low') {
+    parts.push('<strong>インポスター「単独行動型」×内向性：</strong>一人でやることを好む性格と、人に頼ることを避ける傾向が重なっています。実力はあるのに「他人の手を借りたら認められない」と感じやすいですが、協力を得ることは能力の一部です。');
+  }
+  if (impostorDom === 'superhero' && A === 'high') {
+    parts.push('<strong>インポスター「スーパーヒーロー型」×高い協調性：</strong>周りの期待に応えようとするあまり、自分を酷使してしまうパターンです。「休むことも仕事のうち」という前提でスケジュールを組むことが、長期的な力になります。');
+  }
+
   if (parts.length === 0) {
     parts.push('複数のテスト結果を照合した結果、あなたの性格は<strong>バランス型</strong>の傾向を示しています。特定の強烈な偏りがない分、状況に応じた柔軟な対応が得意です。一方で「これが自分の強みだ」と明確に言える核を意識的に育てることが次のステップです。');
   }
@@ -925,7 +1031,7 @@ function getValueInsight(O, C, E, A, N, topValue) {
   return `あなたの最上位価値観「${VALUES_JA[topValue] || topValue}」は、性格特性とユニークな形で組み合わさっています。この価値観があなたの判断基準の中心にあることを意識して行動すると、迷いが減るでしょう。`;
 }
 
-function getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey) {
+function getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom) {
   const items = [];
 
   if ((s.N || 3) >= 4) items.push('感情の波が大きく、ストレスや批判を受けると気持ちの立て直しに時間がかかることがある。反芻思考（グルグル考える癖）に気をつけましょう。');
@@ -944,12 +1050,22 @@ function getWeaknesses(s, love, mindset, sdt, hspTotal, attachKey) {
   if (attachKey === 'avoidant') items.push('深い関係を築くチャンスを逃しやすい。「一人でいる方が楽」という感覚が、本当に求めているものへのブロックになっていないか振り返ってみてください。');
   if (attachKey === 'fearful') items.push('近づきたい気持ちと怖い気持ちが同時にあり、関係が不安定になりやすい。無理に解決しようとせず、「両方の気持ちがある」と認めるだけで少し楽になります。');
 
+  if (locusType === 'external') items.push('「結果は運や他人のせい」と思いがちで、自分の行動が変化を起こせるという感覚が弱まっている可能性があります。小さな行動で「自分にもできた」経験を積むことが、自己効力感を育てます。');
+  if (locusType === 'internal' && (s.N || 3) >= 4) items.push('「すべて自分次第」と思いがちで、失敗をすべて自分の責任と捉えて追い詰めやすい。「自分でコントロールできる部分」と「そうでない部分」を分ける視点が、心の負担を減らします。');
+  if (eqLevel === 'growth') items.push('感情を適切に扱う力に伸びしろがあります。感情を無意識に押し込めたり、爆発させてしまうことがあるかもしれません。感情を言葉にする練習が第一歩です。');
+  if (eqWeakest === 'regulation') items.push('感情の波をコントロールする力が最も弱い領域です。衝動的な反応や、感情に飲まれてしまう場面に注意が必要です。一呼吸おいてから反応する習慣が効果的です。');
+  if (eqWeakest === 'social') items.push('対人スキルがEQの中で最も弱い領域です。グループでのコミュニケーションや、場の空気を読むことに苦手意識があるかもしれません。1対1の関係から練習を始めると無理ありません。');
+  if (impostorSev === 'high') items.push('「自分は周りに遅れをとっているのでは」「いつか見透かされるのでは」という不安が、本来の実力を発揮する邪魔をしている可能性があります。客観的な成果を書き出して振り返る習慣が、不安を事実で中和します。');
+  if (impostorDom === 'perfectionist') items.push('インポスター症候群の「完璧主義型」傾向があり、100%でなければ認めない基準が自分を縛っています。「70%できたら合格」という現実的な基準を設定してみてください。');
+  if (impostorDom === 'superhero') items.push('インポスター症候群の「スーパーヒーロー型」傾向があり、必要以上に頑張って証明しようとする癖があります。過労につながりやすいので、「やらないこと」を決めることも重要です。');
+  if (impostorDom === 'soloist') items.push('インポスター症候群の「単独行動型」傾向があり、人に頼ることを避けるあまり孤立しがちです。他人に助けを求めることは能力の欠如ではなく、リソースの活用です。');
+
   if (items.length === 0) items.push('大きな弱点は見当たりません。ただし、バランスが取れているということは「尖った強み」も作りにくい側面があります。意識的に得意分野を深掘りすることを意識してみてください。');
 
   return items;
 }
 
-function getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal) {
+function getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal, locusType, eqLevel, eqStrongest, impostorSev, impostorDom) {
   const items = [];
 
   if (sdt === 'autonomy') items.push('自分でテーマを決められる役割・プロジェクトで最大の力を発揮します。細かく管理されるよりも、成果で評価される環境を選びましょう。');
@@ -964,11 +1080,20 @@ function getWorkAdvice(O, C, E, A, N, mindset, sdt, hspTotal) {
   if (hspTotal !== null && hspTotal >= 34) items.push('感受性が高い分、騒がしい環境や連続した対人業務は消耗しやすいです。集中できる静かな時間帯・環境を意識的に確保することが、パフォーマンス維持の鍵になります。');
   if (hspTotal !== null && hspTotal <= 19) items.push('刺激に強く、プレッシャーの高い環境でも安定して動けます。感受性が高い同僚の「見えない消耗」に気づいてあげる視点を持つと、チームとしての成果が上がります。');
 
+  if (locusType === 'internal') items.push('自分でコントロールできるという感覚が強い分、マネジメントや起業など裁量の大きい役割で力を発揮します。一方で、すべてを背負い込みすぎないよう、チームへの委譲も意識してください。');
+  if (locusType === 'external') items.push('環境や運が結果を左右すると感じやすい場合、自分の裁量が大きい役割より、チームや組織の力を活かす役割で安定感を得やすいです。小さな成功体験を意識的に振り返る習慣が、自己効力感を育てます。');
+  if (eqLevel && ['very_high', 'high'].includes(eqLevel)) items.push('感情知能が高い分、チームの調整役や、対人折衝が必要なプロジェクトで特に力を発揮します。相手の感情を読み取りつつ適切な対応ができる力は、職場で大きな武器です。');
+  if (eqStrongest === 'awareness') items.push('自分の感情状態に気づく力が最も高い分、自分のコンディション管理が上手なタイプです。この力を活かして、集中力が高い時間帯に重要な仕事を配置すると効率が上がります。');
+  if (eqStrongest === 'empathy') items.push('相手の気持ちを理解する力が最も高い分、顧客対応や部下育成など「人を理解する」場面で強みを発揮します。ただし共感疲労に気をつけ、感情の距離を保つ技術も身につけると長続きします。');
+  if (impostorSev === 'high') items.push('仕事で実力があるのに「いつか見透かされるのでは」と不安を感じやすいです。客観的な事実（実績・評価）を書き出して見直す習慣が、不安を行動で中和します。');
+  if (impostorDom === 'expert') items.push('「まだ知識が足りない」と感じて学び続けるインポスター「専門家型」の傾向があります。学ぶことは素晴らしいですが、「今の知識でも十分に価値がある」と認めることも大切です。');
+  if (impostorDom === 'superhero') items.push('「もっと頑張らないと」と無意識に自分を追い込むインポスター「スーパーヒーロー型」の傾向があります。仕事の質を維持しながら「やらないこと」を決めることが、長期的な成果につながります。');
+
   if (items.length === 0) items.push('バランスよく様々な仕事環境に適応できます。自分が最もエネルギーを感じる業務に意識的に時間を割くことで、さらに成果が上がるでしょう。');
   return items;
 }
 
-function getLoveAdvice(O, C, E, A, N, love, attachKey) {
+function getLoveAdvice(O, C, E, A, N, love, attachKey, eqLevel, impostorSev) {
   const items = [];
 
   if (love === 'eros') items.push('直感と情熱を大切にするあなたは、相手への気持ちを率直に伝えることが強みです。ただし、最初の熱が落ち着いたあとの「育てる恋愛」も意識的に取り組んでみてください。');
@@ -986,11 +1111,15 @@ function getLoveAdvice(O, C, E, A, N, love, attachKey) {
   if (attachKey === 'avoidant') items.push('心を開くことへのハードルが高めです。「心を開くこと＝自立を失うこと」ではありません。信頼できる人に少しずつ本音を話すことで、関係の深さが変わります。');
   if (attachKey === 'fearful') items.push('近づきたい気持ちと怖い気持ちが同時にある状態は、矛盾ではなく感受性の証です。「両方あっていい」と認めることから始めてみてください。');
 
+  if (eqLevel && ['very_high', 'high'].includes(eqLevel)) items.push('感情知能が高い分、パートナーの気持ちに敏感で、関係を大切にする力が強いです。その力を活かしつつ、「相手の気持ちを優先しすぎて自分が犠牲にならないか」も意識してみてください。');
+  if (eqLevel === 'growth') items.push('感情を適切に表現・管理する力に伸びしろがある分、パートナーとのすれ違いが起きやすい可能性があります。「今どう感じているか」を言葉にする練習が、関係を深める第一歩です。');
+  if (impostorSev === 'high') items.push('「この人は本当に私を好きなのかな」「いつか私のダメなところがバレるかも」と不安が恋愛に入り込みやすいです。パートナーから言われたポジティブな言葉を書き留めておく習慣が、不安を和らげます。');
+
   if (items.length === 0) items.push('あなたの恋愛スタイルは状況に応じて柔軟に変化します。大切なのは、相手との対話を続けてお互いの期待値をすり合わせていくことです。');
   return items;
 }
 
-function getHumanAdvice(O, C, E, A, N, a, sdt, topValue, attachKey) {
+function getHumanAdvice(O, C, E, A, N, a, sdt, topValue, attachKey, eqLevel, eqWeakest, impostorDom) {
   const items = [];
 
   if (A === 'high') items.push('相手の気持ちに自然と寄り添えるため、多くの人から信頼されます。ただし「いい人」でいようとするあまり、本音を言えなくなる場面に注意してください。');
@@ -1004,11 +1133,18 @@ function getHumanAdvice(O, C, E, A, N, a, sdt, topValue, attachKey) {
   if (attachKey === 'avoidant') items.push('深い関係よりも、適度な距離感のある繋がりを好みます。無理に親密にならなくても良い。自分のペースで関係を築ける環境を選ぶことが、長続きする繋がりにつながります。');
   if (attachKey === 'fearful') items.push('関係に対して非常に敏感で、相手の感情を深く読み取る力があります。この感受性は、親密な関係において大きな力になります。安心できる一人との関係から、少しずつ信頼を育ててみてください。');
 
+  if (eqLevel && ['very_high', 'high'].includes(eqLevel)) items.push('感情知能が高く、相手の気持ちを的確に読み取れるため、多くの人から信頼されやすいです。ただし「空気を読みすぎる」ことで自分が疲れていないかも確認してください。');
+  if (eqLevel === 'growth') items.push('感情を扱う力に伸びしろがある分、対人関係で「なんとなくうまくいかない」と感じることがあるかもしれません。相手の言葉の裏にある感情に耳を傾ける練習が、関係の質を変えます。');
+  if (eqWeakest === 'empathy') items.push('共感力がEQの中で最も弱い領域です。相手の立場に立つことが苦手に感じる場面があるかもしれません。「相手は今どう感じているかな」と意識的に問いかける習慣が、関係を深めます。');
+  if (eqWeakest === 'social') items.push('社会的スキルがEQの中で最も弱い領域です。グループでのやり取りに苦手意識があるかもしれませんが、1対1の深い関係なら持ち味を活かせます。まずは少人数の関係を大切にしてください。');
+  if (impostorDom === 'soloist') items.push('人に頼ることを避ける傾向があり、結果的に孤立しがちです。困ったときに人に頼ることは弱さではなく、信頼関係の証です。小さなことから「助けて」と言う練習をしてみてください。');
+  if (impostorDom === 'superhero') items.push('人間関係でも「もっとやらなきゃ」と無意識に頑張りすぎる傾向があります。「今日はこれだけでOK」と自分なりのラインを決めることが、関係を長続きさせます。');
+
   if (items.length === 0) items.push('様々な人と柔軟に関われるバランス型です。関係の深さと広さのバランスを意識しながら、自分にとって心地よい人間関係を構築していきましょう。');
   return items;
 }
 
-function getGrowthSteps(s, mindset, hspTotal, attachKey) {
+function getGrowthSteps(s, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev) {
   const steps = [];
 
   // 最も低い因子を特定
@@ -1056,6 +1192,30 @@ function getGrowthSteps(s, mindset, hspTotal, attachKey) {
   }
   if (attachKey === 'fearful') {
     steps.push({ num: steps.length + 1, label: '「両方の気持ち」を認める練習', action: '「近づきたい」と「怖い」が同時にあるとき、どちらも否定せず紙に書き出してみる。矛盾を受け入れることが、次の一歩の土台になります。' });
+  }
+
+  // 統制の所在由来のステップ
+  if (locusType === 'external') {
+    steps.push({ num: steps.length + 1, label: '小さな成功体験を書き出す', action: '毎日1つ、「自分の行動で良かったこと」を書き出す。自分の影響力を実感することで、自己効力感が少しずつ育ちます。' });
+  }
+  if (locusType === 'internal' && (s.N || 3) >= 4) {
+    steps.push({ num: steps.length + 1, label: '「自分次第」を少し手放す', action: '上手くいかなかったとき「自分のせい」と捉える前に、「自分でコントロールできる部分」と「できない部分」を分けて書き出してみる。' });
+  }
+
+  // EQ由来のステップ
+  if (eqLevel === 'growth' || eqWeakest) {
+    if (eqWeakest === 'regulation') {
+      steps.push({ num: steps.length + 1, label: '感情にラベルをつける練習', action: 'イライラ・不安・悲しみを感じたら、すぐに「今、〇〇を感じている」と言葉にする。感情を名前で呼ぶだけで、波が落ち着きやすくなります。' });
+    } else if (eqWeakest === 'empathy') {
+      steps.push({ num: steps.length + 1, label: '相手の視点に立つ練習', action: '会話の中で「この人は今どう感じているかな」を1日3回意識的に考える。共感力は筋トレのように鍛えられます。' });
+    } else if (eqLevel === 'growth') {
+      steps.push({ num: steps.length + 1, label: '感情日記を始める', action: '1日5分でOK。その日の感情と出来事を3行で書く。自分の感情パターンに気づくことが、EQ向上の第一歩です。' });
+    }
+  }
+
+  // インポスター症候群由来のステップ
+  if (impostorSev === 'high' || impostorSev === 'moderate') {
+    steps.push({ num: steps.length + 1, label: '「できたこと」リストを作る', action: '1週間分の「できたこと・評価されたこと」を書き出す。インポスター症候群は「できないこと」に目を向けさせる癖があります。事実でバランスを取り戻しましょう。' });
   }
 
   if (steps.length === 0) {
