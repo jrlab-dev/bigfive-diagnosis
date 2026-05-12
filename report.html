@@ -9,18 +9,18 @@
   <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>総合性格レポート — ビッグファイブで本当の自分を知る【公式】</title>
-<meta name="description" content="ビッグファイブ 診断の総合性格レポート。最大7種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセットを一画面で無料分析。">
+<meta name="description" content="ビッグファイブ 診断の総合性格レポート。最大10種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
 <meta property="og:title" content="総合性格レポート — ビッグファイブで本当の自分を知る【公式】">
-<meta property="og:description" content="ビッグファイブ 診断の総合性格レポート。最大7種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセットを一画面で無料分析。">
+<meta property="og:description" content="ビッグファイブ 診断の総合性格レポート。最大10種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/report.html">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="総合性格レポート — ビッグファイブで本当の自分を知る【公式】">
-<meta name="twitter:description" content="ビッグファイブ 診断の総合性格レポート。最大7種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセットを一画面で無料分析。">
+<meta name="twitter:description" content="ビッグファイブ 診断の総合性格レポート。最大10種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。">
 <meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 
 <script type="application/ld+json">
@@ -29,7 +29,7 @@
   "@type": "WebPage",
   "name": "総合性格レポート【公式】",
   "url": "https://bigfive.jr-genius.jp/report.html",
-  "description": "ビッグファイブ診断を含む最大7種類の心理学診断結果を統合して表示する総合レポートページ。",
+  "description": "ビッグファイブ診断を含む最大10種類の心理学診断結果を統合して表示する総合レポートページ。",
   "isPartOf": {
     "@type": "WebSite",
     "name": "ビッグファイブで本当の自分を知る【公式】",
@@ -463,7 +463,7 @@ body {
   <div class="page-header">
     <div class="page-badge">✦ PREMIUM REPORT</div>
     <h1 class="page-title">総合性格レポート</h1>
-    <p class="page-subtitle">5つの心理テストを統合した、あなただけの深層分析</p>
+    <p class="page-subtitle">8つの心理テストを統合した、あなただけの深層分析</p>
   </div>
 
   <!-- 未受診バナー（受診が足りない場合に表示） -->
@@ -583,14 +583,17 @@ const ATTACHMENT_TYPES = {
 function loadData() {
   const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
   const bf     = bfList.length > 0 ? bfList[0] : null;
-  let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null;
+  let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null, locus = null, eq = null, impostor = null;
   try { love       = JSON.parse(localStorage.getItem('love_result'));       } catch(e) {}
   try { mindset    = JSON.parse(localStorage.getItem('mindset_result'));    } catch(e) {}
   try { sdt        = JSON.parse(localStorage.getItem('sdt_result'));        } catch(e) {}
   try { schwartz   = JSON.parse(localStorage.getItem('schwartz_result'));   } catch(e) {}
   try { hsp        = JSON.parse(localStorage.getItem('hsp_result'));        } catch(e) {}
   try { attachment = JSON.parse(localStorage.getItem('attachment_result')); } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz, hsp, attachment };
+  try { locus      = JSON.parse(localStorage.getItem('locus_result'));      } catch(e) {}
+  try { eq         = JSON.parse(localStorage.getItem('eq_result'));         } catch(e) {}
+  try { impostor   = JSON.parse(localStorage.getItem('impostor_result'));   } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor };
 }
 
 // ===== 未受診チェック =====
@@ -603,6 +606,9 @@ function checkMissing(data) {
   if (!data.schwartz)   missing.push({ name: '価値観診断',           url: 'schwartz.html' });
   if (!data.hsp)        missing.push({ name: 'HSP感受性チェック',    url: 'hsp.html' });
   if (!data.attachment) missing.push({ name: '愛着スタイルチェック', url: 'attachment.html' });
+  if (!data.locus)      missing.push({ name: '統制の所在チェック',   url: 'locus.html' });
+  if (!data.eq)         missing.push({ name: '感情知能チェック',     url: 'eq.html' });
+  if (!data.impostor)   missing.push({ name: 'インポスター症候群チェック', url: 'impostor.html' });
   return missing;
 }
 

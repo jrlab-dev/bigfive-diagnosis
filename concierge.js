@@ -229,6 +229,84 @@ const CONCIERGE_CONFIG = {
           message: '努力家のあなた。マインドセットを知ることで、「努力の方向性」をさらに最適化できます。'
         }
       ]
+    },
+    {
+      key: 'locus_result',
+      title: '統制の所在チェック',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+      url: 'locus.html',
+      bgColor: 'rgba(245,158,11,0.15)',
+      getResult: (d) => {
+        const map = {
+          internal: { name: '内的統制型', color: '#f59e0b' },
+          balanced: { name: 'バランス型', color: '#8b5cf6' },
+          external: { name: '外的統制型', color: '#64748b' },
+        };
+        return map[d.type] || { name: d.typeName, color: '#f59e0b' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.N <= 2,
+          priority: 5,
+          message: '精神的に安定しているあなたに。自分のコントロール感を科学してみましょう。'
+        },
+        {
+          condition: (sc) => sc.C >= 4,
+          priority: 3,
+          message: '計画性が高いあなた。その「統制感」の源泉を分析しましょう。'
+        }
+      ]
+    },
+    {
+      key: 'eq_result',
+      title: '感情知能（EQ）チェック',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
+      url: 'eq.html',
+      bgColor: 'rgba(249,115,22,0.15)',
+      getResult: (d) => {
+        const map = {
+          very_high: { name: 'EQ非常に高い', color: '#10b981' },
+          high: { name: 'EQ高い', color: '#f97316' },
+          average: { name: 'EQ標準的', color: '#3b82f6' },
+          growth: { name: 'EQ伸びしろあり', color: '#a78bfa' },
+        };
+        return map[d.level] || { name: d.levelName, color: '#f97316' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.A >= 5,
+          priority: 5,
+          message: '相手の気持ちに敏感なあなたに。その共感力の正体を分析しましょう。'
+        },
+        {
+          condition: (sc) => sc.E >= 4 && sc.A >= 4,
+          priority: 4,
+          message: '社交的で思いやりがあるあなた。感情知能が高い可能性があります。'
+        }
+      ]
+    },
+    {
+      key: 'impostor_result',
+      title: 'インポスター症候群チェック',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+      url: 'impostor.html',
+      bgColor: 'rgba(167,139,250,0.15)',
+      getResult: (d) => {
+        const sevNames = { low: '低い', moderate: '中程度', high: '高い' };
+        return { name: '重症度: ' + (sevNames[d.severityLevel] || d.severityName), color: d.severityLevel === 'high' ? '#ef4444' : '#a78bfa' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.N >= 5,
+          priority: 5,
+          message: '感受性が豊かなあなたに。不安の正体がインポスターかどうか確かめてみましょう。'
+        },
+        {
+          condition: (sc) => sc.C >= 4 && sc.N >= 3,
+          priority: 4,
+          message: '真面目で繊細なあなた。成功しているのに不安になることがあるなら、インポスターかもしれません。'
+        }
+      ]
     }
   ]
 };
