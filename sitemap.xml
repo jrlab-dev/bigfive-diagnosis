@@ -97,6 +97,30 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- 統制の所在チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/locus.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 感情知能チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/eq.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- インポスター症候群チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/impostor.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- 心理学診断 一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/diagnoses.html</loc>

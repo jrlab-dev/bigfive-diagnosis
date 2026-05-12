@@ -1865,6 +1865,9 @@ function renderReportBanner() {
     { key: 'schwartz_result', name: '価値観診断', url: 'schwartz.html' },
     { key: 'hsp_result', name: 'HSP感受性チェック', url: 'hsp.html' },
     { key: 'attachment_result', name: '愛着スタイルチェック', url: 'attachment.html' },
+    { key: 'locus_result', name: '統制の所在チェック', url: 'locus.html' },
+    { key: 'eq_result', name: '感情知能チェック', url: 'eq.html' },
+    { key: 'impostor_result', name: 'インポスター症候群チェック', url: 'impostor.html' },
   ];
   const missing = tests.filter(t => !localStorage.getItem(t.key));
   const allDone = hasBf && missing.length === 0;
@@ -1879,7 +1882,7 @@ function renderReportBanner() {
           全テスト完了！総合レポートが見られます
         </span>
       </div>
-      <div class="report-banner-sub">6つのテストを統合した、あなただけの深層分析</div>
+      <div class="report-banner-sub">9つのテストを統合した、あなただけの深層分析</div>
       <a href="report.html" class="report-btn">
         <span class="icon-with-text">
           <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
