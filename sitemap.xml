@@ -409,6 +409,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：「優しい人」ほど暴力的パートナーに引き寄せられる理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-abusive-seikaku.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
