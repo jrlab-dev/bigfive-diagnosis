@@ -1943,8 +1943,11 @@ function renderAIProfile() {
   const hasMind = !!localStorage.getItem('mindset_result');
   const hasSch = !!localStorage.getItem('schwartz_result');
   const hasSDT = !!localStorage.getItem('sdt_result');
+  const hasLocus = !!localStorage.getItem('locus_result');
+  const hasEQ = !!localStorage.getItem('eq_result');
+  const hasImpostor = !!localStorage.getItem('impostor_result');
 
-  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT) return;
+  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor) return;
   section.style.display = 'block';
 
   // マッピング
@@ -2029,6 +2032,40 @@ function renderAIProfile() {
       const d = JSON.parse(localStorage.getItem('sdt_result'));
       lines.push('■ 動機タイプ');
       lines.push(`最も強い欲求: ${sdtNames[d.strongest] || d.strongest}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 統制の所在
+  if (hasLocus) {
+    try {
+      const d = JSON.parse(localStorage.getItem('locus_result'));
+      const locNames = { internal: '内的統制型（自分でコントロールできると思える）', balanced: 'バランス型', external: '外的統制型（運や環境の影響が大きいと感じる）' };
+      lines.push('■ 統制の所在');
+      lines.push(`タイプ: ${locNames[d.type] || d.type}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // 感情知能(EQ)
+  if (hasEQ) {
+    try {
+      const d = JSON.parse(localStorage.getItem('eq_result'));
+      const eqFactorNames = { awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル' };
+      lines.push('■ 感情知能(EQ)');
+      lines.push(`レベル: ${d.levelName || d.level}`);
+      if (d.scores) lines.push(`総合: ${d.scores.overall?.toFixed(1) || '?'} / 最も強い: ${eqFactorNames[d.strongest] || d.strongest} / 最も弱い: ${eqFactorNames[d.weakest] || d.weakest}`);
+      lines.push('');
+    } catch(e) {}
+  }
+
+  // インポスター症候群
+  if (hasImpostor) {
+    try {
+      const d = JSON.parse(localStorage.getItem('impostor_result'));
+      const impNames = { perfectionist: '完璧主義型', superhero: 'スーパーヒーロー型', naturalGenius: '天才型', soloist: '単独行動型', expert: '専門家型' };
+      lines.push('■ インポスター症候群');
+      lines.push(`傾向の強さ: ${d.severityName || d.severityLevel} / ドミナントタイプ: ${impNames[d.dominantType] || d.dominantType}`);
       lines.push('');
     } catch(e) {}
   }
