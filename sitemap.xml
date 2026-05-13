@@ -449,6 +449,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：恋愛がうまくいくのに「何か足りない」——外交性が高い人の恋愛 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-extraversion-high.html</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
