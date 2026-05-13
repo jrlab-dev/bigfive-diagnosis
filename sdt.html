@@ -53,11 +53,11 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --auto: #3b82f6; --comp: #f59e0b; --rel: #ec4899; }
+  :root { --auto: #7c3aed; --comp: #f59e0b; --rel: #ec4899; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
-  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 30%, rgba(59,130,246,0.1) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(236,72,153,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245,158,11,0.07) 0%, transparent 70%); animation: nebula-drift 25s ease-in-out infinite alternate; }
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 30%, rgba(124,58,237,0.1) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(236,72,153,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 50% 50%, rgba(245,158,11,0.07) 0%, transparent 70%); animation: nebula-drift 25s ease-in-out infinite alternate; }
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); border-radius: 999px; font-size: 12px; color: var(--auto); font-weight: 700; letter-spacing: .08em; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); border-radius: 999px; font-size: 12px; color: var(--auto); font-weight: 700; letter-spacing: .08em; }
   .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
   .intro h1 span { color: var(--auto); }
   .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
@@ -65,7 +65,7 @@
   .need-chip { flex: 1; padding: 10px 8px; border-radius: 10px; text-align: center; }
   .need-chip .need-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
   .need-chip .need-desc { font-size: 10px; color: var(--dim); line-height: 1.4; }
-  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--auto), #1d4ed8); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(59,130,246,0.35); transition: transform .2s; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--auto), #6d28d9); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(124,58,237,0.35); transition: transform .2s; }
   .start-btn:hover { transform: translateY(-2px); }
   .intro-note { font-size: 12px; color: var(--dim); }
 
@@ -74,10 +74,10 @@
 
   .question-num { font-size: 13px; color: var(--auto); font-weight: 500; margin-bottom: 4px; }
   .question-text { font-size: 17px; line-height: 1.7; margin-bottom: 32px; min-height: 60px; }
-  .answer-btn { flex: 1; padding: 14px 2px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim); background: rgba(59,130,246,0.06); border: 1.5px solid rgba(59,130,246,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s; min-height: 52px; display: flex; align-items: center; justify-content: center; text-align: center; }
-  .answer-btn:hover { background: rgba(59,130,246,0.18); border-color: rgba(59,130,246,0.4); color: var(--text); }
-  .answer-btn.selected { background: linear-gradient(135deg, var(--auto), #1d4ed8); border-color: transparent; color: #fff; font-weight: 700; }
-  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(59,130,246,0.2); border-top-color: var(--auto); border-radius: 50%; animation: spin 1s linear infinite; }
+  .answer-btn { flex: 1; padding: 14px 2px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim); background: rgba(124,58,237,0.06); border: 1.5px solid rgba(124,58,237,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s; min-height: 52px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .answer-btn:hover { background: rgba(124,58,237,0.18); border-color: rgba(124,58,237,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--auto), #6d28d9); border-color: transparent; color: #fff; font-weight: 700; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(124,58,237,0.2); border-top-color: var(--auto); border-radius: 50%; animation: spin 1s linear infinite; }
 
   .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
   .result-card-inner { padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); }
@@ -154,7 +154,7 @@
     <h1>何が<span>あなたを動かす</span>のか</h1>
     <p class="intro-sub">Deci & Ryanの自己決定理論（SDT）に基づき、あなたの「3つの心理的欲求」の充足度を21問で科学的に測定します。</p>
     <div class="three-needs">
-      <div class="need-chip" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);">
+      <div class="need-chip" style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);">
         <div class="need-name" style="color:var(--auto);">自律性</div>
         <div class="need-desc">自分で選んで動けているか</div>
       </div>
@@ -168,7 +168,7 @@
       </div>
     </div>
     <button class="start-btn" id="startBtn">診断スタート</button>
-    <button class="start-btn" id="resumeBtn" style="display:none; background:linear-gradient(135deg,#f59e0b,#3b82f6); margin-top:10px; font-size:15px;">▶ 途中から再開する</button>
+    <button class="start-btn" id="resumeBtn" style="display:none; background:linear-gradient(135deg,#f59e0b,#7c3aed); margin-top:10px; font-size:15px;">▶ 途中から再開する</button>
     <p class="resume-info" id="resumeInfo" style="display:none; font-size:12px; color:rgba(245,158,11,0.8); margin-top:6px;"></p>
     <p class="intro-note">21問・無料・登録不要</p>
   </div>
@@ -265,8 +265,8 @@ const questions = [
 ];
 
 const needLabels = { autonomy: '自律性', competence: '有能感', relatedness: '関係性' };
-const needColors = { autonomy: '#3b82f6', competence: '#f59e0b', relatedness: '#ec4899' };
-const needEmoji = { autonomy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#3b82f6"><circle cx="12" cy="12" r="10"/></svg>', competence: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="10"/></svg>', relatedness: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#ec4899"><circle cx="12" cy="12" r="10"/></svg>' };
+const needColors = { autonomy: '#7c3aed', competence: '#f59e0b', relatedness: '#ec4899' };
+const needEmoji = { autonomy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#7c3aed"><circle cx="12" cy="12" r="10"/></svg>', competence: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b"><circle cx="12" cy="12" r="10"/></svg>', relatedness: '<svg width="14" height="14" viewBox="0 0 24 24" fill="#ec4899"><circle cx="12" cy="12" r="10"/></svg>' };
 
 let current = 0;
 const answers = new Array(questions.length).fill(null);

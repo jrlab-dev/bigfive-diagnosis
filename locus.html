@@ -53,26 +53,26 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --accent: #f59e0b; --accent2: #d97706; }
+  :root { --accent: #4a90c0; --accent2: #3a80a8; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
 
   .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
-      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(245,158,11,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(217,119,6,0.07) 0%, transparent 70%);
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(74,144,192,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58,128,168,0.07) 0%, transparent 70%);
     animation: nebula-drift 25s ease-in-out infinite alternate; }
   .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
 
   /* intro */
-  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(74,144,192,0.1); border: 1px solid rgba(74,144,192,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
   .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
   .intro h1 span { color: var(--accent); }
   .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
-  .intro-explain { background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 14px 16px; max-width: 380px; text-align: left; }
+  .intro-explain { background: rgba(74,144,192,0.05); border: 1px solid rgba(74,144,192,0.2); border-radius: 12px; padding: 14px 16px; max-width: 380px; text-align: left; }
   .intro-explain p { font-size: 13px; color: var(--dim); line-height: 1.65; }
   .intro-explain strong { color: var(--text); }
-  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(245,158,11,0.3); transition: transform .2s; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(74,144,192,0.3); transition: transform .2s; }
   .start-btn:hover { transform: translateY(-2px); }
   .intro-note { font-size: 12px; color: var(--dim); }
 
@@ -84,17 +84,17 @@
   .question-factor { font-size: 12px; color: var(--dim); margin-bottom: 8px; font-style: italic; }
   .question-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 60px; }
   .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim);
-    background: rgba(245,158,11,0.04); border: 1.5px solid rgba(245,158,11,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
+    background: rgba(74,144,192,0.04); border: 1.5px solid rgba(74,144,192,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
     min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
-  .answer-btn:hover { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.4); color: var(--text); }
+  .answer-btn:hover { background: rgba(74,144,192,0.15); border-color: rgba(74,144,192,0.4); color: var(--text); }
   .answer-btn.selected { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; font-weight: 700; }
   .answer-btn .answer-label { font-size: 10px; line-height: 1.3; }
 
   /* loading */
-  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(245,158,11,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(74,144,192,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
 
   /* result */
-  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(245,158,11,0.3); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(74,144,192,0.3); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
   .result-card-inner { padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); }
   .result-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--accent); }
   .result-type-name { font-size: 22px; font-weight: 900; }
@@ -102,7 +102,7 @@
   .result-desc { font-size: 14px; line-height: 1.8; max-width: 340px; color: var(--dim); padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
 
   /* factor bars */
-  .factor-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(245,158,11,0.18); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .factor-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(74,144,192,0.18); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
   .factor-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 18px; letter-spacing: .08em; }
   .factor-row { margin-bottom: 18px; }
   .factor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
@@ -131,7 +131,7 @@
   /* nav */
   .result-nav { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
   .nav-btn { width: 100%; padding: 14px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; text-decoration: none; display: block; }
-  .nav-btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #fff; }
+  .nav-btn-primary { background: linear-gradient(135deg, #4a90c0, #3a80a8); border: none; color: #fff; }
   .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
   .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
 </style>
@@ -275,7 +275,7 @@ const QUESTIONS = [
 
 const ANSWER_LABELS = ['全く\nそう\n思わない', 'あまり\nそう\n思わない', 'どちら\nでも\nない', '少し\nそう\n思う', '強く\nそう\n思う'];
 const FACTOR_LABELS = { internal: '内的統制', others: '他者支配', chance: '偶然' };
-const FACTOR_COLORS = { internal: '#f59e0b', others: '#3b82f6', chance: '#8b5cf6' };
+const FACTOR_COLORS = { internal: '#4a90c0', others: '#3b82f6', chance: '#8b5cf6' };
 const FACTOR_DESCS  = {
   internal: { high: '自分の行動が結果を生むと強く信じています。困難に直面しても「自分で変えられる」という感覚を持ちやすく、主体的に行動できる力があります。', low: '自分の行動では結果を大きく変えられないと感じやすい傾向があります。成功も失敗も「自分のせいではない」と捉えがちで、行動のモチベーションに影響することがあります。' },
   others:   { high: '周囲の有力な人や権威によって自分の人生が左右されると感じやすい傾向があります。組織や上下関係の中ではストレスを感じやすいかもしれません。', low: '他者にコントロールされている感覚が低く、自分の意思で行動できるという感覚が強いタイプです。周囲の圧力に流されにくい自立性があります。' },
@@ -465,7 +465,7 @@ function showResult(preScores) {
 
     crossArea.innerHTML = `<p style="font-size:14px;line-height:1.75;">${badges ? badges + '<br><br>' : ''}${msg}</p>`;
   } else {
-    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#f59e0b;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#4a90c0;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
   }
 
   // save
