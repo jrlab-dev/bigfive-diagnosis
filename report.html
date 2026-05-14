@@ -792,10 +792,8 @@ function buildAnalysis(data) {
   const eqWeakest = data.eq ? data.eq.weakest : null;
   const impostorSev = data.impostor ? data.impostor.severityLevel : null;
   const impostorDom = data.impostor ? data.impostor.dominantType : null;
-  if (love || sdt || hspTotal || attachKey || locusType || eqLevel || impostorSev) {
-    const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
-    if (crossText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> 複数テストが示すあなたの傾向', text: crossText });
-  }
+  const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
+  if (crossText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> 複数テストが示すあなたの傾向', text: crossText });
 
   // ── 3. 価値観との一致・不一致 ──
   if (topValue) {
@@ -1037,7 +1035,7 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
   }
 
   if (parts.length === 0) {
-    parts.push('「自分ってどんな性格なんだろう」と、はっきり答えられなかった経験があるのではないでしょうか。周りに「俺はこういう人間だ」と迷いなく言える人を見て、少し羨ましく感じることもあるかもしれない。<br><br>複数のテスト結果を照合した結果、あなたの性格はどの方向にも大きく偏っていない<strong>バランス型</strong>の構造を示しています。突出した特徴がない分、特定の場面で「圧倒的に強い」という感覚を持ちにくいかもしれません。でも、これは弱さではありません。<br><br>偏りが強い人は、その特性が活きる場面では誰よりも力を発揮しますが、合わない場面では大きく消耗します。バランス型は逆に、どんな環境にも適応しやすく、違うタイプの人と自然につながれる。「この人といると安心する」「話していて疲れない」と感じてもらいやすいのはこのタイプです。<br><br>スポーツで言えばスーパーサブのポジションです。スタメンではないかもしれないけれど、どのチームに入っても足りない役割を自然と補える。その人がいなくなって初めて、いかに大切だったかがわかるタイプです。自分を低く見積もりがちですが、それは「目立つ強み」と「本当の価値」が一致していないだけです。<br><br>強みを意識的に育てたいなら、「一つ選んで伸ばす」ことが効果的です。バランスが取れているということは、どの方向にも伸びられる土台があるということ。何を強化するかを意識的に選べる、可能性の広い立場にあります。<br><br>今の自分に「特徴がない」とラベルを貼らなくていいです。まだ、どこに向かうかを決める途中にいるだけです。');
+    return '<a href="attachment.html" style="color:var(--purple);font-weight:700;">愛着スタイル</a>・<a href="sdt.html" style="color:var(--purple);font-weight:700;">SDT（動機）</a>・<a href="hsp.html" style="color:var(--purple);font-weight:700;">HSP</a>・<a href="eq.html" style="color:var(--purple);font-weight:700;">EQ</a>などのサブ診断を受けると、複数テストを組み合わせた詳細な分析がここに表示されます。';
   }
 
   return parts.join('<br><br>');
