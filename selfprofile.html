@@ -1044,10 +1044,20 @@ function pickCert(el, val) {
   const wrap = el.closest('.cert-suggest-wrap');
   wrap.querySelector('input').value = val;
   el.parentElement.classList.remove('open');
-  const gradeSelect = wrap.closest('tr').querySelector('.sc-grade');
+  const tr = wrap.closest('tr');
+  const gradeSelect = tr.querySelector('.sc-grade');
   if (gradeSelect && CERT_DB[val]) {
     gradeSelect.innerHTML = '<option value="">選択</option>' + CERT_DB[val].map(g => '<option value="' + g + '">' + g + '</option>').join('');
     gradeSelect.disabled = false;
+  }
+  // 発行機関を自動入力
+  const issuerMatch = val.match(/[（(](.+)[)）]/);
+  if (issuerMatch) {
+    const detailTr = document.getElementById(tr.id + '_d');
+    if (detailTr) {
+      const issuerInput = detailTr.querySelector('.sc-issuer');
+      if (issuerInput && !issuerInput.value) issuerInput.value = issuerMatch[1];
+    }
   }
 }
 function hideCertSuggest(input) {
