@@ -89,10 +89,16 @@ body {
   justify-content: space-between;
 }
 .sec-body { padding: 16px; }
-.contact-toggle { margin-top: 10px; }
-.contact-toggle summary { cursor: pointer; font-size: 12px; color: var(--dim); padding: 6px 0; user-select: none; }
-.contact-toggle summary:hover { color: var(--accent); }
-.contact-toggle[open] summary { margin-bottom: 12px; }
+.contact-btns { display: flex; gap: 8px; margin-top: 4px; }
+.btn-contact-add {
+  font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+  background: transparent; border: 1px dashed var(--dim); color: var(--dim);
+}
+.btn-contact-add:hover { border-color: var(--accent); color: var(--accent); }
+.extra-field { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.extra-field input { flex: 1; }
+.extra-field .btn-rm { font-size: 14px; color: var(--dim); cursor: pointer; background: none; border: none; padding: 0 4px; }
+.extra-field .btn-rm:hover { color: #ef4444; }
 
 /* ===== フォーム ===== */
 .row { margin-bottom: 12px; }
@@ -464,18 +470,23 @@ body.theme-light .priv-bar {
           <input type="text" id="addrBuilding" placeholder="例：○○マンション101" autocomplete="off">
         </div>
       </div>
-      <!-- 連絡先（基本は非表示） -->
-      <details class="contact-toggle">
-        <summary>連絡先を追加（メール・電話など）</summary>
-        <div class="row">
-          <label>メールアドレス</label>
-          <input type="email" id="email" placeholder="例：nihon.taro@example.com" autocomplete="email">
-        </div>
+      <!-- 連絡先 -->
+      <div class="row">
+        <label>メールアドレス</label>
+        <input type="email" id="email" placeholder="例：nihon.taro@example.com" autocomplete="email">
+      </div>
+      <div id="emailExtra"></div>
+      <div id="phoneWrap" style="display:none">
         <div class="row">
           <label>電話番号</label>
           <input type="tel" id="phone" placeholder="例：090-1234-5678" autocomplete="tel">
         </div>
-      </details>
+      </div>
+      <div id="phoneExtra"></div>
+      <div class="contact-btns">
+        <button type="button" class="btn-contact-add" onclick="addExtraField('email')">＋ メール追加</button>
+        <button type="button" class="btn-contact-add" onclick="addExtraField('phone')">＋ 電話番号追加</button>
+      </div>
     </div>
   </div>
 
@@ -524,6 +535,19 @@ body.theme-light .priv-bar {
   </div>
 
   <!-- 4. 資格・スキル -->
+  <datalist id="certList">
+    <option value="日商簿記 1級（日本商工会議所）">
+    <option value="日商簿記 2級（日本商工会議所）">
+    <option value="日商簿記 3級（日本商工会議所）">
+    <option value="日商簿記 原価計算（日本商工会議所）">
+    <option value="日商簿記 商業簿記（日本商工会議所）">
+    <option value="日商簿記 工業簿記（日本商工会議所）">
+    <option value="日商簿記 会計学（日本商工会議所）">
+    <option value="全経簿記 上級（全国経理教育協会）">
+    <option value="全経簿記 1級（全国経理教育協会）">
+    <option value="全経簿記 2級（全国経理教育協会）">
+    <option value="全経簿記 3級（全国経理教育協会）">
+  </datalist>
   <div class="sec">
     <div class="sec-head">資格・スキル</div>
     <div class="sec-body">
@@ -987,7 +1011,7 @@ function addSkillRow(data) {
   const tr = document.createElement('tr');
   tr.id = id;
   tr.innerHTML = `
-    <td><input type="text" class="sc-name" placeholder="例：普通自動車免許・TOEIC 780点" value="${data ? escHtml(data.name||'') : ''}"></td>
+    <td><input type="text" class="sc-name" list="certList" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}"></td>
     <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
@@ -1145,6 +1169,8 @@ function saveAll() {
     addrBuilding:   val('addrBuilding'),
     email:          val('email'),
     phone:          val('phone'),
+    emailsExtra:    getExtraFields('email'),
+    phonesExtra:    getExtraFields('phone'),
     strengths:  val('strengths'),
     weaknesses: val('weaknesses'),
     values:     val('values'),
@@ -1205,6 +1231,26 @@ function saveAll() {
 
 function val(id) { return (document.getElementById(id)?.value||'').trim(); }
 
+// ===== 追加連絡先フィールド =====
+function addExtraField(type, value) {
+  if (type === 'phone') {
+    document.getElementById('phoneWrap').style.display = '';
+  }
+  const container = document.getElementById(type === 'email' ? 'emailExtra' : 'phoneExtra');
+  const id = 'ex_' + type + '_' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'extra-field';
+  div.id = id;
+  const ph = type === 'email' ? '例：sub@example.com' : '例：03-1234-5678';
+  div.innerHTML = '<input type="' + type + '" placeholder="' + ph + '" value="' + escHtml(value||'') + '">' +
+    '<button type="button" class="btn-rm" onclick="this.parentElement.remove()">×</button>';
+  container.appendChild(div);
+}
+function getExtraFields(type) {
+  const container = document.getElementById(type === 'email' ? 'emailExtra' : 'phoneExtra');
+  return Array.from(container.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+}
+
 // ===== 読み込み =====
 function loadAll() {
   const raw = localStorage.getItem(KEY);
@@ -1258,10 +1304,17 @@ function loadAll() {
     }
   }
 
-  // 連絡先にデータがあれば自動展開
-  if (d.email || d.phone) {
-    const ct = document.querySelector('.contact-toggle');
-    if (ct) ct.open = true;
+  // 追加連絡先の復元
+  if (d.emailsExtra && d.emailsExtra.length) {
+    d.emailsExtra.forEach(v => addExtraField('email', v));
+  }
+  if (d.phone) {
+    document.getElementById('phoneWrap').style.display = '';
+    if (d.phonesExtra && d.phonesExtra.length) {
+      d.phonesExtra.forEach(v => addExtraField('phone', v));
+    }
+  } else if (d.phonesExtra && d.phonesExtra.length) {
+    d.phonesExtra.forEach(v => addExtraField('phone', v));
   }
 
   if (d.updatedAt) showLastSave(d.updatedAt);
@@ -1289,7 +1342,9 @@ function buildFullText() {
   const addrFull = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
   if (d.postalCode || addrFull) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull);
   if (d.email)           lines.push('連絡先: ' + d.email);
+  if (d.emailsExtra)     d.emailsExtra.forEach(m => lines.push('連絡先: ' + m));
   if (d.phone)           lines.push('電話: ' + d.phone);
+  if (d.phonesExtra)     d.phonesExtra.forEach(p => lines.push('電話: ' + p));
   lines.push('');
 
   if (d.edu && d.edu.length) {
@@ -1383,7 +1438,9 @@ function buildResumeText() {
   const addrFull2 = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
   if (d.postalCode || addrFull2) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull2);
   if (d.email)          lines.push('連絡先: ' + d.email);
+  if (d.emailsExtra)    d.emailsExtra.forEach(m => lines.push('連絡先: ' + m));
   if (d.phone)          lines.push('電話: ' + d.phone);
+  if (d.phonesExtra)    d.phonesExtra.forEach(p => lines.push('電話: ' + p));
   lines.push('', '■ 学歴', '');
   if (d.edu && d.edu.length) {
     d.edu.forEach(r => {
