@@ -1623,6 +1623,9 @@ const SYNC_DATA_KEYS = [
   'bigfive_my_results', 'bigfive_other_results',
   'bigfive_album', 'bigfive_album_meta',
   'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
+  'attachment_result', 'hsp_result', 'locus_result',
+  'eq_result', 'impostor_result', 'sdt_result',
+  'schwartz_result', 'mindset_result', 'love_result',
 ];
 
 function getSyncId() {
@@ -1778,8 +1781,6 @@ document.getElementById('syncLoadBtn').addEventListener('click', async () => {
 document.getElementById('syncOverwriteBtn').addEventListener('click', () => {
   if (!_pendingSyncData) return;
   applySyncData(_pendingSyncData, 'overwrite');
-  const id = document.getElementById('syncIdInput').value.trim();
-  localStorage.setItem(SYNC_ID_KEY, id);
   hideSyncChoice();
   setStatus('上書き完了！ページを再読み込みします...', 'ok');
   setTimeout(() => location.reload(), 1500);
@@ -1788,8 +1789,6 @@ document.getElementById('syncOverwriteBtn').addEventListener('click', () => {
 document.getElementById('syncMergeBtn').addEventListener('click', () => {
   if (!_pendingSyncData) return;
   applySyncData(_pendingSyncData, 'merge');
-  const id = document.getElementById('syncIdInput').value.trim();
-  localStorage.setItem(SYNC_ID_KEY, id);
   hideSyncChoice();
   setStatus('統合完了！ページを再読み込みします...', 'ok');
   setTimeout(() => location.reload(), 1500);
