@@ -1002,6 +1002,48 @@ body.theme-light .growth-tip-item::before {
   color: oklch(0.62 0.05 270) !important;
 }
 
+/* ファセット分析セクション（120問版） */
+body.theme-light .btn-facet {
+  color: oklch(0.45 0.03 270) !important;
+  background: oklch(0.97 0.01 270) !important;
+  border-color: oklch(0.88 0.03 270) !important;
+}
+body.theme-light .btn-facet:hover {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.82 0.03 270) !important;
+  color: oklch(0.35 0.03 270) !important;
+}
+body.theme-light .btn-facet.active {
+  background: oklch(0.95 0.01 270) !important;
+  border-color: oklch(0.82 0.03 270) !important;
+  color: oklch(0.35 0.03 270) !important;
+}
+body.theme-light .facet-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.88 0.03 270) !important;
+}
+body.theme-light .facet-card-title {
+  color: var(--text) !important;
+}
+body.theme-light .facet-card-note {
+  color: var(--dim) !important;
+}
+body.theme-light .facet-factor-label {
+  border-bottom-color: oklch(0.90 0.02 270) !important;
+}
+body.theme-light .facet-name {
+  color: oklch(0.45 0.03 270) !important;
+}
+body.theme-light .facet-bar-bg {
+  background: oklch(0.92 0.01 270) !important;
+}
+body.theme-light .facet-score {
+  color: var(--dim) !important;
+}
+body.theme-light .facet-desc {
+  color: oklch(0.55 0.02 270) !important;
+}
+
 /* おすすめ職種カード */
 body.theme-light .career-card {
   background: oklch(1.0 0.0 0 / 0.78) !important;
