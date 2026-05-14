@@ -481,4 +481,52 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：神経症性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：誠実性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：外向性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：開放性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：協調性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
