@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる｜ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブの5因子をさらに細かく分けた30のファセット（下位尺度）について解説。因子スコアだけでは見えない性格の粒度を上げる仕組みと、自分のファセットを測る方法。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる">
+<meta property="og:description" content="ビッグファイブの5因子をさらに細かく分けた30のファセット（下位尺度）について解説。因子スコアだけでは見えない性格の粒度を上げる仕組みと、自分のファセットを測る方法。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/bigfive-facet-toha.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる">
+<meta name="twitter:description" content="ビッグファイブの5因子をさらに細かく分けた30のファセット（下位尺度）について解説。因子スコアだけでは見えない性格の粒度を上げる仕組みと、自分のファセットを測る方法。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる",
+  "description": "ビッグファイブの5因子をさらに細かく分けた30のファセット（下位尺度）について解説。因子スコアだけでは見えない性格の粒度を上げる仕組みと、自分のファセットを測る方法。",
+  "url": "https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html",
+  "datePublished": "2026-05-14",
+  "dateModified": "2026-05-14",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "ファセット" },
+    { "@type": "Thing", "name": "下位尺度" },
+    { "@type": "Thing", "name": "性格診断" },
+    { "@type": "Thing", "name": "心理学" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+  .cta-sub-link {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--dim);
+  }
+  .cta-sub-link a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .cta-sub-link a:hover {
+    text-decoration: underline;
+  }
+
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img {
+    width: 100%; max-width: 720px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: block;
+    height: auto;
+  }
+
+  .facet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .facet-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.8;
+  }
+  .facet-list li:last-child {
+    border-bottom: none;
+  }
+  .facet-name {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .facet-q {
+    color: var(--dim);
+    font-size: 14px;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ブログ",
+      "item": "https://bigfive.jr-genius.jp/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる",
+      "item": "https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html"
+    }
+  ]
+}
+</script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">← トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">ビッグファイブ</span>
+        <span class="tag">ファセット</span>
+        <span class="tag">下位尺度</span>
+        <span class="tag">性格診断</span>
+        <span class="tag">心理学</span>
+      </div>
+      <h1 class="article-title">ビッグファイブのファセット（下位尺度）とは<br><span>30の側面</span>で性格の解像度を上げる</h1>
+      <p class="article-lead">ビッグファイブの5因子をさらに細かく分けた30のファセット（下位尺度）について解説。因子スコアだけでは見えない性格の粒度を上げる仕組みと、自分のファセットを測る方法。</p>
+      <p class="article-meta">公開：2026年5月14日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/bigfive-facet-toha.webp"
+      alt="ビッグファイブの30のファセット（下位尺度）を解説する画像"
+      width="1536" height="1024"
+      loading="eager"
+    >
+
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">「開放性が高い」だけで終わらせていいのか</a></li>
+        <li><a href="#sec2">ファセットとは何か</a></li>
+        <li><a href="#sec3">30のファセット一覧</a></li>
+        <li><a href="#sec4">ファセットが見せる「同じ因子の中での違い」</a></li>
+        <li><a href="#sec5">自分のファセットを測るには</a></li>
+        <li><a href="#sec6">120問版で自分の30ファセットを測る</a></li>
+      </ol>
+    </nav>
+
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>「開放性が高い」だけで終わらせていいのか</h2>
+
+        <p>開放性のスコアが高い人が二人います。一人は空想に何時間も浸り、小説を書き、想像の世界で生きているタイプ。もう一人は物語を一つも書いたことがないけれど、見知らぬ国へ旅するのが好きで、社会的な慣習に疑問を投げかけるタイプ。</p>
+
+        <p>二人ともビッグファイブのテスト結果では「開放性：高」と出ます。でも実際の性格はまったく違います。一人は想像力と感情性のファセットが突出していて、もう一人は冒険性と自由主義のファセットが高い。因子スコアはその平均値なので、この違いが打ち消し合って同じ「高」という結果になっているのです。</p>
+
+        <p>因子スコアは便利な要約です。全体像を素早く把握するには役立ちます。でもその反面、一人ひとりの性格の持つ粒度を平均化してしまいます。「外向性が高い」「協調性が低い」という結果を見て「わかったつもり」になる前に、その中にどんな違いが隠れているかを知っておくことが大切です。</p>
+
+        <p>そのためにあるのが、ファセット（下位尺度）という概念です。</p>
+      </section>
+
+      <section id="sec2">
+        <h2>ファセットとは何か</h2>
+
+        <p>ビッグファイブの5つの因子は、それぞれ6つの下位次元に分かれています。この下位次元をファセット（facet）と呼びます。CostaとMcCraeが1990年代に開発したNEO PI Rという性格検査で、この構造が初めて定義されました。</p>
+
+        <p>5因子 × 6ファセット = 30のファセットが存在します。</p>
+
+        <p>因子スコアは、基本的にその6つのファセットの平均値です。日本の年平均気温が16度だからといって、夏と冬の気温の差がわからないのと同じように、因子スコアだけではファセット間の差が見えません。沖縄の冬と北海道の夏が同じ「年平均気温」にまとめられてしまうようなものです。</p>
+
+        <div class="highlight-box">
+          <p>ファセットを見ることで、「外向性が高い」という結果が「友好性と群居性は高いけれど、主張性は低い」という具体的な性格像に変わります。この方がはるかに自分に当てはまるし、日常生活での行動とも一致しやすい。</p>
+        </div>
+
+        <p>因子レベルの分析でも大まかな傾向はつかめます。でも「なぜ自分は外向性が高いはずなのに、リーダーシップを取るのが苦手なんだろう」という違和感の正体は、ファセットを見ることで説明がつくことが多いです。</p>
+      </section>
+
+      <section id="sec3">
+        <h2>30のファセット一覧</h2>
+
+        <p>5つの因子それぞれに6つのファセットがあります。以下にすべて挙げます。括弧の中は、そのファセットが測っている問いのイメージです。</p>
+
+        <h3>N　神経症性</h3>
+        <div class="highlight-box">
+          <ul class="facet-list">
+            <li><span class="facet-name">不安</span> <span class="facet-q">(心配事や不安を感じやすいか)</span></li>
+            <li><span class="facet-name">怒り</span> <span class="facet-q">(イライラや怒りを感じやすいか)</span></li>
+            <li><span class="facet-name">抑うつ</span> <span class="facet-q">(気分が落ち込みやすいか)</span></li>
+            <li><span class="facet-name">自己意識</span> <span class="facet-q">(他人の目を気にするか)</span></li>
+            <li><span class="facet-name">無抑制</span> <span class="facet-q">(衝動的に行動してしまうか)</span></li>
+            <li><span class="facet-name">脆弱性</span> <span class="facet-q">(ストレスに圧倒されやすいか)</span></li>
+          </ul>
+        </div>
+
+        <h3>E　外向性</h3>
+        <div class="highlight-box">
+          <ul class="facet-list">
+            <li><span class="facet-name">友好性</span> <span class="facet-q">(友人を作りやすいか)</span></li>
+            <li><span class="facet-name">群居性</span> <span class="facet-q">(大勢の中にいるのが好きか)</span></li>
+            <li><span class="facet-name">主張性</span> <span class="facet-q">(自分からリードするか)</span></li>
+            <li><span class="facet-name">活動性</span> <span class="facet-q">(常に活動的で忙しいか)</span></li>
+            <li><span class="facet-name">刺激追求</span> <span class="facet-q">(スリルや興奮を求めるか)</span></li>
+            <li><span class="facet-name">陽気さ</span> <span class="facet-q">(明るく楽観的か)</span></li>
+          </ul>
+        </div>
+
+        <h3>O　開放性</h3>
+        <div class="highlight-box">
+          <ul class="facet-list">
+            <li><span class="facet-name">想像力</span> <span class="facet-q">(想像力や空想を楽しむか)</span></li>
+            <li><span class="facet-name">芸術的興味</span> <span class="facet-q">(芸術や美に感応するか)</span></li>
+            <li><span class="facet-name">感情性</span> <span class="facet-q">(感情を深く感じるか)</span></li>
+            <li><span class="facet-name">冒険性</span> <span class="facet-q">(新しい体験を好むか)</span></li>
+            <li><span class="facet-name">知性</span> <span class="facet-q">(知的な探求を好むか)</span></li>
+            <li><span class="facet-name">自由主義</span> <span class="facet-q">(既存の価値観を問い直すか)</span></li>
+          </ul>
+        </div>
+
+        <h3>A　協調性</h3>
+        <div class="highlight-box">
+          <ul class="facet-list">
+            <li><span class="facet-name">信頼</span> <span class="facet-q">(他人を信用できるか)</span></li>
+            <li><span class="facet-name">道徳性</span> <span class="facet-q">(他者を利用しないか)</span></li>
+            <li><span class="facet-name">利他性</span> <span class="facet-q">(他者を助けたいと思うか)</span></li>
+            <li><span class="facet-name">協調性</span> <span class="facet-q">(争いを避けるか)</span></li>
+            <li><span class="facet-name">謙虚さ</span> <span class="facet-q">(自分を控えめにするか)</span></li>
+            <li><span class="facet-name">共感性</span> <span class="facet-q">(他人の悲しみに寄り添うか)</span></li>
+          </ul>
+        </div>
+
+        <h3>C　誠実性</h3>
+        <div class="highlight-box">
+          <ul class="facet-list">
+            <li><span class="facet-name">有能性</span> <span class="facet-q">(効率よく物事をこなせるか)</span></li>
+            <li><span class="facet-name">秩序性</span> <span class="facet-q">(整理整頓が好きか)</span></li>
+            <li><span class="facet-name">義務感</span> <span class="facet-q">(約束やルールを守るか)</span></li>
+            <li><span class="facet-name">達成努力</span> <span class="facet-q">(期待以上の努力をするか)</span></li>
+            <li><span class="facet-name">自己規律</span> <span class="facet-q">(計画を実行に移せるか)</span></li>
+            <li><span class="facet-name">慎重さ</span> <span class="facet-q">(考慮してから行動するか)</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="sec4">
+        <h2>ファセットが見せる「同じ因子の中での違い」</h2>
+
+        <p>因子スコアが同じでも、ファセットの組み合わせ次第で実際の性格は大きく異なります。具体例を3つ挙げます。</p>
+
+        <div class="highlight-box">
+          <p><strong>誠実性が高い人</strong></p>
+          <p>秩序性は高いが慎重さは低い。机はピカピカ、スケジュール帳も完璧。でも衝動買いが多く、「あとで考えればよかった」と後悔することも少なくない。几帳面さと衝動性が同じ人の中に共存している。因子スコアだけではこの矛盾は見えません。</p>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>外向性が高い人</strong></p>
+          <p>群居性は高いが主張性は低い。パーティーには喜んで参加するし、大勢でワイワイ過ごすのは大好き。でも自分から場を仕切ったり、意見を先頭に立って主張したりするのは苦手。「人には囲まれていたいけれど、リーダーにはなりたくない」というタイプです。</p>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>協調性が高い人</strong></p>
+          <p>信頼は高いが謙虚さは低い。人は基本的に信じているし、裏切りにも寛容。でも自分の実績や能力についてはしっかりアピールする。「人を信じること」と「自分を控えること」は別のファセットなので、この組み合わせは自然に存在します。</p>
+        </div>
+
+        <p>この3つの例が示しているのは、「同じ因子が高い」二人でも、ファセットを見るとまったく違う性格像が浮かび上がるということです。因子スコアだけを見て「自分は誠実性が高いから几帳面で慎重な人間だ」と思い込むと、実際の自分の行動との間に違和感が生まれます。</p>
+
+        <p>ファセットは、その違和感を解消してくれます。因子スコアが隠している「中身の違い」を可視化する。それがファセットレベル分析の本当の価値です。</p>
+      </section>
+
+      <section id="sec5">
+        <h2>自分のファセットを測るには</h2>
+
+        <p>ビッグファイブの診断には主に2つのバージョンがあります。10問版と120問版です。</p>
+
+        <p>10問版は5因子のスコアだけを出します。手軽で数分で終わりますが、ファセットの情報は含まれていません。「開放性：高」という結果は得られても、「想像力が高いのか冒険性が高いのか」はわからない。</p>
+
+        <p>120問版は30のファセットをすべて測定します。各ファセットにつき4問の設問があり、1〜5点のスコアが出ます。結果画面では因子ごとにファセットが並び、カラーバーで内訳が可視化されるので、「この因子の中でどのファセットが突出しているか」が一目でわかります。</p>
+
+        <p>所要時間は約15分。無料で、登録も不要です。ファセットレベルで自分の性格を理解したい場合は、120問版を受けるのが最も確実な方法です。</p>
+
+        <p>因子スコアを見て「なんか自分と違う気がする」と感じたことがある人は、ファセットを見ることでそのギャップが埋まるかもしれません。「外向性は高いけれど主張性が低い」という結果を見れば、「だから自分はパーティーは好きだけどリーダーにはなりたくないんだ」と腑に落ちる。</p>
+      </section>
+
+    </div><!-- /.article-body -->
+
+    <section id="sec6" class="cta-box">
+      <h2>120問版で自分の30ファセットを測る</h2>
+      <p>120問版を受けることで、30すべてのファセットスコアが因子ごとに整理されて表示されます。因子スコアだけでは見えない「中身の違い」が、カラーバーで直感的に把握できます。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">約15分</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+        <span class="cta-badge">30ファセット測定</span>
+      </div>
+      <a href="https://bigfive.jr-genius.jp/" class="cta-btn">無料でビッグファイブ診断を受ける →</a>
+      <p class="cta-sub-link">まずは手軽に <a href="https://bigfive.jr-genius.jp/">10問版から</a></p>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="openness-high.html">開放性が高い人の特徴と日常生活での現れ方</a></li>
+        <li><a href="conscientiousness-high.html">誠実性が高い人の特徴</a></li>
+        <li><a href="neuroticism-high.html">感受性が高い人の特徴</a></li>
+        <li><a href="seikaku-shinrigaku-top10.html">科学的信憑性トップ10</a></li>
+        <li><a href="mbti-vs-bigfive.html">MBTIとビッグファイブの違い</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>
