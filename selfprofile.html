@@ -865,6 +865,11 @@ function autoFillEdu(silent) {
 // ===== 郵便番号 → 住所自動補完 =====
 function onPostalInput(el) {
   const digits = el.value.replace(/\D/g, '');
+  if (digits.length > 3) {
+    el.value = digits.slice(0, 3) + '-' + digits.slice(3, 7);
+  } else {
+    el.value = digits;
+  }
   if (digits.length === 7) fetchAddress(digits);
 }
 
