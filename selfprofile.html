@@ -89,6 +89,10 @@ body {
   justify-content: space-between;
 }
 .sec-body { padding: 16px; }
+.contact-toggle { margin-top: 10px; }
+.contact-toggle summary { cursor: pointer; font-size: 12px; color: var(--dim); padding: 6px 0; user-select: none; }
+.contact-toggle summary:hover { color: var(--accent); }
+.contact-toggle[open] summary { margin-bottom: 12px; }
 
 /* ===== フォーム ===== */
 .row { margin-bottom: 12px; }
@@ -460,10 +464,18 @@ body.theme-light .priv-bar {
           <input type="text" id="addrBuilding" placeholder="例：○○マンション101" autocomplete="off">
         </div>
       </div>
-      <div class="row">
-        <label>連絡先メールアドレス</label>
-        <input type="text" id="email" placeholder="例：nihon.taro@example.com" autocomplete="off">
-      </div>
+      <!-- 連絡先（基本は非表示） -->
+      <details class="contact-toggle">
+        <summary>連絡先を追加（メール・電話など）</summary>
+        <div class="row">
+          <label>メールアドレス</label>
+          <input type="email" id="email" placeholder="例：nihon.taro@example.com" autocomplete="email">
+        </div>
+        <div class="row">
+          <label>電話番号</label>
+          <input type="tel" id="phone" placeholder="例：090-1234-5678" autocomplete="tel">
+        </div>
+      </details>
     </div>
   </div>
 
@@ -1132,6 +1144,7 @@ function saveAll() {
     addrStreet:     val('addrStreet'),
     addrBuilding:   val('addrBuilding'),
     email:          val('email'),
+    phone:          val('phone'),
     strengths:  val('strengths'),
     weaknesses: val('weaknesses'),
     values:     val('values'),
@@ -1200,7 +1213,7 @@ function loadAll() {
   try { d = JSON.parse(raw); } catch(e) { return; }
 
   const simple = ['lastName','firstName','birthdate','genderOfficial','genderSelf',
-                  'hometown','postalCode','addrPref','addrCity','addrTown','addrStreet','addrBuilding','email',
+                  'hometown','postalCode','addrPref','addrCity','addrTown','addrStreet','addrBuilding','email','phone',
                   'strengths','weaknesses','values','motivation',
                   'background','style','jobTarget','longGoal','memo'];
   simple.forEach(id => {
@@ -1245,6 +1258,12 @@ function loadAll() {
     }
   }
 
+  // 連絡先にデータがあれば自動展開
+  if (d.email || d.phone) {
+    const ct = document.querySelector('.contact-toggle');
+    if (ct) ct.open = true;
+  }
+
   if (d.updatedAt) showLastSave(d.updatedAt);
 }
 
@@ -1270,6 +1289,7 @@ function buildFullText() {
   const addrFull = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
   if (d.postalCode || addrFull) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull);
   if (d.email)           lines.push('連絡先: ' + d.email);
+  if (d.phone)           lines.push('電話: ' + d.phone);
   lines.push('');
 
   if (d.edu && d.edu.length) {
@@ -1363,6 +1383,7 @@ function buildResumeText() {
   const addrFull2 = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
   if (d.postalCode || addrFull2) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull2);
   if (d.email)          lines.push('連絡先: ' + d.email);
+  if (d.phone)          lines.push('電話: ' + d.phone);
   lines.push('', '■ 学歴', '');
   if (d.edu && d.edu.length) {
     d.edu.forEach(r => {
