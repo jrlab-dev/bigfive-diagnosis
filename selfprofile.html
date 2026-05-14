@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私の自己プロファイル — 自分を持ち歩く</title>
+<meta name="description" content="名前・学歴・職歴・性格を記録する自分専用のプロファイル。外部には一切送信されず、このデバイスにのみ保存されます。">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:      #111210;
+  --bg2:     #1a1917;
+  --bg3:     #222120;
+  --bg4:     #2a2927;
+  --border:  rgba(255,255,255,0.09);
+  --border2: rgba(255,255,255,0.05);
+  --text:    #ddd8d0;
+  --dim:     #888078;
+  --dim2:    #555048;
+  --accent:  #a08060;
+  --label:   #8a8480;
+  --danger:  #c06060;
+  --success: #60a880;
+  --c-O: #8b5cf6; --c-C: #3b82f6; --c-E: #f97316; --c-A: #f472b6; --c-N: #14b8a6;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ===== プライバシーバナー ===== */
+.priv-bar {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border2);
+  padding: 7px 16px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* ===== レイアウト ===== */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 16px 100px;
+}
+
+/* ===== ページヘッダー ===== */
+.page-head {
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.page-head h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 4px; }
+.page-head p { font-size: 12px; color: var(--dim); }
+.last-save { font-size: 11px; color: var(--dim2); margin-top: 6px; }
+
+/* ===== セクション ===== */
+.sec {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.sec-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border2);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sec-body { padding: 16px; }
+
+/* ===== フォーム ===== */
+.row { margin-bottom: 12px; }
+.row:last-child { margin-bottom: 0; }
+.row label {
+  display: block;
+  font-size: 11px;
+  color: var(--dim);
+  margin-bottom: 4px;
+}
+input[type=text], input[type=number], input[type=date],
+textarea, select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 11px;
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  outline: none;
+  appearance: none;
+  transition: border-color .18s;
+}
+input[type=text]:focus, input[type=number]:focus, input[type=date]:focus,
+textarea:focus, select:focus { border-color: var(--accent); }
+input::placeholder, textarea::placeholder { color: var(--dim2); }
+textarea { resize: vertical; min-height: 72px; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* ===== ビッグファイブ 数字のみ ===== */
+.bf-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.bf-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+.bf-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.bf-key { color: var(--dim); }
+.bf-val { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.bf-auto-tag {
+  font-size: 10px; color: var(--success);
+  background: rgba(96,168,128,.1);
+  border: 1px solid rgba(96,168,128,.2);
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 4px;
+}
+.bf-manual-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-top: 12px; }
+.bf-manual-grid .row { margin-bottom: 0; }
+
+/* ===== 学歴テーブル ===== */
+.edu-table { width: 100%; border-collapse: collapse; }
+.edu-table th {
+  font-size: 10px; color: var(--dim); font-weight: 500;
+  text-align: left; padding: 0 6px 6px;
+  letter-spacing: 0.04em;
+}
+.edu-table td { padding: 4px 3px; vertical-align: top; }
+.edu-table td input, .edu-table td select {
+  padding: 6px 8px; font-size: 12px;
+}
+.edu-yr  { width: 72px; }
+.edu-mo  { width: 52px; }
+.edu-ev  { width: 62px; }
+.edu-nm  { }
+.edu-del {
+  width: 28px; text-align: center;
+}
+.btn-del-row {
+  background: none; border: none; color: var(--dim2); cursor: pointer;
+  font-size: 16px; line-height: 1; padding: 4px;
+  transition: color .15s;
+}
+.btn-del-row:hover { color: var(--danger); }
+.btn-add-row {
+  font-size: 12px; color: var(--dim);
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+  font-family: inherit;
+  margin-top: 10px;
+}
+.btn-add-row:hover { color: var(--text); border-color: var(--accent); }
+.btn-auto {
+  font-size: 11px; color: var(--accent);
+  background: rgba(160,128,96,.1);
+  border: 1px solid rgba(160,128,96,.25);
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s;
+}
+.btn-auto:hover { background: rgba(160,128,96,.2); }
+
+/* ===== 職歴・資格テーブル ===== */
+.rec-table { width: 100%; border-collapse: collapse; }
+.rec-table th {
+  font-size: 10px; color: var(--dim); font-weight: 500;
+  text-align: left; padding: 0 4px 6px;
+  letter-spacing: .04em;
+}
+.rec-table td { padding: 3px 2px; vertical-align: middle; }
+.rec-table td input, .rec-table td select { padding: 6px 7px; font-size: 12px; }
+.tenure-cell {
+  font-size: 10px; color: var(--accent);
+  white-space: nowrap; padding: 0 4px !important; min-width: 56px;
+}
+.btn-detail {
+  font-size: 11px; color: var(--dim);
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 3px 8px;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.btn-detail:hover, .btn-detail.open { color: var(--accent); border-color: rgba(160,128,96,.4); }
+.detail-row > td {
+  background: var(--bg3);
+  padding: 10px 10px 12px !important;
+  border-bottom: 1px solid var(--border2);
+}
+.detail-inner { display: grid; gap: 8px; }
+.detail-inner .row { margin: 0; }
+
+/* ===== 保存バー ===== */
+.save-bar {
+  position: sticky; bottom: 0;
+  background: linear-gradient(to top, var(--bg) 60%, transparent);
+  padding: 14px 0 6px;
+}
+.btn-save {
+  width: 100%;
+  background: var(--accent);
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: opacity .2s;
+}
+.btn-save:hover { opacity: .88; }
+
+/* ===== 出力セクション ===== */
+.export-sec {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 8px;
+}
+.export-head { font-size: 11px; font-weight: 700; color: var(--label); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px; }
+.export-btns { display: flex; flex-direction: column; gap: 8px; }
+.btn-exp {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: inherit; font-size: 13px;
+  cursor: pointer; text-align: left;
+  transition: border-color .18s, background .18s;
+}
+.btn-exp:hover { border-color: var(--accent); background: var(--bg4); }
+.btn-exp svg { color: var(--accent); flex-shrink: 0; }
+.btn-exp-label { flex: 1; }
+.btn-exp-sub { display: block; font-size: 11px; color: var(--dim); margin-top: 1px; }
+
+/* ===== 削除 ===== */
+.danger-zone { text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border2); }
+.btn-delete {
+  font-size: 11px; color: var(--danger);
+  background: none; border: 1px solid rgba(192,96,96,.2);
+  border-radius: 5px; padding: 6px 14px;
+  cursor: pointer; font-family: inherit; opacity: .65;
+  transition: opacity .2s;
+}
+.btn-delete:hover { opacity: 1; }
+
+/* ===== トースト ===== */
+.toast {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 8px 18px;
+  font-size: 12px; color: var(--text);
+  white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity .22s, transform .22s;
+  z-index: 9999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== 戻るリンク ===== */
+.back { display: inline-flex; align-items: center; gap: 5px; color: var(--dim); text-decoration: none; font-size: 12px; margin-bottom: 22px; transition: color .18s; }
+.back:hover { color: var(--text); }
+
+/* ===== 勤務期間バッジ ===== */
+.tenure-label {
+  font-size: 11px;
+  color: var(--accent);
+  min-height: 1em;
+}
+
+/* ===== 他診断チップ ===== */
+.other-diag-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.diag-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 10px 3px 8px;
+  font-size: 11px;
+}
+.diag-chip-label { color: var(--dim); }
+.diag-chip-val { font-weight: 700; color: var(--text); }
+
+/* ===== ライトモード ===== */
+body.theme-light {
+  --bg:      #f5f3ef;
+  --bg2:     #ffffff;
+  --bg3:     #f0ece6;
+  --bg4:     #e8e4de;
+  --border:  rgba(0,0,0,0.10);
+  --border2: rgba(0,0,0,0.06);
+  --text:    #1c1a18;
+  --dim:     #706858;
+  --dim2:    #b8b0a8;
+  --accent:  #8a6530;
+  --label:   #888078;
+  --danger:  #b04040;
+  --success: #3a8060;
+}
+body.theme-light .priv-bar {
+  background: rgba(0,0,0,0.03);
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+
+/* ===== 印刷 ===== */
+@media print {
+  .priv-bar, .save-bar, .export-sec, .danger-zone, .back,
+  .btn-auto, .btn-add-row, .btn-del-row, .work-card-del,
+  .bf-manual-grid { display: none !important; }
+  body { background: #fff; color: #111; }
+  .sec { border: 1px solid #ccc; break-inside: avoid; }
+  .sec-head { color: #555; background: #f5f5f5; }
+  input, textarea, select { border: 1px solid #ddd; background: #fafafa; }
+  .page { padding: 10px; max-width: 100%; }
+}
+</style>
+</head>
+<body><script>if(localStorage.getItem('bigfive_theme')==='light')document.body.classList.add('theme-light');</script>
+
+<div class="priv-bar">
+  🔒 このデータは外部に一切送信されません。このデバイスにのみ保存されます。
+</div>
+
+<div class="page">
+  <a href="mypage.html" class="back">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    マイページへ戻る
+  </a>
+
+  <div class="page-head">
+    <h1>私の自己プロファイル</h1>
+    <p>AIに「私」を伝えるためのコンテキストドキュメント。就職・転職・ブログ執筆・キャリア相談など、AIを使うたびに一から説明しなくて済む。</p>
+    <div class="last-save" id="lastSave"></div>
+  </div>
+
+  <!-- 1. 基本情報 -->
+  <!-- 都道府県datalist -->
+  <datalist id="prefList">
+    <option value="北海道"><option value="青森県"><option value="岩手県"><option value="宮城県">
+    <option value="秋田県"><option value="山形県"><option value="福島県"><option value="茨城県">
+    <option value="栃木県"><option value="群馬県"><option value="埼玉県"><option value="千葉県">
+    <option value="東京都"><option value="神奈川県"><option value="新潟県"><option value="富山県">
+    <option value="石川県"><option value="福井県"><option value="山梨県"><option value="長野県">
+    <option value="岐阜県"><option value="静岡県"><option value="愛知県"><option value="三重県">
+    <option value="滋賀県"><option value="京都府"><option value="大阪府"><option value="兵庫県">
+    <option value="奈良県"><option value="和歌山県"><option value="鳥取県"><option value="島根県">
+    <option value="岡山県"><option value="広島県"><option value="山口県"><option value="徳島県">
+    <option value="香川県"><option value="愛媛県"><option value="高知県"><option value="福岡県">
+    <option value="佐賀県"><option value="長崎県"><option value="熊本県"><option value="大分県">
+    <option value="宮崎県"><option value="鹿児島県"><option value="沖縄県">
+  </datalist>
+
+  <div class="sec">
+    <div class="sec-head">基本情報</div>
+    <div class="sec-body">
+      <div class="cols3">
+        <div class="row">
+          <label>姓（名字）</label>
+          <input type="text" id="lastName" placeholder="例：日本">
+        </div>
+        <div class="row">
+          <label>名（下の名前）</label>
+          <input type="text" id="firstName" placeholder="例：太郎">
+        </div>
+        <div class="row">
+          <label>生年月日 <span style="font-size:10px;color:var(--dim2);">19820722 形式でも可</span></label>
+          <input type="text" id="birthdate" placeholder="例：19820722"
+            onblur="finalizeBirthdate(this)">
+        </div>
+      </div>
+      <div class="cols2">
+        <div class="row">
+          <label>公式の性別 <span style="font-size:10px;color:var(--dim2);">履歴書・公文書用</span></label>
+          <select id="genderOfficial">
+            <option value=""></option>
+            <option value="男性">男性</option>
+            <option value="女性">女性</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>自分のプロフィール上の性別 <span style="font-size:10px;color:var(--dim2);">ブログ・AI用</span></label>
+          <input type="text" id="genderSelf" placeholder="例：男性、ノンバイナリー、回答しない">
+        </div>
+      </div>
+      <div class="cols2">
+        <div class="row">
+          <label>出身地</label>
+          <input type="text" id="hometown" list="prefList" placeholder="例：神奈川県横浜市">
+        </div>
+        <div class="row">
+          <label>郵便番号 <span style="font-size:10px;color:var(--dim2);">7桁で自動補完</span></label>
+          <input type="text" id="postalCode" placeholder="例：2310023" maxlength="8"
+            oninput="onPostalInput(this)">
+        </div>
+      </div>
+      <div class="cols3">
+        <div class="row">
+          <label>都道府県</label>
+          <input type="text" id="addrPref" list="prefList" placeholder="例：神奈川県">
+        </div>
+        <div class="row">
+          <label>市区町村</label>
+          <input type="text" id="addrCity" placeholder="例：横浜市中区"
+            onblur="reversePostalLookup()">
+        </div>
+        <div class="row">
+          <label>町域</label>
+          <input type="text" id="addrTown" placeholder="例：山手町"
+            onblur="reversePostalLookup()">
+        </div>
+      </div>
+      <div class="cols2">
+        <div class="row">
+          <label>丁番地</label>
+          <input type="text" id="addrStreet" placeholder="例：1-1">
+        </div>
+        <div class="row">
+          <label>建物名・部屋番号</label>
+          <input type="text" id="addrBuilding" placeholder="例：○○マンション101">
+        </div>
+      </div>
+      <div class="row">
+        <label>連絡先メールアドレス</label>
+        <input type="text" id="email" placeholder="例：nihon.taro@example.com">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 学歴 -->
+  <div class="sec">
+    <div class="sec-head">
+      <span>学歴</span>
+      <button class="btn-auto" id="btnAutoEdu" onclick="autoFillEdu()" style="display:none">生年月日から自動入力</button>
+    </div>
+    <div class="sec-body">
+      <p id="eduHint" style="font-size:11px;color:var(--dim);margin-bottom:12px;">生年月日を入力すると「生年月日から自動入力」ボタンが表示されます。</p>
+      <table class="edu-table">
+        <thead>
+          <tr>
+            <th class="edu-yr">年</th>
+            <th class="edu-mo">月</th>
+            <th class="edu-ev">種別</th>
+            <th class="edu-nm">学校名・学部・専攻など</th>
+            <th class="edu-del"></th>
+          </tr>
+        </thead>
+        <tbody id="eduBody"></tbody>
+      </table>
+      <button class="btn-add-row" onclick="addEduRow()">＋ 行を追加</button>
+    </div>
+  </div>
+
+  <!-- 3. 職務経歴 -->
+  <div class="sec">
+    <div class="sec-head">職務経歴</div>
+    <div class="sec-body">
+      <table class="rec-table">
+        <thead><tr>
+          <th>会社名・組織名</th>
+          <th style="width:76px">役職・職種</th>
+          <th style="width:98px">入社年月</th>
+          <th style="width:98px">退社年月</th>
+          <th style="width:60px">期間</th>
+          <th style="width:44px"></th>
+          <th style="width:26px"></th>
+        </tr></thead>
+        <tbody id="workBody"></tbody>
+      </table>
+      <button class="btn-add-row" onclick="addWorkRow()">＋ 職歴を追加</button>
+    </div>
+  </div>
+
+  <!-- 4. 資格・スキル -->
+  <div class="sec">
+    <div class="sec-head">資格・スキル</div>
+    <div class="sec-body">
+      <table class="rec-table">
+        <thead><tr>
+          <th>資格・スキル名</th>
+          <th style="width:112px">取得年月</th>
+          <th style="width:44px"></th>
+          <th style="width:26px"></th>
+        </tr></thead>
+        <tbody id="skillBody"></tbody>
+      </table>
+      <button class="btn-add-row" onclick="addSkillRow()">＋ 資格・スキルを追加</button>
+    </div>
+  </div>
+
+  <!-- 5. 性格・心理データ -->
+  <div class="sec">
+    <div class="sec-head">
+      <span>性格・心理データ</span>
+      <span id="bfTag"></span>
+    </div>
+    <div class="sec-body">
+      <div style="font-size:10px;color:var(--dim2);margin-bottom:6px;letter-spacing:.04em;">ビッグファイブ</div>
+      <div class="bf-row" id="bfDisplay">
+        <span style="font-size:12px;color:var(--dim);">診断データなし</span>
+      </div>
+      <div id="bfManualWrap" style="display:none">
+        <div class="bf-manual-grid">
+          <div class="row"><label>開放性 O</label><input type="number" id="m-O" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>誠実性 C</label><input type="number" id="m-C" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>外向性 E</label><input type="number" id="m-E" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>協調性 A</label><input type="number" id="m-A" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>感受性 N</label><input type="number" id="m-N" min="0" max="100" placeholder="0-100"></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-auto" onclick="reloadBf()">診断結果を再読み込み</button>
+        <button class="btn-auto" id="btnBfManual" onclick="toggleBfManual()">手動で入力する</button>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--border2);padding-top:12px;">
+        <div style="font-size:10px;color:var(--dim2);margin-bottom:8px;letter-spacing:.04em;">他の診断結果</div>
+        <div class="other-diag-wrap" id="otherDiagDisplay">
+          <span style="font-size:11px;color:var(--dim2);">他の診断を受けると結果が表示されます</span>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="btn-auto" onclick="loadOtherDiagnostics()">診断結果を再読み込み</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 自己分析 -->
+  <div class="sec">
+    <div class="sec-head">自己分析</div>
+    <div class="sec-body">
+      <div class="row">
+        <label>強み・得意なこと</label>
+        <textarea id="strengths" rows="3" placeholder="例：計画を立てて粘り強く実行できる。細部への注意力が高い。一度信頼した人を長期的にサポートする。"></textarea>
+      </div>
+      <div class="row">
+        <label>弱み・課題・成長したい点</label>
+        <textarea id="weaknesses" rows="3" placeholder="例：完璧主義で人に任せるのが苦手。新しい環境への適応に時間がかかる。"></textarea>
+      </div>
+      <div class="row">
+        <label>価値観・仕事で大切にしていること</label>
+        <textarea id="values" rows="3" placeholder="例：誠実であること、継続する力、チームへの貢献。成果より過程を重視したい。"></textarea>
+      </div>
+      <div class="row">
+        <label>志望動機の素材・仕事への思い（転職・就活用）</label>
+        <textarea id="motivation" rows="3" placeholder="例：前職で○○を経験し、より○○に関わる仕事がしたいと感じた。人の成長を支援することに喜びを感じる。"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 生い立ち・背景（任意） -->
+  <div class="sec">
+    <div class="sec-head">生い立ち・背景（任意）</div>
+    <div class="sec-body">
+      <div class="row">
+        <label>生い立ち・家族・転機になった出来事</label>
+        <textarea id="background" rows="4" placeholder="例：長野県の山間部で育つ。3人兄弟の長男。農家の家庭で自然の中で過ごした幼少期が今の価値観に大きく影響。"></textarea>
+      </div>
+      <div class="row">
+        <label>対人スタイル・接し方のコツ（AIへの補足に有効）</label>
+        <textarea id="style" rows="3" placeholder="例：結論から話してほしい。フィードバックは直接的に。長い説明より箇条書きが好き。"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. 目標 -->
+  <div class="sec">
+    <div class="sec-head">目標</div>
+    <div class="sec-body">
+      <div class="cols2">
+        <div class="row">
+          <label>希望職種・希望条件</label>
+          <textarea id="jobTarget" rows="3" placeholder="例：ITエンジニア、フルリモート可、年収500万以上"></textarea>
+        </div>
+        <div class="row">
+          <label>長期目標・理想の姿</label>
+          <textarea id="longGoal" rows="3" placeholder="例：自分のペースで働ける環境を作る。専門性を活かして独立したい。"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. 自由メモ -->
+  <div class="sec">
+    <div class="sec-head">自由メモ</div>
+    <div class="sec-body">
+      <div class="row">
+        <textarea id="memo" rows="3" placeholder="趣味、AIへの補足、その他なんでも"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 保存ボタン -->
+  <div class="save-bar">
+    <button class="btn-save" onclick="saveAll()">保存する</button>
+  </div>
+
+  <!-- 出力 -->
+  <div class="export-sec" style="margin-top:24px">
+    <div class="export-head">出力・エクスポート</div>
+    <div class="export-head" style="margin-top:0;margin-bottom:6px;font-size:10px;color:var(--dim2);">── AIに渡す ──────────────</div>
+    <div class="export-btns">
+      <button class="btn-exp" onclick="copyAi()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <span class="btn-exp-label">
+          プロフィール全文をコピー（汎用）
+          <span class="btn-exp-sub">AIとの会話冒頭に貼り付けて「私のことを踏まえて話してください」と使う</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="copyNarikiruPrompt()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span class="btn-exp-label">
+          「私になりきって」プロンプトをコピー
+          <span class="btn-exp-sub">AIが自分として返答・文章生成する。SNS投稿・返信文・自己紹介など</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="copyBlogPrompt()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="btn-exp-label">
+          「私の視点でブログ記事を書いて」プロンプトをコピー
+          <span class="btn-exp-sub">自分の価値観・文体・生い立ちを踏まえた記事をAIが執筆</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="copySelfPrPrompt()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span class="btn-exp-label">
+          自己PR草稿をAIに生成させるプロンプトをコピー
+          <span class="btn-exp-sub">就職・転職活動用の自己PR文をAIに書かせるプロンプト</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="copyResume()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="btn-exp-label">
+          履歴書フォーマットでコピー
+          <span class="btn-exp-sub">学歴・職歴・資格を日本の履歴書形式に整形してコピー</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="downloadTxt()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span class="btn-exp-label">
+          テキストファイルとして保存
+          <span class="btn-exp-sub">全データを .txt ファイルでダウンロード</span>
+        </span>
+      </button>
+      <button class="btn-exp" onclick="doPrint()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span class="btn-exp-label">
+          PDFとして保存
+          <span class="btn-exp-sub">印刷ダイアログで「PDFに保存」を選択</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="danger-zone">
+    <button class="btn-delete" onclick="deleteAll()">プロファイルをすべて削除する</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY = 'bigfive_selfprofile';
+
+// ===== 初期化 =====
+window.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+  reloadBf();
+  loadOtherDiagnostics();
+  setupEnterNav();
+});
+
+// ===== 生年月日：blur時に整形 =====
+function finalizeBirthdate(el) {
+  const v = el.value.trim();
+  if (!v) return;
+
+  // 数字のみ抽出
+  const digits = v.replace(/\D/g, '');
+
+  if (digits.length === 8) {
+    // YYYYMMDD → 1982-07-22
+    el.value = digits.slice(0,4) + '-' + digits.slice(4,6) + '-' + digits.slice(6,8);
+  } else if (digits.length === 6) {
+    // YYMMDD → 1982-07-22 (YY>30なら19xx、以下なら20xx)
+    const yy = parseInt(digits.slice(0,2), 10);
+    const century = yy > 30 ? '19' : '20';
+    el.value = century + digits.slice(0,2) + '-' + digits.slice(2,4) + '-' + digits.slice(4,6);
+  } else if (/^\d{4}[-\/\.]\d{1,2}[-\/\.]\d{1,2}$/.test(v)) {
+    // 1982/7/22 や 1982.7.22 形式
+    const parts = v.split(/[-\/\.]/);
+    el.value = parts[0] + '-' + parts[1].padStart(2,'0') + '-' + parts[2].padStart(2,'0');
+  }
+  // それ以外はそのまま残す（ユーザーが自分で入力した場合）
+
+  onBirthdateChange();
+}
+function onBirthdateChange() {
+  const v = document.getElementById('birthdate').value;
+  const btn = document.getElementById('btnAutoEdu');
+  const hint = document.getElementById('eduHint');
+  const hasDate = /^\d{4}-\d{2}-\d{2}$/.test(v);
+  if (hasDate) {
+    btn.style.display = '';
+    if (hint) hint.style.display = 'none';
+    // 学歴が空の場合は自動入力
+    if (!document.querySelector('#eduBody tr')) {
+      autoFillEdu(true);
+    }
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+// ===== Enterキーで次フィールドへ移動 =====
+function setupEnterNav() {
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    const el = e.target;
+    // textareaはEnterで改行（移動しない）
+    if (el.tagName === 'TEXTAREA') return;
+    if (el.tagName === 'BUTTON') return;
+    e.preventDefault();
+    const all = Array.from(document.querySelectorAll(
+      'input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled])'
+    ));
+    const idx = all.indexOf(el);
+    if (idx >= 0 && idx < all.length - 1) {
+      all[idx + 1].focus();
+      // select要素はfocus後に選択肢を開かない（UX的に自然）
+    }
+  });
+}
+
+// ===== 学歴自動入力 =====
+function autoFillEdu(silent) {
+  const v = document.getElementById('birthdate').value;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    if (!silent) showToast('生年月日を正しく入力してください（例：19820722）');
+    return;
+  }
+  const [y, m, d] = v.split('-').map(Number);
+
+  // 4/2以降生まれは+7、4/1以前は+6
+  const offset = (m > 4 || (m === 4 && d >= 2)) ? 7 : 6;
+  const eStart = y + offset; // 小学校入学年
+
+  const nowDate = new Date();
+  const nowY = nowDate.getFullYear();
+  const nowM = nowDate.getMonth() + 1;
+
+  const allRows = [
+    { yr: eStart + 6,  mo: 3, ev: '卒業', nm: '小学校' },
+    { yr: eStart + 6,  mo: 4, ev: '入学', nm: '中学校' },
+    { yr: eStart + 9,  mo: 3, ev: '卒業', nm: '中学校' },
+    { yr: eStart + 9,  mo: 4, ev: '入学', nm: '高等学校' },
+    { yr: eStart + 12, mo: 3, ev: '卒業', nm: '高等学校' },
+    { yr: eStart + 12, mo: 4, ev: '入学', nm: '大学' },
+    { yr: eStart + 16, mo: 3, ev: '卒業', nm: '大学' },
+  ];
+
+  // 現在時点を超えた行は除外
+  const rows = allRows.filter(r => r.yr < nowY || (r.yr === nowY && r.mo <= nowM));
+
+  const tbody = document.getElementById('eduBody');
+  tbody.innerHTML = '';
+  if (rows.length === 0) {
+    if (!silent) showToast('まだ卒業・入学の記録がありません');
+    return;
+  }
+  rows.forEach(r => addEduRow(r));
+  showToast('学歴を自動表示しました（学校名を修正してください）');
+}
+
+// ===== 郵便番号 → 住所自動補完 =====
+function onPostalInput(el) {
+  const digits = el.value.replace(/\D/g, '');
+  if (digits.length === 7) fetchAddress(digits);
+}
+
+async function fetchAddress(zip) {
+  try {
+    const res = await fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + zip);
+    const json = await res.json();
+    if (json.results && json.results[0]) {
+      const r = json.results[0];
+      document.getElementById('addrPref').value = r.address1;
+      document.getElementById('addrCity').value = r.address2;
+      document.getElementById('addrTown').value = r.address3 || '';
+      document.getElementById('addrStreet').focus();
+      showToast('住所を自動入力しました');
+    } else {
+      showToast('該当する住所が見つかりませんでした');
+    }
+  } catch(e) {
+    if (location.protocol === 'file:') {
+      showToast('ローカルファイルでは通信できません — サイトを公開後に動作します');
+    } else {
+      showToast('住所の取得に失敗しました（通信エラー）');
+    }
+  }
+}
+
+// ===== 住所 → 郵便番号（逆引き）=====
+async function reversePostalLookup() {
+  const postalEl = document.getElementById('postalCode');
+  if (postalEl.value.replace(/\D/g, '').length >= 7) return; // すでに入力済みなら何もしない
+
+  const pref  = document.getElementById('addrPref').value.trim();
+  const city  = document.getElementById('addrCity').value.trim();
+  const town  = document.getElementById('addrTown').value.trim();
+  const query = [pref, city, town].filter(Boolean).join('');
+  if (query.length < 4) return;
+
+  try {
+    const res  = await fetch('https://zipcloud.ibsnet.co.jp/api/search?address=' + encodeURIComponent(query));
+    const json = await res.json();
+    if (!json.results || !json.results.length) return;
+    if (json.results.length === 1) {
+      const z = json.results[0].zipcode;
+      postalEl.value = z.slice(0, 3) + '-' + z.slice(3);
+      showToast('郵便番号を自動入力しました');
+    } else {
+      showToast('候補が' + json.results.length + '件あります — 町域まで入力すると絞り込めます');
+    }
+  } catch(e) {
+    if (location.protocol === 'file:') {
+      showToast('ローカルファイルでは通信できません — サイトを公開後に動作します');
+    }
+  }
+}
+
+// ===== 他の診断結果を読み込み・表示 =====
+function loadOtherDiagnostics() {
+  const items = [];
+
+  // HSP
+  try {
+    const r = JSON.parse(localStorage.getItem('hsp_result') || 'null');
+    if (r && r.scores) items.push({ label: 'HSP', value: r.scores.total + '点' });
+  } catch(e) {}
+
+  // 愛着スタイル
+  try {
+    const r = JSON.parse(localStorage.getItem('attachment_result') || 'null');
+    if (r && r.typeKey) {
+      const names = { secure: '安心ベース型', anxious: 'つながり重視型', avoidant: '自律尊重型', disorganized: '混乱型' };
+      items.push({ label: '愛着スタイル', value: names[r.typeKey] || r.typeKey });
+    }
+  } catch(e) {}
+
+  // EQ
+  try {
+    const r = JSON.parse(localStorage.getItem('eq_result') || 'null');
+    if (r) items.push({ label: 'EQ', value: r.levelName || '診断済' });
+  } catch(e) {}
+
+  // インポスター症候群
+  try {
+    const r = JSON.parse(localStorage.getItem('impostor_result') || 'null');
+    if (r) items.push({ label: 'インポスター', value: r.severityName || r.severityLevel });
+  } catch(e) {}
+
+  // 統制の所在
+  try {
+    const r = JSON.parse(localStorage.getItem('locus_result') || 'null');
+    if (r) items.push({ label: '統制の所在', value: r.typeName || r.type });
+  } catch(e) {}
+
+  // SDT（動機スタイル）
+  try {
+    const r = JSON.parse(localStorage.getItem('sdt_result') || 'null');
+    if (r && r.strongest) {
+      const names = { autonomy: '自律駆動型', competence: '有能感重視型', relatedness: '関係重視型' };
+      items.push({ label: '動機スタイル', value: names[r.strongest] || r.strongest });
+    }
+  } catch(e) {}
+
+  // マインドセット
+  try {
+    const r = JSON.parse(localStorage.getItem('mindset_result') || 'null');
+    if (r && r.type) {
+      const names = { growth: 'しなやか型', fixed: '硬直型' };
+      items.push({ label: 'マインドセット', value: names[r.type] || r.type });
+    }
+  } catch(e) {}
+
+  // シュワルツ価値観
+  try {
+    const r = JSON.parse(localStorage.getItem('schwartz_result') || 'null');
+    if (r && r.top3 && r.top3.length) items.push({ label: '価値観(Top)', value: r.top3.slice(0, 2).join('・') });
+  } catch(e) {}
+
+  const wrap = document.getElementById('otherDiagDisplay');
+  if (!items.length) {
+    wrap.innerHTML = '<span style="font-size:11px;color:var(--dim2);">他の診断を受けると結果が表示されます</span>';
+    return;
+  }
+  wrap.innerHTML = '<div class="other-diag-wrap">' + items.map(it =>
+    `<span class="diag-chip"><span class="diag-chip-label">${it.label}</span>&nbsp;<span class="diag-chip-val">${it.value}</span></span>`
+  ).join('') + '</div>';
+}
+
+// ===== 学歴行追加 =====
+function addEduRow(data) {
+  const tbody = document.getElementById('eduBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="edu-yr"><input type="number" class="edu-yr-in" placeholder="年" min="1950" max="2050" value="${data ? data.yr : ''}"></td>
+    <td class="edu-mo"><input type="number" class="edu-mo-in" placeholder="月" min="1" max="12" value="${data ? data.mo : ''}"></td>
+    <td class="edu-ev">
+      <select class="edu-ev-in">
+        <option value="卒業" ${data && data.ev === '卒業' ? 'selected' : ''}>卒業</option>
+        <option value="入学" ${data && data.ev === '入学' ? 'selected' : ''}>入学</option>
+        <option value="修了" ${data && data.ev === '修了' ? 'selected' : ''}>修了</option>
+        <option value="中退" ${data && data.ev === '中退' ? 'selected' : ''}>中退</option>
+        <option value="在学中" ${data && data.ev === '在学中' ? 'selected' : ''}>在学中</option>
+      </select>
+    </td>
+    <td class="edu-nm"><input type="text" class="edu-nm-in" placeholder="学校名・学部・専攻" value="${data ? escHtml(data.nm) : ''}"></td>
+    <td class="edu-del"><button class="btn-del-row" onclick="this.closest('tr').remove()" title="削除">×</button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ===== 職歴行追加（テーブル形式）=====
+function addWorkRow(data) {
+  const tbody = document.getElementById('workBody');
+  const id = 'wr_' + Date.now() + '_' + Math.random().toString(36).slice(2,5);
+  const tr = document.createElement('tr');
+  tr.id = id;
+  tr.innerHTML = `
+    <td><input type="text" class="wc-co" placeholder="例：株式会社○○" value="${data ? escHtml(data.co||'') : ''}"></td>
+    <td><input type="text" class="wc-pos" placeholder="例：営業" value="${data ? escHtml(data.pos||'') : ''}"></td>
+    <td><input type="month" class="wc-from" value="${data ? (data.from||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
+    <td><input type="month" class="wc-to" value="${data ? (data.to||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
+    <td class="tenure-cell"></td>
+    <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
+    <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
+  `;
+  tbody.appendChild(tr);
+  const dtr = document.createElement('tr');
+  dtr.id = id + '_d';
+  dtr.className = 'detail-row';
+  dtr.style.display = 'none';
+  dtr.innerHTML = `
+    <td colspan="7">
+      <label style="font-size:11px;color:var(--dim);display:block;margin-bottom:5px">業務内容・実績</label>
+      <textarea class="wc-desc" rows="3" placeholder="例：法人営業として新規開拓。年間目標120%達成。チームリーダーとして5名をマネジメント。">${data ? escHtml(data.desc||'') : ''}</textarea>
+    </td>
+  `;
+  tbody.appendChild(dtr);
+  if (data && data.from) updateTenureRow(tr);
+  if (data && data.desc) toggleDetail(id + '_d');
+}
+
+// ===== 資格・スキル行追加（テーブル形式）=====
+function addSkillRow(data) {
+  const tbody = document.getElementById('skillBody');
+  const id = 'sr_' + Date.now() + '_' + Math.random().toString(36).slice(2,5);
+  const tr = document.createElement('tr');
+  tr.id = id;
+  tr.innerHTML = `
+    <td><input type="text" class="sc-name" placeholder="例：普通自動車免許・TOEIC 780点" value="${data ? escHtml(data.name||'') : ''}"></td>
+    <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
+    <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
+    <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
+  `;
+  tbody.appendChild(tr);
+  const dtr = document.createElement('tr');
+  dtr.id = id + '_d';
+  dtr.className = 'detail-row';
+  dtr.style.display = 'none';
+  dtr.innerHTML = `
+    <td colspan="4">
+      <div class="detail-inner" style="grid-template-columns:1fr 1fr">
+        <div class="row"><label>発行機関・認定機関</label>
+          <input type="text" class="sc-issuer" placeholder="例：国土交通省・IIBC" value="${data ? escHtml(data.issuer||'') : ''}">
+        </div>
+        <div class="row"><label>資格番号・スコア</label>
+          <input type="text" class="sc-number" placeholder="例：第123456号・780点" value="${data ? escHtml(data.number||'') : ''}">
+        </div>
+        <div class="row"><label>有効期限</label>
+          <input type="month" class="sc-expiry" value="${data ? (data.expiry||'') : ''}">
+        </div>
+        <div class="row"><label>備考・レベル・詳細</label>
+          <input type="text" class="sc-note" placeholder="例：ビジネス英語可" value="${data ? escHtml(data.note||'') : ''}">
+        </div>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(dtr);
+  if (data && (data.issuer || data.number || data.expiry || data.note)) toggleDetail(id + '_d');
+}
+
+// ===== 詳細開閉・行削除 =====
+function toggleDetail(detailId) {
+  const dtr = document.getElementById(detailId);
+  if (!dtr) return;
+  const isOpen = dtr.style.display !== 'none';
+  dtr.style.display = isOpen ? 'none' : '';
+  const btn = document.getElementById(detailId.replace('_d', ''))?.querySelector('.btn-detail');
+  if (btn) { btn.textContent = isOpen ? '詳細' : '閉じる'; btn.classList.toggle('open', !isOpen); }
+}
+
+function delRowPair(id) {
+  document.getElementById(id)?.remove();
+  document.getElementById(id + '_d')?.remove();
+}
+
+// ===== 勤務期間計算 =====
+function calcTenure(from, to) {
+  if (!from) return '';
+  const [fy, fm] = from.split('-').map(Number);
+  let ty, tm;
+  if (to) {
+    [ty, tm] = to.split('-').map(Number);
+  } else {
+    const now = new Date();
+    ty = now.getFullYear();
+    tm = now.getMonth() + 1;
+  }
+  const months = (ty - fy) * 12 + (tm - fm);
+  if (months < 0) return '';
+  if (months === 0) return '〜1ヶ月';
+  if (months < 12) return months + 'ヶ月';
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  return m > 0 ? y + '年' + m + 'ヶ月' : y + '年';
+}
+
+function updateTenureRow(mainTr) {
+  const from = mainTr.querySelector('.wc-from')?.value;
+  const to   = mainTr.querySelector('.wc-to')?.value;
+  const cell = mainTr.querySelector('.tenure-cell');
+  if (!cell) return;
+  const t = calcTenure(from, to);
+  cell.textContent = t ? t + (to ? '' : '（在）') : '';
+}
+
+// ===== ビッグファイブ読み込み =====
+function reloadBf() {
+  const keys = ['bigfive_my_results','bigfive_my_results_v2','bigfive_my_results_v3'];
+  let scores = null;
+  for (const k of keys) {
+    try {
+      const arr = JSON.parse(localStorage.getItem(k)||'[]');
+      if (arr.length) { scores = arr[arr.length-1].scores; break; }
+    } catch(e) {}
+  }
+  renderBf(scores, 'auto');
+  return scores;
+}
+
+function renderBf(scores, src) {
+  const wrap = document.getElementById('bfDisplay');
+  const tag  = document.getElementById('bfTag');
+  if (!scores) {
+    wrap.innerHTML = '<span style="font-size:12px;color:var(--dim);">診断データなし — 手動入力または診断を受けてください</span>';
+    tag.innerHTML = '';
+    return;
+  }
+  const toP = v => Math.round((v-1)/4*100);
+  const isRaw = (scores.O > 5); // すでに0-100ならそのまま
+  const pct = {
+    O: isRaw ? scores.O : toP(scores.O||scores.o||3),
+    C: isRaw ? scores.C : toP(scores.C||scores.c||3),
+    E: isRaw ? scores.E : toP(scores.E||scores.e||3),
+    A: isRaw ? scores.A : toP(scores.A||scores.a||3),
+    N: isRaw ? scores.N : toP(scores.N||scores.n||3),
+  };
+  window._bfPct = {...pct, source: src};
+  const labels = {O:'開放性',C:'誠実性',E:'外向性',A:'協調性',N:'感受性'};
+  const colors = {O:'var(--c-O)',C:'var(--c-C)',E:'var(--c-E)',A:'var(--c-A)',N:'var(--c-N)'};
+  wrap.innerHTML = ['O','C','E','A','N'].map(k =>
+    `<span class="bf-item"><span class="bf-dot" style="background:${colors[k]}"></span><span class="bf-key">${labels[k]}(${k})</span>&nbsp;<span class="bf-val">${pct[k]}</span></span>`
+  ).join('');
+  tag.innerHTML = src === 'auto' ? '<span class="bf-auto-tag">診断結果より</span>' : '<span class="bf-auto-tag" style="background:rgba(160,128,96,.1);border-color:rgba(160,128,96,.3);color:var(--accent)">手動入力</span>';
+}
+
+function toggleBfManual() {
+  const wrap = document.getElementById('bfManualWrap');
+  const btn  = document.getElementById('btnBfManual');
+  const show = wrap.style.display === 'none';
+  wrap.style.display = show ? '' : 'none';
+  btn.textContent = show ? '手動入力を閉じる' : '手動で入力する';
+  if (show) {
+    ['O','C','E','A','N'].forEach(k => {
+      const el = document.getElementById('m-'+k);
+      if (el && window._bfPct) el.value = window._bfPct[k] || '';
+    });
+  }
+}
+
+function getManualBf() {
+  const vals = {};
+  let any = false;
+  ['O','C','E','A','N'].forEach(k => {
+    const v = parseInt(document.getElementById('m-'+k).value);
+    if (!isNaN(v)) { vals[k] = Math.min(100, Math.max(0, v)); any = true; }
+  });
+  return any ? vals : null;
+}
+
+// ===== 保存 =====
+function saveAll() {
+  const data = {
+    lastName:       val('lastName'),
+    firstName:      val('firstName'),
+    birthdate:      val('birthdate'),
+    genderOfficial: val('genderOfficial'),
+    genderSelf:     val('genderSelf'),
+    hometown:       val('hometown'),
+    postalCode:     val('postalCode'),
+    addrPref:       val('addrPref'),
+    addrCity:       val('addrCity'),
+    addrTown:       val('addrTown'),
+    addrStreet:     val('addrStreet'),
+    addrBuilding:   val('addrBuilding'),
+    email:          val('email'),
+    strengths:  val('strengths'),
+    weaknesses: val('weaknesses'),
+    values:     val('values'),
+    motivation: val('motivation'),
+    background: val('background'),
+    style:      val('style'),
+    jobTarget:  val('jobTarget'),
+    longGoal:   val('longGoal'),
+    memo:       val('memo'),
+  };
+
+  // 学歴
+  data.edu = [];
+  document.querySelectorAll('#eduBody tr').forEach(tr => {
+    data.edu.push({
+      yr: tr.querySelector('.edu-yr-in')?.value || '',
+      mo: tr.querySelector('.edu-mo-in')?.value || '',
+      ev: tr.querySelector('.edu-ev-in')?.value || '',
+      nm: tr.querySelector('.edu-nm-in')?.value || '',
+    });
+  });
+
+  // 職歴
+  data.work = [];
+  document.querySelectorAll('#workBody tr:not(.detail-row)').forEach(tr => {
+    data.work.push({
+      co:   tr.querySelector('.wc-co')?.value  || '',
+      pos:  tr.querySelector('.wc-pos')?.value || '',
+      from: tr.querySelector('.wc-from')?.value || '',
+      to:   tr.querySelector('.wc-to')?.value  || '',
+      desc: document.getElementById(tr.id + '_d')?.querySelector('.wc-desc')?.value || '',
+    });
+  });
+
+  // 資格・スキル
+  data.skills = [];
+  document.querySelectorAll('#skillBody tr:not(.detail-row)').forEach(tr => {
+    data.skills.push({
+      name:   tr.querySelector('.sc-name')?.value  || '',
+      date:   tr.querySelector('.sc-date')?.value  || '',
+      issuer: document.getElementById(tr.id + '_d')?.querySelector('.sc-issuer')?.value || '',
+      number: document.getElementById(tr.id + '_d')?.querySelector('.sc-number')?.value || '',
+      expiry: document.getElementById(tr.id + '_d')?.querySelector('.sc-expiry')?.value || '',
+      note:   document.getElementById(tr.id + '_d')?.querySelector('.sc-note')?.value  || '',
+    });
+  });
+
+  // ビッグファイブ
+  const manual = document.getElementById('bfManualWrap').style.display !== 'none' ? getManualBf() : null;
+  if (manual) { data.bigfive = {...manual, source:'manual'}; renderBf(manual,'manual'); }
+  else if (window._bfPct) data.bigfive = window._bfPct;
+
+  data.updatedAt = new Date().toISOString();
+  localStorage.setItem(KEY, JSON.stringify(data));
+  showLastSave(data.updatedAt);
+  showToast('✓ 保存しました');
+}
+
+function val(id) { return (document.getElementById(id)?.value||'').trim(); }
+
+// ===== 読み込み =====
+function loadAll() {
+  const raw = localStorage.getItem(KEY);
+  if (!raw) return;
+  let d;
+  try { d = JSON.parse(raw); } catch(e) { return; }
+
+  const simple = ['lastName','firstName','birthdate','genderOfficial','genderSelf',
+                  'hometown','postalCode','addrPref','addrCity','addrTown','addrStreet','addrBuilding','email',
+                  'strengths','weaknesses','values','motivation',
+                  'background','style','jobTarget','longGoal','memo'];
+  simple.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && d[id]) el.value = d[id];
+  });
+
+  // 旧 address フィールドの移行（分割前データ対応）
+  if (d.address && !d.addrPref && !d.addrCity && !d.addrTown && !d.addrStreet) {
+    const el = document.getElementById('addrStreet');
+    if (el) el.value = d.address;
+  }
+
+  if (d.birthdate) onBirthdateChange();
+
+  if (d.edu && d.edu.length) {
+    d.edu.forEach(r => addEduRow(r));
+    const hint = document.getElementById('eduHint');
+    if (hint) hint.style.display = 'none';
+  }
+
+  if (d.work && d.work.length) d.work.forEach(w => addWorkRow(w));
+
+  // 資格・スキル（新テーブル形式 or 旧テキスト形式の両対応）
+  if (Array.isArray(d.skills) && d.skills.length) {
+    d.skills.forEach(s => addSkillRow(s));
+  } else if (d.certs || (typeof d.skills === 'string' && d.skills)) {
+    if (d.certs) addSkillRow({ name: d.certs });
+    if (typeof d.skills === 'string' && d.skills) addSkillRow({ name: d.skills });
+  }
+
+  if (d.bigfive) {
+    window._bfPct = d.bigfive;
+    renderBf(d.bigfive, d.bigfive.source || 'auto');
+    if (d.bigfive.source === 'manual') {
+      document.getElementById('bfManualWrap').style.display = '';
+      document.getElementById('btnBfManual').textContent = '手動入力を閉じる';
+      ['O','C','E','A','N'].forEach(k => {
+        const el = document.getElementById('m-'+k);
+        if (el && d.bigfive[k] != null) el.value = d.bigfive[k];
+      });
+    }
+  }
+
+  if (d.updatedAt) showLastSave(d.updatedAt);
+}
+
+function showLastSave(iso) {
+  const d = new Date(iso);
+  document.getElementById('lastSave').textContent =
+    '最終保存：' + d.toLocaleDateString('ja-JP') + ' ' + d.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ===== テキスト生成 =====
+function buildFullText() {
+  const d = getDataObj();
+  const lines = [];
+  lines.push('=== 私のプロファイル ===','');
+
+  lines.push('【基本情報】');
+  const fullName = [d.lastName, d.firstName].filter(Boolean).join(' ');
+  if (fullName)          lines.push('氏名: ' + fullName);
+  if (d.birthdate)       lines.push('生年月日: ' + d.birthdate);
+  if (d.genderOfficial)  lines.push('性別（公式）: ' + d.genderOfficial);
+  if (d.genderSelf)      lines.push('性別（自認）: ' + d.genderSelf);
+  if (d.hometown) lines.push('出身地: ' + d.hometown);
+  const addrFull = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
+  if (d.postalCode || addrFull) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull);
+  if (d.email)           lines.push('連絡先: ' + d.email);
+  lines.push('');
+
+  if (d.edu && d.edu.length) {
+    lines.push('【学歴】');
+    d.edu.forEach(r => {
+      if (r.nm) lines.push(r.yr + '年 ' + r.mo + '月  ' + r.nm + '  ' + r.ev);
+    });
+    lines.push('');
+  }
+
+  if (d.work && d.work.length) {
+    lines.push('【職務経歴】');
+    d.work.forEach(w => {
+      if (w.co) {
+        lines.push(w.co + '（' + w.pos + '）');
+        if (w.from) lines.push('在籍: ' + w.from.replace('-','/') + ' 〜 ' + (w.to ? w.to.replace('-','/') : '現在'));
+        if (w.desc) lines.push(w.desc);
+        lines.push('');
+      }
+    });
+  }
+
+  if (Array.isArray(d.skills) && d.skills.some(s => s.name)) {
+    lines.push('【資格・スキル】');
+    d.skills.forEach(s => {
+      if (!s.name) return;
+      let line = s.name;
+      if (s.date) line += '（' + s.date.replace('-', '/') + '取得）';
+      if (s.number) line += '　' + s.number;
+      if (s.issuer) line += '　' + s.issuer;
+      if (s.expiry) line += '　有効期限:' + s.expiry.replace('-', '/');
+      if (s.note) line += '　' + s.note;
+      lines.push(line);
+    });
+    lines.push('');
+  }
+
+  if (d.bigfive) {
+    const bf = d.bigfive;
+    const labels = {O:'開放性',C:'誠実性',E:'外向性',A:'協調性',N:'感受性'};
+    lines.push('【性格（ビッグファイブ）】');
+    ['O','C','E','A','N'].forEach(k => {
+      if (bf[k] != null) lines.push(labels[k]+'('+k+'): '+bf[k]+'/100');
+    });
+    lines.push('');
+  }
+
+  // 他の診断結果をその場で読む（保存済みの値ではなくリアルタイム）
+  const otherResults = [];
+  try { const r=JSON.parse(localStorage.getItem('hsp_result')||'null'); if(r&&r.scores) otherResults.push('HSP感受性スコア: '+r.scores.total+'点'); } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('attachment_result')||'null'); if(r&&r.typeKey){ const n={secure:'安心ベース型',anxious:'つながり重視型',avoidant:'自律尊重型',disorganized:'混乱型'}; otherResults.push('愛着スタイル: '+(n[r.typeKey]||r.typeKey)); } } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('eq_result')||'null'); if(r) otherResults.push('EQ（感情知性）: '+(r.levelName||'診断済')); } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('impostor_result')||'null'); if(r) otherResults.push('インポスター症候群: '+(r.severityName||r.severityLevel)); } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('locus_result')||'null'); if(r) otherResults.push('統制の所在: '+(r.typeName||r.type)); } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('sdt_result')||'null'); if(r&&r.strongest){ const n={autonomy:'自律駆動型',competence:'有能感重視型',relatedness:'関係重視型'}; otherResults.push('動機スタイル(SDT): '+(n[r.strongest]||r.strongest)); } } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('mindset_result')||'null'); if(r&&r.type){ const n={growth:'しなやかマインドセット',fixed:'硬直マインドセット'}; otherResults.push('マインドセット: '+(n[r.type]||r.type)); } } catch(e){}
+  try { const r=JSON.parse(localStorage.getItem('schwartz_result')||'null'); if(r&&r.top3&&r.top3.length) otherResults.push('重視する価値観: '+r.top3.slice(0,3).join('・')); } catch(e){}
+  if (otherResults.length) {
+    lines.push('【その他の診断結果】');
+    otherResults.forEach(l => lines.push(l));
+    lines.push('');
+  }
+
+  const secs = [
+    ['強み',           'strengths'],
+    ['弱み・課題',     'weaknesses'],
+    ['価値観',         'values'],
+    ['志望動機の素材', 'motivation'],
+    ['生い立ち・背景', 'background'],
+    ['対人スタイル',   'style'],
+    ['希望職種・条件', 'jobTarget'],
+    ['長期目標',       'longGoal'],
+    ['メモ',           'memo'],
+  ];
+  secs.forEach(([label, key]) => {
+    if (d[key]) { lines.push('【'+label+'】'); lines.push(d[key]); lines.push(''); }
+  });
+
+  lines.push('生成日時: ' + new Date().toLocaleDateString('ja-JP'));
+  return lines.join('\n');
+}
+
+function buildResumeText() {
+  const d = getDataObj();
+  const lines = [];
+  // ヘッダー情報（履歴書用）
+  const fullName = [d.lastName, d.firstName].filter(Boolean).join('　');
+  if (fullName)         lines.push('氏名: ' + fullName);
+  if (d.birthdate)      lines.push('生年月日: ' + d.birthdate);
+  if (d.genderOfficial) lines.push('性別: ' + d.genderOfficial);
+  const addrFull2 = [d.addrPref, d.addrCity, d.addrTown, d.addrStreet, d.addrBuilding].filter(Boolean).join('');
+  if (d.postalCode || addrFull2) lines.push('住所: '+(d.postalCode ? '〒'+d.postalCode+' ' : '')+addrFull2);
+  if (d.email)          lines.push('連絡先: ' + d.email);
+  lines.push('', '■ 学歴', '');
+  if (d.edu && d.edu.length) {
+    d.edu.forEach(r => {
+      if (r.nm) lines.push(r.yr + '年 ' + r.mo + '月　' + r.nm + '　' + r.ev);
+    });
+  }
+  lines.push('', '■ 職務経歴', '');
+  if (d.work && d.work.length) {
+    d.work.forEach(w => {
+      if (w.co) {
+        const period = (w.from ? w.from.replace('-','/') : '?') + ' 〜 ' + (w.to ? w.to.replace('-','/') : '現在');
+        lines.push(period + '　' + w.co + '　' + (w.pos||''));
+        if (w.desc) lines.push(w.desc);
+        lines.push('');
+      }
+    });
+  }
+  if (Array.isArray(d.skills) && d.skills.some(s => s.name)) {
+    lines.push('■ 資格・免許・スキル', '');
+    d.skills.forEach(s => {
+      if (!s.name) return;
+      let line = (s.date ? s.date.replace('-', '/') + '　' : '') + s.name;
+      if (s.number) line += '　' + s.number;
+      if (s.note) line += '　' + s.note;
+      lines.push(line);
+    });
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+function buildSelfPrPrompt() {
+  const d = getDataObj();
+  const profile = buildFullText();
+  return `以下は私のプロファイル情報です。このデータをもとに、就職・転職活動で使える自己PR文を300〜400字で書いてください。
+箇条書きではなく、採用担当者に向けた文章形式で作成してください。
+
+---
+${profile}
+---
+
+※ ビッグファイブの数値は参考程度に使ってください。強み・弱み・価値観・志望動機の素材を中心に自己PRを構成してください。`;
+}
+
+function buildNarikiruPrompt() {
+  const d = getDataObj();
+  const fullName = [d.lastName, d.firstName].filter(Boolean).join(' ') || '私';
+  const profile = buildFullText();
+  return `以下のプロファイルは「${fullName}」という人物の自己情報です。
+あなたはこれから、このプロファイルに基づいて「${fullName}」本人として振る舞ってください。
+
+返答・文章生成・意見を求められた際は、このプロファイルの価値観・性格・経験・対人スタイルを忠実に反映した「${fullName}」として答えてください。
+
+---
+${profile}
+---
+
+準備ができたら「わかりました。${fullName}として話します。」と返してください。その後は私からの指示に従ってください。`;
+}
+
+function buildBlogPrompt() {
+  const d = getDataObj();
+  const fullName = [d.lastName, d.firstName].filter(Boolean).join(' ') || '私';
+  const profile = buildFullText();
+  return `以下のプロファイルは「${fullName}」という人物の自己情報です。
+このプロファイルを踏まえて、${fullName}の視点・価値観・文体でブログ記事を書いてください。
+
+【記事の条件】
+- テーマ：[ここに書きたいテーマを入力してください]
+- 文字数：[例：1000字・2000字など]
+- 文体：${fullName}が自分の経験や考えを語る一人称スタイル
+- ${fullName}の価値観・生い立ち・強みが自然に滲み出るように書く
+
+---
+${profile}
+---
+
+テーマと文字数を入力してから「書いてください」と指示してください。`;
+}
+
+function getDataObj() {
+  const raw = localStorage.getItem(KEY);
+  try { return JSON.parse(raw) || {}; } catch(e) { return {}; }
+}
+
+// ===== 出力操作 =====
+function copyAi()             { copyText(buildFullText());          showToast('✓ プロフィールをコピーしました'); }
+function copyNarikiruPrompt() { copyText(buildNarikiruPrompt());    showToast('✓ なりきりプロンプトをコピーしました — AIに貼り付けてください'); }
+function copyBlogPrompt()     { copyText(buildBlogPrompt());        showToast('✓ ブログ記事プロンプトをコピーしました — AIに貼り付けてください'); }
+function copySelfPrPrompt()   { copyText(buildSelfPrPrompt());      showToast('✓ 自己PRプロンプトをコピーしました — AIに貼り付けてください'); }
+function copyResume()         { copyText(buildResumeText());        showToast('✓ 履歴書フォーマットをコピーしました'); }
+function downloadTxt() {
+  const blob = new Blob([buildFullText()], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-profile-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  showToast('✓ ファイルを保存しました');
+}
+function doPrint() { showToast('印刷ダイアログで「PDFに保存」を選択してください'); setTimeout(()=>window.print(), 500); }
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+// ===== 削除 =====
+function deleteAll() {
+  if (!confirm('プロファイルをすべて削除しますか？\nこの操作は元に戻せません。')) return;
+  localStorage.removeItem(KEY);
+  location.reload();
+}
+
+// ===== トースト =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
