@@ -89,16 +89,39 @@ body {
   justify-content: space-between;
 }
 .sec-body { padding: 16px; }
-.contact-btns { display: flex; gap: 8px; margin-top: 4px; }
+.contact-add-wrap { position: relative; display: inline-block; margin-top: 4px; }
 .btn-contact-add {
   font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
   background: transparent; border: 1px dashed var(--dim); color: var(--dim);
 }
 .btn-contact-add:hover { border-color: var(--accent); color: var(--accent); }
+.contact-menu {
+  display: none; position: absolute; bottom: calc(100% + 4px); left: 0;
+  background: var(--card, #1e293b); border: 1px solid var(--border, #334155);
+  border-radius: 6px; overflow: hidden; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,.3);
+  min-width: 160px;
+}
+.contact-menu.open { display: block; }
+.contact-menu button {
+  display: block; width: 100%; text-align: left; padding: 8px 12px;
+  background: none; border: none; color: inherit; font-size: 13px; cursor: pointer;
+}
+.contact-menu button:hover { background: var(--hover, rgba(255,255,255,.08)); }
 .extra-field { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 .extra-field input { flex: 1; }
 .extra-field .btn-rm { font-size: 14px; color: var(--dim); cursor: pointer; background: none; border: none; padding: 0 4px; }
 .extra-field .btn-rm:hover { color: #ef4444; }
+.cert-suggest-wrap { position: relative; }
+.cert-suggest-list {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 60;
+  background: var(--card, #1e293b); border: 1px solid var(--border, #334155);
+  border-radius: 4px; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+.cert-suggest-list.open { display: block; }
+.cert-suggest-list div {
+  padding: 6px 10px; font-size: 13px; cursor: pointer;
+}
+.cert-suggest-list div:hover { background: var(--hover, rgba(255,255,255,.08)); }
 
 /* ===== フォーム ===== */
 .row { margin-bottom: 12px; }
@@ -483,9 +506,12 @@ body.theme-light .priv-bar {
         </div>
       </div>
       <div id="phoneExtra"></div>
-      <div class="contact-btns">
-        <button type="button" class="btn-contact-add" onclick="addExtraField('email')">＋ メール追加</button>
-        <button type="button" class="btn-contact-add" onclick="addExtraField('phone')">＋ 電話番号追加</button>
+      <div class="contact-add-wrap">
+        <button type="button" class="btn-contact-add" id="btnContactMenu" onclick="toggleContactMenu()">＋ 詳細を追加</button>
+        <div class="contact-menu" id="contactMenu">
+          <button type="button" onclick="addExtraField('email');closeContactMenu()">メールアドレス</button>
+          <button type="button" onclick="addExtraField('phone');closeContactMenu()">電話番号</button>
+        </div>
       </div>
     </div>
   </div>
@@ -535,19 +561,6 @@ body.theme-light .priv-bar {
   </div>
 
   <!-- 4. 資格・スキル -->
-  <datalist id="certList">
-    <option value="日商簿記 1級（日本商工会議所）">
-    <option value="日商簿記 2級（日本商工会議所）">
-    <option value="日商簿記 3級（日本商工会議所）">
-    <option value="日商簿記 原価計算（日本商工会議所）">
-    <option value="日商簿記 商業簿記（日本商工会議所）">
-    <option value="日商簿記 工業簿記（日本商工会議所）">
-    <option value="日商簿記 会計学（日本商工会議所）">
-    <option value="全経簿記 上級（全国経理教育協会）">
-    <option value="全経簿記 1級（全国経理教育協会）">
-    <option value="全経簿記 2級（全国経理教育協会）">
-    <option value="全経簿記 3級（全国経理教育協会）">
-  </datalist>
   <div class="sec">
     <div class="sec-head">資格・スキル</div>
     <div class="sec-body">
@@ -1004,6 +1017,31 @@ function addWorkRow(data) {
   if (data && data.desc) toggleDetail(id + '_d');
 }
 
+// ===== 資格サジェスト =====
+const CERT_DB = [
+  '日商簿記 1級（日本商工会議所）','日商簿記 2級（日本商工会議所）','日商簿記 3級（日本商工会議所）',
+  '日商簿記 原価計算（日本商工会議所）','日商簿記 商業簿記（日本商工会議所）',
+  '日商簿記 工業簿記（日本商工会議所）','日商簿記 会計学（日本商工会議所）',
+  '全経簿記 上級（全国経理教育協会）','全経簿記 1級（全国経理教育協会）',
+  '全経簿記 2級（全国経理教育協会）','全経簿記 3級（全国経理教育協会）',
+];
+function showCertSuggest(input) {
+  const list = input.nextElementSibling;
+  const q = input.value.trim();
+  if (!q) { list.classList.remove('open'); return; }
+  const hits = CERT_DB.filter(c => c.includes(q));
+  if (!hits.length) { list.classList.remove('open'); return; }
+  list.innerHTML = hits.map(c => '<div onmousedown="pickCert(this,\'' + c.replace(/'/g,"\\'") + '\')">' + escHtml(c) + '</div>').join('');
+  list.classList.add('open');
+}
+function pickCert(el, val) {
+  el.closest('.cert-suggest-wrap').querySelector('input').value = val;
+  el.parentElement.classList.remove('open');
+}
+function hideCertSuggest(input) {
+  setTimeout(() => input.nextElementSibling.classList.remove('open'), 150);
+}
+
 // ===== 資格・スキル行追加（テーブル形式）=====
 function addSkillRow(data) {
   const tbody = document.getElementById('skillBody');
@@ -1011,7 +1049,7 @@ function addSkillRow(data) {
   const tr = document.createElement('tr');
   tr.id = id;
   tr.innerHTML = `
-    <td><input type="text" class="sc-name" list="certList" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}"></td>
+    <td><div class="cert-suggest-wrap"><input type="text" class="sc-name" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}" oninput="showCertSuggest(this)" onblur="hideCertSuggest(this)" autocomplete="off"><div class="cert-suggest-list"></div></div></td>
     <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
@@ -1232,6 +1270,17 @@ function saveAll() {
 function val(id) { return (document.getElementById(id)?.value||'').trim(); }
 
 // ===== 追加連絡先フィールド =====
+function toggleContactMenu() {
+  document.getElementById('contactMenu').classList.toggle('open');
+}
+function closeContactMenu() {
+  document.getElementById('contactMenu').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.contact-add-wrap');
+  if (wrap && !wrap.contains(e.target)) closeContactMenu();
+});
+
 function addExtraField(type, value) {
   if (type === 'phone') {
     document.getElementById('phoneWrap').style.display = '';
