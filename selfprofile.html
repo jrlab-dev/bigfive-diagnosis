@@ -74,7 +74,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 10px;
   margin-bottom: 12px;
-  overflow: hidden;
+  overflow: visible;
 }
 .sec-head {
   padding: 12px 16px;
@@ -113,9 +113,10 @@ body {
 .extra-field .btn-rm:hover { color: #ef4444; }
 .cert-suggest-wrap { position: relative; }
 .cert-suggest-list {
-  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 60;
+  display: none; position: absolute; bottom: 100%; left: 0; right: 0; z-index: 60;
   background: var(--bg3); border: 1px solid var(--bg4);
-  border-radius: 4px; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,.5);
+  border-radius: 4px; max-height: 180px; overflow-y: auto; box-shadow: 0 -2px 12px rgba(0,0,0,.5);
+  margin-bottom: 2px;
 }
 .cert-suggest-list.open { display: block; }
 .cert-suggest-list div {
@@ -233,6 +234,7 @@ textarea { resize: vertical; min-height: 72px; }
 
 /* ===== 職歴・資格テーブル ===== */
 .rec-table { width: 100%; border-collapse: collapse; }
+.rec-table tr { position: relative; }
 .rec-table th {
   font-size: 10px; color: var(--dim); font-weight: 500;
   text-align: left; padding: 0 4px 6px;
