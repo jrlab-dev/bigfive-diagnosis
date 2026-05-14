@@ -569,6 +569,7 @@ body.theme-light .priv-bar {
       <table class="rec-table">
         <thead><tr>
           <th>資格・スキル名</th>
+          <th style="width:90px">等級・区分</th>
           <th style="width:112px">取得年月</th>
           <th style="width:44px"></th>
           <th style="width:26px"></th>
@@ -1025,25 +1026,29 @@ function addWorkRow(data) {
 }
 
 // ===== 資格サジェスト =====
-const CERT_DB = [
-  '日商簿記 1級（日本商工会議所）','日商簿記 2級（日本商工会議所）','日商簿記 3級（日本商工会議所）',
-  '日商簿記 原価計算（日本商工会議所）','日商簿記 商業簿記（日本商工会議所）',
-  '日商簿記 工業簿記（日本商工会議所）','日商簿記 会計学（日本商工会議所）',
-  '全経簿記 上級（全国経理教育協会）','全経簿記 1級（全国経理教育協会）',
-  '全経簿記 2級（全国経理教育協会）','全経簿記 3級（全国経理教育協会）',
-];
+const CERT_DB = {
+  '日商簿記（日本商工会議所）': ['1級','2級','3級','原価計算','商業簿記','工業簿記','会計学'],
+  '全経簿記（全国経理教育協会）': ['上級','1級','2級','3級'],
+  '普通自動車免許': ['大型','中型','準中型','普通','大型特殊','けん引','小型特殊','原付'],
+};
 function showCertSuggest(input) {
   const list = input.nextElementSibling;
   const q = input.value.trim();
   if (!q) { list.classList.remove('open'); return; }
-  const hits = CERT_DB.filter(c => c.includes(q));
+  const hits = Object.keys(CERT_DB).filter(c => c.includes(q));
   if (!hits.length) { list.classList.remove('open'); return; }
   list.innerHTML = hits.map(c => '<div onmousedown="pickCert(this,\'' + c.replace(/'/g,"\\'") + '\')">' + escHtml(c) + '</div>').join('');
   list.classList.add('open');
 }
 function pickCert(el, val) {
-  el.closest('.cert-suggest-wrap').querySelector('input').value = val;
+  const wrap = el.closest('.cert-suggest-wrap');
+  wrap.querySelector('input').value = val;
   el.parentElement.classList.remove('open');
+  const gradeSelect = wrap.closest('tr').querySelector('.sc-grade');
+  if (gradeSelect && CERT_DB[val]) {
+    gradeSelect.innerHTML = '<option value="">選択</option>' + CERT_DB[val].map(g => '<option value="' + g + '">' + g + '</option>').join('');
+    gradeSelect.disabled = false;
+  }
 }
 function hideCertSuggest(input) {
   setTimeout(() => input.nextElementSibling.classList.remove('open'), 150);
@@ -1055,8 +1060,13 @@ function addSkillRow(data) {
   const id = 'sr_' + Date.now() + '_' + Math.random().toString(36).slice(2,5);
   const tr = document.createElement('tr');
   tr.id = id;
+  const gradeDisabled = data && data.name && CERT_DB[data.name] ? '' : ' disabled';
+  const gradeOpts = data && data.name && CERT_DB[data.name]
+    ? '<option value="">選択</option>' + CERT_DB[data.name].map(g => '<option value="'+g+'"'+(g===data.grade?' selected':'')+'>'+g+'</option>').join('')
+    : '<option value="">-</option>';
   tr.innerHTML = `
     <td><div class="cert-suggest-wrap"><input type="text" class="sc-name" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}" oninput="showCertSuggest(this)" onblur="hideCertSuggest(this)" autocomplete="off"><div class="cert-suggest-list"></div></div></td>
+    <td><select class="sc-grade"${gradeDisabled}>${gradeOpts}</select></td>
     <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
@@ -1067,7 +1077,7 @@ function addSkillRow(data) {
   dtr.className = 'detail-row';
   dtr.style.display = 'none';
   dtr.innerHTML = `
-    <td colspan="4">
+    <td colspan="5">
       <div class="detail-inner" style="grid-template-columns:1fr 1fr">
         <div class="row"><label>発行機関・認定機関</label>
           <input type="text" class="sc-issuer" placeholder="例：国土交通省・IIBC" value="${data ? escHtml(data.issuer||'') : ''}">
@@ -1255,6 +1265,7 @@ function saveAll() {
   document.querySelectorAll('#skillBody tr:not(.detail-row)').forEach(tr => {
     data.skills.push({
       name:   tr.querySelector('.sc-name')?.value  || '',
+      grade:  tr.querySelector('.sc-grade')?.value  || '',
       date:   tr.querySelector('.sc-date')?.value  || '',
       issuer: document.getElementById(tr.id + '_d')?.querySelector('.sc-issuer')?.value || '',
       number: document.getElementById(tr.id + '_d')?.querySelector('.sc-number')?.value || '',
@@ -1428,6 +1439,7 @@ function buildFullText() {
     d.skills.forEach(s => {
       if (!s.name) return;
       let line = s.name;
+      if (s.grade) line += ' ' + s.grade;
       if (s.date) line += '（' + s.date.replace('-', '/') + '取得）';
       if (s.number) line += '　' + s.number;
       if (s.issuer) line += '　' + s.issuer;
@@ -1518,7 +1530,7 @@ function buildResumeText() {
     lines.push('■ 資格・免許・スキル', '');
     d.skills.forEach(s => {
       if (!s.name) return;
-      let line = (s.date ? s.date.replace('-', '/') + '　' : '') + s.name;
+      let line = (s.date ? s.date.replace('-', '/') + '　' : '') + s.name + (s.grade ? ' ' + s.grade : '');
       if (s.number) line += '　' + s.number;
       if (s.note) line += '　' + s.note;
       lines.push(line);
