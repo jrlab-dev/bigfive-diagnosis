@@ -661,9 +661,21 @@ function calcScore() {
       // 24問×5段階=合計24〜120、平均ベースで30問版と同じ閾値
       scores[f] = sum <= 44 ? 1 : sum <= 64 ? 2 : sum <= 92 ? 3 : sum <= 112 ? 4 : 5;
     }
+    // ファセットスコア（30ファセット、各4問）
+    const facetScores = [];
+    for (let f = 0; f < 30; f++) {
+      const start = f * 4;
+      let sum = 0;
+      for (let q = start; q < start + 4; q++) {
+        const val = questions[q].dir === '-' ? (6 - answers[q]) : answers[q];
+        sum += val;
+      }
+      facetScores.push(sum <= 8 ? 1 : sum <= 11 ? 2 : sum <= 14 ? 3 : sum <= 17 ? 4 : 5);
+    }
     return {
       O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
-      code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`
+      code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`,
+      facets: facetScores.join('')
     };
   } else {
     // 30問版：各因子6問、合計→5段階
@@ -703,6 +715,7 @@ function showResult() {
     if (ref) url += `&ref=${ref}`;
     if (otherCode) url += `&other_code=${otherCode}`;
     if (otherName) url += `&other_name=${encodeURIComponent(otherName)}`;
+    if (result.facets) url += `&facets=${result.facets}`;
     // other_quizから来た場合で、自分のコードがある場合は渡す（診断前にLocalStorageから取得したもの）
     // ※診断結果自体はtypeパラメータで渡されるので、これは参照用
     if (myCode && ref === 'other') url += `&stored_my_code=${myCode}`;

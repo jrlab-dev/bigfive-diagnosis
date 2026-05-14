@@ -676,6 +676,81 @@
     font-size: 13px;
   }
 
+  /* ===== ファセット分析セクション（120問版） ===== */
+  .facet-section {
+    width: 100%; max-width: 480px;
+    margin-bottom: 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .btn-facet {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: #64748b; background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-facet:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.12);
+    color: #94a3b8;
+    transform: translateY(-1px);
+  }
+  .btn-facet.active {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.15);
+    color: #94a3b8;
+  }
+  .facet-card {
+    width: 100%;
+    background: rgba(20,10,50,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 22px 20px;
+    margin-top: 16px; backdrop-filter: blur(8px);
+    animation: weakness-fadein 0.4s ease-out;
+  }
+  .facet-card-title {
+    font-size: 15px; font-weight: 700; text-align: center;
+    margin-bottom: 6px; color: var(--text);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .facet-card-note {
+    font-size: 12px; color: var(--dim); text-align: center;
+    margin-bottom: 18px; line-height: 1.6;
+  }
+  .facet-factor-group { margin-bottom: 14px; }
+  .facet-factor-group:last-child { margin-bottom: 0; }
+  .facet-factor-label {
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 8px; padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .facet-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 0;
+  }
+  .facet-name {
+    font-size: 12px; color: #94a3b8; width: 72px; flex-shrink: 0;
+  }
+  .facet-bar-bg {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; overflow: hidden;
+  }
+  .facet-bar {
+    height: 100%; border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .facet-score {
+    font-size: 11px; color: var(--dim); width: 16px;
+    text-align: center; font-weight: 600;
+  }
+  .facet-desc {
+    font-size: 11px; color: #475569; line-height: 1.5;
+    padding-left: 80px; margin-top: 1px;
+  }
+
   /* ===== おすすめ職種 ===== */
   .career-section {
     width: 100%; max-width: 480px;
@@ -967,6 +1042,26 @@
         <p class="growth-tips-note">性格は大人になってからも変わります。数週間〜数ヶ月の継続で測定可能な変化が報告されています。</p>
         <div id="growthTipsContent"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- ファセット分析（120問版のみ） -->
+  <div class="facet-section" id="facetSection" style="display:none;">
+    <button class="btn btn-facet" id="facetBtn">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <span id="facetBtnText">下位尺度の詳細を見る</span>
+    </button>
+    <div class="facet-card" id="facetCard" style="display:none;">
+      <p class="facet-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        下位尺度分析
+      </p>
+      <p class="facet-card-note">各因子は6つの下位尺度（ファセット）で構成されています。因子スコアが同じでも、内訳が違うことがあります。</p>
+      <div id="facetContent"></div>
     </div>
   </div>
 
@@ -1615,6 +1710,7 @@ const isSavedView = params.get('saved') === '1';
 const isSharedView = params.get('from') === 'share';
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
+const facetsParam = params.get('facets'); // 120問版: 30桁のファセットスコア
 
 // ===== 相性スコア計算（学術根拠版＋関係性重み） =====
 function calcCompatibility(myCode, partnerCode, relation) {
@@ -2143,6 +2239,94 @@ if (version === '10') {
   document.getElementById('upgradeBtn').textContent = '120問の徹底分析へ（無料）';
   document.getElementById('upgradeBtn').href = 'quiz.html?v=120';
 }
+
+// ===== ファセット分析（120問版のみ） =====
+(function() {
+  if (version !== '120' || !facetsParam || !/^[1-5]{30}$/.test(facetsParam)) return;
+
+  const section = document.getElementById('facetSection');
+  const btn = document.getElementById('facetBtn');
+  const card = document.getElementById('facetCard');
+  const content = document.getElementById('facetContent');
+  const btnText = document.getElementById('facetBtnText');
+  let isOpen = false;
+
+  section.style.display = 'flex';
+
+  // facetsParam文字列のインデックス: 0-5=N, 6-11=E, 12-17=O, 18-23=A, 24-29=C
+  var facetMeta = [
+    { name: '不安',     factor: 'N', desc: '心配事や不安を感じやすいか' },
+    { name: '怒り',     factor: 'N', desc: 'イライラや怒りを感じやすいか' },
+    { name: '抑うつ',   factor: 'N', desc: '気分が落ち込みやすいか' },
+    { name: '自己意識', factor: 'N', desc: '他人の目を気にするか' },
+    { name: '無抑制',   factor: 'N', desc: '衝動的に行動してしまうか' },
+    { name: '脆弱性',   factor: 'N', desc: 'ストレスに圧倒されやすいか' },
+    { name: '友好性',   factor: 'E', desc: '友人を作りやすいか' },
+    { name: '群居性',   factor: 'E', desc: '大勢の中にいるのが好きか' },
+    { name: '主張性',   factor: 'E', desc: '自分からリードするか' },
+    { name: '活動性',   factor: 'E', desc: '常に活動的で忙しいか' },
+    { name: '刺激追求', factor: 'E', desc: 'スリルや興奮を求めるか' },
+    { name: '陽気さ',   factor: 'E', desc: '明るく楽観的か' },
+    { name: '想像力',     factor: 'O', desc: '想像力や空想を楽しむか' },
+    { name: '芸術的興味', factor: 'O', desc: '芸術や美に感応するか' },
+    { name: '感情性',     factor: 'O', desc: '感情を深く感じるか' },
+    { name: '冒険性',     factor: 'O', desc: '新しい体験を好むか' },
+    { name: '知性',       factor: 'O', desc: '知的な探求を好むか' },
+    { name: '自由主義',   factor: 'O', desc: '既存の価値観を問い直すか' },
+    { name: '信頼',   factor: 'A', desc: '他人を信用できるか' },
+    { name: '道徳性', factor: 'A', desc: '他者を利用しないか' },
+    { name: '利他性', factor: 'A', desc: '他者を助けたいと思うか' },
+    { name: '協調性', factor: 'A', desc: '争いを避けるか' },
+    { name: '謙虚さ', factor: 'A', desc: '自分を控えめにするか' },
+    { name: '共感性', factor: 'A', desc: '他人の悲しみに寄り添うか' },
+    { name: '有能性',   factor: 'C', desc: '効率よく物事をこなせるか' },
+    { name: '秩序性',   factor: 'C', desc: '整理整頓が好きか' },
+    { name: '義務感',   factor: 'C', desc: '約束やルールを守るか' },
+    { name: '達成努力', factor: 'C', desc: '期待以上の努力をするか' },
+    { name: '自己規律', factor: 'C', desc: '計画を実行に移せるか' },
+    { name: '慎重さ',   factor: 'C', desc: '考慮してから行動するか' }
+  ];
+
+  // 表示順 O, C, E, A, N に合わせてファセットをグループ化
+  var displayOrder = ['O', 'C', 'E', 'A', 'N'];
+  var paramFactorOrder = { N: 0, E: 1, O: 2, A: 3, C: 4 }; // facetsParam内の因子オフセット
+
+  var html = '';
+  displayOrder.forEach(function(factor) {
+    var info = traitInfo[factor];
+    var offset = paramFactorOrder[factor] * 6;
+
+    html += '<div class="facet-factor-group">';
+    html += '<div class="facet-factor-label" style="color:' + info.color + '">' + info.name + '（' + factor + '）の下位尺度</div>';
+
+    for (var j = 0; j < 6; j++) {
+      var idx = offset + j;
+      var score = parseInt(facetsParam[idx]);
+      var pct = score * 20;
+      var meta = facetMeta[idx];
+      html += '<div class="facet-row">';
+      html += '<span class="facet-name">' + meta.name + '</span>';
+      html += '<div class="facet-bar-bg"><div class="facet-bar" style="width:' + pct + '%;background:' + info.color + ';opacity:0.7"></div></div>';
+      html += '<span class="facet-score">' + score + '</span>';
+      html += '</div>';
+      html += '<div class="facet-desc">' + meta.desc + '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  content.innerHTML = html;
+
+  btn.addEventListener('click', function() {
+    isOpen = !isOpen;
+    card.style.display = isOpen ? 'block' : 'none';
+    btn.classList.toggle('active', isOpen);
+    btnText.textContent = isOpen ? '下位尺度を隠す' : '下位尺度の詳細を見る';
+    if (isOpen) {
+      setTimeout(function() { card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+  });
+})();
 
 // ===== おすすめ職種カード =====
 (function() {
