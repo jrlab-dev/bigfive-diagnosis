@@ -398,11 +398,11 @@ body.theme-light .priv-bar {
       <div class="cols3">
         <div class="row">
           <label>姓（名字）</label>
-          <input type="text" id="lastName" placeholder="例：日本">
+          <input type="text" id="lastName" placeholder="例：日本" autocomplete="off">
         </div>
         <div class="row">
           <label>名（下の名前）</label>
-          <input type="text" id="firstName" placeholder="例：太郎">
+          <input type="text" id="firstName" placeholder="例：太郎" autocomplete="off">
         </div>
         <div class="row">
           <label>生年月日 <span style="font-size:10px;color:var(--dim2);">19820722 形式でも可</span></label>
@@ -427,43 +427,43 @@ body.theme-light .priv-bar {
       <div class="cols2">
         <div class="row">
           <label>出身地</label>
-          <input type="text" id="hometown" list="prefList" placeholder="例：神奈川県横浜市">
+          <input type="text" id="hometown" list="prefList" placeholder="例：神奈川県横浜市" autocomplete="off">
         </div>
         <div class="row">
           <label>郵便番号 <span style="font-size:10px;color:var(--dim2);">7桁で自動補完</span></label>
           <input type="text" id="postalCode" placeholder="例：2310023" maxlength="8"
-            oninput="onPostalInput(this)">
+            oninput="onPostalInput(this)" autocomplete="off">
         </div>
       </div>
       <div class="cols3">
         <div class="row">
           <label>都道府県</label>
-          <input type="text" id="addrPref" list="prefList" placeholder="例：神奈川県">
+          <input type="text" id="addrPref" list="prefList" placeholder="例：神奈川県" autocomplete="off">
         </div>
         <div class="row">
           <label>市区町村</label>
           <input type="text" id="addrCity" placeholder="例：横浜市中区"
-            onblur="reversePostalLookup()">
+            onblur="reversePostalLookup()" autocomplete="off">
         </div>
         <div class="row">
           <label>町域</label>
           <input type="text" id="addrTown" placeholder="例：山手町"
-            onblur="reversePostalLookup()">
+            onblur="reversePostalLookup()" autocomplete="off">
         </div>
       </div>
       <div class="cols2">
         <div class="row">
           <label>丁番地</label>
-          <input type="text" id="addrStreet" placeholder="例：1-1">
+          <input type="text" id="addrStreet" placeholder="例：1-1" autocomplete="off">
         </div>
         <div class="row">
           <label>建物名・部屋番号</label>
-          <input type="text" id="addrBuilding" placeholder="例：○○マンション101">
+          <input type="text" id="addrBuilding" placeholder="例：○○マンション101" autocomplete="off">
         </div>
       </div>
       <div class="row">
         <label>連絡先メールアドレス</label>
-        <input type="text" id="email" placeholder="例：nihon.taro@example.com">
+        <input type="text" id="email" placeholder="例：nihon.taro@example.com" autocomplete="off">
       </div>
     </div>
   </div>
