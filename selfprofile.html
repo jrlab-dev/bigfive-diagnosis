@@ -1046,11 +1046,20 @@ function pickCert(el, idx) {
   wrap.querySelector('input').value = cert.name;
   el.parentElement.classList.remove('open');
   const tr = wrap.closest('tr');
-  // 等級セレクト更新
-  const gradeSelect = tr.querySelector('.sc-grade');
-  if (gradeSelect) {
-    gradeSelect.innerHTML = '<option value="">選択</option>' + cert.grades.map(g => '<option value="' + g + '">' + g + '</option>').join('');
-    gradeSelect.disabled = false;
+  // 等級フィールド更新
+  const gradeInput = tr.querySelector('.sc-grade');
+  if (gradeInput && cert.grades.length) {
+    let dl = tr.querySelector('.sc-grade-dl');
+    if (!dl) {
+      dl = document.createElement('datalist');
+      dl.className = 'sc-grade-dl';
+      tr.appendChild(dl);
+      gradeInput.setAttribute('list', dl.id || '');
+      dl.id = 'gdl_' + tr.id;
+      gradeInput.setAttribute('list', dl.id);
+    }
+    dl.innerHTML = cert.grades.map(g => '<option value="' + g + '">').join('');
+    gradeInput.placeholder = '例：' + cert.grades[0];
   }
   // 発行機関を自動入力
   const detailTr = document.getElementById(tr.id + '_d');
@@ -1070,13 +1079,13 @@ function addSkillRow(data) {
   const tr = document.createElement('tr');
   tr.id = id;
   const certMatch = data && data.name ? CERT_DB.find(c => c.name === data.name) : null;
-  const gradeDisabled = certMatch ? '' : ' disabled';
-  const gradeOpts = certMatch
-    ? '<option value="">選択</option>' + certMatch.grades.map(g => '<option value="'+g+'"'+(g===data.grade?' selected':'')+'>'+g+'</option>').join('')
-    : '<option value="">-</option>';
+  const gradeDL = certMatch && certMatch.grades.length
+    ? '<datalist id="gdl_'+id+'">' + certMatch.grades.map(g => '<option value="'+g+'">').join('') + '</datalist>' : '';
+  const gradeListAttr = gradeDL ? ' list="gdl_'+id+'"' : '';
+  const gradePH = certMatch && certMatch.grades.length ? '例：'+certMatch.grades[0] : '例：2級・990点';
   tr.innerHTML = `
     <td><div class="cert-suggest-wrap"><input type="text" class="sc-name" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}" oninput="showCertSuggest(this)" onblur="hideCertSuggest(this)" autocomplete="off"><div class="cert-suggest-list"></div></div></td>
-    <td><select class="sc-grade"${gradeDisabled}>${gradeOpts}</select></td>
+    <td><input type="text" class="sc-grade" placeholder="${gradePH}" value="${data ? escHtml(data.grade||'') : ''}"${gradeListAttr}>${gradeDL}</td>
     <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
