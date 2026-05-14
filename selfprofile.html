@@ -1026,38 +1026,37 @@ function addWorkRow(data) {
 }
 
 // ===== 資格サジェスト =====
-const CERT_DB = {
-  '日商簿記（日本商工会議所）': ['1級','2級','3級','原価計算','商業簿記','工業簿記','会計学'],
-  '全経簿記（全国経理教育協会）': ['上級','1級','2級','3級'],
-  '普通自動車免許': ['大型','中型','準中型','普通','大型特殊','けん引','小型特殊','原付'],
-};
+const CERT_DB = [
+  { name: '日商簿記', issuer: '日本商工会議所', grades: ['1級','2級','3級','原価計算','商業簿記','工業簿記','会計学'] },
+  { name: '全経簿記', issuer: '全国経理教育協会', grades: ['上級','1級','2級','3級'] },
+  { name: '普通自動車免許', issuer: '公安委員会', grades: ['大型','中型','準中型','普通','大型特殊','けん引','小型特殊','原付'] },
+];
 function showCertSuggest(input) {
   const list = input.nextElementSibling;
   const q = input.value.trim();
   if (!q) { list.classList.remove('open'); return; }
-  const hits = Object.keys(CERT_DB).filter(c => c.includes(q));
+  const hits = CERT_DB.filter(c => c.name.includes(q));
   if (!hits.length) { list.classList.remove('open'); return; }
-  list.innerHTML = hits.map(c => '<div onmousedown="pickCert(this,\'' + c.replace(/'/g,"\\'") + '\')">' + escHtml(c) + '</div>').join('');
+  list.innerHTML = hits.map(c => '<div onmousedown="pickCert(this,' + CERT_DB.indexOf(c) + ')">' + escHtml(c.name) + '</div>').join('');
   list.classList.add('open');
 }
-function pickCert(el, val) {
+function pickCert(el, idx) {
+  const cert = CERT_DB[idx];
   const wrap = el.closest('.cert-suggest-wrap');
-  wrap.querySelector('input').value = val;
+  wrap.querySelector('input').value = cert.name;
   el.parentElement.classList.remove('open');
   const tr = wrap.closest('tr');
+  // 等級セレクト更新
   const gradeSelect = tr.querySelector('.sc-grade');
-  if (gradeSelect && CERT_DB[val]) {
-    gradeSelect.innerHTML = '<option value="">選択</option>' + CERT_DB[val].map(g => '<option value="' + g + '">' + g + '</option>').join('');
+  if (gradeSelect) {
+    gradeSelect.innerHTML = '<option value="">選択</option>' + cert.grades.map(g => '<option value="' + g + '">' + g + '</option>').join('');
     gradeSelect.disabled = false;
   }
   // 発行機関を自動入力
-  const issuerMatch = val.match(/[（(](.+)[)）]/);
-  if (issuerMatch) {
-    const detailTr = document.getElementById(tr.id + '_d');
-    if (detailTr) {
-      const issuerInput = detailTr.querySelector('.sc-issuer');
-      if (issuerInput && !issuerInput.value) issuerInput.value = issuerMatch[1];
-    }
+  const detailTr = document.getElementById(tr.id + '_d');
+  if (detailTr && cert.issuer) {
+    const issuerInput = detailTr.querySelector('.sc-issuer');
+    if (issuerInput && !issuerInput.value) issuerInput.value = cert.issuer;
   }
 }
 function hideCertSuggest(input) {
@@ -1070,9 +1069,10 @@ function addSkillRow(data) {
   const id = 'sr_' + Date.now() + '_' + Math.random().toString(36).slice(2,5);
   const tr = document.createElement('tr');
   tr.id = id;
-  const gradeDisabled = data && data.name && CERT_DB[data.name] ? '' : ' disabled';
-  const gradeOpts = data && data.name && CERT_DB[data.name]
-    ? '<option value="">選択</option>' + CERT_DB[data.name].map(g => '<option value="'+g+'"'+(g===data.grade?' selected':'')+'>'+g+'</option>').join('')
+  const certMatch = data && data.name ? CERT_DB.find(c => c.name === data.name) : null;
+  const gradeDisabled = certMatch ? '' : ' disabled';
+  const gradeOpts = certMatch
+    ? '<option value="">選択</option>' + certMatch.grades.map(g => '<option value="'+g+'"'+(g===data.grade?' selected':'')+'>'+g+'</option>').join('')
     : '<option value="">-</option>';
   tr.innerHTML = `
     <td><div class="cert-suggest-wrap"><input type="text" class="sc-name" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}" oninput="showCertSuggest(this)" onblur="hideCertSuggest(this)" autocomplete="off"><div class="cert-suggest-list"></div></div></td>
