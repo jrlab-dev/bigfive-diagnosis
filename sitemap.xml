@@ -457,6 +457,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：想いが溢れれば溢れるほど動けない。内向的な人の恋愛の仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-extraversion-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
