@@ -398,11 +398,11 @@ body.theme-light .priv-bar {
       <div class="cols3">
         <div class="row">
           <label>姓（名字）</label>
-          <input type="text" id="lastName" placeholder="例：日本" autocomplete="off">
+          <input type="text" id="lastName" placeholder="例：日本" autocomplete="family-name">
         </div>
         <div class="row">
           <label>名（下の名前）</label>
-          <input type="text" id="firstName" placeholder="例：太郎" autocomplete="off">
+          <input type="text" id="firstName" placeholder="例：太郎" autocomplete="given-name">
         </div>
         <div class="row">
           <label>生年月日 <span style="font-size:10px;color:var(--dim2);">19820722 形式でも可</span></label>
@@ -443,12 +443,11 @@ body.theme-light .priv-bar {
         <div class="row">
           <label>市区町村</label>
           <input type="text" id="addrCity" placeholder="例：横浜市中区"
-            onblur="reversePostalLookup()" autocomplete="off">
+          <input type="text" id="addrCity" placeholder="例：横浜市中区" autocomplete="off">
         </div>
         <div class="row">
           <label>町域</label>
           <input type="text" id="addrTown" placeholder="例：山手町"
-            onblur="reversePostalLookup()" autocomplete="off">
         </div>
       </div>
       <div class="cols2">
@@ -837,35 +836,6 @@ async function fetchAddress(zip) {
       showToast('ローカルファイルでは通信できません — サイトを公開後に動作します');
     } else {
       showToast('住所の取得に失敗しました（通信エラー）');
-    }
-  }
-}
-
-// ===== 住所 → 郵便番号（逆引き）=====
-async function reversePostalLookup() {
-  const postalEl = document.getElementById('postalCode');
-  if (postalEl.value.replace(/\D/g, '').length >= 7) return; // すでに入力済みなら何もしない
-
-  const pref  = document.getElementById('addrPref').value.trim();
-  const city  = document.getElementById('addrCity').value.trim();
-  const town  = document.getElementById('addrTown').value.trim();
-  const query = [pref, city, town].filter(Boolean).join('');
-  if (query.length < 4) return;
-
-  try {
-    const res  = await fetch('https://zipcloud.ibsnet.co.jp/api/search?address=' + encodeURIComponent(query));
-    const json = await res.json();
-    if (!json.results || !json.results.length) return;
-    if (json.results.length === 1) {
-      const z = json.results[0].zipcode;
-      postalEl.value = z.slice(0, 3) + '-' + z.slice(3);
-      showToast('郵便番号を自動入力しました');
-    } else {
-      showToast('候補が' + json.results.length + '件あります — 町域まで入力すると絞り込めます');
-    }
-  } catch(e) {
-    if (location.protocol === 'file:') {
-      showToast('ローカルファイルでは通信できません — サイトを公開後に動作します');
     }
   }
 }
