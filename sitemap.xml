@@ -577,4 +577,28 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：飽きっぽい人の恋愛（開放性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-openness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：優しすぎる人の恋愛（協調性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-agreeableness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：感情が安定しすぎる人の恋愛（神経症性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-neuroticism-low.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
