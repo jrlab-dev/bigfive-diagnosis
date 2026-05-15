@@ -267,7 +267,7 @@ function matchPct(user,ideal){
     var diff=(user[KEYS[i]]||3)-ideal[KEYS[i]];
     sumSq+=diff*diff;
   }
-  return Math.round((1-Math.sqrt(sumSq)/MAX_DIST)*48+52);
+  return Math.round((1-Math.sqrt(sumSq)/MAX_DIST)*75+25);
 }
 
 function rankItems(user,list){
@@ -455,17 +455,17 @@ var ICONS={
   var analysis=genAnalysis(scores);
   html+='<div class="section-title">'+ICONS.shield+' 詳細分析</div>';
 
-  html+='<div class="analysis-box"><span class="paid-badge">将来有料化予定</span>';
+  html+='<div class="analysis-box">';
   html+='<h3>あなたに合う職場環境</h3>';
   for(var i=0;i<analysis.env.length;i++) html+='<p>'+analysis.env[i]+'</p>';
   html+='</div>';
 
-  html+='<div class="analysis-box"><span class="paid-badge">将来有料化予定</span>';
+  html+='<div class="analysis-box">';
   html+='<h3>キャリアの落とし穴</h3>';
   for(var i=0;i<analysis.pitfall.length;i++) html+='<p>'+analysis.pitfall[i]+'</p>';
   html+='</div>';
 
-  html+='<div class="analysis-box"><span class="paid-badge">将来有料化予定</span>';
+  html+='<div class="analysis-box">';
   html+='<h3>キャリア戦略アドバイス</h3>';
   for(var i=0;i<analysis.strategy.length;i++) html+='<p>'+analysis.strategy[i]+'</p>';
   html+='</div>';
