@@ -569,4 +569,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：完璧主義者の恋愛（誠実性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-conscientiousness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
