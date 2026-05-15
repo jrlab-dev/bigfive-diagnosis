@@ -1063,6 +1063,8 @@ body.theme-light .career-reason {
 }
 
 /* ===== career.html キャリア適性診断 ===== */
+body.theme-light .seo-content h3 { color: oklch(0.45 0.13 85) !important; }
+body.theme-light .seo-content p { color: oklch(0.40 0.02 270) !important; }
 body.theme-light .rank-card {
   background: oklch(1.0 0.0 0 / 0.78) !important;
   border-color: oklch(0.88 0.03 270 / 0.6) !important;
