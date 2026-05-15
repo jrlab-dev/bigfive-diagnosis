@@ -383,6 +383,7 @@ function calcScores() {
 function showResult(preScores, preStrongest) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
+  window.scrollTo(0, 0);
 
   const scores = preScores || calcScores();
   const avg = (scores.autonomy + scores.competence + scores.relatedness) / 3;

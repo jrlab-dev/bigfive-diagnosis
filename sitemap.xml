@@ -545,4 +545,28 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：ルーズな人の恋愛（誠実性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-conscientiousness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：意見が強い人の恋愛（協調性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-agreeableness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：保守的な人の恋愛（開放性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-openness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
