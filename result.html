@@ -876,6 +876,15 @@
   .icon { width: 18px; height: 18px; flex-shrink: 0; }
   .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
   .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+
+  .career-link {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 20px; background: rgba(245,158,11,0.08);
+    border: 1px dashed rgba(245,158,11,0.3); border-radius: 14px;
+    color: #f59e0b; font-size: 13px; font-weight: 700; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .career-link:hover { background: rgba(245,158,11,0.15); }
 </style>
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
@@ -1034,9 +1043,9 @@
 
   <!-- キャリア適性診断への誘導 -->
   <div style="width:100%;max-width:480px;margin-bottom:20px;">
-    <a href="career.html" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;background:rgba(245,158,11,0.08);border:1px dashed rgba(245,158,11,0.3);border-radius:14px;color:#f59e0b;font-size:13px;font-weight:700;text-decoration:none;">
+    <a href="career.html" class="career-link">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-      18業界・26職種のキャリア適性を詳しく見る →
+      あなたが向いている仕事は →
     </a>
   </div>
 
