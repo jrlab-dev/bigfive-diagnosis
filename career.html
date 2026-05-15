@@ -135,6 +135,13 @@
   /* ===== 隠し（展開用） ===== */
   .hidden-list { display: none; background: rgba(26,10,62,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
   .hidden-list.show { display: block; }
+
+  /* ===== SEO静的コンテンツ ===== */
+  .seo-content { max-width: 600px; width: 100%; margin: 0 auto; padding: 40px 0; }
+  .seo-content h2 { font-size: 20px; font-weight: 900; margin: 0 0 16px; color: var(--text); }
+  .seo-content h3 { font-size: 15px; font-weight: 700; margin: 24px 0 10px; color: var(--accent); }
+  .seo-content p { font-size: 14px; color: var(--dim); line-height: 1.85; margin-bottom: 12px; }
+  .seo-content.hide { display: none; }
 </style>
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
@@ -173,6 +180,24 @@
     <a href="quiz.html" class="start-btn">まずはビッグファイブ診断を受ける</a>
     <p class="intro-note">10問・約3分・無料・登録不要</p>
   </div>
+
+  <!-- SEO静的コンテンツ（検索エンジン用・結果表示時は非表示） -->
+  <section class="seo-content" id="seoContent">
+    <h2>ビッグファイブでわかるキャリア適性診断</h2>
+    <p>自分に向いている仕事は何か。それは性格と深く関係しています。ビッグファイブ（Big Five）性格理論は、心理学で最も信頼されている性格モデルの一つで、開放性・誠実性・外向性・協調性・神経症性の5つの因子で性格を分析します。この診断では、ビッグファイブのスコアをもとに、あなたの性格に合う業界や職種を科学的に導き出します。</p>
+
+    <h3>18業界の適性を分析</h3>
+    <p>IT・情報通信、メーカー、金融・保険、コンサルティング、医療・福祉、教育・研究など、主要18業界へのマッチング度をパーセンテージで表示します。Barrick &amp; Mount（1991）のメタ分析に基づき、各業界で活躍する人の性格傾向とあなたのスコアを比較して適性を判定します。</p>
+
+    <h3>26職種への適性を判定</h3>
+    <p>営業、企画・商品開発、マーケティング、SE・システム開発、研究・開発、デザイン・クリエイティブ、データ分析・AIなど、26の職種について適性を分析。あなたの強みが最も活きる職種と、相性の良くない職種がわかります。</p>
+
+    <h3>8つのキャリアアーキタイプ</h3>
+    <p>あなたの性格パターンから、最も近いキャリアスタイルを判定します。組織を動かすリーダー型、新しい価値を生み出すクリエイター型、論理と精度で課題を解く分析型など、8つのアーキタイプからあなたに合うキャリアの方向性が見えます。</p>
+
+    <h3>キャリア診断の使い方</h3>
+    <p>まずビッグファイブ診断（10問・約3分・無料）を受けてください。診断結果が保存されていれば、このページで自動的にキャリア適性分析が表示されます。30問版や120問版を受けると、より精密な分析結果が得られます。</p>
+  </section>
 
   <!-- 結果エリア -->
   <div id="resultArea" style="display:none;"></div>
@@ -370,6 +395,8 @@ var ICONS={
     document.getElementById('noScoresArea').style.display='flex';
     return;
   }
+
+  document.getElementById('seoContent').classList.add('hide');
 
   var scores=bf.scores;
   var container=document.getElementById('resultArea');
