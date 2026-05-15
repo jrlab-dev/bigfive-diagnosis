@@ -1388,6 +1388,18 @@ function toggleDetail(detailId) {
   if (btn) { btn.textContent = isOpen ? '詳細' : '閉じる'; btn.classList.toggle('open', !isOpen); }
 }
 
+// 詳細行の外をクリックで閉じる
+document.addEventListener('click', e => {
+  if (e.target.closest('.detail-row') || e.target.closest('.btn-detail')) return;
+  document.querySelectorAll('.detail-row').forEach(dtr => {
+    if (dtr.style.display !== 'none') {
+      dtr.style.display = 'none';
+      const btn = document.getElementById(dtr.id.replace('_d',''))?.querySelector('.btn-detail');
+      if (btn) { btn.textContent = '詳細'; btn.classList.remove('open'); }
+    }
+  });
+});
+
 function delRowPair(id) {
   document.getElementById(id)?.remove();
   document.getElementById(id + '_d')?.remove();
