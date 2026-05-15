@@ -561,7 +561,8 @@ if (ref === 'other' && !myCode) {
     const STORAGE_KEY_MY = 'bigfive_my_results';
     const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
     if (myResults.length > 0) {
-      myCode = myResults[0].code;
+      const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+      myCode = myResults[activeIdx].code;
       console.log('LocalStorageから自分のコードを読み込みました:', myCode);
     }
   } catch (e) {
