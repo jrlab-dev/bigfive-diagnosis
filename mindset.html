@@ -405,6 +405,7 @@ function calcScore() {
 function showResult(preScore, preType) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
+  window.scrollTo(0, 0);
 
   const score = preScore !== undefined ? preScore : calcScore();
   const type = preType || (score >= 3.5 ? 'growth' : score >= 2.5 ? 'mixed' : 'fixed');

@@ -751,6 +751,7 @@ function calcScores() {
 function showResult(preScores, preMainKey) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
+  window.scrollTo(0, 0);
 
   const scores = preScores || calcScores();
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
