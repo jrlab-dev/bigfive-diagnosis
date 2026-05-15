@@ -260,6 +260,16 @@ const DIAGNOSES = [
     questions: 10,
     minutes: 3,
   },
+  {
+    id: 'career',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',
+    name: 'キャリア適性診断',
+    desc: 'ビッグファイブの結果をもとに18業界・26職種への適性を分析。科学的根拠に基づくキャリアマッチング。無料。',
+    url: 'career.html',
+    questions: 0,
+    minutes: 0,
+    recommend: { factor: 'C', score: 5, reason: '真面目なあなたに。キャリア戦略を科学的に分析しましょう。' },
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -313,8 +323,9 @@ function diagCardHTML(d, done) {
         <div class="diag-name">${d.name}</div>
         <div class="diag-desc">${d.desc}</div>
         <div class="diag-meta">
-          <span class="diag-tag tag-q"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${d.questions}問</span>
-          <span class="diag-tag tag-time"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 約${d.minutes}分</span>
+          ${d.questions > 0 ? `<span class="diag-tag tag-q"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${d.questions}問</span>
+          <span class="diag-tag tag-time"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 約${d.minutes}分</span>` :
+          '<span class="diag-tag tag-q"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> 診断結果から即分析</span>'}
           ${isDone ? '<span class="diag-tag tag-done">✓ 受診済み</span>' : ''}
         </div>
       </div>

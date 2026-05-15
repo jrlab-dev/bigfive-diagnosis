@@ -1062,6 +1062,43 @@ body.theme-light .career-reason {
   border-left-color: oklch(0.58 0.22 285 / 0.25) !important;
 }
 
+/* ===== career.html キャリア適性診断 ===== */
+body.theme-light .rank-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.88 0.03 270 / 0.6) !important;
+}
+body.theme-light .rank-bar-bg {
+  background: oklch(0.88 0.03 270 / 0.35) !important;
+}
+body.theme-light .rank-tag {
+  background: oklch(0.58 0.15 85 / 0.08) !important;
+  border-color: oklch(0.58 0.15 85 / 0.2) !important;
+}
+body.theme-light .archetype-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.88 0.03 270 / 0.6) !important;
+}
+body.theme-light .archetype-card.active {
+  border-color: oklch(0.75 0.15 85) !important;
+  box-shadow: 0 4px 20px oklch(0.75 0.15 85 / 0.1) !important;
+}
+body.theme-light .analysis-box {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: oklch(0.88 0.03 270 / 0.6) !important;
+}
+body.theme-light .expand-btn {
+  background: oklch(0.58 0.15 85 / 0.06) !important;
+  border-color: oklch(0.58 0.15 85 / 0.2) !important;
+}
+body.theme-light .hidden-list {
+  background: oklch(1.0 0.0 0 / 0.6) !important;
+  border-color: oklch(0.88 0.03 270 / 0.4) !important;
+}
+body.theme-light .related-link {
+  background: oklch(1.0 0.0 0 / 0.6) !important;
+  border-color: oklch(0.88 0.03 270 / 0.4) !important;
+}
+
 /* 相性カード */
 body.theme-light .compatibility-card {
   background: linear-gradient(145deg, oklch(0.72 0.18 340 / 0.08), oklch(0.58 0.22 285 / 0.05)) !important;

@@ -129,6 +129,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- キャリア適性診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/career.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- 総合性格レポート -->
   <url>
     <loc>https://bigfive.jr-genius.jp/report.html</loc>
