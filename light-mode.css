@@ -1496,6 +1496,15 @@ body.theme-light .diag-card:hover {
   background: oklch(0.58 0.22 285 / 0.06) !important;
   border-color: oklch(0.58 0.22 285 / 0.25) !important;
 }
+/* 因子カラー外枠（ライトモード） */
+body.theme-light .diag-card[data-fc="N"] { border-color: rgba(20,184,166,0.35) !important; }
+body.theme-light .diag-card[data-fc="A"] { border-color: rgba(244,114,182,0.35) !important; }
+body.theme-light .diag-card[data-fc="O"] { border-color: rgba(139,92,246,0.35) !important; }
+body.theme-light .diag-card[data-fc="C"] { border-color: rgba(59,130,246,0.35) !important; }
+body.theme-light .diag-card[data-fc="N"]:hover { border-color: rgba(20,184,166,0.6) !important; background: rgba(20,184,166,0.06) !important; }
+body.theme-light .diag-card[data-fc="A"]:hover { border-color: rgba(244,114,182,0.6) !important; background: rgba(244,114,182,0.06) !important; }
+body.theme-light .diag-card[data-fc="O"]:hover { border-color: rgba(139,92,246,0.6) !important; background: rgba(139,92,246,0.06) !important; }
+body.theme-light .diag-card[data-fc="C"]:hover { border-color: rgba(59,130,246,0.6) !important; background: rgba(59,130,246,0.06) !important; }
 body.theme-light .diag-name {
   color: var(--text) !important;
 }
@@ -2018,3 +2027,18 @@ body.theme-light .header-sub {
 /* kodomo.html（子ども向けはデフォルトがライト系なので、ライトモードCSS変数で上書きされる部分を戻す） */
 /* kodomo.html は --bg が #e6f3ff、--text が #0f2d4a と既にライトなので追加対応なし */
 /* feature-item は白半透明背景なので問題なし */
+
+/* 自己プロファイル：ライトモード（薄いグレー） */
+body.theme-light .selfprofile-beta {
+  background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08);
+}
+body.theme-light .selfprofile-beta-icon {
+  background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); color: rgba(0,0,0,0.25);
+}
+body.theme-light .selfprofile-beta-title { color: rgba(0,0,0,0.35); }
+body.theme-light .selfprofile-beta-title .beta-tag { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: rgba(0,0,0,0.35); }
+body.theme-light .selfprofile-beta-desc { color: rgba(0,0,0,0.25); }
+body.theme-light .selfprofile-beta-link {
+  background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); color: rgba(0,0,0,0.35);
+}
+body.theme-light .selfprofile-beta-link:hover { background: rgba(0,0,0,0.08); color: rgba(0,0,0,0.5); }
