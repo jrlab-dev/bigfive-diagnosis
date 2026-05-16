@@ -145,6 +145,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- キャリア統合分析 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/career-integration.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- 総合性格レポート -->
   <url>
     <loc>https://bigfive.jr-genius.jp/report.html</loc>

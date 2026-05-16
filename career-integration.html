@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/career-integration.html">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キャリア統合分析 — ビッグファイブで本当の自分を知る【公式】</title>
+<meta name="description" content="ビッグファイブ適性×RIASEC興味の2軸を統合。性格的適性と職業興味の両面から26職種を分析する最先端キャリア診断。無料・登録不要。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="キャリア統合分析 — ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:description" content="ビッグファイブ適性×RIASEC興味の2軸を統合。性格と興味の両面からあなたに最も合うキャリアを見つける。無料・登録不要。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/career-integration.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="キャリア統合分析 — ビッグファイブで本当の自分を知る【公式】">
+<meta name="twitter:description" content="ビッグファイブ適性×RIASEC興味の2軸を統合。無料・登録不要。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "キャリア統合分析【公式】",
+  "url": "https://bigfive.jr-genius.jp/career-integration.html",
+  "description": "ビッグファイブ適性×RIASEC興味の2軸を統合したキャリア分析。",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "genre": ["心理学", "キャリア", "適職診断", "ビッグファイブ", "RIASEC"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #2563eb; --accent2: #1d4ed8; --riasec: #8b5cf6; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .quiz-container { max-width: 640px; }
+
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(37,99,235,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(139,92,246,0.06) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate; }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  /* ===== イントロ（前提不足時） ===== */
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--accent); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 400px; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(37,99,235,0.3); transition: transform .2s; text-decoration: none; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
+  .cta-row .start-btn { font-size: 14px; padding: 14px 32px; }
+  .cta-btn-purple { background: linear-gradient(135deg, var(--riasec), #6d28d9); box-shadow: 0 4px 24px rgba(139,92,246,0.3); }
+
+  /* ===== ヘッダー ===== */
+  .ci-header { text-align: center; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); width: 100%; }
+  .ci-header .intro-badge { margin-bottom: 10px; }
+  .ci-header h1 { font-size: 20px; font-weight: 900; line-height: 1.3; }
+  .ci-header h1 span { color: var(--accent); }
+  .ci-header .header-sub { font-size: 12px; color: var(--dim); margin-top: 4px; }
+
+  /* ヘッダー2軸表示 */
+  .header-dual { display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+  .header-side { background: rgba(26,10,62,0.45); border-radius: 12px; padding: 10px 14px; backdrop-filter: blur(8px); flex: 1; min-width: 200px; max-width: 280px; }
+  .header-side-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px; }
+  .header-side-label.bf { color: var(--accent); }
+  .header-side-label.rc { color: var(--riasec); }
+  .mini-ocean-item { display: flex; align-items: center; gap: 4px; }
+  .mini-ocean-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; min-width: 40px; }
+  body.theme-light .mini-ocean-bar-bg { background: rgba(0,0,0,0.08); }
+  .mini-ocean-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .mini-ocean-label { font-size: 10px; font-weight: 700; min-width: 30px; }
+  .mini-ocean-score { font-size: 10px; color: var(--dim); min-width: 24px; text-align: right; }
+
+  /* ===== アーキタイプ ===== */
+  .archetype-wrap { display: flex; gap: 8px; width: 100%; flex-wrap: wrap; }
+  .archetype-card { flex: 1; min-width: 200px; background: rgba(26,10,62,0.45); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; backdrop-filter: blur(8px); text-align: center; }
+  .archetype-card.active { border-color: var(--accent); box-shadow: 0 4px 16px rgba(37,99,235,0.12); }
+  .archetype-name { font-size: 14px; font-weight: 900; margin-bottom: 2px; }
+  .archetype-catch { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .archetype-desc { font-size: 11px; color: var(--dim); line-height: 1.6; }
+
+  /* ===== 説明ボックス ===== */
+  .explain-box { width: 100%; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; padding: 14px 16px; backdrop-filter: blur(8px); margin-bottom: 16px; }
+  .explain-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .explain-box p { font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 4px; }
+  .explain-box strong { color: var(--text); }
+  .explain-box .bf-text { color: var(--accent); font-weight: 700; }
+  .explain-box .rc-text { color: var(--riasec); font-weight: 700; }
+
+  /* ===== 2カラムレイアウト ===== */
+  .two-col-container { display: flex; gap: 8px; width: 100%; }
+  .col { flex: 1; min-width: 0; }
+  .col-header { text-align: center; margin-bottom: 6px; }
+  .col-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; display: inline-block; letter-spacing: .05em; }
+  .bf-badge { background: rgba(37,99,235,0.1); color: var(--accent); border: 1px solid rgba(37,99,235,0.25); }
+  .riasec-badge { background: rgba(139,92,246,0.1); color: var(--riasec); border: 1px solid rgba(139,92,246,0.25); }
+
+  /* ===== コンパクトランキング ===== */
+  .compact-rank { display: flex; align-items: center; gap: 4px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .compact-rank:last-child { border-bottom: none; }
+  .compact-num { font-weight: 900; color: var(--dim); min-width: 16px; font-size: 9px; text-align: right; }
+  .compact-name { font-weight: 600; flex: 1; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .compact-pct { font-weight: 900; min-width: 26px; text-align: right; font-size: 10px; }
+  .bf-pct { color: var(--accent); }
+  .riasec-pct { color: var(--riasec); }
+
+  /* ===== 統合ボタン（横表示） ===== */
+  .integrate-btn { display: block; width: 100%; padding: 12px 24px; background: linear-gradient(135deg, var(--accent), var(--riasec)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 20px rgba(139,92,246,0.25); transition: transform .2s; margin-top: 12px; }
+  .integrate-btn:hover { transform: translateY(-2px); }
+  .integrate-btn:disabled { opacity: 0.7; cursor: default; transform: none; }
+
+  /* ===== 統合結果 ===== */
+  .section-title { font-size: 14px; font-weight: 900; margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title svg { color: var(--accent); }
+  .integrated-card { background: rgba(26,10,62,0.45); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 12px; backdrop-filter: blur(8px); margin-bottom: 6px; }
+  .integrated-card.aptitude_interest { border-left: 3px solid #22c55e; }
+  .integrated-card.aptitude_main { border-left: 3px solid var(--accent); }
+  .integrated-card.interest_plus { border-left: 3px solid var(--riasec); }
+  .integrated-card.neutral { border-left: 3px solid var(--dim); }
+  .integrated-top { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .integrated-num { font-size: 13px; font-weight: 900; color: var(--dim); min-width: 20px; }
+  .integrated-name { font-size: 13px; font-weight: 700; flex: 1; }
+  .integrated-pct { font-size: 16px; font-weight: 900; color: var(--accent); }
+  .integrated-tag { font-size: 9px; padding: 2px 7px; border-radius: 999px; font-weight: 700; }
+  .tag-aptitude_interest { background: rgba(34,197,94,0.1); color: #22c55e; }
+  .tag-aptitude_main { background: rgba(37,99,235,0.1); color: var(--accent); }
+  .tag-interest_plus { background: rgba(139,92,246,0.1); color: var(--riasec); }
+  .bar-row { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+  .bar-label { font-size: 9px; color: var(--dim); min-width: 24px; }
+  .bar-bg { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+  .bf-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .riasec-fill { background: linear-gradient(90deg, var(--riasec), #6d28d9); }
+  .bar-pct { font-size: 9px; color: var(--dim); min-width: 24px; text-align: right; }
+  .modifier-note { font-size: 9px; color: var(--dim); margin-top: 4px; }
+  .modifier-note.positive { color: #22c55e; }
+  .modifier-note.negative { color: #f97316; }
+
+  /* ===== ローディング ===== */
+  .integration-loading { position: absolute; inset: 0; background: rgba(10,14,39,0.88); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 10; }
+  .loading-spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+  .loading-text { font-size: 12px; color: var(--dim); }
+  .thinking-dots::after { content: ''; animation: dots 1.5s steps(4,end) infinite; }
+
+  /* ===== 関連リンク・免責 ===== */
+  .related-links { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 16px; }
+  .related-link { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(26,10,62,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 500; transition: border-color .2s; }
+  .related-link:hover { border-color: rgba(37,99,235,0.3); }
+  .related-link svg { color: var(--accent); flex-shrink: 0; }
+  .related-link span { flex: 1; }
+  .disclaimer { font-size: 10px; color: var(--dim); text-align: center; margin-top: 16px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.04); line-height: 1.7; }
+
+  /* ===== ライトモード ===== */
+  body.theme-light .compact-rank { border-bottom-color: rgba(0,0,0,0.06); }
+  body.theme-light .explain-box { background: oklch(1.0 0.0 0 / 0.72); border-color: oklch(0.88 0.03 270 / 0.5); }
+  body.theme-light .integrated-card { background: oklch(1.0 0.0 0 / 0.72); border-color: oklch(0.88 0.03 270 / 0.5); }
+  body.theme-light .header-side { background: oklch(1.0 0.0 0 / 0.72); }
+  body.theme-light .archetype-card { background: oklch(1.0 0.0 0 / 0.72); }
+  body.theme-light .bar-bg { background: rgba(0,0,0,0.06); }
+  body.theme-light .integration-loading { background: rgba(255,255,255,0.88); }
+  body.theme-light .loading-text { color: var(--dim); }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "キャリア統合分析", "item": "https://bigfive.jr-genius.jp/career-integration.html" }
+  ]
+}
+</script>
+</head>
+<body class="theme-light">
+<script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">トップに戻る</a>
+
+<div class="quiz-container">
+
+  <!-- 前提不足時 -->
+  <div class="intro" id="noScoresArea" style="display:none;"></div>
+
+  <!-- 結果エリア -->
+  <div id="resultArea" style="display:none;"></div>
+
+</div>
+
+<script>
+// ===== 星背景 =====
+(function(){
+  var c=document.getElementById('bgStars'),ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  for(var i=0;i<100;i++){ctx.beginPath();ctx.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.2,0,2*Math.PI);ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.5+0.15)+')';ctx.fill();}
+})();
+
+// ===== 共通データ =====
+var KEYS=['O','C','E','A','N'];
+var RIASEC_KEYS=['R','I','A','S','E','C'];
+var WEIGHTS={O:1.0,C:1.5,E:1.0,A:1.0,N:0.8};
+var BF_MAX_DIST=Math.sqrt(9*(1.0+1.5+1.0+1.0+0.8));
+
+var traitInfo={
+  O:{name:'開放性',color:'#8b5cf6'},
+  C:{name:'誠実性',color:'#3b82f6'},
+  E:{name:'外向性',color:'#f97316'},
+  A:{name:'協調性',color:'#f472b6'},
+  N:{name:'感受性',color:'#14b8a6'}
+};
+
+var TYPE_INFO={
+  R:{name:'現実型',short:'R',color:'#ef4444',catch:'実践的・体を使う'},
+  I:{name:'研究型',short:'I',color:'#3b82f6',catch:'分析的・知的探求'},
+  A:{name:'芸術型',short:'A',color:'#f59e0b',catch:'創造的・表現的'},
+  S:{name:'社会型',short:'S',color:'#22c55e',catch:'支援的・対人重視'},
+  E:{name:'企業型',short:'E',color:'#f97316',catch:'指導的・ビジネス志向'},
+  C:{name:'慣習型',short:'C',color:'#8b5cf6',catch:'整理的・正確性重視'}
+};
+
+var JOB_TYPES=[
+  {id:'sales',name:'営業',ideal:{O:3.0,C:3.5,E:4.5,A:2.5,N:2.0}},
+  {id:'planning',name:'企画・商品開発',ideal:{O:4.5,C:3.5,E:3.0,A:3.0,N:2.5}},
+  {id:'marketing',name:'マーケティング',ideal:{O:4.0,C:3.5,E:3.5,A:3.0,N:2.5}},
+  {id:'management',name:'経営・管理',ideal:{O:3.5,C:4.0,E:3.5,A:2.5,N:2.0}},
+  {id:'hr_labor',name:'人事・労務',ideal:{O:3.0,C:3.5,E:3.5,A:4.0,N:2.5}},
+  {id:'accounting',name:'経理・財務',ideal:{O:2.5,C:4.5,E:2.5,A:2.5,N:2.0}},
+  {id:'se',name:'SE・システム開発',ideal:{O:4.0,C:4.0,E:2.5,A:2.5,N:2.0}},
+  {id:'research',name:'研究・開発',ideal:{O:4.5,C:3.5,E:2.5,A:3.0,N:2.5}},
+  {id:'design',name:'デザイン・クリエイティブ',ideal:{O:4.5,C:3.0,E:3.0,A:3.0,N:3.5}},
+  {id:'pr',name:'広報・PR',ideal:{O:3.5,C:3.5,E:4.0,A:3.5,N:2.5}},
+  {id:'legal',name:'法務',ideal:{O:3.0,C:4.5,E:2.5,A:2.0,N:2.0}},
+  {id:'cs',name:'カスタマーサポート',ideal:{O:3.0,C:3.5,E:3.5,A:4.5,N:3.0}},
+  {id:'production',name:'生産・製造',ideal:{O:2.5,C:4.5,E:2.5,A:3.0,N:2.0}},
+  {id:'qa',name:'品質管理',ideal:{O:3.0,C:4.5,E:2.5,A:3.0,N:2.0}},
+  {id:'logistics_p',name:'物流・購買',ideal:{O:2.5,C:4.0,E:3.0,A:3.0,N:2.0}},
+  {id:'field',name:'施工・現場管理',ideal:{O:2.5,C:4.0,E:3.5,A:2.5,N:2.0}},
+  {id:'medical_job',name:'医療・看護',ideal:{O:3.0,C:4.0,E:3.0,A:4.5,N:2.5}},
+  {id:'teaching',name:'教育・講師',ideal:{O:4.0,C:3.5,E:3.5,A:4.0,N:2.5}},
+  {id:'consultant',name:'コンサルタント',ideal:{O:4.0,C:4.0,E:4.0,A:2.5,N:2.5}},
+  {id:'webdev',name:'Web・アプリ開発',ideal:{O:4.0,C:3.5,E:2.5,A:2.5,N:2.5}},
+  {id:'data_ai',name:'データ分析・AI',ideal:{O:4.0,C:4.0,E:2.5,A:2.5,N:2.0}},
+  {id:'sales_plan',name:'営業企画',ideal:{O:3.5,C:4.0,E:3.5,A:3.0,N:2.5}},
+  {id:'retail_store',name:'販売・接客',ideal:{O:3.0,C:3.5,E:4.5,A:3.5,N:2.5}},
+  {id:'civil',name:'公務員',ideal:{O:2.5,C:4.5,E:2.5,A:3.5,N:2.0}},
+  {id:'freelance',name:'フリーランス・起業',ideal:{O:4.0,C:3.5,E:3.5,A:2.5,N:2.5}},
+  {id:'hr_recruit',name:'人事・採用',ideal:{O:3.5,C:3.5,E:4.0,A:4.0,N:2.5}}
+];
+
+var ARCHETYPES=[
+  {id:'leader',name:'リーダー型',cond:function(s){return s.C>=4&&s.E>=4;},color:'#f59e0b',catch:'組織を動かし、結果を出す'},
+  {id:'creator',name:'クリエイター型',cond:function(s){return s.O>=4&&s.N>=3;},color:'#8b5cf6',catch:'新しい価値を生み出す'},
+  {id:'analyst',name:'分析型',cond:function(s){return s.C>=4&&s.O>=3&&s.E<=3;},color:'#3b82f6',catch:'論理と精度で課題を解く'},
+  {id:'supporter',name:'サポート型',cond:function(s){return s.A>=4&&s.E>=3;},color:'#f472b6',catch:'人を助け、チームを支える'},
+  {id:'pioneer',name:'パイオニア型',cond:function(s){return s.O>=4&&s.E>=3&&s.A<=3;},color:'#f97316',catch:'未知の領域に切り込む'},
+  {id:'craftsman',name:'職人型',cond:function(s){return s.C>=4&&s.O<=3;},color:'#14b8a6',catch:'決められたことを極める'},
+  {id:'diplomat',name:'外交官型',cond:function(s){return s.E>=4&&s.A>=4;},color:'#ec4899',catch:'人をつなぎ、場を動かす'},
+  {id:'sage',name:'賢者型',cond:function(s){return s.O>=4&&s.E<=3;},color:'#6366f1',catch:'知識を深め、真理を探る'}
+];
+
+// ===== RIASEC理想プロファイル（26職種） =====
+var RIASEC_IDEALS={
+  sales:       {R:2,I:2,A:3,S:4,E:5,C:3},
+  planning:    {R:2,I:3,A:5,S:3,E:3,C:3},
+  marketing:   {R:2,I:4,A:4,S:3,E:4,C:3},
+  management:  {R:3,I:2,A:2,S:3,E:5,C:4},
+  hr_labor:    {R:1,I:2,A:2,S:5,E:3,C:4},
+  accounting:  {R:2,I:2,A:1,S:2,E:2,C:5},
+  se:          {R:3,I:5,A:2,S:2,E:2,C:4},
+  research:    {R:2,I:5,A:3,S:2,E:2,C:3},
+  design:      {R:2,I:3,A:5,S:2,E:2,C:2},
+  pr:          {R:2,I:2,A:3,S:4,E:4,C:3},
+  legal:       {R:2,I:4,A:1,S:2,E:3,C:5},
+  cs:          {R:2,I:2,A:2,S:5,E:3,C:3},
+  production:  {R:5,I:2,A:1,S:2,E:2,C:5},
+  qa:          {R:3,I:4,A:1,S:2,E:2,C:5},
+  logistics_p: {R:4,I:2,A:1,S:2,E:3,C:4},
+  field:       {R:5,I:2,A:1,S:3,E:3,C:4},
+  medical_job: {R:3,I:4,A:2,S:5,E:3,C:4},
+  teaching:    {R:2,I:3,A:3,S:5,E:3,C:3},
+  consultant:  {R:2,I:4,A:2,S:3,E:5,C:3},
+  webdev:      {R:2,I:5,A:3,S:2,E:2,C:3},
+  data_ai:     {R:2,I:5,A:2,S:2,E:2,C:4},
+  sales_plan:  {R:2,I:3,A:2,S:3,E:4,C:4},
+  retail_store:{R:2,I:1,A:2,S:5,E:4,C:3},
+  civil:       {R:3,I:2,A:1,S:3,E:3,C:5},
+  freelance:   {R:2,I:3,A:4,S:2,E:5,C:2},
+  hr_recruit:  {R:1,I:2,A:3,S:5,E:4,C:3}
+};
+
+// ===== Big Fiveマッチング =====
+function matchPct(user,ideal){
+  var sumSq=0;
+  for(var i=0;i<KEYS.length;i++){
+    var diff=(user[KEYS[i]]||3)-ideal[KEYS[i]];
+    sumSq+=WEIGHTS[KEYS[i]]*diff*diff;
+  }
+  return Math.max(1,Math.round((1-Math.sqrt(sumSq)/BF_MAX_DIST)*100));
+}
+
+function rankItems(user,list){
+  return list.map(function(item){
+    return {item:item,pct:matchPct(user,item.ideal)};
+  }).sort(function(a,b){return b.pct-a.pct;});
+}
+
+// ===== RIASECマッチング =====
+var RIASEC_MAX_DIST=Math.sqrt(6*16);
+
+function riasecMatchPct(user,ideal){
+  var sumSq=0;
+  for(var i=0;i<RIASEC_KEYS.length;i++){
+    var diff=(user[RIASEC_KEYS[i]]||3)-ideal[RIASEC_KEYS[i]];
+    sumSq+=diff*diff;
+  }
+  return Math.max(1,Math.round((1-Math.sqrt(sumSq)/RIASEC_MAX_DIST)*100));
+}
+
+function rankItemsRIASEC(userScores){
+  return JOB_TYPES.map(function(job){
+    return {item:job,pct:riasecMatchPct(userScores,RIASEC_IDEALS[job.id])};
+  }).sort(function(a,b){return b.pct-a.pct;});
+}
+
+// ===== アーキタイプ選択 =====
+function pickArchetypes(scores){
+  var matched=[];
+  for(var i=0;i<ARCHETYPES.length;i++){
+    if(ARCHETYPES[i].cond(scores)) matched.push(ARCHETYPES[i]);
+    if(matched.length>=2) break;
+  }
+  if(matched.length===0){
+    var scored=ARCHETYPES.map(function(a){
+      var s=0;
+      if(scores.C>=3) s++;
+      if(scores.E>=3) s++;
+      if(scores.O>=3) s++;
+      if(scores.A>=3) s++;
+      if(scores.N>=3) s++;
+      return {a:a,s:s};
+    }).sort(function(a,b){return b.s-a.s;});
+    matched=[scored[0].a];
+    if(scored.length>1&&scored[1].s===scored[0].s) matched.push(scored[1].a);
+  }
+  return matched.slice(0,2);
+}
+
+// ===== 統合スコア =====
+var INTEGRATION_WEIGHT=0.15;
+
+function computeIntegrated(bfScores,riasecScores){
+  return JOB_TYPES.map(function(job){
+    var bfPct=matchPct(bfScores,job.ideal);
+    var riasecPct=riasecMatchPct(riasecScores,RIASEC_IDEALS[job.id]);
+    var modifier=(riasecPct-50)*INTEGRATION_WEIGHT;
+    var finalPct=Math.max(1,Math.min(100,Math.round(bfPct+modifier)));
+    var tag;
+    if(riasecPct>=60&&bfPct>=60) tag='aptitude_interest';
+    else if(bfPct>=60) tag='aptitude_main';
+    else if(riasecPct>=60) tag='interest_plus';
+    else tag='neutral';
+    return {item:job,bfPct:bfPct,riasecPct:riasecPct,finalPct:finalPct,modifier:Math.round(modifier*10)/10,tag:tag};
+  }).sort(function(a,b){return b.finalPct-a.finalPct;});
+}
+
+// ===== SVGアイコン =====
+var ICONS={
+  briefcase:'<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
+  star:'<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>',
+  merge:'<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>',
+  chart:'<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>'
+};
+
+// ===== メイン処理 =====
+(function(){
+  var bfScores=null,riasecScores=null;
+
+  // Big Five読込
+  var urlParams=new URLSearchParams(location.search);
+  var code=urlParams.get('code');
+  if(code&&/^[1-5]{5}$/.test(code)){
+    bfScores={O:parseInt(code[0]),C:parseInt(code[1]),E:parseInt(code[2]),A:parseInt(code[3]),N:parseInt(code[4])};
+  }
+  if(!bfScores){
+    var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
+    var idx=Math.min(parseInt(localStorage.getItem('bigfive_active_my_index')||'0'),Math.max(0,bfList.length-1));
+    var bf=bfList.length>0?bfList[idx]:null;
+    if(bf&&bf.scores) bfScores=bf.scores;
+  }
+
+  // RIASEC読込
+  var riasecSaved=localStorage.getItem('riasec_result');
+  if(riasecSaved){
+    try{
+      var rd=JSON.parse(riasecSaved);
+      if(rd.scores){
+        riasecScores={};
+        RIASEC_KEYS.forEach(function(t){riasecScores[t]=rd.scores[t]?rd.scores[t].avg:3;});
+      }
+    }catch(e){}
+  }
+
+  // 前提チェック
+  if(!bfScores||!riasecScores){
+    showCTA(bfScores,riasecScores);
+    return;
+  }
+
+  renderResults(bfScores,riasecScores);
+})();
+
+// ===== CTA表示 =====
+function showCTA(bf,riasec){
+  var el=document.getElementById('noScoresArea');
+  el.style.display='flex';
+  el.style.flexDirection='column';
+  el.style.alignItems='center';
+  el.style.gap='16px';
+  el.style.paddingTop='40px';
+  var html='<span class="intro-badge">'+ICONS.merge+' キャリア統合分析</span>';
+  html+='<h1>適性×興味の<span>統合分析</span></h1>';
+  html+='<p class="intro-sub">ビッグファイブ（性格的適性）とRIASEC（職業興味）の2つの結果を統合して、あなたに最も合うキャリアを見つけます。</p>';
+
+  if(!bf&&!riasec){
+    html+='<p class="intro-note" style="color:var(--accent);font-weight:700;">両方の診断結果が必要です</p>';
+    html+='<div class="cta-row">';
+    html+='<a href="quiz.html" class="start-btn">ビッグファイブ診断を受ける</a>';
+    html+='<a href="riasec.html" class="start-btn cta-btn-purple">RIASEC診断を受ける</a>';
+    html+='</div>';
+  }else if(!bf){
+    html+='<p class="intro-note" style="color:var(--accent);font-weight:700;">ビッグファイブの診断結果が必要です</p>';
+    html+='<a href="quiz.html" class="start-btn">ビッグファイブ診断を受ける</a>';
+    html+='<p class="intro-note">10問・約3分・無料</p>';
+  }else{
+    html+='<p class="intro-note" style="color:var(--riasec);font-weight:700;">RIASECの診断結果が必要です</p>';
+    html+='<a href="riasec.html" class="start-btn cta-btn-purple">RIASEC職業興味診断を受ける</a>';
+    html+='<p class="intro-note">60問・約5分・無料</p>';
+  }
+  el.innerHTML=html;
+}
+
+// ===== 結果表示 =====
+var globalBfScores,globalRiasecScores;
+
+function renderResults(bfScores,riasecScores){
+  globalBfScores=bfScores;
+  globalRiasecScores=riasecScores;
+  var container=document.getElementById('resultArea');
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.alignItems='center';
+  container.style.gap='12px';
+
+  var html='';
+
+  // ヘッダー
+  html+='<div class="ci-header">';
+  html+='<span class="intro-badge">'+ICONS.merge+' キャリア統合分析</span>';
+  html+='<h1>適性×興味の<span>統合分析</span></h1>';
+  html+='<p class="header-sub">2つの角度からあなたのキャリアを見ます</p>';
+
+  // 2軸表示
+  html+='<div class="header-dual">';
+
+  // Big Five側
+  html+='<div class="header-side">';
+  html+='<div class="header-side-label bf">適性（ビッグファイブ）</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:4px;">';
+  for(var i=0;i<KEYS.length;i++){
+    var k=KEYS[i],sc=bfScores[k]||3,pct=(sc/5*100);
+    html+='<div class="mini-ocean-item">';
+    html+='<span class="mini-ocean-label" style="color:'+traitInfo[k].color+'">'+traitInfo[k].name+'</span>';
+    html+='<div class="mini-ocean-bar-bg"><div class="mini-ocean-bar-fill" style="width:'+pct+'%;background:'+traitInfo[k].color+'"></div></div>';
+    html+='<span class="mini-ocean-score">'+sc+'/5</span>';
+    html+='</div>';
+  }
+  html+='</div></div>';
+
+  // RIASEC側
+  var riasecSaved=JSON.parse(localStorage.getItem('riasec_result')||'{}');
+  var riasecCode=riasecSaved.scores?riasecSaved.scores.code||'':'';
+  var riasecSorted=riasecSaved.scores?riasecSaved.scores.sorted||RIASEC_KEYS:RIASEC_KEYS;
+
+  html+='<div class="header-side">';
+  html+='<div class="header-side-label rc">興味（RIASEC）</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:4px;">';
+  RIASEC_KEYS.forEach(function(t){
+    var avg=riasecScores[t]||3,pct=(avg/5*100);
+    html+='<div class="mini-ocean-item">';
+    html+='<span class="mini-ocean-label" style="color:'+TYPE_INFO[t].color+'">'+TYPE_INFO[t].name+'</span>';
+    html+='<div class="mini-ocean-bar-bg"><div class="mini-ocean-bar-fill" style="width:'+pct+'%;background:'+TYPE_INFO[t].color+'"></div></div>';
+    html+='<span class="mini-ocean-score">'+avg.toFixed(1)+'</span>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+  html+='</div>'; // header-dual
+  html+='</div>'; // ci-header
+
+  // アーキタイプ
+  var archetypes=pickArchetypes(bfScores);
+  html+='<div class="archetype-wrap">';
+  for(var i=0;i<archetypes.length;i++){
+    var a=archetypes[i];
+    html+='<div class="archetype-card active" style="border-color:'+a.color+'">';
+    html+='<div class="archetype-name" style="color:'+a.color+'">'+a.name+'</div>';
+    html+='<div class="archetype-catch" style="color:'+a.color+'">'+a.catch+'</div>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // 説明ボックス
+  html+='<div class="explain-box">';
+  html+='<h3>このページについて</h3>';
+  html+='<p><span class="bf-text">左（適性）</span>は、ビッグファイブの性格分析から「あなたの性格的に向いている」職種です。';
+  html+='<span class="rc-text">右（興味）</span>は、RIASECの職業興味検査から「あなたが関心を持っている」職種です。</p>';
+  html+='<p>適性と興味は別ものです。どちらも大切ですが、長く続けるなら<strong>適性が基礎</strong>になります。興味は経験で変わるものですが、性格的な向き不向きはそう簡単には変わりません。</p>';
+  html+='</div>';
+
+  // 2カラムランキング
+  var bfRank=rankItems(bfScores,JOB_TYPES);
+  var riasecRank=rankItemsRIASEC(riasecScores);
+  var showCount=20;
+
+  html+='<div class="two-col-container">';
+
+  // 左カラム：Big Five
+  html+='<div class="col col-left">';
+  html+='<div class="col-header"><span class="col-badge bf-badge">適性</span></div>';
+  for(var i=0;i<Math.min(showCount,bfRank.length);i++){
+    var r=bfRank[i];
+    html+='<div class="compact-rank">';
+    html+='<span class="compact-num">'+(i+1)+'</span>';
+    html+='<span class="compact-name">'+r.item.name+'</span>';
+    html+='<span class="compact-pct bf-pct">'+r.pct+'%</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // 右カラム：RIASEC
+  html+='<div class="col col-right">';
+  html+='<div class="col-header"><span class="col-badge riasec-badge">興味</span></div>';
+  for(var i=0;i<Math.min(showCount,riasecRank.length);i++){
+    var r=riasecRank[i];
+    html+='<div class="compact-rank">';
+    html+='<span class="compact-num">'+(i+1)+'</span>';
+    html+='<span class="compact-name">'+r.item.name+'</span>';
+    html+='<span class="compact-pct riasec-pct">'+r.pct+'%</span>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  html+='</div>'; // two-col-container
+
+  // 統合ボタン（下に横表示）
+  html+='<button class="integrate-btn" onclick="runIntegration()">2つの軸を統合して最適解を出す</button>';
+
+  // 統合結果エリア
+  html+='<div id="integrationResult"></div>';
+
+  // 関連リンク
+  html+='<div class="related-links">';
+  html+='<a href="career.html" class="related-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span>キャリア適性診断（詳細版）</span></a>';
+  html+='<a href="riasec.html" class="related-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>RIASEC職業興味診断</span></a>';
+  html+='<a href="diagnoses.html" class="related-link"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>診断一覧</span></a>';
+  html+='</div>';
+
+  // 免責
+  html+='<div class="disclaimer">この分析はビッグファイブ性格理論とHollandのRIASEC理論に基づく教育的・娯楽的なものです。最終的なキャリアの判断はご自身で行ってください。</div>';
+
+  container.innerHTML=html;
+}
+
+// ===== 統合実行 =====
+function runIntegration(){
+  var btn=document.querySelector('.integrate-btn');
+  if(btn.disabled) return;
+  btn.disabled=true;
+  btn.textContent='分析中...';
+
+  var tc=document.querySelector('.two-col-container');
+  var overlay=document.createElement('div');
+  overlay.className='integration-loading';
+  overlay.innerHTML='<div class="loading-spinner"></div><div class="loading-text">2つの軸を統合して最適解を計算中<span class="thinking-dots"></span></div>';
+  tc.style.position='relative';
+  tc.appendChild(overlay);
+
+  setTimeout(function(){
+    overlay.remove();
+    var integrated=computeIntegrated(globalBfScores,globalRiasecScores);
+    renderIntegration(integrated);
+  },2500);
+}
+
+function renderIntegration(integrated){
+  var container=document.getElementById('integrationResult');
+  container.style.display='block';
+
+  var html='<div class="section-title">'+ICONS.merge+' 統合ランキング</div>';
+  html+='<p style="font-size:11px;color:var(--dim);margin-bottom:12px;">適性（Big Five）をベースに、興味（RIASEC）の一致度でスコアを調整した結果です。</p>';
+
+  for(var i=0;i<integrated.length;i++){
+    var r=integrated[i];
+    var tagText=r.tag==='aptitude_interest'?'適性＋興味':r.tag==='aptitude_main'?'適性メイン':r.tag==='interest_plus'?'興味プラス':'';
+    var tagClass=r.tag;
+
+    html+='<div class="integrated-card '+tagClass+'">';
+    html+='<div class="integrated-top">';
+    html+='<span class="integrated-num">'+(i+1)+'</span>';
+    html+='<span class="integrated-name">'+r.item.name+'</span>';
+    if(tagText) html+='<span class="integrated-tag tag-'+tagClass+'">'+tagText+'</span>';
+    html+='<span class="integrated-pct">'+r.finalPct+'%</span>';
+    html+='</div>';
+    html+='<div class="bar-row"><span class="bar-label">適性</span><div class="bar-bg"><div class="bar-fill bf-fill" style="width:'+r.bfPct+'%"></div></div><span class="bar-pct">'+r.bfPct+'%</span></div>';
+    html+='<div class="bar-row"><span class="bar-label">興味</span><div class="bar-bg"><div class="bar-fill riasec-fill" style="width:'+r.riasecPct+'%"></div></div><span class="bar-pct">'+r.riasecPct+'%</span></div>';
+    if(r.modifier!==0){
+      var cls=r.modifier>0?'positive':'negative';
+      html+='<div class="modifier-note '+cls+'">興味による調整: '+(r.modifier>0?'+':'')+r.modifier+'pt</div>';
+    }
+    html+='</div>';
+  }
+
+  container.innerHTML=html;
+  container.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
