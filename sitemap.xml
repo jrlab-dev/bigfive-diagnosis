@@ -657,6 +657,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：喧嘩の仕方でわかる性格タイプ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kenka-seikaku-type.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：長続きするカップルの性格パターン -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/nagatsuzuki-couple.html</loc>
