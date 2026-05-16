@@ -221,8 +221,6 @@
 // ===== 共通データ =====
 var KEYS=['O','C','E','A','N'];
 var RIASEC_KEYS=['R','I','A','S','E','C'];
-var WEIGHTS={O:1.0,C:1.5,E:1.0,A:1.0,N:0.8};
-var BF_MAX_DIST=Math.sqrt(9*(1.0+1.5+1.0+1.0+0.8));
 
 var traitInfo={
   O:{name:'開放性',color:'#8b5cf6'},
@@ -242,32 +240,32 @@ var TYPE_INFO={
 };
 
 var JOB_TYPES=[
-  {id:'sales',name:'営業',ideal:{O:3.0,C:3.5,E:4.5,A:2.5,N:2.0}},
-  {id:'planning',name:'企画・商品開発',ideal:{O:4.5,C:3.5,E:3.0,A:3.0,N:2.5}},
-  {id:'marketing',name:'マーケティング',ideal:{O:4.0,C:3.5,E:3.5,A:3.0,N:2.5}},
-  {id:'management',name:'経営・管理',ideal:{O:3.5,C:4.0,E:3.5,A:2.5,N:2.0}},
-  {id:'hr_labor',name:'人事・労務',ideal:{O:3.0,C:3.5,E:3.5,A:4.0,N:2.5}},
-  {id:'accounting',name:'経理・財務',ideal:{O:2.5,C:4.5,E:2.5,A:2.5,N:2.0}},
-  {id:'se',name:'SE・システム開発',ideal:{O:4.0,C:4.0,E:2.5,A:2.5,N:2.0}},
-  {id:'research',name:'研究・開発',ideal:{O:4.5,C:3.5,E:2.5,A:3.0,N:2.5}},
-  {id:'design',name:'デザイン・クリエイティブ',ideal:{O:4.5,C:3.0,E:3.0,A:3.0,N:3.5}},
-  {id:'pr',name:'広報・PR',ideal:{O:3.5,C:3.5,E:4.0,A:3.5,N:2.5}},
-  {id:'legal',name:'法務',ideal:{O:3.0,C:4.5,E:2.5,A:2.0,N:2.0}},
-  {id:'cs',name:'カスタマーサポート',ideal:{O:3.0,C:3.5,E:3.5,A:4.5,N:3.0}},
-  {id:'production',name:'生産・製造',ideal:{O:2.5,C:4.5,E:2.5,A:3.0,N:2.0}},
-  {id:'qa',name:'品質管理',ideal:{O:3.0,C:4.5,E:2.5,A:3.0,N:2.0}},
-  {id:'logistics_p',name:'物流・購買',ideal:{O:2.5,C:4.0,E:3.0,A:3.0,N:2.0}},
-  {id:'field',name:'施工・現場管理',ideal:{O:2.5,C:4.0,E:3.5,A:2.5,N:2.0}},
-  {id:'medical_job',name:'医療・看護',ideal:{O:3.0,C:4.0,E:3.0,A:4.5,N:2.5}},
-  {id:'teaching',name:'教育・講師',ideal:{O:4.0,C:3.5,E:3.5,A:4.0,N:2.5}},
-  {id:'consultant',name:'コンサルタント',ideal:{O:4.0,C:4.0,E:4.0,A:2.5,N:2.5}},
-  {id:'webdev',name:'Web・アプリ開発',ideal:{O:4.0,C:3.5,E:2.5,A:2.5,N:2.5}},
-  {id:'data_ai',name:'データ分析・AI',ideal:{O:4.0,C:4.0,E:2.5,A:2.5,N:2.0}},
-  {id:'sales_plan',name:'営業企画',ideal:{O:3.5,C:4.0,E:3.5,A:3.0,N:2.5}},
-  {id:'retail_store',name:'販売・接客',ideal:{O:3.0,C:3.5,E:4.5,A:3.5,N:2.5}},
-  {id:'civil',name:'公務員',ideal:{O:2.5,C:4.5,E:2.5,A:3.5,N:2.0}},
-  {id:'freelance',name:'フリーランス・起業',ideal:{O:4.0,C:3.5,E:3.5,A:2.5,N:2.5}},
-  {id:'hr_recruit',name:'人事・採用',ideal:{O:3.5,C:3.5,E:4.0,A:4.0,N:2.5}}
+  {id:'sales',name:'営業',betas:{O:0.06,C:0.18,E:0.24,A:0.12,ES:0.10}},
+  {id:'planning',name:'企画・商品開発',betas:{O:0.26,C:0.20,E:0.14,A:0.08,ES:0.10}},
+  {id:'marketing',name:'マーケティング',betas:{O:0.24,C:0.20,E:0.16,A:0.08,ES:0.10}},
+  {id:'management',name:'経営・管理',betas:{O:0.18,C:0.28,E:0.28,A:0.06,ES:0.22}},
+  {id:'hr_labor',name:'人事・労務',betas:{O:0.10,C:0.20,E:0.18,A:0.24,ES:0.12}},
+  {id:'accounting',name:'経理・財務',betas:{O:-0.08,C:0.30,E:-0.04,A:0.06,ES:0.20}},
+  {id:'se',name:'SE・システム開発',betas:{O:0.22,C:0.26,E:0.04,A:0.04,ES:0.16}},
+  {id:'research',name:'研究・開発',betas:{O:0.30,C:0.22,E:0.04,A:0.06,ES:0.14}},
+  {id:'design',name:'デザイン・クリエイティブ',betas:{O:0.32,C:0.10,E:0.10,A:0.08,ES:0.12}},
+  {id:'pr',name:'広報・PR',betas:{O:0.18,C:0.18,E:0.26,A:0.10,ES:0.10}},
+  {id:'legal',name:'法務',betas:{O:0.10,C:0.30,E:0.04,A:0.05,ES:0.20}},
+  {id:'cs',name:'カスタマーサポート',betas:{O:0.04,C:0.18,E:0.16,A:0.28,ES:0.15}},
+  {id:'production',name:'生産・製造',betas:{O:-0.04,C:0.28,E:0.03,A:0.07,ES:0.16}},
+  {id:'qa',name:'品質管理',betas:{O:-0.06,C:0.30,E:0.03,A:0.06,ES:0.16}},
+  {id:'logistics_p',name:'物流・購買',betas:{O:0.04,C:0.26,E:0.08,A:0.08,ES:0.14}},
+  {id:'field',name:'施工・現場管理',betas:{O:0.04,C:0.24,E:0.14,A:0.07,ES:0.18}},
+  {id:'medical_job',name:'医療・看護',betas:{O:0.08,C:0.22,E:0.10,A:0.28,ES:0.20}},
+  {id:'teaching',name:'教育・講師',betas:{O:0.24,C:0.20,E:0.16,A:0.22,ES:0.12}},
+  {id:'consultant',name:'コンサルタント',betas:{O:0.16,C:0.26,E:0.22,A:0.06,ES:0.14}},
+  {id:'webdev',name:'Web・アプリ開発',betas:{O:0.24,C:0.25,E:0.04,A:0.04,ES:0.14}},
+  {id:'data_ai',name:'データ分析・AI',betas:{O:0.26,C:0.28,E:0.03,A:0.03,ES:0.14}},
+  {id:'sales_plan',name:'営業企画',betas:{O:0.18,C:0.24,E:0.18,A:0.08,ES:0.12}},
+  {id:'retail_store',name:'販売・接客',betas:{O:0.06,C:0.18,E:0.24,A:0.18,ES:0.10}},
+  {id:'civil',name:'公務員',betas:{O:-0.05,C:0.28,E:0.05,A:0.12,ES:0.16}},
+  {id:'freelance',name:'フリーランス・起業',betas:{O:0.22,C:0.22,E:0.22,A:0.04,ES:0.14}},
+  {id:'hr_recruit',name:'人事・採用',betas:{O:0.12,C:0.20,E:0.24,A:0.22,ES:0.12}}
 ];
 
 var ARCHETYPES=[
@@ -311,19 +309,25 @@ var RIASEC_IDEALS={
   hr_recruit:  {R:1,I:2,A:3,S:5,E:4,C:3}
 };
 
-// ===== Big Fiveマッチング =====
-function matchPct(user,ideal){
-  var sumSq=0;
-  for(var i=0;i<KEYS.length;i++){
-    var diff=(user[KEYS[i]]||3)-ideal[KEYS[i]];
-    sumSq+=WEIGHTS[KEYS[i]]*diff*diff;
+// ===== Big Fiveマッチング（Barrick & Mount 1991 回帰係数方式） =====
+function matchPct(user,item){
+  var b=item.betas,score=0,maxScore=0;
+  var POS=['O','C','E','A'];
+  for(var i=0;i<POS.length;i++){
+    var k=POS[i],bk=b[k]||0;
+    score+=bk*((user[k]||3)-1);
+    if(bk>0) maxScore+=bk*4;
   }
-  return Math.max(1,Math.round((1-Math.sqrt(sumSq)/BF_MAX_DIST)*100));
+  var bES=b.ES||0;
+  score+=bES*(5-(user.N||3));
+  if(bES>0) maxScore+=bES*4;
+  if(maxScore===0) return 50;
+  return Math.max(5,Math.min(100,Math.round(30+70*(score/maxScore))));
 }
 
 function rankItems(user,list){
   return list.map(function(item){
-    return {item:item,pct:matchPct(user,item.ideal)};
+    return {item:item,pct:matchPct(user,item)};
   }).sort(function(a,b){return b.pct-a.pct;});
 }
 
@@ -374,7 +378,7 @@ var INTEGRATION_WEIGHT=0.25;
 function computeIntegrated(bfScores,riasecScores){
   var RIASEC_THRESHOLD=60;
   return JOB_TYPES.map(function(job){
-    var bfPct=matchPct(bfScores,job.ideal);
+    var bfPct=matchPct(bfScores,job);
     var riasecPct=riasecMatchPct(riasecScores,RIASEC_IDEALS[job.id]);
     var modifier=(riasecPct-RIASEC_THRESHOLD)*INTEGRATION_WEIGHT;
     var finalPct=Math.max(1,Math.min(100,Math.round(bfPct+modifier)));
