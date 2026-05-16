@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/riasec-toha.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIASEC理論とは何か　Hollandの6タイプで見る「自分に合う仕事」の探し方｜ビッグファイブ診断</title>
+<meta name="description" content="HollandのRIASEC理論を徹底解説。現実型・研究型・芸術型・社会型・企業型・事務型の6タイプとHolland Codeの仕組み。自分に合う仕事を科学的に探す方法。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="RIASEC理論とは何か　Hollandの6タイプで見る「自分に合う仕事」の探し方">
+<meta property="og:description" content="HollandのRIASEC理論を徹底解説。6タイプとHolland Codeの仕組み。自分に合う仕事を科学的に探す方法。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/riasec-toha.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/riasec-toha.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RIASEC理論とは何か　Hollandの6タイプで見る「自分に合う仕事」の探し方">
+<meta name="twitter:description" content="HollandのRIASEC理論を徹底解説。6タイプとHolland Codeの仕組み。自分に合う仕事を科学的に探す方法。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "RIASEC理論とは何か　Hollandの6タイプで見る「自分に合う仕事」の探し方",
+  "description": "HollandのRIASEC理論を徹底解説。6タイプとHolland Codeの仕組み。自分に合う仕事を科学的に探す方法。",
+  "url": "https://bigfive.jr-genius.jp/blog/riasec-toha.html",
+  "datePublished": "2026-05-16",
+  "dateModified": "2026-05-16",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "RIASEC" },
+    { "@type": "Thing", "name": "Holland理論" },
+    { "@type": "Thing", "name": "職業興味" },
+    { "@type": "Thing", "name": "キャリア" },
+    { "@type": "Thing", "name": "適職" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "ブログ", "item": "https://bigfive.jr-genius.jp/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "RIASEC理論とは何か", "item": "https://bigfive.jr-genius.jp/blog/riasec-toha.html" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .type-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .type-card h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .type-card .type-label {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .type-card p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+  .cta-sub-link {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--dim);
+  }
+  .cta-sub-link a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .cta-sub-link a:hover {
+    text-decoration: underline;
+  }
+
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img {
+    width: 100%; max-width: 720px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: block;
+    height: auto;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">← トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">RIASEC</span>
+        <span class="tag">Holland理論</span>
+        <span class="tag">職業興味</span>
+        <span class="tag">キャリア</span>
+        <span class="tag">適職</span>
+      </div>
+      <h1 class="article-title">RIASEC理論とは何か<br><span>Hollandの6タイプ</span>で見る「自分に合う仕事」の探し方</h1>
+      <p class="article-lead">HollandのRIASEC理論を徹底解説。現実型・研究型・芸術型・社会型・企業型・事務型の6タイプとHolland Codeの仕組み、ビッグファイブとの関係まで。</p>
+      <p class="article-meta">公開：2026年5月16日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/riasec-toha.webp"
+      alt="RIASEC理論の6タイプを解説する画像"
+      width="1536" height="1024"
+      loading="eager"
+    >
+
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">「自分に合う仕事がわからない」を科学する</a></li>
+        <li><a href="#sec2">RIASEC理論とは何か</a></li>
+        <li><a href="#sec3">6つのタイプを詳しく見る</a></li>
+        <li><a href="#sec4">Holland Codeで適職を絞り込む</a></li>
+        <li><a href="#sec5">ビッグファイブとRIASECの関係</a></li>
+        <li><a href="#sec6">RIASEC診断を受けてみる</a></li>
+      </ol>
+    </nav>
+
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>「自分に合う仕事がわからない」を科学する</h2>
+
+        <p>進路選択や転職のタイミングで「自分に合う仕事がわからない」という悩みを持つ人は多い。適職テストを受けたことがある人でも、結果を見て「これで本当に自分に合っていると言えるのか」と疑問に思ったことがあるのではないか。</p>
+
+        <p>この疑問に対して、心理学には一つの有力な回答がある。HollandのRIASEC理論だ。1950年代から研究が始まり、現在でも世界中のキャリアカウンセリングで使われている職業興味理論で、アメリカ労働省のO*NETという職業情報データベースでも採用されている。</p>
+
+        <p>「自分は何に興味があるのか」「その興味に合う仕事は何か」を体系化したこの理論は、性格診断と組み合わせることでさらに精度の高いキャリア選択が可能になる。</p>
+      </section>
+
+      <section id="sec2">
+        <h2>RIASEC理論とは何か</h2>
+
+        <p>John L. Hollandが提唱したRIASEC理論は、人の職業興味を6つのタイプに分類する。R（Realistic：現実型）、I（Investigative：研究型）、A（Artistic：芸術型）、S（Social：社会型）、E（Enterprising：企業型）、C（Conventional：事務型）の6つだ。</p>
+
+        <p>Hollandが主張したのは、人は自分の性格に似た職業環境にいるとき、最も満足し、最も成果を出すということだ。性格と環境の「適合」がキャリアの満足度とパフォーマンスを決める。この仮説は多くの研究で支持されていて、 Tranbergら（1993）のメタ分析では、Hollandコードと実際の職業の一致度が高い人ほど、仕事の満足度が高く、離職率が低いことが確認されている。</p>
+
+        <div class="highlight-box">
+          <p>RIASEC理論の核となるのは「人と環境の適合」だ。自分がどのタイプに近いかを知り、そのタイプに合う職業環境を選ぶ。このシンプルな枠組みが、70年以上にわたってキャリア心理学の基盤として使い続けられている。</p>
+        </div>
+      </section>
+
+      <section id="sec3">
+        <h2>6つのタイプを詳しく見る</h2>
+
+        <p>RIASECの6タイプは、それぞれ異なる価値観と行動傾向を持つ。自分がどのタイプに当てはまるかを考えるときは、「どんな活動に自然とエネルギーが向くか」を基準にするとわかりやすい。</p>
+
+        <div class="type-grid">
+
+          <div class="type-card">
+            <p class="type-label">R  Realistic</p>
+            <h4>現実型</h4>
+            <p>物を動かし、体を使い、具体的な結果を生み出す活動を好む。エンジニア、大工、農家など。ツールや機械を使うのが得意で、実用的な問題解決を好む。机に座って書類を整理するより、手を動かして何かを作り上げることにやりがいを感じる。</p>
+          </div>
+
+          <div class="type-card">
+            <p class="type-label">I  Investigative</p>
+            <h4>研究型</h4>
+            <p>観察し、分析し、理解することを好む。科学者、データアナリスト、医師など。「なぜそうなるのか」を知りたい欲求が強く、データや論理的思考に基づいて判断する。人との交流よりも知的な探求にエネルギーを注ぐ傾向がある。</p>
+          </div>
+
+          <div class="type-card">
+            <p class="type-label">A  Artistic</p>
+            <h4>芸術型</h4>
+            <p>創造し、表現し、美を追求する活動を好む。デザイナー、作家、音楽家など。ルールや手順が決まっている環境より自由で創造的な環境を好む。感情や直感を大切にし、型にはまらない発想を持つ。</p>
+          </div>
+
+          <div class="type-card">
+            <p class="type-label">S  Social</p>
+            <h4>社会型</h4>
+            <p>人を助け、教え、育てる活動を好む。教師、カウンセラー、看護師など。他者の成長や幸福に貢献することにやりがいを感じる。技術的な問題より人間関係の問題に取り組むことを好む。</p>
+          </div>
+
+          <div class="type-card">
+            <p class="type-label">E  Enterprising</p>
+            <h4>企業型</h4>
+            <p>リーダーシップを取り、説得し、組織を動かす活動を好む。経営者、営業、プロジェクトマネージャーなど。リスクを恐れず影響力を行使することにやりがいを感じる。競争や交渉がある環境で力を発揮する。</p>
+          </div>
+
+          <div class="type-card">
+            <p class="type-label">C  Conventional</p>
+            <h4>事務型</h4>
+            <p>整理し、管理し、ルールに従う活動を好む。経理、事務、データ入力など。正確さと効率を重視し、決められた手順を確実にこなすことにやりがいを感じる。曖昧さより明確な基準がある環境を好む。</p>
+          </div>
+
+        </div>
+
+        <p>多くの人は1つのタイプに完全に当てはまるわけではない。複数のタイプが混ざり合っていて、その組み合わせで一人ひとりの職業興味の特徴が決まる。次に説明するHolland Codeは、その組み合わせを表現する仕組みだ。</p>
+      </section>
+
+      <section id="sec4">
+        <h2>Holland Codeで適職を絞り込む</h2>
+
+        <p>RIASEC診断では、6タイプのうちスコアが高い上位3つを組み合わせて「Holland Code」を出す。例えば、研究型が一番高く、次に芸術型、3番目に現実型なら「IAR」というコードになる。</p>
+
+        <p>上位3タイプの組み合わせは216通り存在する。このコードを使って自分に合う職業を絞り込む。研究型×芸術型の組み合わせが強い人には、UXリサーチャーや科学ジャーナリストのような職業が合いやすい。企業型×社会型なら、人事コンサルタントやNPOのディレクターが候補になる。</p>
+
+        <div class="highlight-box">
+          <p>重要なのは、2つのタイプが隣り合っているか、離れているかだ。RIASECの六角形モデルでは、隣接するタイプほど似ている。RとI、IとA、AとS、SとE、EとC、CとRは隣り合っているので、上位2タイプが隣接する組み合わせ（例：IA、SE）の人は、幅広い職業に適応しやすい。逆に対角にある組み合わせ（例：RとS、IとE）は価値観の差が大きく、両方を満たす職業を見つけるのが難しい。</p>
+        </div>
+
+        <p>Holland Codeの実用性は、単に「この職業が合う」と提案するだけではない。「このタイプの環境は苦手かもしれない」という予測にも使える。社会型が低い人が接客の多い職場に入ると、入社後のミスマッチにつながる。事務型が低い人がルールの厳しい事務職に就くと、窮屈さを感じやすい。自分のHolland Codeを知ることは、向いている仕事だけでなく、向いていない仕事も特定する手段になる。</p>
+      </section>
+
+      <section id="sec5">
+        <h2>ビッグファイブとRIASECの関係</h2>
+
+        <p>RIASECは職業興味を測るテストで、ビッグファイブは性格特性を測るテストだ。測っているものは違うが、両者には関係がある。</p>
+
+        <p>Barrickらの研究（2003）によると、ビッグファイブの外向性は企業型（E）と正の相関があり、開放性は芸術型（A）や研究型（I）と相関がある。誠実性は事務型（C）と相関し、協調性は社会型（S）と相関する。</p>
+
+        <p>つまりビッグファイブで自分の性格を知ることで、RIASECでどのタイプが高くなりそうかをある程度予測できる。逆に、RIASECの結果が自分のビッグファイブのプロファイルと大きく乖離している場合は、「性格には合っているけれど興味が向いていない」または「興味はあるけれど性格に合わない」という仕事がある可能性を示している。</p>
+
+        <div class="highlight-box">
+          <p>具体例を考えよう。ビッグファイブで外向性が高く、開放性も高い人。RIASECでも企業型（E）と芸術型（A）が高くなる可能性がある。でも実際にRIASECを受けてみたら、社会型（S）が一番高かった。この場合、「人と関わる仕事に興味があるけれど、自分の性格の強みを一番活かせるのはリーダーシップや創造性を発揮する場面だ」という読み取りができる。両方のデータを揃えることで、単一のテストでは見えないキャリアの方向性が見えてくる。</p>
+        </div>
+
+        <p>この両方を組み合わせて見ることで、より精度の高いキャリア選択が可能になる。「自分はどんな性格で、その性格がどんな仕事に向いていて、自分はどんな仕事に興味があるのか」。この3つの問いに同時に答えることが、キャリア選択を大きく間違えないコツだ。</p>
+      </section>
+
+      <section id="sec6">
+        <h2>RIASEC診断を受けてみる</h2>
+
+        <p>RIASEC診断には2つのバージョンがある。60問版（約5分）と291問版（約20分）だ。</p>
+
+        <p>60問版は手軽に全体像を把握したい人向け。10問ずつ6セクションに分かれていて、各タイプの傾向をサッと測れる。結果画面では6タイプのスコアがバーで表示され、上位3タイプのHolland Codeが判定される。</p>
+
+        <p>291問版は、活動・能力・職業の3つの側面から詳しく分析したい人向けだ。「何をするのが好きか」だけでなく「何が得意か」「どんな仕事に魅力を感じるか」を別々に測定するので、興味と能力のギャップも見える化される。途中で中断しても保存されるので、まとまった時間が取れない人でも安心だ。</p>
+
+        <p>どちらのバージョンでも、結果にはHolland Codeに基づく適職リストと、ビッグファイブスコアとのクロス分析が含まれる。ビッグファイブの診断を受けていれば、性格と職業興味の両面から自分に合う仕事を絞り込める。</p>
+      </section>
+
+    </div><!-- /.article-body -->
+
+    <section class="cta-box">
+      <h2>RIASEC職業興味診断を無料で受ける</h2>
+      <p>HollandのRIASEC理論に基づき、あなたの職業興味タイプを判定。ビッグファイブの結果と組み合わせて、自分に合う仕事を科学的に探せます。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">60問 / 約5分</span>
+        <span class="cta-badge">291問 / 約20分</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+      </div>
+      <a href="https://bigfive.jr-genius.jp/riasec.html" class="cta-btn">RIASEC職業興味診断を受ける →</a>
+      <p class="cta-sub-link">ビッグファイブの結果がない場合は <a href="https://bigfive.jr-genius.jp/">先にビッグファイブ診断を</a></p>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="shigoto-muki-fumuki.html">ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事</a></li>
+        <li><a href="career-tekisei-shindan.html">性格と仕事の相性を科学的に判定する　ビッグファイブ×キャリア適性の仕組み</a></li>
+        <li><a href="bigfive-facet-toha.html">ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる</a></li>
+        <li><a href="mindset-toha.html">マインドセットとは？「才能は変えられる」と信じる人が結果を出す理由</a></li>
+        <li><a href="seikaku-shinrigaku-top10.html">テストで性格がわかる心理学、科学的信憑性トップ10</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>

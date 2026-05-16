@@ -609,4 +609,20 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：RIASEC理論とは何か Hollandの6タイプで見る「自分に合う仕事」の探し方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/riasec-toha.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格と仕事の相性を科学的に判定する ビッグファイブ×キャリア適性の仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
