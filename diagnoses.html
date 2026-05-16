@@ -290,6 +290,16 @@ const DIAGNOSES = [
     minutes: 5,
     recommend: { factor: 'O', score: 5, reason: '好奇心が旺盛なあなたに。自分に合う職業の方向性が見つかります。' },
   },
+  {
+    id: 'career-integration',
+    fc: 'O',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 009 9"/></svg>',
+    name: 'キャリア統合分析',
+    desc: 'ビッグファイブ適性×RIASEC興味の2軸を統合。性格的適性と職業興味の両面から最適なキャリアを分析。両方の結果が必要です。',
+    url: 'career-integration.html',
+    questions: 0,
+    minutes: 0,
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -317,6 +327,7 @@ function getDoneIds() {
     if (localStorage.getItem('eq_result')) done.add('eq');
     if (localStorage.getItem('impostor_result')) done.add('impostor');
     if (localStorage.getItem('riasec_result')) done.add('riasec');
+    if (localStorage.getItem('riasec_result') && localStorage.getItem('bigfive_my_results')) done.add('career-integration');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => !r.relation || !r.relation.startsWith('child'))) done.add('other');
   } catch(e) {}
