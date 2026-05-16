@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/riasec.html">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIASEC職業興味診断 — ビッグファイブで本当の自分を知る【公式】</title>
+<meta name="description" content="HollandのRIASEC理論に基づく職業興味診断。60問（約5分）または291問（約20分）で、あなたの性格に合う職業・業界がわかる。無料・登録不要。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="RIASEC職業興味診断 — ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:description" content="HollandのRIASEC理論で職業適性を診断。60問または291問。無料・登録不要。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/riasec.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RIASEC職業興味診断【公式】">
+<meta name="twitter:description" content="HollandのRIASEC理論で職業適性を診断。無料・登録不要。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"RIASEC職業興味診断【公式】","url":"https://bigfive.jr-genius.jp/riasec.html","description":"HollandのRIASEC理論に基づく職業興味診断。","isPartOf":{"@type":"WebSite","name":"ビッグファイブで本当の自分を知る【公式】","url":"https://bigfive.jr-genius.jp/"},"inLanguage":"ja","genre":["心理学","キャリア","職業適性","RIASEC"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://bigfive.jr-genius.jp/"},{"@type":"ListItem","position":2,"name":"RIASEC職業興味診断","item":"https://bigfive.jr-genius.jp/riasec.html"}]}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #f59e0b; --accent2: #d97706; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 30%, rgba(245,158,11,0.06) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 70%, rgba(239,68,68,0.05) 0%, transparent 70%); animation: nebula-drift 25s ease-in-out infinite alternate; }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  /* バージョン選択 */
+  .ver-cards { display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-top: 16px; }
+  .ver-card { flex: 1; min-width: 240px; background: rgba(26,10,62,0.45); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); text-align: center; cursor: pointer; transition: border-color .2s, transform .2s; }
+  .ver-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .ver-card .ver-num { font-size: 32px; font-weight: 900; color: var(--accent); }
+  .ver-card .ver-label { font-size: 14px; font-weight: 700; margin: 4px 0; }
+  .ver-card .ver-time { font-size: 12px; color: var(--dim); }
+  .ver-card .ver-desc { font-size: 12px; color: var(--dim); margin-top: 8px; line-height: 1.6; }
+
+  /* セクション遷移 */
+  .section-intro { display: none; text-align: center; padding: 40px 20px; }
+  .section-intro.show { display: block; }
+  .section-intro .sec-label { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .1em; margin-bottom: 8px; }
+  .section-intro h2 { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+  .section-intro p { font-size: 13px; color: var(--dim); line-height: 1.7; max-width: 360px; margin: 0 auto 16px; }
+  .section-intro .sec-btn { padding: 12px 40px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  /* 質問エリア */
+  .q-factor-label { font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+  .q-number { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 12px; }
+  .q-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 60px; }
+  #answersArea { display: flex; gap: 6px; width: 100%; margin-bottom: 16px; }
+  .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim);
+    background: rgba(245,158,11,0.04); border: 1.5px solid rgba(245,158,11,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
+    min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
+  .answer-btn:hover { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; font-weight: 700; }
+  .answer-btn .answer-label { font-size: 10px; line-height: 1.3; }
+  .answer-labels { display: flex; gap: 6px; width: 100%; margin-bottom: 6px; }
+  .answer-labels span { flex: 1; text-align: center; font-size: 10px; color: var(--dim); }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(245,158,11,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+
+  /* 結果 */
+  .result-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .holland-code { font-size: 40px; font-weight: 900; letter-spacing: .08em; margin: 12px 0 4px; }
+  .holland-code span { display: inline-block; }
+  .code-desc { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 400px; margin: 0 auto; }
+
+  /* 因子バー */
+  .factor-box { width: 100%; background: rgba(26,10,62,0.45); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; backdrop-filter: blur(8px); margin-bottom: 8px; }
+  .factor-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .factor-row:last-child { margin-bottom: 0; }
+  .factor-label { font-size: 12px; font-weight: 700; min-width: 56px; }
+  .factor-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .factor-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; width: 0%; }
+  .factor-score { font-size: 12px; font-weight: 700; min-width: 36px; text-align: right; }
+
+  /* タイプ解説 */
+  .type-cards { display: flex; gap: 8px; width: 100%; flex-wrap: wrap; }
+  .type-card { flex: 1; min-width: 180px; background: rgba(26,10,62,0.45); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; backdrop-filter: blur(8px); }
+  .type-card h3 { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+  .type-card .type-catch { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+  .type-card p { font-size: 12px; color: var(--dim); line-height: 1.65; }
+
+  /* 適職 */
+  .career-section { width: 100%; margin-top: 12px; }
+  .career-section h3 { font-size: 14px; font-weight: 900; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .career-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .career-tag { font-size: 12px; padding: 6px 12px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15); border-radius: 10px; color: var(--text); font-weight: 500; }
+
+  /* クロス分析 */
+  .cross-box { width: 100%; background: rgba(26,10,62,0.3); border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; padding: 16px; margin-bottom: 8px; }
+  .cross-box h3 { font-size: 13px; font-weight: 700; color: #a78bfa; margin-bottom: 8px; }
+  .cross-box p { font-size: 13px; color: var(--dim); line-height: 1.75; }
+
+  /* ナビボタン */
+  .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .nav-btn { padding: 10px 20px; border-radius: 999px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: transform .2s; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(26,10,62,0.4); color: var(--text); backdrop-filter: blur(8px); }
+  .nav-btn:hover { transform: translateY(-1px); }
+  .nav-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #fff; }
+
+  /* 免責 */
+  .disclaimer { font-size: 11px; color: var(--dim); text-align: center; margin-top: 24px; padding: 12px; border-top: 1px solid rgba(255,255,255,0.04); line-height: 1.7; }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body class="theme-light">
+<script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div><div class="blob blob-4"></div><div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">トップに戻る</a>
+
+<div class="quiz-container">
+
+  <!-- バージョン選択 -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">RIASEC 職業興味診断</span>
+    <h1>あなたの<span>職業興味パターン</span>を分析</h1>
+    <p class="intro-sub">HollandのRIASEC理論に基づき、6つの職業興味タイプ（現実・研究・芸術・社会・企業・慣習）の中からあなたに合うキャリア方向性を導きます。ビッグファイブとは別の角度から適職を探れます。</p>
+    <div class="ver-cards">
+      <div class="ver-card" onclick="startQuiz(60)">
+        <div class="ver-num">60</div>
+        <div class="ver-label">問バージョン</div>
+        <div class="ver-time">約5分</div>
+        <div class="ver-desc">各タイプ10問ずつ。サクッと自分の傾向を知りたい人向け。</div>
+      </div>
+      <div class="ver-card" onclick="startQuiz(291)">
+        <div class="ver-num">291</div>
+        <div class="ver-label">問バージョン</div>
+        <div class="ver-time">約20分</div>
+        <div class="ver-desc">活動・能力・職業の3セクション構成。詳しく分析したい人向け。</div>
+      </div>
+    </div>
+    <p class="intro-note" style="margin-top:16px;">無料・登録不要・結果は端末に保存</p>
+  </div>
+
+  <!-- セクション遷移 -->
+  <div class="section-intro" id="sectionIntro"></div>
+
+  <!-- 進捗 -->
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText"></div>
+  </div>
+
+  <!-- 質問 -->
+  <div class="question-area" id="questionArea" style="display:none;">
+    <div class="q-factor-label" id="qFactorLabel"></div>
+    <div class="q-number" id="qNumber"></div>
+    <div class="q-text" id="qText"></div>
+    <div class="answer-labels" id="answerLabels"></div>
+    <div id="answersArea"></div>
+    <button class="back-btn" id="backBtn" onclick="goBack()">戻る</button>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loadingArea" style="display:none;">
+    <div class="loading-spinner"></div>
+    <p>あなたの職業興味パターンを分析中...</p>
+  </div>
+
+  <!-- 結果 -->
+  <div class="result" id="resultArea" style="display:none;"></div>
+
+</div>
+
+<script>
+// ===== 星背景 =====
+(function(){
+  var c=document.getElementById('bgStars'),ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  for(var i=0;i<100;i++){ctx.beginPath();ctx.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.2,0,2*Math.PI);ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.5+0.15)+')';ctx.fill();}
+})();
+
+// ===== データ定義 =====
+var TYPE_KEYS=['R','I','A','S','E','C'];
+var TYPE_INFO={
+  R:{name:'現実型',short:'R',color:'#ef4444',catch:'実践的・体を使う',desc:'物を作ったり、機械を操作したり、体を動かす作業にやりがいを感じるタイプ。現場での実践力が高く、目に見える成果を作り出すのが得意です。'},
+  I:{name:'研究型',short:'I',color:'#3b82f6',catch:'分析的・知的探求',desc:'データを分析したり、現象の法則を見つけたりする知的作業に喜びを感じるタイプ。好奇心が旺盛で、深く考え抜く集中力があります。'},
+  A:{name:'芸術型',short:'A',color:'#f59e0b',catch:'創造的・表現的',desc:'アイデアを形にしたり、感覚で表現したりする創造的な活動に生きがいを感じるタイプ。独創的な発想と豊かな感性が強みです。'},
+  S:{name:'社会型',short:'S',color:'#22c55e',catch:'支援的・対人重視',desc:'人の役に立ったり、何かを教えたりする対人活動に充実感を感じるタイプ。共感力が高く、人との関わりの中で力を発揮します。'},
+  E:{name:'企業型',short:'E',color:'#f97316',catch:'指導的・ビジネス志向',desc:'人を動かしたり、ビジネスを成長させたりする目標達成の作業に燃えるタイプ。リーダーシップと交渉力が強みです。'},
+  C:{name:'慣習型',short:'C',color:'#8b5cf6',catch:'整理的・正確性重視',desc:'データや書類を正確に処理したり、体系化したりする事務作業に安心感を感じるタイプ。几帳面さと信頼性が高いです。'}
+};
+
+var SECTION_LABELS={activity:'活動',competency:'能力',occupation:'職業'};
+var ANSWER_LABELS=['全く\nそう\n思わない','あまり\nそう\n思わない','どちら\nでも\nない','少し\nそう\n思う','強く\nそう\n思う'];
+var SECTION_NAMES=['activity','competency','occupation'];
+
+// ===== 60問データ =====
+var DATA_60={
+  R:{activity:['機械や道具を分解して組み立てる','木材を加工して何かを作る','車や自転車の修理を自分でやってみる','屋外で体を動かして作業する'],competency:['工具や機械の使い方を覚えるのが早い','手先が器用だと言われる','図面や設計図を読み取れる'],occupation:['建築作業員','自動車整備士','農業従事者']},
+  I:{activity:['科学記事や技術解説をじっくり読む','データを分析して傾向や法則を見つける','実験や観察を通じて仮説を検証する','新しい技術や発見について深く調べる'],competency:['数学や統計の問題を解くのが得意だ','複雑な問題を論理的に分析できる','プログラミングやデータ処理が得意だ'],occupation:['研究者','データサイエンティスト','医師']},
+  A:{activity:['絵を描いたり何かを創り出す','音楽を聴いたり演奏したりする','小説や詩、エッセイを書く','インテリアやファッションを工夫する'],competency:['アイデアを視覚的に表現するのが得意だ','独創的な発想が浮かびやすい','芸術やデザインのセンスに自信がある'],occupation:['デザイナー','作家','音楽関係の仕事']},
+  S:{activity:['人の悩みを聞いてアドバイスをする','子供や若者に何かを教える','困っている人を助ける活動に参加する','チームで協力して目標を達成する'],competency:['人の気持ちを敏感に察知できる','分かりやすく説明する能力がある','いろいろな人と打ち解けるのが得意だ'],occupation:['教師','カウンセラー','看護師']},
+  E:{activity:['グループをまとめてリーダーシップを発揮する','人を説得したり交渉したりする','新しいビジネスアイデアを考える','競争して成果を上げる'],competency:['自分の意見をはっきり伝えられる','人前で話すことに抵抗がない','目標を立てて計画的に実行できる'],occupation:['経営者・起業家','営業職','弁護士']},
+  C:{activity:['書類やデータを整理整頓する','決められた手順に従って作業する','家計簿や経費の記録を正確につける','パソコンでデータ入力する'],competency:['数字や詳細なデータを正確に扱える','規則やルールをきちんと守れる','スケジュールや予定をきっちり管理できる'],occupation:['経理・会計','銀行員','事務職']}
+};
+
+// ===== 291問データ =====
+var DATA_291={
+  R:{
+    activity:[
+      '機械や道具を分解して組み立てる','木材を加工して何かを作る','車やバイクのエンジンをいじる',
+      '土を耕して植物を育てる','配管や電気配線の修理をする','手作り料理に熱中する',
+      'アウトドアで体を動かす','模型やプラモデルを作る','電動工具を使ってDIYをする',
+      '自転車の修理やメンテナンスをする','釣りやキャンプなど自然の中で過ごす','家の修繕やリフォームをする',
+      '金属を切削したり加工したりする','スポーツや体力を使う活動に参加する','家具を自分で組み立てる',
+      '工場の製造ラインに興味がある'
+    ],
+    competency:[
+      '工具や機械の使い方を覚えるのが早い','手先が器用だと言われる','図面や設計図を正確に読み取れる',
+      '体を使った作業に持久力がある','機械の仕組みを直感的に理解できる','空間認識能力に自信がある',
+      '故障の原因を見つけるのが得意だ','作業手順を一度で覚えられる','測定を正確に行うことができる',
+      '肉体的な労働を苦にしない','現場での臨機応変な対応が得意だ','安全手順を確実に守れる',
+      '丁寧な仕上げ作業が得意だ','設備の定期点検を継続できる','材料の種類や性質を理解している',
+      '危険箇所を察知する注意力がある'
+    ],
+    occupation:[
+      '建築作業員','自動車整備士','電気工事士','大工','農業従事者',
+      'パイロット','料理人','配管工','測量士','溶接工',
+      '消防士','船舶乗組員','歯科技工士','園芸師','体育教師',
+      '製造ライン作業員','造園師'
+    ]
+  },
+  I:{
+    activity:[
+      '科学記事や技術解説をじっくり読む','データを分析して傾向を見つける','実験や観察を通じて仮説を検証する',
+      '新しい技術や発見について深く調べる','数学のパズルや論理問題に取り組む','医学や生物の記事に興味を持つ',
+      '統計グラフやチャートを読み解く','テクノロジーの最新動向を追う','研究論文や学術書に目を通す',
+      'プログラミングでアルゴリズムを組む','自然現象の理由を考えたくなる','歴史や文化の背景を深掘りする',
+      '実験器具や測定機器に興味がある','論理的な議論に参加するのが好きだ','新しい知識を独学で身につける',
+      '分析レポートをまとめる作業が好きだ'
+    ],
+    competency:[
+      '数学や統計の問題を解くのが得意だ','複雑な問題を論理的に分析できる','プログラミングやデータ処理が得意だ',
+      '実験を計画通りに進められる','外国語の論文を読める','批判的思考ができる',
+      '観察力が鋭いとよく言われる','仮説を立てて検証する力がある','正確な記録をつけることができる',
+      '専門用語を理解するのが早い','数式を用いた説明に抵抗がない','根気よく一つのテーマに取り組める',
+      '複数の情報源を比較検討できる','科学的な根拠に基づいて判断できる','データの傾向から予測を立てられる',
+      '研究計画を段取りよく立てられる'
+    ],
+    occupation:[
+      '研究者','データサイエンティスト','医師','薬剤師','プログラマー',
+      '獣医師','心理学者','経済学者','システムエンジニア','実験技術者',
+      '大学教授','天文学者','化学者','生物学者','臨床検査技師',
+      '品質分析技術者','宇宙飛行士'
+    ]
+  },
+  A:{
+    activity:[
+      '絵を描いたり何かを創り出す','音楽を聴いたり演奏したりする','小説や詩、エッセイを書く',
+      'インテリアやファッションを工夫する','写真や動画を撮影・編集する','演劇やダンスに参加する',
+      '手芸や工芸に取り組む','映画や演劇を見て感銘を受ける','ポエトリーやスピーチで表現する',
+      'カラーコーディネートをする','アイデアスケッチをよく描く','SNSでクリエイティブな発信をする',
+      '美術館やギャラリーによく行く','コスプレや着こなしにこだわる','曲を作ったり歌詞を書いたりする',
+      'ブログやnoteで自分の世界観を表現する'
+    ],
+    competency:[
+      'アイデアを視覚的に表現するのが得意だ','独創的な発想が浮かびやすい','芸術やデザインのセンスに自信がある',
+      '色彩感覚が鋭い','楽器の演奏や歌が得意だ','文章で感情や情景を描写できる',
+      '人と違う視点を持っている','直感に従って判断することが多い','物語を作る想像力が豊かだ',
+      '美意識が高いと言われる','プレゼン資料のデザインにこだわる','トレンドを取り入れる感覚がある',
+      '即興で何かを作るのが得意だ','映像や音で伝える力がある','雰囲気や空間を作るのが上手い',
+      '共感力が高く作品から深く感じる'
+    ],
+    occupation:[
+      'グラフィックデザイナー','作家','音楽家','俳優','インテリアデザイナー',
+      '写真家','イラストレーター','映画監督','建築家','ファッションデザイナー',
+      'Webデザイナー','コピーライター','アニメーター','ゲームクリエイター','美容師',
+      '花屋・フローリスト'
+    ]
+  },
+  S:{
+    activity:[
+      '人の悩みを聞いてアドバイスをする','子供や若者に何かを教える','困っている人を助ける活動に参加する',
+      'チームで協力して目標を達成する','ボランティア活動に参加する','コミュニティのイベントを企画する',
+      '高齢者や障害者をサポートする','カウンセリングや相談に乗る','育児や介護に関わる',
+      '部活やサークルで後輩を指導する','交流会や飲み会で場を盛り上げる','栄養や健康について人にアドバイスする',
+      'ペットの世話や動物と触れ合う','SNSで共感を呼ぶ発信をする','国際協力や開発支援に興味がある',
+      'メンタリングやコーチングに取り組む'
+    ],
+    competency:[
+      '人の気持ちを敏感に察知できる','分かりやすく説明する能力がある','いろいろな人と打ち解けるのが得意だ',
+      '傾聴力が高いとよく言われる','初対面の人と自然に会話できる','グループの調整役を務められる',
+      '感情的な場面でも冷静さを保てる','人の成長をサポートするのが得意だ','チームビルディングができる',
+      'アドバイスを求められることが多い','共感的な態度で人に接することができる','年齢や立場を超えて信頼関係を築ける',
+      '言語的・非言語的なコミュニケーションが得意だ','衝突を仲介・解決できる','配慮のある行動が自然にできる',
+      '相手の話の裏にある気持ちを読み取れる'
+    ],
+    occupation:[
+      '教師','カウンセラー','看護師','ソーシャルワーカー','人事担当',
+      'コーチ','セラピスト','保育士','医療従事者','言語聴覚士',
+      '介護士','学校カウンセラー','栄養士','相談員','臨床心理士',
+      '社会福祉士','健康管理士'
+    ]
+  },
+  E:{
+    activity:[
+      'グループをまとめてリーダーシップを発揮する','人を説得したり交渉したりする','新しいビジネスアイデアを考える',
+      '競争して成果を上げる','プレゼンテーションをする','イベントや会議を企画運営する',
+      '商品やサービスを人に勧める','起業や独立について考える','政治や社会問題に関心を持つ',
+      '投資や資産運用について学ぶ','セールスやマーケティング戦略を練る','目標数値を追いかける',
+      '人会や名刺交換会に参加する','プロジェクトを主導して進める','交渉や合意形成の場に立つ',
+      '新規顧客の開拓にやりがいを感じる'
+    ],
+    competency:[
+      '自分の意見をはっきり伝えられる','人前で話すことに抵抗がない','目標を立てて計画的に実行できる',
+      '交渉力に自信がある','人の長所を見抜くのが得意だ','決断力がある',
+      '影響力を持って人を動かせる','プレゼン資料を説得力のある内容にできる','タイムリーな判断ができる',
+      'リスクを評価して行動できる','組織の方向性を示すことができる','利害関係者の調整ができる',
+      '数字を使った成果管理が得意だ','モチベーションを高める言葉がけができる','競合分析や市場調査ができる',
+      '困難な状況でも前向きに取り組める'
+    ],
+    occupation:[
+      '経営者・起業家','営業職','弁護士','不動産仲介','マーケティングディレクター',
+      '政治家','金融ディーラー','リクルーター','イベントプランナー','経営コンサルタント',
+      '投資銀行員','プロジェクトマネージャー','営業部長','商品企画','広告プランナー',
+      '外交官'
+    ]
+  },
+  C:{
+    activity:[
+      '書類やデータを整理整頓する','決められた手順に従って作業する','家計簿や経費の記録を正確につける',
+      'パソコンでデータ入力する','ファイルやフォルダを体系的に管理する','チェックリストに沿って確認作業をする',
+      '数字を正確に扱う作業に集中する','マニュアルや手順書を作成する','会議の議事録をとる',
+      '在庫や備品の管理をする','スケジュールや予定表を作る','タイピングや文字入力の作業が苦にならない',
+      '表計算ソフトでデータを集計する','契約書や申請書の不備を確認する','コストや予算の管理をする',
+      'データベースの入力や更新をする'
+    ],
+    competency:[
+      '数字や詳細なデータを正確に扱える','規則やルールをきちんと守れる','スケジュールや予定をきっちり管理できる',
+      '集中力が長く続く','ミスに気づく注意力がある','段取りよく作業を進められる',
+      '同じ作業を継続しても集中が切れない','文書の誤字脱字にすぐ気づく','優先順位をつけて効率よく進められる',
+      '報告書や提出物の期限を守れる','定型業務を確実にこなせる','データの矛盾や不整合を見つけられる',
+      '複数のタスクを整理して管理できる','規定のフォーマットに正確に記入できる','記録を体系的に保管・管理できる',
+      '標準化や効率化の改善が得意だ'
+    ],
+    occupation:[
+      '経理・会計','銀行員','事務職','税理士','図書館司書',
+      '監査役','総務担当','品質管理者','金融アナリスト','医療事務',
+      '公認会計士','人事労務','秘書','保険事務','販売事務',
+      'データ入力担当'
+    ]
+  }
+};
+
+// ===== 適職データ =====
+var CAREER_MAP={
+  R:['建築作業員','自動車整備士','電気工事士','大工','農業従事者','パイロット','料理人','配管工','測量士','消防士'],
+  I:['研究者','データサイエンティスト','医師','薬剤師','プログラマー','獣医師','心理学者','経済学者','システムエンジニア','実験技術者'],
+  A:['グラフィックデザイナー','作家','音楽家','俳優','インテリアデザイナー','写真家','イラストレーター','映画監督','建築家','ファッションデザイナー'],
+  S:['教師','カウンセラー','看護師','ソーシャルワーカー','人事担当','コーチ','セラピスト','保育士','医療従事者','言語聴覚士'],
+  E:['営業マネージャー','経営者','弁護士','不動産仲介','マーケティングディレクター','政治家','金融ディーラー','リクルーター','イベントプランナー','経営コンサルタント'],
+  C:['会計士','秘書','銀行員','税理士','図書館司書','監査役','データ入力担当','総務','品質管理者','金融アナリスト'],
+  RI:['獣医師','電子工学者','地質学者','ロボット工学者','測量技師'],
+  IR:['プログラマー','システムエンジニア','技術研究者','製造業エンジニア','実験装置開発者'],
+  IA:['UI/UXリサーチャー','心理学者','人類学者','天文学者','音楽療法士'],
+  IS:['臨床心理士','学校カウンセラー','医学研究者','健康科学者','教育研究者'],
+  IE:['特許弁護士','技術営業','ITコンサルタント','医療機器セールス','バイオベンチャー経営'],
+  IC:['データベース管理者','統計学者','品質エンジニア','検査技師','分析プログラマー'],
+  AR:['インテリアデザイナー','商品デザイナー','写真家','工芸家','ジュエリーデザイナー'],
+  AI:['建築家','天文学者','UI/UXデザイナー','サイエンスライター','映像クリエイター'],
+  AS:['音楽教師','劇作家','リクリエーション指導員','言語教師','アートセラピスト'],
+  AE:['広告ディレクター','プロデューサー','アートディレクター','ブランドマネージャー','CMプランナー'],
+  AC:['DTPオペレーター','Webデザイナー','映像編集者','カラーコーディネーター','レイアウトデザイナー'],
+  SR:['理学療法士','作業療法士','スポーツトレーナー','救急救命士','義肢装具士'],
+  SI:['臨床心理士','学校カウンセラー','医学研究者','言語聴覚士','保健師'],
+  SA:['音楽療法士','劇団講師','アートセラピスト','ダンスセラピスト','演劇療法士'],
+  SE:['人事コンサルタント','学校管理者','教育コンサルタント','医療ソーシャルワーカー','NPOマネージャー'],
+  SC:['医療事務','図書館司書','社会福祉主事','学校事務','顧客サービス管理'],
+  ER:['建設業経営者','製造業マネージャー','航空業界管理職','物流企業経営者','スポーツチーム代表'],
+  EA:['広告代理店営業','ブロードキャスター','PRディレクター','エンタメ業界プロデューサー','アーティストマネージャー'],
+  ES:['不動産仲介','ホテルマネージャー','保険営業','旅行代理店経営','接客サービス経営'],
+  EC:['銀行支店長','経理部長','金融アナリスト','税理士','人事管理'],
+  EI:['医療経営者','テクノロジー起業家','投資アナリスト','知的財産管理者','バイオ経営者'],
+  CR:['品質管理者','CADオペレーター','建築事務','測量データ処理','製造データ管理'],
+  CI:['プログラマー','統計学者','データベース管理者','品質エンジニア','金融システム開発'],
+  CA:['DTPオペレーター','Webデザイナー','映像編集者','デジタルアーカイビスト','メディア制作'],
+  CS:['医療事務','図書館司書','顧客サポート管理','学校事務','社会保険労務士'],
+  CE:['経理部長','金融アナリスト','人事管理','管理会計','内部統制担当']
+};
+
+// ===== ビッグファイブクロス分析 =====
+var CROSS_PATTERNS=[
+  {cond:function(bf,code){return bf.O>=4&&code[0]==='I';},msg:'開放性が高く研究型のあなたは、新しいアイデアと科学的探求の両方に意欲があります。研究開発やイノベーション部門で力を発揮する可能性が高いです。'},
+  {cond:function(bf,code){return bf.E>=4&&code[0]==='S';},msg:'外向性が高く社会型のあなたは、人との関わりを通じて最大のエネルギーを得ます。教育、カウンセリング、チーム管理など、対人関係が中心の職種が最適です。'},
+  {cond:function(bf,code){return bf.C>=4&&code[0]==='C';},msg:'誠実性が高く慣習型のあなたは、正確さと責任感を併せ持っています。経理、品質管理、監査など、確実性が求められる職種で高い評価を得るでしょう。'},
+  {cond:function(bf,code){return bf.A>=4&&code[0]==='E';},msg:'協調性が高く企業型のあなたは、人を動かしながらも相手の気持ちを汲み取れます。人事、営業管理、プロジェクトマネジメントでバランスの取れたリーダーシップを発揮できます。'},
+  {cond:function(bf,code){return bf.O>=4&&code[0]==='A';},msg:'開放性が高く芸術型のあなたは、豊かな想像力と表現力の両方を持っています。デザイン、コンテンツ制作、企画開発などで独自の色を出せます。'},
+  {cond:function(bf,code){return bf.E>=4&&code[0]==='E';},msg:'外向性が高く企業型のあなたは、ビジネスの現場で圧倒的な存在感を放つタイプです。営業、起業、経営などで成果を上げやすい組み合わせです。'},
+  {cond:function(bf,code){return bf.C>=4&&code[0]==='R';},msg:'誠実性が高く現実型のあなたは、実直で確実な作業を好む職人気質です。製造、建設、品質管理などで信頼される存在になれるでしょう。'},
+  {cond:function(bf,code){return bf.N>=4&&code[0]==='S';},msg:'感受性が高く社会型のあなたは、人の気持ちに深く共感できる繊細さがあります。カウンセリングやケア系の職種でその感性が強みになります。'}
+];
+
+// ===== 状態 =====
+var current=0;
+var answers=[];
+var version=60;
+var questions=[];
+var currentSection='';
+var STORAGE_KEY='riasec_result';
+var PROGRESS_KEY='';
+var timer=null;
+
+// ===== 質問配列構築 =====
+function buildQuestions(ver){
+  var qs=[];
+  var src=(ver===291)?DATA_291:DATA_60;
+  TYPE_KEYS.forEach(function(t){
+    SECTION_NAMES.forEach(function(sec){
+      var items=src[t][sec];
+      var limit=(ver===291)?items.length:items.length;
+      for(var i=0;i<limit;i++){
+        var text=items[i];
+        if(sec==='occupation') text+='に興味がある';
+        qs.push({text:text,type:t,section:sec});
+      }
+    });
+  });
+  return qs;
+}
+
+// ===== クイズ開始 =====
+function startQuiz(ver){
+  version=ver;
+  PROGRESS_KEY='riasec_progress_'+(ver===291?'full':'short');
+  questions=buildQuestions(ver);
+  current=0;
+  answers=new Array(questions.length).fill(null);
+  currentSection=questions[0].section;
+  document.getElementById('introArea').style.display='none';
+  document.getElementById('progressArea').style.display='block';
+  document.getElementById('questionArea').style.display='block';
+  showQuestion();
+}
+
+// ===== セクション遷移 =====
+function showSectionIntro(){
+  var sec=questions[current].section;
+  if(sec===currentSection) return false;
+  currentSection=sec;
+  var el=document.getElementById('sectionIntro');
+  var secIdx=SECTION_NAMES.indexOf(sec)+1;
+  el.innerHTML='<div class="sec-label">セクション '+secIdx+' / 3</div>'+
+    '<h2>'+SECTION_LABELS[sec]+'について聞きます</h2>'+
+    '<p>'+(sec==='activity'?'日々の活動について、どれくらい好きかをお答えください。':sec==='competency'?'ご自身の能力や得意なことについてお答えください。':'様々な職業への興味の有無をお答えください。')+'</p>'+
+    '<button class="sec-btn" onclick="hideSectionIntro()">続ける</button>';
+  el.classList.add('show');
+  document.getElementById('questionArea').style.display='none';
+  document.getElementById('progressArea').style.display='none';
+  return true;
+}
+function hideSectionIntro(){
+  document.getElementById('sectionIntro').classList.remove('show');
+  document.getElementById('questionArea').style.display='block';
+  document.getElementById('progressArea').style.display='block';
+  showQuestion();
+}
+
+// ===== 質問表示 =====
+function showQuestion(){
+  if(showSectionIntro()) return;
+  var q=questions[current];
+  var pct=Math.round((current/questions.length)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressText').textContent=(current+1)+' / '+questions.length+(version===291?' ('+SECTION_LABELS[q.section]+')':'');
+
+  var fl=document.getElementById('qFactorLabel');
+  var ti=TYPE_INFO[q.type];
+  fl.textContent=ti.name;
+  fl.style.background=ti.color+'18';
+  fl.style.color=ti.color;
+  fl.style.border='1px solid '+ti.color+'40';
+
+  document.getElementById('qNumber').textContent='Q'+(current+1);
+  document.getElementById('qText').textContent=q.text;
+
+  var labelsDiv=document.getElementById('answerLabels');
+  labelsDiv.innerHTML='';
+  ANSWER_LABELS.forEach(function(lb){
+    var sp=document.createElement('span');
+    sp.textContent=lb.replace(/\n/g,'');
+    labelsDiv.appendChild(sp);
+  });
+
+  var area=document.getElementById('answersArea');
+  area.innerHTML='';
+  [1,2,3,4,5].forEach(function(val){
+    var btn=document.createElement('button');
+    btn.className='answer-btn'+(answers[current]===val?' selected':'');
+    btn.innerHTML='<span style="font-size:16px;font-weight:700;">'+val+'</span><span class="answer-label">'+ANSWER_LABELS[val-1]+'</span>';
+    btn.addEventListener('click',function(){selectAnswer(val);});
+    area.appendChild(btn);
+  });
+
+  document.getElementById('backBtn').style.visibility=current>0?'visible':'hidden';
+}
+
+// ===== 回答選択 =====
+function selectAnswer(val){
+  if(timer) return;
+  answers[current]=val;
+  document.querySelectorAll('.answer-btn').forEach(function(b,i){
+    b.classList.toggle('selected',i+1===val);
+  });
+  saveProgress();
+  timer=setTimeout(function(){
+    timer=null;
+    document.querySelectorAll('.answer-btn').forEach(function(b){b.classList.remove('selected');});
+    current++;
+    if(current>=questions.length){
+      clearProgress();
+      showLoading();
+    } else {
+      showQuestion();
+    }
+  },280);
+}
+
+// ===== 戻る =====
+function goBack(){
+  if(timer){clearTimeout(timer);timer=null;}
+  if(current>0){current--;showQuestion();}
+}
+
+// ===== ローディング =====
+function showLoading(){
+  document.getElementById('questionArea').style.display='none';
+  document.getElementById('progressArea').style.display='none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(function(){
+    document.getElementById('loadingArea').classList.remove('active');
+    showResult();
+  },1800);
+}
+
+// ===== スコア計算 =====
+function calcScores(){
+  var sums={R:0,I:0,A:0,S:0,E:0,C:0};
+  var counts={R:0,I:0,A:0,S:0,E:0,C:0};
+  questions.forEach(function(q,i){
+    var val=answers[i]||3;
+    sums[q.type]+=val;
+    counts[q.type]++;
+  });
+  var result={};
+  TYPE_KEYS.forEach(function(t){result[t]={sum:sums[t],count:counts[t],avg:counts[t]>0?(sums[t]/counts[t]):0};});
+  var sorted=TYPE_KEYS.slice().sort(function(a,b){return result[b].avg-result[a].avg;});
+  result.code=sorted[0]+sorted[1]+sorted[2];
+  result.sorted=sorted;
+  return result;
+}
+
+// ===== 結果表示 =====
+function showResult(preScores){
+  document.getElementById('loadingArea').style.display='none';
+  var scores=preScores||calcScores();
+  var container=document.getElementById('resultArea');
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.alignItems='center';
+  container.style.gap='12px';
+
+  var code=scores.code;
+  var sorted=scores.sorted;
+  var maxAvg=scores[sorted[0]].avg;
+
+  var html='';
+
+  // ヘッダー
+  html+='<div style="text-align:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);width:100%;">';
+  html+='<span class="result-badge">RIASEC 職業興味診断</span>';
+  html+='<div class="holland-code">';
+  for(var i=0;i<3;i++){
+    var t=code[i];
+    html+='<span style="color:'+TYPE_INFO[t].color+';">'+t+'</span>';
+  }
+  html+='</div>';
+  html+='<p class="code-desc">あなたのHollandコードは <strong>'+code+'</strong>（'+TYPE_INFO[code[0]].name+'・'+TYPE_INFO[code[1]].name+'・'+TYPE_INFO[code[2]].name+'）です。</p>';
+  html+='</div>';
+
+  // 6タイプスコアバー
+  html+='<div class="factor-box">';
+  html+='<div style="font-size:13px;font-weight:700;margin-bottom:12px;">6タイプのスコア</div>';
+  TYPE_KEYS.forEach(function(t){
+    var avg=scores[t].avg;
+    var pct=Math.round((avg/5)*100);
+    html+='<div class="factor-row">';
+    html+='<span class="factor-label" style="color:'+TYPE_INFO[t].color+';">'+TYPE_INFO[t].name+'</span>';
+    html+='<div class="factor-bar-bg"><div class="factor-bar-fill" data-pct="'+pct+'" style="background:'+TYPE_INFO[t].color+';"></div></div>';
+    html+='<span class="factor-score" style="color:'+TYPE_INFO[t].color+';">'+avg.toFixed(1)+'</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // 上位3タイプ解説
+  html+='<div style="font-size:15px;font-weight:900;margin:16px 0 8px;width:100%;">あなたの上位タイプ</div>';
+  html+='<div class="type-cards">';
+  for(var i=0;i<3;i++){
+    var t=code[i];
+    var ti=TYPE_INFO[t];
+    html+='<div class="type-card" style="border-top:3px solid '+ti.color+';">';
+    html+='<h3 style="color:'+ti.color+';">'+ti.name+'（'+ti.short+'）'+(i===0?' — 最も強い':'')+'</h3>';
+    html+='<div class="type-catch" style="color:'+ti.color+';">'+ti.catch+'</div>';
+    html+='<p>'+ti.desc+'</p>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // 適職提案
+  var code2=code[0]+code[1];
+  var code2r=code[1]+code[0];
+  var careers=CAREER_MAP[code2]||CAREER_MAP[code2r]||CAREER_MAP[code[0]]||[];
+  var primaryCareers=CAREER_MAP[code[0]]||[];
+  var allCareers=careers.slice();
+  primaryCareers.forEach(function(c){if(allCareers.indexOf(c)===-1)allCareers.push(c);});
+  allCareers=allCareers.slice(0,15);
+
+  html+='<div class="career-section">';
+  html+='<h3>あなたに合う職業</h3>';
+  html+='<div class="career-grid">';
+  allCareers.forEach(function(c){html+='<span class="career-tag">'+c+'</span>';});
+  html+='</div>';
+  html+='</div>';
+
+  // Big Fiveクロス分析
+  var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
+  var bfResult=bfList.length>0?bfList[0]:null;
+  if(bfResult&&bfResult.scores){
+    var bf=bfResult.scores;
+    html+='<div style="font-size:15px;font-weight:900;margin:16px 0 8px;width:100%;">ビッグファイブ × RIASEC</div>';
+    CROSS_PATTERNS.forEach(function(p){
+      if(p.cond(bf,code)) html+='<div class="cross-box"><h3>クロス分析</h3><p>'+p.msg+'</p></div>';
+    });
+  }
+
+  // ナビ
+  html+='<div class="nav-btns">';
+  html+='<a href="career.html" class="nav-btn primary">キャリア適性診断を見る</a>';
+  html+='<a href="quiz.html?v=10" class="nav-btn">ビッグファイブ診断を受ける</a>';
+  html+='<button class="nav-btn" onclick="retry()">もう一度受ける</button>';
+  html+='<a href="index.html" class="nav-btn">トップに戻る</a>';
+  html+='</div>';
+
+  // 免責
+  html+='<div class="disclaimer">この診断はHolland（1959, 1997）のRIASEC理論に基づく参考情報です。結果は自己理解の一助であり、職業選択を確定するものではありません。個人の適性は経験や環境によって変化します。専門のキャリアカウンセラーとの併用をお勧めします。</div>';
+
+  container.innerHTML=html;
+
+  // バーアニメーション
+  setTimeout(function(){
+    document.querySelectorAll('.factor-bar-fill').forEach(function(el){
+      el.style.width=el.getAttribute('data-pct')+'%';
+    });
+  },100);
+
+  // localStorage保存
+  if(!preScores){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({scores:scores,version:version,timestamp:Date.now()}));
+  }
+}
+
+// ===== リトライ =====
+function retry(){
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('resultArea').style.display='none';
+  document.getElementById('introArea').style.display='flex';
+  current=0;answers=[];
+  window.scrollTo(0,0);
+}
+
+// ===== 進捗保存 =====
+function saveProgress(){
+  if(!PROGRESS_KEY) return;
+  localStorage.setItem(PROGRESS_KEY,JSON.stringify({current:current,answers:answers}));
+}
+function clearProgress(){
+  if(!PROGRESS_KEY) return;
+  localStorage.removeItem(PROGRESS_KEY);
+}
+
+// ===== 初期化 =====
+(function(){
+  var urlParams=new URLSearchParams(location.search);
+  var vParam=urlParams.get('v');
+
+  // 保存済み結果の復元
+  var saved=localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    try{
+      var data=JSON.parse(saved);
+      if(data.scores){
+        document.getElementById('introArea').style.display='none';
+        showResult(data.scores);
+        return;
+      }
+    }catch(e){}
+  }
+
+  // 途中保存の復元
+  if(vParam){
+    var ver=parseInt(vParam);
+    if(ver===60||ver===291){
+      var pKey='riasec_progress_'+(ver===291?'full':'short');
+      var progress=localStorage.getItem(pKey);
+      if(progress){
+        try{
+          var pData=JSON.parse(progress);
+          version=ver;
+          PROGRESS_KEY=pKey;
+          questions=buildQuestions(ver);
+          current=pData.current||0;
+          answers=pData.answers||new Array(questions.length).fill(null);
+          currentSection=questions[current].section;
+          document.getElementById('introArea').style.display='none';
+          document.getElementById('progressArea').style.display='block';
+          document.getElementById('questionArea').style.display='block';
+          showQuestion();
+          return;
+        }catch(e){}
+      }
+      startQuiz(ver);
+    }
+  }
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
