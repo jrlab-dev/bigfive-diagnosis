@@ -86,6 +86,16 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .tag-time { background: rgba(148,163,184,0.1); color: var(--dim); }
 .tag-done { background: rgba(16,185,129,0.12); color: #6ee7b7; }
 .diag-arrow { font-size: 18px; color: var(--dim); flex-shrink: 0; margin-top: 6px; }
+
+/* 因子カラー外枠 */
+.diag-card[data-fc="N"] { border-color: rgba(20,184,166,0.25); }
+.diag-card[data-fc="A"] { border-color: rgba(244,114,182,0.25); }
+.diag-card[data-fc="O"] { border-color: rgba(139,92,246,0.25); }
+.diag-card[data-fc="C"] { border-color: rgba(59,130,246,0.25); }
+.diag-card[data-fc="N"]:hover { border-color: rgba(20,184,166,0.5); background: rgba(20,184,166,0.06); }
+.diag-card[data-fc="A"]:hover { border-color: rgba(244,114,182,0.5); background: rgba(244,114,182,0.06); }
+.diag-card[data-fc="O"]:hover { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.06); }
+.diag-card[data-fc="C"]:hover { border-color: rgba(59,130,246,0.5); background: rgba(59,130,246,0.06); }
 </style>
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
@@ -153,7 +163,7 @@ const DIAGNOSES = [
     minutes: 3,
   },
   {
-    id: 'hsp',
+    id: 'hsp', fc: 'N',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>',
     name: 'HSP 感受性チェック',
     desc: 'あなたの感じ方の深さを分析。EOE（感覚過敏）・AES（美的感受性）・LST（低感覚耐性）の3因子で特徴がわかる。',
@@ -163,7 +173,7 @@ const DIAGNOSES = [
     recommend: { factor: 'N', score: 5, reason: '感受性が豊かなあなたに。HSPとの関連を知ることで自己理解が深まります。' },
   },
   {
-    id: 'attachment',
+    id: 'attachment', fc: 'A',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
     name: '愛着スタイル チェック',
     desc: '大切な人との関わり方のパターンを分析。安心型・不安型・回避型・恐れ型の4スタイルから自分の傾向がわかる。',
@@ -173,7 +183,7 @@ const DIAGNOSES = [
     recommend: { factor: 'A', score: 5, reason: '思いやりが強いあなたに。人との繋がり方をさらに深く理解できます。' },
   },
   {
-    id: 'love',
+    id: 'love', fc: 'A',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
     name: '恋愛スタイル診断',
     desc: '情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせも。',
@@ -183,7 +193,7 @@ const DIAGNOSES = [
     recommend: { factor: 'E', score: 5, reason: '社交的なあなたに。恋愛での自分らしさを発見できます。' },
   },
   {
-    id: 'mindset',
+    id: 'mindset', fc: 'C',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
     name: 'マインドセット診断',
     desc: 'ドゥエック博士の理論に基づく診断。「成長型」か「固定型」かを8問で分析。才能観・努力観があなたの行動にどう影響するかがわかる。',
@@ -193,7 +203,7 @@ const DIAGNOSES = [
     recommend: { factor: 'C', score: 1, reason: 'やり遂げる力を伸ばすヒントが見つかるかもしれません。' },
   },
   {
-    id: 'schwartz',
+    id: 'schwartz', fc: 'O',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
     name: '価値観タイプ診断',
     desc: 'シュワーツの価値理論（80カ国で検証）に基づく21問診断。安全・達成・普遍主義など10カテゴリであなたの核心的な価値観を分析。',
@@ -203,7 +213,7 @@ const DIAGNOSES = [
     recommend: { factor: 'O', score: 5, reason: '好奇心旺盛なあなたに。自分が何を大切にしているかが明確になります。' },
   },
   {
-    id: 'sdt',
+    id: 'sdt', fc: 'O',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
     name: '動機タイプ診断',
     desc: 'Deci & Ryanの自己決定理論による21問診断。自律性・有能感・関係性の3欲求から「何があなたを動かすか」を科学的に分析。',
@@ -213,7 +223,7 @@ const DIAGNOSES = [
     recommend: { factor: 'C', score: 5, reason: 'やり遂げる力が高いあなたに。その動機の源泉を探ってみましょう。' },
   },
   {
-    id: 'locus',
+    id: 'locus', fc: 'C',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
     name: '統制の所在チェック',
     desc: 'Rotterの心理学理論に基づく15問診断。内的統制・他者支配・偶然の3因子から「自分のコントロール感」を科学的に分析。',
@@ -223,7 +233,7 @@ const DIAGNOSES = [
     recommend: { factor: 'N', score: 1, reason: '精神的に安定しているあなたに。自分のコントロール感を科学してみましょう。' },
   },
   {
-    id: 'eq',
+    id: 'eq', fc: 'A',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
     name: '感情知能（EQ）チェック',
     desc: 'GolemanのEQモデルに基づく20問診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で感情知能を分析。',
@@ -233,7 +243,7 @@ const DIAGNOSES = [
     recommend: { factor: 'A', score: 5, reason: '相手の気持ちに敏感なあなたに。その共感力の正体を分析しましょう。' },
   },
   {
-    id: 'impostor',
+    id: 'impostor', fc: 'N',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
     name: 'インポスター症候群チェック',
     desc: 'Clanceの心理学研究に基づく15問診断。重症度と5つのタイプから「自分は偽物ではないか」という感覚を分析。',
@@ -318,7 +328,7 @@ function buildRecommendations(scores) {
 function diagCardHTML(d, done) {
   const isDone = done.has(d.id);
   return `
-    <a href="${d.url}" class="diag-card">
+    <a href="${d.url}" class="diag-card"${d.fc ? ` data-fc="${d.fc}"` : ''}>
       <span class="diag-icon">${d.icon}</span>
       <div class="diag-body">
         <div class="diag-name">${d.name}</div>

@@ -1043,7 +1043,7 @@
 
   <!-- キャリア適性診断への誘導 -->
   <div style="width:100%;max-width:480px;margin-bottom:20px;">
-    <a href="career.html" class="career-link">
+    <a href="career.html" class="career-link" id="careerLink">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
       あなたが向いている仕事は →
     </a>
@@ -1830,6 +1830,9 @@ function shrinkTypeName() {
 requestAnimationFrame(() => setTimeout(shrinkTypeName, 100));
 window.addEventListener('load', shrinkTypeName);
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
+// キャリアリンクに現在の診断スコアを渡す
+var careerLinkEl = document.getElementById('careerLink');
+if (careerLinkEl) careerLinkEl.href = 'career.html?code=' + typeCode;
 // バージョンラベル（スコアコードの右下に薄く表示）
 const versionLabels = { '10': 'IPIP-10Q', '30': 'IPIP-30Q', '120': 'IPIP-NEO-120' };
 // version label removed from card display
