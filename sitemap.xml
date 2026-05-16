@@ -137,6 +137,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- RIASEC職業興味診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/riasec.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- 総合性格レポート -->
   <url>
     <loc>https://bigfive.jr-genius.jp/report.html</loc>

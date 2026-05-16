@@ -146,7 +146,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="selfGrid"></div>
 
   <!-- 応用診断 -->
-  <p class="section-label">応用診断（3種類）</p>
+  <p class="section-label">応用診断（4種類）</p>
   <p class="section-sub-note">性格データを他者分析やキャリアに活かす応用診断です。推測診断は本人の実際の性格と異なる場合があります。</p>
   <div class="diag-grid" id="otherGrid"></div>
 </div>
@@ -280,6 +280,16 @@ const DIAGNOSES = [
     minutes: 0,
     recommend: { factor: 'C', score: 5, reason: '真面目なあなたに。キャリア戦略を科学的に分析しましょう。' },
   },
+  {
+    id: 'riasec',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    name: 'RIASEC職業興味診断',
+    desc: 'Hollandの理論に基づく職業興味検査。60問（約5分）または291問（約20分）で6タイプからあなたの職業適性パターンを導きます。',
+    url: 'riasec.html',
+    questions: 60,
+    minutes: 5,
+    recommend: { factor: 'O', score: 5, reason: '好奇心が旺盛なあなたに。自分に合う職業の方向性が見つかります。' },
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -306,6 +316,7 @@ function getDoneIds() {
     if (localStorage.getItem('locus_result')) done.add('locus');
     if (localStorage.getItem('eq_result')) done.add('eq');
     if (localStorage.getItem('impostor_result')) done.add('impostor');
+    if (localStorage.getItem('riasec_result')) done.add('riasec');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => !r.relation || !r.relation.startsWith('child'))) done.add('other');
   } catch(e) {}
