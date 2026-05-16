@@ -44,6 +44,18 @@
   .ver-card .ver-time { font-size: 12px; color: var(--dim); }
   .ver-card .ver-desc { font-size: 12px; color: var(--dim); margin-top: 8px; line-height: 1.6; }
 
+  /* 途中保存プロンプト */
+  .resume-box { background: rgba(245,158,11,0.08); border: 1.5px solid rgba(245,158,11,0.3); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; text-align: center; animation: fadeIn .3s ease; }
+  .resume-box .resume-label { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .08em; margin-bottom: 8px; }
+  .resume-box .resume-info { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .resume-box .resume-detail { font-size: 12px; color: var(--dim); margin-bottom: 16px; }
+  .resume-box .resume-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .resume-btn { padding: 12px 28px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: transform .2s; border: none; }
+  .resume-btn:hover { transform: translateY(-2px); }
+  .resume-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(245,158,11,0.25); }
+  .resume-btn.secondary { background: rgba(255,255,255,0.06); color: var(--dim); border: 1px solid rgba(255,255,255,0.1); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
   /* セクション遷移 */
   .section-intro { display: none; text-align: center; padding: 40px 20px; }
   .section-intro.show { display: block; }
@@ -685,6 +697,33 @@ function retry(){
   window.scrollTo(0,0);
 }
 
+// ===== 途中から再開 =====
+function resumeQuiz(ver,pKey){
+  var progress=localStorage.getItem(pKey);
+  if(!progress){startQuiz(ver);return;}
+  try{
+    var pData=JSON.parse(progress);
+    version=ver;
+    PROGRESS_KEY=pKey;
+    questions=buildQuestions(ver);
+    current=pData.current||0;
+    answers=pData.answers||new Array(questions.length).fill(null);
+    currentSection=questions[current].section;
+    document.getElementById('introArea').style.display='none';
+    document.getElementById('progressArea').style.display='block';
+    document.getElementById('questionArea').style.display='block';
+    showQuestion();
+  }catch(e){startQuiz(ver);}
+}
+
+// ===== やり直し =====
+function restartQuiz(ver,pKey,btn){
+  localStorage.removeItem(pKey);
+  var box=btn.closest('.resume-box');
+  if(box) box.remove();
+  startQuiz(ver);
+}
+
 // ===== 進捗保存 =====
 function saveProgress(){
   if(!PROGRESS_KEY) return;
@@ -738,6 +777,29 @@ function clearProgress(){
       startQuiz(ver);
     }
   }
+
+  // イントロ画面に再開プロンプト表示
+  [{ver:60,key:'riasec_progress_short'},{ver:291,key:'riasec_progress_full'}].forEach(function(cfg){
+    try{
+      var raw=localStorage.getItem(cfg.key);
+      if(!raw) return;
+      var pd=JSON.parse(raw);
+      if(!pd.answers||pd.answers.filter(function(a){return a!==null;}).length===0) return;
+      var total=pd.answers.length;
+      var done=pd.answers.filter(function(a){return a!==null;}).length;
+      var introEl=document.getElementById('introArea');
+      var box=document.createElement('div');
+      box.className='resume-box';
+      box.innerHTML='<div class="resume-label">SAVED PROGRESS</div>'+
+        '<div class="resume-info">'+cfg.ver+'問版：'+done+'問完了（残り'+(total-done)+'問）</div>'+
+        '<div class="resume-detail">前回の回答が保存されています</div>'+
+        '<div class="resume-btns">'+
+          '<button class="resume-btn primary" onclick="resumeQuiz('+cfg.ver+',\''+cfg.key+'\')">続きから始める</button>'+
+          '<button class="resume-btn secondary" onclick="restartQuiz('+cfg.ver+',\''+cfg.key+'\',this)">最初からやり直す</button>'+
+        '</div>';
+      introEl.insertBefore(box,introEl.querySelector('.ver-cards'));
+    }catch(e){}
+  });
 })();
 </script>
 <script src="nav.js"></script>
