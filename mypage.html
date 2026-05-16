@@ -1893,14 +1893,14 @@ function renderReportBanner() {
   const banner = document.getElementById('reportBanner');
   const hasBf  = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
   const tests = typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : [
-    { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
-    { key: 'mindset_result', name: 'マインドセット診断', url: 'mindset.html' },
+    { key: 'attachment_result', name: '愛着スタイルチェック', url: 'attachment.html' },
     { key: 'sdt_result', name: '動機タイプ診断', url: 'sdt.html' },
     { key: 'schwartz_result', name: '価値観診断', url: 'schwartz.html' },
-    { key: 'hsp_result', name: 'HSP感受性チェック', url: 'hsp.html' },
-    { key: 'attachment_result', name: '愛着スタイルチェック', url: 'attachment.html' },
     { key: 'locus_result', name: '統制の所在チェック', url: 'locus.html' },
     { key: 'eq_result', name: '感情知能チェック', url: 'eq.html' },
+    { key: 'hsp_result', name: 'HSP感受性チェック', url: 'hsp.html' },
+    { key: 'mindset_result', name: 'マインドセット診断', url: 'mindset.html' },
+    { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
     { key: 'impostor_result', name: 'インポスター症候群チェック', url: 'impostor.html' },
   ];
   const missing = tests.filter(t => !localStorage.getItem(t.key));
