@@ -641,4 +641,44 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：神経症傾向が高い人の「強み」と付き合い方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-taishoho.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：協調性が低い人に向いている仕事 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-low-shigoto.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：長続きするカップルの性格パターン -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/nagatsuzuki-couple.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：HSPの恋愛 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hsp-renai.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：外向性が低い人の仕事の強み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/introvert-shigoto.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
