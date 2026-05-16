@@ -72,21 +72,21 @@
   .ci-header .header-sub { font-size: 12px; color: var(--dim); margin-top: 4px; }
 
   /* ヘッダー2軸表示 */
-  .header-dual { display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
-  .header-side { background: rgba(26,10,62,0.45); border-radius: 12px; padding: 10px 14px; backdrop-filter: blur(8px); flex: 1; min-width: 200px; max-width: 280px; }
+  .header-dual { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+  .header-side { background: rgba(26,10,62,0.45); border-radius: 12px; padding: 8px 10px; backdrop-filter: blur(8px); flex: 1; min-width: 0; }
   .header-side-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; margin-bottom: 6px; }
   .header-side-label.bf { color: var(--accent); }
   .header-side-label.rc { color: var(--riasec); }
   .mini-ocean-item { display: flex; align-items: center; gap: 4px; }
-  .mini-ocean-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; min-width: 40px; }
+  .mini-ocean-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; min-width: 24px; }
   body.theme-light .mini-ocean-bar-bg { background: rgba(0,0,0,0.08); }
   .mini-ocean-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
-  .mini-ocean-label { font-size: 10px; font-weight: 700; min-width: 30px; }
-  .mini-ocean-score { font-size: 10px; color: var(--dim); min-width: 24px; text-align: right; }
+  .mini-ocean-label { font-size: 9px; font-weight: 700; min-width: 24px; }
+  .mini-ocean-score { font-size: 9px; color: var(--dim); min-width: 20px; text-align: right; }
 
   /* ===== アーキタイプ ===== */
-  .archetype-wrap { display: flex; gap: 8px; width: 100%; flex-wrap: wrap; }
-  .archetype-card { flex: 1; min-width: 200px; background: rgba(26,10,62,0.45); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; backdrop-filter: blur(8px); text-align: center; }
+  .archetype-wrap { display: flex; gap: 6px; width: 100%; }
+  .archetype-card { flex: 1; min-width: 0; background: rgba(26,10,62,0.45); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 10px; backdrop-filter: blur(8px); text-align: center; }
   .archetype-card.active { border-color: var(--accent); box-shadow: 0 4px 16px rgba(37,99,235,0.12); }
   .archetype-name { font-size: 14px; font-weight: 900; margin-bottom: 2px; }
   .archetype-catch { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
