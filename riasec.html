@@ -195,7 +195,11 @@ var TYPE_INFO={
 };
 
 var SECTION_LABELS={activity:'活動',competency:'能力',occupation:'職業'};
-var ANSWER_LABELS=['全く\nそう\n思わない','あまり\nそう\n思わない','どちら\nでも\nない','少し\nそう\n思う','強く\nそう\n思う'];
+var ANSWER_SETS={
+  activity:['全く\n興味\nがない','あまり\n興味がない','どちら\nでもない','少し\n興味がある','とても\n興味がある'],
+  competency:['全く\n当てはまらない','あまり\n当てはまらない','どちら\nでもない','少し\n当てはまる','とても\n当てはまる'],
+  occupation:['全く\n興味\nがない','あまり\n興味がない','どちら\nでもない','少し\n興味がある','とても\n興味がある']
+};
 var SECTION_NAMES=['activity','competency','occupation'];
 
 // ===== 60問データ =====
@@ -424,7 +428,6 @@ function buildQuestions(ver){
       var limit=(ver===291)?items.length:items.length;
       for(var i=0;i<limit;i++){
         var text=items[i];
-        if(sec==='occupation') text+='に興味がある';
         qs.push({text:text,type:t,section:sec});
       }
     });
@@ -489,7 +492,8 @@ function showQuestion(){
 
   var labelsDiv=document.getElementById('answerLabels');
   labelsDiv.innerHTML='';
-  ANSWER_LABELS.forEach(function(lb){
+  var labels=ANSWER_SETS[q.section]||ANSWER_SETS.activity;
+  labels.forEach(function(lb){
     var sp=document.createElement('span');
     sp.textContent=lb.replace(/\n/g,'');
     labelsDiv.appendChild(sp);
@@ -500,7 +504,7 @@ function showQuestion(){
   [1,2,3,4,5].forEach(function(val){
     var btn=document.createElement('button');
     btn.className='answer-btn'+(answers[current]===val?' selected':'');
-    btn.innerHTML='<span style="font-size:16px;font-weight:700;">'+val+'</span><span class="answer-label">'+ANSWER_LABELS[val-1]+'</span>';
+    btn.innerHTML='<span style="font-size:16px;font-weight:700;">'+val+'</span><span class="answer-label">'+labels[val-1]+'</span>';
     btn.addEventListener('click',function(){selectAnswer(val);});
     area.appendChild(btn);
   });
