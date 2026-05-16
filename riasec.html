@@ -778,15 +778,16 @@ function clearProgress(){
     }
   }
 
-  // イントロ画面に再開プロンプト表示
+  // イントロ画面に再開プロンプト表示（3問以上回答時のみ）
   [{ver:60,key:'riasec_progress_short'},{ver:291,key:'riasec_progress_full'}].forEach(function(cfg){
     try{
       var raw=localStorage.getItem(cfg.key);
       if(!raw) return;
       var pd=JSON.parse(raw);
-      if(!pd.answers||pd.answers.filter(function(a){return a!==null;}).length===0) return;
-      var total=pd.answers.length;
+      if(!pd.answers) return;
       var done=pd.answers.filter(function(a){return a!==null;}).length;
+      if(done<3){localStorage.removeItem(cfg.key);return;}
+      var total=pd.answers.length;
       var introEl=document.getElementById('introArea');
       var box=document.createElement('div');
       box.className='resume-box';
