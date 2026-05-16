@@ -297,7 +297,7 @@ var ARCHETYPES=[
 // ===== マッチングアルゴリズム =====
 var KEYS=['O','C','E','A','N'];
 var WEIGHTS={O:1.0,C:1.5,E:1.0,A:1.0,N:0.8}; // C重視：Barrick & Mount（1991）メタ分析
-var MAX_DIST=Math.sqrt(9*(1.0+1.5+1.0+1.0+0.8));
+var MAX_DIST=Math.sqrt(16*(1.0+1.5+1.0+1.0+0.8)); // max_diff=4 (1〜5スケール), 4²=16
 
 function matchPct(user,ideal){
   var sumSq=0;
