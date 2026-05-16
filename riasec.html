@@ -531,11 +531,11 @@ function selectAnswer(val){
   document.querySelectorAll('.answer-btn').forEach(function(b,i){
     b.classList.toggle('selected',i+1===val);
   });
-  saveProgress();
   timer=setTimeout(function(){
     timer=null;
     document.querySelectorAll('.answer-btn').forEach(function(b){b.classList.remove('selected');});
     current++;
+    saveProgress();
     if(current>=questions.length){
       clearProgress();
       showLoading();
@@ -791,8 +791,8 @@ function clearProgress(){
       var box=document.createElement('div');
       box.className='resume-box';
       box.innerHTML='<div class="resume-label">SAVED PROGRESS</div>'+
-        '<div class="resume-info">'+cfg.ver+'問版：'+done+'問完了（残り'+(total-done)+'問）</div>'+
-        '<div class="resume-detail">前回の回答が保存されています</div>'+
+        '<div class="resume-info">'+cfg.ver+'問版：'+done+' / '+total+' 問回答済み</div>'+
+        '<div class="resume-detail">前回の途中経過が保存されています</div>'+
         '<div class="resume-btns">'+
           '<button class="resume-btn primary" onclick="resumeQuiz('+cfg.ver+',\''+cfg.key+'\')">続きから始める</button>'+
           '<button class="resume-btn secondary" onclick="restartQuiz('+cfg.ver+',\''+cfg.key+'\',this)">最初からやり直す</button>'+
