@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>性格と仕事の相性を科学的に判定する　ビッグファイブ×キャリア適性の仕組み｜ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブの性格データをもとに18業界・26職種への適性を判定するキャリア適性診断の仕組みを解説。Barrick &amp; Mountのメタ分析に基づく科学的根拠と、8つのキャリアアーキタイプ。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="性格と仕事の相性を科学的に判定する　ビッグファイブ×キャリア適性の仕組み">
+<meta property="og:description" content="ビッグファイブの性格データをもとに18業界・26職種への適性を判定する仕組みを解説。科学的根拠と8つのキャリアアーキタイプ。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/career-tekisei-shindan.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="性格と仕事の相性を科学的に判定する　ビッグファイブ×キャリア適性の仕組み">
+<meta name="twitter:description" content="ビッグファイブの性格データをもとにキャリア適性を判定する仕組みを解説。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "性格と仕事の相性を科学的に判定する　ビッグファイブ×キャリア適性の仕組み",
+  "description": "ビッグファイブの性格データをもとに18業界・26職種への適性を判定するキャリア適性診断の仕組みを解説。Barrick & Mountのメタ分析に基づく科学的根拠と、8つのキャリアアーキタイプ。",
+  "url": "https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html",
+  "datePublished": "2026-05-16",
+  "dateModified": "2026-05-16",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "キャリア適性" },
+    { "@type": "Thing", "name": "仕事選び" },
+    { "@type": "Thing", "name": "性格診断" },
+    { "@type": "Thing", "name": "キャリア" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "ブログ", "item": "https://bigfive.jr-genius.jp/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "性格と仕事の相性を科学的に判定する", "item": "https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .archetype-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .archetype-card h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .archetype-card .arch-label {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .archetype-card p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+  .cta-sub-link {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--dim);
+  }
+  .cta-sub-link a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .cta-sub-link a:hover {
+    text-decoration: underline;
+  }
+
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img {
+    width: 100%; max-width: 720px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: block;
+    height: auto;
+  }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">← トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">ビッグファイブ</span>
+        <span class="tag">キャリア適性</span>
+        <span class="tag">仕事選び</span>
+        <span class="tag">業界分析</span>
+        <span class="tag">心理学</span>
+      </div>
+      <h1 class="article-title">性格と仕事の相性を科学的に判定する<br><span>ビッグファイブ×キャリア適性</span>の仕組み</h1>
+      <p class="article-lead">ビッグファイブの性格データをもとに18業界・26職種への適性を判定するキャリア適性診断の仕組みを解説。Barrick &amp; Mountのメタ分析に基づく科学的根拠と、8つのキャリアアーキタイプ。</p>
+      <p class="article-meta">公開：2026年5月16日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/career-tekisei-shindan.webp"
+      alt="ビッグファイブ×キャリア適性診断の仕組みを解説する画像"
+      width="1536" height="1024"
+      loading="eager"
+    >
+
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">「向いてる仕事」をどう見つけるか</a></li>
+        <li><a href="#sec2">性格は仕事のパフォーマンスと関係するのか</a></li>
+        <li><a href="#sec3">5因子が仕事にどう影響するか</a></li>
+        <li><a href="#sec4">8つのキャリアアーキタイプ</a></li>
+        <li><a href="#sec5">18業界×26職種のマッチング</a></li>
+        <li><a href="#sec6">キャリア適性診断を試す</a></li>
+      </ol>
+    </nav>
+
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>「向いてる仕事」をどう見つけるか</h2>
+
+        <p>「自分に向いている仕事がわからない」という悩みの根本には、二つのことがある。一つは自分の性格を正確に知らないこと。もう一つは、仕事の内容を業界や職種という単位で理解していないことだ。</p>
+
+        <p>「IT業界がいい」「安定した仕事がいい」という程度のざっくりとしたイメージで仕事を選ぶと、入社後に「自分には合わなかった」と気づくことになる。この「入社後のミスマッチ」を減らすには、自分の性格と仕事の要求の間にどのくらいずれがあるかを、具体的に知る必要がある。</p>
+
+        <p>そのためにあるのが、ビッグファイブに基づくキャリア適性診断だ。性格の5つの因子スコアをもとに、18の業界と26の職種への適合度を計算する。直感や自己イメージではなく、性格データに基づいて仕事との相性を判定する仕組みだ。</p>
+      </section>
+
+      <section id="sec2">
+        <h2>性格は仕事のパフォーマンスと関係するのか</h2>
+
+        <p>「性格と仕事の成績に関係はあるのか」という問いに対して、心理学は明確に「ある」と答えている。</p>
+
+        <p>最も有名な研究は、BarrickとMountが1991年に発表したメタ分析だ。この研究は117の独立した研究を統合し、ビッグファイブの5つの因子が職務パフォーマンスとどう関係するかを検証した。対象は約24,000人。結果は明確だった。</p>
+
+        <div class="highlight-box">
+          <p><strong>誠実性</strong>は、すべての職業群において職務パフォーマンスと正の相関があった。熟練職、営業、管理職、事務職、サービス職、どの職業群でも、誠実性が高い人は仕事の評価が高かった。唯一「すべての職業で予測力がある」と確認された因子だ。</p>
+          <p><strong>外向性</strong>は、営業職と管理職で特に予測力があった。人と関わる仕事では、外向性が高い方が成績が出やすい。</p>
+          <p><strong>開放性</strong>は、訓練成效性（新しいスキルを学ぶ能力）と関係していた。変化の激しい環境や、新しい知識を取り入れる必要がある職種では、開放性が高い方が適応しやすい。</p>
+          <p><strong>協調性</strong>と<strong>神経症傾向</strong>も一部の職業群で予測力が確認されたが、誠実性ほど一貫した結果ではなかった。</p>
+        </div>
+
+        <p>この研究の意義は、「性格は仕事の成績と関係ない」という当時の常識を覆したことにある。その後、TettとBurnett（2003）らの研究でも、ビッグファイブと職務パフォーマンスの関係は再確認されている。</p>
+
+        <p>ただし、重要な注意点がある。性格は仕事のパフォーマンスを「ある程度」予測するが、すべてを決めるわけではない。経験、スキル、動機づけ、職場の環境も同様に重要だ。性格データは仕事選びの「一つの視点」として使うのが正しい使い方だ。</p>
+      </section>
+
+      <section id="sec3">
+        <h2>5因子が仕事にどう影響するか</h2>
+
+        <p>Barrick &amp; Mountの研究以降、ビッグファイブの各因子が仕事のどの側面と関係するかが詳しく研究されてきた。大まかな傾向を整理する。</p>
+
+        <h3>誠実性が高い人</h3>
+        <p>計画を立て、約束を守り、目標に向かって着実に進む。どの職種でも一定のパフォーマンスが期待できる。一方で、変化への柔軟性に欠けたり、完璧主義が行動を止めたりすることもある。</p>
+
+        <h3>外向性が高い人</h3>
+        <p>人とのコミュニケーションが活発で、チームの士気を上げる。営業、マネジメント、接客など、人と関わる場面で強みを発揮する。逆に、一人で黙々と作業する環境ではエネルギーを持て余すことがある。</p>
+
+        <h3>開放性が高い人</h3>
+        <p>新しいアイデアを取り入れ、創造的な問題解決に長ける。企画、研究、デザイン、戦略立案など、変化と創造性が求められる仕事に向いている。ルーティンワークが続く環境では飽きを感じやすい。</p>
+
+        <h3>協調性が高い人</h3>
+        <p>チームワークを重視し、他者の意見に耳を傾ける。カスタマーサポート、教育、医療など、他者への配慮が求められる場面で強みを持つ。競争の激しい環境では、自分の主張が弱くなる傾向がある。</p>
+
+        <h3>神経症傾向が低い人</h3>
+        <p>ストレスに強く、感情的な動揺が少ない。プレッシャーの高い環境でも冷静に判断できる。危機管理や交渉など、感情的な安定性が求められる場面で強みを発揮する。神経症傾向が高い人は、ストレス管理が課題になることが多い。</p>
+
+        <p>5つの因子は単独で見るのではなく、組み合わせで見るのが本質だ。外向性が高くて誠実性も高い人は「人と関わりながら着実に成果を出す」仕事に向いている。開放性が高くて外向性が低い人は「一人で創造的な作業に没頭する」仕事に向いている。因子の組み合わせが、その人の仕事のスタイルを形作る。</p>
+      </section>
+
+      <section id="sec4">
+        <h2>8つのキャリアアーキタイプ</h2>
+
+        <p>ビッグファイブの5因子スコアの組み合わせから、8つのキャリアアーキタイプ（職業適性パターン）を導き出す。自分がどのアーキタイプに当てはまるかを知ることで、大まかなキャリアの方向性が見える。</p>
+
+        <div class="archetype-grid">
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 01</p>
+            <h4>開拓者</h4>
+            <p>開放性と外向性が高い。新しい市場や分野に飛び込み、人を巻き込みながら前進する。起業家、新規事業担当、プロデューサーに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 02</p>
+            <h4>職人</h4>
+            <p>誠実性が高く、外向性が低い。一人で深く集中し、高い品質を追求する。エンジニア、研究者、専門職に向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 03</p>
+            <h4>調停者</h4>
+            <p>協調性が高く、神経症傾向が低い。チームの調和を保ち、対立を解決する。人事、カウンセラー、ファシリテーターに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 04</p>
+            <h4>指揮官</h4>
+            <p>外向性と誠実性が高い。チームを率いて目標を達成する。プロジェクトマネージャー、経営層、チームリーダーに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 05</p>
+            <h4>創造者</h4>
+            <p>開放性が高く、誠実性が低い。自由な発想で新しいものを生み出す。デザイナー、アーティスト、プランナーに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 06</p>
+            <h4>守護者</h4>
+            <p>誠実性と協調性が高い。組織のルールを守り、安定を支える。経理、品質管理、法務などに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 07</p>
+            <h4>交流者</h4>
+            <p>外向性と協調性が高い。人との関係を通じて価値を生み出す。営業、接客、コミュニティマネージャーに向く。</p>
+          </div>
+
+          <div class="archetype-card">
+            <p class="arch-label">Archetype 08</p>
+            <h4>分析者</h4>
+            <p>開放性が高く、外向性が低い。データや論理を駆使して問題を解く。データアナリスト、リサーチャー、戦略立案に向く。</p>
+          </div>
+
+        </div>
+
+        <p>アーキタイプは「あなたはこの仕事しかできない」という意味ではない。自分の性格がどの方向に自然とエネルギーを注ぐかを示すコンパスのようなものだ。自分のアーキタイプを知った上で、その中でどうキャリアを築くかは自分次第だ。</p>
+      </section>
+
+      <section id="sec5">
+        <h2>18業界×26職種のマッチング</h2>
+
+        <p>キャリア適性診断のもう一つの仕組みが、業界と職種への適合度計算だ。18の業界（IT、医療、金融、教育、製造など）と26の職種（エンジニア、営業、企画、研究など）について、それぞれの仕事がビッグファイブのどの因子をどの程度求めているかを定義している。</p>
+
+        <p>例えば、IT業界のエンジニア職は開放性と誠実性を高く求める。新しい技術にキャッチアップする柔軟性と、コードの品質を守る慎重さの両方が必要だからだ。一方で、医療現場の看護師は協調性と神経症傾向の低さ（感情の安定性）を高く求める。患者への配慮と、緊急時の冷静な判断が不可欠だからだ。</p>
+
+        <div class="highlight-box">
+          <p>適合度の計算は、ユーザーのビッグファイブスコアと、各業界・職種が求める理想的なスコアプロファイルの間の距離を測ることで行われる。自分のスコアに近い仕事ほど「向いている」と判定される。単に「誠実性が高いから事務に向いている」という単因子の判定ではなく、5因子の総合的な距離で判定するのが特徴だ。</p>
+        </div>
+
+        <p>各業界と職種には、平均的な年収目安と将来性（成長/安定/縮小）も表示される。適性が高い仕事の中から、「生活を支える収入」と「将来の安定性」を考慮して選ぶことができる。</p>
+
+        <p>もちろん、この適合度は「絶対的な正解」ではない。業界内での職種の多様性や、企業文化の違いも大きく影響する。あくまで「自分の性格プロファイルと、その仕事の要求プロファイルがどのくらい近いか」を示す一つの指標として使うのが正しい使い方だ。</p>
+      </section>
+
+      <section id="sec6">
+        <h2>キャリア適性診断を試す</h2>
+
+        <p>キャリア適性診断は、ビッグファイブの診断結果をもとに動く。まだビッグファイブを受けていない人は、先に10問以上の診断を受けてほしい。スコアが保存されていれば、キャリア適性診断を開いた瞬間に結果が表示される。</p>
+
+        <p>結果画面では、8つのキャリアアーキタイプのうち自分に当てはまるものが表示され、18業界・26職種のランキングが適合度順に並ぶ。各業界・職種には年収目安と将来性も表示されるので、適性だけでなく現実的な観点も含めて仕事を検討できる。</p>
+
+        <p>RIASEC職業興味診断と組み合わせるとさらに精度が上がる。「性格はこっちの方向だが、興味はあっちの方向だ」というずれがある場合、そのずれ自体がキャリア選択の大事なヒントになる。</p>
+      </section>
+
+    </div><!-- /.article-body -->
+
+    <section class="cta-box">
+      <h2>キャリア適性診断を無料で試す</h2>
+      <p>ビッグファイブの性格データをもとに、18業界・26職種への適合度を判定。自分の性格に合う仕事と、合わない仕事がわかります。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">18業界</span>
+        <span class="cta-badge">26職種</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+      </div>
+      <a href="https://bigfive.jr-genius.jp/career.html" class="cta-btn">キャリア適性診断を試す →</a>
+      <p class="cta-sub-link">ビッグファイブの結果がない場合は <a href="https://bigfive.jr-genius.jp/">先にビッグファイブ診断を</a></p>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="riasec-toha.html">RIASEC理論とは何か　Hollandの6タイプで見る「自分に合う仕事」の探し方</a></li>
+        <li><a href="shigoto-muki-fumuki.html">ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事</a></li>
+        <li><a href="bigfive-facet-toha.html">ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる</a></li>
+        <li><a href="mindset-toha.html">マインドセットとは？「才能は変えられる」と信じる人が結果を出す理由</a></li>
+        <li><a href="seikaku-shinrigaku-top10.html">テストで性格がわかる心理学、科学的信憑性トップ10</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>
