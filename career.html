@@ -99,8 +99,10 @@
   .rank-bar-bg { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
   .rank-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
   .rank-desc { font-size: 12px; color: var(--dim); line-height: 1.65; margin-bottom: 6px; }
+  .rank-reason { font-size: 12px; color: var(--accent); font-weight: 500; margin-top: 6px; }
   .rank-tags { display: flex; gap: 6px; flex-wrap: wrap; }
   .rank-tag { font-size: 10px; padding: 2px 8px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 999px; color: var(--accent); }
+  .compact-trait { font-size: 10px; font-weight: 600; opacity: 0.65; margin-left: 4px; }
 
   /* 展開ボタン */
   .expand-btn { width: 100%; padding: 12px; background: rgba(245,158,11,0.06); border: 1px dashed rgba(245,158,11,0.25); border-radius: 10px; color: var(--accent); font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; margin: 8px 0 20px; transition: background .2s; }
@@ -284,15 +286,16 @@ var ARCHETYPES=[
 
 // ===== マッチングアルゴリズム =====
 var KEYS=['O','C','E','A','N'];
-var MAX_DIST=Math.sqrt(5*16); // 全因子5vs1の最大ユークリッド距離
+var WEIGHTS={O:1.0,C:1.5,E:1.0,A:1.0,N:0.8}; // C重視：Barrick & Mount（1991）メタ分析
+var MAX_DIST=Math.sqrt(9*(1.0+1.5+1.0+1.0+0.8));
 
 function matchPct(user,ideal){
   var sumSq=0;
   for(var i=0;i<KEYS.length;i++){
     var diff=(user[KEYS[i]]||3)-ideal[KEYS[i]];
-    sumSq+=diff*diff;
+    sumSq+=WEIGHTS[KEYS[i]]*diff*diff;
   }
-  return Math.round((1-Math.sqrt(sumSq)/MAX_DIST)*75+25);
+  return Math.max(1,Math.round((1-Math.sqrt(sumSq)/MAX_DIST)*100));
 }
 
 function rankItems(user,list){
@@ -317,6 +320,15 @@ function genReason(user,item){
     reasons.push({k:k,text:u>=4?traitInfo[k].high:u<=2?traitInfo[k].low:traitInfo[k].name+'のバランス'});
   }
   return reasons.slice(0,2).map(function(r){return r.text;}).join('、')+'点で、この'+(item.tags?'業界':'職種')+'に向いています。';
+}
+
+function topMatchLabel(user,item){
+  var best=null,bd=99;
+  for(var i=0;i<KEYS.length;i++){
+    var k=KEYS[i],d=Math.abs((user[k]||3)-item.ideal[k]);
+    if(d<bd){bd=d;best=k;}
+  }
+  return '<span class="compact-trait" style="color:'+traitInfo[best].color+'">'+traitInfo[best].name+'</span>';
 }
 
 // ===== アーキタイプ選択 =====
@@ -350,6 +362,8 @@ function genAnalysis(scores){
   if(scores.O>=4) env.push('自由度が高く、創造的な取り組みが評価される環境で能力を発揮します。');
   else if(scores.O<=2) env.push('ルールと手順が明確な構造化された環境で安心して働けます。');
   if(scores.C>=4) env.push('目標とスケジュールが明確な環境で最高のパフォーマンスを発揮します。');
+  if(scores.A>=4) env.push('チームの調整役として信頼を得やすいです。協働が重視される環境で力を発揮します。');
+  if(scores.C<=2) env.push('型にはまらない柔軟な働き方ができる環境で持ち味が活きます。');
   if(env.length===0) env.push('バランスの取れた環境で柔軟に対応できます。色々な職場環境に適応できるのが強みです。');
 
   // キャリアの落とし穴
@@ -359,6 +373,8 @@ function genAnalysis(scores){
   if(scores.E>=4&&scores.N>=4) pitfall.push('人間関係のトラブルを必要以上に深刻に受け止める傾向があります。客観的な視点を持つメンターを見つけると良いでしょう。');
   if(scores.O>=4&&scores.C<=2) pitfall.push('新しいアイデアに飛びつきすぎて途中で投げ出す傾向があります。一つのことを最後までやり抜く習慣をつけましょう。');
   if(scores.E<=2&&scores.A>=4) pitfall.push('自己主張が弱く不当な扱いを受けやすい傾向があります。交渉スキルを意識的に学ぶことをお勧めします。');
+  if(scores.C>=4&&scores.N>=4) pitfall.push('完璧を求めすぎて疲弊しやすい傾向があります。「80%で十分」という基準を持つと持続可能なペースを作れます。');
+  if(scores.N<=2&&scores.E<=2) pitfall.push('周囲から「冷たい」「無関心」と誤解されることがあります。意図的にコミュニケーションを取ることで防げます。');
   if(pitfall.length===0) pitfall.push('バランスの取れた性格のため、極端な落とし穴は少ないですが、自分の強みを活かすキャリア選びを意識しましょう。');
 
   // キャリア戦略
@@ -370,6 +386,8 @@ function genAnalysis(scores){
   }
   if(scores.C>=4) strategy.push('誠実性が高いあなたは長期的なキャリア構築に向いています。3〜5年先を見据えた計画を立てることで、着実にステップアップできます。');
   if(scores.O>=4) strategy.push('開放性が高いあなたは新しいスキルの習得が早いです。定期的に新しい技術や知識に触れる環境を選ぶと成長曲線が急伸します。');
+  if(scores.E>=4) strategy.push('外向性が高いあなたは人脈が最大の資産です。業界イベントやコミュニティへの参加を積極的に行うとキャリアの幅が広がります。');
+  if(scores.A>=4&&scores.E<=3) strategy.push('協調性が高く静かに貢献するタイプです。直接目立つ役割より、信頼を積み上げて影響力を発揮する戦略が向いています。');
 
   return {env:env,pitfall:pitfall,strategy:strategy};
 }
@@ -387,18 +405,26 @@ var ICONS={
 
 // ===== メイン初期化 =====
 (function(){
-  var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
-  var activeIdx=Math.min(parseInt(localStorage.getItem('bigfive_active_my_index')||'0'),Math.max(0,bfList.length-1));
-  var bf=bfList.length>0?bfList[activeIdx]:null;
+  var urlParams=new URLSearchParams(location.search);
+  var code=urlParams.get('code');
+  var scores=null;
 
-  if(!bf||!bf.scores){
-    document.getElementById('noScoresArea').style.display='flex';
-    return;
+  if(code&&/^[1-5]{5}$/.test(code)){
+    scores={O:parseInt(code[0]),C:parseInt(code[1]),E:parseInt(code[2]),A:parseInt(code[3]),N:parseInt(code[4])};
+  }
+
+  if(!scores){
+    var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
+    var activeIdx=Math.min(parseInt(localStorage.getItem('bigfive_active_my_index')||'0'),Math.max(0,bfList.length-1));
+    var bf=bfList.length>0?bfList[activeIdx]:null;
+    if(!bf||!bf.scores){
+      document.getElementById('noScoresArea').style.display='flex';
+      return;
+    }
+    scores=bf.scores;
   }
 
   document.getElementById('seoContent').classList.add('hide');
-
-  var scores=bf.scores;
   var container=document.getElementById('resultArea');
   container.style.display='flex';
   container.style.flexDirection='column';
@@ -446,6 +472,7 @@ var ICONS={
     html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+r.item.name+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
     html+='<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:'+r.pct+'%"></div></div>';
     html+='<div class="rank-desc">'+r.item.desc+'</div>';
+    html+='<div class="rank-reason">'+genReason(scores,r.item)+'</div>';
     html+='<div class="rank-tags">';
     for(var j=0;j<r.item.tags.length;j++) html+='<span class="rank-tag">'+r.item.tags[j]+'</span>';
     html+='</div></div>';
@@ -454,7 +481,7 @@ var ICONS={
   html+='<div class="hidden-list" id="moreIndustry">';
   for(var i=5;i<indRank.length;i++){
     var r=indRank[i];
-    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+'</span></div><span class="rank-compact-pct">'+r.pct+'%</span></div>';
+    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct">'+r.pct+'%</span></div>';
   }
   html+='</div>';
   html+='<button class="expand-btn" onclick="this.previousElementSibling.classList.toggle(\'show\');this.textContent=this.previousElementSibling.classList.contains(\'show\')?\'閉じる\':\'全18業界を見る\'">全18業界を見る</button>';
@@ -468,13 +495,14 @@ var ICONS={
     html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+r.item.name+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
     html+='<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:'+r.pct+'%"></div></div>';
     html+='<div class="rank-desc">'+r.item.desc+'</div>';
+    html+='<div class="rank-reason">'+genReason(scores,r.item)+'</div>';
     html+='</div>';
   }
   // 残りの職種
   html+='<div class="hidden-list" id="moreJob">';
   for(var i=10;i<jobRank.length;i++){
     var r=jobRank[i];
-    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+'</span></div><span class="rank-compact-pct">'+r.pct+'%</span></div>';
+    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct">'+r.pct+'%</span></div>';
   }
   html+='</div>';
   html+='<button class="expand-btn" onclick="this.previousElementSibling.classList.toggle(\'show\');this.textContent=this.previousElementSibling.classList.contains(\'show\')?\'閉じる\':\'全26職種を見る\'">全26職種を見る</button>';
