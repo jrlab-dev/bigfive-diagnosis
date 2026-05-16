@@ -372,19 +372,18 @@ function pickArchetypes(scores){
 var INTEGRATION_WEIGHT=0.15;
 
 function computeIntegrated(bfScores,riasecScores){
-  var all=JOB_TYPES.map(function(job){
-    return {job:job,bfPct:matchPct(bfScores,job.ideal),riasecPct:riasecMatchPct(riasecScores,RIASEC_IDEALS[job.id])};
-  });
-  var riasecAvg=all.reduce(function(s,r){return s+r.riasecPct;},0)/all.length;
-  return all.map(function(r){
-    var modifier=(r.riasecPct-riasecAvg)*INTEGRATION_WEIGHT;
-    var finalPct=Math.max(1,Math.min(100,Math.round(r.bfPct+modifier)));
+  var RIASEC_THRESHOLD=60;
+  return JOB_TYPES.map(function(job){
+    var bfPct=matchPct(bfScores,job.ideal);
+    var riasecPct=riasecMatchPct(riasecScores,RIASEC_IDEALS[job.id]);
+    var modifier=(riasecPct-RIASEC_THRESHOLD)*INTEGRATION_WEIGHT;
+    var finalPct=Math.max(1,Math.min(100,Math.round(bfPct+modifier)));
     var tag;
-    if(r.riasecPct>=riasecAvg&&r.bfPct>=60) tag='aptitude_interest';
-    else if(r.bfPct>=60) tag='aptitude_main';
-    else if(r.riasecPct>=riasecAvg) tag='interest_plus';
+    if(riasecPct>=RIASEC_THRESHOLD&&bfPct>=60) tag='aptitude_interest';
+    else if(bfPct>=60) tag='aptitude_main';
+    else if(riasecPct>=RIASEC_THRESHOLD) tag='interest_plus';
     else tag='neutral';
-    return {item:r.job,bfPct:r.bfPct,riasecPct:r.riasecPct,finalPct:finalPct,modifier:Math.round(modifier*10)/10,tag:tag};
+    return {item:job,bfPct:bfPct,riasecPct:riasecPct,finalPct:finalPct,modifier:Math.round(modifier*10)/10,tag:tag};
   }).sort(function(a,b){return b.finalPct-a.finalPct;});
 }
 
