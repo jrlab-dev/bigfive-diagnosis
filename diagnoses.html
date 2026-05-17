@@ -130,15 +130,16 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 </div>
 <div class="bg-nebula"></div>
 <div class="page-wrap">
-  <span class="page-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 9V3h4v6l5 11H5l5-11z"/></svg> 心理学診断 一覧</span>
-  <h1 class="page-title">科学に基づく<br><em>心理学診断</em></h1>
-  <p class="page-sub">すべて無料・登録不要。各診断は独立して受けられます。<br>ビッグファイブの結果がある方には、あなたに合ったおすすめを表示します。</p>
-
-  <!-- 科学的信憑性マップ -->
-  <div style="margin:0 0 36px;">
-    <p style="font-size:13px;font-weight:700;color:rgba(139,92,246,0.9);letter-spacing:.06em;margin-bottom:10px;">各診断の科学的信憑性マップ</p>
-  <div style="background:rgba(15,21,53,0.6);border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:8px;overflow-x:auto;">
-    <svg viewBox="30 50 540 535" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="性格心理学の科学的信憑性マップ" style="display:block;width:100%;height:auto;">
+  <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:36px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:200px;">
+      <span class="page-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 9V3h4v6l5 11H5l5-11z"/></svg> 心理学診断 一覧</span>
+      <h1 class="page-title">科学に基づく<br><em>心理学診断</em></h1>
+      <p class="page-sub">すべて無料・登録不要。各診断は独立して受けられます。<br>ビッグファイブの結果がある方には、あなたに合ったおすすめを表示します。</p>
+    </div>
+    <div style="flex-shrink:0;width:155px;">
+  <div style="background:rgba(15,21,53,0.6);border:1px solid rgba(139,92,246,0.2);border-radius:12px;padding:6px;overflow:hidden;">
+    <svg viewBox="20 5 560 645" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="性格心理学の科学的信憑性マップ" style="display:block;width:100%;height:auto;">
+      <text x="300" y="42" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="sans-serif" font-weight="bold" font-size="50">各診断の科学的信憑性マップ</text>
       <path d="M 350,260 L 350,142 A 118,118 0 0,1 462,224 Z" fill="#6A0DAD" stroke="none"/>
       <path d="M 350,260 L 462,224 A 118,118 0 0,1 419,356 Z" fill="#1E90FF" stroke="none"/>
       <path d="M 350,260 L 419,356 A 118,118 0 0,1 281,356 Z" fill="#FFA500" stroke="none"/>
@@ -202,9 +203,11 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
       <path d="M 90,375 L 51,398 A 45,45 0 0,1 90,330 Z" fill="rgba(255,193,7,0.5)"/>
       <text x="90" y="379" text-anchor="middle" fill="rgba(255,255,255,1)" font-family="sans-serif" font-weight="bold" font-size="11" stroke="rgba(0,0,0,0.6)" stroke-width="2.5" paint-order="stroke">エニアグラム</text>
       <text x="90" y="415" text-anchor="middle" fill="rgba(200,205,215,1)" font-family="sans-serif" font-size="10">10位 ★</text>
+      <text x="300" y="603" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="34">円が大きいほど影響力が高い ／ 重なりは概念的な近さを示す</text>
+      <text x="300" y="638" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="34">薄字＝ビッグファイブに統合された理論 ／ 破線＝科学的根拠が弱い</text>
     </svg>
   </div>
-  <p style="font-size:12px;color:rgba(148,163,184,0.7);text-align:center;margin-top:10px;line-height:1.8;">円が大きいほど影響力が高い ／ 重なりは概念的な近さを示す<br>薄字＝ビッグファイブに統合された理論 ／ 破線＝科学的根拠が弱い</p>
+    </div>
   </div>
 
   <!-- おすすめセクション（ビッグファイブ結果がある場合のみ表示） -->
