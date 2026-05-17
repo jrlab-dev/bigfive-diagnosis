@@ -349,8 +349,8 @@ function buildRecommendations(scores) {
     const { factor, score, reason } = d.recommend;
     if (scores[factor] === score) recs.push({ ...d, reason });
   });
-  // 最大3件
-  return recs.slice(0, 3);
+  // 最大2件
+  return recs.slice(0, 2);
 }
 
 // ===== 診断カードHTML =====
