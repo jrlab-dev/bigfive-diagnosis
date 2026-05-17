@@ -324,6 +324,7 @@ function getDoneIds() {
   const done = new Set();
   try {
     if (localStorage.getItem('bigfive_my_results')) done.add('bigfive');
+    if (localStorage.getItem('bigfive_my_results')) done.add('career');
     if (localStorage.getItem('hsp_result')) done.add('hsp');
     if (localStorage.getItem('attachment_result')) done.add('attachment');
     if (localStorage.getItem('love_result')) done.add('love');
