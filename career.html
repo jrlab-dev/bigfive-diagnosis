@@ -568,7 +568,7 @@ var ICONS={
   // --- B6: 関連リンク ---
   html+='<div class="related-links">';
   html+='<a href="result.html?code='+((bf&&bf.code)||code||'33333')+'" class="related-link">'+ICONS.briefcase+' <span>診断結果の詳細を見る</span> <span class="related-arrow">›</span></a>';
-  html+='<a href="career-integration.html" class="related-link">'+ICONS.chart+' <span>キャリア統合分析を見る（適性×興味）</span> <span class="related-arrow">›</span></a>';
+  html+='<a href="career-integration.html?code='+scores.O+scores.C+scores.E+scores.A+scores.N+'" class="related-link">'+ICONS.chart+' <span>キャリア統合分析を見る（適性×興味）</span> <span class="related-arrow">›</span></a>';
   html+='<a href="quiz.html" class="related-link">'+ICONS.target+' <span>診断を受け直す</span> <span class="related-arrow">›</span></a>';
   html+='<a href="blog/shigoto-muki-fumuki.html" class="related-link">'+ICONS.star+' <span>ビッグファイブでわかる向いてる仕事・向いてない仕事</span> <span class="related-arrow">›</span></a>';
   html+='</div>';
