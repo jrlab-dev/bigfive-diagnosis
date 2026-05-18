@@ -761,4 +761,44 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：マーケティングの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-marketing.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：経営・管理の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-management.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：人事・労務の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-hr_labor.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：経理・財務の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-accounting.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：SE・システム開発の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-se.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
