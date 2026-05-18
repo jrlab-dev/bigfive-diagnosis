@@ -745,4 +745,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：営業の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-sales.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
