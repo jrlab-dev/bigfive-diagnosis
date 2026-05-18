@@ -729,4 +729,20 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：テスト不安と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/tesuto-fuan-seikaku.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：先延ばし癖と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sakinobashi-kuse-seikaku.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
