@@ -855,6 +855,22 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：物流・購買の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-logistics_p.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：施工・現場管理の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-field.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：価値観の科学——シュワルツ理論で読み解く「大切にしたいもの」の正体 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/kachikan-no-kagaku.html</loc>
