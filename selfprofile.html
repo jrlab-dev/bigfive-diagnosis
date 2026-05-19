@@ -419,6 +419,15 @@ body.theme-light .priv-bar {
   background: rgba(0,0,0,0.03);
   border-bottom-color: rgba(0,0,0,0.08);
 }
+body.theme-light input, body.theme-light textarea, body.theme-light select {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.15);
+  color: #1c1a18;
+}
+body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light select:focus {
+  border-color: var(--accent);
+  background: #fffdf8;
+}
 
 /* ===== 印刷 ===== */
 @media print {
@@ -433,7 +442,7 @@ body.theme-light .priv-bar {
 }
 </style>
 </head>
-<body>
+<body><script>if(localStorage.getItem('bigfive_theme')!=='dark')document.body.classList.add('theme-light');</script>
 
 <div class="priv-bar">
   🔒 このデータは外部に一切送信されません。このデバイスにのみ保存されます。
