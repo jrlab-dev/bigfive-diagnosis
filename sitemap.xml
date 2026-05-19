@@ -801,4 +801,60 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：価値観の科学——シュワルツ理論で読み解く「大切にしたいもの」の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kachikan-no-kagaku.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：愛着スタイルとは——安心・不安・回避の3パターンで読み解く人間関係 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/aichaku-style-toha.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：恋愛スタイル6種類——愛着×ビッグファイブで見る「付き合い方」の傾向 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/rennai-style-6-shurui.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：マインドセットとは——「変われる人」と「変われない人」の違い -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mindset-toha.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：やる気の正体——動機づけの科学が教える「続く」と「続かない」 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/yaruki-no-seitai.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ChatGPTに性格診断させる本当のところ——AI×心理学の可能性と限界 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/chatgpt-seikaku-data.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ一覧 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
 </urlset>
