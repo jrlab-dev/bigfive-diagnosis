@@ -842,7 +842,7 @@
     });
   }
 
-  function switchTab(tab) {
+  function switchTab(tab, skipScroll) {
     currentTab = tab;
     btns.forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
 
@@ -863,7 +863,7 @@
     }
 
     cards.forEach(function(c){ c.style.display = 'none'; });
-    visible.forEach(function(c){ c.style.display = ''; });
+    visible.forEach(function(c){ c.style.display = 'block'; });
 
     // Insert divider between latest and picks (only on latest tab)
     if (tab === 'latest') {
@@ -875,14 +875,14 @@
     }
 
     loadImages(visible);
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!skipScroll) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   btns.forEach(function(btn){
     btn.addEventListener('click', function(){ switchTab(btn.dataset.tab); });
   });
 
-  switchTab('latest');
+  switchTab('latest', true);
 })();
 </script>
 </body>
