@@ -1986,6 +1986,32 @@ body.theme-light .card-title {
 body.theme-light .page-eyebrow {
   color: oklch(0.42 0.18 210) !important;
 }
+/* タブ */
+body.theme-light .tab-nav {
+  background: var(--bg) !important;
+  border-bottom: 1px solid oklch(0.86 0.04 210 / 0.2);
+  padding-bottom: 12px !important;
+}
+body.theme-light .tab-btn {
+  color: oklch(0.42 0.18 210) !important;
+  border-color: oklch(0.86 0.04 210 / 0.35) !important;
+}
+body.theme-light .tab-btn:hover {
+  background: oklch(0.94 0.02 210) !important;
+  border-color: oklch(0.55 0.18 210 / 0.4) !important;
+}
+body.theme-light .tab-btn.active {
+  background: oklch(0.55 0.18 210) !important;
+  border-color: oklch(0.55 0.18 210) !important;
+  color: #fff !important;
+}
+body.theme-light .tab-count {
+  opacity: .5;
+}
+body.theme-light .section-divider {
+  color: oklch(0.42 0.18 210) !important;
+  border-color: oklch(0.86 0.04 210 / 0.35) !important;
+}
 
 /* ─── legal.html ─── */
 body.theme-light .legal-body,
