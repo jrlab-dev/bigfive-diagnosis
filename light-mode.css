@@ -606,10 +606,10 @@ body.theme-light .coll-slot.next .coll-num {
   color: #fff !important;
 }
 body.theme-light .coll-unlock-num {
-  color: #6b5f8a !important;
+  color: #4a4460 !important;
 }
 body.theme-light .coll-unlock-name {
-  color: #5b21b6 !important;
+  color: #4c1d95 !important;
 }
 body.theme-light .coll-slot.milestone.next .coll-unlock-name {
   color: #9d174d !important;
@@ -622,7 +622,7 @@ body.theme-light .coll-slot::after {
   background: rgba(100, 80, 150, 0.2) !important;
 }
 body.theme-light .coll-default-label {
-  color: #8b7faa !important;
+  color: #5a5070 !important;
 }
 body.theme-light .coll-silhouette {
   color: #6b5f8a !important;
