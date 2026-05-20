@@ -1649,6 +1649,7 @@ document.getElementById('deleteModalConfirm').addEventListener('click', () => {
     localStorage.removeItem(AlbumUtils.STORAGE_KEY);
     localStorage.removeItem(AlbumUtils.META_KEY);
   }
+  localStorage.removeItem('bigfive_legacy_user');
   location.href = 'index.html';
 });
 
