@@ -2722,9 +2722,16 @@ if (isOtherMode) {
       });
 
       var count = AlbumUtils.getAlbumCards().length;
+      var oldShareCount = count - (added ? 1 : 0);
       if (added) {
         markAsAdded(btn, hint, count);
         showZukanToast('図鑑に追加しました！ (' + count.toLocaleString() + ' / 8,298枚)');
+        if (typeof getNewUnlocks === 'function') {
+          var shareUnlocks = getNewUnlocks(oldShareCount, count);
+          if (shareUnlocks.length > 0) {
+            setTimeout(function() { showUnlockBanners(shareUnlocks); }, 800);
+          }
+        }
       } else {
         markAsAdded(btn, hint, count);
       }
