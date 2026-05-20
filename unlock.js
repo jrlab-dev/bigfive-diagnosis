@@ -1,6 +1,7 @@
 'use strict';
 
-var UNLOCK_DEPLOY_DATE = '2026-05-21';
+// 2026-05-21 00:00:00 JST = 2026-05-20T15:00:00Z
+var UNLOCK_DEPLOY_DATE = '2026-05-20T15:00:00.000Z';
 
 var UNLOCK_TABLE = [
   { cards:  1, id: 'other',               label: 'あの人診断',          url: 'other_quiz.html' },
@@ -33,7 +34,7 @@ function isLegacyUser() {
     var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
     var allData = album.concat(myResults);
     var hasOldData = allData.some(function(r) {
-      return r.date && r.date.slice(0, 10) < UNLOCK_DEPLOY_DATE;
+      return r.date && r.date < UNLOCK_DEPLOY_DATE;
     });
     if (hasOldData) {
       localStorage.setItem('bigfive_legacy_user', 'true');
@@ -101,16 +102,31 @@ function renderGate(featureId) {
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
   gate.innerHTML =
-    '<div style="position:fixed;inset:0;background:#0a0e27;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;">'
-    + '<div style="font-size:3rem;margin-bottom:16px;">🔒</div>'
-    + '<h2 style="color:#e2e8f0;font-size:1.3rem;margin-bottom:12px;">' + label + '</h2>'
-    + '<p style="color:#94a3b8;font-size:0.95rem;line-height:1.7;margin-bottom:8px;">カードを<strong style="color:#a78bfa;">' + required + '枚</strong>集めると解放されます</p>'
-    + '<p style="color:#64748b;font-size:0.85rem;margin-bottom:28px;">現在 ' + current + ' 枚 ／ あと ' + remaining + ' 枚</p>'
-    + '<div style="background:#1e293b;border-radius:999px;height:6px;width:200px;margin:0 auto 32px;">'
+    '<div style="position:fixed;inset:0;background:#0a0e27;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    + '<div style="max-width:340px;width:100%;">'
+    + '<div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>'
+    + '<h2 style="color:#e2e8f0;font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
+    + '<div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">'
+    + '<p style="color:#c4b5fd;font-size:0.85rem;margin:0 0 10px 0;font-weight:bold;">解放条件</p>'
+    + '<p style="color:#e2e8f0;font-size:0.95rem;margin:0 0 12px 0;line-height:1.6;">カードを <strong style="color:#a78bfa;">' + required + '枚</strong> 集めると使えるようになります</p>'
+    + '<p style="color:#94a3b8;font-size:0.8rem;margin:0;line-height:1.6;">カードの集め方</p>'
+    + '<ul style="color:#94a3b8;font-size:0.8rem;margin:6px 0 0 0;padding-left:16px;line-height:1.8;">'
+    + '<li>自分の診断結果を保存する</li>'
+    + '<li>友達にシェアして受け取る</li>'
+    + '</ul>'
+    + '</div>'
+    + '<div style="margin-bottom:16px;">'
+    + '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">'
+    + '<span style="color:#94a3b8;font-size:0.8rem;">現在 ' + current + ' 枚</span>'
+    + '<span style="color:#a78bfa;font-size:0.8rem;">あと ' + remaining + ' 枚</span>'
+    + '</div>'
+    + '<div style="background:#1e293b;border-radius:999px;height:8px;width:100%;">'
     + '<div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:' + pct + '%;"></div>'
     + '</div>'
-    + '<a href="quiz.html" style="display:inline-block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 32px;border-radius:999px;text-decoration:none;font-weight:bold;font-size:1rem;margin-bottom:20px;">診断してカードを集める</a>'
-    + '<br><a href="index.html" style="color:#64748b;font-size:0.85rem;text-decoration:none;">トップに戻る</a>'
+    + '</div>'
+    + '<a href="quiz.html" style="display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:0.95rem;margin-bottom:12px;">診断してカードを集める</a>'
+    + '<a href="index.html" style="display:inline-block;color:#64748b;font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
+    + '</div>'
     + '</div>';
   document.body.appendChild(gate);
 }

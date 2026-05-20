@@ -14,6 +14,7 @@ const CONCIERGE_CONFIG = {
       title: 'HSP感受性チェック',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>',
       url: 'hsp.html',
+      gate: null,
       bgColor: 'rgba(34,211,238,0.15)',
       getResult: (d) => {
         const map = {
@@ -54,6 +55,7 @@ const CONCIERGE_CONFIG = {
       title: '愛着スタイルチェック',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
       url: 'attachment.html',
+      gate: 'attachment',
       bgColor: 'rgba(244,114,182,0.15)',
       getResult: (d) => {
         const map = {
@@ -92,6 +94,7 @@ const CONCIERGE_CONFIG = {
       title: '恋愛スタイル診断',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
       url: 'love.html',
+      gate: null,
       bgColor: 'rgba(236,72,153,0.15)',
       getResult: (d) => {
         const map = {
@@ -132,6 +135,7 @@ const CONCIERGE_CONFIG = {
       title: '価値観診断',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
       url: 'schwartz.html',
+      gate: 'schwartz',
       bgColor: 'rgba(245,158,11,0.15)',
       getResult: (d) => {
         const valJa = {
@@ -166,6 +170,7 @@ const CONCIERGE_CONFIG = {
       title: '動機タイプ診断',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
       url: 'sdt.html',
+      gate: 'sdt',
       bgColor: 'rgba(59,130,246,0.15)',
       getResult: (d) => {
         const map = {
@@ -203,6 +208,7 @@ const CONCIERGE_CONFIG = {
       title: 'マインドセット診断',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M20 15h2M9 2v2M9 20v2M2 9h2M20 9h2"/></svg>',
       url: 'mindset.html',
+      gate: 'mindset',
       bgColor: 'rgba(16,185,129,0.15)',
       getResult: (d) => {
         const map = {
@@ -235,6 +241,7 @@ const CONCIERGE_CONFIG = {
       title: '統制の所在チェック',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
       url: 'locus.html',
+      gate: 'locus',
       bgColor: 'rgba(245,158,11,0.15)',
       getResult: (d) => {
         const map = {
@@ -262,6 +269,7 @@ const CONCIERGE_CONFIG = {
       title: '感情知能（EQ）チェック',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
       url: 'eq.html',
+      gate: 'eq',
       bgColor: 'rgba(249,115,22,0.15)',
       getResult: (d) => {
         const map = {
@@ -290,6 +298,7 @@ const CONCIERGE_CONFIG = {
       title: 'インポスター症候群チェック',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
       url: 'impostor.html',
+      gate: null,
       bgColor: 'rgba(167,139,250,0.15)',
       getResult: (d) => {
         const sevNames = { low: '低い', moderate: '中程度', high: '高い' };
@@ -317,7 +326,11 @@ const CONCIERGE_CONFIG = {
  * @returns {Array} おすすめテストの配列（最大3個）
  */
 function getRecommendations(sc) {
-  const candidates = CONCIERGE_CONFIG.tests.filter(test => !localStorage.getItem(test.key));
+  const candidates = CONCIERGE_CONFIG.tests.filter(test => {
+    if (localStorage.getItem(test.key)) return false;
+    if (test.gate && typeof isUnlocked === 'function' && !isUnlocked(test.gate)) return false;
+    return true;
+  });
   if (candidates.length === 0) return [];
 
   const scored = candidates.map(test => {
