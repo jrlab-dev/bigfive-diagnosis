@@ -574,6 +574,53 @@ body.theme-light .album-empty-slot {
   color: oklch(0.72 0.08 270 / 0.45) !important;
 }
 
+/* コレクション進行パス（mypage.html） */
+body.theme-light .coll-slot {
+  background: oklch(0.96 0.01 270) !important;
+  border-color: oklch(0.82 0.04 270 / 0.5) !important;
+}
+body.theme-light .coll-slot.filled {
+  border-color: oklch(0.65 0.15 160 / 0.5) !important;
+}
+body.theme-light .coll-slot.next {
+  border-color: oklch(0.55 0.2 280 / 0.6) !important;
+}
+body.theme-light .coll-slot.milestone {
+  border-color: oklch(0.60 0.15 280 / 0.5) !important;
+  background: oklch(0.94 0.03 280) !important;
+}
+body.theme-light .coll-slot.milestone.next {
+  border-color: oklch(0.55 0.2 340 / 0.6) !important;
+}
+body.theme-light .coll-num {
+  background: oklch(0.88 0.04 270 / 0.6) !important;
+  color: oklch(0.40 0.05 270) !important;
+}
+body.theme-light .coll-slot.filled .coll-num {
+  background: oklch(0.55 0.15 160 / 0.85) !important;
+  color: #fff !important;
+}
+body.theme-light .coll-slot.next .coll-num {
+  background: oklch(0.55 0.18 280 / 0.75) !important;
+  color: #fff !important;
+}
+body.theme-light .coll-unlock-label {
+  color: oklch(0.40 0.15 280) !important;
+}
+body.theme-light .coll-slot.milestone.next .coll-unlock-label {
+  color: oklch(0.45 0.18 340) !important;
+}
+body.theme-light .coll-slot.filled .coll-unlock-label {
+  background: oklch(0.20 0.03 270 / 0.65) !important;
+  color: oklch(0.55 0.18 280) !important;
+}
+body.theme-light .coll-slot::after {
+  background: oklch(0.72 0.06 270 / 0.35) !important;
+}
+body.theme-light .coll-default-label {
+  color: oklch(0.55 0.03 270) !important;
+}
+
 /* カードサムネイル（コレクション） */
 body.theme-light .collection-card {
   border-color: oklch(0.88 0.03 270 / 0.5) !important;
