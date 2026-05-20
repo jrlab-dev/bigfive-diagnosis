@@ -124,7 +124,7 @@
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
 </head>
-<body class="theme-light">
+<body data-feature-gate="riasec" class="theme-light">
 <script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
   <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div><div class="blob blob-4"></div><div class="blob blob-5"></div>
@@ -804,5 +804,6 @@ function clearProgress(){
 })();
 </script>
 <script src="nav.js"></script>
+<script src="unlock.js"></script>
 </body>
 </html>

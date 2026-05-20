@@ -702,7 +702,7 @@
 }
 </script>
 </head>
-<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<body data-feature-gate="team" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -1456,5 +1456,6 @@ if (viewTeamData && allMembers.length >= 2) {
 </script>
 <script src="compat.js"></script>
 <script src="nav.js"></script>
+<script src="unlock.js"></script>
 </body>
 </html>

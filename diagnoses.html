@@ -158,6 +158,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="otherGrid"></div>
 </div>
 
+<script src="unlock.js"></script>
 <script>
 const DIAGNOSES = [
   {
@@ -357,6 +358,23 @@ function buildRecommendations(scores) {
 // ===== 診断カードHTML =====
 function diagCardHTML(d, done) {
   const isDone = done.has(d.id);
+  const locked = (typeof isUnlocked === 'function') && !isUnlocked(d.id);
+  const required = locked && (typeof getRequiredCards === 'function') ? getRequiredCards(d.id) : 0;
+  const current  = locked && (typeof getCardCount    === 'function') ? getCardCount()          : 0;
+  const remaining = required - current;
+
+  if (locked) {
+    return `
+    <div class="diag-card diag-card-locked" data-feature="${d.id}" data-required="${required}" onclick="window._showLockedToast(${remaining})">
+      <span class="diag-icon" style="opacity:0.35">${d.icon}</span>
+      <div class="diag-body" style="opacity:0.4">
+        <div class="diag-name">${d.name}</div>
+        <div class="diag-desc">${d.desc}</div>
+      </div>
+      <div class="diag-lock-badge">🔒 あと${remaining}枚</div>
+    </div>`;
+  }
+
   return `
     <a href="${d.url}" class="diag-card"${d.fc ? ` data-fc="${d.fc}"` : ''}>
       <span class="diag-icon">${d.icon}</span>
@@ -405,6 +423,65 @@ DIAGNOSES.forEach(d => {
   const target = SELF_IDS.includes(d.id) ? selfGrid : otherGrid;
   target.innerHTML += diagCardHTML(d, done);
 });
+</script>
+<style>
+.diag-card-locked {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(30,41,59,0.5);
+  border: 1px solid rgba(51,65,85,0.5);
+  user-select: none;
+}
+.diag-lock-badge {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  background: rgba(139,92,246,0.2);
+  border: 1px solid rgba(139,92,246,0.4);
+  color: #a78bfa;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+#diagLockedToast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e293b;
+  border: 1px solid rgba(139,92,246,0.4);
+  color: #e2e8f0;
+  font-size: 0.88rem;
+  padding: 10px 20px;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  z-index: 7000;
+  white-space: nowrap;
+}
+#diagLockedToast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+<div id="diagLockedToast"></div>
+<script>
+window._showLockedToast = function(remaining) {
+  var toast = document.getElementById('diagLockedToast');
+  if (!toast) return;
+  toast.textContent = 'あと' + remaining + '枚集めると使えます';
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+};
 </script>
 <script src="nav.js"></script>
 </body>
