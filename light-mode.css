@@ -611,6 +611,9 @@ body.theme-light .coll-unlock-num {
 body.theme-light .coll-unlock-name {
   color: #4c1d95 !important;
 }
+body.theme-light .coll-unlock-suffix {
+  color: #6d28d9 !important;
+}
 body.theme-light .coll-slot.milestone.next .coll-unlock-name {
   color: #9d174d !important;
 }

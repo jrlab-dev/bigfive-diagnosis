@@ -958,16 +958,23 @@
     padding: 2px 4px;
     max-width: 100%;
     overflow: hidden;
+    margin-top: 4px;
   }
   .coll-unlock-num {
     font-size: 0.65rem;
     color: rgba(203,213,225,0.7);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
   .coll-unlock-name {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: bold;
     color: #e9d5ff;
+    display: block;
+  }
+  .coll-unlock-suffix {
+    font-size: 0.55rem;
+    color: rgba(167,139,250,0.7);
+    display: block;
   }
   .coll-slot.milestone.next .coll-unlock-name {
     color: #f9a8d4;
@@ -992,11 +999,11 @@
   }
   .coll-silhouette {
     position: absolute;
-    bottom: 2px;
+    bottom: -4px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    height: 80%;
+    width: 180%;
+    height: 140%;
     opacity: 0.04;
     z-index: 0;
     pointer-events: none;
@@ -1840,7 +1847,8 @@ function renderAlbum() {
       if (unlock) {
         html += '<div class="coll-unlock-label">';
         html += '<div class="coll-unlock-num">' + i + '枚目</div>';
-        html += '<div class="coll-unlock-name">' + unlock.label + '</div>';
+        html += '<span class="coll-unlock-name">' + unlock.label + '</span>';
+        html += '<span class="coll-unlock-suffix">+機能解放</span>';
         html += '</div>';
       } else {
         html += '<div class="coll-default-label">' + i + '枚目</div>';
