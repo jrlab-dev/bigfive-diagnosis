@@ -889,6 +889,7 @@
     justify-content: center;
     border: 2px dashed rgba(139,92,246,0.2);
     transition: border-color 0.3s, box-shadow 0.3s;
+    overflow: hidden;
   }
   .coll-slot.filled {
     border-color: rgba(16,185,129,0.4);
@@ -999,7 +1000,7 @@
   }
   .coll-silhouette {
     position: absolute;
-    bottom: -4px;
+    bottom: -16px;
     left: 50%;
     transform: translateX(-50%);
     width: 180%;
@@ -1007,6 +1008,7 @@
     opacity: 0.04;
     z-index: 0;
     pointer-events: none;
+    overflow: visible;
   }
   .coll-slot.milestone .coll-silhouette {
     opacity: 0.06;
