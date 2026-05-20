@@ -484,9 +484,9 @@ sortedDiagnoses.forEach(d => {
 window._showLockedToast = function(remaining) {
   var toast = document.getElementById('diagLockedToast');
   if (!toast) return;
-  toast.textContent = 'あと' + remaining + '枚集めると使えます';
+  toast.textContent = 'カードをあと' + remaining + '枚集めると解放されます。診断を受けるか、友達のシェアを受け取るとカードが増えます';
   toast.classList.add('show');
-  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+  setTimeout(function() { toast.classList.remove('show'); }, 4000);
 };
 </script>
 <script src="nav.js"></script>
