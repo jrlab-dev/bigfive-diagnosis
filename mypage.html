@@ -857,6 +857,177 @@
     color: rgba(139,92,246,0.25);
     font-size: 24px;
   }
+
+  /* ===== コレクション進行パス ===== */
+  .collection-stage-label {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #a78bfa;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .collection-path {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 14px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  @media (max-width: 480px) {
+    .collection-path {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px 10px;
+    }
+  }
+  .coll-slot {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(30,20,50,0.6);
+    border: 2px solid rgba(139,92,246,0.15);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .coll-slot.filled {
+    border-color: rgba(16,185,129,0.4);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+  }
+  .coll-slot.filled:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.2);
+  }
+  .coll-slot.filled img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .coll-slot.next {
+    border-color: rgba(139,92,246,0.6);
+    animation: coll-pulse 2s ease-in-out infinite;
+  }
+  @keyframes coll-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.3); }
+    50% { box-shadow: 0 0 12px 2px rgba(139,92,246,0.15); }
+  }
+  .coll-slot.milestone {
+    border-color: rgba(139,92,246,0.4);
+    background: rgba(139,92,246,0.08);
+  }
+  .coll-slot.milestone.next {
+    border-color: rgba(236,72,153,0.6);
+    animation: coll-pulse-milestone 2s ease-in-out infinite;
+  }
+  @keyframes coll-pulse-milestone {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(236,72,153,0.3); }
+    50% { box-shadow: 0 0 12px 2px rgba(236,72,153,0.15); }
+  }
+  .coll-num {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.3);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .coll-slot.filled .coll-num {
+    background: rgba(16,185,129,0.8);
+    color: #fff;
+  }
+  .coll-slot.next .coll-num {
+    background: rgba(139,92,246,0.6);
+    color: #fff;
+  }
+  .coll-unlock-label {
+    font-size: 0.6rem;
+    color: #c4b5fd;
+    text-align: center;
+    line-height: 1.3;
+    padding: 2px 4px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .coll-slot.milestone.next .coll-unlock-label {
+    color: #f9a8d4;
+  }
+  .coll-slot.filled .coll-unlock-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #a78bfa;
+    font-size: 0.55rem;
+    padding: 2px 0;
+  }
+  /* 進行コネクター（スロット間の線） */
+  .coll-slot::after {
+    content: '';
+    position: absolute;
+    right: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 2px;
+    background: rgba(139,92,246,0.25);
+    z-index: 1;
+  }
+  @media (max-width: 480px) {
+    .coll-slot::after { right: -7px; width: 4px; }
+  }
+  /* 行末スロットは下へ */
+  .coll-slot.row-end::after {
+    right: auto;
+    top: auto;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 6px;
+  }
+  @media (max-width: 480px) {
+    .coll-slot.row-end::after {
+      bottom: -5px;
+      height: 4px;
+    }
+  }
+  /* 最終スロットには線なし */
+  .coll-slot:last-child::after {
+    display: none;
+  }
+  .collection-complete-banner {
+    text-align: center;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(236,72,153,0.15));
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .collection-complete-banner h3 {
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .collection-complete-banner p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
   .album-badges {
     display: flex;
     justify-content: center;
@@ -1013,7 +1184,7 @@
     <button class="tab" data-tab="others">あの人の結果</button>
     <button class="tab" data-tab="tests">心理テスト</button>
     <button class="tab" data-tab="team">チーム</button>
-    <button class="tab" data-tab="album">アルバム</button>
+    <button class="tab" data-tab="album">コレクション</button>
   </div>
 
   <div id="myResults" class="results-list"></div>
@@ -1551,12 +1722,11 @@ function deleteTestResult(key) {
   renderOtherTests();
 }
 
-// ===== アルバム =====
+// ===== コレクション =====
 function renderAlbum() {
   const container = document.getElementById('albumContent');
   if (!window.AlbumUtils) { container.innerHTML = '<p style="color:#888;padding:40px;text-align:center;">読み込み中...</p>'; return; }
 
-  // 初回アクセス時に既存データを移行
   const meta = AlbumUtils.getAlbumMeta();
   if (!meta.migrated) {
     AlbumUtils.migrateExistingResults();
@@ -1567,38 +1737,81 @@ function renderAlbum() {
   const TOTAL = 8298;
   const pct = Math.round((count / TOTAL) * 100);
   const isComplete = count >= TOTAL;
+  const isMobile = window.innerWidth <= 480;
+  const cols = isMobile ? 3 : 4;
 
   if (count === 0) {
-    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがアルバムに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！<br><br>友達に結果をシェアしてもらうと図鑑が埋まります！</div>';
+    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがコレクションに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！<br><br>友達に結果をシェアしてもらうとコレクションが埋まります！</div>';
     return;
   }
 
-  let html = '<div class="album-header">';
-  html += `<div class="album-progress-text${isComplete ? ' complete' : ''}">${count.toLocaleString()} / ${TOTAL.toLocaleString()} 枚${isComplete ? ' COMPLETE!' : ''}</div>`;
+  // 解放マイルストーンのマップ（枚数→情報）
+  var unlockMap = {};
+  if (typeof UNLOCK_TABLE !== 'undefined') {
+    UNLOCK_TABLE.forEach(function(e) {
+      unlockMap[e.cards] = e;
+    });
+  }
+
+  let html = '';
+
+  // ヘッダー
+  html += '<div class="album-header">';
+  html += '<div class="album-progress-text' + (isComplete ? ' complete' : '') + '">' + count.toLocaleString() + ' / ' + TOTAL.toLocaleString() + ' 枚' + (isComplete ? ' COMPLETE!' : '') + '</div>';
   html += '<div class="album-progress-bar"><div class="album-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '</div>';
 
-  // カードグリッド（直近20枚まで表示）
-  html += '<div class="album-grid">';
-  var displayCards = cards.slice(0, 20);
-  displayCards.forEach(function(card) {
-    const imgPath = AlbumUtils.getCardImagePath(card);
-    const r = card.rarity || 'common';
-    const sourceLabel = card.source === 'my' ? '自分' : card.source === 'other' ? 'あの人' : '';
-    html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="album-card rarity-' + r + '">';
-    html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
-    html += '<div class="album-card-code">' + card.code + '</div>';
-    if (sourceLabel) html += '<div class="album-card-source">' + sourceLabel + '</div>';
-    html += '</a>';
-  });
-  // 空スロット
-  for (var i = displayCards.length; i < 20; i++) {
-    html += '<div class="album-empty-slot">?</div>';
+  // Stage判定
+  if (count >= 20) {
+    html += '<div class="collection-complete-banner">';
+    html += '<h3>Stage 1 コンプリート！</h3>';
+    html += '<p>' + count + '枚のコレクション達成</p>';
+    html += '</div>';
   }
-  if (count > 20) {
-    html += '<div style="grid-column:1/-1;text-align:center;font-size:12px;color:#64748b;padding:4px;">...他 ' + (count - 20) + ' 枚</div>';
+
+  // 進行パス（最初の20スロット）
+  html += '<div class="collection-stage-label">Stage 1 — カードを集めて機能を解放</div>';
+  html += '<div class="collection-path">';
+
+  // カードは古い順（最初に集めたもの=slot 1）に並べる
+  var orderedCards = cards.slice().reverse();
+
+  for (var i = 1; i <= 20; i++) {
+    var filled = i <= count;
+    var isNext = (i === count + 1) && (count < 20);
+    var unlock = unlockMap[i];
+    var isRowEnd = (i % cols === 0) && (i < 20);
+
+    var cls = 'coll-slot';
+    if (filled) cls += ' filled';
+    if (isNext) cls += ' next';
+    if (unlock && !filled) cls += ' milestone';
+    if (unlock && isNext) cls += ' milestone next';
+    if (isRowEnd) cls += ' row-end';
+
+    if (filled) {
+      var card = orderedCards[i - 1];
+      var imgPath = AlbumUtils.getCardImagePath(card);
+      var r = card.rarity || 'common';
+      html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="' + cls + '">';
+      html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
+      html += '<div class="coll-num">' + i + '</div>';
+      if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + '</div>';
+      html += '</a>';
+    } else {
+      html += '<div class="' + cls + '">';
+      html += '<div class="coll-num">' + i + '</div>';
+      if (unlock) {
+        html += '<div class="coll-unlock-label">' + unlock.label + '</div>';
+      }
+      html += '</div>';
+    }
   }
   html += '</div>';
+
+  if (count > 20) {
+    html += '<div style="text-align:center;font-size:0.8rem;color:#64748b;padding:4px 0 16px;">...他 ' + (count - 20) + ' 枚</div>';
+  }
 
   // 実績バッジ
   html += '<div class="album-badges">';
@@ -1625,11 +1838,15 @@ function renderAlbum() {
   });
   html += '</div>';
 
-  // コレクション・図鑑ボタン
+  // コレクション・図鑑ボタン（解放条件で制御）
   var bookSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>';
   var bookOpenSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>';
-  html += '<a href="card-collection.html" class="stage2-btn unlocked" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookSvg + ' コレクションを開く</a>';
-  html += '<a href="zukan.html" class="stage2-btn unlocked" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookOpenSvg + ' 全種類図鑑を開く</a>';
+  if (typeof isUnlocked === 'function' && isUnlocked('zukan_s2')) {
+    html += '<a href="card-collection.html" class="stage2-btn unlocked" style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookSvg + ' コレクションを開く</a>';
+  }
+  if (typeof isUnlocked === 'function' && isUnlocked('zukan_s3')) {
+    html += '<a href="zukan.html" class="stage2-btn unlocked" style="margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;">' + bookOpenSvg + ' 図鑑を開く</a>';
+  }
 
   container.innerHTML = html;
 }
