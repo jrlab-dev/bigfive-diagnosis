@@ -911,6 +911,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：営業企画の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-sales-plan.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：価値観の科学——シュワルツ理論で読み解く「大切にしたいもの」の正体 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/kachikan-no-kagaku.html</loc>
