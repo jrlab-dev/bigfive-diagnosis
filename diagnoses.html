@@ -419,7 +419,13 @@ if (scores) {
 const selfGrid = document.getElementById('selfGrid');
 const otherGrid = document.getElementById('otherGrid');
 const SELF_IDS = ['bigfive','hsp','attachment','love','mindset','schwartz','sdt','locus','eq','impostor'];
-DIAGNOSES.forEach(d => {
+const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
+  const aLocked = (typeof isUnlocked === 'function') && !isUnlocked(a.id);
+  const bLocked = (typeof isUnlocked === 'function') && !isUnlocked(b.id);
+  if (aLocked === bLocked) return 0;
+  return aLocked ? 1 : -1;
+});
+sortedDiagnoses.forEach(d => {
   const target = SELF_IDS.includes(d.id) ? selfGrid : otherGrid;
   target.innerHTML += diagCardHTML(d, done);
 });
