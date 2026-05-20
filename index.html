@@ -79,6 +79,8 @@
 }
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -587,7 +589,7 @@
     <div class="feature-cards">
 
       <div class="feature-card">
-        <img class="feature-bg-img" src="images/features/patterns.webp" alt="">
+        <img class="feature-bg-img" src="images/features/patterns.webp" alt="" width="1024" height="1024" loading="eager" fetchpriority="high">
         <div class="feature-content">
           <span class="science-label">
             <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
@@ -602,7 +604,7 @@
 
       <div class="feature-card feature-card--chara">
         <div class="card-showcase">
-          <img src="images/features/card_showcase.webp" alt="キャラクターカード">
+          <img src="images/features/card_showcase.webp" alt="キャラクターカード" width="1200" height="664" loading="lazy">
         </div>
         <div class="feature-content">
           <span class="science-label" style="background:rgba(232,121,176,0.1);border-color:rgba(232,121,176,0.3);color:var(--rose);">
@@ -617,7 +619,7 @@
       </div>
 
       <div class="feature-card">
-        <img class="feature-bg-img" src="images/features/science.webp" alt="">
+        <img class="feature-bg-img" src="images/features/science.webp" alt="" width="1024" height="1024" loading="lazy">
         <div class="feature-content">
           <span class="science-label">
             <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -632,7 +634,7 @@
       </div>
 
       <div class="feature-card feature-card--anohito">
-        <img class="feature-bg-img" src="images/features/observation.webp" alt="">
+        <img class="feature-bg-img" src="images/features/observation.webp" alt="" width="1024" height="1024" loading="lazy">
         <div class="feature-content">
           <span class="science-label" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);color:#f472b6;">
             <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
@@ -747,7 +749,7 @@
         <p class="demo-sub">ビッグファイブ理論による観察分析（デモ）</p>
       </div>
       <div class="demo-char">
-        <img src="images/characters/M/53513.webp" alt="推定キャラクター" onerror="this.style.display='none'">
+        <img src="images/characters/M/53513.webp" alt="推定キャラクター" width="508" height="1024" loading="lazy" onerror="this.style.display='none'">
         <p class="demo-char-label">推定キャラクター</p>
       </div>
       <div class="demo-traits">
@@ -921,7 +923,7 @@
 
 </script>
 <script src="concierge.js"></script>
-<script src="nav.js"></script>
+<script src="nav.js" defer></script>
 <script>
 // ===== トップページ：心理コンシェルジュ動的CTA =====
 (function() {
