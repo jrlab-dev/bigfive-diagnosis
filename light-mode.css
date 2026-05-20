@@ -624,6 +624,13 @@ body.theme-light .coll-slot::after {
 body.theme-light .coll-default-label {
   color: #8b7faa !important;
 }
+body.theme-light .coll-silhouette {
+  color: #6b5f8a !important;
+  opacity: 0.1 !important;
+}
+body.theme-light .coll-slot.milestone .coll-silhouette {
+  opacity: 0.15 !important;
+}
 
 /* カードサムネイル（コレクション） */
 body.theme-light .collection-card {

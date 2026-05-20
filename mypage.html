@@ -986,6 +986,15 @@
     color: rgba(148,163,184,0.5);
     text-align: center;
   }
+  .coll-silhouette {
+    width: 60%;
+    height: 50%;
+    opacity: 0.08;
+    margin-bottom: 2px;
+  }
+  .coll-slot.milestone .coll-silhouette {
+    opacity: 0.12;
+  }
     padding: 2px 0;
   }
   /* 進行コネクター（スロット間の線） */
@@ -1815,14 +1824,17 @@ function renderAlbum() {
       if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + ' 解放</div>';
       html += '</a>';
     } else {
+      var silhSvg = '<svg class="coll-silhouette" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 13c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>';
       html += '<div class="' + cls + '">';
       html += '<div class="coll-num">' + i + '</div>';
       if (unlock) {
+        html += silhSvg;
         html += '<div class="coll-unlock-label">';
         html += '<div class="coll-unlock-num">' + i + '枚目</div>';
         html += '<div class="coll-unlock-name">' + unlock.label + '</div>';
         html += '</div>';
       } else {
+        html += silhSvg;
         html += '<div class="coll-default-label">' + i + '枚目</div>';
       }
       html += '</div>';
