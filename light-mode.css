@@ -626,10 +626,10 @@ body.theme-light .coll-default-label {
 }
 body.theme-light .coll-silhouette {
   color: #6b5f8a !important;
-  opacity: 0.1 !important;
+  opacity: 0.06 !important;
 }
 body.theme-light .coll-slot.milestone .coll-silhouette {
-  opacity: 0.15 !important;
+  opacity: 0.08 !important;
 }
 
 /* カードサムネイル（コレクション） */
