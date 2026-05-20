@@ -962,7 +962,7 @@
     margin-top: 4px;
   }
   .coll-unlock-num {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: rgba(203,213,225,0.7);
     margin-bottom: 4px;
   }
@@ -994,7 +994,7 @@
   .coll-default-label {
     position: relative;
     z-index: 1;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: rgba(203,213,225,0.65);
     text-align: center;
   }
@@ -1002,7 +1002,7 @@
     position: absolute;
     bottom: -28px;
     left: 50%;
-    transform: translateX(-50%) scaleX(0.5);
+    transform: translateX(-50%);
     width: 180%;
     height: 140%;
     opacity: 0.04;
@@ -1841,7 +1841,7 @@ function renderAlbum() {
       if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + ' 解放</div>';
       html += '</a>';
     } else {
-      var silhSvg = '<svg class="coll-silhouette" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 13c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg>';
+      var silhSvg = '<svg class="coll-silhouette" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 13c-2 0-4 2-4 5v1h8v-1c0-3-2-5-4-5z"/></svg>';
       html += '<div class="' + cls + '">';
       html += '<div class="coll-num">' + i + '</div>';
       html += silhSvg;
