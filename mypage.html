@@ -1512,7 +1512,7 @@ function getTestMeta() {
 
 function renderOtherTests() {
   const container = document.getElementById('otherTestResults');
-  const TEST_META = getTestMeta();
+  const TEST_META = getTestMeta().filter(t => !t.gate || typeof isUnlocked !== 'function' || isUnlocked(t.gate));
   container.innerHTML = TEST_META.map((test, i) => {
     let stored = null;
     try { stored = JSON.parse(localStorage.getItem(test.key)); } catch(e) {}
@@ -2126,6 +2126,7 @@ function renderAIProfile() {
 </script>
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
+<script src="unlock.js"></script>
 <script src="concierge.js"></script>
 <script src="nav.js"></script>
 <script>
