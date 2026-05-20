@@ -115,6 +115,8 @@
   .rank-compact-num { font-size: 12px; font-weight: 900; color: var(--dim); min-width: 22px; }
   .rank-compact-name { font-size: 13px; font-weight: 500; }
   .rank-compact-pct { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .job-blog-link { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(34,211,238,0.4); transition: color .15s; }
+  .job-blog-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* ===== 詳細分析 ===== */
   .analysis-box { width: 100%; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); margin-bottom: 12px; position: relative; }
@@ -317,6 +319,11 @@ function rankItems(user,list){
     return {item:item,pct:matchPct(user,item)};
   }).sort(function(a,b){return b.pct-a.pct;});
 }
+
+// ===== 職種ブログURL =====
+var JOB_BLOG_SLUG={data_ai:'data-ai',sales_plan:'sales-plan',retail_store:'retail-store',hr_recruit:'hr-recruit'};
+function jobBlogUrl(id){return 'blog/job-'+(JOB_BLOG_SLUG[id]||id)+'.html';}
+function jobNameHtml(item){return '<a href="'+jobBlogUrl(item.id)+'" target="_blank" rel="noopener" class="job-blog-link">'+item.name+'</a>';}
 
 // ===== 理由生成 =====
 function genReason(user,item){
@@ -525,7 +532,7 @@ var ICONS={
   for(var i=0;i<Math.min(10,jobRank.length);i++){
     var r=jobRank[i];
     html+='<div class="rank-card">';
-    html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+r.item.name+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
+    html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+jobNameHtml(r.item)+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
     html+='<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:'+r.pct+'%"></div></div>';
     html+='<div class="rank-desc">'+r.item.desc+'</div>';
     html+='<div class="rank-reason">'+genReason(scores,r.item)+'</div>';
@@ -541,7 +548,7 @@ var ICONS={
   html+='<div class="hidden-list" id="moreJob">';
   for(var i=10;i<jobRank.length;i++){
     var r=jobRank[i];
-    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct" style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--dim);font-weight:400;">'+r.item.salary+'万</span>'+r.pct+'%</span></div>';
+    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+jobNameHtml(r.item)+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct" style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--dim);font-weight:400;">'+r.item.salary+'万</span>'+r.pct+'%</span></div>';
   }
   html+='</div>';
   html+='<button class="expand-btn" onclick="this.previousElementSibling.classList.toggle(\'show\');this.textContent=this.previousElementSibling.classList.contains(\'show\')?\'閉じる\':\'全26職種を見る\'">全26職種を見る</button>';
