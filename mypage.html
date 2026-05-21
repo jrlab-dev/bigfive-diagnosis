@@ -866,6 +866,9 @@
     margin-bottom: 12px;
     letter-spacing: 0.05em;
   }
+  body.theme-light .collection-stage-label {
+    color: #1e293b;
+  }
   .collection-path {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1792,8 +1795,10 @@ function renderAlbum() {
   const cards = AlbumUtils.getAlbumCards();
   const count = cards.length;
   const TOTAL = 8298;
-  const pct = Math.round((count / TOTAL) * 100);
-  const isComplete = count >= TOTAL;
+  const STAGE1 = 20;
+  const stage1Count = Math.min(count, STAGE1);
+  const pct = Math.min(100, Math.round((stage1Count / STAGE1) * 100));
+  const isComplete = count >= STAGE1;
   const isMobile = window.innerWidth <= 480;
   const cols = isMobile ? 3 : 4;
 
@@ -1814,7 +1819,7 @@ function renderAlbum() {
 
   // ヘッダー
   html += '<div class="album-header">';
-  html += '<div class="album-progress-text' + (isComplete ? ' complete' : '') + '">' + count.toLocaleString() + ' / ' + TOTAL.toLocaleString() + ' 枚' + (isComplete ? ' COMPLETE!' : '') + '</div>';
+  html += '<div class="album-progress-text' + (isComplete ? ' complete' : '') + '">' + stage1Count + ' / ' + STAGE1 + ' 枚' + (isComplete ? ' COMPLETE!' : '') + '</div>';
   html += '<div class="album-progress-bar"><div class="album-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '</div>';
 
