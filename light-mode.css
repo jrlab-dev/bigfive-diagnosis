@@ -576,7 +576,7 @@ body.theme-light .album-empty-slot {
 
 /* コレクション進行パス（mypage.html） */
 body.theme-light .coll-slot {
-  border-color: oklch(0.82 0.04 270 / 0.45) !important;
+  border-color: rgba(80, 70, 100, 0.25) !important;
 }
 body.theme-light .coll-slot.filled {
   border-color: oklch(0.65 0.15 160 / 0.5) !important;
@@ -587,7 +587,7 @@ body.theme-light .coll-slot.next {
   border-style: solid !important;
 }
 body.theme-light .coll-slot.milestone {
-  border-color: oklch(0.60 0.15 280 / 0.45) !important;
+  border-color: rgba(80, 70, 100, 0.35) !important;
   border-style: solid !important;
 }
 body.theme-light .coll-slot.milestone.next {
@@ -612,7 +612,7 @@ body.theme-light .coll-unlock-name {
   color: #4c1d95 !important;
 }
 body.theme-light .coll-unlock-suffix {
-  color: #6d28d9 !important;
+  color: #4c1d95 !important;
 }
 body.theme-light .coll-slot.milestone.next .coll-unlock-name {
   color: #9d174d !important;
