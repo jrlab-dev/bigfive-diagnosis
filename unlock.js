@@ -28,7 +28,7 @@ var UNLOCK_TABLE = [
 var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'love', 'impostor', 'kodomo'];
 
 function isLegacyUser() {
-  if (localStorage.getItem('bigfive_legacy_user') === 'true') return true;
+  try { if (localStorage.getItem('bigfive_legacy_user') === 'true') return true; } catch(e) { return false; }
   try {
     var album = JSON.parse(localStorage.getItem('bigfive_album') || '[]');
     var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
@@ -98,7 +98,7 @@ function renderGate(featureId) {
   }
   var pct = required > 0 ? Math.min(100, Math.round(current / required * 100)) : 0;
 
-  var isLight = localStorage.getItem('bigfive_theme') === 'light';
+  var isLight = document.body.classList.contains('theme-light');
   var c = isLight ? {
     bg: '#f8fafc',
     text: '#1e293b',
