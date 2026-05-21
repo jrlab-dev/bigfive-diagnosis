@@ -16,7 +16,7 @@ var UNLOCK_TABLE = [
   { cards: 16, id: 'career-integration', label: 'キャリア統合分析',     url: 'career-integration.html' },
   { cards: 18, id: 'locus',             label: '統制の所在診断',        url: 'locus.html' },
   { cards: 20, id: 'sdt',               label: '動機づけ診断',          url: 'sdt.html' },
-  { cards: 20, id: 'zukan_s2',          label: '図鑑 Stage 2',          url: 'zukan.html' },
+  { cards: 20, id: 'zukan_s2',          label: 'コレクション Stage 2',   url: 'zukan.html' },
   { cards: 25, id: 'other_limit_30',    label: 'あの人保存30件に拡張',  url: null },
   { cards: 30, id: 'other_limit_40',    label: 'あの人保存40件に拡張',  url: null },
   { cards: 40, id: 'other_limit_50',    label: 'あの人保存50件に拡張',  url: null },
