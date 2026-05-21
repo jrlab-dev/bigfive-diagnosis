@@ -28,7 +28,7 @@
   "@type": "CollectionPage",
   "name": "心理学診断 一覧【公式】",
   "url": "https://bigfive.jr-genius.jp/diagnoses.html",
-  "description": "ビッグファイブ診断を含む心理学診断一覧。自分の性格分析10種＋応用診断3種。HSP・愛着スタイル・恋愛スタイル・マインドセット・価値観・動機タイプ・統制の所在・EQ・インポスター症候群など。",
+  "description": "ビッグファイブ診断を含む心理学診断一覧。自分の性格分析11種＋応用診断3種。HSP・愛着スタイル・恋愛スタイル・マインドセット・ダークトライアド・価値観・動機タイプ・統制の所在・EQ・インポスター症候群など。",
   "isPartOf": {
     "@type": "WebSite",
     "name": "ビッグファイブで本当の自分を知る【公式】",
@@ -149,7 +149,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   </section>
 
   <!-- 自分の性格を診断 -->
-  <p class="section-label">自分の性格を分析する（10種類）</p>
+  <p class="section-label">自分の性格を分析する（11種類）</p>
   <div class="diag-grid" id="selfGrid"></div>
 
   <!-- 応用診断 -->
@@ -429,7 +429,7 @@ if (scores) {
 
 const selfGrid = document.getElementById('selfGrid');
 const otherGrid = document.getElementById('otherGrid');
-const SELF_IDS = ['bigfive','hsp','attachment','love','mindset','schwartz','sdt','locus','eq','impostor'];
+const SELF_IDS = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
   const aLocked = (typeof isUnlocked === 'function') && !isUnlocked(a.id);
   const bLocked = (typeof isUnlocked === 'function') && !isUnlocked(b.id);
