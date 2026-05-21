@@ -988,11 +988,13 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0,0,0,0.6);
-    color: #c4b5fd;
-    font-size: 0.5rem;
+    background: transparent;
+    color: #a78bfa;
+    font-size: 0.55rem;
     font-weight: bold;
     padding: 2px 0;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
   }
   .coll-default-label {
     position: relative;
@@ -1841,7 +1843,7 @@ function renderAlbum() {
       html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="' + cls + '">';
       html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
       html += '<div class="coll-num">' + i + '</div>';
-      if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + ' 解放</div>';
+      if (unlock) html += '<div class="coll-unlock-label">解放済</div>';
       html += '</a>';
     } else {
       var silhSvg = '<svg class="coll-silhouette" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 13c-2 0-4 2-4 5v1h8v-1c0-3-2-5-4-5z"/></svg>';
