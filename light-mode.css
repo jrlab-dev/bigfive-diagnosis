@@ -620,7 +620,7 @@ body.theme-light .coll-slot.milestone.next .coll-unlock-name {
 body.theme-light .coll-slot.filled .coll-unlock-label {
   background: transparent !important;
   color: #6d28d9 !important;
-  text-shadow: 0 1px 3px rgba(255,255,255,0.8) !important;
+  text-shadow: 0 0 4px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.6) !important;
 }
 body.theme-light .coll-slot::after {
   background: rgba(100, 80, 150, 0.2) !important;
