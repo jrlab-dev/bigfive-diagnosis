@@ -998,9 +998,9 @@
       var picks = cards.filter(function(c){ return c.dataset.pick === '1' && !latestHrefs.has(c.href); });
       visible = latest.concat(picks);
     } else if (tab === 'picks') {
-      visible = cards.filter(function(c){ return c.dataset.pick === '1'; });
+      visible = sortedByDate.filter(function(c){ return c.dataset.pick === '1'; });
     } else {
-      visible = cards.filter(function(c){ return c.dataset.cat === tab; });
+      visible = sortedByDate.filter(function(c){ return c.dataset.cat === tab; });
     }
 
     cards.forEach(function(c){ c.style.display = 'none'; });
