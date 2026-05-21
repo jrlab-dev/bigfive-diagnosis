@@ -952,14 +952,16 @@
     color: #fff;
   }
   .coll-unlock-label {
-    position: relative;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
     z-index: 1;
     text-align: center;
     line-height: 1.3;
-    padding: 2px 4px;
+    padding: 0 4px;
     max-width: 100%;
     overflow: hidden;
-    margin-top: 4px;
   }
   .coll-unlock-num {
     font-size: 0.75rem;
@@ -973,8 +975,9 @@
     display: block;
   }
   .coll-unlock-suffix {
-    font-size: 0.55rem;
-    color: rgba(167,139,250,0.7);
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #e9d5ff;
     display: block;
   }
   .coll-slot.milestone.next .coll-unlock-name {
@@ -1849,7 +1852,7 @@ function renderAlbum() {
         html += '<div class="coll-unlock-label">';
         html += '<div class="coll-unlock-num">' + i + '枚目</div>';
         html += '<span class="coll-unlock-name">' + unlock.label + '</span>';
-        html += '<span class="coll-unlock-suffix">+機能解放</span>';
+        html += '<span class="coll-unlock-suffix">解放</span>';
         html += '</div>';
       } else {
         html += '<div class="coll-default-label">' + i + '枚目</div>';
