@@ -100,7 +100,7 @@ function renderGate(featureId) {
 
   var isLight = document.body.classList.contains('theme-light');
   var c = isLight ? {
-    bg: 'rgba(248,250,252,0.30)',
+    bg: 'rgba(248,250,252,0.05)',
     cardBg: 'rgba(248,250,252,0.93)',
     cardShadow: '0 8px 32px rgba(0,0,0,0.18)',
     text: '#1e293b',
@@ -114,7 +114,7 @@ function renderGate(featureId) {
     barBg: '#e2e8f0',
     backLink: '#94a3b8'
   } : {
-    bg: 'rgba(10,14,39,0.30)',
+    bg: 'rgba(10,14,39,0.05)',
     cardBg: 'rgba(10,14,39,0.93)',
     cardShadow: '0 8px 32px rgba(0,0,0,0.5)',
     text: '#e2e8f0',
@@ -133,7 +133,7 @@ function renderGate(featureId) {
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
   gate.innerHTML =
-    '<div style="position:fixed;inset:0;background:' + c.bg + ';backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    '<div style="position:fixed;inset:0;background:' + c.bg + ';backdrop-filter:none;-webkit-backdrop-filter:none;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
     + '<div style="max-width:340px;width:100%;background:' + c.cardBg + ';border-radius:16px;padding:24px 20px;box-shadow:' + c.cardShadow + ';">'
     + '<div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>'
     + '<h2 style="color:' + c.h2 + ';font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
