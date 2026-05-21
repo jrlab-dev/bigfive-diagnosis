@@ -607,7 +607,7 @@ function loadData() {
   const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
   const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, bfList.length - 1));
   const bf     = bfList.length > 0 ? bfList[activeIdx] : null;
-  let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null, locus = null, eq = null, impostor = null;
+  let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null, locus = null, eq = null, impostor = null, darkTriad = null;
   try { love       = JSON.parse(localStorage.getItem('love_result'));       } catch(e) {}
   try { mindset    = JSON.parse(localStorage.getItem('mindset_result'));    } catch(e) {}
   try { sdt        = JSON.parse(localStorage.getItem('sdt_result'));        } catch(e) {}
@@ -617,7 +617,8 @@ function loadData() {
   try { locus      = JSON.parse(localStorage.getItem('locus_result'));      } catch(e) {}
   try { eq         = JSON.parse(localStorage.getItem('eq_result'));         } catch(e) {}
   try { impostor   = JSON.parse(localStorage.getItem('impostor_result'));   } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor };
+  try { darkTriad  = JSON.parse(localStorage.getItem('dark_triad_result')); } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad };
 }
 
 // ===== 未受診チェック =====
@@ -738,6 +739,12 @@ function renderTestsGrid(data) {
       value: data.impostor ? '傾向' + (data.impostor.severityName || '') : null,
       color: data.impostor ? (IMPOSTOR_LEVELS[data.impostor.severityLevel] || {}).color : '#f59e0b',
       url: 'impostor.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', label: 'ダークトライアド',
+      value: data.darkTriad ? data.darkTriad.profileName || null : null,
+      color: '#dc2626',
+      url: 'dark-triad.html'
     },
   ];
 
