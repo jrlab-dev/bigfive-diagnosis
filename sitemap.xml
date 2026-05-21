@@ -999,6 +999,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：すぐ怒る・感情的になりやすい性格の科学 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/okori-yasui-seikaku.html</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/</loc>
