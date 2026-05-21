@@ -2186,7 +2186,10 @@ function renderReportBanner() {
     { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
     { key: 'impostor_result', name: 'インポスター症候群チェック', url: 'impostor.html' },
   ];
-  const missing = tests.filter(t => !localStorage.getItem(t.key));
+  const missing = tests.filter(t =>
+    !localStorage.getItem(t.key) &&
+    (!t.gate || typeof isUnlocked !== 'function' || isUnlocked(t.gate))
+  );
   const allDone = hasBf && missing.length === 0;
 
   if (allDone) {
