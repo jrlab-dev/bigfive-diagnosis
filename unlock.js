@@ -98,34 +98,53 @@ function renderGate(featureId) {
   }
   var pct = required > 0 ? Math.min(100, Math.round(current / required * 100)) : 0;
 
+  var isLight = localStorage.getItem('bigfive_theme') === 'light';
+  var c = isLight ? {
+    bg: '#f8fafc',
+    text: '#1e293b',
+    sub: '#475569',
+    muted: '#64748b',
+    h2: '#1e293b',
+    boxBg: 'rgba(139,92,246,0.06)',
+    boxBorder: 'rgba(139,92,246,0.2)',
+    label: '#6d28d9',
+    accent: '#7c3aed',
+    barBg: '#e2e8f0',
+    backLink: '#94a3b8'
+  } : {
+    bg: '#0a0e27',
+    text: '#e2e8f0',
+    sub: '#94a3b8',
+    muted: '#64748b',
+    h2: '#e2e8f0',
+    boxBg: 'rgba(139,92,246,0.1)',
+    boxBorder: 'rgba(139,92,246,0.3)',
+    label: '#c4b5fd',
+    accent: '#a78bfa',
+    barBg: '#1e293b',
+    backLink: '#64748b'
+  };
+
   document.body.style.overflow = 'hidden';
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
   gate.innerHTML =
-    '<div style="position:fixed;inset:0;background:#0a0e27;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    '<div style="position:fixed;inset:0;background:' + c.bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
     + '<div style="max-width:340px;width:100%;">'
     + '<div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>'
-    + '<h2 style="color:#e2e8f0;font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
-    + '<div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">'
-    + '<p style="color:#c4b5fd;font-size:0.85rem;margin:0 0 10px 0;font-weight:bold;">解放条件</p>'
-    + '<p style="color:#e2e8f0;font-size:0.95rem;margin:0 0 12px 0;line-height:1.6;">カードを <strong style="color:#a78bfa;">' + required + '枚</strong> 集めると使えるようになります</p>'
-    + '<p style="color:#94a3b8;font-size:0.8rem;margin:0;line-height:1.6;">カードの集め方</p>'
-    + '<ul style="color:#94a3b8;font-size:0.8rem;margin:6px 0 0 0;padding-left:16px;line-height:1.8;">'
-    + '<li>自分の診断結果を保存する</li>'
-    + '<li>友達にシェアして受け取る</li>'
-    + '</ul>'
+    + '<h2 style="color:' + c.h2 + ';font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
+    + '<div style="background:' + c.boxBg + ';border:1px solid ' + c.boxBorder + ';border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">'
+    + '<p style="color:' + c.label + ';font-size:0.85rem;margin:0 0 10px 0;font-weight:bold;">解放条件</p>'
+    + '<p style="color:' + c.text + ';font-size:0.95rem;margin:0 0 6px 0;line-height:1.6;">ビッグファイブ診断を受けると使えるようになります</p>'
+    + '<p style="color:' + c.sub + ';font-size:0.85rem;margin:0;line-height:1.6;">カード <strong style="color:' + c.accent + ';">' + required + '枚</strong> で解放（あと ' + remaining + ' 枚）</p>'
     + '</div>'
     + '<div style="margin-bottom:16px;">'
-    + '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">'
-    + '<span style="color:#94a3b8;font-size:0.8rem;">現在 ' + current + ' 枚</span>'
-    + '<span style="color:#a78bfa;font-size:0.8rem;">あと ' + remaining + ' 枚</span>'
-    + '</div>'
-    + '<div style="background:#1e293b;border-radius:999px;height:8px;width:100%;">'
+    + '<div style="background:' + c.barBg + ';border-radius:999px;height:8px;width:100%;">'
     + '<div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:' + pct + '%;"></div>'
     + '</div>'
     + '</div>'
     + '<a href="quiz.html" style="display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:0.95rem;margin-bottom:12px;">診断してカードを集める</a>'
-    + '<a href="index.html" style="display:inline-block;color:#64748b;font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
+    + '<a href="index.html" style="display:inline-block;color:' + c.backLink + ';font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
     + '</div>'
     + '</div>';
   document.body.appendChild(gate);
