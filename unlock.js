@@ -100,7 +100,7 @@ function renderGate(featureId) {
 
   var isLight = document.body.classList.contains('theme-light');
   var c = isLight ? {
-    bg: '#f8fafc',
+    bg: 'rgba(248,250,252,0.82)',
     text: '#1e293b',
     sub: '#475569',
     muted: '#64748b',
@@ -112,7 +112,7 @@ function renderGate(featureId) {
     barBg: '#e2e8f0',
     backLink: '#94a3b8'
   } : {
-    bg: '#0a0e27',
+    bg: 'rgba(10,14,39,0.82)',
     text: '#e2e8f0',
     sub: '#94a3b8',
     muted: '#64748b',
@@ -129,7 +129,7 @@ function renderGate(featureId) {
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
   gate.innerHTML =
-    '<div style="position:fixed;inset:0;background:' + c.bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    '<div style="position:fixed;inset:0;background:' + c.bg + ';backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
     + '<div style="max-width:340px;width:100%;">'
     + '<div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>'
     + '<h2 style="color:' + c.h2 + ';font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
