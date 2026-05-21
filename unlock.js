@@ -148,7 +148,7 @@ function renderGate(featureId) {
     + '<div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:' + pct + '%;"></div>'
     + '</div>'
     + '</div>'
-    + '<a href="quiz.html" style="display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:0.95rem;margin-bottom:12px;">診断してカードを集める</a>'
+    + '<a href="quiz.html" style="display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:0.95rem;margin-bottom:12px;">診断してカードを手に入れる</a>'
     + '<a href="index.html" style="display:inline-block;color:' + c.backLink + ';font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
     + '</div>'
     + '</div>';
