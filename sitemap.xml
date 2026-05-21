@@ -121,6 +121,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- ダークトライアド診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/dark-triad.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- 心理学診断 一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/diagnoses.html</loc>

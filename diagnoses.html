@@ -261,6 +261,16 @@ const DIAGNOSES = [
     recommend: { factor: 'N', score: 5, reason: '感受性が豊かなあなたに。不安の正体がインポスターかどうか確かめてみましょう。' },
   },
   {
+    id: 'dark-triad', fc: 'N',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
+    name: 'ダークトライアド診断',
+    desc: 'Jones &amp; Paulhus（2014）のSD3を参考にした17問診断。ナルシシズム・マキャベリズム・サイコパシーの3因子であなたのダークサイドを分析。',
+    url: 'dark-triad.html',
+    questions: 17,
+    minutes: 4,
+    gate: 'dark-triad',
+  },
+  {
     id: 'kodomo',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
     name: 'お子さんの性格診断',
@@ -335,6 +345,7 @@ function getDoneIds() {
     if (localStorage.getItem('locus_result')) done.add('locus');
     if (localStorage.getItem('eq_result')) done.add('eq');
     if (localStorage.getItem('impostor_result')) done.add('impostor');
+    if (localStorage.getItem('dark_triad_result')) done.add('dark-triad');
     if (localStorage.getItem('riasec_result')) done.add('riasec');
     if (localStorage.getItem('riasec_result') && localStorage.getItem('bigfive_my_results')) done.add('career-integration');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
