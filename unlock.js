@@ -103,7 +103,7 @@ function renderGate(featureId) {
 
   var isLight = document.body.classList.contains('theme-light');
   var c = isLight ? {
-    bg: 'rgba(248,250,252,0.05)',
+    bg: 'rgba(248,250,252,0.20)',
     cardBg: 'rgba(248,250,252,0.93)',
     cardShadow: '0 8px 32px rgba(0,0,0,0.18)',
     text: '#1e293b',
@@ -117,7 +117,7 @@ function renderGate(featureId) {
     barBg: '#e2e8f0',
     backLink: '#94a3b8'
   } : {
-    bg: 'rgba(10,14,39,0.05)',
+    bg: 'rgba(10,14,39,0.20)',
     cardBg: 'rgba(10,14,39,0.93)',
     cardShadow: '0 8px 32px rgba(0,0,0,0.5)',
     text: '#e2e8f0',
