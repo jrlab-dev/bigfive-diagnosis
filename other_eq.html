@@ -8,11 +8,11 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>あの人のEQ診断 | ビッグファイブで本当の自分を知る【公式】</title>
-<meta name="description" content="恋人・友人・職場の人のEQ（感情知能）を20問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
+<meta name="description" content="恋人・友人・職場の人のEQ（感情知能）を22問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
 <meta property="og:title" content="あの人のEQ診断 | ビッグファイブで本当の自分を知る【公式】">
-<meta property="og:description" content="恋人・友人・職場の人のEQ（感情知能）を20問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
+<meta property="og:description" content="恋人・友人・職場の人のEQ（感情知能）を22問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/other_eq.html">
 <meta name="twitter:card" content="summary_large_image">
 <style>
@@ -120,7 +120,7 @@ body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color
       あの人のEQ診断
     </span>
     <h1><span>あの人</span>の<br>感情知能（EQ）を読み解く</h1>
-    <p class="intro-sub">GolemanのEQモデルをもとにした20問の行動観察。自己認識・自己管理・動機・共感・社会的スキルの5因子で、相手の感情を扱う力のパターンがわかります。</p>
+    <p class="intro-sub">GolemanのEQモデルをもとにした22問の行動観察。自己認識・自己管理・動機・共感・社会的スキルの5因子で、相手の感情を扱う力のパターンがわかります。</p>
 
     <p style="font-size:13px;font-weight:700;color:var(--dim);margin-bottom:10px;text-align:left;width:100%;">診断したい相手を選んでください</p>
     <div id="personList" style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
@@ -132,7 +132,7 @@ body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color
     <div class="intro-warning">
       <p>⚠️ この診断はあなたの主観的な行動観察に基づきます。スコアは断定的な判断ではなく、関係を振り返るきっかけとしてご活用ください。観察者の感情・状況・関係性によって結果は異なる場合があります。</p>
     </div>
-    <p class="intro-note">20問・約4分・無料・登録不要</p>
+    <p class="intro-note">22問・約5分・無料・登録不要</p>
   </div>
 
   <!-- ===== クイズ ===== -->
@@ -214,30 +214,32 @@ body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color
 // ===== 質問データ =====
 const QUESTIONS = [
   // 自己認識 (awareness)
-  { factor: 'awareness', text: '今の自分の気持ちを言葉で表現することができる' },
-  { factor: 'awareness', text: '感情的になっているとき、本人がそれに気づいている様子がある' },
-  { factor: 'awareness', text: '自分の得意・不得意を客観的に把握しているように見える' },
-  { factor: 'awareness', text: '「なぜそう感じたのか」を振り返ることができるようだ' },
+  { factor: 'awareness', weight: 1.5, text: '感情の話になったとき、「なんかモヤモヤしてる」「うれしいというより安心した感じ」など、気持ちを細かく言葉にすることがある' },
+  { factor: 'awareness', weight: 0.7, text: '感情的になっているとき、本人がそれに気づいている様子がある' },
+  { factor: 'awareness', weight: 0.7, text: '自分の得意・不得意を客観的に把握しているように見える' },
+  { factor: 'awareness', weight: 1.0, text: '後日、「あのときああいう態度をとったのは、こういう気持ちがあったからだと思う」と自分の行動を振り返って話すことがある' },
   // 自己管理 (regulation)
-  { factor: 'regulation', text: '怒りやイライラしている場面でも、感情的な言動をその場で抑えられることが多い' },
-  { factor: 'regulation', text: 'ストレスを受けても、必要以上に周囲にぶつけることが少ない' },
-  { factor: 'regulation', text: '衝動的に動く前に立ち止まって考えることができる' },
-  { factor: 'regulation', text: '失敗や批判があっても、感情を引きずらずに立て直せる' },
+  { factor: 'regulation', weight: 1.0, text: '怒りやイライラしている場面でも、感情的な言動をその場で抑えられることが多い' },
+  { factor: 'regulation', weight: 1.0, text: 'ストレスを受けても、必要以上に周囲にぶつけることが少ない' },
+  { factor: 'regulation', weight: 1.5, text: '怒ったり動揺したりした場面で、すぐに反応するのではなく、少し間を置いてから発言・行動することが多い' },
+  { factor: 'regulation', weight: 1.0, text: '失敗や批判があっても、感情を引きずらずに立て直せる' },
   // 動機 (motivation)
-  { factor: 'motivation', text: '目標に向かって、自ら進んで行動している様子がある' },
-  { factor: 'motivation', text: '困難があっても、あきらめずに取り組み続けることができる' },
-  { factor: 'motivation', text: '外から言われなくても、自分から課題を見つけて動こうとする' },
-  { factor: 'motivation', text: '長期的な目標に向けて、コツコツ努力を続けている' },
+  { factor: 'motivation', weight: 1.0, text: '目標に向かって、自ら進んで行動している様子がある' },
+  { factor: 'motivation', weight: 1.0, text: '困難があっても、あきらめずに取り組み続けることができる' },
+  { factor: 'motivation', weight: 1.0, text: '外から言われなくても、自分から課題を見つけて動こうとする' },
+  { factor: 'motivation', weight: 1.0, text: '長期的な目標に向けて、コツコツ努力を続けている' },
   // 共感 (empathy)
-  { factor: 'empathy', text: '周りの人の気持ちに敏感で、表情や雰囲気から感情を読み取ることができる' },
-  { factor: 'empathy', text: '言葉にされていない本音や気持ちを察することができる' },
-  { factor: 'empathy', text: '立場の異なる人の気持ちを想像し、それを踏まえた行動ができる' },
-  { factor: 'empathy', text: '誰かが困っているとき、自然と気づいて寄り添える' },
+  { factor: 'empathy', weight: 1.5, text: '誰かの様子がいつもと違うとき、「どうかした？」と先に気づいて声をかけることが多い' },
+  { factor: 'empathy', weight: 1.0, text: '相手が「大丈夫」「いいよ」と言っていても、「本当に？」と掘り下げて確認しようとすることがある' },
+  { factor: 'empathy', weight: 0.7, text: '年齢・立場が異なる人と話すとき、相手に合わせた話し方や接し方をしている様子がある' },
+  { factor: 'empathy', weight: 1.5, text: '誰かが困っているとき、自然と気づいて寄り添える' },
   // 社会的スキル (social)
-  { factor: 'social', text: '初対面の人ともすぐに打ち解けて、スムーズに関係を築ける' },
-  { factor: 'social', text: 'グループの中で、自然と意見をまとめる役割を担える' },
-  { factor: 'social', text: '意見の対立が起きたとき、うまく調整・仲裁できる' },
-  { factor: 'social', text: '周囲の人との関係を、長期にわたって良好に維持している' },
+  { factor: 'social', weight: 1.0, text: '初対面の人ともすぐに打ち解けて、スムーズに関係を築ける' },
+  { factor: 'social', weight: 1.0, text: 'グループの中で、自然と意見をまとめる役割を担える' },
+  { factor: 'social', weight: 1.0, text: '意見の対立が起きたとき、うまく調整・仲裁できる' },
+  { factor: 'social', weight: 1.0, text: '周囲の人との関係を、長期にわたって良好に維持している' },
+  { factor: 'social', weight: 1.5, text: 'うまくいったとき、自分の手柄として語るのではなく、「みんながいたから」「○○さんのおかげ」と他者の貢献を自然に口にする' },
+  { factor: 'social', weight: 1.5, text: '問題が起きたとき、誰かのせいにするのではなく、自分も含めて「どうすればよかったか」を考えようとする姿がある' },
 ];
 
 const ANSWER_LABELS = ['全く\n当ては\nまらない', 'あまり\n当ては\nまらない', 'どちら\nとも\nいえない', 'やや\n当ては\nまる', 'とても\n当ては\nまる'];
@@ -353,7 +355,7 @@ function selectPerson(idx) {
 
 // ===== スタート =====
 function startQuiz() {
-  answers = new Array(20).fill(null);
+  answers = new Array(QUESTIONS.length).fill(null);
   current = 0;
   document.getElementById('whoIcon').textContent = REL_ICONS[selectedRel] || '👤';
   document.getElementById('whoNameTxt').textContent = selectedName;
@@ -369,8 +371,8 @@ function showQuestion() {
   document.getElementById('questionNum').textContent    = `Q${current + 1}`;
   document.getElementById('questionFactor').textContent = FACTOR_LABELS[q.factor];
   document.getElementById('questionText').textContent   = q.text;
-  document.getElementById('progressFill').style.width  = `${(current / 20) * 100}%`;
-  document.getElementById('progressText').textContent  = `${current + 1}/20`;
+  document.getElementById('progressFill').style.width  = `${(current / QUESTIONS.length) * 100}%`;
+  document.getElementById('progressText').textContent  = `${current + 1}/${QUESTIONS.length}`;
   const area = document.getElementById('answersArea');
   area.innerHTML = '';
   [1,2,3,4,5].forEach(val => {
@@ -392,7 +394,7 @@ function selectAnswer(val) {
   timer = setTimeout(() => {
     timer = null;
     current++;
-    if (current < 20) showQuestion();
+    if (current < QUESTIONS.length) showQuestion();
     else showLoading();
   }, 280);
 }
@@ -415,8 +417,9 @@ function calcScores() {
   const sums   = { awareness: 0, regulation: 0, motivation: 0, empathy: 0, social: 0 };
   const counts = { awareness: 0, regulation: 0, motivation: 0, empathy: 0, social: 0 };
   QUESTIONS.forEach((q, i) => {
-    sums[q.factor]   += (answers[i] || 3);
-    counts[q.factor] += 1;
+    const w = q.weight || 1;
+    sums[q.factor]   += (answers[i] || 3) * w;
+    counts[q.factor] += w;
   });
   const avgs = {};
   let total = 0;
