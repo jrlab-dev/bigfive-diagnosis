@@ -894,6 +894,8 @@
   body.theme-light #darkTriadSection a { color: #4c1d95 !important; }
   body.theme-light #attachmentSection * { color: #1e293b !important; }
   body.theme-light #attachmentSection a { color: #be185d !important; }
+  body.theme-light #eqSection * { color: #1e293b !important; }
+  body.theme-light #eqSection a { color: #0e7490 !important; }
 </style>
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
@@ -1035,6 +1037,9 @@
 
   <!-- 愛着スタイルセクション（あの人モードのみ） -->
   <div id="attachmentSection" style="display:none; width:100%; max-width:480px; margin-bottom:20px;"></div>
+
+  <!-- EQセクション（あの人モードのみ） -->
+  <div id="eqSection" style="display:none; width:100%; max-width:480px; margin-bottom:20px;"></div>
 
   <!-- ファセット分析（120問版のみ） -->
   <div class="facet-section" id="facetSection" style="display:none;">
@@ -2391,6 +2396,60 @@ if (isOtherMode) {
           </a>`;
       }
       atSection.style.display = 'block';
+    }
+
+    // EQセクション
+    const eqSection = document.getElementById('eqSection');
+    if (eqSection) {
+      let eqData = null;
+      if (personIdx >= 0) {
+        try {
+          const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+          if (others[personIdx]) eqData = others[personIdx].eq || null;
+        } catch(e) {}
+      }
+      const eqViewUrl = personIdx >= 0 ? `other_eq.html?view=${personIdx}` : `other_eq.html`;
+      const eqDiagUrl = personIdx >= 0 ? `other_eq.html?person=${personIdx}` : `other_eq.html`;
+      if (eqData) {
+        const levelLabels = { very_high: 'EQ非常に高い ✨', high: 'EQ高い 💡', average: 'EQ標準的 🌿', growth: 'EQ発展途上 🌱' };
+        const lLabel = levelLabels[eqData.levelKey] || eqData.levelName || '';
+        const overall = eqData.overall ? eqData.overall.toFixed(1) : '—';
+        const factorColors = { awareness: '#d05090', regulation: '#c0407a', motivation: '#10b981', empathy: '#a78bfa', social: '#3b82f6' };
+        const factorLabels = { awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル' };
+        const bars = eqData.avgs ? Object.entries(eqData.avgs).filter(([k]) => factorLabels[k]).map(([f, avg]) => {
+          const pct = Math.round(((avg - 1) / 4) * 100);
+          return `<div style="margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-bottom:4px;"><span style="color:${factorColors[f]}">${factorLabels[f]}</span><span>${avg.toFixed(1)}</span></div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:999px;height:6px;"><div style="background:${factorColors[f]};height:100%;border-radius:999px;width:${pct}%;"></div></div>
+          </div>`;
+        }).join('') : '';
+        eqSection.innerHTML = `
+          <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:14px;padding:18px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <p style="font-size:13px;font-weight:700;color:#06b6d4;margin:0;display:flex;align-items:center;gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+                ${personName}さんのEQ
+              </p>
+              <a href="${eqDiagUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
+            </div>
+            <p style="font-size:12px;color:var(--dim);margin:0 0 10px 0;">総合EQ ${overall} / 5.0 ─ <strong style="color:var(--text);">${lLabel}</strong></p>
+            ${bars}
+            <a href="${eqViewUrl}" style="display:block;margin-top:14px;padding:10px 0;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.35);border-radius:10px;text-align:center;font-size:13px;font-weight:700;color:#67e8f9;text-decoration:none;">詳細を見る →</a>
+          </div>`;
+      } else {
+        eqSection.innerHTML = `
+          <a href="${eqDiagUrl}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:14px;padding:16px;text-decoration:none;color:inherit;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+              <div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${personName}さんのEQを診断</div>
+                <div style="font-size:12px;color:var(--dim);margin-top:2px;">20問の行動観察で感情知能のパターンを分析</div>
+              </div>
+            </div>
+            <span style="font-size:18px;color:var(--dim);">›</span>
+          </a>`;
+      }
+      eqSection.style.display = 'block';
     }
   }
 }
