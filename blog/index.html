@@ -1014,11 +1014,7 @@
 
     var visible;
     if (tab === 'latest') {
-      // Latest 8 by date + 7 picks (deduplicated)
-      var latest = sortedByDate.filter(function(c){ return c.dataset.job !== '1'; }).slice(0, LATEST_MAX);
-      var latestHrefs = new Set(latest.map(function(c){ return c.href; }));
-      var picks = cards.filter(function(c){ return c.dataset.pick === '1' && !latestHrefs.has(c.href); });
-      visible = latest.concat(picks);
+      visible = sortedByDate.filter(function(c){ return c.dataset.job !== '1'; }).slice(0, LATEST_MAX);
     } else if (tab === 'picks') {
       visible = sortedByDate.filter(function(c){ return c.dataset.pick === '1'; });
     } else {
@@ -1027,15 +1023,6 @@
 
     cards.forEach(function(c){ c.style.display = 'none'; });
     visible.forEach(function(c){ c.style.display = 'block'; });
-
-    // Insert divider between latest and picks (only on latest tab)
-    if (tab === 'latest') {
-      var latestCount = Math.min(sortedByDate.filter(function(c){ return c.dataset.job !== '1'; }).length, LATEST_MAX);
-      var picksExtra = visible.length - latestCount;
-      if (picksExtra > 0 && visible[latestCount]) {
-        grid.insertBefore(divider, visible[latestCount]);
-      }
-    }
 
     loadImages(visible);
     if (!skipScroll) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
