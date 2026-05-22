@@ -136,7 +136,7 @@ function renderGate(featureId) {
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
   gate.innerHTML =
-    '<div style="position:fixed;inset:0;background:' + c.bg + ';backdrop-filter:none;-webkit-backdrop-filter:none;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    '<div style="position:fixed;top:52px;left:0;right:0;bottom:0;background:' + c.bg + ';backdrop-filter:none;-webkit-backdrop-filter:none;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px 20px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
     + '<div style="max-width:340px;width:100%;background:' + c.cardBg + ';border-radius:16px;padding:24px 20px;box-shadow:' + c.cardShadow + ';">'
     + '<div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>'
     + '<h2 style="color:' + c.h2 + ';font-size:1.15rem;margin-bottom:16px;line-height:1.5;">' + label + '</h2>'
