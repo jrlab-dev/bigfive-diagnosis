@@ -153,9 +153,14 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="selfGrid"></div>
 
   <!-- 応用診断 -->
-  <p class="section-label">応用診断（7種類）</p>
-  <p class="section-sub-note">性格データを他者分析やキャリアに活かす応用診断です。推測診断は本人の実際の性格と異なる場合があります。</p>
+  <p class="section-label">応用診断（4種類）</p>
+  <p class="section-sub-note">他者の性格推測や特定の目的に特化した診断です。推測診断は本人の実際の性格と異なる場合があります。</p>
   <div class="diag-grid" id="otherGrid"></div>
+
+  <!-- キャリア診断 -->
+  <p class="section-label">キャリア・職業診断（3種類）</p>
+  <p class="section-sub-note">科学的根拠に基づき、性格や職業興味からキャリア適性を分析します。</p>
+  <div class="diag-grid" id="careerGrid"></div>
 </div>
 
 <script src="unlock.js"></script>
@@ -447,15 +452,20 @@ if (scores) {
   }
 }
 
-const selfGrid = document.getElementById('selfGrid');
-const otherGrid = document.getElementById('otherGrid');
-const SELF_IDS = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
+const selfGrid   = document.getElementById('selfGrid');
+const otherGrid  = document.getElementById('otherGrid');
+const careerGrid = document.getElementById('careerGrid');
+const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
+const CAREER_IDS = ['career','riasec','career-integration'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
   const req = typeof getRequiredCards === 'function' ? getRequiredCards : () => 0;
   return req(a.id) - req(b.id);
 });
 sortedDiagnoses.forEach(d => {
-  const target = SELF_IDS.includes(d.id) ? selfGrid : otherGrid;
+  let target;
+  if (SELF_IDS.includes(d.id)) target = selfGrid;
+  else if (CAREER_IDS.includes(d.id)) target = careerGrid;
+  else target = otherGrid;
   target.innerHTML += diagCardHTML(d, done);
 });
 </script>
