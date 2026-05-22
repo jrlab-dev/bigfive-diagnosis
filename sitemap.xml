@@ -1023,10 +1023,26 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：「内向的な性格を直したい」は本当に必要か -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/introvert-naoshitai.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：彼氏と性格が合わない　ビッグファイブで読む「合わなさ」の正体と対処法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kareshi-seikaku-awanai.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/</loc>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
