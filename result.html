@@ -2259,6 +2259,16 @@ document.getElementById('otherDiagBtn').href = `other_quiz.html?my=${typeCode}`;
 // ===== コレクション・共有ビューの保存ボタン非表示 =====
 if (isSavedView) document.getElementById('saveBtn').style.display = 'none';
 
+// ===== コレクション・図鑑ビュー時の不要ボタン非表示 =====
+if (isSavedView) {
+  ['weaknessSection', 'retryBtn', 'upgradeBanner'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  var careerLink = document.getElementById('careerLink');
+  if (careerLink && careerLink.parentNode) careerLink.parentNode.style.display = 'none';
+}
+
 // ===== あの人モードの処理 =====
 if (isOtherMode) {
   // バナー表示
