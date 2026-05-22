@@ -2295,10 +2295,8 @@ if (isOtherMode) {
           if (others[personIdx]) dtData = others[personIdx].darkTriad || null;
         } catch(e) {}
       }
-      const dtUrl = personIdx >= 0
-        ? `other_dark_triad.html?person=${personIdx}`
-        : `other_dark_triad.html`;
-      const isLight = document.body.classList.contains('theme-light');
+      const dtViewUrl = personIdx >= 0 ? `other_dark_triad.html?view=${personIdx}` : `other_dark_triad.html`;
+      const dtDiagUrl = personIdx >= 0 ? `other_dark_triad.html?person=${personIdx}` : `other_dark_triad.html`;
       if (dtData) {
         const profileLabels = { clean:'クリーン', narcissist:'ナルシスト', machiavellian:'マキャベリスト', psychopath:'サイコパス', dark_full:'ダークフル' };
         const pLabel = profileLabels[dtData.profileId] || dtData.profileId || '';
@@ -2309,7 +2307,7 @@ if (isOtherMode) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 ${personName}さんのダークトライアド
               </p>
-              <a href="${dtUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
+              <a href="${dtDiagUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
             </div>
             <p style="font-size:12px;color:var(--dim);margin:0 0 12px 0;">プロファイル：<strong style="color:var(--text);">${pLabel}</strong></p>
             ${[['N','ナルシシズム',dtData.nPct],['M','マキャベリズム',dtData.mPct],['P','サイコパシー',dtData.pPct]].map(([k,label,pct])=>`
@@ -2319,6 +2317,7 @@ if (isOtherMode) {
                 <div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:${pct}%;"></div>
               </div>
             </div>`).join('')}
+            <a href="${dtViewUrl}" style="display:block;margin-top:14px;padding:10px 0;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);border-radius:10px;text-align:center;font-size:13px;font-weight:700;color:#c4b5fd;text-decoration:none;">詳細を見る →</a>
           </div>`;
       } else {
         dtSection.innerHTML = `
