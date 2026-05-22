@@ -91,6 +91,7 @@ function getOtherLimit() {
 // ゲート表示（ロックされたページ用）
 function renderGate(featureId) {
   if (isUnlocked(featureId)) return;
+  if (document.getElementById('unlock-gate')) return;
   var required = getRequiredCards(featureId);
   var current = getCardCount();
   var remaining = required - current;
