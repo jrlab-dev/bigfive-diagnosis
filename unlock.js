@@ -21,6 +21,7 @@ var UNLOCK_TABLE = [
   { cards: 24, id: 'other_limit_30',    label: 'あの人保存30件に拡張',  url: null },
   { cards: 27, id: 'other-dark-triad', label: 'あの人のダークトライアド診断', url: 'other_dark_triad.html' },
   { cards: 30, id: 'other_limit_40',    label: 'あの人保存40件に拡張',  url: null },
+  { cards: 35, id: 'other-attachment', label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
   { cards: 40, id: 'other_limit_50',    label: 'あの人保存50件に拡張',  url: null },
   { cards: 50, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
   { cards: 60, id: 'group',             label: 'グループ分けツール',    url: 'group.html' },
