@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/other_eq.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あの人のEQ診断 | ビッグファイブで本当の自分を知る【公式】</title>
+<meta name="description" content="恋人・友人・職場の人のEQ（感情知能）を20問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="あの人のEQ診断 | ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:description" content="恋人・友人・職場の人のEQ（感情知能）を20問の行動観察で診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で分析。Golemanモデル準拠。無料・登録不要。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/other_eq.html">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root { --accent: #06b6d4; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body { font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100%; overflow-x: hidden; }
+
+canvas#bgStars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+.quiz-container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; }
+
+/* ===== イントロ ===== */
+.intro { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px 0 8px; }
+.intro-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent); background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 20px; }
+.intro h1 { font-size: 22px; font-weight: 900; line-height: 1.5; margin-bottom: 12px; }
+.intro h1 span { background: linear-gradient(135deg, #06b6d4, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.intro-sub { font-size: 13px; color: var(--dim); line-height: 1.75; margin-bottom: 24px; }
+.intro-warning { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 12px 14px; font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 20px; text-align: left; width: 100%; }
+.intro-note { font-size: 12px; color: var(--dim); opacity: .6; }
+
+/* ===== クイズ ===== */
+.quiz-area { display: none; flex-direction: column; padding-top: 8px; }
+.who-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; margin-bottom: 20px; background: rgba(6,182,212,0.10); border: 1px solid rgba(6,182,212,0.25); }
+.who-icon { font-size: 22px; }
+.who-name-txt { font-size: 14px; font-weight: 700; }
+.who-sub-txt  { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.progress { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+body.theme-light .progress-bar { background: rgba(0,0,0,0.08); }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #06b6d4, #3b82f6); border-radius: 999px; transition: width .3s; width: 0; }
+.progress-text { font-size: 12px; color: var(--dim); flex-shrink: 0; }
+.question-area { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 20px 16px; margin-bottom: 16px; }
+body.theme-light .question-area { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.question-num    { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+.question-factor { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+.question-text   { font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+.scale-labels    { display: flex; justify-content: space-between; font-size: 10px; color: var(--dim); margin-bottom: 8px; }
+.answers { display: flex; gap: 6px; }
+.answer-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; background: rgba(6,182,212,0.04); border: 1.5px solid rgba(6,182,212,0.15); border-radius: 10px; cursor: pointer; font-family: inherit; transition: .15s; color: var(--dim); }
+.answer-btn:hover { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.4); }
+.answer-btn.selected { background: rgba(6,182,212,0.2); border-color: #06b6d4; color: var(--text); }
+.answer-label { font-size: 9px; line-height: 1.3; text-align: center; white-space: pre-line; }
+.back-btn { background: none; border: none; color: var(--dim); font-size: 12px; cursor: pointer; padding: 8px 0; font-family: inherit; }
+
+/* ===== ローディング ===== */
+.loading { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
+.loading.active { display: flex; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid rgba(6,182,212,0.2); border-top-color: #06b6d4; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== 結果 ===== */
+.result { display: none; flex-direction: column; align-items: center; gap: 16px; }
+.result.active { display: flex; }
+.result-card { width: 100%; background: linear-gradient(135deg, rgba(6,182,212,0.12), rgba(59,130,246,0.08)); border: 1px solid rgba(6,182,212,0.25); border-radius: 20px; padding: 24px 20px; text-align: center; }
+.result-label    { font-size: 11px; letter-spacing: .12em; color: var(--dim); margin-bottom: 10px; }
+.result-type-icon { font-size: 48px; margin-bottom: 8px; }
+.result-who-name  { font-size: 13px; color: var(--dim); margin-bottom: 4px; }
+.result-type-name { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #06b6d4, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+.result-catch     { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; }
+.result-overall   { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 4px; }
+.result-desc      { font-size: 13px; color: var(--dim); line-height: 1.75; text-align: left; }
+
+.factor-box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 18px 16px; }
+body.theme-light .factor-box { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.factor-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--dim); }
+.factor-row { margin-bottom: 14px; }
+.factor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.factor-name  { font-size: 13px; font-weight: 700; }
+.factor-score { font-size: 13px; font-weight: 700; }
+.factor-bar-bg   { height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+body.theme-light .factor-bar-bg { background: rgba(0,0,0,0.08); }
+.factor-bar-fill { height: 100%; border-radius: 999px; width: 0; transition: width .8s ease; }
+.factor-desc-text { font-size: 12px; color: var(--dim); line-height: 1.65; margin-top: 4px; }
+
+.detail-box, .cross-box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 18px 16px; }
+body.theme-light .detail-box, body.theme-light .cross-box { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.detail-box h3, .cross-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--dim); }
+.detail-section { margin-bottom: 14px; }
+.detail-section:last-child { margin-bottom: 0; }
+.detail-label { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+.detail-text  { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+.disclaimer { font-size: 11px; color: var(--dim); line-height: 1.6; padding: 14px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; width: 100%; opacity: .7; }
+body.theme-light .disclaimer { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.06); }
+
+.result-nav { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+.nav-btn { display: block; padding: 14px 20px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; border: none; transition: opacity .2s; }
+.nav-btn:hover { opacity: .85; }
+.nav-btn-primary { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; }
+.nav-btn-secondary { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--dim); }
+body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body data-feature-gate="other-eq" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<canvas id="bgStars"></canvas>
+<div class="quiz-container">
+
+  <!-- ===== スタート ===== -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+      あの人のEQ診断
+    </span>
+    <h1><span>あの人</span>の<br>感情知能（EQ）を読み解く</h1>
+    <p class="intro-sub">GolemanのEQモデルをもとにした20問の行動観察。自己認識・自己管理・動機・共感・社会的スキルの5因子で、相手の感情を扱う力のパターンがわかります。</p>
+
+    <p style="font-size:13px;font-weight:700;color:var(--dim);margin-bottom:10px;text-align:left;width:100%;">診断したい相手を選んでください</p>
+    <div id="personList" style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+    <div id="noPersonMsg" style="display:none;font-size:13px;color:var(--dim);text-align:center;margin-bottom:20px;">
+      先に「あの人を診断する」でビッグファイブ診断を行ってください。<br>
+      <a href="other_quiz.html" style="color:#06b6d4;text-decoration:none;">あの人を診断する →</a>
+    </div>
+
+    <div class="intro-warning">
+      <p>⚠️ この診断はあなたの主観的な行動観察に基づきます。スコアは断定的な判断ではなく、関係を振り返るきっかけとしてご活用ください。観察者の感情・状況・関係性によって結果は異なる場合があります。</p>
+    </div>
+    <p class="intro-note">20問・約4分・無料・登録不要</p>
+  </div>
+
+  <!-- ===== クイズ ===== -->
+  <div class="quiz-area" id="quizArea">
+    <div class="who-bar" id="whoBar">
+      <span class="who-icon" id="whoIcon"></span>
+      <div>
+        <div class="who-name-txt" id="whoNameTxt"></div>
+        <div class="who-sub-txt"  id="whoSubTxt"></div>
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-text" id="progressText">1/20</span>
+    </div>
+    <div class="question-area">
+      <p class="question-num"    id="questionNum">Q1</p>
+      <p class="question-factor" id="questionFactor"></p>
+      <p class="question-text"   id="questionText"></p>
+      <div class="scale-labels"><span>全く当てはまらない</span><span>とても当てはまる</span></div>
+      <div class="answers" id="answersArea"></div>
+      <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+    </div>
+  </div>
+
+  <!-- ===== ローディング ===== -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中…</p>
+    <p id="loadingName" style="font-size:13px;color:var(--dim);"></p>
+  </div>
+
+  <!-- ===== 結果 ===== -->
+  <div class="result" id="resultArea">
+    <div class="result-card">
+      <p class="result-label">EMOTIONAL INTELLIGENCE</p>
+      <div class="result-type-icon" id="resultIcon"></div>
+      <p class="result-who-name" id="resultWhoName"></p>
+      <p class="result-overall" id="resultOverall"></p>
+      <p class="result-type-name" id="resultTypeName"></p>
+      <p class="result-catch"    id="resultCatch"></p>
+      <p class="result-desc"     id="resultDesc"></p>
+    </div>
+
+    <div class="factor-box">
+      <h3>5因子スコア</h3>
+      <div id="factorBars"></div>
+    </div>
+
+    <div class="detail-box">
+      <h3>この人との関係で意識しておきたいこと</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <div class="cross-box">
+      <h3>あなた自身との比較分析</h3>
+      <div id="crossContent"></div>
+    </div>
+
+    <div class="disclaimer">
+      この診断は行動観察に基づく一般向けコンテンツです（Goleman, 1995; Salovey &amp; Mayer, 1990 参考）。医学的・臨床的な診断ではありません。スコアは参考指標であり、相手の能力を確定するものではありません。EQは経験や訓練によって変化します。<br><br>
+      スコアはあなたの主観的な観察をもとに算出されます。同じ行動でも見る人によって解釈は異なり、観察者の感情・状況・関係性の影響を受けます。
+    </div>
+
+    <div class="result-nav">
+      <button class="nav-btn nav-btn-primary" id="saveBtn" onclick="saveResult()">結果を保存する</button>
+      <a href="eq.html" class="nav-btn nav-btn-secondary">自分のEQも診断する</a>
+      <a href="diagnoses.html" class="nav-btn nav-btn-secondary">診断一覧に戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn" onclick="retryQuiz()">別の人を診断する</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="nav.js"></script>
+<script src="unlock.js"></script>
+<script>if(typeof renderGate==='function')renderGate('other-eq');</script>
+<script>
+// ===== 質問データ =====
+const QUESTIONS = [
+  // 自己認識 (awareness)
+  { factor: 'awareness', text: '自分が今どんな感情状態にあるか、言葉や態度からある程度わかる' },
+  { factor: 'awareness', text: '感情的になっているとき、本人がそれに気づいている様子がある' },
+  { factor: 'awareness', text: '自分の得意・不得意を客観的に把握しているように見える' },
+  { factor: 'awareness', text: '「なぜそう感じたのか」を振り返ることができるようだ' },
+  // 自己管理 (regulation)
+  { factor: 'regulation', text: '怒りやイライラを感じても、感情的な行動を抑えられる' },
+  { factor: 'regulation', text: 'ストレスを受けても、必要以上に周囲にぶつけることが少ない' },
+  { factor: 'regulation', text: '衝動的に動く前に立ち止まって考えることができる' },
+  { factor: 'regulation', text: '失敗や批判があっても、感情を引きずらずに立て直せる' },
+  // 動機 (motivation)
+  { factor: 'motivation', text: '目標に向かって、自ら進んで行動している様子がある' },
+  { factor: 'motivation', text: '困難があっても、あきらめずに取り組み続けることができる' },
+  { factor: 'motivation', text: '外から言われなくても、自分から課題を見つけて動こうとする' },
+  { factor: 'motivation', text: '長期的な目標に向けて、コツコツ努力を続けている' },
+  // 共感 (empathy)
+  { factor: 'empathy', text: '相手の気持ちに敏感で、表情や雰囲気から感情を読み取れる' },
+  { factor: 'empathy', text: '言葉にされていない本音や気持ちを察することができる' },
+  { factor: 'empathy', text: '自分とは違う立場の人の気持ちを想像して行動できる' },
+  { factor: 'empathy', text: '誰かが困っているとき、自然と気づいて寄り添える' },
+  // 社会的スキル (social)
+  { factor: 'social', text: '初対面の人ともすぐに打ち解けて、スムーズに関係を築ける' },
+  { factor: 'social', text: 'グループの中で、自然と意見をまとめる役割を担える' },
+  { factor: 'social', text: '意見の対立が起きたとき、うまく調整・仲裁できる' },
+  { factor: 'social', text: '周囲の人との関係を、長期にわたって良好に維持している' },
+];
+
+const ANSWER_LABELS = ['全く\n当ては\nまらない', 'あまり\n当ては\nまらない', 'どちら\nとも\nいえない', 'やや\n当ては\nまる', 'とても\n当ては\nまる'];
+
+const FACTOR_LABELS = { awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル' };
+const FACTOR_COLORS = { awareness: '#d05090', regulation: '#c0407a', motivation: '#10b981', empathy: '#a78bfa', social: '#3b82f6' };
+const FACTOR_DESCS  = {
+  awareness:  {
+    high: '自分の感情状態を把握し、それを言語化する力が高いように見えます。感情の波に気づくのが早く、自分の行動の背景にある感情にも敏感です。',
+    low:  '自分の感情への意識があまり向いていない傾向がありそうです。感情に気づくのが遅れたり、感情の影響を認識しにくい場面があるかもしれません。'
+  },
+  regulation: {
+    high: '感情を適切に管理し、衝動的な行動を抑える力が高いように見えます。ストレス状況でも冷静さを保ちやすく、周囲から安定した印象を持たれやすいタイプです。',
+    low:  '感情の波に振り回されやすい傾向があるかもしれません。イライラや焦りが行動に出やすく、感情のコントロールに課題がある場合があります。'
+  },
+  motivation: {
+    high: '内発的なモチベーションが強く、目標に向かって自ら動ける傾向があります。壁にぶつかってもやる気を維持し、楽観的に取り組める人です。',
+    low:  'モチベーションを自ら維持するのが苦手な面がありそうです。外部からの刺激や明確なゴールがあると動きやすいタイプかもしれません。'
+  },
+  empathy:    {
+    high: '相手の気持ちを敏感に読み取る力が高いように見えます。言葉にされていない感情にも気づき、自然と寄り添える観察眼を持っています。',
+    low:  '相手の感情への感度がやや低めの傾向があるかもしれません。論理や事実ベースのコミュニケーションを好み、感情面での共鳴が少ない場面もありそうです。'
+  },
+  social:     {
+    high: '人間関係を円滑に進める力が高いように見えます。初対面でも打ち解けやすく、対立の調整や関係の維持が自然にできるタイプです。',
+    low:  '人との関係構築に少し苦手意識がある傾向があるかもしれません。少人数や一人での活動を好み、広い人間関係の維持は負担に感じることもあるようです。'
+  },
+};
+
+const LEVELS = [
+  { min: 1.0, max: 2.49, icon: '🌱', name: 'EQ発展途上', catch: '感情の扱い方に課題がある傾向',
+    desc: '観察からは、感情を扱う力がまだ発達途上にある傾向が見えます。感情に振り回されやすかったり、相手の感情を読み取るのが苦手な場面があるかもしれません。',
+    advice: '感情的な話題には慎重に接すると関係がスムーズになります。感情ではなく、具体的な行動や状況を軸に会話を進めると伝わりやすいです。',
+    note: '「感情的に動く」ことと「感情が豊か」なことは別物です。この人の感情表現の背景にある動機を理解しようとすると、関係が深まります。' },
+  { min: 2.5, max: 3.49, icon: '🌿', name: 'EQ標準的', catch: '感情の扱いに基礎力はある',
+    desc: '観察からは、感情知能が標準的なレベルにある傾向が見えます。日常のほとんどの場面では感情を適切に扱えていますが、特定の状況では苦手な面が出ることもあります。',
+    advice: '基礎的な感情管理力はあるため、普通に感情的な話題にも対応できます。ただし、特にスコアが低かった因子に関わる場面では配慮が必要かもしれません。',
+    note: '因子ごとの強弱を把握しておくと、この人との関係でどの領域に気をつけるべきかがわかります。' },
+  { min: 3.5, max: 4.49, icon: '💡', name: 'EQ高い', catch: '感情を扱う力が周囲を支えている',
+    desc: '観察からは、感情知能が高い傾向が見えます。自分の感情を把握し管理しながら、相手の気持ちも読み取るバランスが取れているように見えます。',
+    advice: 'この人は感情的なコミュニケーションが得意なため、率直に気持ちを伝え合える関係が築きやすいです。感情的な相談も受け止めてもらいやすいでしょう。',
+    note: '高いEQの人は、周囲の感情を引き受けすぎて消耗することがあります。この人の様子を観察しながら、一方的に頼りすぎないよう心がけましょう。' },
+  { min: 4.5, max: 5.0, icon: '✨', name: 'EQ非常に高い', catch: '感情の達人タイプ',
+    desc: '観察からは、感情知能が非常に高い傾向が見えます。自分と相手の感情を深く理解し、それを行動に活かす力に長けているように見えます。',
+    advice: 'この人は感情的な洞察力が高く、あなたの気持ちを敏感に察している可能性があります。正直なコミュニケーションが最も効果的です。',
+    note: '感受性が高い分、感情的に消耗しやすい面もあります。この人のペースを尊重しながら関係を深めることで、より安定した信頼関係が築けます。' },
+];
+
+const REL_ICONS  = { love: '💕', work: '💼', friend: '🤝' };
+const REL_LABELS = { love: '恋愛・気になる人', work: '職場の人', friend: '友人・知人' };
+
+// ===== 状態 =====
+let selectedPersonIdx = -1;
+let selectedName = '';
+let selectedRel  = null;
+let current = 0;
+let answers = [];
+
+// ===== 星 =====
+(function() {
+  const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.15})`;
+    ctx.fill();
+  }
+})();
+
+// ===== 人物ピッカー =====
+function renderPersonList() {
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const list  = document.getElementById('personList');
+  const noMsg = document.getElementById('noPersonMsg');
+  const eligible = others.map((r, i) => ({ r, i })).filter(({ r }) => {
+    const rel = r.relation || 'friend';
+    return rel !== 'child46' && rel !== 'child79';
+  });
+  if (eligible.length === 0) { list.style.display = 'none'; noMsg.style.display = 'block'; return; }
+  list.innerHTML = '';
+  eligible.forEach(({ r, i }) => {
+    const rel   = r.relation || 'friend';
+    const icon  = REL_ICONS[rel]  || '👤';
+    const label = REL_LABELS[rel] || rel;
+    const hasEQ = !!r.eq;
+    const btn = document.createElement('button');
+    btn.style.cssText = 'width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;text-align:left;color:inherit;font-family:inherit;transition:background 0.15s;';
+    btn.innerHTML = `
+      <span style="font-size:24px;">${icon}</span>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;">${r.name}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${label}${hasEQ ? ' · 診断済み' : ''}</div>
+      </div>
+      <span style="font-size:18px;color:var(--dim);">›</span>`;
+    btn.addEventListener('click', () => selectPerson(i));
+    list.appendChild(btn);
+  });
+}
+
+// ===== 人物選択 =====
+function selectPerson(idx) {
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const r = others[idx];
+  if (!r) return;
+  selectedPersonIdx = idx;
+  selectedName = r.name;
+  selectedRel = (r.relation === 'child46' || r.relation === 'child79') ? 'friend' : (r.relation || 'friend');
+  startQuiz();
+}
+
+// ===== スタート =====
+function startQuiz() {
+  answers = new Array(20).fill(null);
+  current = 0;
+  document.getElementById('whoIcon').textContent = REL_ICONS[selectedRel] || '👤';
+  document.getElementById('whoNameTxt').textContent = selectedName;
+  document.getElementById('whoSubTxt').textContent  = (REL_LABELS[selectedRel] || selectedRel) + 'の行動を思い浮かべながら答えてください';
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('quizArea').style.display  = 'flex';
+  showQuestion();
+}
+
+// ===== 質問表示 =====
+function showQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('questionNum').textContent    = `Q${current + 1}`;
+  document.getElementById('questionFactor').textContent = FACTOR_LABELS[q.factor];
+  document.getElementById('questionText').textContent   = q.text;
+  document.getElementById('progressFill').style.width  = `${(current / 20) * 100}%`;
+  document.getElementById('progressText').textContent  = `${current + 1}/20`;
+  const area = document.getElementById('answersArea');
+  area.innerHTML = '';
+  [1,2,3,4,5].forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn' + (answers[current] === val ? ' selected' : '');
+    btn.innerHTML = `<span style="font-size:16px;font-weight:700;">${val}</span><span class="answer-label">${ANSWER_LABELS[val-1]}</span>`;
+    btn.addEventListener('click', () => selectAnswer(val));
+    area.appendChild(btn);
+  });
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答 =====
+let timer = null;
+function selectAnswer(val) {
+  if (timer) return;
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach((b, i) => b.classList.toggle('selected', i + 1 === val));
+  timer = setTimeout(() => {
+    timer = null;
+    current++;
+    if (current < 20) showQuestion();
+    else showLoading();
+  }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (timer) { clearTimeout(timer); timer = null; }
+  if (current > 0) { current--; showQuestion(); }
+});
+
+// ===== ローディング =====
+function showLoading() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  document.getElementById('loadingName').textContent = `${selectedName}のEQを分析しています…`;
+  setTimeout(showResult, 1800);
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  const sums   = { awareness: 0, regulation: 0, motivation: 0, empathy: 0, social: 0 };
+  const counts = { awareness: 0, regulation: 0, motivation: 0, empathy: 0, social: 0 };
+  QUESTIONS.forEach((q, i) => {
+    sums[q.factor]   += (answers[i] || 3);
+    counts[q.factor] += 1;
+  });
+  const avgs = {};
+  let total = 0;
+  for (const f of Object.keys(sums)) {
+    avgs[f] = sums[f] / counts[f];
+    total  += avgs[f];
+  }
+  const overall  = total / 5;
+  const sorted   = Object.entries(avgs).sort((a, b) => b[1] - a[1]);
+  const strongest = sorted[0][0];
+  const weakest   = sorted[sorted.length - 1][0];
+  const level     = LEVELS.find(l => overall >= l.min && overall <= l.max) || LEVELS[1];
+  return { avgs, overall, strongest, weakest, level };
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  renderResult(calcScores());
+}
+
+function renderResult(s) {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  document.getElementById('resultIcon').textContent     = s.level.icon;
+  document.getElementById('resultWhoName').textContent  = `${selectedName} は…`;
+  document.getElementById('resultOverall').textContent  = `総合EQ ${s.overall.toFixed(1)} / 5.0`;
+  document.getElementById('resultTypeName').textContent = s.level.name;
+  document.getElementById('resultCatch').textContent    = s.level.catch;
+  document.getElementById('resultDesc').textContent     = s.level.desc;
+
+  // 因子バー
+  const factors = ['awareness','regulation','motivation','empathy','social'];
+  document.getElementById('factorBars').innerHTML = factors.map(f => {
+    const avg  = s.avgs[f];
+    const pct  = Math.round(((avg - 1) / 4) * 100);
+    const desc = avg >= 3.5 ? FACTOR_DESCS[f].high : FACTOR_DESCS[f].low;
+    return `<div class="factor-row">
+      <div class="factor-header">
+        <span class="factor-name" style="color:${FACTOR_COLORS[f]}">${FACTOR_LABELS[f]}</span>
+        <span class="factor-score" style="color:${FACTOR_COLORS[f]}">${avg.toFixed(1)} / 5.0</span>
+      </div>
+      <div class="factor-bar-bg">
+        <div class="factor-bar-fill" style="background:${FACTOR_COLORS[f]}" data-pct="${pct}"></div>
+      </div>
+      <p class="factor-desc-text">${desc}</p>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    document.querySelectorAll('.factor-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+  }, 100);
+
+  // 関係への示唆
+  const strongLabel = FACTOR_LABELS[s.strongest];
+  const weakLabel   = FACTOR_LABELS[s.weakest];
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-section">
+      <p class="detail-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 最も強い因子：${strongLabel}</p>
+      <p class="detail-text">${FACTOR_DESCS[s.strongest].high}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> 関係で意識しておきたいこと</p>
+      <p class="detail-text">${s.level.advice}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> もう一歩深く理解するために</p>
+      <p class="detail-text">${s.level.note}</p>
+    </div>`;
+
+  // クロス分析
+  const crossArea = document.getElementById('crossContent');
+  const selfData  = JSON.parse(localStorage.getItem('eq_result') || 'null');
+  if (selfData && selfData.scores) {
+    const selfOverall = selfData.scores.overall || 3;
+    const otherOverall = s.overall;
+    const selfName  = selfData.levelName || '';
+    const otherName = s.level.name;
+    let msg = '';
+    if (selfOverall >= 3.5 && otherOverall >= 3.5) {
+      msg = `あなたも${selectedName}さんも高いEQを持っています。感情的な理解が深く、お互いの気持ちを自然に汲み取れる関係です。感情的に成熟した、安定したコミュニケーションが期待できます。`;
+    } else if (selfOverall >= 3.5 && otherOverall < 2.5) {
+      msg = `あなたのEQは高い一方、${selectedName}さんはまだ発展途上の傾向があります。あなたが感情的な架け橋になれる関係ですが、相手の感情表現を評価するのではなく、受け止める姿勢が大切です。`;
+    } else if (selfOverall < 2.5 && otherOverall >= 3.5) {
+      msg = `${selectedName}さんのEQはあなたより高い傾向があります。相手はあなたの感情を敏感に察している可能性が高いです。率直に気持ちを伝えることで、関係がより深まりやすくなります。`;
+    } else if (Math.abs(selfOverall - otherOverall) < 0.5) {
+      msg = `あなたと${selectedName}さんのEQは近いレベルにあります。感情の扱い方のペースが似ているため、コミュニケーションの相性は良い傾向があります。共通の感情的なパターンを活かして関係を深めましょう。`;
+    } else if (selfOverall > otherOverall) {
+      msg = `あなたのEQは${selectedName}さんより高い傾向にあります。感情面でのリードをしながら、相手が安心して感情表現できる雰囲気を作ることが関係の質を高めます。`;
+    } else {
+      msg = `${selectedName}さんのEQはあなたより高い傾向にあります。相手の感情的な洞察力を活かして、オープンなコミュニケーションを意識することで、関係がより豊かになります。`;
+    }
+    crossArea.innerHTML = `<p style="font-size:12px;color:var(--dim);margin:0 0 10px;">あなた自身のEQ診断結果（${selfName}）と比較しています。</p><p style="font-size:14px;line-height:1.75;">${msg}</p>`;
+  } else {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分のEQ診断を受けると、<strong>${selectedName}さん</strong>との感情的な相性をさらに詳しく分析できます。</p><a href="eq.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);border-radius:999px;color:#06b6d4;font-size:13px;font-weight:700;text-decoration:none;">自分のEQを診断する →</a>`;
+  }
+
+  window.scrollTo(0, 0);
+}
+
+// ===== 保存 =====
+function saveResult() {
+  const s = calcScores();
+  const levelKey = s.overall >= 4.5 ? 'very_high' : s.overall >= 3.5 ? 'high' : s.overall >= 2.5 ? 'average' : 'growth';
+  const eqData = {
+    avgs: s.avgs,
+    overall: s.overall,
+    levelKey,
+    levelName: s.level.name,
+    strongest: s.strongest,
+    weakest: s.weakest,
+    date: new Date().toISOString()
+  };
+  if (selectedPersonIdx >= 0) {
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      if (others[selectedPersonIdx]) {
+        others[selectedPersonIdx].eq = eqData;
+        localStorage.setItem('bigfive_other_results', JSON.stringify(others));
+      }
+    } catch(e) {}
+  }
+  document.getElementById('saveBtn').textContent = '保存しました ✓';
+  document.getElementById('saveBtn').disabled = true;
+}
+
+// ===== リトライ =====
+function retryQuiz() {
+  selectedRel = null;
+  selectedName = '';
+  selectedPersonIdx = -1;
+  current = 0;
+  answers = [];
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+  document.getElementById('saveBtn').textContent = '結果を保存する';
+  document.getElementById('saveBtn').disabled = false;
+  renderPersonList();
+  window.scrollTo(0, 0);
+}
+
+// ===== 初期化 =====
+(function init() {
+  const params  = new URLSearchParams(location.search);
+  const viewIdx = params.get('view');
+  const pIdx    = params.get('person');
+  if (viewIdx !== null) {
+    const idx = parseInt(viewIdx);
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      const person = others[idx];
+      if (person && person.eq) {
+        selectedPersonIdx = idx;
+        selectedName = person.name;
+        selectedRel  = (person.relation === 'child46' || person.relation === 'child79') ? 'friend' : (person.relation || 'friend');
+        document.getElementById('introArea').style.display = 'none';
+        const eq = person.eq;
+        renderResult({ avgs: eq.avgs, overall: eq.overall, strongest: eq.strongest, weakest: eq.weakest, level: LEVELS.find(l => eq.overall >= l.min && eq.overall <= l.max) || LEVELS[1] });
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) saveBtn.style.display = 'none';
+        return;
+      }
+    } catch(e) {}
+    renderPersonList();
+  } else if (pIdx !== null) {
+    selectPerson(parseInt(pIdx));
+  } else {
+    renderPersonList();
+  }
+})();
+</script>
+</body>
+</html>
