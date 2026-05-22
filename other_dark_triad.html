@@ -612,10 +612,12 @@ function getLevel(pct) {
 
 // ===== 結果表示 =====
 function showResult() {
+  renderResult(calcScores());
+}
+
+function renderResult(s) {
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
-
-  const s = calcScores();
   const profile = getProfile(s.nPct, s.mPct, s.pPct);
   const cfg = REL_CONFIG[selectedRel];
 
@@ -750,8 +752,29 @@ function retryQuiz() {
 // ===== 初期化 =====
 (function init() {
   const params = new URLSearchParams(location.search);
+  const viewIdx = params.get('view');
   const pIdx = params.get('person');
-  if (pIdx !== null) {
+  if (viewIdx !== null) {
+    // 保存済み結果を再表示
+    const idx = parseInt(viewIdx);
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      const person = others[idx];
+      if (person && person.darkTriad) {
+        selectedPersonIdx = idx;
+        selectedName = person.name;
+        selectedRel = (person.relation === 'child46' || person.relation === 'child79') ? 'friend' : (person.relation || 'friend');
+        const dt = person.darkTriad;
+        document.getElementById('introArea').style.display = 'none';
+        renderResult({ nPct: dt.nPct, mPct: dt.mPct, pPct: dt.pPct });
+        // 閲覧モード：保存ボタンを非表示
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) { saveBtn.style.display = 'none'; }
+        return;
+      }
+    } catch(e) {}
+    renderPersonList();
+  } else if (pIdx !== null) {
     selectPerson(parseInt(pIdx));
   } else {
     renderPersonList();
