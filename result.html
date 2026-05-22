@@ -1000,30 +1000,6 @@
     </div>
   </div>
 
-  <!-- 弱点カード -->
-  <div class="weakness-section" id="weaknessSection">
-    <button class="btn btn-weakness" id="weaknessBtn">
-      <svg class="icon-sm" id="weaknessBtnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-        <path d="M7 11V7a5 5 0 0110 0v4"/>
-      </svg>
-      <span id="weaknessBtnText">自分の弱点を知る</span>
-    </button>
-    <div class="weakness-card" id="weaknessCard" style="display:none;">
-      <p class="weakness-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> 自分の弱点を知る</p>
-      <p class="weakness-card-note">弱点は「悪いところ」ではありません。自分を理解し、成長するためのヒントです。</p>
-      <div id="weaknessContent"></div>
-      <button class="btn btn-growth-tips" id="growthTipsBtn" style="display:none;">
-        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
-        <span>一番の改善ポイントを見る</span>
-      </button>
-      <div class="growth-tips-card" id="growthTipsCard" style="display:none;">
-        <p class="growth-tips-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 成長ヒント</p>
-        <p class="growth-tips-note">性格は大人になってからも変わります。数週間〜数ヶ月の継続で測定可能な変化が報告されています。</p>
-        <div id="growthTipsContent"></div>
-      </div>
-    </div>
-  </div>
 
   <!-- ダークトライアドセクション（あの人モードのみ） -->
   <div id="darkTriadSection" style="display:none; width:100%; max-width:480px; margin-bottom:20px;"></div>
@@ -1048,13 +1024,6 @@
     </div>
   </div>
 
-  <!-- キャリア適性診断への誘導 -->
-  <div style="width:100%;max-width:480px;margin-bottom:20px;">
-    <a href="career.html" class="career-link" id="careerLink">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-      あなたが向いている仕事は →
-    </a>
-  </div>
 
   <!-- ブログリンクカード（高A×高N の自分モードのみ） -->
   <div class="blog-links-card" id="blogLinksCard" style="display:none;"></div>
@@ -1077,7 +1046,7 @@
   <!-- ボタン -->
   <div class="result-buttons">
     <a href="index.html" class="btn btn-secondary">トップに戻る</a>
-    <a href="#" class="btn btn-primary" id="retryBtn">もう一度診断する</a>
+
     <button class="btn btn-save" id="saveBtn">
       <span class="icon-with-text">
         <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1158,11 +1127,6 @@
     <p style="font-size:12px; color:var(--dim); text-align:center;">恋愛・仕事・友人…気になる人の性格を推測できます</p>
   </div>
 
-  <!-- 10問/30問版→上位版誘導 -->
-  <div class="upgrade-banner" id="upgradeBanner" style="display:none;">
-    <p id="upgradeText">もっと正確に自分を知りたい方へ</p>
-    <a href="quiz.html?v=30" class="btn btn-primary" id="upgradeBtn">30問の本格診断へ（無料）</a>
-  </div>
 
 </div>
 
