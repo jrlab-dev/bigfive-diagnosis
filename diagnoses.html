@@ -153,7 +153,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="selfGrid"></div>
 
   <!-- 応用診断 -->
-  <p class="section-label">応用診断（6種類）</p>
+  <p class="section-label">応用診断（7種類）</p>
   <p class="section-sub-note">性格データを他者分析やキャリアに活かす応用診断です。推測診断は本人の実際の性格と異なる場合があります。</p>
   <div class="diag-grid" id="otherGrid"></div>
 </div>
@@ -259,6 +259,16 @@ const DIAGNOSES = [
     questions: 27,
     minutes: 6,
     gate: 'other-dark-triad',
+  },
+  {
+    id: 'other-attachment', fc: 'A',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
+    name: 'あの人の愛着スタイル診断',
+    desc: '20問の行動観察で不安軸・回避軸の2軸から愛着スタイル（安定型・不安型・回避型・恐れ型）を分析。恋人・片思い・職場など関係に合わせた専用質問。',
+    url: 'other_attachment.html',
+    questions: 20,
+    minutes: 5,
+    gate: 'other-attachment',
   },
   {
     id: 'love', fc: 'A',

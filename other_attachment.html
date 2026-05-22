@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/other_attachment.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あの人の愛着スタイル診断 | ビッグファイブで本当の自分を知る【公式】</title>
+<meta name="description" content="恋人・気になる人・友人の愛着スタイルを20問の行動観察で診断。安定型・不安型・回避型・恐れ型の4タイプから相手の人間関係パターンを読み解く。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="あの人の愛着スタイル診断 | ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:description" content="恋人・気になる人・友人の愛着スタイルを20問の行動観察で診断。安定型・不安型・回避型・恐れ型の4タイプから相手の人間関係パターンを読み解く。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/other_attachment.html">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root { --accent: #f472b6; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body { font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100%; overflow-x: hidden; }
+
+canvas#bgStars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+.quiz-container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; }
+
+/* ===== イントロ ===== */
+.intro { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px 0 8px; }
+.intro-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent); background: rgba(244,114,182,0.12); border: 1px solid rgba(244,114,182,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 20px; }
+.intro h1 { font-size: 22px; font-weight: 900; line-height: 1.5; margin-bottom: 12px; }
+.intro h1 span { background: linear-gradient(135deg, #f472b6, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.intro-sub { font-size: 13px; color: var(--dim); line-height: 1.75; margin-bottom: 24px; }
+.rel-label { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 10px; text-align: left; width: 100%; }
+.intro-warning { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 12px 14px; font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 20px; text-align: left; width: 100%; }
+.intro-note { font-size: 12px; color: var(--dim); opacity: .6; }
+
+/* ===== クイズ ===== */
+.quiz-area { display: none; flex-direction: column; padding-top: 8px; }
+.who-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; margin-bottom: 20px; }
+.who-bar.rel-love   { background: rgba(244,114,182,0.12); border: 1px solid rgba(244,114,182,0.3); }
+.who-bar.rel-work   { background: rgba(59,130,246,0.10);  border: 1px solid rgba(59,130,246,0.25); }
+.who-bar.rel-friend { background: rgba(16,185,129,0.10);  border: 1px solid rgba(16,185,129,0.25); }
+.who-icon { font-size: 22px; }
+.who-name-txt { font-size: 14px; font-weight: 700; }
+.who-sub-txt  { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.progress { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+body.theme-light .progress-bar { background: rgba(0,0,0,0.08); }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #f472b6, #fb923c); border-radius: 999px; transition: width .3s; width: 0; }
+.progress-text { font-size: 12px; color: var(--dim); flex-shrink: 0; }
+.question-area { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 20px 16px; margin-bottom: 16px; }
+body.theme-light .question-area { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.question-num    { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+.question-axis   { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+.question-text   { font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+.scale-labels    { display: flex; justify-content: space-between; font-size: 10px; color: var(--dim); margin-bottom: 8px; }
+.answers { display: flex; gap: 6px; }
+.answer-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; background: rgba(244,114,182,0.04); border: 1.5px solid rgba(244,114,182,0.15); border-radius: 10px; cursor: pointer; font-family: inherit; transition: .15s; color: var(--dim); }
+.answer-btn:hover { background: rgba(244,114,182,0.1); border-color: rgba(244,114,182,0.4); }
+.answer-btn.selected { background: rgba(244,114,182,0.2); border-color: #f472b6; color: var(--text); }
+.answer-label { font-size: 9px; line-height: 1.3; text-align: center; white-space: pre-line; }
+.back-btn { background: none; border: none; color: var(--dim); font-size: 12px; cursor: pointer; padding: 8px 0; font-family: inherit; }
+
+/* ===== ローディング ===== */
+.loading { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 16px; }
+.loading.active { display: flex; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid rgba(244,114,182,0.2); border-top-color: #f472b6; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== 結果 ===== */
+.result { display: none; flex-direction: column; align-items: center; gap: 16px; }
+.result.active { display: flex; }
+.result-card { width: 100%; background: linear-gradient(135deg, rgba(244,114,182,0.12), rgba(251,146,60,0.08)); border: 1px solid rgba(244,114,182,0.25); border-radius: 20px; padding: 24px 20px; text-align: center; }
+.result-label    { font-size: 11px; letter-spacing: .12em; color: var(--dim); margin-bottom: 10px; }
+.result-type-icon { font-size: 48px; margin-bottom: 8px; }
+.result-who-name  { font-size: 13px; color: var(--dim); margin-bottom: 4px; }
+.result-type-name { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #f472b6, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+.result-catch     { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; }
+.result-desc      { font-size: 13px; color: var(--dim); line-height: 1.75; text-align: left; }
+
+.axis-box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 18px 16px; }
+body.theme-light .axis-box { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.axis-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--dim); }
+.axis-row { margin-bottom: 14px; }
+.axis-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.axis-name  { font-size: 13px; font-weight: 700; }
+.axis-score { font-size: 13px; font-weight: 700; }
+.axis-bar-bg   { height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+body.theme-light .axis-bar-bg { background: rgba(0,0,0,0.08); }
+.axis-bar-fill { height: 100%; border-radius: 999px; width: 0; transition: width .8s ease; }
+.axis-level-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.axis-desc-text   { font-size: 12px; color: var(--dim); line-height: 1.65; margin-top: 6px; }
+
+.detail-box, .cross-box { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 18px 16px; }
+body.theme-light .detail-box, body.theme-light .cross-box { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.07); }
+.detail-box h3, .cross-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 14px; color: var(--dim); }
+.detail-section { margin-bottom: 14px; }
+.detail-section:last-child { margin-bottom: 0; }
+.detail-label { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+.detail-text  { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+.disclaimer { font-size: 11px; color: var(--dim); line-height: 1.6; padding: 14px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; width: 100%; opacity: .7; }
+body.theme-light .disclaimer { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.06); }
+
+.result-nav { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+.nav-btn { display: block; padding: 14px 20px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; border: none; transition: opacity .2s; }
+.nav-btn:hover { opacity: .85; }
+.nav-btn-primary { background: linear-gradient(135deg, #f472b6, #fb923c); color: #fff; }
+.nav-btn-secondary { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--dim); }
+body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body data-feature-gate="other-attachment" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<canvas id="bgStars"></canvas>
+<div class="quiz-container">
+
+  <!-- ===== スタート ===== -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      あの人の愛着スタイル
+    </span>
+    <h1><span>あの人</span>の<br>人間関係パターンを読み解く</h1>
+    <p class="intro-sub">不安軸・回避軸の2軸から愛着スタイルを分析。20問の行動観察で、相手の距離感・依存傾向・感情表現のパターンがわかります。</p>
+
+    <p class="rel-label">診断したい相手を選んでください</p>
+    <div id="personList" style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+    <div id="noPersonMsg" style="display:none;font-size:13px;color:var(--dim);text-align:center;margin-bottom:20px;">
+      先に「あの人を診断する」でビッグファイブ診断を行ってください。<br>
+      <a href="other_quiz.html" style="color:#f472b6;text-decoration:none;">あの人を診断する →</a>
+    </div>
+
+    <div class="intro-warning">
+      <p>⚠️ この診断はあなたの主観的な行動観察に基づきます。スコアは断定的な判断ではなく、関係を振り返るきっかけとしてご活用ください。また、スコアはあなた自身の観察をもとに算出されます。同じ行動でも見る人によって解釈は異なり、観察者の感情・状況・関係性の影響を受けることがあります。</p>
+    </div>
+    <p class="intro-note">20問・約4分・無料・登録不要</p>
+  </div>
+
+  <!-- ===== クイズ ===== -->
+  <div class="quiz-area" id="quizArea">
+    <div class="who-bar" id="whoBar">
+      <span class="who-icon" id="whoIcon"></span>
+      <div>
+        <div class="who-name-txt" id="whoNameTxt"></div>
+        <div class="who-sub-txt"  id="whoSubTxt"></div>
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-text" id="progressText">1/20</span>
+    </div>
+    <div class="question-area">
+      <p class="question-num"  id="questionNum">Q1</p>
+      <p class="question-axis" id="questionAxis"></p>
+      <p class="question-text" id="questionText"></p>
+      <div class="scale-labels"><span>全く当てはまらない</span><span>とても当てはまる</span></div>
+      <div class="answers" id="answersArea"></div>
+      <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+    </div>
+  </div>
+
+  <!-- ===== ローディング ===== -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中…</p>
+    <p id="loadingName" style="font-size:13px;color:var(--dim);"></p>
+  </div>
+
+  <!-- ===== 結果 ===== -->
+  <div class="result" id="resultArea">
+    <div class="result-card">
+      <p class="result-label">ATTACHMENT STYLE</p>
+      <div class="result-type-icon" id="resultIcon"></div>
+      <p class="result-who-name" id="resultWhoName"></p>
+      <p class="result-type-name" id="resultTypeName"></p>
+      <p class="result-catch" id="resultCatch"></p>
+      <p class="result-desc"  id="resultDesc"></p>
+    </div>
+
+    <div class="axis-box">
+      <h3>2軸スコア</h3>
+      <div id="axisBars"></div>
+    </div>
+
+    <div class="detail-box">
+      <h3>この関係で意識しておきたいこと</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <div class="cross-box">
+      <h3>あなた自身との比較分析</h3>
+      <div id="crossContent"></div>
+    </div>
+
+    <div class="disclaimer">
+      この診断は行動観察に基づく一般向けコンテンツです。医学的・臨床的な診断ではありません。スコアは参考指標であり、相手の人格を断定するものではありません。<br><br>
+      また、スコアはあなた自身の主観的な観察をもとに算出されます。同じ行動でも見る人によって解釈は異なり、観察者の感情・状況・関係性の影響を受けることがあります。結果は「自分がどう感じているか」の可視化としてお受け取りください。
+    </div>
+
+    <div class="result-nav">
+      <button class="nav-btn nav-btn-primary" id="saveBtn" onclick="saveResult()">結果を保存する</button>
+      <a href="attachment.html" class="nav-btn nav-btn-secondary">自分の愛着スタイルも診断する</a>
+      <a href="diagnoses.html" class="nav-btn nav-btn-secondary">診断一覧に戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn" onclick="retryQuiz()">別の人を診断する</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="nav.js"></script>
+<script src="unlock.js"></script>
+<script>if(typeof renderGate==='function')renderGate('other-attachment');</script>
+<script>
+// ===== 質問データ =====
+const QUESTIONS_LOVE = [
+  // 不安軸（anxiety）
+  { axis: 'anxiety', text: '誰かに少し冷たくされたり無視されると、すぐ落ち込んだり気にしすぎる様子がある' },
+  { axis: 'anxiety', text: 'メッセージや連絡の返信が遅いと、その後「届いた？」など確認してくることがある' },
+  { axis: 'anxiety', text: '好きな人や大切な相手が他の人と仲良くしていると、嫉妬や不安な様子を見せることがある' },
+  { axis: 'anxiety', text: '「嫌われてないかな」「怒ってる？」と相手の気持ちをよく確認したがる' },
+  { axis: 'anxiety', text: '関係に少しでもぎこちなさが生じると、すぐに仲直りや修復に動こうとする' },
+  { axis: 'anxiety', text: '自分の言動が原因で誰かを不快にさせたのではと、必要以上に気にしてしまうことがある' },
+  { axis: 'anxiety', text: '相手が自分のことをどう思っているか、細かく気にして読み取ろうとする様子がある' },
+  { axis: 'anxiety', text: '好きな人からの反応に感情が大きく左右され、落ち込んだり喜んだりを繰り返す' },
+  { axis: 'anxiety', text: '別れや距離を置かれることを強く恐れている様子がある' },
+  { axis: 'anxiety', text: '誰かに認められたり、特別に思われることをとても重視している' },
+  // 回避軸（avoidance）
+  { axis: 'avoidance', text: '感情的な話題になると、話を変えたり冗談にしたりして深入りを避ける' },
+  { axis: 'avoidance', text: '自分の気持ちを直接言葉にすることをためらう傾向がある' },
+  { axis: 'avoidance', text: '関係が深まってきたタイミングで、急に連絡が減ったり距離を置くことがある' },
+  { axis: 'avoidance', text: '誰かに頼ったり弱みを見せることが少なく、一人で抱え込みがちに見える' },
+  { axis: 'avoidance', text: '「好き」「ありがとう」などの感情を言葉にすることを恥ずかしそうにしたり避けたりする' },
+  { axis: 'avoidance', text: '自分の悩みや本音をあまり人に話さない' },
+  { axis: 'avoidance', text: '一人の時間をとても大切にし、誰かといることを負担に感じる瞬間がありそう' },
+  { axis: 'avoidance', text: '相手から強く求められたり追われると、少し引いてしまう様子がある' },
+  { axis: 'avoidance', text: '感情的に深く踏み込まれると、笑いにしたり話をそらしたりする' },
+  { axis: 'avoidance', text: '親しくなりすぎることへの抵抗感が、ふとした言動や態度に出ることがある' },
+];
+
+const QUESTIONS_WORK = [
+  // 不安軸（anxiety）
+  { axis: 'anxiety', text: '誰かに無視されたり冷たくされると、すぐに気にしすぎている様子がある' },
+  { axis: 'anxiety', text: 'グループのやり取りや会話から外れると、仲間外れにされたと感じやすい' },
+  { axis: 'anxiety', text: '誰かの機嫌が悪いと、自分のせいではないかと必要以上に心配することがある' },
+  { axis: 'anxiety', text: '断ったり反論したりすることが苦手で、周りに合わせてしまいがちに見える' },
+  { axis: 'anxiety', text: '「怒ってる？」「嫌われた？」と相手の気持ちを確認してくることがある' },
+  { axis: 'anxiety', text: 'グループ内での自分の評価や立ち位置をとても気にしている' },
+  { axis: 'anxiety', text: '誰かに誘われなかったり返信が遅いと、不安になるという話をすることがある' },
+  { axis: 'anxiety', text: '少し関係がぎこちなくなると、すぐ関係修復のために動こうとする' },
+  { axis: 'anxiety', text: '孤立することや一人になることを強く恐れている様子がある' },
+  { axis: 'anxiety', text: '誰かに頼りにされたり、ほめられることをとても大切にしている' },
+  // 回避軸（avoidance）
+  { axis: 'avoidance', text: '深い話や個人的な悩みをほとんど人に話さない' },
+  { axis: 'avoidance', text: '困っていても「大丈夫」と言いがちで、あまり助けを求めない' },
+  { axis: 'avoidance', text: '感情をあまり表に出さず、クールな印象を与える' },
+  { axis: 'avoidance', text: '人と一定の距離感を保つことを好む様子がある' },
+  { axis: 'avoidance', text: 'グループより少人数や一人での行動を好む' },
+  { axis: 'avoidance', text: '人に頼られるのは得意でも、自分から頼ることが少ない' },
+  { axis: 'avoidance', text: 'プライベートな話をほとんどしない、または聞いてもうまくかわす' },
+  { axis: 'avoidance', text: '感謝や謝罪を言葉にすることが少ない' },
+  { axis: 'avoidance', text: '誰かとのトラブルがあっても、感情的に話し合うより距離を置くことがある' },
+  { axis: 'avoidance', text: '仲が良くなってきても、一定以上踏み込まれると引いてしまうことがある' },
+];
+
+const ANSWER_LABELS = ['全く\n当ては\nまらない', 'あまり\n当ては\nまらない', 'どちら\nとも\nいえない', 'やや\n当ては\nまる', 'とても\n当ては\nまる'];
+
+const AXIS_LABELS  = { anxiety: '不安軸（見捨てられ不安）', avoidance: '回避軸（親密さへの抵抗）' };
+const AXIS_COLORS  = { anxiety: '#fb923c', avoidance: '#818cf8' };
+const AXIS_DESCS   = {
+  anxiety: {
+    high: '見捨てられ不安が強い傾向があります。大切な人の反応や気持ちに敏感になりやすく、安心感を確認したくなる場面が多いかもしれません。この不安は相手を「大切にしたい」という気持ちの裏返しでもあります。',
+    low:  '見捨てられ不安が低く、関係に対して比較的安定した感覚を持っている傾向があります。相手の反応に過度に振り回されず、自然な距離感で関係を保てるタイプです。'
+  },
+  avoidance: {
+    high: '親密さへの抵抗がやや強い傾向があります。関係が深くなると窮屈さを感じたり、感情表現を避けたりすることがあるようです。自立心が強く、一人の時間を大切にするタイプです。',
+    low:  '親密さへの抵抗が少なく、感情的なつながりを比較的自然に受け入れられる傾向があります。人に頼ることや心を開くことへの抵抗が少ないタイプです。'
+  }
+};
+
+// ===== プロファイル =====
+const PROFILES = {
+  secure:    { id: 'secure',    name: '安定型',   icon: '🌿', catch: '感情のバランサー',   desc: '親しい人との距離感が自然で、依存しすぎず離れすぎない関係を築ける傾向があります。感情表現と自立のバランスが取れており、周囲から「一緒にいて安心できる人」と見られやすいタイプです。', advice: 'この人との関係は比較的安定しています。感情的なコミュニケーションが取りやすく、互いの気持ちを率直に伝え合うことで、より深い信頼関係を築けます。', note: '感情的に落ち着いているため、相手から話しかけやすい雰囲気を作っています。ただし「なんでも大丈夫そう」と見られることで、本人が困っていても気づかれにくいことも。定期的に「最近どう？」と声をかけることが関係を深めます。' },
+  anxious:   { id: 'anxious',   name: '不安型',   icon: '🌊', catch: '愛情に敏感な人',     desc: '大切な人からの承認や愛情確認を強く求める傾向が見られます。相手の反応に敏感で、少しの変化にも不安を感じやすいようです。深く人を思う力の裏返しでもあります。',                       advice: 'この人には、こまめな安心感の提供が大切です。「大丈夫」「あなたのことを大切にしている」というメッセージを意識的に伝えることで、関係が安定します。急な変化や返信の遅れが不安を招きやすいので、予め伝えておくと効果的です。', note: '不安が高まると試すような行動（あえて連絡しないなど）が出ることも。「なんで返信しないの」という形で感情が出やすいですが、その奥には深い愛情があります。感情を否定せず、まずは受け止める姿勢が信頼につながります。' },
+  avoidant:  { id: 'avoidant',  name: '回避型',   icon: '🏔️', catch: '自立した一匹狼',     desc: '感情的な親密さへの抵抗があり、深い関係になると距離を置く傾向が見られます。頼ることや感情表現が苦手で、一人の時間を大切にするタイプです。冷たく見えることもありますが、自立心の強さが魅力でもあります。',                       advice: 'この人との関係では、適度な距離感を保つことが重要です。距離を詰めすぎると引いてしまうので、自然な流れで関係を深めましょう。感情の押しつけや過度な要求は逆効果です。', note: '「冷たい」のではなく「近づき方がわからない」タイプです。自分から話しかけてこなくても、あなたのことを気にしている可能性はあります。一人の時間を尊重しながら、少しずつ信頼を積み上げるアプローチが有効です。' },
+  fearful:   { id: 'fearful',   name: '恐れ型',   icon: '🌀', catch: '葛藤を抱えた人',     desc: '「近づきたいけど傷つきたくない」という矛盾した気持ちを抱えやすい傾向が見られます。関係が深まると不安定になったり、突然距離を置いたりすることも。複雑な行動の裏に、傷つくことへの恐れが潜んでいることがあります。',                       advice: 'この人との関係は不安定になりやすいですが、一定のペースで安心感を積み上げることが大切です。急な展開や感情的な詰め方は避け、ゆっくりと信頼関係を育てましょう。', note: '近づいてきたと思ったら急に距離を置く、という行動が見られることがあります。これは「あなたが嫌い」ではなく「傷つくのが怖い」という防衛反応であることが多いです。一貫した「ここにいる」という安定した存在感が、この人の恐れを和らげます。' },
+};
+
+const REL_CONFIG = {
+  love:   { icon: '💕', label: '恋愛・気になる人', barClass: 'rel-love'   },
+  work:   { icon: '💼', label: '職場の人',         barClass: 'rel-work'   },
+  friend: { icon: '🤝', label: '友人・知人',       barClass: 'rel-friend' },
+};
+
+// ===== 状態 =====
+let selectedPersonIdx = -1;
+let selectedName = '';
+let selectedRel  = null;
+let currentQuestions = [];
+let current = 0;
+let answers = [];
+
+// ===== 星 =====
+(function() {
+  const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.15})`;
+    ctx.fill();
+  }
+})();
+
+// ===== 人物ピッカー =====
+function renderPersonList() {
+  const relIcons  = { love:'💕', work:'💼', friend:'🤝' };
+  const relLabels = { love:'恋愛・気になる人', work:'職場の人', friend:'友人・知人' };
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const list  = document.getElementById('personList');
+  const noMsg = document.getElementById('noPersonMsg');
+  const eligible = others.map((r, i) => ({ r, i })).filter(({ r }) => {
+    const rel = r.relation || 'friend';
+    return rel !== 'child46' && rel !== 'child79';
+  });
+  if (eligible.length === 0) { list.style.display = 'none'; noMsg.style.display = 'block'; return; }
+  list.innerHTML = '';
+  eligible.forEach(({ r, i }) => {
+    const rel   = r.relation || 'friend';
+    const icon  = relIcons[rel]  || '👤';
+    const label = relLabels[rel] || rel;
+    const hasAT = !!r.attachment;
+    const btn = document.createElement('button');
+    btn.style.cssText = 'width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;text-align:left;color:inherit;font-family:inherit;transition:background 0.15s;';
+    btn.innerHTML = `
+      <span style="font-size:24px;">${icon}</span>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;">${r.name}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${label}${hasAT ? ' · 診断済み' : ''}</div>
+      </div>
+      <span style="font-size:18px;color:var(--dim);">›</span>`;
+    btn.addEventListener('click', () => selectPerson(i));
+    list.appendChild(btn);
+  });
+}
+
+// ===== 人物選択 =====
+function selectPerson(idx) {
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const r = others[idx];
+  if (!r) return;
+  selectedPersonIdx = idx;
+  selectedName = r.name;
+  selectedRel = (r.relation === 'child46' || r.relation === 'child79') ? 'friend' : (r.relation || 'friend');
+  startQuiz();
+}
+
+// ===== スタート =====
+function startQuiz() {
+  currentQuestions = (selectedRel === 'love') ? QUESTIONS_LOVE : QUESTIONS_WORK;
+  answers = new Array(20).fill(null);
+  current = 0;
+  const cfg = REL_CONFIG[selectedRel] || REL_CONFIG.friend;
+  const whoBar = document.getElementById('whoBar');
+  whoBar.className = 'who-bar ' + cfg.barClass;
+  document.getElementById('whoIcon').textContent = cfg.icon;
+  document.getElementById('whoNameTxt').textContent = selectedName;
+  document.getElementById('whoSubTxt').textContent  = cfg.label + 'の行動を思い浮かべながら答えてください';
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('quizArea').style.display  = 'flex';
+  showQuestion();
+}
+
+// ===== 質問表示 =====
+function showQuestion() {
+  const q = currentQuestions[current];
+  document.getElementById('questionNum').textContent  = `Q${current + 1}`;
+  document.getElementById('questionAxis').textContent = AXIS_LABELS[q.axis];
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / 20) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/20`;
+  const area = document.getElementById('answersArea');
+  area.innerHTML = '';
+  [1,2,3,4,5].forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn' + (answers[current] === val ? ' selected' : '');
+    btn.innerHTML = `<span style="font-size:16px;font-weight:700;">${val}</span><span class="answer-label">${ANSWER_LABELS[val-1]}</span>`;
+    btn.addEventListener('click', () => selectAnswer(val));
+    area.appendChild(btn);
+  });
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答 =====
+let timer = null;
+function selectAnswer(val) {
+  if (timer) return;
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach((b, i) => b.classList.toggle('selected', i + 1 === val));
+  timer = setTimeout(() => {
+    timer = null;
+    current++;
+    if (current < 20) showQuestion();
+    else showLoading();
+  }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (timer) { clearTimeout(timer); timer = null; }
+  if (current > 0) { current--; showQuestion(); }
+});
+
+// ===== ローディング =====
+function showLoading() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  document.getElementById('loadingName').textContent = `${selectedName}の愛着スタイルを分析しています…`;
+  setTimeout(showResult, 1800);
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  let aN = 0, aV = 0;
+  currentQuestions.forEach((q, i) => {
+    if (q.axis === 'anxiety')   aN += (answers[i] || 3);
+    if (q.axis === 'avoidance') aV += (answers[i] || 3);
+  });
+  // 各軸10問・1〜5点 → 範囲10〜50 → 0〜100%に正規化
+  const anxietyPct  = Math.round(((aN - 10) / 40) * 100);
+  const avoidancePct = Math.round(((aV - 10) / 40) * 100);
+  return { anxietyPct, avoidancePct };
+}
+
+// ===== プロファイル判定 =====
+function getProfile(anxietyPct, avoidancePct) {
+  const highA = anxietyPct  > 50;
+  const highV = avoidancePct > 50;
+  if (!highA && !highV) return PROFILES.secure;
+  if ( highA && !highV) return PROFILES.anxious;
+  if (!highA &&  highV) return PROFILES.avoidant;
+  return PROFILES.fearful;
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  renderResult(calcScores());
+}
+
+function renderResult(s) {
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const profile = getProfile(s.anxietyPct, s.avoidancePct);
+
+  // プロファイルカード
+  document.getElementById('resultIcon').textContent     = profile.icon;
+  document.getElementById('resultWhoName').textContent  = `${selectedName} は…`;
+  document.getElementById('resultTypeName').textContent = profile.name;
+  document.getElementById('resultCatch').textContent    = profile.catch;
+  document.getElementById('resultDesc').textContent     = profile.desc;
+
+  // 軸バー
+  const axes = [
+    { key: 'anxiety',   pct: s.anxietyPct  },
+    { key: 'avoidance', pct: s.avoidancePct },
+  ];
+  document.getElementById('axisBars').innerHTML = axes.map(a => {
+    const lv = a.pct >= 60 ? { label: '高め', bg: 'rgba(239,68,68,0.12)', color: '#ef4444' }
+             : a.pct >= 35 ? { label: '中',   bg: 'rgba(245,158,11,0.10)', color: '#f59e0b' }
+             :               { label: '低め', bg: 'rgba(16,185,129,0.10)', color: '#10b981' };
+    const desc = a.pct >= 50 ? AXIS_DESCS[a.key].high : AXIS_DESCS[a.key].low;
+    return `<div class="axis-row">
+      <div class="axis-header">
+        <span class="axis-name" style="color:${AXIS_COLORS[a.key]}">${AXIS_LABELS[a.key]}</span>
+        <span class="axis-score" style="color:${AXIS_COLORS[a.key]}">${a.pct}%</span>
+      </div>
+      <div class="axis-bar-bg">
+        <div class="axis-bar-fill" style="background:${AXIS_COLORS[a.key]}" data-pct="${a.pct}"></div>
+      </div>
+      <span class="axis-level-badge" style="background:${lv.bg};color:${lv.color}">${lv.label}</span>
+      <p class="axis-desc-text">${desc}</p>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    document.querySelectorAll('.axis-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+  }, 100);
+
+  // 関係への示唆
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-section">
+      <p class="detail-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> この関係で気をつけたいこと</p>
+      <p class="detail-text">${profile.advice}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> うまく付き合うためのヒント</p>
+      <p class="detail-text">${profile.note}</p>
+    </div>`;
+
+  // クロス分析
+  const crossArea = document.getElementById('crossContent');
+  const selfData  = JSON.parse(localStorage.getItem('attachment_result') || 'null');
+  if (selfData && selfData.typeKey) {
+    const typeNames = { secure: '安定型', anxious: '不安型', avoidant: '回避型', fearful: '恐れ型' };
+    const selfType  = selfData.typeKey;
+    const otherType = profile.id;
+    let msg = '';
+    if (selfType === 'secure' && otherType === 'secure') {
+      msg = `あなたも${selectedName}さんも安定型です。互いに感情的な余裕があり、自然体でいられる関係を築けます。深い信頼を積み上げていきやすい組み合わせです。`;
+    } else if (selfType === 'secure' && otherType === 'anxious') {
+      msg = `あなたは安定型、${selectedName}さんは不安型の傾向があります。あなたの安定感が${selectedName}さんの不安を和らげることができます。「大丈夫」「ここにいる」という安心感を意識的に伝えると、関係が安定します。`;
+    } else if (selfType === 'secure' && otherType === 'avoidant') {
+      msg = `あなたは安定型、${selectedName}さんは回避型の傾向があります。あなたが感情的な距離を尊重しながら接することで、${selectedName}さんは少しずつ心を開いてきます。焦らず一定のペースで信頼を積み上げましょう。`;
+    } else if (selfType === 'secure' && otherType === 'fearful') {
+      msg = `あなたは安定型、${selectedName}さんは恐れ型の傾向があります。あなたの一貫した安定感が、${selectedName}さんの「傷つきたくない」という恐れを和らげる鍵になります。急がず、ゆっくりと安心感を積み上げてください。`;
+    } else if (selfType === 'anxious' && otherType === 'avoidant') {
+      msg = `不安型のあなたと回避型の${selectedName}さんの組み合わせは、追えば引く・引けば来るという「追いかけっこ」パターンになりやすい組み合わせです。あなたが少し感情的な追求を緩め、相手の空間を尊重することで関係が安定しやすくなります。`;
+    } else if (selfType === 'avoidant' && otherType === 'anxious') {
+      msg = `回避型のあなたと不安型の${selectedName}さんの組み合わせです。${selectedName}さんはあなたの反応を敏感に読み取っています。「大丈夫」という小さな安心感を意識的に伝えるだけで、相手の不安が大きく和らぐことがあります。`;
+    } else if (selfType === otherType) {
+      const labels = { anxious: '不安型', avoidant: '回避型', fearful: '恐れ型' };
+      msg = `あなたも${selectedName}さんも${labels[selfType] || selfType}の傾向があります。同じスタイル同士なので共感し合えますが、お互いの弱点が重なりやすい面もあります。意識的にオープンなコミュニケーションを取ることが関係を深めます。`;
+    } else {
+      msg = `あなたと${selectedName}さんの愛着スタイルは異なります。スタイルの違いは「相性が悪い」ではなく、互いに補い合えるポテンシャルでもあります。相手の行動の背景にある不安や抵抗を理解することが、より良い関係につながります。`;
+    }
+    crossArea.innerHTML = `<p style="font-size:12px;color:var(--dim);margin:0 0 10px;">あなた自身の愛着スタイル診断結果（${typeNames[selfType] || selfType}）と比較しています。</p><p style="font-size:14px;line-height:1.75;">${msg}</p>`;
+  } else {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分の愛着スタイル診断を受けると、<strong>${selectedName}さん</strong>との関係パターンをさらに詳しく分析できます。</p><a href="attachment.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.3);border-radius:999px;color:#f472b6;font-size:13px;font-weight:700;text-decoration:none;">自分の愛着スタイルを診断する →</a>`;
+  }
+
+  window.scrollTo(0, 0);
+}
+
+// ===== 保存 =====
+function saveResult() {
+  const s = calcScores();
+  const profile = getProfile(s.anxietyPct, s.avoidancePct);
+  const atData = { anxietyPct: s.anxietyPct, avoidancePct: s.avoidancePct, typeId: profile.id, typeName: profile.name, date: new Date().toISOString() };
+  if (selectedPersonIdx >= 0) {
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      if (others[selectedPersonIdx]) {
+        others[selectedPersonIdx].attachment = atData;
+        localStorage.setItem('bigfive_other_results', JSON.stringify(others));
+      }
+    } catch(e) {}
+  }
+  document.getElementById('saveBtn').textContent = '保存しました ✓';
+  document.getElementById('saveBtn').disabled = true;
+}
+
+// ===== リトライ =====
+function retryQuiz() {
+  selectedRel = null;
+  selectedName = '';
+  selectedPersonIdx = -1;
+  current = 0;
+  answers = [];
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+  document.getElementById('saveBtn').textContent = '結果を保存する';
+  document.getElementById('saveBtn').disabled = false;
+  renderPersonList();
+  window.scrollTo(0, 0);
+}
+
+// ===== 初期化 =====
+(function init() {
+  const params   = new URLSearchParams(location.search);
+  const viewIdx  = params.get('view');
+  const pIdx     = params.get('person');
+  if (viewIdx !== null) {
+    const idx = parseInt(viewIdx);
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      const person = others[idx];
+      if (person && person.attachment) {
+        selectedPersonIdx = idx;
+        selectedName = person.name;
+        selectedRel  = (person.relation === 'child46' || person.relation === 'child79') ? 'friend' : (person.relation || 'friend');
+        currentQuestions = (selectedRel === 'love') ? QUESTIONS_LOVE : QUESTIONS_WORK;
+        document.getElementById('introArea').style.display = 'none';
+        const at = person.attachment;
+        renderResult({ anxietyPct: at.anxietyPct, avoidancePct: at.avoidancePct });
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) saveBtn.style.display = 'none';
+        return;
+      }
+    } catch(e) {}
+    renderPersonList();
+  } else if (pIdx !== null) {
+    selectPerson(parseInt(pIdx));
+  } else {
+    renderPersonList();
+  }
+})();
+</script>
+</body>
+</html>
