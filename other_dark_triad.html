@@ -210,28 +210,16 @@
     <h1><span>あの人</span>の「ダークサイド」を<br>行動から読み解く</h1>
     <p class="intro-sub">ナルシシズム・マキャベリズム・サイコパシーの3因子。27問の行動観察で、気になる相手の傾向を科学的に分析します。</p>
 
-    <p class="rel-label">1. あの人との関係を選んでください</p>
-    <div class="rel-options">
-      <button class="rel-btn" id="relLove" onclick="selectRel('love', this)">
-        <span class="rel-icon">💕</span>恋人・<br>パートナー
-      </button>
-      <button class="rel-btn" id="relWork" onclick="selectRel('work', this)">
-        <span class="rel-icon">💼</span>職場の人
-      </button>
-      <button class="rel-btn" id="relFriend" onclick="selectRel('friend', this)">
-        <span class="rel-icon">🤝</span>友人・<br>知人
-      </button>
-    </div>
-
-    <div class="input-group">
-      <label class="input-label" for="otherName">2. あの人の名前（ニックネームでOK）</label>
-      <input class="text-input" id="otherName" type="text" placeholder="例：Aさん、田中さん" maxlength="20" autocomplete="off">
+    <p class="rel-label">診断したい相手を選んでください</p>
+    <div id="personList" style="width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+    <div id="noPersonMsg" style="display:none;font-size:13px;color:var(--dim);text-align:center;margin-bottom:20px;">
+      先に「あの人を診断する」でビッグファイブ診断を行ってください。<br>
+      <a href="other_quiz.html" style="color:#a78bfa;text-decoration:none;">あの人を診断する →</a>
     </div>
 
     <div class="intro-warning">
       <p>⚠️ この診断はあなたの主観的な行動観察に基づきます。スコアは断定的な判断ではなく、関係を振り返るきっかけとしてご活用ください。</p>
     </div>
-    <button class="start-btn" id="startBtn" disabled onclick="startQuiz()">診断スタート</button>
     <p class="intro-note">27問・約6分・無料・登録不要</p>
   </div>
 
@@ -474,31 +462,65 @@ const REL_CONFIG = {
   }
 })();
 
-// ===== 関係選択 =====
-function selectRel(rel, btn) {
-  selectedRel = rel;
-  document.querySelectorAll('.rel-btn').forEach(b => {
-    b.classList.remove('selected', 'sel-love', 'sel-work', 'sel-friend');
+// ===== 人物インデックス（bigfive_other_results の index） =====
+let selectedPersonIdx = -1;
+
+// ===== 人物ピッカーを描画 =====
+function renderPersonList() {
+  const relIcons = { love:'💕', work:'💼', friend:'🤝' };
+  const relLabels = { love:'恋人・パートナー', work:'職場の人', friend:'友人・知人' };
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const list = document.getElementById('personList');
+  const noMsg = document.getElementById('noPersonMsg');
+  const eligible = others.map((r, i) => ({ r, i })).filter(({ r }) => {
+    const rel = r.relation || 'friend';
+    return rel !== 'child46' && rel !== 'child79';
   });
-  btn.classList.add('selected', `sel-${rel}`);
-  checkStartable();
+  if (eligible.length === 0) {
+    list.style.display = 'none';
+    noMsg.style.display = 'block';
+    return;
+  }
+  list.innerHTML = '';
+  eligible.forEach(({ r, i }) => {
+    const rel = r.relation || 'friend';
+    const icon = relIcons[rel] || '👤';
+    const label = relLabels[rel] || rel;
+    const hasDT = !!r.darkTriad;
+    const btn = document.createElement('button');
+    btn.style.cssText = 'width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;text-align:left;color:inherit;font-family:inherit;transition:background 0.15s;';
+    btn.innerHTML = `
+      <span style="font-size:24px;">${icon}</span>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;">${r.name}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${label}${hasDT ? ' · 診断済み' : ''}</div>
+      </div>
+      <span style="font-size:18px;color:var(--dim);">›</span>`;
+    btn.addEventListener('click', () => selectPerson(i));
+    list.appendChild(btn);
+  });
 }
 
-// ===== スタートボタン制御 =====
-document.getElementById('otherName').addEventListener('input', checkStartable);
-function checkStartable() {
-  const name = document.getElementById('otherName').value.trim();
-  document.getElementById('startBtn').disabled = !(selectedRel && name.length > 0);
+// ===== 人物選択 =====
+function selectPerson(idx) {
+  let others = [];
+  try { others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]'); } catch(e) {}
+  const r = others[idx];
+  if (!r) return;
+  selectedPersonIdx = idx;
+  selectedName = r.name;
+  selectedRel = (r.relation === 'child46' || r.relation === 'child79') ? 'friend' : (r.relation || 'friend');
+  startQuiz();
 }
 
 // ===== スタート =====
 function startQuiz() {
-  selectedName = document.getElementById('otherName').value.trim();
   currentQuestions = (selectedRel === 'love') ? QUESTIONS_LOVE : QUESTIONS_WORK;
   answers = new Array(27).fill(null);
   current = 0;
 
-  const cfg = REL_CONFIG[selectedRel];
+  const cfg = REL_CONFIG[selectedRel] || REL_CONFIG.friend;
   const whoBar = document.getElementById('whoBar');
   whoBar.className = 'who-bar ' + cfg.barClass;
   document.getElementById('whoIcon').textContent = cfg.icon;
@@ -695,17 +717,16 @@ function showResult() {
 function saveResult() {
   const s = calcScores();
   const profile = getProfile(s.nPct, s.mPct, s.pPct);
-  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  stored.unshift({
-    name: selectedName,
-    relation: selectedRel,
-    scores: s,
-    profileId: profile.id,
-    profileName: profile.name,
-    timestamp: Date.now()
-  });
-  if (stored.length > 10) stored.length = 10;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+  const dtData = { nPct: s.nPct, mPct: s.mPct, pPct: s.pPct, profileId: profile.id, profileName: profile.name, date: new Date().toISOString() };
+  if (selectedPersonIdx >= 0) {
+    try {
+      const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      if (others[selectedPersonIdx]) {
+        others[selectedPersonIdx].darkTriad = dtData;
+        localStorage.setItem('bigfive_other_results', JSON.stringify(others));
+      }
+    } catch(e) {}
+  }
   document.getElementById('saveBtn').textContent = '保存しました ✓';
   document.getElementById('saveBtn').disabled = true;
 }
@@ -714,17 +735,27 @@ function saveResult() {
 function retryQuiz() {
   selectedRel = null;
   selectedName = '';
+  selectedPersonIdx = -1;
   current = 0;
   answers = [];
-  document.querySelectorAll('.rel-btn').forEach(b => b.classList.remove('selected', 'sel-love', 'sel-work', 'sel-friend'));
-  document.getElementById('otherName').value = '';
-  document.getElementById('startBtn').disabled = true;
   document.getElementById('resultArea').classList.remove('active');
   document.getElementById('introArea').style.display = 'flex';
   document.getElementById('saveBtn').textContent = '結果を保存する';
   document.getElementById('saveBtn').disabled = false;
+  renderPersonList();
   window.scrollTo(0, 0);
 }
+
+// ===== 初期化 =====
+(function init() {
+  const params = new URLSearchParams(location.search);
+  const pIdx = params.get('person');
+  if (pIdx !== null) {
+    selectPerson(parseInt(pIdx));
+  } else {
+    renderPersonList();
+  }
+})();
 </script>
 </body>
 </html>

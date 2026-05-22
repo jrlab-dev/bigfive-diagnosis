@@ -1025,6 +1025,9 @@
     </div>
   </div>
 
+  <!-- ダークトライアドセクション（あの人モードのみ） -->
+  <div id="darkTriadSection" style="display:none; width:100%; max-width:480px; margin-bottom:20px;"></div>
+
   <!-- ファセット分析（120問版のみ） -->
   <div class="facet-section" id="facetSection" style="display:none;">
     <button class="btn btn-facet" id="facetBtn">
@@ -1582,6 +1585,7 @@ const isChildMode = isOtherMode && (relation === 'child46' || relation === 'chil
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
 const isSavedView = params.get('saved') === '1';
 const isSharedView = params.get('from') === 'share';
+const personIdx = params.get('idx') !== null ? parseInt(params.get('idx')) : -1;
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
 const facetsParam = params.get('facets'); // 120問版: 30桁のファセットスコア
@@ -2269,6 +2273,59 @@ if (isOtherMode) {
   if (weakBtnText) weakBtnText.textContent = personName + 'さんの弱点を知る';
   const weakTitle = document.querySelector('.weakness-card-title');
   if (weakTitle) weakTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> ' + personName + 'さんの弱点';
+
+  // ダークトライアドセクション
+  if (!isChildMode) {
+    const dtSection = document.getElementById('darkTriadSection');
+    if (dtSection) {
+      let dtData = null;
+      if (personIdx >= 0) {
+        try {
+          const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+          if (others[personIdx]) dtData = others[personIdx].darkTriad || null;
+        } catch(e) {}
+      }
+      const dtUrl = personIdx >= 0
+        ? `other_dark_triad.html?person=${personIdx}`
+        : `other_dark_triad.html`;
+      const isLight = document.body.classList.contains('theme-light');
+      if (dtData) {
+        const profileLabels = { clean:'クリーン', narcissist:'ナルシスト', machiavellian:'マキャベリスト', psychopath:'サイコパス', dark_full:'ダークフル' };
+        const pLabel = profileLabels[dtData.profileId] || dtData.profileId || '';
+        dtSection.innerHTML = `
+          <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:18px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <p style="font-size:13px;font-weight:700;color:#a78bfa;margin:0;display:flex;align-items:center;gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                ${personName}さんのダークトライアド
+              </p>
+              <a href="${dtUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
+            </div>
+            <p style="font-size:12px;color:var(--dim);margin:0 0 12px 0;">プロファイル：<strong style="color:var(--text);">${pLabel}</strong></p>
+            ${[['N','ナルシシズム',dtData.nPct],['M','マキャベリズム',dtData.mPct],['P','サイコパシー',dtData.pPct]].map(([k,label,pct])=>`
+            <div style="margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-bottom:4px;"><span>${label}</span><span>${pct}%</span></div>
+              <div style="background:rgba(255,255,255,0.08);border-radius:999px;height:6px;">
+                <div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:${pct}%;"></div>
+              </div>
+            </div>`).join('')}
+          </div>`;
+      } else {
+        dtSection.innerHTML = `
+          <a href="${dtUrl}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:16px;text-decoration:none;color:inherit;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${personName}さんのダークトライアドを診断</div>
+                <div style="font-size:12px;color:var(--dim);margin-top:2px;">27問の行動観察でダークサイドを分析</div>
+              </div>
+            </div>
+            <span style="font-size:18px;color:var(--dim);">›</span>
+          </a>`;
+      }
+      dtSection.style.display = 'block';
+    }
+  }
 }
 
 // ===== 相性スコア表示（他者診断から来た場合） =====
