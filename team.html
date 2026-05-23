@@ -1652,7 +1652,7 @@ function renderResults() {
 
   // ビッグファイブマン分析：発動条件チェック
   const bfmData = loadBigFiveManData(selected);
-  if (canBigFiveMan(bfmData)) {
+  if (isUnlocked('bigfiveman') && canBigFiveMan(bfmData)) {
     document.getElementById('bigfivemanBtn').style.display = 'block';
   }
 
