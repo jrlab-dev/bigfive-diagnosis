@@ -1007,6 +1007,9 @@
     </div>
   </div>
 
+  <!-- 統合スコアセクション（あの人モードのみ・JSで制御） -->
+  <div id="integratedScoreSection" style="display:none;max-width:480px;width:100%;margin:0 auto 4px;"></div>
+
   <!-- 弱点カード -->
   <div class="weakness-section" id="weaknessSection">
     <button class="btn btn-weakness" id="weaknessBtn">
@@ -3815,5 +3818,111 @@ if (isOtherMode) {
 </script>
 
 <script src="nav.js"></script>
+
+<!-- ===== 統合スコア機能（あの人モード × 本人共有データ） ===== -->
+<script>
+(function() {
+  if (!isOtherMode || isSharedView) return;
+
+  var section = document.getElementById('integratedScoreSection');
+  if (!section) return;
+
+  var name = personName;
+  var others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+  var sharedRecord = others.find(function(r) { return r.name === name && r.source === 'shared'; });
+
+  // 現在のあの人スコア（URLから）
+  var otherScores = { O: O, C: C, E: E, A: A, N: N };
+
+  // 研究に基づく重み（他者評価：本人評価）
+  var WEIGHTS = {
+    O: { other: 0.3, self: 0.7 },
+    C: { other: 0.7, self: 0.3 },
+    E: { other: 0.6, self: 0.4 },
+    A: { other: 0.6, self: 0.4 },
+    N: { other: 0.3, self: 0.7 }
+  };
+  var WEIGHT_LABELS = { O: '本人評価重視', C: '他者評価重視', E: '他者評価重視', A: '他者評価重視', N: '本人評価重視' };
+
+  section.style.display = 'block';
+
+  if (!sharedRecord) {
+    // 本人共有データなし → グレーアウト表示
+    section.innerHTML =
+      '<div style="border:1.5px dashed rgba(139,92,246,0.3);border-radius:12px;padding:16px;text-align:center;">' +
+        '<p style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:10px;">📊 統合スコア（研究に基づく精度向上）</p>' +
+        '<button disabled style="width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:700;background:#374151;color:#6b7280;cursor:not-allowed;">本人に共有してもらうと解放されます</button>' +
+        '<p style="font-size:12px;color:var(--dim);margin-top:8px;">' + name + 'さんが自分の診断結果を共有してくれると、あなたの診断と統合した最も精度の高いスコアが出ます</p>' +
+      '</div>';
+    return;
+  }
+
+  // 本人共有データあり → 統合ボタン有効
+  var selfCode = sharedRecord.code;
+  var selfScores = {
+    O: parseInt(selfCode[0]), C: parseInt(selfCode[1]),
+    E: parseInt(selfCode[2]), A: parseInt(selfCode[3]), N: parseInt(selfCode[4])
+  };
+
+  var integrated = false;
+  var FACTOR_COLORS = { O: 'var(--c-O)', C: 'var(--c-C)', E: 'var(--c-E)', A: 'var(--c-A)', N: 'var(--c-N)' };
+
+  section.innerHTML =
+    '<div style="border:1.5px solid rgba(139,92,246,0.5);border-radius:12px;padding:16px;text-align:center;background:rgba(139,92,246,0.05);">' +
+      '<p style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:10px;">📊 統合スコア（研究に基づく精度向上）</p>' +
+      '<button id="integrateBtn" style="width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;">' +
+        'あなたの診断 × 本人の自己評価を統合する' +
+      '</button>' +
+      '<p id="integrateHint" style="font-size:12px;color:var(--dim);margin-top:8px;">E・C・Aは他者評価が、N・Oは本人評価が精度が高いという研究に基づいて計算します</p>' +
+    '</div>';
+
+  document.getElementById('integrateBtn').addEventListener('click', function() {
+    var btn = this;
+    var hint = document.getElementById('integrateHint');
+
+    if (integrated) {
+      renderScores();
+      btn.textContent = 'あなたの診断 × 本人の自己評価を統合する';
+      btn.style.background = 'linear-gradient(135deg,#8b5cf6,#3b82f6)';
+      hint.innerHTML = 'E・C・Aは他者評価が、N・Oは本人評価が精度が高いという研究に基づいて計算します';
+      integrated = false;
+      return;
+    }
+
+    // 統合スコア計算
+    var intScores = {};
+    ['O','C','E','A','N'].forEach(function(f) {
+      var w = WEIGHTS[f];
+      intScores[f] = Math.round((otherScores[f] * w.other + selfScores[f] * w.self) * 10) / 10;
+    });
+
+    // バーグラフをアニメーション更新
+    var factors = [
+      { key: 'O' }, { key: 'C' }, { key: 'E' }, { key: 'A' }, { key: 'N' }
+    ];
+    var html = '';
+    factors.forEach(function(f) {
+      var val = intScores[f.key];
+      var pct = val * 20;
+      var color = FACTOR_COLORS[f.key];
+      var tag = WEIGHT_LABELS[f.key];
+      html += '<div class="score-item">' +
+        '<span class="score-label" style="color:' + color + '">' + f.key + '</span>' +
+        '<div class="score-bar-bg"><div class="score-bar" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+        '<span style="font-size:10px;color:' + color + ';min-width:24px;text-align:right;">' + val + '</span>' +
+        '</div>';
+    });
+    document.getElementById('scores').innerHTML = html;
+
+    btn.textContent = '元のスコアに戻す';
+    btn.style.background = '#374151';
+    hint.innerHTML =
+      '<span style="color:#a78bfa;font-weight:700;">統合スコア表示中</span>　' +
+      '<span style="color:var(--dim);">O・N → 本人70% ／ E・C・A → あなたの診断70%</span>';
+    integrated = true;
+  });
+})();
+</script>
+
 </body>
 </html>
