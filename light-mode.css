@@ -2278,3 +2278,16 @@ body.theme-light .selfprofile-beta-link {
   background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); color: rgba(0,0,0,0.35);
 }
 body.theme-light .selfprofile-beta-link:hover { background: rgba(0,0,0,0.08); color: rgba(0,0,0,0.5); }
+
+/* ─── 薄紫テキスト（#a78bfa）のライトモード対応 ─── */
+/* CSSクラス経由 */
+body.theme-light .detail-label { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .cross-badge { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .rank-a { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .meta-skill { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .lv-mid { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .cross-box h3 { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .page-nav-btn:hover:not(:disabled) { color: oklch(0.42 0.22 275) !important; }
+body.theme-light .diag-lock-badge { color: oklch(0.42 0.22 275) !important; }
+/* インラインスタイル直書き（属性セレクタで一括対応） */
+body.theme-light [style*="color:#a78bfa"] { color: oklch(0.42 0.22 275) !important; }
