@@ -1063,6 +1063,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：総合レポートとは　10種類の診断が「一つの人物像」に収束する仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sogo-report-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：チーム相性診断とは　性格で読む「合う組み合わせ」の科学 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/team-compatibility.html</loc>
