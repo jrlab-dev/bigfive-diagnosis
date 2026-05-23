@@ -483,63 +483,76 @@ body.theme-light .btn-reselect:hover {
   color: var(--text) !important;
 }
 
-/* エンタメモード */
-body.theme-light .btn-entertain {
+/* ビッグファイブマン分析 */
+body.theme-light .btn-bigfiveman {
   color: oklch(0.42 0.22 300) !important;
   background: oklch(0.58 0.22 300 / 0.07) !important;
   border-color: oklch(0.58 0.22 300 / 0.35) !important;
 }
-body.theme-light .btn-entertain:hover {
+body.theme-light .btn-bigfiveman:hover {
   background: oklch(0.58 0.22 300 / 0.13) !important;
 }
-body.theme-light .entertain-card {
+body.theme-light .bigfiveman-card {
   background: linear-gradient(145deg, oklch(0.58 0.22 300 / 0.07), oklch(0.58 0.18 270 / 0.05)) !important;
   border-color: oklch(0.58 0.22 300 / 0.3) !important;
 }
-body.theme-light .entertain-disclaimer {
+body.theme-light .bigfiveman-disclaimer {
   background: oklch(0.93 0.02 270) !important;
   color: var(--dim) !important;
 }
-body.theme-light .entertain-type-wrap {
+body.theme-light .bigfiveman-type-wrap {
   border-bottom-color: oklch(0.58 0.22 300 / 0.15) !important;
 }
-body.theme-light .entertain-type-name {
+body.theme-light .bigfiveman-type-name {
   background: linear-gradient(135deg, oklch(0.42 0.22 300), oklch(0.42 0.18 270)) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
 }
-body.theme-light .entertain-type-desc,
-body.theme-light .entertain-type-label,
-body.theme-light .entertain-members-title {
+body.theme-light .bigfiveman-type-desc,
+body.theme-light .bigfiveman-type-label,
+body.theme-light .bigfiveman-members-title {
   color: var(--dim) !important;
 }
-body.theme-light .entertain-pattern.warning {
+body.theme-light .bigfiveman-warning.danger {
   background: oklch(0.62 0.2 30 / 0.08) !important;
   border-color: oklch(0.62 0.2 30 / 0.2) !important;
   color: oklch(0.42 0.15 30) !important;
 }
-body.theme-light .entertain-pattern.caution {
+body.theme-light .bigfiveman-warning.caution {
   background: oklch(0.82 0.16 85 / 0.1) !important;
   border-color: oklch(0.82 0.16 85 / 0.2) !important;
   color: oklch(0.5 0.12 85) !important;
 }
-body.theme-light .entertain-pattern.positive {
+body.theme-light .bigfiveman-warning.positive {
   background: oklch(0.7 0.17 162 / 0.08) !important;
   border-color: oklch(0.7 0.17 162 / 0.18) !important;
   color: oklch(0.42 0.15 162) !important;
 }
-body.theme-light .entertain-member-row {
+body.theme-light .bigfiveman-pair-warning {
+  background: oklch(0.62 0.2 30 / 0.07) !important;
+  border-color: oklch(0.62 0.2 30 / 0.18) !important;
+}
+body.theme-light .bigfiveman-pair-text {
+  color: oklch(0.42 0.15 30) !important;
+}
+body.theme-light .bigfiveman-pair-text strong {
+  color: oklch(0.38 0.18 30) !important;
+}
+body.theme-light .bigfiveman-member-row {
   background: oklch(0.58 0.22 300 / 0.05) !important;
   border-color: oklch(0.58 0.22 300 / 0.12) !important;
 }
-body.theme-light .entertain-member-name { color: var(--text) !important; }
-body.theme-light .entertain-mini-label,
-body.theme-light .entertain-mini-val { color: var(--dim) !important; }
-body.theme-light .entertain-mini-track {
+body.theme-light .bigfiveman-member-name { color: var(--text) !important; }
+body.theme-light .bigfiveman-mini-label,
+body.theme-light .bigfiveman-mini-val { color: var(--dim) !important; }
+body.theme-light .bigfiveman-mini-track {
   background: oklch(0.88 0.03 270 / 0.4) !important;
 }
-body.theme-light .entertain-no-data { color: var(--dim) !important; }
-body.theme-light .entertain-no-data a { color: oklch(0.42 0.22 300) !important; }
+body.theme-light .bigfiveman-btn-revert {
+  background: oklch(0.93 0.02 270) !important;
+  border-color: var(--card-border) !important;
+  color: var(--dim) !important;
+}
 
 /* Dラボバナー */
 body.theme-light .dlab-banner {

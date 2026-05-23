@@ -603,8 +603,8 @@
     padding: 8px 0;
   }
 
-  /* エンタメモードボタン */
-  .btn-entertain {
+  /* ビッグファイブマン分析ボタン */
+  .btn-bigfiveman {
     display: block;
     width: 100%;
     padding: 14px;
@@ -619,13 +619,13 @@
     transition: all 0.2s;
     margin-top: 12px;
   }
-  .btn-entertain:hover {
+  .btn-bigfiveman:hover {
     background: rgba(139,92,246,0.15);
     border-color: rgba(139,92,246,0.7);
   }
 
-  /* エンタメカード */
-  .entertain-card {
+  /* ビッグファイブマンカード */
+  .bigfiveman-card {
     background: linear-gradient(145deg, rgba(88,28,135,0.18) 0%, rgba(30,10,80,0.15) 100%);
     border: 1px solid rgba(139,92,246,0.35);
     border-radius: 16px;
@@ -633,22 +633,27 @@
     margin-bottom: 20px;
     backdrop-filter: blur(8px);
   }
-  .entertain-header {
+  .bigfiveman-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 4px;
+    margin-bottom: 12px;
   }
-  .entertain-label {
+  .bigfiveman-label {
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: #c084fc;
     padding: 2px 8px;
     border: 1px solid rgba(192,132,252,0.4);
     border-radius: 999px;
   }
-  .entertain-disclaimer {
+  .bigfiveman-score-change {
+    font-size: 13px;
+    font-weight: 700;
+    margin-left: auto;
+  }
+  .bigfiveman-disclaimer {
     font-size: 11px;
     color: var(--dim);
     line-height: 1.7;
@@ -657,19 +662,19 @@
     background: rgba(255,255,255,0.04);
     border-radius: 8px;
   }
-  .entertain-type-wrap {
+  .bigfiveman-type-wrap {
     text-align: center;
     margin-bottom: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid rgba(139,92,246,0.15);
   }
-  .entertain-type-label {
+  .bigfiveman-type-label {
     font-size: 11px;
     color: #c084fc;
     font-weight: 600;
     margin-bottom: 6px;
   }
-  .entertain-type-name {
+  .bigfiveman-type-name {
     font-size: 22px;
     font-weight: 900;
     background: linear-gradient(135deg, #c084fc, #818cf8);
@@ -678,85 +683,85 @@
     background-clip: text;
     margin-bottom: 8px;
   }
-  .entertain-type-desc {
+  .bigfiveman-type-desc {
     font-size: 13px;
     line-height: 1.8;
     color: var(--dim);
   }
-  .entertain-patterns {
+  .bigfiveman-warnings {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-bottom: 16px;
   }
-  .entertain-pattern {
+  .bigfiveman-warning {
     font-size: 13px;
     line-height: 1.75;
     padding: 12px 14px;
     border-radius: 10px;
   }
-  .entertain-pattern.warning {
+  .bigfiveman-warning.danger {
     background: rgba(239,68,68,0.1);
     border: 1px solid rgba(239,68,68,0.25);
     color: #fca5a5;
   }
-  .entertain-pattern.caution {
+  .bigfiveman-warning.caution {
     background: rgba(251,191,36,0.1);
     border: 1px solid rgba(251,191,36,0.2);
     color: #fde68a;
   }
-  .entertain-pattern.positive {
+  .bigfiveman-warning.positive {
     background: rgba(16,185,129,0.1);
     border: 1px solid rgba(16,185,129,0.2);
     color: #6ee7b7;
   }
-  .entertain-members-title {
+  .bigfiveman-members-title {
     font-size: 13px;
     font-weight: 700;
     margin-bottom: 10px;
     color: var(--dim);
   }
-  .entertain-member-row {
+  .bigfiveman-member-row {
     padding: 10px 14px;
     background: rgba(139,92,246,0.06);
     border: 1px solid rgba(139,92,246,0.1);
     border-radius: 10px;
     margin-bottom: 8px;
   }
-  .entertain-member-row:last-child { margin-bottom: 0; }
-  .entertain-member-name {
+  .bigfiveman-member-row:last-child { margin-bottom: 0; }
+  .bigfiveman-member-name {
     font-size: 13px;
     font-weight: 700;
     margin-bottom: 6px;
   }
-  .entertain-mini-bars {
+  .bigfiveman-mini-bars {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
-  .entertain-mini-row {
+  .bigfiveman-mini-row {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 11px;
   }
-  .entertain-mini-label {
-    width: 56px;
+  .bigfiveman-mini-label {
+    width: 80px;
     color: var(--dim);
     flex-shrink: 0;
   }
-  .entertain-mini-track {
+  .bigfiveman-mini-track {
     flex: 1;
     height: 6px;
     background: rgba(255,255,255,0.06);
     border-radius: 3px;
     overflow: hidden;
   }
-  .entertain-mini-fill {
+  .bigfiveman-mini-fill {
     height: 100%;
     border-radius: 3px;
   }
-  .entertain-mini-val {
+  .bigfiveman-mini-val {
     font-size: 11px;
     font-weight: 600;
     width: 40px;
@@ -764,17 +769,42 @@
     flex-shrink: 0;
     color: var(--dim);
   }
-  .entertain-no-data {
-    text-align: center;
-    font-size: 13px;
-    color: var(--dim);
-    padding: 12px 0;
-    line-height: 1.8;
+  .bigfiveman-pair-warnings {
+    margin-bottom: 16px;
   }
-  .entertain-no-data a {
-    color: #c084fc;
-    text-decoration: none;
+  .bigfiveman-pair-warning {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .bigfiveman-pair-warning:last-child { margin-bottom: 0; }
+  .bigfiveman-pair-icon { flex-shrink: 0; font-size: 15px; }
+  .bigfiveman-pair-text { flex: 1; color: #fca5a5; }
+  .bigfiveman-pair-text strong { color: #f87171; }
+  .bigfiveman-btn-revert {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 12px;
     font-weight: 600;
+    color: var(--dim);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s;
+  }
+  .bigfiveman-btn-revert:hover {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
   }
 
   /* Dラボ紹介バナー */
@@ -1513,9 +1543,9 @@ function renderResults() {
     <div class="team-card">
       <p class="team-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> チーム全体スコア</p>
       <div class="team-score-area">
-        <div class="team-score-value">${score}</div>
+        <div class="team-score-value" id="teamScoreDisplay">${score}</div>
         <p class="team-score-label">/ 100点</p>
-        <span class="team-score-rank ${summary.rankClass}">${summary.rank}ランク</span>
+        <span class="team-score-rank ${summary.rankClass}" id="teamRankDisplay">${summary.rank}ランク</span>
       </div>
       <div class="factor-rows">
         ${['O','C','E','A','N'].map(f => {
@@ -1561,9 +1591,9 @@ function renderResults() {
     <!-- ポジションアドバイス -->
     ${genPositionAdviceHtml(selected, score)}
 
-    <!-- エンタメモード -->
-    <div id="entertainSection"></div>
-    <button class="btn-entertain" id="entertainBtn">🎭 その他の心理学も反映する（EQ・ダークトライアド エンタメモード）</button>
+    <!-- ビッグファイブマン分析 -->
+    <div id="bigfivemanSection"></div>
+    <button class="btn-bigfiveman" id="bigfivemanBtn" style="display:none;">🦸 ビッグファイブマン分析（EQ・ダークトライアドを反映）</button>
 
     <button class="btn-save-team" id="saveTeamBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> このチームをマイページに保存する</button>
     <button class="btn-reselect" id="reselectBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> メンバーを選び直す</button>
@@ -1600,12 +1630,32 @@ function renderResults() {
     btn.disabled = true;
   });
 
-  // エンタメモードボタン
-  document.getElementById('entertainBtn').addEventListener('click', () => {
-    const membersWithData = loadEntertainData(selected);
-    const character = genTeamCharacter(membersWithData);
-    document.getElementById('entertainSection').innerHTML = genEntertainHtml(membersWithData, character);
-    document.getElementById('entertainBtn').style.display = 'none';
+  // ビッグファイブマン分析：発動条件チェック
+  const bfmData = loadBigFiveManData(selected);
+  if (canBigFiveMan(bfmData)) {
+    document.getElementById('bigfivemanBtn').style.display = 'block';
+  }
+
+  // ビッグファイブマン分析ボタン
+  let bfmActive = false;
+  document.getElementById('bigfivemanBtn').addEventListener('click', () => {
+    if (!bfmActive) {
+      const bonus = calcEqDtBonus(bfmData);
+      const newScore = Math.max(0, Math.min(100, score + bonus));
+      const newSummary = genSummary(newScore, avg, variance, bestPair, worstPair, selected.length);
+      animateScoreValue(score, newScore);
+      updateRankDisplay(newSummary.rank, newSummary.rankClass);
+      const warnings = genPairWarnings(bfmData);
+      document.getElementById('bigfivemanSection').innerHTML = genBigFiveManHtml(bfmData, warnings, bonus, newScore);
+      document.getElementById('bigfivemanBtn').textContent = '↩ ビッグファイブのみに戻す';
+      bfmActive = true;
+    } else {
+      animateScoreValue(parseInt(document.getElementById('teamScoreDisplay').textContent), score);
+      updateRankDisplay(summary.rank, summary.rankClass);
+      document.getElementById('bigfivemanSection').innerHTML = '';
+      document.getElementById('bigfivemanBtn').textContent = '🦸 ビッグファイブマン分析（EQ・ダークトライアドを反映）';
+      bfmActive = false;
+    }
   });
 
   // 再選択ボタン
@@ -1616,8 +1666,8 @@ function renderResults() {
   });
 }
 
-// ===== エンタメモード：データ取得 =====
-function loadEntertainData(members) {
+// ===== ビッグファイブマン分析：データ取得 =====
+function loadBigFiveManData(members) {
   let myEq = null, myDt = null;
   try { myEq = JSON.parse(localStorage.getItem('eq_result') || 'null'); } catch(e) {}
   try { myDt = JSON.parse(localStorage.getItem('dark_triad_result') || 'null'); } catch(e) {}
@@ -1639,180 +1689,202 @@ function loadEntertainData(members) {
   });
 }
 
-// ===== エンタメモード：チームキャラクター判定 =====
-function genTeamCharacter(membersWithData) {
-  const eqMembers = membersWithData.filter(m => m.eq && m.eq.overall != null);
-  const dtMembers = membersWithData.filter(m => m.dt && m.dt.nPct != null);
+// ===== ビッグファイブマン分析：発動条件 =====
+function canBigFiveMan(bfmData) {
+  const myData = bfmData.find(m => m.type === 'my');
+  const myHasData = myData && (myData.eq || myData.dt);
+  const othersWithData = bfmData.filter(m => m.type !== 'my' && (m.eq || m.dt));
+  return myHasData && othersWithData.length >= 1;
+}
 
-  const eqAvg = eqMembers.length > 0
-    ? eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length
-    : null;
+// ===== ビッグファイブマン分析：スコア補正計算 =====
+function calcEqDtBonus(bfmData) {
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  let bonus = 0;
 
-  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  // EQ補正
+  if (eqMembers.length >= 2) {
+    const eqAvg = eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length;
+    if (eqAvg >= 4.0) bonus += 6;
+    else if (eqAvg >= 3.5) bonus += 3;
+    else if (eqAvg <= 2.0) bonus -= 4;
+  }
+
+  // DT補正
   const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
   const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
   const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
 
-  const patterns = [];
+  const eqHighCount = eqMembers.filter(m => m.eq.overall >= 3.5).length;
 
-  // パターン検出（文脈込み）
-  if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.2) {
-    patterns.push({
-      type: 'warning',
-      text: `${machiHigh.map(m => m.name).join('・')}さんのマキャベリアン傾向と、チームの高いEQが組み合わさると、感情を読む力が一方的に利用される「搾取的ダイナミクス」が生じやすいです。外部交渉では強みになる一方、内部の信頼構築を意識的に行うことが重要です。`
-    });
+  if (machiHigh.length >= 1 && eqHighCount >= 2) bonus -= 8; // 搾取リスク
+  if (narcHigh.length >= 2) bonus -= 8;                       // 覇権争いリスク
+  if (psychHigh.length >= 1) bonus -= 4;                      // 信頼毀損リスク
+
+  // EQ高＋DT全員低い → 安定ボーナス
+  if (eqMembers.length >= 2) {
+    const eqAvg = eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length;
+    if (eqAvg >= 3.5 && dtMembers.length >= 1 && anyDtHigh.length === 0) bonus += 4;
   }
 
-  if (narcHigh.length === 1 && eqMembers.length >= 2 && eqAvg !== null && eqAvg >= 3.2) {
-    patterns.push({
-      type: 'caution',
-      text: `${narcHigh[0].name}さんの強いリーダーシップと、周囲の共感力の高さは、短期的なプロジェクトで非常に効果的です。ただし長期になると「引っ張られ疲れ」が起きやすいため、定期的に役割と貢献を再確認しましょう。`
-    });
-  }
-
-  if (narcHigh.length >= 2) {
-    patterns.push({
-      type: 'warning',
-      text: `強いリーダーシップ傾向を持つメンバーが複数いるチームです。方向性が合っているうちは突破力がありますが、意見が割れたときの内部対立リスクが高くなります。意思決定フローを明文化しておくことが有効です。`
-    });
-  }
-
-  if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= Math.floor(membersWithData.length / 2)) {
-    patterns.push({
-      type: 'positive',
-      text: `EQが高く、ダークトライアド傾向が低い組み合わせは「長期的に持続するチーム」の典型パターンです。信頼関係が自然に育ちやすく、メンバーの定着率も高くなる傾向があります。`
-    });
-  }
-
-  if (eqAvg !== null && eqAvg >= 4.0 && anyDtHigh.length === 0) {
-    patterns.push({
-      type: 'caution',
-      text: `全体的にEQが高いチームは、互いに気を遣い合うあまり「創造的な対立」が起きにくくなることがあります。意図的に反論役（デビルズアドボケイト）を設けるなど、建設的な摩擦を生む仕組みを作ると効果的です。`
-    });
-  }
-
-  if (psychHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
-    patterns.push({
-      type: 'caution',
-      text: `高ストレス環境での冷静な判断力が強みになりうる一方、長期的なチームの信頼関係が傷つきやすいパターンです。短期・危機対応に強い反面、継続的な関係構築には工夫が必要です。`
-    });
-  }
-
-  // チームタイプ決定
-  let typeName = null, typeDesc = null;
-  if (eqMembers.length === 0 && dtMembers.length === 0) {
-    typeName = null;
-  } else if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
-    typeName = '安定・持続型';
-    typeDesc = '感情的な共感力が高く、ダークトライアド傾向も低い組み合わせです。長期プロジェクトや信頼を要する仕事で真価を発揮します。急成長よりも着実な積み上げが得意です。';
-  } else if (eqAvg !== null && eqAvg >= 4.0) {
-    typeName = '調和型';
-    typeDesc = '感情知性が高く、対立をうまく収められるチームです。人間関係のトラブルが少なく、相談しやすい空気があります。意見を積極的に言い合える場を作ると、さらに力が伸びます。';
-  } else if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
-    typeName = '戦略×共感型';
-    typeDesc = '交渉力・洞察力と人への共感力が混在したチームです。外部との折衝や組織政治で強みを発揮します。内部の信頼構築が最大の課題であり、成長のカギです。';
-  } else if (narcHigh.length >= 1 && eqAvg !== null && eqAvg >= 2.5) {
-    typeName = 'エネルギー型';
-    typeDesc = '強い推進力と共感力が混在したチームです。短期的な成果を出すのが得意で、場の勢いを作れます。長期的にはエネルギーの持続性を意識した役割分担が鍵になります。';
-  } else if (anyDtHigh.length >= 2) {
-    typeName = '競争型';
-    typeDesc = '個性と主張の強いメンバーが集まったチームです。明確なルール・役割・評価基準を設けることで、競争が内部崩壊ではなく成果に向かいます。';
-  } else if (eqAvg !== null && eqAvg >= 2.5) {
-    typeName = 'バランス型';
-    typeDesc = '多様な特性が混在したチームです。状況に応じて役割を柔軟に変えられる適応力があります。';
-  } else {
-    typeName = 'データ収集中';
-    typeDesc = 'まだ診断データが少ないため、より詳しい分析にはEQ・ダークトライアド診断を増やしてみてください。';
-  }
-
-  return { typeName, typeDesc, patterns, eqAvg, eqCount: eqMembers.length, dtCount: dtMembers.length };
+  return bonus;
 }
 
-// ===== エンタメモード：HTML生成 =====
-function genEntertainHtml(membersWithData, character) {
-  const hasAny = membersWithData.some(m => m.eq || m.dt);
+// ===== ビッグファイブマン分析：ペア別警告 =====
+function genPairWarnings(bfmData) {
+  const warnings = [];
+  const n = bfmData.length;
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const a = bfmData[i], b = bfmData[j];
+      const aHighEq  = a.eq && a.eq.overall >= 3.5;
+      const bHighEq  = b.eq && b.eq.overall >= 3.5;
+      const aHighMachi = a.dt && a.dt.mPct >= 65;
+      const bHighMachi = b.dt && b.dt.mPct >= 65;
+      const aHighNarc  = a.dt && a.dt.nPct >= 65;
+      const bHighNarc  = b.dt && b.dt.nPct >= 65;
+      const aHighPsych = a.dt && a.dt.pPct >= 70;
+      const bHighPsych = b.dt && b.dt.pPct >= 70;
 
-  if (!hasAny) {
-    const memberCount = membersWithData.length;
-    return `
-      <div class="entertain-card">
-        <div class="entertain-header">
-          <span class="entertain-label">エンタメモード</span>
-        </div>
-        <div class="entertain-no-data" style="margin-top:12px;">
-          <p>このチームメンバーのEQ・ダークトライアド診断データがまだありません。</p>
-          <p style="margin-top:8px;"><a href="eq.html">EQ診断を受ける →</a>　<a href="dark-triad.html">ダークトライアド診断を受ける →</a></p>
-          <p style="margin-top:8px;font-size:11px;">※ あの人のデータは「あの人のEQ診断」「あの人のダークトライアド診断」から追加できます</p>
-        </div>
-      </div>
-    `;
+      if (bHighMachi && aHighEq) {
+        warnings.push({ type: 'danger', text: `<strong>${b.name}さんのマキャベリアン傾向</strong>が、<strong>${a.name}さんの高いEQ</strong>を利用しやすい関係です。内部の信頼に注意が必要です。` });
+      }
+      if (aHighMachi && bHighEq) {
+        warnings.push({ type: 'danger', text: `<strong>${a.name}さんのマキャベリアン傾向</strong>が、<strong>${b.name}さんの高いEQ</strong>を利用しやすい関係です。内部の信頼に注意が必要です。` });
+      }
+      if (aHighNarc && bHighNarc) {
+        warnings.push({ type: 'danger', text: `<strong>${a.name}さんと${b.name}さん</strong>は両者ともリーダーシップ傾向が強く、方向性が割れたときに覇権争いが起きやすいです。` });
+      }
+      if (aHighPsych && bHighEq) {
+        warnings.push({ type: 'caution', text: `<strong>${a.name}さんのサイコパシー傾向</strong>が長期化すると、<strong>${b.name}さん</strong>のような共感力の高いメンバーへの負担が蓄積しやすいです。` });
+      }
+      if (bHighPsych && aHighEq) {
+        warnings.push({ type: 'caution', text: `<strong>${b.name}さんのサイコパシー傾向</strong>が長期化すると、<strong>${a.name}さん</strong>のような共感力の高いメンバーへの負担が蓄積しやすいです。` });
+      }
+    }
+  }
+  return warnings;
+}
+
+// ===== ビッグファイブマン分析：スコアアニメーション =====
+function animateScoreValue(from, to, duration = 700) {
+  const el = document.getElementById('teamScoreDisplay');
+  if (!el) return;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    el.textContent = Math.round(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+    else el.textContent = to;
+  }
+  requestAnimationFrame(tick);
+}
+
+function updateRankDisplay(rank, rankClass) {
+  const el = document.getElementById('teamRankDisplay');
+  if (!el) return;
+  el.textContent = rank + 'ランク';
+  el.className = `team-score-rank ${rankClass}`;
+}
+
+// ===== ビッグファイブマン分析：HTML生成 =====
+function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  const eqAvg = eqMembers.length > 0
+    ? eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length : null;
+  const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+
+  // チームタイプ判定
+  let typeName, typeDesc;
+  if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
+    typeName = '安定・持続型';
+    typeDesc = 'EQが高くダークトライアド傾向も低い、長期プロジェクトに最も向いた組み合わせです。信頼関係が自然に育ちやすく、持続力があります。';
+  } else if (eqAvg !== null && eqAvg >= 4.0) {
+    typeName = '調和型';
+    typeDesc = '感情知性が高く、対立を収める力があります。創造的な摩擦を意図的に作ると、さらに力が伸びます。';
+  } else if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
+    typeName = '戦略×共感型';
+    typeDesc = '交渉力と共感力が混在した、外部折衝に強いチームです。内部の信頼構築が成長のカギです。';
+  } else if (narcHigh.length >= 1 && eqAvg !== null && eqAvg >= 2.5) {
+    typeName = 'エネルギー型';
+    typeDesc = '強い推進力と共感力が混在し、短期的な成果を出すのが得意なチームです。';
+  } else if (anyDtHigh.length >= 2) {
+    typeName = '競争型';
+    typeDesc = '個性の強いメンバーが集まったチームです。ルールと役割を明確にすることで力を発揮します。';
+  } else {
+    typeName = 'バランス型';
+    typeDesc = '多様な特性が混在した、状況適応力のあるチームです。';
   }
 
-  // チームタイプ
-  const typeHtml = character.typeName ? `
-    <div class="entertain-type-wrap">
-      <p class="entertain-type-label">チームキャラクター</p>
-      <p class="entertain-type-name">${character.typeName}</p>
-      <p class="entertain-type-desc">${character.typeDesc}</p>
-    </div>
-  ` : '';
+  // スコア補正表示
+  const bonusSign = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+  const bonusColor = bonus >= 0 ? '#34d399' : '#f87171';
 
-  // パターンコメント
-  const patternsHtml = character.patterns.length > 0 ? `
-    <div class="entertain-patterns">
-      ${character.patterns.map(p => `<div class="entertain-pattern ${p.type}">${p.text}</div>`).join('')}
+  // 警告HTML
+  const warningsHtml = warnings.length > 0 ? `
+    <div class="bigfiveman-pair-warnings">
+      <p class="bigfiveman-members-title" style="margin-bottom:8px;">⚠️ 注意が必要な組み合わせ</p>
+      ${warnings.map(w => `
+        <div class="bigfiveman-pair-warning">
+          <span class="bigfiveman-pair-icon">${w.type === 'danger' ? '🔴' : '🟡'}</span>
+          <span class="bigfiveman-pair-text">${w.text}</span>
+        </div>
+      `).join('')}
     </div>
-  ` : '';
+  ` : `
+    <div style="text-align:center;padding:10px 0;font-size:13px;color:#6ee7b7;">✓ 危険な組み合わせパターンは検出されませんでした</div>
+  `;
 
-  // メンバー別
-  const membersHtml = membersWithData.map(m => {
+  // メンバー別データ
+  const membersHtml = bfmData.map(m => {
     if (!m.eq && !m.dt) return '';
     const bars = [];
     if (m.eq && m.eq.overall != null) {
       const pct = ((m.eq.overall - 1) / 4) * 100;
-      bars.push(`
-        <div class="entertain-mini-row">
-          <span class="entertain-mini-label">EQ</span>
-          <div class="entertain-mini-track"><div class="entertain-mini-fill" style="width:${pct}%;background:#d946ef;"></div></div>
-          <span class="entertain-mini-val">${m.eq.levelName || m.eq.overall.toFixed(1)}</span>
-        </div>
-      `);
+      bars.push(`<div class="bigfiveman-mini-row">
+        <span class="bigfiveman-mini-label">EQ</span>
+        <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${pct}%;background:#d946ef;"></div></div>
+        <span class="bigfiveman-mini-val">${m.eq.levelName || m.eq.overall.toFixed(1)}</span>
+      </div>`);
     }
     if (m.dt) {
-      [['N', 'ナルシシズム', '#f97316', m.dt.nPct],
-       ['M', 'マキャベリアン', '#ef4444', m.dt.mPct],
-       ['P', 'サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([key, label, color, val]) => {
+      [['ナルシシズム', '#f97316', m.dt.nPct],
+       ['マキャベリアン', '#ef4444', m.dt.mPct],
+       ['サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([label, color, val]) => {
         if (val == null) return;
-        bars.push(`
-          <div class="entertain-mini-row">
-            <span class="entertain-mini-label" title="${label}">${label}</span>
-            <div class="entertain-mini-track"><div class="entertain-mini-fill" style="width:${val}%;background:${color};"></div></div>
-            <span class="entertain-mini-val">${val}%</span>
-          </div>
-        `);
+        bars.push(`<div class="bigfiveman-mini-row">
+          <span class="bigfiveman-mini-label">${label}</span>
+          <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${val}%;background:${color};"></div></div>
+          <span class="bigfiveman-mini-val">${val}%</span>
+        </div>`);
       });
     }
-    return `
-      <div class="entertain-member-row">
-        <div class="entertain-member-name">${m.name}</div>
-        <div class="entertain-mini-bars">${bars.join('')}</div>
-      </div>
-    `;
+    return `<div class="bigfiveman-member-row">
+      <div class="bigfiveman-member-name">${m.name}</div>
+      <div class="bigfiveman-mini-bars">${bars.join('')}</div>
+    </div>`;
   }).filter(Boolean).join('');
 
-  const dataNote = [];
-  if (character.eqCount > 0) dataNote.push(`EQデータ: ${character.eqCount}人`);
-  if (character.dtCount > 0) dataNote.push(`ダークトライアドデータ: ${character.dtCount}人`);
-
   return `
-    <div class="entertain-card">
-      <div class="entertain-header">
-        <span class="entertain-label">エンタメモード</span>
+    <div class="bigfiveman-card">
+      <div class="bigfiveman-header">
+        <span class="bigfiveman-label">🦸 ビッグファイブマン分析</span>
+        <span class="bigfiveman-score-change" style="color:${bonusColor};">スコア ${bonusSign}点</span>
       </div>
-      <p class="entertain-disclaimer">※ EQ・ダークトライアドは自己申告値で測定誤差があります。エンタメ・参考値としてお楽しみください。（${dataNote.join('・')}）</p>
-      ${typeHtml}
-      ${patternsHtml}
-      ${membersHtml ? `<p class="entertain-members-title">メンバー別データ</p>${membersHtml}` : ''}
+      <p class="bigfiveman-disclaimer">EQ・ダークトライアドの自己申告値をビッグファイブに加算して算出しています。測定誤差があるため参考値としてご活用ください。</p>
+      <div class="bigfiveman-type-wrap">
+        <p class="bigfiveman-type-label">チームキャラクター診断</p>
+        <p class="bigfiveman-type-name">${typeName}</p>
+        <p class="bigfiveman-type-desc">${typeDesc}</p>
+      </div>
+      ${warningsHtml}
+      ${membersHtml ? `<p class="bigfiveman-members-title">メンバー別プロファイル</p>${membersHtml}` : ''}
     </div>
   `;
 }
