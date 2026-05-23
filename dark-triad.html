@@ -341,8 +341,8 @@ const PROFILES = [
   {
     id: 'clean', name: 'クリーン型',
     icon: '🛡️',
-    catch: '三つのダーク特性がいずれも低い',
-    desc: 'ダークトライアドの3因子すべてが低い水準にあります。他者への共感があり、操作的な行動や過度な自己顕示欲が少ない傾向です。',
+    catch: '三つのダーク特性に突出した傾向はない',
+    desc: 'ダークトライアドの3因子いずれも突出した水準には達していません。操作性・自己顕示欲・衝動性のいずれも日常的な問題になるほどの傾向は見られない、バランスのとれた結果です。',
     strength: '誠実で信頼されやすく、長期的な人間関係を築きやすい。良心的な行動が周囲からの信頼の土台になる。',
     note: '一方で、自己主張が必要な場面での踏み込みや、戦略的な判断が必要な場面での決断が遅れることもある。',
   },
@@ -471,10 +471,9 @@ function calcScores() {
 
 // ===== プロファイル判定 =====
 function getProfile(nPct, mPct, pPct) {
-  if (nPct > 55 && mPct > 55 && pPct > 55) return PROFILES.find(p => p.id === 'dark_full');
-  const allLow = nPct <= 40 && mPct <= 40 && pPct <= 40;
-  if (allLow) return PROFILES.find(p => p.id === 'clean');
+  if (nPct > 60 && mPct > 60 && pPct > 60) return PROFILES.find(p => p.id === 'dark_full');
   const max = Math.max(nPct, mPct, pPct);
+  if (max <= 60) return PROFILES.find(p => p.id === 'clean');
   if (nPct === max) return PROFILES.find(p => p.id === 'narcissist');
   if (mPct === max) return PROFILES.find(p => p.id === 'machiavellian');
   return PROFILES.find(p => p.id === 'psychopath');
