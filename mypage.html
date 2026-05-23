@@ -866,8 +866,31 @@
     margin-bottom: 12px;
     letter-spacing: 0.05em;
   }
+  .collection-stage-label a {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    padding: 2px 8px;
+    border: 1px solid rgba(167,139,250,0.35);
+    border-radius: 999px;
+    color: #c4b5fd;
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+  }
+  .collection-stage-label a:hover {
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.65);
+  }
   body.theme-light .collection-stage-label {
     color: #1e293b;
+  }
+  body.theme-light .collection-stage-label a {
+    color: #6d28d9;
+    border-color: rgba(109,40,217,0.28);
+    background: rgba(109,40,217,0.06);
   }
   .collection-path {
     display: grid;
@@ -1844,7 +1867,7 @@ function renderAlbum() {
   }
 
   // 進行パス（最初の20スロット）
-  html += '<div class="collection-stage-label">Stage 1 — カードを集めて機能を解放</div>';
+  html += '<div class="collection-stage-label">Stage 1 — カードを集めて機能を解放 <a href="collection-guide.html">機能開放とは？</a></div>';
   html += '<div class="collection-path">';
 
   // カードは古い順（最初に集めたもの=slot 1）に並べる
