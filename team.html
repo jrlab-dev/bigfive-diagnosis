@@ -787,6 +787,26 @@
   .bigfiveman-pair-icon { flex-shrink: 0; font-size: 15px; }
   .bigfiveman-pair-text { flex: 1; color: #fca5a5; }
   .bigfiveman-pair-text strong { color: #f87171; }
+  .bigfiveman-advice-item {
+    padding: 10px 14px;
+    background: rgba(99,102,241,0.06);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .bigfiveman-advice-item:last-child { margin-bottom: 0; }
+  .bigfiveman-advice-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #a5b4fc;
+    margin-bottom: 4px;
+  }
+  .bigfiveman-advice-text {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
   .bigfiveman-btn-revert {
     display: block;
     width: 100%;
@@ -1670,10 +1690,14 @@ function renderResults() {
 function loadBigFiveManData(members) {
   // 旧キー（フォールバック用）
   let myEqFallback = null, myDtFallback = null;
+  let myAttachFallback = null, myMindsetFallback = null, myLocusFallback = null;
   try { myEqFallback = JSON.parse(localStorage.getItem('eq_result') || 'null'); } catch(e) {}
   try { myDtFallback = JSON.parse(localStorage.getItem('dark_triad_result') || 'null'); } catch(e) {}
+  try { myAttachFallback = JSON.parse(localStorage.getItem('attachment_result') || 'null'); } catch(e) {}
+  try { myMindsetFallback = JSON.parse(localStorage.getItem('mindset_result') || 'null'); } catch(e) {}
+  try { myLocusFallback = JSON.parse(localStorage.getItem('locus_result') || 'null'); } catch(e) {}
 
-  // 適用中の自分のBig Five結果レコード（EQ/DTが紐づいている）
+  // 適用中の自分のBig Five結果レコード
   let myRecord = null;
   try {
     const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
@@ -1684,27 +1708,30 @@ function loadBigFiveManData(members) {
   const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
 
   return members.map(m => {
-    let eq = null, dt = null;
+    let eq = null, dt = null, attachment = null, mindset = null, locus = null;
     if (m.type === 'my') {
-      // bigfive_my_results に紐づいたデータを優先、なければ旧キーからフォールバック
       eq = (myRecord && myRecord.eq) || myEqFallback;
       dt = (myRecord && myRecord.darkTriad) || myDtFallback;
+      attachment = (myRecord && myRecord.attachment) || myAttachFallback;
+      mindset = (myRecord && myRecord.mindset) || myMindsetFallback;
+      locus = (myRecord && myRecord.locus) || myLocusFallback;
     } else if (m.type === 'other') {
       const idx = parseInt(m.id.replace('other_', ''));
       if (!isNaN(idx) && otherResults[idx]) {
         eq = otherResults[idx].eq || null;
         dt = otherResults[idx].darkTriad || null;
+        attachment = otherResults[idx].attachment || null;
       }
     }
-    return { ...m, eq, dt };
+    return { ...m, eq, dt, attachment, mindset, locus };
   });
 }
 
 // ===== ビッグファイブマン分析：発動条件 =====
 function canBigFiveMan(bfmData) {
   const myData = bfmData.find(m => m.type === 'my');
-  const myHasData = myData && (myData.eq || myData.dt);
-  const othersWithData = bfmData.filter(m => m.type !== 'my' && (m.eq || m.dt));
+  const myHasData = myData && (myData.eq || myData.dt || myData.attachment || myData.mindset || myData.locus);
+  const othersWithData = bfmData.filter(m => m.type !== 'my' && (m.eq || m.dt || m.attachment));
   return myHasData && othersWithData.length >= 1;
 }
 
@@ -1769,6 +1796,24 @@ function calcEqDtBonus(bfmData) {
   // EQ適度＋DT全員低い → 持続性ボーナス
   if (eqAvg !== null && eqAvg >= 3.0 && eqAvg < 3.8 && dtMembers.length >= 1 && anyDtHigh.length === 0) {
     bonus += 4;
+  }
+
+  // ── 愛着スタイル補正（自分+あの人のペアパターン）──
+  const myData = bfmData.find(m => m.type === 'my');
+  const myType = myData && myData.attachment && myData.attachment.typeKey;
+  const otherAttachMembers = bfmData.filter(m => m.type !== 'my' && m.attachment && m.attachment.typeId);
+
+  if (myType && otherAttachMembers.length >= 1) {
+    let securePairCount = 0, clashPairCount = 0;
+    otherAttachMembers.forEach(m => {
+      const otherType = m.attachment.typeId;
+      if (myType === 'secure' && otherType === 'secure') securePairCount++;
+      // 不安×回避（追いかけっこパターン）
+      if ((myType === 'anxious' && otherType === 'avoidant') ||
+          (myType === 'avoidant' && otherType === 'anxious')) clashPairCount++;
+    });
+    if (securePairCount >= 1) bonus += 3;
+    bonus -= clashPairCount * 5;
   }
 
   return bonus;
@@ -1841,6 +1886,26 @@ function genPairWarnings(bfmData) {
     }
   });
 
+  // ── 愛着スタイルペア警告 ──
+  const myMember = bfmData.find(m => m.type === 'my');
+  const myAttachType = myMember && myMember.attachment && myMember.attachment.typeKey;
+  if (myAttachType) {
+    bfmData.filter(m => m.type !== 'my' && m.attachment && m.attachment.typeId).forEach(m => {
+      const otherType = m.attachment.typeId;
+      if ((myAttachType === 'anxious' && otherType === 'avoidant') ||
+          (myAttachType === 'avoidant' && otherType === 'anxious')) {
+        const [chaser, distancer] = myAttachType === 'anxious'
+          ? [myMember.name, m.name]
+          : [m.name, myMember.name];
+        warnings.push({ type: 'caution', pair: true,
+          text: `<strong>${chaser}さんと${distancer}さんの愛着スタイル</strong>は「不安型×回避型」の組み合わせです。距離感でズレが生じやすく、追いかけるほど引いてしまう循環が起きやすいです。定期的に「今どんなペースで関わりたいか」を率直に伝え合う場を設けると関係が安定します。` });
+      } else if (myAttachType === 'secure' && otherType === 'secure') {
+        warnings.push({ type: 'good', pair: true,
+          text: `<strong>${myMember.name}さんと${m.name}さん</strong>は両者とも安定型の愛着スタイルです。感情的な余裕があり、安心して頼り合えるベース関係を築きやすい組み合わせです。` });
+      }
+    });
+  }
+
   return warnings;
 }
 
@@ -1908,15 +1973,29 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
   const bonusColor = bonus >= 0 ? '#34d399' : '#f87171';
 
   // 警告HTML
-  const warningsHtml = warnings.length > 0 ? `
+  const iconMap = { danger: '🔴', caution: '🟡', good: '🟢' };
+  const cautionWarnings = warnings.filter(w => w.type !== 'good');
+  const goodWarnings = warnings.filter(w => w.type === 'good');
+  const warningsHtml = (cautionWarnings.length > 0 || goodWarnings.length > 0) ? `
     <div class="bigfiveman-pair-warnings">
-      <p class="bigfiveman-members-title" style="margin-bottom:8px;">⚠️ 注意が必要な組み合わせ</p>
-      ${warnings.map(w => `
-        <div class="bigfiveman-pair-warning">
-          <span class="bigfiveman-pair-icon">${w.type === 'danger' ? '🔴' : '🟡'}</span>
-          <span class="bigfiveman-pair-text">${w.text}</span>
-        </div>
-      `).join('')}
+      ${cautionWarnings.length > 0 ? `
+        <p class="bigfiveman-members-title" style="margin-bottom:8px;">⚠️ 注意が必要な組み合わせ</p>
+        ${cautionWarnings.map(w => `
+          <div class="bigfiveman-pair-warning">
+            <span class="bigfiveman-pair-icon">${iconMap[w.type] || '🟡'}</span>
+            <span class="bigfiveman-pair-text">${w.text}</span>
+          </div>
+        `).join('')}
+      ` : ''}
+      ${goodWarnings.length > 0 ? `
+        <p class="bigfiveman-members-title" style="margin-bottom:8px;margin-top:12px;">✨ 相性のよい組み合わせ</p>
+        ${goodWarnings.map(w => `
+          <div class="bigfiveman-pair-warning">
+            <span class="bigfiveman-pair-icon">🟢</span>
+            <span class="bigfiveman-pair-text">${w.text}</span>
+          </div>
+        `).join('')}
+      ` : ''}
     </div>
   ` : `
     <div style="text-align:center;padding:10px 0;font-size:13px;color:#6ee7b7;">✓ 危険な組み合わせパターンは検出されませんでした</div>
@@ -1952,6 +2031,45 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
     </div>`;
   }).filter(Boolean).join('');
 
+  // 自分へのアドバイスHTML（mindset/locus）
+  const myMemberForAdvice = bfmData.find(m => m.type === 'my');
+  const adviceItems = [];
+
+  if (myMemberForAdvice && myMemberForAdvice.mindset) {
+    const ms = myMemberForAdvice.mindset;
+    const mindsetLabels = { growth: '成長マインドセット', mixed: '中間マインドセット', fixed: '固定マインドセット' };
+    const mindsetAdvice = {
+      growth: 'チームの困難を「成長の機会」と捉える視点がチームに伝わると、メンバーの挑戦意欲が高まります。',
+      mixed: '状況によって柔軟に思考スタイルを切り替えられる強みがあります。チームが停滞しているときに「できることから試そう」と促す役割が向いています。',
+      fixed: '安定志向の強さはリスク管理に活きます。一方、チームが新しい挑戦をするときは「まず小さく試す」というフレームで参加すると動きやすくなります。'
+    };
+    adviceItems.push(`<div class="bigfiveman-advice-item">
+      <span class="bigfiveman-advice-label">マインドセット：${mindsetLabels[ms.type] || ms.type}</span>
+      <p class="bigfiveman-advice-text">${mindsetAdvice[ms.type] || ''}</p>
+    </div>`);
+  }
+
+  if (myMemberForAdvice && myMemberForAdvice.locus) {
+    const lc = myMemberForAdvice.locus;
+    const locusLabels = { internal: '内的統制型', external: '外的統制型', balanced: 'バランス型' };
+    const locusAdvice = {
+      internal: '「自分で変えられる」という意識が強く、主体的な行動力がチームの推進力になります。ただし他者への期待値が高くなりすぎると摩擦が生まれやすいので注意しましょう。',
+      external: '状況の流れを読む柔軟性がありますが、チームでの意思決定時には「自分はどうしたいか」を一度明確にして発言すると影響力が増します。',
+      balanced: '自分でコントロールできることとできないことを使い分ける判断力が強みです。チームの振り返りの場でファシリテーター的な役割を担うと力を発揮しやすいです。'
+    };
+    adviceItems.push(`<div class="bigfiveman-advice-item">
+      <span class="bigfiveman-advice-label">統制の所在：${locusLabels[lc.type] || lc.type}</span>
+      <p class="bigfiveman-advice-text">${locusAdvice[lc.type] || ''}</p>
+    </div>`);
+  }
+
+  const adviceHtml = adviceItems.length > 0 ? `
+    <div class="bigfiveman-pair-warnings" style="margin-top:12px;">
+      <p class="bigfiveman-members-title" style="margin-bottom:8px;">💡 あなた自身へのアドバイス</p>
+      ${adviceItems.join('')}
+    </div>
+  ` : '';
+
   return `
     <div class="bigfiveman-card">
       <div class="bigfiveman-header">
@@ -1966,6 +2084,7 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
       </div>
       ${warningsHtml}
       ${membersHtml ? `<p class="bigfiveman-members-title">メンバー別プロファイル</p>${membersHtml}` : ''}
+      ${adviceHtml}
     </div>
   `;
 }
