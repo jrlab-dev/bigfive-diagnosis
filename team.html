@@ -1703,68 +1703,133 @@ function calcEqDtBonus(bfmData) {
   const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
   let bonus = 0;
 
-  // EQ補正
-  if (eqMembers.length >= 2) {
-    const eqAvg = eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length;
-    if (eqAvg >= 4.0) bonus += 6;
-    else if (eqAvg >= 3.5) bonus += 3;
-    else if (eqAvg <= 2.0) bonus -= 4;
-  }
+  const eqVals = eqMembers.map(m => m.eq.overall);
+  const eqAvg  = eqVals.length > 0 ? eqVals.reduce((s, v) => s + v, 0) / eqVals.length : null;
+  const eqMax  = eqVals.length > 0 ? Math.max(...eqVals) : null;
+  const eqMin  = eqVals.length > 0 ? Math.min(...eqVals) : null;
+  const eqHighCount = eqMembers.filter(m => m.eq.overall >= 3.5).length;
 
-  // DT補正
   const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
   const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
   const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
   const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
 
-  const eqHighCount = eqMembers.filter(m => m.eq.overall >= 3.5).length;
+  // ── EQ補正（文脈込み）──
+  if (eqAvg !== null && eqMembers.length >= 2) {
+    // 全員EQが高い → 対立回避・創造性低下リスク（マイナス）
+    const allHighEq = eqVals.every(v => v >= 3.8);
+    if (allHighEq) {
+      bonus -= 4; // 全員高EQ＝空気読み合いで創造的摩擦が起きにくい
+    } else if (eqAvg >= 3.5) {
+      bonus += 3; // 適度に高EQ＝プラス
+    } else if (eqAvg <= 2.0) {
+      bonus -= 4;
+    }
+    // EQに偏りがある → 感情労働が一部に集中するリスク
+    if (eqMax !== null && eqMin !== null && eqMax - eqMin >= 1.5 && eqMembers.length >= 2) {
+      bonus -= 3;
+    }
+  }
 
-  if (machiHigh.length >= 1 && eqHighCount >= 2) bonus -= 8; // 搾取リスク
-  if (narcHigh.length >= 2) bonus -= 8;                       // 覇権争いリスク
-  if (psychHigh.length >= 1) bonus -= 4;                      // 信頼毀損リスク
+  // ── DT補正（文脈込み）──
+  // マキャベリアン1人 → 外部交渉力としてプラス面あり、EQ高多数と組み合わさると搾取リスク
+  if (machiHigh.length === 1) {
+    if (eqHighCount >= 2) {
+      bonus -= 6; // 搾取リスク（外部強みはあるが内部コスト大）
+    } else {
+      bonus += 2; // 外部折衝力としてプラス
+    }
+  } else if (machiHigh.length >= 2) {
+    bonus -= 7; // 複数マキャベリアン＝内部の権謀術数
+  }
 
-  // EQ高＋DT全員低い → 安定ボーナス
-  if (eqMembers.length >= 2) {
-    const eqAvg = eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length;
-    if (eqAvg >= 3.5 && dtMembers.length >= 1 && anyDtHigh.length === 0) bonus += 4;
+  // ナルシシスト1人 → 短期リーダーシップとして機能しうる（軽めのマイナス）
+  if (narcHigh.length === 1) {
+    bonus -= 2; // 単独なら牽引力になる可能性あり
+  } else if (narcHigh.length >= 2) {
+    bonus -= 8; // 複数は覇権争いリスク大
+  }
+
+  // サイコパシー → 高ストレス下での決断力あり、長期で信頼を傷つける
+  if (psychHigh.length >= 1) {
+    bonus -= 4;
+  }
+
+  // EQ適度＋DT全員低い → 持続性ボーナス
+  if (eqAvg !== null && eqAvg >= 3.0 && eqAvg < 3.8 && dtMembers.length >= 1 && anyDtHigh.length === 0) {
+    bonus += 4;
   }
 
   return bonus;
 }
 
-// ===== ビッグファイブマン分析：ペア別警告 =====
+// ===== ビッグファイブマン分析：ペア別・チーム全体の注目ポイント =====
 function genPairWarnings(bfmData) {
   const warnings = [];
-  const n = bfmData.length;
-  for (let i = 0; i < n; i++) {
-    for (let j = i + 1; j < n; j++) {
-      const a = bfmData[i], b = bfmData[j];
-      const aHighEq  = a.eq && a.eq.overall >= 3.5;
-      const bHighEq  = b.eq && b.eq.overall >= 3.5;
-      const aHighMachi = a.dt && a.dt.mPct >= 65;
-      const bHighMachi = b.dt && b.dt.mPct >= 65;
-      const aHighNarc  = a.dt && a.dt.nPct >= 65;
-      const bHighNarc  = b.dt && b.dt.nPct >= 65;
-      const aHighPsych = a.dt && a.dt.pPct >= 70;
-      const bHighPsych = b.dt && b.dt.pPct >= 70;
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  const eqVals = eqMembers.map(m => m.eq.overall);
+  const eqAvg  = eqVals.length > 0 ? eqVals.reduce((s, v) => s + v, 0) / eqVals.length : null;
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+  const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
 
-      if (bHighMachi && aHighEq) {
-        warnings.push({ type: 'danger', text: `<strong>${b.name}さんのマキャベリアン傾向</strong>が、<strong>${a.name}さんの高いEQ</strong>を利用しやすい関係です。内部の信頼に注意が必要です。` });
-      }
-      if (aHighMachi && bHighEq) {
-        warnings.push({ type: 'danger', text: `<strong>${a.name}さんのマキャベリアン傾向</strong>が、<strong>${b.name}さんの高いEQ</strong>を利用しやすい関係です。内部の信頼に注意が必要です。` });
-      }
-      if (aHighNarc && bHighNarc) {
-        warnings.push({ type: 'danger', text: `<strong>${a.name}さんと${b.name}さん</strong>は両者ともリーダーシップ傾向が強く、方向性が割れたときに覇権争いが起きやすいです。` });
-      }
-      if (aHighPsych && bHighEq) {
-        warnings.push({ type: 'caution', text: `<strong>${a.name}さんのサイコパシー傾向</strong>が長期化すると、<strong>${b.name}さん</strong>のような共感力の高いメンバーへの負担が蓄積しやすいです。` });
-      }
-      if (bHighPsych && aHighEq) {
-        warnings.push({ type: 'caution', text: `<strong>${b.name}さんのサイコパシー傾向</strong>が長期化すると、<strong>${a.name}さん</strong>のような共感力の高いメンバーへの負担が蓄積しやすいです。` });
-      }
+  // ── チーム全体の傾向（ペア問わず） ──
+
+  // 全員EQ高い → 対立回避リスク
+  if (eqVals.length >= 2 && eqVals.every(v => v >= 3.8)) {
+    warnings.push({ type: 'caution', pair: false,
+      text: `全員のEQが高く、互いに気を遣い合う空気が生まれやすいです。「反対意見を言いにくい」「問題を先送りにする」といった現象が起きやすいため、意図的に反論役（デビルズアドボケイト）を設けることが有効です。` });
+  }
+
+  // EQに大きな偏り → 感情労働の集中
+  if (eqVals.length >= 2) {
+    const eqMax = Math.max(...eqVals), eqMin = Math.min(...eqVals);
+    if (eqMax - eqMin >= 1.5) {
+      const highEqNames = eqMembers.filter(m => m.eq.overall >= eqMax - 0.3).map(m => m.name);
+      warnings.push({ type: 'caution', pair: false,
+        text: `メンバー間でEQに差があります。<strong>${highEqNames.join('・')}さん</strong>に感情的な調整役・緩衝役が集中しやすく、長期的に燃え尽きるリスクがあります。意識的に役割を分担しましょう。` });
     }
   }
+
+  // マキャベリアン → 文脈込みの評価
+  if (machiHigh.length === 1) {
+    const m = machiHigh[0];
+    const eqHighCount = eqMembers.filter(em => em.eq.overall >= 3.5).length;
+    if (eqHighCount >= 2) {
+      warnings.push({ type: 'danger', pair: false,
+        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部交渉や組織政治での立ち回りでチームに強みをもたらします。一方、EQの高いメンバーが多い内部では、感情を読んだ利用的なダイナミクスが生じやすいため、定期的に率直な1on1を設けることが有効です。` });
+    } else {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部折衝や政治的な場面でチームの強みになります。内部では物事をストレートに話す場を意識的に作ると、関係が安定しやすいです。` });
+    }
+  } else if (machiHigh.length >= 2) {
+    warnings.push({ type: 'danger', pair: false,
+      text: `<strong>${machiHigh.map(m => m.name).join('・')}さん</strong>が両者ともマキャベリアン傾向が高いです。外部では強力ですが、内部で利害が衝突したときに権謀術数が生じやすく、チームの信頼基盤が崩れるリスクがあります。` });
+  }
+
+  // ナルシシズム → 文脈込みの評価
+  if (narcHigh.length === 1) {
+    const m = narcHigh[0];
+    warnings.push({ type: 'caution', pair: false,
+      text: `<strong>${m.name}さんのリーダーシップ傾向</strong>は、危機対応や短期プロジェクトで大きな推進力になります。ただし長期的には「自分の貢献だけが見えやすくなる」傾向があるため、他メンバーの成果を可視化する工夫が有効です。` });
+  } else if (narcHigh.length >= 2) {
+    warnings.push({ type: 'danger', pair: false,
+      text: `<strong>${narcHigh.map(m => m.name).join('・')}さん</strong>が両者ともリーダーシップ傾向が強いです。方向性が一致しているうちは突破力がありますが、意見が割れた場合に覇権争いに発展しやすいです。意思決定のフローを明文化しておくことを強く推奨します。` });
+  }
+
+  // サイコパシー
+  psychHigh.forEach(m => {
+    const eqHighNames = eqMembers.filter(em => em.id !== m.id && em.eq.overall >= 3.5).map(em => em.name);
+    if (eqHighNames.length >= 1) {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さん</strong>は高ストレス下での冷静な判断力が強みです。一方、長期的には<strong>${eqHighNames.join('・')}さん</strong>のような共感力の高いメンバーに感情的コストが蓄積しやすいです。定期的な振り返りの場が有効です。` });
+    } else {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さん</strong>は冷静な判断力が強みです。長期的にはチームの感情的なつながりを維持する工夫が必要です。` });
+    }
+  });
+
   return warnings;
 }
 
@@ -1800,23 +1865,28 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
   const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
   const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
 
-  // チームタイプ判定
+  // チームタイプ判定（良い面・悪い面を両方記述）
+  const eqValsAll = eqMembers.map(m => m.eq.overall);
+  const allHighEq = eqValsAll.length >= 2 && eqValsAll.every(v => v >= 3.8);
   let typeName, typeDesc;
-  if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
+  if (eqAvg !== null && eqAvg >= 3.0 && eqAvg < 3.8 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
     typeName = '安定・持続型';
-    typeDesc = 'EQが高くダークトライアド傾向も低い、長期プロジェクトに最も向いた組み合わせです。信頼関係が自然に育ちやすく、持続力があります。';
-  } else if (eqAvg !== null && eqAvg >= 4.0) {
+    typeDesc = 'EQが適度に高く、ダークトライアド傾向も低い組み合わせです。長期プロジェクトへの適性が高く、信頼関係が自然に育ちます。急成長よりも着実な積み上げが得意な反面、外部への強い折衝力は別途補う必要があります。';
+  } else if (allHighEq) {
+    typeName = '調和重視型';
+    typeDesc = '全員EQが高く、対立を避ける力に優れています。雰囲気が良い反面、誰も反論しないまま問題が先送りになる「グループシンク」が起きやすいです。意図的に批判的思考を持ち込む役割を作ると、このチームの力が最大化します。';
+  } else if (eqAvg !== null && eqAvg >= 3.5) {
     typeName = '調和型';
-    typeDesc = '感情知性が高く、対立を収める力があります。創造的な摩擦を意図的に作ると、さらに力が伸びます。';
+    typeDesc = '感情知性が高く、対立をうまく収める力があります。人間関係のトラブルが少なく、相談しやすい空気があります。建設的な摩擦を意図的に作ると、さらに力が伸びます。';
   } else if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
     typeName = '戦略×共感型';
-    typeDesc = '交渉力と共感力が混在した、外部折衝に強いチームです。内部の信頼構築が成長のカギです。';
-  } else if (narcHigh.length >= 1 && eqAvg !== null && eqAvg >= 2.5) {
+    typeDesc = '外部交渉・組織政治に強いメンバーと、共感力の高いメンバーが共存するチームです。外部折衝では強みを発揮します。内部では感情的搾取が起きやすい構造のため、信頼構築を意識的に行うことがこのチームの最重要課題です。';
+  } else if (narcHigh.length === 1 && eqAvg !== null) {
     typeName = 'エネルギー型';
-    typeDesc = '強い推進力と共感力が混在し、短期的な成果を出すのが得意なチームです。';
-  } else if (anyDtHigh.length >= 2) {
+    typeDesc = '強い推進力を持つメンバーがいるチームです。短期プロジェクトや危機対応では大きな力を発揮します。長期的には他メンバーの貢献の可視化と、リーダーシップを共有する仕組みが持続力のカギになります。';
+  } else if (narcHigh.length >= 2 || machiHigh.length >= 2) {
     typeName = '競争型';
-    typeDesc = '個性の強いメンバーが集まったチームです。ルールと役割を明確にすることで力を発揮します。';
+    typeDesc = '個性と主張の強いメンバーが集まったチームです。方向性が合っているときの突破力は強いですが、利害が衝突したときに内部崩壊するリスクがあります。ルール・役割・評価基準の明文化が不可欠です。';
   } else {
     typeName = 'バランス型';
     typeDesc = '多様な特性が混在した、状況適応力のあるチームです。';
