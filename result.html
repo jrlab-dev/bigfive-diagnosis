@@ -1146,6 +1146,16 @@
       <p id="addToZukanHint" style="font-size:12px;color:var(--dim);margin-top:8px;">自分の図鑑（全8,298種）にこのカードが追加されます</p>
       <a href="index.html" style="display:inline-block;margin-top:16px;font-size:14px;color:#8b5cf6;text-decoration:none;">自分も診断してカードをゲット！ →</a>
     </div>
+    <!-- あの人として保存 -->
+    <div id="saveAsOtherSection" style="margin:16px auto 0;max-width:480px;width:100%;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
+      <p style="font-size:13px;color:#f472b6;margin-bottom:10px;text-align:center;font-weight:700;">この人をあの人として保存</p>
+      <div style="display:flex;gap:8px;">
+        <input id="saveAsOtherName" type="text" placeholder="名前を入力（例：田中さん）" maxlength="20"
+          style="flex:1;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--text);font-size:14px;font-family:inherit;outline:none;" />
+        <button id="saveAsOtherBtn" style="padding:10px 16px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;white-space:nowrap;">保存</button>
+      </div>
+      <p id="saveAsOtherHint" style="font-size:12px;color:var(--dim);margin-top:6px;">「あの人」一覧に「本人共有」として保存されます</p>
+    </div>
   </div>
 
   <!-- シェア促進メッセージ（通常の診断結果時に表示） -->
@@ -2924,6 +2934,53 @@ if (isOtherMode) {
         markAsAdded(btn, hint, count);
       }
     });
+    // あの人として保存
+    var saveAsOtherBtn = document.getElementById('saveAsOtherBtn');
+    var saveAsOtherName = document.getElementById('saveAsOtherName');
+    var saveAsOtherHint = document.getElementById('saveAsOtherHint');
+
+    var existingOthers = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+    var alreadySavedAsOther = existingOthers.some(function(r) {
+      return r.code === code && r.source === 'shared';
+    });
+    if (alreadySavedAsOther) {
+      saveAsOtherBtn.textContent = '✓ 保存済み';
+      saveAsOtherBtn.style.background = '#374151';
+      saveAsOtherBtn.disabled = true;
+    }
+
+    saveAsOtherBtn.addEventListener('click', function() {
+      var name = saveAsOtherName.value.trim();
+      if (!name) {
+        saveAsOtherName.style.borderColor = '#ef4444';
+        saveAsOtherName.focus();
+        return;
+      }
+      saveAsOtherName.style.borderColor = '';
+      var others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      var maxOthers = typeof getOtherLimit === 'function' ? getOtherLimit() : (localStorage.getItem('bigfive_others_limit_unlocked') ? 30 : 10);
+      if (others.length >= maxOthers) {
+        saveAsOtherHint.textContent = '保存上限（' + maxOthers + '件）に達しています。マイページで整理してください。';
+        saveAsOtherHint.style.color = '#ef4444';
+        return;
+      }
+      others.unshift({
+        name: name,
+        code: code,
+        gender: g,
+        version: ver,
+        date: new Date().toISOString(),
+        source: 'shared'
+      });
+      localStorage.setItem('bigfive_other_results', JSON.stringify(others));
+      saveAsOtherBtn.textContent = '✓ 保存しました！';
+      saveAsOtherBtn.style.background = '#374151';
+      saveAsOtherBtn.disabled = true;
+      saveAsOtherName.disabled = true;
+      saveAsOtherHint.textContent = 'マイページの「あの人」一覧から確認できます';
+      saveAsOtherHint.style.color = '#a78bfa';
+    });
+
   } else if (encourage) {
     // 通常の診断結果: シェア促進メッセージを表示
     encourage.style.display = 'block';

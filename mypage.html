@@ -1626,8 +1626,9 @@ function renderOtherResults() {
     const isChecked = selectedOthers.has(i);
     const isPartner = partnerData && partnerData.code === r.code && partnerData.name === r.name;
     const isChild = r.relation === 'child46' || r.relation === 'child79';
+    const isShared = r.source === 'shared';
     return `
-      <div class="result-card${isChecked ? ' checked' : ''}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : ''}">
+      <div class="result-card${isChecked ? ' checked' : ''}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : isShared ? 'background:rgba(236,72,153,0.06);border-color:rgba(236,72,153,0.3);' : ''}">
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
         <a href="${isChild ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}&idx=${i}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
@@ -1635,7 +1636,7 @@ function renderOtherResults() {
                  onerror="this.parentElement.innerHTML='<svg class=\\'icon\\' style=\\'color:#ec4899\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><path d=\\'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\\'/><circle cx=\\'12\\' cy=\\'7\\' r=\\'4\\'/></svg>';this.parentElement.style.background='rgba(236,72,153,0.2)';this.parentElement.style.display='flex';this.parentElement.style.alignItems='center';this.parentElement.style.justifyContent='center';">
           </div>
           <div class="result-card-content">
-            <div class="result-card-name">${r.name}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.7 2.8 1.7 3.7C6.5 11 5 13 5 15.5V20c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4.5c0-2.5-1.5-4.5-4.2-5.3 1-.9 1.7-2.2 1.7-3.7C16.5 4 14.5 2 12 2z"/><circle cx="9" cy="5" r="1.5" fill="#fbbf24"/><path d="M8 4.5L7 3M10 4.5L11 3" stroke="#fbbf24" stroke-width="1" stroke-linecap="round"/></svg>子供</span></span>' : ''}</div>
+            <div class="result-card-name">${r.name}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.7 2.8 1.7 3.7C6.5 11 5 13 5 15.5V20c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4.5c0-2.5-1.5-4.5-4.2-5.3 1-.9 1.7-2.2 1.7-3.7C16.5 4 14.5 2 12 2z"/><circle cx="9" cy="5" r="1.5" fill="#fbbf24"/><path d="M8 4.5L7 3M10 4.5L11 3" stroke="#fbbf24" stroke-width="1" stroke-linecap="round"/></svg>子供</span></span>' : ''}${isShared ? ' <span style="font-size:11px;background:rgba(236,72,153,0.2);color:#ec4899;border-radius:999px;padding:1px 7px;font-weight:700;">本人共有</span>' : ''}</div>
             <div class="result-card-meta">
               <span class="result-card-code">${r.code}</span>
               <span class="result-card-date">${formatDate(r.date)}</span>
