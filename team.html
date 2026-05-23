@@ -603,6 +603,180 @@
     padding: 8px 0;
   }
 
+  /* エンタメモードボタン */
+  .btn-entertain {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: #c084fc;
+    background: rgba(139,92,246,0.08);
+    border: 1px dashed rgba(139,92,246,0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .btn-entertain:hover {
+    background: rgba(139,92,246,0.15);
+    border-color: rgba(139,92,246,0.7);
+  }
+
+  /* エンタメカード */
+  .entertain-card {
+    background: linear-gradient(145deg, rgba(88,28,135,0.18) 0%, rgba(30,10,80,0.15) 100%);
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .entertain-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .entertain-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #c084fc;
+    padding: 2px 8px;
+    border: 1px solid rgba(192,132,252,0.4);
+    border-radius: 999px;
+  }
+  .entertain-disclaimer {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+  }
+  .entertain-type-wrap {
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(139,92,246,0.15);
+  }
+  .entertain-type-label {
+    font-size: 11px;
+    color: #c084fc;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .entertain-type-name {
+    font-size: 22px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #c084fc, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .entertain-type-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--dim);
+  }
+  .entertain-patterns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .entertain-pattern {
+    font-size: 13px;
+    line-height: 1.75;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+  .entertain-pattern.warning {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    color: #fca5a5;
+  }
+  .entertain-pattern.caution {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.2);
+    color: #fde68a;
+  }
+  .entertain-pattern.positive {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: #6ee7b7;
+  }
+  .entertain-members-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dim);
+  }
+  .entertain-member-row {
+    padding: 10px 14px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.1);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .entertain-member-row:last-child { margin-bottom: 0; }
+  .entertain-member-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .entertain-mini-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .entertain-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .entertain-mini-label {
+    width: 56px;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+  .entertain-mini-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .entertain-mini-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .entertain-mini-val {
+    font-size: 11px;
+    font-weight: 600;
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--dim);
+  }
+  .entertain-no-data {
+    text-align: center;
+    font-size: 13px;
+    color: var(--dim);
+    padding: 12px 0;
+    line-height: 1.8;
+  }
+  .entertain-no-data a {
+    color: #c084fc;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
   /* Dラボ紹介バナー */
   .dlab-banner {
     margin-top: 14px;
@@ -1387,6 +1561,10 @@ function renderResults() {
     <!-- ポジションアドバイス -->
     ${genPositionAdviceHtml(selected, score)}
 
+    <!-- エンタメモード -->
+    <div id="entertainSection"></div>
+    <button class="btn-entertain" id="entertainBtn">🎭 その他の心理学も反映する（EQ・ダークトライアド エンタメモード）</button>
+
     <button class="btn-save-team" id="saveTeamBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> このチームをマイページに保存する</button>
     <button class="btn-reselect" id="reselectBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> メンバーを選び直す</button>
   `;
@@ -1422,12 +1600,221 @@ function renderResults() {
     btn.disabled = true;
   });
 
+  // エンタメモードボタン
+  document.getElementById('entertainBtn').addEventListener('click', () => {
+    const membersWithData = loadEntertainData(selected);
+    const character = genTeamCharacter(membersWithData);
+    document.getElementById('entertainSection').innerHTML = genEntertainHtml(membersWithData, character);
+    document.getElementById('entertainBtn').style.display = 'none';
+  });
+
   // 再選択ボタン
   document.getElementById('reselectBtn').addEventListener('click', () => {
     container.classList.remove('visible');
     container.innerHTML = '';
     document.getElementById('memberSection').style.display = 'block';
   });
+}
+
+// ===== エンタメモード：データ取得 =====
+function loadEntertainData(members) {
+  let myEq = null, myDt = null;
+  try { myEq = JSON.parse(localStorage.getItem('eq_result') || 'null'); } catch(e) {}
+  try { myDt = JSON.parse(localStorage.getItem('dark_triad_result') || 'null'); } catch(e) {}
+  const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+
+  return members.map(m => {
+    let eq = null, dt = null;
+    if (m.type === 'my') {
+      eq = myEq;
+      dt = myDt;
+    } else if (m.type === 'other') {
+      const idx = parseInt(m.id.replace('other_', ''));
+      if (!isNaN(idx) && otherResults[idx]) {
+        eq = otherResults[idx].eq || null;
+        dt = otherResults[idx].darkTriad || null;
+      }
+    }
+    return { ...m, eq, dt };
+  });
+}
+
+// ===== エンタメモード：チームキャラクター判定 =====
+function genTeamCharacter(membersWithData) {
+  const eqMembers = membersWithData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = membersWithData.filter(m => m.dt && m.dt.nPct != null);
+
+  const eqAvg = eqMembers.length > 0
+    ? eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length
+    : null;
+
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+  const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
+  const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
+
+  const patterns = [];
+
+  // パターン検出（文脈込み）
+  if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.2) {
+    patterns.push({
+      type: 'warning',
+      text: `${machiHigh.map(m => m.name).join('・')}さんのマキャベリアン傾向と、チームの高いEQが組み合わさると、感情を読む力が一方的に利用される「搾取的ダイナミクス」が生じやすいです。外部交渉では強みになる一方、内部の信頼構築を意識的に行うことが重要です。`
+    });
+  }
+
+  if (narcHigh.length === 1 && eqMembers.length >= 2 && eqAvg !== null && eqAvg >= 3.2) {
+    patterns.push({
+      type: 'caution',
+      text: `${narcHigh[0].name}さんの強いリーダーシップと、周囲の共感力の高さは、短期的なプロジェクトで非常に効果的です。ただし長期になると「引っ張られ疲れ」が起きやすいため、定期的に役割と貢献を再確認しましょう。`
+    });
+  }
+
+  if (narcHigh.length >= 2) {
+    patterns.push({
+      type: 'warning',
+      text: `強いリーダーシップ傾向を持つメンバーが複数いるチームです。方向性が合っているうちは突破力がありますが、意見が割れたときの内部対立リスクが高くなります。意思決定フローを明文化しておくことが有効です。`
+    });
+  }
+
+  if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= Math.floor(membersWithData.length / 2)) {
+    patterns.push({
+      type: 'positive',
+      text: `EQが高く、ダークトライアド傾向が低い組み合わせは「長期的に持続するチーム」の典型パターンです。信頼関係が自然に育ちやすく、メンバーの定着率も高くなる傾向があります。`
+    });
+  }
+
+  if (eqAvg !== null && eqAvg >= 4.0 && anyDtHigh.length === 0) {
+    patterns.push({
+      type: 'caution',
+      text: `全体的にEQが高いチームは、互いに気を遣い合うあまり「創造的な対立」が起きにくくなることがあります。意図的に反論役（デビルズアドボケイト）を設けるなど、建設的な摩擦を生む仕組みを作ると効果的です。`
+    });
+  }
+
+  if (psychHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
+    patterns.push({
+      type: 'caution',
+      text: `高ストレス環境での冷静な判断力が強みになりうる一方、長期的なチームの信頼関係が傷つきやすいパターンです。短期・危機対応に強い反面、継続的な関係構築には工夫が必要です。`
+    });
+  }
+
+  // チームタイプ決定
+  let typeName = null, typeDesc = null;
+  if (eqMembers.length === 0 && dtMembers.length === 0) {
+    typeName = null;
+  } else if (eqAvg !== null && eqAvg >= 3.5 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
+    typeName = '安定・持続型';
+    typeDesc = '感情的な共感力が高く、ダークトライアド傾向も低い組み合わせです。長期プロジェクトや信頼を要する仕事で真価を発揮します。急成長よりも着実な積み上げが得意です。';
+  } else if (eqAvg !== null && eqAvg >= 4.0) {
+    typeName = '調和型';
+    typeDesc = '感情知性が高く、対立をうまく収められるチームです。人間関係のトラブルが少なく、相談しやすい空気があります。意見を積極的に言い合える場を作ると、さらに力が伸びます。';
+  } else if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
+    typeName = '戦略×共感型';
+    typeDesc = '交渉力・洞察力と人への共感力が混在したチームです。外部との折衝や組織政治で強みを発揮します。内部の信頼構築が最大の課題であり、成長のカギです。';
+  } else if (narcHigh.length >= 1 && eqAvg !== null && eqAvg >= 2.5) {
+    typeName = 'エネルギー型';
+    typeDesc = '強い推進力と共感力が混在したチームです。短期的な成果を出すのが得意で、場の勢いを作れます。長期的にはエネルギーの持続性を意識した役割分担が鍵になります。';
+  } else if (anyDtHigh.length >= 2) {
+    typeName = '競争型';
+    typeDesc = '個性と主張の強いメンバーが集まったチームです。明確なルール・役割・評価基準を設けることで、競争が内部崩壊ではなく成果に向かいます。';
+  } else if (eqAvg !== null && eqAvg >= 2.5) {
+    typeName = 'バランス型';
+    typeDesc = '多様な特性が混在したチームです。状況に応じて役割を柔軟に変えられる適応力があります。';
+  } else {
+    typeName = 'データ収集中';
+    typeDesc = 'まだ診断データが少ないため、より詳しい分析にはEQ・ダークトライアド診断を増やしてみてください。';
+  }
+
+  return { typeName, typeDesc, patterns, eqAvg, eqCount: eqMembers.length, dtCount: dtMembers.length };
+}
+
+// ===== エンタメモード：HTML生成 =====
+function genEntertainHtml(membersWithData, character) {
+  const hasAny = membersWithData.some(m => m.eq || m.dt);
+
+  if (!hasAny) {
+    const memberCount = membersWithData.length;
+    return `
+      <div class="entertain-card">
+        <div class="entertain-header">
+          <span class="entertain-label">エンタメモード</span>
+        </div>
+        <div class="entertain-no-data" style="margin-top:12px;">
+          <p>このチームメンバーのEQ・ダークトライアド診断データがまだありません。</p>
+          <p style="margin-top:8px;"><a href="eq.html">EQ診断を受ける →</a>　<a href="dark-triad.html">ダークトライアド診断を受ける →</a></p>
+          <p style="margin-top:8px;font-size:11px;">※ あの人のデータは「あの人のEQ診断」「あの人のダークトライアド診断」から追加できます</p>
+        </div>
+      </div>
+    `;
+  }
+
+  // チームタイプ
+  const typeHtml = character.typeName ? `
+    <div class="entertain-type-wrap">
+      <p class="entertain-type-label">チームキャラクター</p>
+      <p class="entertain-type-name">${character.typeName}</p>
+      <p class="entertain-type-desc">${character.typeDesc}</p>
+    </div>
+  ` : '';
+
+  // パターンコメント
+  const patternsHtml = character.patterns.length > 0 ? `
+    <div class="entertain-patterns">
+      ${character.patterns.map(p => `<div class="entertain-pattern ${p.type}">${p.text}</div>`).join('')}
+    </div>
+  ` : '';
+
+  // メンバー別
+  const membersHtml = membersWithData.map(m => {
+    if (!m.eq && !m.dt) return '';
+    const bars = [];
+    if (m.eq && m.eq.overall != null) {
+      const pct = ((m.eq.overall - 1) / 4) * 100;
+      bars.push(`
+        <div class="entertain-mini-row">
+          <span class="entertain-mini-label">EQ</span>
+          <div class="entertain-mini-track"><div class="entertain-mini-fill" style="width:${pct}%;background:#d946ef;"></div></div>
+          <span class="entertain-mini-val">${m.eq.levelName || m.eq.overall.toFixed(1)}</span>
+        </div>
+      `);
+    }
+    if (m.dt) {
+      [['N', 'ナルシシズム', '#f97316', m.dt.nPct],
+       ['M', 'マキャベリアン', '#ef4444', m.dt.mPct],
+       ['P', 'サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([key, label, color, val]) => {
+        if (val == null) return;
+        bars.push(`
+          <div class="entertain-mini-row">
+            <span class="entertain-mini-label" title="${label}">${label}</span>
+            <div class="entertain-mini-track"><div class="entertain-mini-fill" style="width:${val}%;background:${color};"></div></div>
+            <span class="entertain-mini-val">${val}%</span>
+          </div>
+        `);
+      });
+    }
+    return `
+      <div class="entertain-member-row">
+        <div class="entertain-member-name">${m.name}</div>
+        <div class="entertain-mini-bars">${bars.join('')}</div>
+      </div>
+    `;
+  }).filter(Boolean).join('');
+
+  const dataNote = [];
+  if (character.eqCount > 0) dataNote.push(`EQデータ: ${character.eqCount}人`);
+  if (character.dtCount > 0) dataNote.push(`ダークトライアドデータ: ${character.dtCount}人`);
+
+  return `
+    <div class="entertain-card">
+      <div class="entertain-header">
+        <span class="entertain-label">エンタメモード</span>
+      </div>
+      <p class="entertain-disclaimer">※ EQ・ダークトライアドは自己申告値で測定誤差があります。エンタメ・参考値としてお楽しみください。（${dataNote.join('・')}）</p>
+      ${typeHtml}
+      ${patternsHtml}
+      ${membersHtml ? `<p class="entertain-members-title">メンバー別データ</p>${membersHtml}` : ''}
+    </div>
+  `;
 }
 
 // ===== イベント =====
