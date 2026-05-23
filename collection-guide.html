@@ -120,6 +120,21 @@
     font-weight: 700;
   }
   .nav a:hover { color: var(--cyan); }
+  .theme-toggle-mini {
+    border: 1px solid rgba(139,92,246,0.35);
+    background: rgba(255,255,255,0.04);
+    color: var(--dim);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .theme-toggle-mini:hover {
+    color: var(--cyan);
+    border-color: rgba(6,182,212,0.45);
+  }
   main {
     position: relative;
     z-index: 1;
@@ -321,6 +336,68 @@
     color: var(--muted);
     font-size: 12px;
   }
+  body.theme-light {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --dim: #475569;
+    --muted: #64748b;
+    --border: rgba(109,40,217,0.16);
+    background: #f8fafc;
+  }
+  body.theme-light .bg {
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(139,92,246,0.12), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 80% 75%, rgba(6,182,212,0.10), transparent 70%);
+  }
+  body.theme-light .site-header {
+    background: rgba(255,255,255,0.88);
+    border-bottom-color: rgba(109,40,217,0.16);
+  }
+  body.theme-light .brand,
+  body.theme-light .card h3,
+  body.theme-light .unlock-main strong {
+    color: #1e293b;
+  }
+  body.theme-light h1 {
+    background: linear-gradient(135deg, #1e293b, #6d28d9, #0e7490);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  body.theme-light .eyebrow,
+  body.theme-light .count {
+    color: #6d28d9;
+    background: rgba(109,40,217,0.08);
+    border-color: rgba(109,40,217,0.24);
+  }
+  body.theme-light .card,
+  body.theme-light .step {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .path {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .unlock-row {
+    border-bottom-color: rgba(109,40,217,0.10);
+  }
+  body.theme-light .btn.secondary,
+  body.theme-light .theme-toggle-mini {
+    color: #334155;
+    border-color: rgba(109,40,217,0.18);
+    background: rgba(255,255,255,0.75);
+  }
+  body.theme-light .note {
+    color: #475569;
+    background: rgba(6,182,212,0.08);
+    border-color: rgba(6,182,212,0.20);
+  }
+  body.theme-light footer {
+    border-top-color: rgba(109,40,217,0.14);
+  }
   @media (max-width: 760px) {
     .site-header-inner { align-items: flex-start; flex-direction: column; }
     .nav { justify-content: flex-start; }
@@ -331,7 +408,7 @@
   }
 </style>
 </head>
-<body>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg"></div>
 
 <header class="site-header">
@@ -342,6 +419,7 @@
       <a href="mypage.html">マイページ</a>
       <a href="diagnoses.html">診断一覧</a>
       <a href="zukan.html">図鑑</a>
+      <button class="theme-toggle-mini" id="themeToggleMini" type="button">DARK</button>
     </nav>
   </div>
 </header>
@@ -446,5 +524,21 @@
 <footer>
   <p>&copy; 2026 ビッグファイブで本当の自分を知る【公式】</p>
 </footer>
+<script>
+(function() {
+  var key = 'bigfive_theme';
+  var btn = document.getElementById('themeToggleMini');
+  if (!btn) return;
+  function updateLabel() {
+    btn.textContent = document.body.classList.contains('theme-light') ? 'DARK' : 'LIGHT';
+  }
+  updateLabel();
+  btn.addEventListener('click', function() {
+    var isLight = document.body.classList.toggle('theme-light');
+    localStorage.setItem(key, isLight ? 'light' : 'dark');
+    updateLabel();
+  });
+})();
+</script>
 </body>
 </html>
