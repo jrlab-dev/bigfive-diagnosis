@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/group-tool-toha.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グループ分けツールとは　性格データでチームの偏りをなくすSnake draft方式｜ビッグファイブ診断</title>
+<meta name="description" content="「なんとなく」のグループ分けをやめる。ビッグファイブ診断データをもとにSnake draft方式で性格バランスが均等なグループを自動生成。最大100人・複数名簿対応。職場・教育・イベントに。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="グループ分けツールとは　性格データでチームの偏りをなくすSnake draft方式">
+<meta property="og:description" content="ビッグファイブデータでSnake draft方式のバランス配分。最大100人・複数名簿対応。「なんとなく」のグループ分けを終わりにする。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/group-tool-toha.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/group-tool-toha.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="グループ分けツールとは　性格データでチームの偏りをなくすSnake draft方式">
+<meta name="twitter:description" content="ビッグファイブデータでSnake draft方式の均等配分。100人・複数名簿対応のグループ分けツール。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "グループ分けツールとは　性格データでチームの偏りをなくすSnake draft方式",
+  "description": "ビッグファイブ診断データをもとにSnake draft方式で性格バランスが均等なグループを自動生成するツールの解説。最大100人・複数名簿対応。",
+  "url": "https://bigfive.jr-genius.jp/blog/group-tool-toha.html",
+  "datePublished": "2026-05-24",
+  "dateModified": "2026-05-24",
+  "inLanguage": "ja",
+  "isPartOf": { "@type": "WebSite", "name": "ビッグファイブで本当の自分を知る【公式】", "url": "https://bigfive.jr-genius.jp/" },
+  "about": [
+    { "@type": "Thing", "name": "グループ分け" },
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "チームビルディング" },
+    { "@type": "Thing", "name": "Snake draft" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "ブログ", "item": "https://bigfive.jr-genius.jp/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "グループ分けツールとは", "item": "https://bigfive.jr-genius.jp/blog/group-tool-toha.html" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --bg: #0a0e27; --bg2: #0f1535; --text: #e2e8f0; --dim: #94a3b8; --accent: #22d3ee; --accent2: #0ea5e9; --warm: #f472b6; --border: rgba(34,211,238,0.15); }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.8; }
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%); }
+  .site-header { position: sticky; top: 0; z-index: 100; background: rgba(10,14,39,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .back-link:hover { color: var(--accent); }
+  .header-title { font-size: 13px; color: var(--dim); font-weight: 500; }
+  .main-wrap { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+  .hero-img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; max-width: 720px; border-radius: 12px; margin-bottom: 36px; display: block; }
+  .article-header { margin-bottom: 48px; }
+  .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .tag { display: inline-block; padding: 3px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--accent); background: rgba(34,211,238,0.05); }
+  .article-title { font-size: clamp(22px, 4vw, 32px); font-weight: 900; line-height: 1.4; margin-bottom: 16px; color: var(--text); }
+  .article-title span { color: var(--accent); }
+  .article-lead { font-size: 16px; color: var(--dim); line-height: 1.9; border-left: 3px solid var(--accent); padding-left: 16px; }
+  .article-meta { margin-top: 20px; font-size: 12px; color: var(--dim); }
+  .toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 48px; }
+  .toc-title { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .08em; margin-bottom: 16px; text-transform: uppercase; }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: baseline; gap: 10px; }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before { content: counter(toc, decimal-leading-zero); font-size: 11px; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .toc a { color: var(--dim); text-decoration: none; font-size: 14px; line-height: 1.5; transition: color .2s; }
+  .toc a:hover { color: var(--text); }
+  .article-body { font-size: 16px; }
+  .article-body h2 { font-size: clamp(18px, 3vw, 24px); font-weight: 900; color: var(--text); margin: 56px 0 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); line-height: 1.4; }
+  .article-body h2::before { content: ''; display: inline-block; width: 4px; height: 1em; background: var(--accent); border-radius: 2px; margin-right: 12px; vertical-align: middle; }
+  .article-body h3 { font-size: 18px; font-weight: 700; color: var(--accent); margin: 36px 0 16px; }
+  .article-body p { margin-bottom: 20px; color: var(--text); line-height: 1.9; }
+  .article-body strong { color: var(--text); font-weight: 700; background: rgba(34,211,238,0.08); padding: 1px 4px; border-radius: 3px; }
+  .highlight-box { background: rgba(34,211,238,0.05); border: 1px solid rgba(34,211,238,0.2); border-radius: 12px; padding: 24px 28px; margin: 32px 0; }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+  .data-table { width: 100%; border-collapse: collapse; margin: 28px 0; font-size: 14px; }
+  .data-table th { background: rgba(34,211,238,0.1); color: var(--accent); font-weight: 700; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text); vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .cta-box { background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05)); border: 1px solid rgba(34,211,238,0.3); border-radius: 16px; padding: 40px 32px; margin: 56px 0 0; text-align: center; }
+  .cta-box h2 { font-size: clamp(18px, 3vw, 22px); font-weight: 900; margin-bottom: 16px; border: none; padding: 0; color: var(--text); }
+  .cta-box h2::before { display: none; }
+  .cta-box p { font-size: 15px; color: var(--dim); margin-bottom: 8px; }
+  .cta-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0 28px; }
+  .cta-badge { padding: 4px 14px; background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.3); border-radius: 999px; font-size: 13px; color: var(--accent); font-weight: 700; }
+  .cta-btn { display: inline-block; padding: 16px 40px; background: var(--accent); color: #0a0e27; font-family: 'Noto Sans JP', sans-serif; font-size: 16px; font-weight: 900; border-radius: 999px; text-decoration: none; transition: all .2s; box-shadow: 0 0 24px rgba(34,211,238,0.3); }
+  .cta-btn:hover { background: #67e8f9; box-shadow: 0 0 36px rgba(34,211,238,0.5); transform: translateY(-2px); }
+  .related-articles { margin: 40px 0 0; padding: 28px 0 0; border-top: 1px solid var(--border); }
+  .related-articles h2 { font-size: clamp(16px, 2.5vw, 20px); font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .related-articles h2::before { display: none; }
+  .related-articles ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .related-articles a { color: var(--accent); text-decoration: none; font-size: 15px; line-height: 1.6; transition: color .2s; }
+  .related-articles a:hover { color: #67e8f9; text-decoration: underline; }
+  .article-footer { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); text-align: center; }
+  .footer-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .footer-link:hover { color: var(--accent); }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">← トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+<article>
+
+  <img src="../images/blog/group-tool-toha.webp" alt="グループ分けツールとは 性格データでチームの偏りをなくすSnake draft方式を解説する画像" class="hero-img" width="1536" height="864" loading="eager">
+
+  <header class="article-header">
+    <div class="article-tags">
+      <span class="tag">グループ分け</span>
+      <span class="tag">チームビルディング</span>
+      <span class="tag">Snake draft</span>
+      <span class="tag">ビッグファイブ活用</span>
+    </div>
+    <h1 class="article-title">グループ分けツールとは<br><span>性格データでチームの偏りをなくすSnake draft方式</span></h1>
+    <p class="article-lead">「いつも同じ人が仕切ることになる」「あのグループだけ活発で他は静かだ」——グループ分けの偏りは、仲の良さで分けたことより、性格バランスで分けなかったことから来ていることが多い。</p>
+    <p class="article-meta">公開：2026年5月24日 ｜ ビッグファイブ診断 編集部</p>
+  </header>
+
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sec1">「なんとなく」のグループ分けに起きること</a></li>
+      <li><a href="#sec2">Snake draft方式とは何か</a></li>
+      <li><a href="#sec3">何を「バランス」させているか</a></li>
+      <li><a href="#sec4">保存データとの連携と使い方</a></li>
+      <li><a href="#sec5">ぜひ一度、使ってみてほしい</a></li>
+    </ol>
+  </nav>
+
+  <div class="article-body">
+
+    <section id="sec1">
+      <h2>「なんとなく」のグループ分けに起きること</h2>
+      <p>グループ分けの方法はいくつかある。番号で機械的に分ける、くじ引きで決める、仲の良さで固まる。どれも一定の合理性はあるが、それぞれに問題を抱えている。</p>
+      <p>番号やランダムは「偶然に任せる」ので、運次第で外向性が高い人がひとつのグループに偏ることがある。仲の良さで固まる方法は、関係性の再現はできても、新しい関係やバランスの良いチーム編成にはならない。</p>
+      <p>特に職場での新プロジェクト、教育現場でのグループワーク、イベントでのチーム分けなど「初対面や馴染みの薄いメンバーをうまく組み合わせたい」という場面では、性格的なバランスを意識した配分が活きる。外向性の高い人と低い人をバランスよく配置する、誠実性が高い計画タイプが各グループにいる状態を作る、といった編成だ。</p>
+      <div class="highlight-box">
+        <p>このツールが目指すのは「相性の良い組み合わせを作ること」ではなく「性格の多様性バランスを各グループで均等にすること」だ。相性は偶発的に良くなるものだが、バランスは設計できる。</p>
+      </div>
+    </section>
+
+    <section id="sec2">
+      <h2>Snake draft方式とは何か</h2>
+      <p>このツールで使っているのは<strong>Snake draft（スネークドラフト）</strong>という配分アルゴリズムだ。もとはスポーツのドラフトで使われる手法で、戦力の偏りをなくすために考案された。</p>
+      <p>仕組みはこうだ。まず全メンバーをビッグファイブの総合スコア順（高い順）に並べる。そこからグループへの振り分けを、蛇が折り返しながら進むように行う。</p>
+      <p>4グループに分ける場合を例にすると、1番目のメンバーはグループ1、2番目はグループ2、3番目はグループ3、4番目はグループ4に入る。ここで折り返して、5番目はグループ4、6番目はグループ3、7番目はグループ2、8番目はグループ1に入る——という繰り返しだ。これによって「スコアが高い順に強いグループと弱いグループが生まれる」という偏りをなくせる。</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>方法</th>
+            <th>特徴</th>
+            <th>偏りのリスク</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>番号順・ランダム</strong></td>
+            <td>手間がかからない</td>
+            <td>運次第で性格が偏る</td>
+          </tr>
+          <tr>
+            <td><strong>仲の良さで分ける</strong></td>
+            <td>関係性を維持できる</td>
+            <td>同質なグループが生まれやすい</td>
+          </tr>
+          <tr>
+            <td><strong>Snake draft方式</strong></td>
+            <td>性格バランスが均等になる</td>
+            <td>データがないメンバーには使えない</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>シャッフルボタンを押すと、同じデータで別のバランス配分が生成される。「今日の組み合わせに変化をつけたい」「何パターンか試したい」という場合に使える。</p>
+    </section>
+
+    <section id="sec3">
+      <h2>何を「バランス」させているか</h2>
+      <p>均等にしようとしているのは、ビッグファイブ5因子（O・C・E・A・N）のスコア分布だ。各グループの<strong>因子の平均値が近くなる</strong>よう配分される。結果画面では各グループの因子平均がグラフで表示されるので、「どのグループも外向性が同程度か」「誠実性の分布に偏りがないか」が一目で確認できる。</p>
+      <p>外向性だけを見ても意味がある。外向性が高い人が一つのグループに集中すると、そのグループは発言が多くなり活発に見えるが、他のグループが沈黙がちになることがある。外向性を各グループに均等配置するだけで、全体の活気のバランスが変わる。</p>
+      <p>誠実性の均等配置も重要だ。計画的に動けるメンバーが一つのグループに偏ると、そのグループだけが締め切りを守り、他のグループが流れに乗れないという状況が生まれやすい。各グループに「段取り役」が1人いる状態を作るのは、特にプロジェクト系の場面で効く。</p>
+    </section>
+
+    <section id="sec4">
+      <h2>保存データとの連携と使い方</h2>
+      <p>このツールの利点の一つは、このサイトで診断した結果をそのまま引き込めることだ。自分の診断結果と、あの人診断で登録したメンバーのデータが保存されていれば、「保存データから取り込む」ボタンで名簿に一括追加できる。</p>
+      <p>診断コードを手入力する方法もある。ビッグファイブ診断の結果ページに表示される英数字のコードを入力することで、このサイト以外で診断を受けたメンバーのデータも追加できる。最大100人まで対応し、複数の名簿を切り替えて使える（職場チームとサークルの名簿を別々に管理するなど）。</p>
+      <p>グループ数は2〜20の範囲で自由に設定できる。「4人×5グループ」でも「3人×7グループ」でも対応する。人数が割り切れない場合は自動で調整される。</p>
+      <div class="highlight-box">
+        <p>使い方として効果的なのは、新しいプロジェクトチームの立ち上げや、教育現場でのグループワーク前に全員の診断を済ませておくことだ。診断データが揃っていれば、あとはグループ数を入力してボタンを押すだけで、性格バランスの取れた編成が出力される。</p>
+      </div>
+    </section>
+
+    <section id="sec5">
+      <h2>ぜひ一度、使ってみてほしい</h2>
+      <p>「グループ分けにビッグファイブを使う」という発想は、まだ一般的ではない。でも「なぜあのグループはいつも機能しないのか」という問いに、性格バランスの視点から答えが見えることがある。</p>
+      <p>70枚のカードを集めて解放されるこのツールは、このサイトを使い込んだ人にしか届かない。それだけのデータが揃っているなら、グループ分けを「なんとなく」で決める必要はもうない。</p>
+      <p>職場でも、教育の現場でも、サークルやコミュニティでも——使い方を見つけてもらえると嬉しい。</p>
+    </section>
+
+  </div>
+
+  <section class="cta-box">
+    <h2>グループ分けツールを使ってみる</h2>
+    <p>ビッグファイブデータで性格バランスの均等なグループを自動生成。カードを70枚集めると解放されます。</p>
+    <div class="cta-badges">
+      <span class="cta-badge">最大100人対応</span>
+      <span class="cta-badge">複数名簿対応</span>
+      <span class="cta-badge">登録不要</span>
+    </div>
+    <a href="https://bigfive.jr-genius.jp/group.html" class="cta-btn">グループ分けツールを開く →</a>
+  </section>
+
+  <section class="related-articles">
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="bigfiveman-toha.html">ビッグファイブマン分析とは　EQ・ダークトライアド・愛着スタイルを統合したチーム相性の上位分析</a></li>
+      <li><a href="team-compatibility.html">チーム相性診断とは　性格で読む「合う組み合わせ」の科学</a></li>
+      <li><a href="sogo-report-toha.html">総合レポートとは　10種類以上の診断が「一つの人物像」に収束する仕組み</a></li>
+      <li><a href="shigoto-muki-fumuki.html">性格で向き不向きは変わるか　仕事と性格の関係を科学する</a></li>
+      <li><a href="ano-hito-yosoku-aishindan.html">あの人のビッグファイブ診断　相手の性格を行動から読む方法</a></li>
+    </ul>
+  </section>
+
+</article>
+
+<footer class="article-footer">
+  <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+</footer>
+</main>
+</body>
+</html>
