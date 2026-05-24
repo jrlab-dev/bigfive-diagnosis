@@ -83,6 +83,18 @@
     font-size: 20px;
     font-weight: 700;
   }
+  .coin-display {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 14px;
+    background: rgba(192,132,168,0.1);
+    border: 1px solid rgba(192,132,168,0.3);
+    border-radius: 100px;
+    font-size: 13px; font-weight: 700; color: #f0c850;
+    text-decoration: none; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .coin-display:hover { background: rgba(192,132,168,0.2); }
+  body.theme-light .coin-display { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.25); color: #7c3aed; }
 
   /* タブ */
   .tabs {
@@ -1312,7 +1324,9 @@
         マイページ
       </span>
     </h1>
-    <div style="width: 80px;"></div>
+    <a href="gacha.html" class="coin-display" id="headerCoinDisplay">
+      🪙 <span id="headerCoinCount">…</span>枚
+    </a>
   </header>
 
   <div class="tabs">
@@ -2603,8 +2617,17 @@ function renderAIProfile() {
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
 <script src="unlock.js"></script>
+<script src="gacha-utils.js"></script>
 <script src="concierge.js"></script>
 <script src="nav.js"></script>
+<script>
+(function() {
+  if (typeof GachaUtils !== 'undefined') {
+    var el = document.getElementById('headerCoinCount');
+    if (el) el.textContent = GachaUtils.getCoins();
+  }
+})();
+</script>
 <script>
 // 隠しキャラ画像パスを取得（一致しなければnull）120問版のみ呼ぶこと
 function getHiddenCharImg(scores, gender) {
