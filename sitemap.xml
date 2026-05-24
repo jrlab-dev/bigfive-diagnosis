@@ -1119,6 +1119,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：ビッグファイブマン分析とは　EQ・ダークトライアド・愛着スタイルを統合したチーム相性の上位分析 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfiveman-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：チーム相性診断とは　性格で読む「合う組み合わせ」の科学 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/team-compatibility.html</loc>
