@@ -1031,6 +1031,12 @@
 (function() {
   if (typeof GachaUtils === 'undefined') return;
   if (!GachaUtils.checkLoginBonus()) return;
+  // 初回訪問はポップアップなし（日付とストリークだけ記録してコインは加算しない）
+  if (!localStorage.getItem('bigfive_login_last')) {
+    localStorage.setItem('bigfive_login_last', GachaUtils.getTodayJST());
+    localStorage.setItem('bigfive_login_streak', '1');
+    return;
+  }
   var result = GachaUtils.claimLoginBonus();
   var coins  = GachaUtils.getCoins();
   document.getElementById('bonusEarned').textContent = '+' + result.earned + '枚';
