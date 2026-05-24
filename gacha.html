@@ -108,16 +108,22 @@ body {
 }
 .result-card-wrap {
   width: 140px; height: 200px; margin: 0 auto 16px;
-  border-radius: 12px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 8px;
-  font-size: 28px; position: relative; overflow: hidden;
+  border-radius: 12px; position: relative; overflow: hidden;
+}
+.result-card-img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: block;
+}
+.result-emoji-fallback {
+  display: none; position: absolute; inset: 0;
+  align-items: center; justify-content: center;
+  font-size: 52px;
 }
 .result-rarity-badge {
   position: absolute; top: 8px; right: 8px;
   font-size: 10px; font-weight: 900;
   padding: 2px 6px; border-radius: 4px; letter-spacing: 0.06em;
+  z-index: 1;
 }
-.result-code { font-size: 16px; font-weight: 900; letter-spacing: 0.12em; }
 .result-name { font-size: 11px; color: var(--dim); margin-top: 2px; }
 .result-label { font-size: 13px; font-weight: 700; margin-bottom: 14px; }
 .result-added { font-size: 12px; color: #34d399; margin-bottom: 16px; }
@@ -192,8 +198,8 @@ body.theme-light .rarity-r1 .result-rarity-badge { background: #64748b; color: #
     <div class="result-label" id="resultLabel"></div>
     <div class="result-card-wrap" id="resultCardWrap">
       <div class="result-rarity-badge" id="resultBadge"></div>
-      <div style="font-size:32px;" id="resultEmoji"></div>
-      <div class="result-code" id="resultCode"></div>
+      <img class="result-card-img" id="resultCardImg" src="" alt="">
+      <div class="result-emoji-fallback" id="resultEmoji"></div>
     </div>
     <div class="result-name" id="resultName"></div>
     <div class="result-added" id="resultAdded"></div>
@@ -298,22 +304,40 @@ body.theme-light .rarity-r1 .result-rarity-badge { background: #64748b; color: #
   }
 
   function showResult(card, isNew) {
-    var area     = document.getElementById('resultArea');
-    var wrap     = document.getElementById('resultCardWrap');
-    var badge    = document.getElementById('resultBadge');
-    var emoji    = document.getElementById('resultEmoji');
-    var codeEl   = document.getElementById('resultCode');
-    var nameEl   = document.getElementById('resultName');
-    var addedEl  = document.getElementById('resultAdded');
-    var labelEl  = document.getElementById('resultLabel');
+    var area    = document.getElementById('resultArea');
+    var wrap    = document.getElementById('resultCardWrap');
+    var badge   = document.getElementById('resultBadge');
+    var imgEl   = document.getElementById('resultCardImg');
+    var emoji   = document.getElementById('resultEmoji');
+    var nameEl  = document.getElementById('resultName');
+    var addedEl = document.getElementById('resultAdded');
+    var labelEl = document.getElementById('resultLabel');
 
     area.classList.remove('show');
     void area.offsetWidth; // reflow for re-animation
 
-    wrap.className  = 'result-card-wrap rarity-' + card.rarity;
+    wrap.className    = 'result-card-wrap rarity-' + card.rarity;
     badge.textContent = RARITY_LABEL[card.rarity] || card.rarity.toUpperCase();
-    emoji.textContent = RARITY_EMOJI[card.rarity] || '🃏';
-    codeEl.textContent = card.code;
+
+    // カード画像
+    var imgPath = (window.AlbumUtils && card.code && card.gender)
+      ? AlbumUtils.getCardImagePath(card) : '';
+    if (imgPath) {
+      imgEl.src = imgPath;
+      imgEl.alt = card.typeName || card.code;
+      imgEl.style.display = 'block';
+      emoji.style.display = 'none';
+      imgEl.onerror = function() {
+        imgEl.style.display = 'none';
+        emoji.style.display = 'flex';
+        emoji.textContent = RARITY_EMOJI[card.rarity] || '🃏';
+      };
+    } else {
+      imgEl.style.display = 'none';
+      emoji.style.display = 'flex';
+      emoji.textContent = RARITY_EMOJI[card.rarity] || '🃏';
+    }
+
     nameEl.textContent  = card.typeName || '';
     labelEl.textContent = isNew ? '新しいカードをゲット！' : 'カードを引きました';
     addedEl.textContent = isNew ? '✅ コレクションに追加しました' : '（すでにコレクション済み）';
