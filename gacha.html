@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/gacha.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カードガチャ｜ビッグファイブ診断</title>
+<meta name="description" content="ログインボーナスで貯めたコインでカードガチャを回そう。ノーマル・レア・スーパーの3段階。シークレットキャラも出るかも。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --purple: #8b5cf6;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --border: rgba(139,92,246,0.18);
+  --card-bg: rgba(255,255,255,0.045);
+}
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+.bg-grad {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(139,92,246,0.1), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(6,182,212,0.07), transparent 70%);
+}
+.wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+/* ヘッダー */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(10,14,39,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.back-link {
+  color: var(--dim); text-decoration: none; font-size: 13px;
+  display: flex; align-items: center; gap: 5px;
+}
+.back-link:hover { color: var(--text); }
+.header-title { font-size: 15px; font-weight: 900; }
+.coin-display {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 13px; font-weight: 700; color: #ddd6fe;
+}
+
+/* ガチャ説明 */
+.hero { text-align: center; padding: 32px 0 20px; }
+.hero h1 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.hero p { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+/* ガチャカード3種 */
+.gacha-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.gacha-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: 16px; padding: 18px 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.gacha-card.disabled { opacity: 0.45; }
+.gacha-icon { font-size: 32px; flex-shrink: 0; width: 52px; text-align: center; }
+.gacha-info { flex: 1; min-width: 0; }
+.gacha-name { font-size: 15px; font-weight: 900; margin-bottom: 3px; }
+.gacha-desc { font-size: 12px; color: var(--dim); line-height: 1.6; }
+.gacha-prob { font-size: 10px; color: var(--dim); margin-top: 6px; line-height: 1.7; }
+.gacha-btn {
+  flex-shrink: 0;
+  padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer;
+  font: inherit; font-size: 13px; font-weight: 700;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.gacha-btn:active { transform: scale(0.96); }
+.gacha-btn.normal { background: linear-gradient(135deg, #6b7280, #9ca3af); color: #fff; }
+.gacha-btn.rare   { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; }
+.gacha-btn.super  { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+.gacha-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.gacha-btn .btn-cost { font-size: 11px; opacity: 0.85; }
+.gacha-btn .btn-lack { font-size: 10px; color: #fca5a5; }
+
+/* 結果エリア */
+.result-area {
+  display: none;
+  animation: slideUp 0.4s ease;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px 20px; text-align: center; margin-bottom: 28px;
+}
+.result-area.show { display: block; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.result-card-wrap {
+  width: 140px; height: 200px; margin: 0 auto 16px;
+  border-radius: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  font-size: 28px; position: relative; overflow: hidden;
+}
+.result-rarity-badge {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 10px; font-weight: 900;
+  padding: 2px 6px; border-radius: 4px; letter-spacing: 0.06em;
+}
+.result-code { font-size: 16px; font-weight: 900; letter-spacing: 0.12em; }
+.result-name { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.result-label { font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+.result-added { font-size: 12px; color: #34d399; margin-bottom: 16px; }
+.result-again-btn {
+  background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25);
+  color: #c4b5fd; border-radius: 999px; padding: 8px 20px;
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.result-again-btn:hover { background: rgba(139,92,246,0.2); }
+
+/* レアリティ別スタイル */
+.rarity-r0 { background: rgba(107,114,128,0.15); border: 2px solid #6b7280; }
+.rarity-r0 .result-rarity-badge { background: #6b7280; color: #fff; }
+.rarity-r1 { background: rgba(226,232,240,0.08); border: 2px solid #e2e8f0; }
+.rarity-r1 .result-rarity-badge { background: #e2e8f0; color: #1e293b; }
+.rarity-r2 { background: rgba(34,197,94,0.1); border: 2px solid #22c55e; }
+.rarity-r2 .result-rarity-badge { background: #22c55e; color: #fff; }
+.rarity-r3 { background: rgba(59,130,246,0.12); border: 2px solid #3b82f6; }
+.rarity-r3 .result-rarity-badge { background: #3b82f6; color: #fff; }
+.rarity-r4 { background: rgba(139,92,246,0.14); border: 2px solid #8b5cf6; }
+.rarity-r4 .result-rarity-badge { background: #8b5cf6; color: #fff; }
+.rarity-r5 { background: rgba(245,158,11,0.12); border: 2px solid #f59e0b; box-shadow: 0 0 16px rgba(245,158,11,0.2); }
+.rarity-r5 .result-rarity-badge { background: #f59e0b; color: #fff; }
+.rarity-r6 { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.15), rgba(236,72,153,0.15)); border: 2px solid transparent; background-clip: padding-box; outline: 2px solid rgba(139,92,246,0.5); box-shadow: 0 0 20px rgba(139,92,246,0.3); }
+.rarity-r6 .result-rarity-badge { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+.rarity-r7 { background: linear-gradient(135deg, rgba(30,10,60,0.8), rgba(80,20,20,0.6)); border: 2px solid #f59e0b; box-shadow: 0 0 24px rgba(245,158,11,0.35); }
+.rarity-r7 .result-rarity-badge { background: linear-gradient(135deg, #f59e0b, #dc2626); color: #fff; }
+
+/* コイン獲得方法 */
+.earn-section { margin-bottom: 28px; }
+.earn-title { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 10px; }
+.earn-list { display: flex; flex-direction: column; gap: 8px; }
+.earn-item {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--dim);
+}
+.earn-item strong { color: var(--text); }
+
+/* ライトモード */
+body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border: rgba(109,40,217,0.14); --card-bg: rgba(255,255,255,0.82); }
+body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(139,92,246,0.08), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(6,182,212,0.06), transparent 70%); }
+body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
+body.theme-light .gacha-card { background: rgba(255,255,255,0.82); border-color: rgba(109,40,217,0.14); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+body.theme-light .result-area { background: rgba(255,255,255,0.82); border-color: rgba(109,40,217,0.14); }
+body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .rarity-r1 { background: rgba(30,41,59,0.06); border-color: #64748b; }
+body.theme-light .rarity-r1 .result-rarity-badge { background: #64748b; color: #fff; }
+</style>
+</head>
+<body class="theme-light">
+<script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<div class="bg-grad"></div>
+
+<header class="site-header">
+  <a href="mypage.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    マイページ
+  </a>
+  <span class="header-title">カードガチャ</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>カードガチャ</h1>
+    <p>毎日トップページを訪れると<strong>コイン</strong>がもらえます。<br>コインを使ってカードガチャを回しましょう。</p>
+  </div>
+
+  <!-- 結果エリア（最初は非表示） -->
+  <div class="result-area" id="resultArea">
+    <div class="result-label" id="resultLabel"></div>
+    <div class="result-card-wrap" id="resultCardWrap">
+      <div class="result-rarity-badge" id="resultBadge"></div>
+      <div style="font-size:32px;" id="resultEmoji"></div>
+      <div class="result-code" id="resultCode"></div>
+    </div>
+    <div class="result-name" id="resultName"></div>
+    <div class="result-added" id="resultAdded"></div>
+    <button class="result-again-btn" id="resultAgainBtn">閉じる</button>
+  </div>
+
+  <!-- ガチャ3種 -->
+  <div class="gacha-list">
+    <!-- ノーマル -->
+    <div class="gacha-card" id="cardNormal">
+      <div class="gacha-icon">🎴</div>
+      <div class="gacha-info">
+        <div class="gacha-name">ノーマルガチャ</div>
+        <div class="gacha-desc">ノーマルカード（r0）確定</div>
+      </div>
+      <button class="gacha-btn normal" id="btnNormal">
+        <span>引く</span>
+        <span class="btn-cost">🪙 1枚</span>
+      </button>
+    </div>
+    <!-- レア -->
+    <div class="gacha-card" id="cardRare">
+      <div class="gacha-icon">✨</div>
+      <div class="gacha-info">
+        <div class="gacha-name">レアガチャ</div>
+        <div class="gacha-desc">レアカード（r1）確定</div>
+      </div>
+      <button class="gacha-btn rare" id="btnRare">
+        <span>引く</span>
+        <span class="btn-cost">🪙 3枚</span>
+      </button>
+    </div>
+    <!-- スーパー -->
+    <div class="gacha-card" id="cardSuper">
+      <div class="gacha-icon">💎</div>
+      <div class="gacha-info">
+        <div class="gacha-name">スーパーガチャ</div>
+        <div class="gacha-desc">r2以上が確定で出現</div>
+        <div class="gacha-prob">
+          r2: 65% ／ r3: 27% ／ r4: 7%<br>
+          r5: 0.9% ／ シークレット: 0.1%
+        </div>
+      </div>
+      <button class="gacha-btn super" id="btnSuper">
+        <span>引く</span>
+        <span class="btn-cost">🪙 5枚</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- コイン獲得方法 -->
+  <div class="earn-section">
+    <div class="earn-title">コインの増やし方</div>
+    <div class="earn-list">
+      <div class="earn-item">🏠 <span>毎日トップページを開くと <strong>🪙 1枚</strong> もらえます</span></div>
+      <div class="earn-item">🔥 <span>7日連続で開くと <strong>🪙 3枚</strong> ボーナス（7の倍数日）</span></div>
+      <div class="earn-item">🎁 <span>初回は <strong>🪙 3枚</strong> からスタート</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="hidden_characters.js"></script>
+<script src="album.js"></script>
+<script src="unlock.js"></script>
+<script src="gacha-utils.js"></script>
+<script>
+(function() {
+
+  var RARITY_LABEL = { r0:'NORMAL', r1:'RARE', r2:'R2', r3:'R3', r4:'R4', r5:'SUPER RARE', r6:'SECRET', r7:'DARK SECRET' };
+  var RARITY_EMOJI = { r0:'🎴', r1:'✨', r2:'💚', r3:'💙', r4:'💜', r5:'⭐', r6:'🌈', r7:'💀' };
+  var COSTS = { normal: 1, rare: 3, super: 5 };
+
+  function updateCoinDisplay() {
+    var c = GachaUtils.getCoins();
+    document.getElementById('coinDisplay').textContent = '🪙 ' + c + '枚';
+    updateButtons(c);
+  }
+
+  function updateButtons(coins) {
+    var defs = [
+      { id: 'btnNormal', cost: COSTS.normal },
+      { id: 'btnRare',   cost: COSTS.rare },
+      { id: 'btnSuper',  cost: COSTS.super },
+    ];
+    defs.forEach(function(d) {
+      var btn = document.getElementById(d.id);
+      if (coins < d.cost) {
+        btn.disabled = true;
+        var lack = btn.querySelector('.btn-lack');
+        if (!lack) {
+          lack = document.createElement('span');
+          lack.className = 'btn-lack';
+          btn.appendChild(lack);
+        }
+        lack.textContent = 'あと' + (d.cost - coins) + '枚';
+      } else {
+        btn.disabled = false;
+        var lack2 = btn.querySelector('.btn-lack');
+        if (lack2) btn.removeChild(lack2);
+      }
+    });
+  }
+
+  function showResult(card, isNew) {
+    var area     = document.getElementById('resultArea');
+    var wrap     = document.getElementById('resultCardWrap');
+    var badge    = document.getElementById('resultBadge');
+    var emoji    = document.getElementById('resultEmoji');
+    var codeEl   = document.getElementById('resultCode');
+    var nameEl   = document.getElementById('resultName');
+    var addedEl  = document.getElementById('resultAdded');
+    var labelEl  = document.getElementById('resultLabel');
+
+    area.classList.remove('show');
+    void area.offsetWidth; // reflow for re-animation
+
+    wrap.className  = 'result-card-wrap rarity-' + card.rarity;
+    badge.textContent = RARITY_LABEL[card.rarity] || card.rarity.toUpperCase();
+    emoji.textContent = RARITY_EMOJI[card.rarity] || '🃏';
+    codeEl.textContent = card.code;
+    nameEl.textContent  = card.typeName || '';
+    labelEl.textContent = isNew ? '新しいカードをゲット！' : 'カードを引きました';
+    addedEl.textContent = isNew ? '✅ コレクションに追加しました' : '（すでにコレクション済み）';
+
+    area.classList.add('show');
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function doGacha(tier) {
+    var cost = COSTS[tier];
+    if (!GachaUtils.spendCoins(cost)) return;
+
+    var card;
+    if (tier === 'normal') card = GachaUtils.drawNormal();
+    else if (tier === 'rare') card = GachaUtils.drawRare();
+    else card = GachaUtils.drawSuper();
+
+    var isNew = false;
+    if (window.AlbumUtils) {
+      isNew = AlbumUtils.addToAlbum({
+        code:     card.code,
+        gender:   card.gender,
+        version:  card.version,
+        rarity:   card.rarity,
+        isHidden: !!card.isHidden,
+        hiddenId: card.hiddenId || null,
+        typeName: card.typeName || card.code,
+        source:   'gacha',
+        date:     new Date().toISOString(),
+      });
+    }
+
+    updateCoinDisplay();
+    showResult(card, isNew);
+  }
+
+  document.getElementById('btnNormal').addEventListener('click', function() { doGacha('normal'); });
+  document.getElementById('btnRare').addEventListener('click',   function() { doGacha('rare'); });
+  document.getElementById('btnSuper').addEventListener('click',  function() { doGacha('super'); });
+
+  document.getElementById('resultAgainBtn').addEventListener('click', function() {
+    document.getElementById('resultArea').classList.remove('show');
+  });
+
+  // 初期表示
+  updateCoinDisplay();
+
+})();
+</script>
+</body>
+</html>
