@@ -282,15 +282,17 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <div class="entry-badge">NOW PLAYING</div>
     <div class="entry-title" id="entryTitle">コインが増やせるゲーム</div>
     <div class="entry-desc" id="entryDesc">
-      4人で参加する投資ゲーム。<br>みんなで協力すればするほど<br>リターンが大きくなる——かもしれない。
+      あなたを含む4人が共同プロジェクトに参加します。<br>何枚投じるかは、あなたの判断です。
     </div>
     <div class="entry-rules">
       <h3>ルール</h3>
       <ul>
-        <li>4人で3ラウンド行います</li>
-        <li>各ラウンド、手持ち3枚のうち何枚を共同プールに投じるか選びます</li>
-        <li>プールは2倍になって全員に均等配分されます</li>
-        <li>最終的なリターンは、みんなの投じ方次第です</li>
+        <li>各ラウンド、あなたは3枚のコインを持っています</li>
+        <li>好きな枚数を共同プールに入れてください</li>
+        <li>集まったコインは増やされて、4人に均等に分けられます</li>
+        <li>全員が3枚入れた場合、手元には<b>4枚</b>戻ります</li>
+        <li>あなたが3枚・他が0枚の場合、手元には<b>1枚</b>しか戻りません</li>
+        <li>逆にあなたが0枚・他が3枚ずつの場合、手元には<b>6枚</b>戻ります</li>
       </ul>
     </div>
     <div class="entry-cost">投資額: 🪙 <strong>3枚</strong></div>
@@ -314,7 +316,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <div class="round-pool-box">
       <div class="round-pool-label">現在の共同プール</div>
       <div class="round-pool-amount"><span id="poolAmount">0</span> <span>枚</span></div>
-      <div class="round-pool-note" style="font-size:11px;color:var(--dim);margin-top:4px">プールは2倍になって4人に均等配分されます</div>
+      <div class="round-pool-note" style="font-size:11px;color:var(--dim);margin-top:4px">集まったコインは増やされて4人に均等配分されます</div>
     </div>
     <div class="round-tokens">
       <div class="round-tokens-label">あなたの持ちトークン</div>
@@ -372,7 +374,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
   var ENTRY_FEE = 3;
   var TOKENS_PER_ROUND = 3;
   var TOTAL_ROUNDS = 3;
-  var MULTIPLIER = 2;
+  var MULTIPLIER = 4 / 3;
   var STORAGE_KEY = 'pgg_result';
 
   // ===== BOTプール（ビッグファイブ性格タイプ） =====
@@ -711,8 +713,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     var playerC = state.playerContribs[n];
     var botCs = state.botContribs[n];
     var roundTotal = playerC + botCs.reduce(function(a, b) { return a + b; }, 0);
-    var multiplied = roundTotal * MULTIPLIER;
-    var perPlayer = (multiplied / 4).toFixed(1);
+    var multiplied = Math.round(roundTotal * MULTIPLIER);
+    var perPlayer = Math.round(multiplied / 4);
 
     // バーチャート
     var myChar = getMyCharInfo();
@@ -746,7 +748,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     // サマリー
     $('rrSummary').innerHTML =
       '<div class="rr-summary-row"><span>プール合計</span><span class="rr-summary-val">' + roundTotal + '枚</span></div>' +
-      '<div class="rr-summary-row"><span>×' + MULTIPLIER + '倍</span><span class="rr-summary-val">' + multiplied + '枚</span></div>' +
+      '<div class="rr-summary-row"><span>配分総額</span><span class="rr-summary-val">' + multiplied + '枚</span></div>' +
       '<div class="rr-summary-row"><span>1人あたり</span><span class="rr-summary-val">' + perPlayer + '枚</span></div>';
 
     // 次へ
@@ -771,7 +773,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       var playerC = state.playerContribs[r];
       var botCs = state.botContribs[r];
       var roundTotal = playerC + botCs.reduce(function(a, b) { return a + b; }, 0);
-      var perPlayer = (roundTotal * MULTIPLIER) / 4;
+      var perPlayer = Math.round(roundTotal * MULTIPLIER / 4);
       totalReturn += perPlayer;
     }
     // 投資額3枚に対するリターン
