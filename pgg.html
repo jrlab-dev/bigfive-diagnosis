@@ -182,8 +182,11 @@ body {
 .rr-bar-img img { width: 100%; height: 100%; object-fit: cover; }
 .rr-bar-name { flex: 1; font-size: 12px; color: var(--dim); min-width: 0; }
 .rr-bar-row.self .rr-bar-name { color: var(--amber); font-weight: 700; }
-.rr-bar-amount { font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.rr-bar-amounts { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; gap: 2px; }
+.rr-bar-amount { font-size: 14px; font-weight: 700; }
 .rr-bar-row.self .rr-bar-amount { color: var(--amber); }
+.rr-bar-total { font-size: 11px; color: var(--dim); }
+.rr-bar-row.self .rr-bar-total { color: rgba(245,158,11,0.7); }
 .rr-wallet { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; padding: 10px 16px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 700; }
 .rr-wallet .coin { color: var(--amber); }
 .rr-summary {
@@ -760,22 +763,30 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     var multiplied = Math.round(roundTotal * MULTIPLIER);
     var perPlayer = Math.round(multiplied / 4);
 
-    // バーチャート → キャラ画像＋枚数リスト
+    // キャラ画像＋今回枚数＋累計枚数リスト
     var myChar = getMyCharInfo();
     var myName = myChar ? myChar.name : 'あなた';
-    var allContribs = [{ name: myName, amount: playerC, self: true, img: myChar ? myChar.img : null }];
+
+    // 累計計算（0..n ラウンド分）
+    var playerTotal = 0;
+    for (var r = 0; r <= n; r++) playerTotal += state.playerContribs[r];
+
+    var allContribs = [{ name: myName, amount: playerC, total: playerTotal, self: true, img: myChar ? myChar.img : null }];
     for (var i = 0; i < state.bots.length; i++) {
-      allContribs.push({ name: state.bots[i].name, amount: botCs[i], self: false, img: state.bots[i].img });
+      var botTotal = 0;
+      for (var r2 = 0; r2 <= n; r2++) botTotal += state.botContribs[r2][i];
+      allContribs.push({ name: state.bots[i].name, amount: botCs[i], total: botTotal, self: false, img: state.bots[i].img });
     }
 
     var barsHtml = '';
     for (var j = 0; j < allContribs.length; j++) {
       var c = allContribs[j];
       var imgHtml = c.img ? '<img src="' + c.img + '">' : '🪙';
+      var totalHtml = n > 0 ? '<div class="rr-bar-total">累計 ' + c.total + '枚</div>' : '';
       barsHtml += '<div class="rr-bar-row' + (c.self ? ' self' : '') + '">' +
         '<div class="rr-bar-img">' + imgHtml + '</div>' +
         '<div class="rr-bar-name">' + c.name + '</div>' +
-        '<div class="rr-bar-amount">' + c.amount + '枚</div></div>';
+        '<div class="rr-bar-amounts"><div class="rr-bar-amount">' + c.amount + '枚</div>' + totalHtml + '</div></div>';
     }
     $('rrBars').innerHTML = barsHtml;
 
