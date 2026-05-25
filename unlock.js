@@ -4,33 +4,35 @@
 var UNLOCK_DEPLOY_DATE = '2026-05-20T15:00:00.000Z';
 
 var UNLOCK_TABLE = [
-  { cards:  1, id: 'other',               label: 'あの人診断',          url: 'other_quiz.html' },
-  { cards:  2, id: 'career',              label: 'キャリア適性診断',     url: 'career.html' },
-  { cards:  3, id: 'team',               label: 'チーム相性診断',       url: 'team.html' },
-  { cards:  4, id: 'report',             label: '総合レポート',         url: 'report.html' },
-  { cards:  5, id: 'attachment',         label: '愛着スタイル診断',     url: 'attachment.html' },
-  { cards:  7, id: 'mindset',            label: 'マインドセット診断',    url: 'mindset.html' },
-  { cards: 10, id: 'schwartz',           label: '価値観診断',           url: 'schwartz.html' },
-  { cards: 13, id: 'eq',                 label: 'EQ診断',               url: 'eq.html' },
-  { cards: 15, id: 'riasec',             label: 'RIASEC職業興味診断',   url: 'riasec.html' },
-  { cards: 16, id: 'career-integration', label: 'キャリア統合分析',     url: 'career-integration.html' },
-  { cards: 18, id: 'locus',             label: '統制の所在診断',        url: 'locus.html' },
-  { cards: 20, id: 'sdt',               label: '動機づけ診断',          url: 'sdt.html' },
-  { cards: 20, id: 'zukan_s2',          label: 'コレクション Stage 2',   url: 'zukan.html' },
-  { cards: 22, id: 'dark-triad',        label: 'ダークトライアド診断',        url: 'dark-triad.html' },
-  { cards: 24, id: 'other_limit_30',    label: 'あの人保存30件に拡張',  url: null },
-  { cards: 27, id: 'other-dark-triad', label: 'あの人のダークトライアド診断', url: 'other_dark_triad.html' },
-  { cards: 30, id: 'other_limit_40',    label: 'あの人保存40件に拡張',  url: null },
-  { cards: 35, id: 'other-attachment', label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
-  { cards: 40, id: 'other_limit_50',    label: 'あの人保存50件に拡張',  url: null },
-  { cards: 50, id: 'other-eq',          label: 'あの人のEQ診断',         url: 'other_eq.html' },
-  { cards: 60, id: 'bigfiveman',         label: 'ビッグファイブマン分析', url: 'team.html' },
-  { cards: 70, id: 'group',             label: 'グループ分けツール',    url: 'group.html' },
-  { cards: 100, id: 'zukan_s3',         label: '完全図鑑 Stage 3',      url: 'zukan.html' },
+  { cards:  1, id: 'love',               label: '恋愛スタイル診断',       url: 'love.html' },
+  { cards:  2, id: 'other',              label: 'あの人診断',            url: 'other_quiz.html' },
+  { cards:  3, id: 'career',             label: 'キャリア適性診断',      url: 'career.html' },
+  { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
+  { cards:  5, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
+  { cards:  7, id: 'report',             label: '総合レポート',          url: 'report.html' },
+  { cards: 10, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
+  { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
+  { cards: 18, id: 'schwartz',           label: '価値観診断',            url: 'schwartz.html' },
+  { cards: 20, id: 'zukan_s2',           label: 'コレクション Stage 2',   url: 'zukan.html' },
+  { cards: 25, id: 'eq',                 label: 'EQ診断',               url: 'eq.html' },
+  { cards: 30, id: 'riasec',             label: 'RIASEC職業興味診断',    url: 'riasec.html' },
+  { cards: 30, id: 'other_limit_30',     label: 'あの人保存30件に拡張',   url: null },
+  { cards: 35, id: 'career-integration', label: 'キャリア統合分析',      url: 'career-integration.html' },
+  { cards: 40, id: 'locus',              label: '統制の所在診断',        url: 'locus.html' },
+  { cards: 40, id: 'other_limit_40',     label: 'あの人保存40件に拡張',   url: null },
+  { cards: 45, id: 'sdt',                label: '動機づけ診断',          url: 'sdt.html' },
+  { cards: 50, id: 'dark-triad',         label: 'ダークトライアド診断',   url: 'dark-triad.html' },
+  { cards: 50, id: 'other_limit_50',     label: 'あの人保存50件に拡張',   url: null },
+  { cards: 55, id: 'other-dark-triad',   label: 'あの人のダークトライアド診断', url: 'other_dark_triad.html' },
+  { cards: 60, id: 'other-attachment',   label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
+  { cards: 65, id: 'other-eq',           label: 'あの人のEQ診断',        url: 'other_eq.html' },
+  { cards: 70, id: 'bigfiveman',          label: 'ビッグファイブマン分析', url: 'team.html' },
+  { cards: 80, id: 'group',              label: 'グループ分けツール',     url: 'group.html' },
+  { cards: 100, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
 ];
 
 // 常に解放済みのID
-var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'love', 'impostor', 'kodomo'];
+var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'kodomo'];
 
 function isLegacyUser() {
   try { if (localStorage.getItem('bigfive_legacy_user') === 'true') return true; } catch(e) { return false; }
@@ -84,9 +86,9 @@ function getRequiredCards(featureId) {
 function getOtherLimit() {
   if (isLegacyUser()) return 50;
   var count = getCardCount();
-  if (count >= 40) return 50;
-  if (count >= 30) return 40;
-  if (count >= 25) return 30;
+  if (count >= 50) return 50;
+  if (count >= 40) return 40;
+  if (count >= 30) return 30;
   if (count >= 1)  return 20;
   return 0;
 }
