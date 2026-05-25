@@ -122,6 +122,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   font-size: 24px; border: 2px solid rgba(255,255,255,0.1);
   background: rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 .lobby-player.self .lobby-avatar { border-color: var(--amber); background: rgba(245,158,11,0.15); }
 .lobby-name { font-size: 11px; color: var(--dim); font-weight: 500; }
@@ -281,7 +282,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <div class="entry-badge">NOW PLAYING</div>
     <div class="entry-title" id="entryTitle">コインが増やせるゲーム</div>
     <div class="entry-desc" id="entryDesc">
-      4人で参加する共同投資ゲーム。<br>みんなで協力すればするほど、<br>リターンが大きくなるかも？
+      4人で参加する投資ゲーム。<br>みんなで協力すればするほど<br>リターンが大きくなる——かもしれない。
     </div>
     <div class="entry-rules">
       <h3>ルール</h3>
@@ -289,10 +290,10 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         <li>4人で3ラウンド行います</li>
         <li>各ラウンド、手持ち3枚のうち何枚を共同プールに投じるか選びます</li>
         <li>プールは2倍になって全員に均等配分されます</li>
-        <li>最後に投資結果でコインが増えるかも？</li>
+        <li>最終的なリターンは、みんなの投じ方次第です</li>
       </ul>
     </div>
-    <div class="entry-cost">参加費: 🪙 <strong>3枚</strong>（結果にかかわらず返却）</div>
+    <div class="entry-cost">投資額: 🪙 <strong>3枚</strong></div>
     <button class="start-btn" id="startBtn">ゲームを始める</button>
     <div class="entry-lack" id="entryLack" style="display:none"></div>
     <div class="entry-replay-note" id="entryReplayNote" style="display:none"></div>
@@ -365,18 +366,70 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
   var ENTRY_FEE = 3;
   var TOKENS_PER_ROUND = 3;
   var TOTAL_ROUNDS = 3;
-  var WIN_BONUS = 2;
   var MULTIPLIER = 2;
   var STORAGE_KEY = 'pgg_result';
 
-  // ===== BOTプール =====
+  // ===== BOTプール（ビッグファイブ性格タイプ） =====
+  function genTypeName(scores) {
+    var keys = ['O', 'C', 'E', 'A', 'N'];
+    var vals = {};
+    for (var i = 0; i < keys.length; i++) vals[keys[i]] = scores[i];
+    var main = 'O', max = scores[0];
+    for (var j = 1; j < keys.length; j++) {
+      if (scores[j] > max) { max = scores[j]; main = keys[j]; }
+    }
+    var mainLabels = { O:{high:'探求者',low:'確実派'}, C:{high:'実行者',low:'自由人'}, E:{high:'社交家',low:'内省家'}, A:{high:'調停者',low:'競争者'}, N:{high:'感受家',low:'平静派'} };
+    var subLabels = { O:{high:'発想家',low:'現実派'}, C:{high:'規律派',low:'柔軟派'}, E:{high:'ムードメーカー',low:'思考家'}, A:{high:'支援者',low:'自立派'}, N:{high:'繊細派',low:'泰然家'} };
+    var mainLabel = max >= 4 ? mainLabels[main].high : mainLabels[main].low;
+    var sub = '';
+    for (var k = 0; k < keys.length; k++) {
+      if (keys[k] !== main && (scores[k] === 1 || scores[k] === 5)) {
+        sub = subLabels[keys[k]][scores[k] === 5 ? 'high' : 'low'];
+        break;
+      }
+    }
+    return sub ? sub + '・' + mainLabel : mainLabel;
+  }
+
+  function charImgUrl(gender, scores) {
+    var code = '';
+    for (var i = 0; i < scores.length; i++) code += scores[i];
+    return 'images/characters/' + gender + '/' + code + '.webp';
+  }
+
   var BOT_POOL = [
-    { name: 'ユウキ', emoji: '🧑', color: '#3b82f6', base: 2, weights: [1.0, 0.9, 0.7], matchBias: 0.3 },
-    { name: 'ミサキ', emoji: '👩', color: '#ec4899', base: 3, weights: [1.0, 1.0, 0.85], matchBias: 0.1 },
-    { name: 'タクヤ', emoji: '👨', color: '#10b981', base: 2, weights: [1.2, 1.0, 0.5], matchBias: 0.2 },
-    { name: 'サクラ', emoji: '👧', color: '#f59e0b', base: 1, weights: [1.0, 0.8, 0.6], matchBias: 0.15 },
-    { name: 'ケンイチ', emoji: '👦', color: '#8b5cf6', base: 2, weights: [1.0, 1.0, 1.0], matchBias: 0.25 }
+    { scores: [3,4,3,5,2], gender: 'F', base: 3, weights: [1.0, 1.0, 0.9], matchBias: 0.1 },
+    { scores: [3,3,4,1,3], gender: 'M', base: 1, weights: [1.0, 0.8, 0.6], matchBias: 0.15 },
+    { scores: [3,5,3,3,2], gender: 'M', base: 2, weights: [1.0, 1.0, 1.0], matchBias: 0.25 },
+    { scores: [5,3,5,3,2], gender: 'F', base: 2, weights: [1.0, 0.9, 0.7], matchBias: 0.3 },
+    { scores: [5,1,3,3,3], gender: 'M', base: 2, weights: [1.2, 1.0, 0.5], matchBias: 0.2 }
   ];
+
+  // BOT_POOLにname/img/colorを自動生成
+  var FACTOR_COLORS = ['#8b5cf6','#3b82f6','#10b981','#f59e0b','#ef4444'];
+  for (var bi = 0; bi < BOT_POOL.length; bi++) {
+    var bp = BOT_POOL[bi];
+    bp.name = genTypeName(bp.scores);
+    bp.img = charImgUrl(bp.gender, bp.scores);
+    var topIdx = 0;
+    for (var bj = 1; bj < bp.scores.length; bj++) { if (bp.scores[bj] > bp.scores[topIdx]) topIdx = bj; }
+    bp.color = FACTOR_COLORS[topIdx];
+  }
+
+  // 自分のキャラ情報を取得
+  function getMyCharInfo() {
+    try {
+      var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      var activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+      if (myResults[activeIdx] && myResults[activeIdx].scores) {
+        var sc = myResults[activeIdx].scores;
+        var scores = [sc.O || 3, sc.C || 3, sc.E || 3, sc.A || 3, sc.N || 3];
+        var gender = myResults[activeIdx].gender || 'M';
+        return { name: genTypeName(scores), img: charImgUrl(gender, scores), scores: scores };
+      }
+    } catch(e) {}
+    return null;
+  }
 
   // ===== タイプ定義 =====
   var TYPES = {
@@ -502,6 +555,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       poolTotal: 0,
       selectedAmount: -1,
       won: false,
+      netGain: 0,
       timers: []
     };
 
@@ -515,10 +569,18 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     grid.innerHTML = '';
 
     // 自分
-    var selfHtml = '<div class="lobby-player self joined">' +
-      '<div class="lobby-avatar">🪙</div>' +
-      '<div class="lobby-name">あなた</div></div>';
-    grid.innerHTML = selfHtml;
+    var myChar = getMyCharInfo();
+    var selfAvatarHtml;
+    if (myChar) {
+      selfAvatarHtml = '<div class="lobby-player self joined">' +
+        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15);overflow:hidden"><img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>' +
+        '<div class="lobby-name">' + myChar.name + '</div></div>';
+    } else {
+      selfAvatarHtml = '<div class="lobby-player self joined">' +
+        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15)">🪙</div>' +
+        '<div class="lobby-name">あなた</div></div>';
+    }
+    grid.innerHTML = selfAvatarHtml;
 
     // BOT枠（まだ参加していない）
     for (var i = 0; i < 3; i++) {
@@ -534,8 +596,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
           var el = $('lobbyBot' + idx);
           var bot = state.bots[idx];
           el.classList.add('joined');
-          el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot.color + ';background:' + bot.color + '22">' +
-            bot.emoji + '</div>' +
+          el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot.color + ';background:' + bot.color + '22;overflow:hidden"><img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>' +
             '<div class="lobby-name">' + bot.name + '</div>';
         }, 1200 + idx * 1400));
       })(j);
@@ -637,16 +698,18 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     var perPlayer = (multiplied / 4).toFixed(1);
 
     // バーチャート
-    var allContribs = [{ name: 'あなた', amount: playerC, self: true }];
+    var myChar = getMyCharInfo();
+    var myName = myChar ? myChar.name : 'あなた';
+    var allContribs = [{ name: myName, amount: playerC, self: true }];
     for (var i = 0; i < state.bots.length; i++) {
-      allContribs.push({ name: state.bots[i].name, amount: botCs[i], self: false });
+      allContribs.push({ name: state.bots[i].name, amount: botCs[i], self: false, color: state.bots[i].color });
     }
 
     var barsHtml = '';
     for (var j = 0; j < allContribs.length; j++) {
       var c = allContribs[j];
       var pct = Math.round((c.amount / TOKENS_PER_ROUND) * 100);
-      var barColor = c.self ? 'var(--amber)' : '#6366f1';
+      var barColor = c.self ? 'var(--amber)' : (c.color || '#6366f1');
       barsHtml += '<div class="rr-bar-row">' +
         '<div class="rr-bar-name' + (c.self ? ' self' : '') + '">' + c.name + '</div>' +
         '<div class="rr-bar-track"><div class="rr-bar-fill" style="width:0%;background:' + barColor + '">' + pct + '%</div></div>' +
@@ -681,26 +744,42 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   // ===== FINAL =====
   function showFinal() {
-    state.won = Math.random() < 0.5;
+    // PGGの実際の結果に基づく損得計算
+    var totalReturn = 0;
+    for (var r = 0; r < TOTAL_ROUNDS; r++) {
+      var playerC = state.playerContribs[r];
+      var botCs = state.botContribs[r];
+      var roundTotal = playerC + botCs.reduce(function(a, b) { return a + b; }, 0);
+      var perPlayer = (roundTotal * MULTIPLIER) / 4;
+      totalReturn += perPlayer;
+    }
+    // 投資額3枚に対するリターン
+    var netGain = Math.round(totalReturn) - ENTRY_FEE;
+    state.won = netGain > 0;
+    state.netGain = netGain;
 
-    // 参加費返却 + 勝者ボーナス
-    GachaUtils.addCoins(ENTRY_FEE + (state.won ? WIN_BONUS : 0));
+    // 実際のコイン変動（内部的には全額返却 + ボーナスのみ加算）
+    var coinChange = Math.max(0, netGain);
+    GachaUtils.addCoins(ENTRY_FEE + coinChange);
     updateCoinDisplay();
 
     showPhase('phaseFinal');
 
-    if (state.won) {
+    if (netGain > 0) {
       $('finalIcon').textContent = '🎉';
-      $('finalTitle').textContent = '当たり！';
+      $('finalTitle').textContent = '+' + netGain + '枚の利益！';
       $('finalTitle').className = 'final-result-title win';
-      $('finalCoins').innerHTML = '🪙 <span class="plus">+' + WIN_BONUS + '枚</span> 獲得！' +
-        '<div class="return-note">参加費' + ENTRY_FEE + '枚を返却しました</div>';
+      $('finalCoins').innerHTML = '投資額より <span class="plus">' + netGain + '枚</span> 多く戻りました';
+    } else if (netGain === 0) {
+      $('finalIcon').textContent = '😐';
+      $('finalTitle').textContent = 'ちょうどプライスレス';
+      $('finalTitle').className = 'final-result-title';
+      $('finalCoins').innerHTML = '投資額と同額が戻りました';
     } else {
       $('finalIcon').textContent = '😔';
-      $('finalTitle').textContent = '外れ...';
+      $('finalTitle').textContent = netGain + '枚の損失...';
       $('finalTitle').className = 'final-result-title lose';
-      $('finalCoins').innerHTML = '参加費' + ENTRY_FEE + '枚を返却しました' +
-        '<div class="return-note">残念！次は当たるかも？</div>';
+      $('finalCoins').innerHTML = '投資額より ' + Math.abs(netGain) + '枚 少なく戻りました';
     }
   }
 
@@ -716,7 +795,28 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('typeName').style.color = typeInfo.color;
     $('typeSummary').textContent = typeInfo.summary;
 
-    $('typeDetail').innerHTML = '<h3>あなたのタイプ</h3><p>' + typeInfo.detail + '</p>';
+    // 参加者一覧（キャラ画像付き）
+    var myChar = getMyCharInfo();
+    var myName = myChar ? myChar.name : 'あなた';
+    var playersHtml = '<h3>参加したメンバー</h3><div style="display:flex;justify-content:center;gap:12px;margin-top:10px">';
+    // 自分
+    playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid var(--amber);margin:0 auto 4px">';
+    if (myChar) {
+      playersHtml += '<img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover">';
+    } else {
+      playersHtml += '🪙';
+    }
+    playersHtml += '</div><div style="font-size:10px;color:var(--amber);font-weight:700">' + myName + '</div></div>';
+    // BOT
+    for (var p = 0; p < state.bots.length; p++) {
+      var bot = state.bots[p];
+      playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid ' + bot.color + ';margin:0 auto 4px">';
+      playersHtml += '<img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover">';
+      playersHtml += '</div><div style="font-size:10px;color:var(--dim);font-weight:500">' + bot.name + '</div></div>';
+    }
+    playersHtml += '</div>';
+
+    $('typeDetail').innerHTML = playersHtml + '<h3 style="margin-top:16px">あなたのタイプ</h3><p>' + typeInfo.detail + '</p>';
 
     // ビッグファイブクロス分析
     var bfHtml = '<h3>ビッグファイブとの関連</h3>';
@@ -747,7 +847,17 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     for (var i = 0; i < state.playerContribs.length; i++) {
       contribHtml += '<span>R' + (i + 1) + ': ' + state.playerContribs[i] + '/' + TOKENS_PER_ROUND + '</span>';
     }
+    // 損失時は安心メッセージ
+    if (state.netGain < 0) {
+      contribHtml += '<span style="color:var(--green);font-weight:700">（投資額は全額戻りました）</span>';
+    }
     $('contribSummary').innerHTML = contribHtml;
+
+    // 損失があった場合はこっそり全額返却
+    if (state.netGain < 0) {
+      GachaUtils.addCoins(Math.abs(state.netGain));
+      updateCoinDisplay();
+    }
 
     // 保存
     saveResult(classification);
@@ -790,6 +900,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       contributions: state.playerContribs.slice(),
       avgRate: Math.round(classification.avgRate * 100) / 100,
       won: state.won,
+      netGain: state.netGain,
       playCount: 1,
       timestamp: Date.now()
     };
@@ -830,6 +941,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       poolTotal: 0,
       selectedAmount: -1,
       won: false,
+      netGain: 0,
       timers: []
     };
     initEntry();
