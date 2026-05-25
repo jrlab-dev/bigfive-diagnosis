@@ -519,17 +519,45 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     return picked;
   }
 
+  // 初回専用：固定シナリオBOT（裏切者・真中・協力者）
+  function buildFirstGameBots() {
+    var defs = [
+      // 裏切者: A=1, N=4 — R1=裏切, R2=裏切, R3=ほぼ裏切
+      { scores:[3,2,2,1,4], gender:'M', fixedContribs:[0,0,-1], r3:[0,1] },
+      // 真中: balanced — R1=やや協力, R2=揺れて非協力, R3=ランダム
+      { scores:[3,3,3,3,3], gender:'F', fixedContribs:[2,1,-1], r3:[0,2] },
+      // 協力者: A=5, N=2 — R1=最大協力, R2=裏切りを見て減らす, R3=やや協力
+      { scores:[3,3,3,5,2], gender:'F', fixedContribs:[3,1,-1], r3:[1,2] }
+    ];
+    return defs.map(function(d) {
+      var bot = { scores:d.scores, gender:d.gender, fixedContribs:d.fixedContribs, r3:d.r3 };
+      bot.name = genTypeName(d.scores);
+      bot.img = charImgUrl(d.gender, d.scores);
+      var topIdx = 0;
+      for (var j=1; j<d.scores.length; j++) { if (d.scores[j]>d.scores[topIdx]) topIdx=j; }
+      bot.color = FACTOR_COLORS[topIdx];
+      return bot;
+    });
+  }
+
   function calcBotContrib(bot, roundIdx, allContribs) {
-    var base = Math.round(bot.base * bot.weights[roundIdx]);
+    // 初回: 固定シナリオ
+    if (bot.fixedContribs) {
+      var fixed = bot.fixedContribs[roundIdx];
+      if (fixed >= 0) return fixed;
+      return bot.r3[0] + Math.floor(Math.random() * (bot.r3[1] - bot.r3[0] + 1));
+    }
+    // 2回目以降: 難易度高め（BOTはほぼ自己中心的）
+    var base = Math.round(bot.base * bot.weights[roundIdx] * 0.35);
     base = Math.max(0, Math.min(3, base));
     if (roundIdx > 0 && allContribs.length > 0) {
       var prevRound = allContribs[allContribs.length - 1];
-      var avg = prevRound.reduce(function(a, b) { return a + b; }, 0) / prevRound.length;
-      base += Math.round((avg - base) * bot.matchBias);
+      var avg = prevRound.reduce(function(a,b){return a+b;},0) / prevRound.length;
+      base += Math.round((avg - base) * bot.matchBias * 0.3);
       base = Math.max(0, Math.min(3, base));
     }
     if (Math.random() < 0.3) {
-      base += (Math.random() < 0.5 ? -1 : 1);
+      base += (Math.random() < 0.25 ? 1 : -1);
       base = Math.max(0, Math.min(3, base));
     }
     return base;
@@ -565,17 +593,19 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     if (!GachaUtils.spendCoins(ENTRY_FEE)) return;
     updateCoinDisplay();
 
+    var isFirst = !localStorage.getItem(STORAGE_KEY);
     state = {
       currentRound: 0,
       playerContribs: [],
       botContribs: [],
-      bots: pickBots(),
+      bots: isFirst ? buildFirstGameBots() : pickBots(),
       poolTotal: 0,
       selectedAmount: -1,
       won: false,
       netGain: 0,
       timers: [],
-      playerBalance: 3
+      playerBalance: 3,
+      isFirstPlay: isFirst
     };
 
     startLobby();
@@ -930,21 +960,19 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   // ===== 保存 =====
   function saveResult(classification) {
-    var pggData = {
-      type: classification.type,
-      typeName: classification.typeName,
-      contributions: state.playerContribs.slice(),
-      avgRate: Math.round(classification.avgRate * 100) / 100,
-      won: state.won,
-      netGain: state.netGain,
-      playCount: 1,
-      timestamp: Date.now()
-    };
-
-    var isFirst = !localStorage.getItem(STORAGE_KEY);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(pggData));
-
-    if (isFirst) {
+    if (state.isFirstPlay) {
+      // 初回のみ：診断結果を保存
+      var pggData = {
+        type: classification.type,
+        typeName: classification.typeName,
+        contributions: state.playerContribs.slice(),
+        avgRate: Math.round(classification.avgRate * 100) / 100,
+        won: state.won,
+        netGain: state.netGain,
+        playCount: 1,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(pggData));
       // 診断ボーナスコイン
       if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('pgg');
       // bigfive_my_resultsにリンク
@@ -957,10 +985,10 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         }
       } catch(e) {}
     } else {
+      // 2回目以降：診断データは一切上書きしない。プレイ回数のみ更新
       try {
         var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
         existing.playCount = (existing.playCount || 1) + 1;
-        existing.won = state.won;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
       } catch(e) {}
     }
