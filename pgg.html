@@ -303,9 +303,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   <!-- LOBBY -->
   <div class="phase" id="phaseLobby">
-    <div class="lobby-title">参加者を待っています<span class="lobby-dots"></span></div>
+    <div class="lobby-title">もう1人待っています<span class="lobby-dots"></span></div>
     <div class="lobby-grid" id="lobbyGrid"></div>
-    <div class="lobby-status" id="lobbyStatus">4人揃いました！ ゲーム開始！</div>
+    <div class="lobby-status" id="lobbyStatus">4人揃いました！ ゲーム開始</div>
   </div>
 
   <!-- ROUND -->
@@ -579,7 +579,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     var grid = $('lobbyGrid');
     grid.innerHTML = '';
 
-    // 自分
+    // 自分（既に参加）
     var myChar = getMyCharInfo();
     var selfAvatarHtml;
     if (myChar) {
@@ -593,35 +593,37 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     }
     grid.innerHTML = selfAvatarHtml;
 
-    // BOT枠（まだ参加していない）
-    for (var i = 0; i < 3; i++) {
-      grid.innerHTML += '<div class="lobby-player" id="lobbyBot' + i + '">' +
-        '<div class="lobby-avatar" style="opacity:0.2">?</div>' +
-        '<div class="lobby-name" style="opacity:0.2">---</div></div>';
+    // BOT 1〜2人目は既に参加済み
+    for (var i = 0; i < 2; i++) {
+      var bot0 = state.bots[i];
+      grid.innerHTML += '<div class="lobby-player joined">' +
+        '<div class="lobby-avatar" style="border-color:' + bot0.color + ';background:' + bot0.color + '22;overflow:hidden"><img src="' + bot0.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
+        '<div class="lobby-name">' + bot0.name + '</div></div>';
     }
 
-    // BOT順次参加演出
-    for (var j = 0; j < 3; j++) {
-      (function(idx) {
-        state.timers.push(setTimeout(function() {
-          var el = $('lobbyBot' + idx);
-          var bot = state.bots[idx];
-          el.classList.add('joined');
-          el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot.color + ';background:' + bot.color + '22;overflow:hidden"><img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
-            '<div class="lobby-name">' + bot.name + '</div>';
-        }, 1200 + idx * 1400));
-      })(j);
-    }
+    // BOT 3人目はまだ（待機中）
+    grid.innerHTML += '<div class="lobby-player" id="lobbyBot2">' +
+      '<div class="lobby-avatar" style="opacity:0.2">?</div>' +
+      '<div class="lobby-name" style="opacity:0.2">---</div></div>';
+
+    // 3人目が参加
+    state.timers.push(setTimeout(function() {
+      var el = $('lobbyBot2');
+      var bot2 = state.bots[2];
+      el.classList.add('joined');
+      el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot2.color + ';background:' + bot2.color + '22;overflow:hidden"><img src="' + bot2.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
+        '<div class="lobby-name">' + bot2.name + '</div>';
+    }, 2500));
 
     // 全員揃った
     state.timers.push(setTimeout(function() {
       $('lobbyStatus').classList.add('show');
-    }, 1200 + 3 * 1400));
+    }, 3500));
 
     // ゲーム開始
     state.timers.push(setTimeout(function() {
       showRound(0);
-    }, 1200 + 3 * 1400 + 1800));
+    }, 5000));
   }
 
   // ===== ROUND =====
