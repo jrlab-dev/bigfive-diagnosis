@@ -177,7 +177,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* 機械コンテナ */
 .carddas-machine {
   position: relative;
-  width: 260px;
+  width: 280px;
   margin-bottom: 0;
 }
 
@@ -235,7 +235,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* 表示窓 */
 .carddas-display {
   margin: 6px auto 10px;
-  width: 200px; height: 60px;
+  width: 220px; height: 60px;
   background: linear-gradient(180deg, #080816, #0f0f24);
   border: 2px solid #333;
   border-radius: 8px;
@@ -348,7 +348,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
   position: absolute;
   bottom: 22px; left: 50%;
   transform: translateX(-50%);
-  width: 120px; height: 10px;
+  width: 140px; height: 10px;
   background: #080808;
   border: 2px solid #3a3a4a;
   border-radius: 5px;
@@ -356,7 +356,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* カードエリア（機械の下） */
 .carddas-card-area {
-  width: 260px; height: 180px;
+  width: 280px; height: 240px;
   position: relative;
   display: flex; justify-content: center;
   overflow: visible;
@@ -364,10 +364,10 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* カード */
 .carddas-card {
-  width: 110px; height: 154px;
+  width: 160px; height: 224px;
   perspective: 800px;
   position: absolute;
-  top: -160px;
+  top: -230px;
   opacity: 0;
   z-index: 2;
 }
@@ -375,7 +375,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
   animation: cardSlideOut 0.9s cubic-bezier(0.15, 0, 0.35, 1) forwards;
 }
 @keyframes cardSlideOut {
-  0%   { opacity: 0; top: -160px; }
+  0%   { opacity: 0; top: -230px; }
   10%  { opacity: 1; }
   40%  { top: 0px; }
   50%  { top: -5px; }
@@ -448,10 +448,10 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* カード上のレアリティバッジ */
 .carddas-rarity {
   position: absolute;
-  top: 5px; right: 5px;
-  font-size: 7px; font-weight: 900;
-  padding: 2px 4px;
-  border-radius: 3px; z-index: 3;
+  top: 6px; right: 6px;
+  font-size: 9px; font-weight: 900;
+  padding: 3px 6px;
+  border-radius: 4px; z-index: 3;
   letter-spacing: 0.05em;
 }
 
@@ -570,28 +570,15 @@ body.theme-light .earn-item strong { color: #1e293b; }
 }
 .carddas-close-btn:hover { background: rgba(139,92,246,0.25); }
 
-/* 機能解放バナー */
-.unlock-banner {
-  position: fixed; bottom: -120px; left: 50%; transform: translateX(-50%);
-  min-width: 300px; max-width: 90vw;
-  background: linear-gradient(135deg, rgba(139,92,246,0.95), rgba(236,72,153,0.95));
-  color: #fff; border-radius: 16px;
-  padding: 16px 20px; text-align: center;
-  z-index: 200; box-shadow: 0 8px 32px rgba(139,92,246,0.4);
-  transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: 'Noto Sans JP', sans-serif;
-}
-.unlock-banner.show { bottom: 20px; }
-.unlock-banner-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
-.unlock-banner-label { font-size: 18px; font-weight: 900; }
-.unlock-banner-sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
 
 /* 小画面対応 */
 @media (max-height: 700px) {
-  .carddas-body { height: 320px; }
+  .carddas-body { height: 300px; }
   .carddas-dial { width: 70px; height: 70px; }
   .carddas-dial-area { margin: 8px 0; }
   .carddas-display { height: 48px; margin: 4px auto 6px; }
+  .carddas-card { width: 140px; height: 196px; top: -200px; }
+  .carddas-card-area { height: 210px; }
 }
 </style>
 </head>
@@ -723,6 +710,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 <script src="album.js"></script>
 <script src="unlock.js"></script>
 <script src="gacha-utils.js"></script>
+<script src="unlock-banner.js"></script>
 <script>
 (function() {
 
@@ -854,10 +842,11 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
     // カード表面の準備（コレクション・図鑑と同じOGP画像を使用）
     var imgPath = '';
+    var cacheBust = '&_t=' + Date.now();
     if (card.isHidden && card.hiddenId) {
-      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?char=' + card.hiddenId;
+      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?char=' + card.hiddenId + cacheBust;
     } else if (card.code && card.gender) {
-      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity;
+      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity + cacheBust;
     }
     if (imgPath) {
       cardImg.src = imgPath;
@@ -956,7 +945,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
         var newCount = getCardCount();
         var unlocked = getNewUnlocks(oldCount, newCount);
         if (unlocked.length > 0) {
-          setTimeout(function() { showGachaUnlockBanners(unlocked); }, 1200);
+          setTimeout(function() { if(window.showUnlockBanners) showUnlockBanners(unlocked); }, 1200);
         }
       }
     }, 5000));
@@ -999,39 +988,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
   document.getElementById('carddasCloseBtn').addEventListener('click', function() {
     resetCarddas();
   });
-
-  // 機能解放バナー
-  var unlockQueue = [];
-  var unlockShowing = false;
-
-  function showGachaUnlockBanners(unlocks) {
-    unlocks.forEach(function(u) { unlockQueue.push(u); });
-    if (!unlockShowing) showNextUnlock();
-  }
-
-  function showNextUnlock() {
-    if (unlockQueue.length === 0) { unlockShowing = false; return; }
-    unlockShowing = true;
-    var u = unlockQueue.shift();
-
-    var banner = document.createElement('div');
-    banner.className = 'unlock-banner';
-    banner.innerHTML =
-      '<div class="unlock-banner-title">🎉 新機能が解放されました！</div>' +
-      '<div class="unlock-banner-label">' + u.label + '</div>' +
-      (u.url ? '<div class="unlock-banner-sub">閉じる後にアクセスできます</div>' : '');
-
-    document.body.appendChild(banner);
-    setTimeout(function() { banner.classList.add('show'); }, 50);
-
-    setTimeout(function() {
-      banner.classList.remove('show');
-      setTimeout(function() {
-        if (banner.parentNode) banner.remove();
-        showNextUnlock();
-      }, 500);
-    }, 3000);
-  }
 
   // 初期表示
   updateCoinDisplay();
