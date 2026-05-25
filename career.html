@@ -441,6 +441,7 @@ var ICONS={
 
 // ===== メイン初期化 =====
 (function(){
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('career');
   var urlParams=new URLSearchParams(location.search);
   var code=urlParams.get('code');
   var scores=null;
@@ -586,7 +587,7 @@ var ICONS={
   container.innerHTML=html;
 })();
 </script>
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 </body>
 </html>

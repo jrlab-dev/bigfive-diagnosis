@@ -210,7 +210,7 @@ body.theme-light .nav-btn-secondary { background: rgba(0,0,0,0.04); border-color
 
 </div>
 
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 <script>if(typeof renderGate==='function')renderGate('other-attachment');</script>
 <script>
@@ -447,6 +447,7 @@ function getProfile(anxietyPct, avoidancePct) {
 
 // ===== 結果表示 =====
 function showResult() {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('other-attachment');
   renderResult(calcScores());
 }
 
