@@ -181,42 +181,34 @@ body.theme-light .earn-item strong { color: #1e293b; }
   margin-bottom: 0;
 }
 
-/* 機械本体 */
+/* 機械本体（画像ベース） */
 .carddas-body {
-  width: 100%; height: 370px;
-  background: linear-gradient(180deg, #3a3a4a 0%, #2d2d3d 40%, #22222f 100%);
-  border-radius: 20px 20px 14px 14px;
-  border: 3px solid #4a4a5a;
+  width: 100%;
   position: relative;
   overflow: hidden;
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -2px 0 rgba(0,0,0,0.3);
+  border-radius: 20px;
 }
-
-/* ブランドヘッダー */
-.carddas-brand {
-  background: linear-gradient(180deg, #7c3aed, #5b21b6);
-  padding: 10px 12px;
-  text-align: center;
-  font-size: 17px; font-weight: 900;
-  color: #e9d5ff;
-  letter-spacing: 0.2em;
-  text-shadow: 0 0 12px rgba(139,92,246,0.6);
-  border-bottom: 2px solid #8b5cf6;
+.carddas-body-img {
+  width: 100%;
+  display: block;
+  border-radius: 20px;
 }
+/* ブランドヘッダー（画像内に統合） */
+.carddas-brand { display: none; }
 
 /* LEDインジケーター */
 .carddas-leds {
+  position: absolute;
+  top: 10.5%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex; justify-content: center; gap: 16px;
-  padding: 8px 0;
+  z-index: 2;
 }
 .carddas-led {
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: #333;
-  border: 1px solid #555;
+  background: rgba(80,80,80,0.6);
   transition: background 0.3s, box-shadow 0.3s;
 }
 .carddas-led.on {
@@ -234,36 +226,42 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* 表示窓 */
 .carddas-display {
-  margin: 6px auto 10px;
-  width: 220px; height: 60px;
-  background: linear-gradient(180deg, #080816, #0f0f24);
-  border: 2px solid #333;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56%;
+  aspect-ratio: 10/3;
+  background: transparent;
+  border: none;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 700;
-  color: #6b7280;
-  text-shadow: none;
+  color: #9ca3af;
+  text-shadow: 0 0 6px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5);
   transition: color 0.3s, text-shadow 0.3s;
+  z-index: 2;
 }
 .carddas-display.active {
   color: #a78bfa;
-  text-shadow: 0 0 8px rgba(139,92,246,0.4);
+  text-shadow: 0 0 8px rgba(139,92,246,0.6), 0 0 16px rgba(139,92,246,0.3);
 }
 
 /* コイン投入エリア */
 .carddas-coin-area {
-  text-align: center; margin: 6px 0;
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
 }
-.carddas-coin-label {
-  font-size: 8px; color: #555;
-  letter-spacing: 0.15em; margin-bottom: 3px;
-}
+.carddas-coin-label { display: none; }
 .carddas-slot {
   width: 56px; height: 8px;
-  background: #0a0a0a;
-  border: 2px solid #555;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid rgba(100,100,100,0.5);
   border-radius: 4px;
-  margin: 0 auto;
   position: relative;
   overflow: hidden;
 }
@@ -295,20 +293,22 @@ body.theme-light .earn-item strong { color: #1e293b; }
   100% { opacity: 0; top: 6px; transform: translateX(-50%) scaleY(0.15) scaleX(1.3); }
 }
 
-/* ダイアル */
+/* ダイアル（画像ベース） */
 .carddas-dial-area {
-  display: flex; justify-content: center;
-  margin: 14px 0;
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 .carddas-dial {
   width: 90px; height: 90px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #5a5a6a, #3a3a4a, #2a2a3a);
-  border: 4px solid #555;
-  position: relative;
-  box-shadow:
-    0 4px 12px rgba(0,0,0,0.4),
-    inset 0 2px 4px rgba(255,255,255,0.06);
+}
+.carddas-dial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 .carddas-dial.spinning {
   animation: dialSpin 1.2s cubic-bezier(0.3, 0, 0.7, 1) forwards;
@@ -317,41 +317,22 @@ body.theme-light .earn-item strong { color: #1e293b; }
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.carddas-dial-center {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #4a4a5a, #2a2a3a);
-  border: 2px solid #555;
-  transform: translate(-50%, -50%);
-}
-.carddas-dial-handle {
-  position: absolute;
-  top: 50%; right: -14px;
-  width: 18px; height: 12px;
-  background: linear-gradient(180deg, #777, #444);
-  border-radius: 3px;
-  transform: translateY(-50%);
-  border: 1px solid #888;
-}
-/* ダイアルの溝 */
-.carddas-dial::before {
-  content: '';
-  position: absolute; inset: 6px;
-  border-radius: 50%;
-  border: 1px dashed rgba(255,255,255,0.06);
-}
+.carddas-dial-center { display: none; }
+.carddas-dial-handle { display: none; }
+.carddas-dial::before { display: none; }
 
 /* 排出口 */
 .carddas-exit {
   position: absolute;
-  bottom: 22px; left: 50%;
+  bottom: 18%;
+  left: 50%;
   transform: translateX(-50%);
-  width: 140px; height: 10px;
-  background: #080808;
-  border: 2px solid #3a3a4a;
+  width: 50%;
+  height: 6px;
+  background: rgba(0,0,0,0.7);
+  border: 2px solid rgba(100,100,100,0.4);
   border-radius: 5px;
+  z-index: 3;
 }
 
 /* カードエリア（機械の下） */
@@ -364,21 +345,27 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* カード */
 .carddas-card {
-  width: 160px; height: 224px;
+  width: 200px; height: 200px;
   perspective: 800px;
   position: absolute;
-  top: -230px;
+  top: -220px;
   opacity: 0;
   z-index: 2;
+  transform: scale(0.55);
+  transition: transform 0.7s cubic-bezier(0.2, 0, 0.2, 1);
+}
+.carddas-card.expanded {
+  transform: scale(1);
 }
 .carddas-card.sliding {
   animation: cardSlideOut 0.9s cubic-bezier(0.15, 0, 0.35, 1) forwards;
 }
 @keyframes cardSlideOut {
-  0%   { opacity: 0; top: -230px; }
-  10%  { opacity: 1; }
-  40%  { top: 0px; }
-  50%  { top: -5px; }
+  0%   { opacity: 0; top: -220px; }
+  28%  { opacity: 0; top: -80px; }
+  35%  { opacity: 1; top: -55px; }
+  55%  { top: 0px; }
+  65%  { top: -5px; }
   100% { opacity: 1; top: 8px; }
 }
 
@@ -431,11 +418,11 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* カード表面 */
 .carddas-card-front {
   transform: rotateY(180deg);
-  background: #1a1a2a;
 }
 .carddas-card-front img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
+  border-radius: 8px;
 }
 .carddas-front-emoji {
   display: none;
@@ -573,11 +560,10 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* 小画面対応 */
 @media (max-height: 700px) {
-  .carddas-body { height: 300px; }
+  .carddas-machine { width: 240px; }
   .carddas-dial { width: 70px; height: 70px; }
-  .carddas-dial-area { margin: 8px 0; }
-  .carddas-display { height: 48px; margin: 4px auto 6px; }
-  .carddas-card { width: 140px; height: 196px; top: -200px; }
+  .carddas-card { width: 170px; height: 170px; top: -190px; transform: scale(0.55); }
+  .carddas-card.expanded { transform: scale(1); }
   .carddas-card-area { height: 210px; }
 }
 </style>
@@ -647,6 +633,18 @@ body.theme-light .earn-item strong { color: #1e293b; }
       <div class="earn-item">🎁 <span>初回は <strong>🪙 3枚</strong> からスタート</span></div>
     </div>
   </div>
+
+  <!-- 公共財ゲームバナー -->
+  <a href="pgg.html" style="display:block;margin-bottom:28px;background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(139,92,246,0.1));border:1px solid rgba(245,158,11,0.3);border-radius:16px;padding:18px 20px;text-decoration:none;color:inherit;transition:opacity 0.2s;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="font-size:36px;flex-shrink:0;">🪙</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:900;color:#f59e0b;margin-bottom:4px;">コインが増やせるゲーム</div>
+        <div style="font-size:12px;color:var(--dim);line-height:1.5;">4人で参加する共同投資ゲーム。当たればコインが増えるかも？</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--dim);"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+  </a>
 </div>
 
 <!-- カードダス演出オーバーレイ -->
@@ -656,6 +654,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
     <div class="carddas-machine" id="carddasMachine">
       <!-- 機械本体 -->
       <div class="carddas-body">
+        <img class="carddas-body-img" src="images/gacha/carddas_machine.webp" alt="">
         <div class="carddas-brand">BIG FIVE</div>
         <div class="carddas-leds">
           <div class="carddas-led" id="led1"></div>
@@ -664,13 +663,13 @@ body.theme-light .earn-item strong { color: #1e293b; }
         </div>
         <div class="carddas-display" id="carddasDisplay">SELECT</div>
         <div class="carddas-coin-area">
-          <div class="carddas-coin-label">COIN</div>
           <div class="carddas-slot">
             <div class="carddas-coin" id="carddasCoin"></div>
           </div>
         </div>
         <div class="carddas-dial-area">
           <div class="carddas-dial" id="carddasDial">
+            <img class="carddas-dial-img" src="images/gacha/carddas_dial.png" alt="">
             <div class="carddas-dial-center"></div>
             <div class="carddas-dial-handle"></div>
           </div>
@@ -781,7 +780,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
     overlay.classList.remove('active');
     coin.classList.remove('inserting');
     dial.classList.remove('spinning');
-    card.classList.remove('sliding');
+    card.classList.remove('sliding', 'expanded');
     cardInner.classList.remove('flipped');
     glow.classList.remove('show', 'glow-green', 'glow-blue', 'glow-purple', 'glow-gold', 'glow-rainbow', 'glow-dark');
     flash.className = 'carddas-flash';
@@ -869,8 +868,8 @@ body.theme-light .earn-item strong { color: #1e293b; }
     rarityEl.style.color = '#fff';
 
     // カード前面のボーダー色
-    cardFront.style.border = '2px solid ' + rc.border;
-    cardFront.style.background = rc.bg;
+    cardFront.style.border = 'none';
+    cardFront.style.background = 'transparent';
 
     // 表示窓
     display.textContent = TIER_LABEL[tier] || 'GACHA';
@@ -901,9 +900,10 @@ body.theme-light .earn-item strong { color: #1e293b; }
       cardEl.classList.add('sliding');
     }, 3000));
 
-    // Phase 5: カードフリップ (4.0s)
+    // Phase 5: カードフリップ + 拡大 (4.0s)
     animTimers.push(setTimeout(function() {
       cardInner.classList.add('flipped');
+      cardEl.classList.add('expanded');
     }, 4000));
 
     // Phase 6: レアリティ演出 (4.5s)
@@ -988,6 +988,10 @@ body.theme-light .earn-item strong { color: #1e293b; }
   document.getElementById('carddasCloseBtn').addEventListener('click', function() {
     resetCarddas();
   });
+
+  // デバッグ: URLに ?coins=99 でコイン追加
+  var dbg = new URLSearchParams(location.search).get('coins');
+  if (dbg) { localStorage.setItem('bigfive_coins', dbg); location.search = ''; }
 
   // 初期表示
   updateCoinDisplay();

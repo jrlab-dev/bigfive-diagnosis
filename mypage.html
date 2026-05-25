@@ -1838,6 +1838,7 @@ function renderStampCard() {
     { label: '統制の所在',      key: 'locus_result',        icon: '🎯', color: '#06b6d4' },
     { label: 'ダークトライアド', key: 'dark_triad_result',   icon: '🌑', color: '#6366f1' },
     { label: 'RIASEC',         key: 'riasec_result',       icon: '🎨', color: '#8b5cf6' },
+    { label: '公共財ゲーム',    key: 'pgg_result',          icon: '🪙', color: '#f59e0b' },
   ];
 
   var results = STAMPS.map(function(s) {
@@ -1941,7 +1942,7 @@ function renderBadges() {
 
   var STAMP_KEYS = ['bigfive_my_results','hsp_result','love_result','impostor_result',
     'attachment_result','mindset_result','schwartz_result','sdt_result',
-    'eq_result','locus_result','dark_triad_result','riasec_result'];
+    'eq_result','locus_result','dark_triad_result','riasec_result','pgg_result'];
   var stampComplete = STAMP_KEYS.every(function(k) {
     var v = localStorage.getItem(k);
     if (k === 'bigfive_my_results') { try { return JSON.parse(v||'[]').length > 0; } catch(e) { return false; } }
@@ -2159,6 +2160,7 @@ const SYNC_DATA_KEYS = [
   'attachment_result', 'hsp_result', 'locus_result',
   'eq_result', 'impostor_result', 'sdt_result',
   'schwartz_result', 'mindset_result', 'love_result',
+  'pgg_result',
 ];
 
 function getSyncId() {
@@ -2400,6 +2402,7 @@ function renderReportBanner() {
     { key: 'mindset_result', name: 'マインドセット診断', url: 'mindset.html' },
     { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
     { key: 'impostor_result', name: 'インポスター症候群チェック', url: 'impostor.html' },
+    { key: 'pgg_result', name: 'コインゲーム（公共財ゲーム）', url: 'pgg.html' },
   ];
   const missing = tests.filter(t =>
     !localStorage.getItem(t.key) &&
@@ -2481,8 +2484,9 @@ function renderAIProfile() {
   const hasLocus = !!localStorage.getItem('locus_result');
   const hasEQ = !!localStorage.getItem('eq_result');
   const hasImpostor = !!localStorage.getItem('impostor_result');
+  const hasPGG = !!localStorage.getItem('pgg_result');
 
-  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor) return;
+  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor && !hasPGG) return;
   section.style.display = 'block';
 
   // マッピング
@@ -2592,6 +2596,15 @@ function renderAIProfile() {
       const impNames = { perfectionist: '完璧主義型', superhero: 'スーパーヒーロー型', naturalGenius: '天才型', soloist: '単独行動型', expert: '専門家型' };
       lines.push('■ インポスター症候群');
       lines.push(`傾向の強さ: ${d.severityName || d.severityLevel} / ドミナントタイプ: ${impNames[d.dominantType] || d.dominantType}`);
+    } catch(e) {}
+  }
+
+  // 公共財ゲーム
+  if (hasPGG) {
+    try {
+      const d = JSON.parse(localStorage.getItem('pgg_result'));
+      lines.push('■ コインゲーム（公共財ゲーム）');
+      lines.push('タイプ: ' + d.typeName + ' / 平均寄付率: ' + Math.round(d.avgRate * 100) + '%');
     } catch(e) {}
   }
 
