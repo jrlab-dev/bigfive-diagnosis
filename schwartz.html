@@ -358,6 +358,7 @@ function calcScores() {
 }
 
 function showResult(preScores) {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('schwartz');
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
   window.scrollTo(0, 0);
@@ -465,7 +466,7 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   document.getElementById('introArea').style.display = 'flex';
 });
 </script>
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 </body>
 </html>

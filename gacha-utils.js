@@ -146,18 +146,51 @@
     return genCardByMaxCount(1);                           // r2: 65%
   }
 
+  // ===== 初回診断ボーナス =====
+
+  var DIAG_BONUS_KEY = 'bigfive_diag_bonus';
+
+  function grantDiagnosisBonus(diagId) {
+    try {
+      var list = JSON.parse(localStorage.getItem(DIAG_BONUS_KEY) || '[]');
+      if (list.indexOf(diagId) >= 0) return false;
+      list.push(diagId);
+      localStorage.setItem(DIAG_BONUS_KEY, JSON.stringify(list));
+      addCoins(1);
+      showCoinNotification();
+      return true;
+    } catch(e) { return false; }
+  }
+
+  function showCoinNotification() {
+    var el = document.createElement('div');
+    el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);' +
+      'background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;' +
+      'padding:10px 22px;border-radius:999px;font-size:14px;font-weight:700;' +
+      'z-index:9999;box-shadow:0 4px 16px rgba(245,158,11,0.4);' +
+      'white-space:nowrap;font-family:inherit;pointer-events:none;';
+    el.textContent = '\u{1FA99} コイン1枚獲得！';
+    document.body.appendChild(el);
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.4s';
+      el.style.opacity = '0';
+      setTimeout(function() { if (el.parentNode) el.remove(); }, 400);
+    }, 2500);
+  }
+
   // ===== 公開 =====
 
   window.GachaUtils = {
-    getCoins:          getCoins,
-    addCoins:          addCoins,
-    spendCoins:        spendCoins,
-    checkLoginBonus:   checkLoginBonus,
-    claimLoginBonus:   claimLoginBonus,
-    drawNormal:        drawNormal,
-    drawRare:          drawRare,
-    drawSuper:         drawSuper,
-    getTodayJST:       getTodayJST,
+    getCoins:            getCoins,
+    addCoins:            addCoins,
+    spendCoins:          spendCoins,
+    checkLoginBonus:     checkLoginBonus,
+    claimLoginBonus:     claimLoginBonus,
+    drawNormal:          drawNormal,
+    drawRare:            drawRare,
+    drawSuper:           drawSuper,
+    getTodayJST:         getTodayJST,
+    grantDiagnosisBonus: grantDiagnosisBonus,
   };
 
 })();

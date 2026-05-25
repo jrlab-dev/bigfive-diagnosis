@@ -1851,6 +1851,7 @@ function renderScores() {
 }
 
 // ===== 初期化 =====
+if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('bigfive');
 document.getElementById('typeName').textContent = genTypeName();
 // 名前が見切れる場合はフォントサイズを縮小
 const nameEl_r = document.getElementById('typeName');
@@ -3817,7 +3818,7 @@ if (isOtherMode) {
 })();
 </script>
 
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 
 <!-- ===== 統合スコア機能（あの人モード × 本人共有データ） ===== -->
 <script>

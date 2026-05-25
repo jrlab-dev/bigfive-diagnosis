@@ -403,6 +403,7 @@ function calcScore() {
 }
 
 function showResult(preScore, preType) {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('mindset');
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
   window.scrollTo(0, 0);
@@ -476,7 +477,7 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   document.getElementById('introArea').style.display = 'flex';
 });
 </script>
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 </body>
 </html>

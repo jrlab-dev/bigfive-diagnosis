@@ -361,6 +361,7 @@ function calcScores() {
 }
 
 function showResult(preScores) {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('impostor');
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
@@ -472,6 +473,6 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   } catch(e) { localStorage.removeItem(STORAGE_KEY); }
 })();
 </script>
-<script src="unlock.js"></script><script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="unlock.js"></script><script src="nav.js"></script>
 </body>
 </html>

@@ -291,7 +291,7 @@
   </div>
 </div>
 
-<script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 <script>
 // ===== 質問データ (SD3準拠・17問) =====
@@ -488,6 +488,7 @@ function getLevel(pct) {
 
 // ===== 結果表示 =====
 function showResult(preScores) {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('dark-triad');
   document.getElementById('loadingArea').classList.remove('active');
   document.getElementById('resultArea').classList.add('active');
 
