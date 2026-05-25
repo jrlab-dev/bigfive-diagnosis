@@ -87,8 +87,9 @@
   }
 
   function genCardR0() {
+    var vals = [1, 3, 5];
     var code = '';
-    for (var i = 0; i < 5; i++) code += randInt(1, 5);
+    for (var i = 0; i < 5; i++) code += vals[Math.floor(Math.random() * 3)];
     return { code: code, gender: randomGender(), version: '10', rarity: 'r0' };
   }
 
