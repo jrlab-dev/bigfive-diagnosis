@@ -316,6 +316,36 @@ const CONCIERGE_CONFIG = {
           message: '真面目で繊細なあなた。成功しているのに不安になることがあるなら、インポスターかもしれません。'
         }
       ]
+    },
+    {
+      key: 'pgg_result',
+      title: 'コインゲーム（公共財ゲーム）',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>',
+      url: 'pgg.html',
+      gate: null,
+      bgColor: 'rgba(245,158,11,0.15)',
+      getResult: (d) => {
+        var map = {
+          'cooperator': { name: '協力型', color: '#10b981' },
+          'conditional-cooperator': { name: '条件付き協力型', color: '#3b82f6' },
+          'balancer': { name: 'バランス型', color: '#f59e0b' },
+          'self-protector': { name: '自己保護型', color: '#ef4444' },
+          'strategic': { name: '戦略型', color: '#8b5cf6' }
+        };
+        return map[d.type] || { name: '完了', color: '#f59e0b' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.A >= 4,
+          priority: 3,
+          message: '協調性が高いあなたに。コインゲームで自分の協力スタイルを知ると面白いかも。'
+        },
+        {
+          condition: (sc) => sc.A <= 2,
+          priority: 3,
+          message: '自分の利益を守る傾向があるあなた。ゲームで自分の本当の協力スタイルを確かめてみませんか？'
+        }
+      ]
     }
   ]
 };

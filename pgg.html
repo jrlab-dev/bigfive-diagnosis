@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/pgg.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コインゲーム｜ビッグファイブ診断</title>
+<meta name="description" content="コインが増やせる共同投資ゲーム。4人で参加して、あなたの協力スタイルを探ろう。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --amber: #f59e0b;
+  --amber2: #d97706;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --border: rgba(139,92,246,0.18);
+  --card-bg: rgba(255,255,255,0.045);
+}
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+.bg-grad {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(245,158,11,0.08), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.06), transparent 70%);
+}
+.wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+/* ヘッダー */
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(10,14,39,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.back-link {
+  color: var(--dim); text-decoration: none; font-size: 13px;
+  display: flex; align-items: center; gap: 5px;
+}
+.back-link:hover { color: var(--text); }
+.header-title { font-size: 15px; font-weight: 900; }
+.coin-display {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 13px; font-weight: 700; color: #fde68a;
+}
+
+/* フェーズ共通 */
+.phase { display: none; padding: 24px 0; text-align: center; }
+.phase.active { display: block; animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ENTRY */
+.entry-coin { font-size: 64px; margin-bottom: 16px; animation: coinBounce 2s ease-in-out infinite; }
+@keyframes coinBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-5deg); }
+  75% { transform: translateY(-4px) rotate(5deg); }
+}
+.entry-badge {
+  display: inline-block; background: linear-gradient(135deg, var(--amber), var(--amber2));
+  color: #fff; font-size: 12px; font-weight: 900; padding: 4px 14px;
+  border-radius: 999px; margin-bottom: 16px; letter-spacing: 0.1em;
+}
+.entry-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+.entry-desc { font-size: 13px; color: var(--dim); line-height: 1.8; margin-bottom: 24px; }
+.entry-rules {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; margin-bottom: 24px; text-align: left;
+}
+.entry-rules h3 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--amber); }
+.entry-rules li { font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 4px; list-style: none; padding-left: 16px; position: relative; }
+.entry-rules li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+.entry-cost {
+  font-size: 14px; font-weight: 700; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.start-btn {
+  background: linear-gradient(135deg, var(--amber), var(--amber2));
+  color: #fff; border: none; border-radius: 999px; padding: 14px 40px;
+  font: inherit; font-size: 15px; font-weight: 900; cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s; letter-spacing: 0.05em;
+}
+.start-btn:hover { opacity: 0.9; }
+.start-btn:active { transform: scale(0.97); }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.entry-lack { font-size: 12px; color: #fca5a5; margin-top: 8px; }
+.entry-replay-note { font-size: 12px; color: var(--dim); margin-top: 12px; }
+
+/* LOBBY */
+.lobby-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.lobby-dots::after { content: ''; animation: dots 1.5s steps(4,end) infinite; }
+@keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} }
+.lobby-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.lobby-player {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  opacity: 0; transition: opacity 0.5s, transform 0.5s;
+  transform: translateY(10px);
+}
+.lobby-player.joined { opacity: 1; transform: translateY(0); }
+.lobby-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; border: 2px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.2);
+}
+.lobby-player.self .lobby-avatar { border-color: var(--amber); background: rgba(245,158,11,0.15); }
+.lobby-name { font-size: 11px; color: var(--dim); font-weight: 500; }
+.lobby-player.self .lobby-name { color: var(--amber); font-weight: 700; }
+.lobby-status {
+  margin-top: 16px; font-size: 13px; color: var(--green); font-weight: 700;
+  opacity: 0; transition: opacity 0.4s;
+}
+.lobby-status.show { opacity: 1; }
+
+/* ROUND */
+.round-header { font-size: 13px; color: var(--amber); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.1em; }
+.round-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; }
+.round-pool-box {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+  padding: 20px; margin-bottom: 24px;
+}
+.round-pool-label { font-size: 12px; color: var(--dim); margin-bottom: 4px; }
+.round-pool-amount { font-size: 28px; font-weight: 900; color: var(--amber); }
+.round-pool-amount span { font-size: 14px; font-weight: 400; color: var(--dim); }
+.round-tokens { margin-bottom: 20px; }
+.round-tokens-label { font-size: 13px; color: var(--dim); margin-bottom: 8px; }
+.round-tokens-display { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; }
+.token-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(245,158,11,0.15); border: 2px solid rgba(245,158,11,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all 0.3s;
+}
+.token-dot.used { background: rgba(107,114,128,0.1); border-color: rgba(107,114,128,0.2); opacity: 0.3; }
+.round-choice-label { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.round-choice { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.choice-btn {
+  width: 64px; height: 64px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
+  background: var(--card-bg); color: var(--text); font: inherit;
+  font-size: 20px; font-weight: 900; cursor: pointer;
+  transition: all 0.2s; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+}
+.choice-btn span { font-size: 10px; font-weight: 400; color: var(--dim); }
+.choice-btn:hover { border-color: var(--amber); background: rgba(245,158,11,0.1); }
+.choice-btn.selected { border-color: var(--amber); background: rgba(245,158,11,0.2); color: var(--amber); box-shadow: 0 0 16px rgba(245,158,11,0.2); }
+.round-submit {
+  background: linear-gradient(135deg, var(--amber), var(--amber2));
+  color: #fff; border: none; border-radius: 999px; padding: 12px 32px;
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s; opacity: 0.4; pointer-events: none;
+}
+.round-submit.ready { opacity: 1; pointer-events: auto; }
+
+/* ROUND RESULT */
+.rr-title { font-size: 16px; font-weight: 900; margin-bottom: 20px; }
+.rr-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; text-align: left; }
+.rr-bar-row { display: flex; align-items: center; gap: 10px; }
+.rr-bar-name { width: 60px; font-size: 12px; color: var(--dim); text-align: right; flex-shrink: 0; }
+.rr-bar-name.self { color: var(--amber); font-weight: 700; }
+.rr-bar-track { flex: 1; height: 24px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; position: relative; }
+.rr-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease-out; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; }
+.rr-bar-amount { width: 32px; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.rr-summary {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; margin-bottom: 16px;
+}
+.rr-summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+.rr-summary-row:last-child { margin-bottom: 0; }
+.rr-summary-val { font-weight: 700; }
+.rr-next { font-size: 12px; color: var(--dim); }
+
+/* FINAL */
+.final-result-icon { font-size: 64px; margin-bottom: 12px; }
+.final-result-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.final-result-title.win { color: var(--green); }
+.final-result-title.lose { color: var(--dim); }
+.final-coins {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; margin: 16px 0; font-size: 15px; font-weight: 700;
+}
+.final-coins .plus { color: var(--green); }
+.final-coins .return-note { font-size: 11px; color: var(--dim); font-weight: 400; margin-top: 6px; }
+.reveal-btn {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff; border: none; border-radius: 999px; padding: 14px 40px;
+  font: inherit; font-size: 15px; font-weight: 900; cursor: pointer;
+  transition: opacity 0.2s; margin-top: 8px;
+}
+
+/* ANALYSIS */
+.analysis-reveal {
+  font-size: 18px; font-weight: 900; margin-bottom: 8px;
+  color: var(--purple);
+}
+.analysis-subtitle { font-size: 13px; color: var(--dim); line-height: 1.7; margin-bottom: 24px; }
+.analysis-type-icon { font-size: 48px; margin-bottom: 8px; }
+.analysis-type-name { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+.analysis-type-summary { font-size: 13px; color: var(--dim); margin-bottom: 20px; }
+.analysis-card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+  padding: 20px; text-align: left; margin-bottom: 16px;
+}
+.analysis-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.analysis-card p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+.analysis-cross {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+  padding: 20px; text-align: left; margin-bottom: 16px;
+}
+.analysis-cross h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.analysis-cross p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+.analysis-cross .no-bf { font-size: 13px; color: var(--dim); }
+.analysis-cross .no-bf a { color: var(--amber); text-decoration: none; font-weight: 700; }
+.analysis-contrib {
+  font-size: 12px; color: var(--dim); margin-bottom: 20px;
+  display: flex; justify-content: center; gap: 12px;
+}
+.analysis-contrib span { display: flex; align-items: center; gap: 4px; }
+.nav-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.nav-btn {
+  border-radius: 999px; padding: 10px 24px; font: inherit;
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; border: none;
+}
+.nav-btn.primary { background: linear-gradient(135deg, var(--amber), var(--amber2)); color: #fff; }
+.nav-btn.secondary { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+
+/* ライトモード */
+body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border: rgba(109,40,217,0.14); --card-bg: rgba(255,255,255,0.82); }
+body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(245,158,11,0.06), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.04), transparent 70%); }
+body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
+body.theme-light .entry-rules { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .lobby-avatar { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+body.theme-light .choice-btn { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
+body.theme-light .choice-btn.selected { background: rgba(245,158,11,0.15); }
+body.theme-light .rr-bar-track { background: rgba(0,0,0,0.04); }
+body.theme-light .rr-summary { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .final-coins { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .analysis-card { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .analysis-cross { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); color: #1e293b; }
+</style>
+</head>
+<body class="theme-light">
+<script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<div class="bg-grad"></div>
+
+<header class="site-header">
+  <a href="gacha.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    ガチャ
+  </a>
+  <span class="header-title">コインゲーム</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ENTRY -->
+  <div class="phase active" id="phaseEntry">
+    <div class="entry-coin">🪙</div>
+    <div class="entry-badge">NOW PLAYING</div>
+    <div class="entry-title" id="entryTitle">コインが増やせるゲーム</div>
+    <div class="entry-desc" id="entryDesc">
+      4人で参加する共同投資ゲーム。<br>みんなで協力すればするほど、<br>リターンが大きくなるかも？
+    </div>
+    <div class="entry-rules">
+      <h3>ルール</h3>
+      <ul>
+        <li>4人で3ラウンド行います</li>
+        <li>各ラウンド、手持ち3枚のうち何枚を共同プールに投じるか選びます</li>
+        <li>プールは2倍になって全員に均等配分されます</li>
+        <li>最後に投資結果でコインが増えるかも？</li>
+      </ul>
+    </div>
+    <div class="entry-cost">参加費: 🪙 <strong>3枚</strong>（結果にかかわらず返却）</div>
+    <button class="start-btn" id="startBtn">ゲームを始める</button>
+    <div class="entry-lack" id="entryLack" style="display:none"></div>
+    <div class="entry-replay-note" id="entryReplayNote" style="display:none"></div>
+  </div>
+
+  <!-- LOBBY -->
+  <div class="phase" id="phaseLobby">
+    <div class="lobby-title">参加者を待っています<span class="lobby-dots"></span></div>
+    <div class="lobby-grid" id="lobbyGrid"></div>
+    <div class="lobby-status" id="lobbyStatus">4人揃いました！ ゲーム開始！</div>
+  </div>
+
+  <!-- ROUND -->
+  <div class="phase" id="phaseRound">
+    <div class="round-header">ROUND <span id="roundNum">1</span> / 3</div>
+    <div class="round-title">いくら投じますか？</div>
+    <div class="round-pool-box">
+      <div class="round-pool-label">現在の共同プール</div>
+      <div class="round-pool-amount"><span id="poolAmount">0</span> <span>枚</span></div>
+    </div>
+    <div class="round-tokens">
+      <div class="round-tokens-label">あなたの持ちトークン</div>
+      <div class="round-tokens-display" id="tokenDisplay"></div>
+    </div>
+    <div class="round-choice-label">共同プールに投じる枚数</div>
+    <div class="round-choice" id="choiceBtns"></div>
+    <button class="round-submit" id="submitBtn">投じる</button>
+  </div>
+
+  <!-- ROUND RESULT -->
+  <div class="phase" id="phaseRoundResult">
+    <div class="rr-title" id="rrTitle">ラウンド 1 結果</div>
+    <div class="rr-bars" id="rrBars"></div>
+    <div class="rr-summary" id="rrSummary"></div>
+    <div class="rr-next" id="rrNext"></div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="phase" id="phaseFinal">
+    <div class="final-result-icon" id="finalIcon"></div>
+    <div class="final-result-title" id="finalTitle"></div>
+    <div class="final-coins" id="finalCoins"></div>
+    <button class="reveal-btn" id="revealBtn">結果を見る</button>
+  </div>
+
+  <!-- ANALYSIS -->
+  <div class="phase" id="phaseAnalysis">
+    <div class="analysis-reveal">実は...</div>
+    <div class="analysis-subtitle">
+      このゲームは行動経済学の<br>「公共財ゲーム」という実験でした。<br>あなたの投じ方から協力スタイルを分析します。
+    </div>
+    <div class="analysis-type-icon" id="typeIcon"></div>
+    <div class="analysis-type-name" id="typeName"></div>
+    <div class="analysis-type-summary" id="typeSummary"></div>
+    <div class="analysis-card" id="typeDetail"></div>
+    <div class="analysis-cross" id="crossAnalysis"></div>
+    <div class="analysis-contrib" id="contribSummary"></div>
+    <div class="nav-btns">
+      <a href="mypage.html" class="nav-btn primary">マイページへ</a>
+      <button class="nav-btn secondary" id="replayBtn">もう一度遊ぶ</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="gacha-utils.js"></script>
+<script>
+(function() {
+
+  var ENTRY_FEE = 3;
+  var TOKENS_PER_ROUND = 3;
+  var TOTAL_ROUNDS = 3;
+  var WIN_BONUS = 2;
+  var MULTIPLIER = 2;
+  var STORAGE_KEY = 'pgg_result';
+
+  // ===== BOTプール =====
+  var BOT_POOL = [
+    { name: 'ユウキ', emoji: '🧑', color: '#3b82f6', base: 2, weights: [1.0, 0.9, 0.7], matchBias: 0.3 },
+    { name: 'ミサキ', emoji: '👩', color: '#ec4899', base: 3, weights: [1.0, 1.0, 0.85], matchBias: 0.1 },
+    { name: 'タクヤ', emoji: '👨', color: '#10b981', base: 2, weights: [1.2, 1.0, 0.5], matchBias: 0.2 },
+    { name: 'サクラ', emoji: '👧', color: '#f59e0b', base: 1, weights: [1.0, 0.8, 0.6], matchBias: 0.15 },
+    { name: 'ケンイチ', emoji: '👦', color: '#8b5cf6', base: 2, weights: [1.0, 1.0, 1.0], matchBias: 0.25 }
+  ];
+
+  // ===== タイプ定義 =====
+  var TYPES = {
+    'cooperator': {
+      name: '協力型', emoji: '🤝', color: '#10b981',
+      summary: 'グループの利益を優先する協力的なタイプ',
+      detail: 'あなたは自分の損得よりも、グループ全体の利益を自然に考えることができる人です。公共財ゲームの研究では、このタイプの人は長期的な信頼関係を築くのに長けていることがわかっています。周りからは「頼りになる」「チームプレーが得意」と思われることが多いでしょう。',
+      bfNote: '協調性（Agreeableness）が高い方に多く見られるタイプです。他者の気持ちに配慮し、協力的な関係を大切にする傾向があります。'
+    },
+    'conditional-cooperator': {
+      name: '条件付き協力型', emoji: '⚖️', color: '#3b82f6',
+      summary: '周りに合わせて協力度を調整するタイプ',
+      detail: 'あなたは周りの人がどれだけ協力的かを観察して、自分の行動を調整するタイプです。みんなが協力していれば自分も協力するし、誰かがサボっていれば自分も手を抜く。これは「互恵性（Reciprocity）」と呼ばれ、社会を維持する上で非常に重要な能力です。',
+      bfNote: '社会的な状況への感受性が高く、協調性と外向性のバランスが取れている方に多いタイプです。'
+    },
+    'balancer': {
+      name: 'バランス型', emoji: '🎯', color: '#f59e0b',
+      summary: '協力と自己保護のバランスを取るタイプ',
+      detail: 'あなたは協力することの価値を理解しつつ、自分の利益もしっかり守るタイプです。リスクを取りすぎず、かといって完全に自己中心的でもない。現実的で堅実な判断ができる人と言えます。ビジネスでも日常でも、損得のバランスを冷静に見極める力があるでしょう。',
+      bfNote: '誠実性（Conscientiousness）が高く、計画的に行動する方に多く見られる傾向があります。'
+    },
+    'self-protector': {
+      name: '自己保護型', emoji: '🛡️', color: '#ef4444',
+      summary: '自分の利益を確実に守るタイプ',
+      detail: 'あなたは自分の持っているものを確実に守ることを優先するタイプです。これは決して「悪い」ことではありません。不確実な状況では自分を守ることが合理的な判断になることも多いからです。ただし、信頼関係が築けている相手に対しては、もう少し協力的な姿勢を見せることで、より良い関係が生まれるかもしれません。',
+      bfNote: '神経症性（Neuroticism）がやや高めの方や、協調性が低めの方に見られる傾向があります。リスクを慎重に評価する能力の表れでもあります。'
+    },
+    'strategic': {
+      name: '戦略型', emoji: '♟️', color: '#8b5cf6',
+      summary: '状況を分析して最適な行動を選ぶタイプ',
+      detail: 'あなたはゲームの構造を素早く理解し、自分に最も有利な戦略を取るタイプです。最初は協力的に振る舞って信頼を築き、後半では自分の利益を確保する。この行動パターンは「評判形成（Reputation Building）」と呼ばれ、高度な社会的知性を示しています。',
+      bfNote: '開放性（Openness）が高く、状況を柔軟に分析する能力がある方に多いタイプです。'
+    }
+  };
+
+  // ===== ゲーム状態 =====
+  var state = {
+    currentRound: 0,
+    playerContribs: [],
+    botContribs: [],
+    bots: [],
+    poolTotal: 0,
+    selectedAmount: -1,
+    won: false,
+    timers: []
+  };
+
+  // ===== ユーティリティ =====
+  function $(id) { return document.getElementById(id); }
+  function showPhase(id) {
+    var phases = document.querySelectorAll('.phase');
+    for (var i = 0; i < phases.length; i++) phases[i].classList.remove('active');
+    $(id).classList.add('active');
+  }
+  function clearTimers() { state.timers.forEach(function(t) { clearTimeout(t); }); state.timers = []; }
+
+  function updateCoinDisplay() {
+    $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
+  }
+
+  // ===== BOT選択・貢献度計算 =====
+  function pickBots() {
+    var pool = BOT_POOL.slice();
+    var picked = [];
+    for (var i = 0; i < 3; i++) {
+      var idx = Math.floor(Math.random() * pool.length);
+      picked.push(pool.splice(idx, 1)[0]);
+    }
+    return picked;
+  }
+
+  function calcBotContrib(bot, roundIdx, allContribs) {
+    var base = Math.round(bot.base * bot.weights[roundIdx]);
+    base = Math.max(0, Math.min(3, base));
+    if (roundIdx > 0 && allContribs.length > 0) {
+      var prevRound = allContribs[allContribs.length - 1];
+      var avg = prevRound.reduce(function(a, b) { return a + b; }, 0) / prevRound.length;
+      base += Math.round((avg - base) * bot.matchBias);
+      base = Math.max(0, Math.min(3, base));
+    }
+    if (Math.random() < 0.3) {
+      base += (Math.random() < 0.5 ? -1 : 1);
+      base = Math.max(0, Math.min(3, base));
+    }
+    return base;
+  }
+
+  // ===== ENTRY =====
+  function initEntry() {
+    updateCoinDisplay();
+    var coins = GachaUtils.getCoins();
+    var isReplay = !!localStorage.getItem(STORAGE_KEY);
+
+    if (isReplay) {
+      try {
+        var prev = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        $('entryTitle').textContent = 'もう一度チャレンジ！';
+        $('entryDesc').innerHTML = '前回のタイプ: <strong>' + (prev.typeName || '---') + '</strong><br>今回はどうなる？';
+        $('entryReplayNote').style.display = 'block';
+        $('entryReplayNote').textContent = '※ 再プレイはお楽しみ用途です（診断データは初回のまま）';
+      } catch(e) {}
+    }
+
+    if (coins < ENTRY_FEE) {
+      $('startBtn').disabled = true;
+      $('entryLack').style.display = 'block';
+      $('entryLack').textContent = 'コインが足りません（あと' + (ENTRY_FEE - coins) + '枚）';
+    } else {
+      $('startBtn').disabled = false;
+      $('entryLack').style.display = 'none';
+    }
+  }
+
+  function startGame() {
+    if (!GachaUtils.spendCoins(ENTRY_FEE)) return;
+    updateCoinDisplay();
+
+    state = {
+      currentRound: 0,
+      playerContribs: [],
+      botContribs: [],
+      bots: pickBots(),
+      poolTotal: 0,
+      selectedAmount: -1,
+      won: false,
+      timers: []
+    };
+
+    startLobby();
+  }
+
+  // ===== LOBBY =====
+  function startLobby() {
+    showPhase('phaseLobby');
+    var grid = $('lobbyGrid');
+    grid.innerHTML = '';
+
+    // 自分
+    var selfHtml = '<div class="lobby-player self joined">' +
+      '<div class="lobby-avatar">🪙</div>' +
+      '<div class="lobby-name">あなた</div></div>';
+    grid.innerHTML = selfHtml;
+
+    // BOT枠（まだ参加していない）
+    for (var i = 0; i < 3; i++) {
+      grid.innerHTML += '<div class="lobby-player" id="lobbyBot' + i + '">' +
+        '<div class="lobby-avatar" style="opacity:0.2">?</div>' +
+        '<div class="lobby-name" style="opacity:0.2">---</div></div>';
+    }
+
+    // BOT順次参加演出
+    for (var j = 0; j < 3; j++) {
+      (function(idx) {
+        state.timers.push(setTimeout(function() {
+          var el = $('lobbyBot' + idx);
+          var bot = state.bots[idx];
+          el.classList.add('joined');
+          el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot.color + ';background:' + bot.color + '22">' +
+            bot.emoji + '</div>' +
+            '<div class="lobby-name">' + bot.name + '</div>';
+        }, 1200 + idx * 1400));
+      })(j);
+    }
+
+    // 全員揃った
+    state.timers.push(setTimeout(function() {
+      $('lobbyStatus').classList.add('show');
+    }, 1200 + 3 * 1400));
+
+    // ゲーム開始
+    state.timers.push(setTimeout(function() {
+      showRound(0);
+    }, 1200 + 3 * 1400 + 1800));
+  }
+
+  // ===== ROUND =====
+  function showRound(n) {
+    state.currentRound = n;
+    state.selectedAmount = -1;
+    showPhase('phaseRound');
+
+    $('roundNum').textContent = n + 1;
+    $('poolAmount').textContent = state.poolTotal;
+
+    // トークン表示
+    var tokenHtml = '';
+    for (var i = 0; i < TOKENS_PER_ROUND; i++) {
+      tokenHtml += '<div class="token-dot">🪙</div>';
+    }
+    $('tokenDisplay').innerHTML = tokenHtml;
+
+    // 選択ボタン
+    var choiceHtml = '';
+    for (var j = 0; j <= TOKENS_PER_ROUND; j++) {
+      choiceHtml += '<button class="choice-btn" data-amount="' + j + '">' + j + '<span>枚</span></button>';
+    }
+    $('choiceBtns').innerHTML = choiceHtml;
+
+    // イベント
+    var btns = $('choiceBtns').querySelectorAll('.choice-btn');
+    for (var k = 0; k < btns.length; k++) {
+      btns[k].addEventListener('click', function() {
+        for (var m = 0; m < btns.length; m++) btns[m].classList.remove('selected');
+        this.classList.add('selected');
+        state.selectedAmount = parseInt(this.getAttribute('data-amount'));
+        $('submitBtn').classList.add('ready');
+        updateTokenDots();
+      });
+    }
+
+    $('submitBtn').classList.remove('ready');
+    $('submitBtn').onclick = function() {
+      if (state.selectedAmount < 0) return;
+      submitRound();
+    };
+  }
+
+  function updateTokenDots() {
+    var dots = $('tokenDisplay').querySelectorAll('.token-dot');
+    for (var i = 0; i < dots.length; i++) {
+      if (i < state.selectedAmount) {
+        dots[i].classList.add('used');
+        dots[i].textContent = '';
+      } else {
+        dots[i].classList.remove('used');
+        dots[i].textContent = '\u{1FA99}';
+      }
+    }
+  }
+
+  function submitRound() {
+    var playerC = state.selectedAmount;
+    state.playerContribs.push(playerC);
+
+    // BOT計算
+    var botCs = [];
+    for (var i = 0; i < state.bots.length; i++) {
+      botCs.push(calcBotContrib(state.bots[i], state.currentRound, state.botContribs));
+    }
+    state.botContribs.push(botCs);
+
+    // プール更新
+    var roundTotal = playerC + botCs.reduce(function(a, b) { return a + b; }, 0);
+    state.poolTotal += roundTotal;
+
+    showRoundResult(state.currentRound);
+  }
+
+  // ===== ROUND RESULT =====
+  function showRoundResult(n) {
+    showPhase('phaseRoundResult');
+    $('rrTitle').textContent = 'ラウンド ' + (n + 1) + ' 結果';
+
+    var playerC = state.playerContribs[n];
+    var botCs = state.botContribs[n];
+    var roundTotal = playerC + botCs.reduce(function(a, b) { return a + b; }, 0);
+    var multiplied = roundTotal * MULTIPLIER;
+    var perPlayer = (multiplied / 4).toFixed(1);
+
+    // バーチャート
+    var allContribs = [{ name: 'あなた', amount: playerC, self: true }];
+    for (var i = 0; i < state.bots.length; i++) {
+      allContribs.push({ name: state.bots[i].name, amount: botCs[i], self: false });
+    }
+
+    var barsHtml = '';
+    for (var j = 0; j < allContribs.length; j++) {
+      var c = allContribs[j];
+      var pct = Math.round((c.amount / TOKENS_PER_ROUND) * 100);
+      var barColor = c.self ? 'var(--amber)' : '#6366f1';
+      barsHtml += '<div class="rr-bar-row">' +
+        '<div class="rr-bar-name' + (c.self ? ' self' : '') + '">' + c.name + '</div>' +
+        '<div class="rr-bar-track"><div class="rr-bar-fill" style="width:0%;background:' + barColor + '">' + pct + '%</div></div>' +
+        '<div class="rr-bar-amount">' + c.amount + '枚</div></div>';
+    }
+    $('rrBars').innerHTML = barsHtml;
+
+    // バーアニメーション
+    setTimeout(function() {
+      var fills = $('rrBars').querySelectorAll('.rr-bar-fill');
+      for (var k = 0; k < fills.length; k++) {
+        var c2 = allContribs[k];
+        fills[k].style.width = Math.round((c2.amount / TOKENS_PER_ROUND) * 100) + '%';
+      }
+    }, 100);
+
+    // サマリー
+    $('rrSummary').innerHTML =
+      '<div class="rr-summary-row"><span>プール合計</span><span class="rr-summary-val">' + roundTotal + '枚</span></div>' +
+      '<div class="rr-summary-row"><span>×' + MULTIPLIER + '倍</span><span class="rr-summary-val">' + multiplied + '枚</span></div>' +
+      '<div class="rr-summary-row"><span>1人あたり</span><span class="rr-summary-val">' + perPlayer + '枚</span></div>';
+
+    // 次へ
+    if (n < TOTAL_ROUNDS - 1) {
+      $('rrNext').textContent = '次のラウンドへ...';
+      state.timers.push(setTimeout(function() { showRound(n + 1); }, 3000));
+    } else {
+      $('rrNext').textContent = '最終結果を確認中...';
+      state.timers.push(setTimeout(function() { showFinal(); }, 3000));
+    }
+  }
+
+  // ===== FINAL =====
+  function showFinal() {
+    state.won = Math.random() < 0.5;
+
+    // 参加費返却 + 勝者ボーナス
+    GachaUtils.addCoins(ENTRY_FEE + (state.won ? WIN_BONUS : 0));
+    updateCoinDisplay();
+
+    showPhase('phaseFinal');
+
+    if (state.won) {
+      $('finalIcon').textContent = '🎉';
+      $('finalTitle').textContent = '当たり！';
+      $('finalTitle').className = 'final-result-title win';
+      $('finalCoins').innerHTML = '🪙 <span class="plus">+' + WIN_BONUS + '枚</span> 獲得！' +
+        '<div class="return-note">参加費' + ENTRY_FEE + '枚を返却しました</div>';
+    } else {
+      $('finalIcon').textContent = '😔';
+      $('finalTitle').textContent = '外れ...';
+      $('finalTitle').className = 'final-result-title lose';
+      $('finalCoins').innerHTML = '参加費' + ENTRY_FEE + '枚を返却しました' +
+        '<div class="return-note">残念！次は当たるかも？</div>';
+    }
+  }
+
+  // ===== ANALYSIS =====
+  function showAnalysis() {
+    var classification = classifyPlayer(state.playerContribs);
+    var typeInfo = TYPES[classification.type];
+
+    showPhase('phaseAnalysis');
+
+    $('typeIcon').textContent = typeInfo.emoji;
+    $('typeName').textContent = typeInfo.name;
+    $('typeName').style.color = typeInfo.color;
+    $('typeSummary').textContent = typeInfo.summary;
+
+    $('typeDetail').innerHTML = '<h3>あなたのタイプ</h3><p>' + typeInfo.detail + '</p>';
+
+    // ビッグファイブクロス分析
+    var bfHtml = '<h3>ビッグファイブとの関連</h3>';
+    try {
+      var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      var activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+      if (myResults[activeIdx] && myResults[activeIdx].scores) {
+        var sc = myResults[activeIdx].scores;
+        bfHtml += '<p>' + typeInfo.bfNote + '</p>';
+        bfHtml += '<p style="margin-top:8px">あなたの協調性スコア: <strong>' + (sc.A || '-') + ' / 5</strong></p>';
+
+        var match = (classification.type === 'cooperator' && sc.A >= 4) ||
+                    (classification.type === 'self-protector' && sc.A <= 2) ||
+                    (classification.type === 'balancer' && sc.A === 3);
+        if (match) {
+          bfHtml += '<p style="margin-top:6px;color:var(--green);font-weight:700">ゲーム結果とビッグファイブの傾向が一致しています。</p>';
+        }
+      } else {
+        bfHtml += '<div class="no-bf">ビッグファイブ診断の結果があると、より詳しい分析が表示されます。<br><a href="quiz.html">診断してみる →</a></div>';
+      }
+    } catch(e) {
+      bfHtml += '<div class="no-bf">ビッグファイブ診断の結果があると、より詳しい分析が表示されます。<br><a href="quiz.html">診断してみる →</a></div>';
+    }
+    $('crossAnalysis').innerHTML = bfHtml;
+
+    // 寄付サマリー
+    var contribHtml = '';
+    for (var i = 0; i < state.playerContribs.length; i++) {
+      contribHtml += '<span>R' + (i + 1) + ': ' + state.playerContribs[i] + '/' + TOKENS_PER_ROUND + '</span>';
+    }
+    $('contribSummary').innerHTML = contribHtml;
+
+    // 保存
+    saveResult(classification);
+  }
+
+  // ===== 分類ロジック =====
+  function classifyPlayer(contribs) {
+    var total = contribs[0] + contribs[1] + contribs[2];
+    var maxPossible = TOTAL_ROUNDS * TOKENS_PER_ROUND;
+    var avgRate = total / maxPossible;
+
+    var declining = contribs[0] > contribs[2];
+    var rising = contribs[0] < contribs[2];
+    var steady = !declining && !rising;
+
+    if (avgRate >= 0.78 && steady) {
+      return { type: 'cooperator', typeName: '協力型', avgRate: avgRate };
+    }
+    if (declining && contribs[0] >= 2 && contribs[2] <= 1 && avgRate >= 0.33) {
+      return { type: 'strategic', typeName: '戦略型', avgRate: avgRate };
+    }
+    if (avgRate >= 0.78 && !steady) {
+      return { type: 'conditional-cooperator', typeName: '条件付き協力型', avgRate: avgRate };
+    }
+    if (avgRate >= 0.67 && avgRate < 0.78) {
+      if (rising) return { type: 'conditional-cooperator', typeName: '条件付き協力型', avgRate: avgRate };
+      return { type: 'balancer', typeName: 'バランス型', avgRate: avgRate };
+    }
+    if (avgRate >= 0.33 && avgRate < 0.67) {
+      return { type: 'balancer', typeName: 'バランス型', avgRate: avgRate };
+    }
+    return { type: 'self-protector', typeName: '自己保護型', avgRate: avgRate };
+  }
+
+  // ===== 保存 =====
+  function saveResult(classification) {
+    var pggData = {
+      type: classification.type,
+      typeName: classification.typeName,
+      contributions: state.playerContribs.slice(),
+      avgRate: Math.round(classification.avgRate * 100) / 100,
+      won: state.won,
+      playCount: 1,
+      timestamp: Date.now()
+    };
+
+    var isFirst = !localStorage.getItem(STORAGE_KEY);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pggData));
+
+    if (isFirst) {
+      // 診断ボーナスコイン
+      if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('pgg');
+      // bigfive_my_resultsにリンク
+      try {
+        var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+        var activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+        if (myResults[activeIdx]) {
+          myResults[activeIdx].pgg = pggData;
+          localStorage.setItem('bigfive_my_results', JSON.stringify(myResults));
+        }
+      } catch(e) {}
+    } else {
+      try {
+        var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        existing.playCount = (existing.playCount || 1) + 1;
+        existing.won = state.won;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+      } catch(e) {}
+    }
+  }
+
+  // ===== リプレイ =====
+  function resetGame() {
+    clearTimers();
+    state = {
+      currentRound: 0,
+      playerContribs: [],
+      botContribs: [],
+      bots: [],
+      poolTotal: 0,
+      selectedAmount: -1,
+      won: false,
+      timers: []
+    };
+    initEntry();
+    showPhase('phaseEntry');
+  }
+
+  // ===== イベント =====
+  $('startBtn').addEventListener('click', startGame);
+  $('revealBtn').addEventListener('click', showAnalysis);
+  $('replayBtn').addEventListener('click', resetGame);
+
+  // 初期化
+  initEntry();
+
+})();
+</script>
+</body>
+</html>

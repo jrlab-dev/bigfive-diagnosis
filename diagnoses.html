@@ -353,6 +353,15 @@ const DIAGNOSES = [
     questions: 0,
     minutes: 0,
   },
+  {
+    id: 'pgg', fc: 'A',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>',
+    name: 'コインゲーム（公共財ゲーム）',
+    desc: 'コインが増やせるゲームに見えますが...実は行動経済学の実験。3ラウンドでわかるあなたの協力スタイル。',
+    url: 'pgg.html',
+    questions: 3,
+    minutes: 3,
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -381,6 +390,7 @@ function getDoneIds() {
     if (localStorage.getItem('eq_result')) done.add('eq');
     if (localStorage.getItem('impostor_result')) done.add('impostor');
     if (localStorage.getItem('dark_triad_result')) done.add('dark-triad');
+    if (localStorage.getItem('pgg_result')) done.add('pgg');
     if (localStorage.getItem('riasec_result')) done.add('riasec');
     if (localStorage.getItem('riasec_result') && localStorage.getItem('bigfive_my_results')) done.add('career-integration');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
@@ -465,7 +475,7 @@ if (scores) {
 const selfGrid   = document.getElementById('selfGrid');
 const otherGrid  = document.getElementById('otherGrid');
 const careerGrid = document.getElementById('careerGrid');
-const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
+const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor','pgg'];
 const CAREER_IDS = ['career','riasec','career-integration'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
   const req = typeof getRequiredCards === 'function' ? getRequiredCards : () => 0;
