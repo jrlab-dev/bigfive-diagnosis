@@ -7,117 +7,413 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="favicon-180.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>カードガチャ｜ビッグファイブ診断</title>
 <meta name="description" content="ログインボーナスで貯めたコインでカードガチャを回そう。ノーマル・レア・スーパーの3段階。シークレットキャラも出るかも。">
 <meta name="robots" content="noindex">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --bg: #0a0e27;
-  --text: #e2e8f0;
-  --dim: #94a3b8;
+  --bg-0: #17132a;
+  --bg-1: #1e1938;
+  --bg-2: #261f42;
+  --ink-0: #f0eef5;
+  --ink-1: #c8c3d8;
+  --ink-2: #948bab;
+  --ink-3: #6b6080;
+  --gold: #d4a843;
+  --gold-deep: #a67c20;
+  --amber: #c9a035;
   --purple: #8b5cf6;
-  --cyan: #06b6d4;
-  --pink: #ec4899;
-  --border: rgba(139,92,246,0.18);
-  --card-bg: rgba(255,255,255,0.045);
+  --purple-deep: #6d28d9;
+  --rare: #4f7df7;
+  --silver: #b8b4c4;
+  --line: rgba(139,92,246,0.18);
+  --line-strong: rgba(139,92,246,0.30);
+  --card-bg: rgba(255,255,255,0.035);
+  --card-bg-strong: rgba(255,255,255,0.06);
 }
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
 body {
-  font-family: 'Noto Sans JP', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
+  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg-0);
+  color: var(--ink-0);
+  min-height: 100dvh;
   padding: 0 0 80px;
+  overflow-x: hidden;
 }
-.bg-grad {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+
+/* ── Fantasy night background ── */
+.bg-stage {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
   background:
-    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(139,92,246,0.1), transparent 70%),
-    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(6,182,212,0.07), transparent 70%);
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(100,60,180,0.35), transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 110%, rgba(180,130,40,0.15), transparent 70%),
+    linear-gradient(180deg, #120f22, #17132a 40%, #0e0c1c);
 }
-.wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+.bg-stars {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 70% 18%, rgba(255,225,180,.6), transparent 60%),
+    radial-gradient(1.2px 1.2px at 88% 55%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1px 1px at 33% 72%, rgba(200,180,255,.55), transparent 60%),
+    radial-gradient(1.5px 1.5px at 55% 88%, rgba(255,235,200,.55), transparent 60%),
+    radial-gradient(0.8px 0.8px at 12% 60%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(0.8px 0.8px at 80% 80%, rgba(255,255,255,.4), transparent 60%),
+    radial-gradient(1px 1px at 45% 14%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1px 1px at 92% 30%, rgba(200,180,255,.5), transparent 60%),
+    radial-gradient(1px 1px at 8% 88%, rgba(255,225,180,.45), transparent 60%);
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+.bg-stars::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 25% 50%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.2px 1.2px at 60% 40%, rgba(255,255,255,.55), transparent 60%),
+    radial-gradient(0.9px 0.9px at 18% 22%, rgba(255,225,180,.45), transparent 60%),
+    radial-gradient(1px 1px at 75% 65%, rgba(200,180,255,.5), transparent 60%);
+  animation: twinkle 4s ease-in-out infinite alternate-reverse;
+}
+@keyframes twinkle { from { opacity: .7 } to { opacity: 1 } }
 
-/* ヘッダー */
-.site-header {
-  position: sticky; top: 0; z-index: 10;
-  background: rgba(10,14,39,0.92); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 16px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-}
-.back-link {
-  color: var(--dim); text-decoration: none; font-size: 13px;
-  display: flex; align-items: center; gap: 5px;
-}
-.back-link:hover { color: var(--text); }
-.header-title { font-size: 15px; font-weight: 900; }
-.coin-display {
-  display: flex; align-items: center; gap: 5px;
-  background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25);
-  border-radius: 999px; padding: 5px 12px;
-  font-size: 13px; font-weight: 700; color: #ddd6fe;
+/* ── Layout shell ── */
+.shell {
+  position: relative; z-index: 1;
+  max-width: 420px; margin: 0 auto;
+  min-height: 100dvh;
+  padding-bottom: 40px;
 }
 
-/* ガチャ説明 */
-.hero { text-align: center; padding: 32px 0 20px; }
-.hero h1 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.hero p { font-size: 13px; color: var(--dim); line-height: 1.7; }
+/* ── Sticky header ── */
+.hdr {
+  position: sticky; top: 0; z-index: 30;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, rgba(14,12,26,0.78), rgba(14,12,26,0.6));
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.hdr-back {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--ink-1); font-size: 13px; font-weight: 500; text-decoration: none;
+  padding: 6px 8px 6px 4px; margin-left: -4px; border-radius: 8px;
+  transition: background .15s, color .15s;
+}
+.hdr-back:hover { background: rgba(255,255,255,0.05); color: var(--ink-0); }
+.hdr-back svg { width: 14px; height: 14px; flex-shrink: 0; }
+.hdr-title {
+  font-family: "Noto Serif JP", serif; font-weight: 700;
+  font-size: 14px; letter-spacing: 0.12em; color: var(--ink-0);
+  text-align: center;
+}
+.hdr-coin {
+  justify-self: end;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px 5px 7px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(180,130,40,0.35), rgba(150,100,20,0.35));
+  border: 1px solid rgba(200,160,60,0.35);
+  color: #e8d8a0;
+  font-size: 12px; font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 8px 24px -8px rgba(180,130,40,0.35);
+  transition: transform .3s;
+}
+.coin-chip {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f5e6a0, #d4a843 60%, #a67c20);
+  box-shadow: 0 0 0 1px rgba(120,80,20,0.6) inset, 0 0 8px rgba(200,160,60,0.6);
+  position: relative; display: inline-block; flex: none;
+}
+.coin-chip::after {
+  content: ""; position: absolute; inset: 3px;
+  border-radius: 50%; border: 1px dashed rgba(120,80,20,0.55);
+}
 
-/* ガチャカード3種 */
-.gacha-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
-.gacha-card {
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  border-radius: 16px; padding: 18px 20px;
-  display: flex; align-items: center; gap: 16px;
+/* ── Hero ── */
+.hero {
+  padding: 24px 22px 18px; text-align: center;
 }
-.gacha-card.disabled { opacity: 0.45; }
-.gacha-icon {
-  flex-shrink: 0; width: 68px; height: 68px;
-  border-radius: 8px; overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.1);
-  background: rgba(0,0,0,0.2);
+.hero-eyebrow {
+  font-family: "Cinzel", serif;
+  font-size: 10px; letter-spacing: .42em;
+  color: #c9a035;
+  margin-bottom: 8px;
 }
-.gacha-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.gacha-info { flex: 1; min-width: 0; }
-.gacha-name { font-size: 15px; font-weight: 900; margin-bottom: 3px; }
-.gacha-desc { font-size: 12px; color: var(--dim); line-height: 1.6; }
-.gacha-prob { font-size: 10px; color: var(--dim); margin-top: 6px; line-height: 1.7; }
-.gacha-btn {
-  flex-shrink: 0;
-  padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer;
-  font: inherit; font-size: 13px; font-weight: 700;
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  transition: opacity 0.2s, transform 0.1s;
+.hero h1 {
+  margin: 0 0 10px;
+  font-family: "Noto Serif JP", serif;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  background: linear-gradient(180deg, #f0e6c0, #c9a035);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.gacha-btn:active { transform: scale(0.96); }
-.gacha-btn.normal { background: linear-gradient(135deg, #6b7280, #9ca3af); color: #fff; }
-.gacha-btn.rare   { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; }
-.gacha-btn.super  { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
-.gacha-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.gacha-btn .btn-cost { font-size: 11px; opacity: 0.85; }
-.gacha-btn .btn-lack { font-size: 10px; color: #fca5a5; }
+.hero-rule {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 6px 0 14px; color: rgba(200,160,60,0.7);
+}
+.hero-rule .line { height: 1px; flex: 0 0 56px; background: linear-gradient(90deg, transparent, rgba(200,160,60,0.7), transparent); }
+.hero-rule .dot { width: 5px; height: 5px; border-radius: 50%; background: #c9a035; box-shadow: 0 0 8px rgba(200,160,60,0.6); }
+.hero p {
+  color: var(--ink-1); font-size: 13px; line-height: 1.7;
+  max-width: 320px; margin: 0 auto;
+}
 
-/* コイン獲得方法 */
-.earn-section { margin-bottom: 28px; }
-.earn-title { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 10px; }
-.earn-list { display: flex; flex-direction: column; gap: 8px; }
-.earn-item {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--text);
+/* ── Gacha cards (rows) ── */
+.cards {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 12px 16px 4px;
 }
-.earn-item strong { color: var(--text); }
+.gcard {
+  position: relative;
+  display: grid; grid-template-columns: 78px 1fr auto; align-items: center; gap: 14px;
+  padding: 14px 16px 14px 14px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)),
+    linear-gradient(135deg, rgba(139,92,246,0.06), rgba(245,200,80,0.02) 60%);
+  border: 1px solid var(--line);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 12px 32px -16px rgba(0,0,0,0.6);
+  overflow: hidden;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.gcard::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit;
+  background: linear-gradient(180deg, var(--card-accent, transparent) 0%, transparent 60%);
+  opacity: .18; pointer-events: none;
+}
+.gcard:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.gcard[data-tier="rare"] { --card-accent: rgba(79,125,247,0.4); }
+.gcard[data-tier="super"] { --card-accent: rgba(139,92,246,0.5); }
 
-/* ライトモード */
-body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border: rgba(109,40,217,0.14); --card-bg: rgba(255,255,255,0.82); }
-body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(139,92,246,0.08), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(6,182,212,0.06), transparent 70%); }
-body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
-body.theme-light .gacha-card { background: rgba(255,255,255,0.82); border-color: rgba(109,40,217,0.14); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); color: #1e293b; }
-body.theme-light .earn-item strong { color: #1e293b; }
+.gcard-img {
+  width: 78px; height: 98px; border-radius: 10px;
+  background-size: cover; background-position: center;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 0 24px var(--glow, rgba(200,160,60,0.35));
+  flex: none; position: relative;
+}
+.gcard-img::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 30%);
+  pointer-events: none;
+}
+.gcard[data-tier="normal"] .gcard-img { --glow: rgba(180,176,196,0.35); }
+.gcard[data-tier="rare"]   .gcard-img { --glow: rgba(79,125,247,0.45); }
+.gcard[data-tier="super"]  .gcard-img { --glow: rgba(200,160,60,0.55); }
+
+.gcard-body { min-width: 0; }
+.gcard-tier {
+  font-family: "Cinzel", serif; font-size: 9.5px; letter-spacing: .28em;
+  color: var(--tier-color, #c9a035);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+.gcard[data-tier="normal"] .gcard-tier { --tier-color: var(--silver); }
+.gcard[data-tier="rare"]   .gcard-tier { --tier-color: var(--rare); }
+.gcard[data-tier="super"]  .gcard-tier { --tier-color: #c9a035; }
+.gcard-title {
+  font-size: 15px; font-weight: 700; color: var(--ink-0);
+  letter-spacing: 0.02em; line-height: 1.2;
+}
+.gcard-desc {
+  margin-top: 5px; font-size: 12px; color: var(--ink-2);
+  line-height: 1.45;
+}
+.gcard-rate {
+  margin-top: 7px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px; color: var(--ink-1);
+  letter-spacing: 0.02em;
+}
+
+/* ── Pull button ── */
+.pull {
+  appearance: none; border: 0; background: transparent; padding: 0;
+  cursor: default;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 74px; min-height: 60px;
+  border-radius: 12px;
+  font-family: inherit; color: #fff;
+  position: relative;
+  transition: transform .12s ease, filter .12s;
+}
+.pull-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 9px 8px 10px;
+  border-radius: 11px;
+  width: 100%;
+  background: var(--btn-grad);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.25) inset,
+    0 -8px 16px -8px rgba(0,0,0,0.4) inset,
+    0 0 0 1px var(--btn-edge, rgba(255,255,255,0.12)) inset,
+    0 8px 18px -8px var(--btn-shadow, rgba(0,0,0,0.5));
+}
+.pull-label { font-size: 13px; font-weight: 800; letter-spacing: 0.1em; }
+.pull-cost {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,0.92);
+}
+.pull-cost .coin-chip { width: 13px; height: 13px; }
+.pull-cost .coin-chip::after { inset: 2px; border-width: .5px; }
+
+.pull[data-tier="normal"] {
+  --btn-grad: linear-gradient(180deg, #b8b4c4, #7a7588);
+  --btn-shadow: rgba(100,95,110,0.7);
+  --btn-edge: rgba(255,255,255,0.25);
+}
+.pull[data-tier="rare"] {
+  --btn-grad: linear-gradient(180deg, #4f7df7, #2a50c8);
+  --btn-shadow: rgba(40,70,180,0.6);
+}
+.pull[data-tier="super"] {
+  --btn-grad: linear-gradient(180deg, #8b5cf6, #6d28d9);
+  --btn-shadow: rgba(90,30,170,0.7);
+}
+
+.pull:not(:disabled):hover { transform: translateY(-1px); filter: brightness(1.05); }
+.pull:not(:disabled):active { transform: translateY(1px); filter: brightness(0.95); }
+.pull:disabled {
+  cursor: not-allowed; filter: grayscale(0.7) brightness(0.55);
+  opacity: .65;
+}
+.pull .btn-lack {
+  font-size: 9px; color: #fca5a5; font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* ── Coin-earn section ── */
+.section-h {
+  margin: 22px 22px 10px;
+  font-size: 11px; font-weight: 700; letter-spacing: .22em;
+  color: var(--ink-2); text-transform: uppercase;
+  font-family: "Cinzel", serif;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-h::before, .section-h::after {
+  content: ""; flex: 1; height: 1px;
+}
+.section-h::before { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10)); }
+.section-h::after  { background: linear-gradient(90deg, rgba(255,255,255,0.10), transparent); }
+
+.earn {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 0 16px;
+}
+.earn-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
+  font-size: 12.5px; color: var(--ink-1);
+  line-height: 1.45;
+}
+.earn-row .ico {
+  flex: none; width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center; font-size: 16px;
+  background: var(--ico-bg, rgba(139,92,246,0.10));
+  border: 1px solid var(--ico-edge, rgba(139,92,246,0.18));
+}
+.earn-row[data-kind="daily"]    .ico { --ico-bg: rgba(200,130,40,0.18); --ico-edge: rgba(200,130,40,0.30); }
+.earn-row[data-kind="streak"]   .ico { --ico-bg: rgba(220,120,40,0.18); --ico-edge: rgba(220,120,40,0.32); }
+.earn-row[data-kind="welcome"]  .ico { --ico-bg: rgba(139,92,246,0.18); --ico-edge: rgba(139,92,246,0.32); }
+.earn-row b { color: #e8d8a0; font-weight: 700; }
+.earn-row .coin-chip { width: 14px; height: 14px; vertical-align: -2px; margin: 0 1px; }
+.earn-row .coin-chip::after { inset: 2px; border-width: .5px; }
+
+/* ── Public goods banner ── */
+.banner {
+  margin: 18px 16px 0;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 16px 16px 18px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(180,130,40,0.35), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(139,92,246,0.35), transparent 60%),
+    linear-gradient(135deg, rgba(120,90,40,0.35), rgba(100,60,160,0.35));
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--ink-0); text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: transform .15s, border-color .15s;
+}
+.banner:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); }
+.banner::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 90px 50px at 50% 0%, rgba(255,255,255,0.10), transparent 70%);
+  pointer-events: none;
+}
+.banner-glyph {
+  flex: none; width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 22px;
+  background: linear-gradient(180deg, rgba(180,130,40,0.4), rgba(150,100,20,0.4));
+  border: 1px solid rgba(200,160,60,0.35);
+  box-shadow: 0 0 18px rgba(180,130,40,0.35);
+}
+.banner-body { flex: 1; min-width: 0; }
+.banner-h {
+  font-size: 13.5px; font-weight: 700; line-height: 1.25;
+  display: flex; align-items: center; gap: 6px;
+}
+.banner-h .coin-chip { width: 14px; height: 14px; }
+.banner-h .coin-chip::after { inset: 2px; border-width: .5px; }
+.banner-sub { font-size: 11.5px; color: var(--ink-1); margin-top: 3px; line-height: 1.45; }
+.banner-arrow {
+  flex: none; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,0.08); color: var(--ink-0);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 13px;
+}
+
+/* ── Foot text ── */
+.foot-note {
+  margin: 22px 22px 0;
+  text-align: center;
+  font-size: 10.5px; color: var(--ink-3);
+  line-height: 1.7;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+  background: rgba(20,18,38,0.92);
+  border: 1px solid rgba(255,255,255,0.10);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  color: var(--ink-0);
+  padding: 10px 16px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 500;
+  z-index: 200; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .25s;
+  box-shadow: 0 12px 32px -12px rgba(0,0,0,0.6);
+  max-width: 88vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Coin fly animation ── */
+.coin-fly {
+  position: fixed; pointer-events: none; z-index: 220;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f5e6a0, #d4a843 60%, #a67c20);
+  box-shadow: 0 0 12px rgba(200,160,60,0.8);
+}
 
 /* ======================================
    カードダス演出システム
@@ -142,9 +438,9 @@ body.theme-light .earn-item strong { color: #1e293b; }
   position: fixed; inset: 0; z-index: 102;
   pointer-events: none; opacity: 0;
 }
-.carddas-flash.gold   { animation: flashGold 0.8s ease-out forwards; }
+.carddas-flash.gold    { animation: flashGold 0.8s ease-out forwards; }
 .carddas-flash.rainbow { animation: flashRainbow 1s ease-out forwards; }
-.carddas-flash.dark   { animation: flashDark 1.2s ease-out forwards; }
+.carddas-flash.dark    { animation: flashDark 1.2s ease-out forwards; }
 @keyframes flashGold {
   0%   { opacity: 0; background: rgba(251,191,36,0); }
   15%  { opacity: 1; background: rgba(251,191,36,0.5); }
@@ -193,48 +489,31 @@ body.theme-light .earn-item strong { color: #1e293b; }
   display: block;
   border-radius: 20px;
 }
-/* ブランドヘッダー（画像内に統合） */
 .carddas-brand { display: none; }
 
 /* LEDインジケーター */
 .carddas-leds {
   position: absolute;
-  top: 10.5%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 10.5%; left: 50%; transform: translateX(-50%);
   display: flex; justify-content: center; gap: 16px;
   z-index: 2;
 }
 .carddas-led {
-  width: 8px; height: 8px;
-  border-radius: 50%;
+  width: 8px; height: 8px; border-radius: 50%;
   background: rgba(80,80,80,0.6);
   transition: background 0.3s, box-shadow 0.3s;
 }
-.carddas-led.on {
-  background: #34d399;
-  box-shadow: 0 0 8px rgba(52,211,153,0.6);
-}
-.carddas-led.warn {
-  background: #fbbf24;
-  box-shadow: 0 0 8px rgba(251,191,36,0.6);
-}
-.carddas-led.rare {
-  background: #f472b6;
-  box-shadow: 0 0 8px rgba(244,114,182,0.6);
-}
+.carddas-led.on   { background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,0.6); }
+.carddas-led.warn { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.6); }
+.carddas-led.rare { background: #f472b6; box-shadow: 0 0 8px rgba(244,114,182,0.6); }
 
 /* 表示窓 */
 .carddas-display {
   position: absolute;
-  top: 28%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 56%;
-  aspect-ratio: 10/3;
+  top: 28%; left: 50%; transform: translateX(-50%);
+  width: 56%; aspect-ratio: 10/3;
   background: transparent;
-  border: none;
-  border-radius: 8px;
+  border: none; border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 18px; font-weight: 900;
   color: #fff;
@@ -255,26 +534,19 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* コイン投入エリア */
 .carddas-coin-area {
   position: absolute;
-  top: 38%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 38%; left: 50%; transform: translateX(-50%);
   z-index: 2;
 }
 .carddas-coin-label { display: none; }
 .carddas-slot {
   width: 56px; height: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  position: relative;
-  overflow: visible;
+  background: transparent; border: none; border-radius: 4px;
+  position: relative; overflow: visible;
 }
 .carddas-coin {
   position: absolute;
-  top: -50px; left: 50%;
-  transform: translateX(-50%);
-  width: 22px; height: 22px;
-  border-radius: 50%;
+  top: -50px; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 22px; border-radius: 50%;
   background: linear-gradient(135deg, #fcd34d, #f59e0b, #d97706);
   border: 2px solid #92400e;
   box-shadow: 0 2px 6px rgba(251,191,36,0.3);
@@ -283,12 +555,9 @@ body.theme-light .earn-item strong { color: #1e293b; }
 .carddas-coin::after {
   content: ''; position: absolute;
   top: 4px; left: 4px; right: 4px; bottom: 4px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
 }
-.carddas-coin.inserting {
-  animation: coinDrop 0.6s ease-in forwards;
-}
+.carddas-coin.inserting { animation: coinDrop 0.6s ease-in forwards; }
 @keyframes coinDrop {
   0%   { opacity: 0; top: -50px; }
   8%   { opacity: 1; top: -50px; }
@@ -301,27 +570,13 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* ダイアル（画像ベース） */
 .carddas-dial-area {
   position: absolute;
-  top: 48.1%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 48.1%; left: 50%; transform: translateX(-50%);
   z-index: 2;
 }
-.carddas-dial {
-  width: 90px; height: 90px;
-}
-.carddas-dial-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.carddas-dial.spinning {
-  animation: dialSpin 1.2s cubic-bezier(0.3, 0, 0.7, 1) forwards;
-}
-@keyframes dialSpin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+.carddas-dial { width: 90px; height: 90px; }
+.carddas-dial-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.carddas-dial.spinning { animation: dialSpin 1.2s cubic-bezier(0.3,0,0.7,1) forwards; }
+@keyframes dialSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 .carddas-dial-center { display: none; }
 .carddas-dial-handle { display: none; }
 .carddas-dial::before { display: none; }
@@ -329,11 +584,8 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* 排出口 */
 .carddas-exit {
   position: absolute;
-  bottom: 18%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50%;
-  height: 6px;
+  bottom: 18%; left: 50%; transform: translateX(-50%);
+  width: 50%; height: 6px;
   background: rgba(0,0,0,0.7);
   border: 2px solid rgba(100,100,100,0.4);
   border-radius: 5px;
@@ -353,18 +605,12 @@ body.theme-light .earn-item strong { color: #1e293b; }
   width: 270px; height: 270px;
   perspective: 800px;
   position: absolute;
-  top: -560px;
-  opacity: 0;
-  z-index: 2;
+  top: -560px; opacity: 0; z-index: 2;
   transform: scale(0.32);
-  transition: transform 0.7s cubic-bezier(0.2, 0, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.2,0,0.2,1);
 }
-.carddas-card.expanded {
-  transform: scale(1);
-}
-.carddas-card.sliding {
-  animation: cardSlideOut 0.9s cubic-bezier(0.15, 0, 0.35, 1) forwards;
-}
+.carddas-card.expanded { transform: scale(1); }
+.carddas-card.sliding { animation: cardSlideOut 0.9s cubic-bezier(0.15,0,0.35,1) forwards; }
 @keyframes cardSlideOut {
   0%   { opacity: 0; top: -560px; }
   12%  { opacity: 0; top: -230px; }
@@ -378,18 +624,15 @@ body.theme-light .earn-item strong { color: #1e293b; }
   width: 100%; height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
 }
-.carddas-card-inner.flipped {
-  transform: rotateY(180deg);
-}
+.carddas-card-inner.flipped { transform: rotateY(180deg); }
 
 .carddas-card-back,
 .carddas-card-front {
   position: absolute; inset: 0;
   backface-visibility: hidden;
-  border-radius: 8px;
-  overflow: hidden;
+  border-radius: 8px; overflow: hidden;
 }
 
 /* カード裏面 */
@@ -421,9 +664,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 }
 
 /* カード表面 */
-.carddas-card-front {
-  transform: rotateY(180deg);
-}
+.carddas-card-front { transform: rotateY(180deg); }
 .carddas-card-front img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
@@ -451,38 +692,19 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* レアリティ別カード演出 */
 .carddas-glow {
   position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -18px; left: 50%; transform: translateX(-50%);
   width: 270px; height: 270px;
-  border-radius: 12px;
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
+  border-radius: 12px; opacity: 0;
+  z-index: 1; pointer-events: none;
   transition: opacity 0.5s;
 }
 .carddas-glow.show { opacity: 1; }
-.carddas-glow.glow-green {
-  box-shadow: 0 0 20px rgba(34,197,94,0.4), 0 0 40px rgba(34,197,94,0.2);
-}
-.carddas-glow.glow-blue {
-  box-shadow: 0 0 20px rgba(59,130,246,0.4), 0 0 40px rgba(59,130,246,0.2);
-}
-.carddas-glow.glow-purple {
-  box-shadow: 0 0 24px rgba(139,92,246,0.5), 0 0 48px rgba(139,92,246,0.3);
-}
-.carddas-glow.glow-gold {
-  box-shadow: 0 0 28px rgba(251,191,36,0.5), 0 0 56px rgba(251,191,36,0.3);
-  animation: pulseGold 1.5s ease-in-out infinite;
-}
-.carddas-glow.glow-rainbow {
-  box-shadow: 0 0 30px rgba(139,92,246,0.5), 0 0 60px rgba(236,72,153,0.3);
-  animation: pulseRainbow 1.5s ease-in-out infinite;
-}
-.carddas-glow.glow-dark {
-  box-shadow: 0 0 30px rgba(220,38,38,0.5), 0 0 60px rgba(139,92,246,0.4);
-  animation: pulseDark 1.2s ease-in-out infinite;
-}
+.carddas-glow.glow-green   { box-shadow: 0 0 20px rgba(34,197,94,0.4), 0 0 40px rgba(34,197,94,0.2); }
+.carddas-glow.glow-blue    { box-shadow: 0 0 20px rgba(59,130,246,0.4), 0 0 40px rgba(59,130,246,0.2); }
+.carddas-glow.glow-purple  { box-shadow: 0 0 24px rgba(139,92,246,0.5), 0 0 48px rgba(139,92,246,0.3); }
+.carddas-glow.glow-gold    { box-shadow: 0 0 28px rgba(251,191,36,0.5), 0 0 56px rgba(251,191,36,0.3); animation: pulseGold 1.5s ease-in-out infinite; }
+.carddas-glow.glow-rainbow { box-shadow: 0 0 30px rgba(139,92,246,0.5), 0 0 60px rgba(236,72,153,0.3); animation: pulseRainbow 1.5s ease-in-out infinite; }
+.carddas-glow.glow-dark    { box-shadow: 0 0 30px rgba(220,38,38,0.5), 0 0 60px rgba(139,92,246,0.4); animation: pulseDark 1.2s ease-in-out infinite; }
 @keyframes pulseGold {
   0%, 100% { box-shadow: 0 0 20px rgba(251,191,36,0.4), 0 0 40px rgba(251,191,36,0.2); }
   50%      { box-shadow: 0 0 35px rgba(251,191,36,0.6), 0 0 70px rgba(251,191,36,0.3); }
@@ -498,9 +720,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 }
 
 /* 画面振動 */
-.carddas-machine.shaking {
-  animation: shake 0.6s ease-out;
-}
+.carddas-machine.shaking { animation: shake 0.6s ease-out; }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   15%  { transform: translateX(-8px) rotate(-0.5deg); }
@@ -513,15 +733,13 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* スパークル */
 .carddas-sparkles {
-  position: absolute;
-  inset: -40px;
+  position: absolute; inset: -40px;
   pointer-events: none; z-index: 10;
 }
 .sparkle {
   position: absolute;
   width: 4px; height: 4px;
-  border-radius: 50%;
-  opacity: 0;
+  border-radius: 50%; opacity: 0;
   animation: sparklePop 0.8s ease-out forwards;
 }
 @keyframes sparklePop {
@@ -535,25 +753,16 @@ body.theme-light .earn-item strong { color: #1e293b; }
   text-align: center;
   opacity: 0; transform: translateY(10px);
   transition: opacity 0.5s, transform 0.5s;
-  margin-top: 16px;
-  min-height: 100px;
+  margin-top: 16px; min-height: 100px;
 }
-.carddas-result.show {
-  opacity: 1; transform: translateY(0);
-}
+.carddas-result.show { opacity: 1; transform: translateY(0); }
 .carddas-result-label {
   font-size: 16px; font-weight: 900;
   margin-bottom: 6px; color: #e2e8f0;
 }
 .carddas-result-label.new-card { color: #fbbf24; }
-.carddas-result-name {
-  font-size: 13px; color: #94a3b8;
-  margin-bottom: 4px;
-}
-.carddas-result-added {
-  font-size: 12px; color: #34d399;
-  margin-bottom: 16px;
-}
+.carddas-result-name { font-size: 13px; color: #94a3b8; margin-bottom: 4px; }
+.carddas-result-added { font-size: 12px; color: #34d399; margin-bottom: 16px; }
 .carddas-close-btn {
   background: rgba(139,92,246,0.15);
   border: 1px solid rgba(139,92,246,0.3);
@@ -566,7 +775,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
 }
 .carddas-close-btn:hover { background: rgba(139,92,246,0.25); }
 
-
 /* 小画面対応 */
 @media (max-height: 700px) {
   .carddas-machine { width: 240px; }
@@ -575,93 +783,203 @@ body.theme-light .earn-item strong { color: #1e293b; }
   .carddas-card.expanded { transform: scale(1); }
   .carddas-card-area { height: 210px; }
 }
+
+/* ── ライトモード ── */
+body.theme-light {
+  --bg-0: #f0eef5;
+  --bg-1: #e8e4f0;
+  --bg-2: #ddd8ea;
+  --ink-0: #1e1a30;
+  --ink-1: #4a4560;
+  --ink-2: #6b6580;
+  --ink-3: #9088a0;
+  --line: rgba(109,40,217,0.14);
+  --line-strong: rgba(109,40,217,0.24);
+  --card-bg: rgba(255,255,255,0.82);
+  --card-bg-strong: rgba(255,255,255,0.90);
+}
+body.theme-light .bg-stage {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(139,92,246,0.08), transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 110%, rgba(200,160,60,0.05), transparent 70%),
+    linear-gradient(180deg, #e8e4f0, #f0eef5 40%, #e5e0f0);
+}
+body.theme-light .bg-stars { opacity: 0.15; }
+body.theme-light .hdr {
+  background: linear-gradient(180deg, rgba(240,238,245,0.88), rgba(240,238,245,0.75));
+  border-bottom-color: rgba(109,40,217,0.10);
+}
+body.theme-light .hdr-back { color: var(--ink-1); }
+body.theme-light .hdr-back:hover { background: rgba(0,0,0,0.04); color: var(--ink-0); }
+body.theme-light .hdr-coin {
+  background: linear-gradient(180deg, rgba(200,160,60,0.18), rgba(180,140,40,0.18));
+  border-color: rgba(200,160,60,0.25);
+  color: #8a6e1a;
+}
+body.theme-light .hero h1 {
+  background: linear-gradient(180deg, #5b3a8a, #8b5cf6);
+  -webkit-background-clip: text; background-clip: text;
+}
+body.theme-light .hero-eyebrow { color: #8b5cf6; }
+body.theme-light .hero-rule .line { background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent); }
+body.theme-light .hero-rule .dot { background: #8b5cf6; box-shadow: 0 0 8px rgba(139,92,246,0.3); }
+body.theme-light .gcard {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.80)),
+    linear-gradient(135deg, rgba(139,92,246,0.04), rgba(200,160,60,0.02) 60%);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 0 rgba(255,255,255,0.5) inset;
+}
+body.theme-light .gcard:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.5) inset; }
+body.theme-light .gcard-img { box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08); }
+body.theme-light .gcard-img::after { background: linear-gradient(180deg, rgba(255,255,255,0.30), transparent 40%); }
+body.theme-light .earn-row {
+  background: rgba(255,255,255,0.70);
+  border-color: rgba(109,40,217,0.10);
+}
+body.theme-light .earn-row b { color: #8a6e1a; }
+body.theme-light .banner {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(200,160,60,0.15), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(139,92,246,0.12), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.80), rgba(245,240,255,0.80));
+  border-color: rgba(139,92,246,0.15);
+}
+body.theme-light .banner-glyph {
+  background: linear-gradient(180deg, rgba(200,160,60,0.15), rgba(180,140,40,0.15));
+  border-color: rgba(200,160,60,0.25);
+  box-shadow: 0 0 12px rgba(200,160,60,0.15);
+}
+body.theme-light .section-h { color: var(--ink-3); }
+body.theme-light .section-h::before { background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08)); }
+body.theme-light .section-h::after { background: linear-gradient(90deg, rgba(0,0,0,0.08), transparent); }
+body.theme-light .foot-note { color: var(--ink-3); }
 </style>
 </head>
 <body class="theme-light">
 <script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
-<div class="bg-grad"></div>
 
-<header class="site-header">
-  <a href="mypage.html" class="back-link">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    マイページ
-  </a>
-  <span class="header-title">カードガチャ</span>
-  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
-</header>
+<div class="bg-stage" aria-hidden="true"><div class="bg-stars"></div></div>
 
-<div class="wrap">
-  <div class="hero">
+<div class="shell">
+  <!-- Header -->
+  <header class="hdr">
+    <a href="mypage.html" class="hdr-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      マイページ
+    </a>
+    <div class="hdr-title">カードガチャ</div>
+    <div class="hdr-coin" id="coin-pill">
+      <span class="coin-chip"></span>
+      <span id="coinDisplay">0枚</span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">CARD&nbsp;GACHA</div>
     <h1>カードガチャ</h1>
-    <p>毎日トップページを訪れると<strong>コイン</strong>がもらえます。<br>コインを使ってカードガチャを回しましょう。</p>
+    <div class="hero-rule"><span class="line"></span><span class="dot"></span><span class="line"></span></div>
+    <p>毎日トップページを訪れるとコインがもらえます。<br>コインを使ってカードガチャを回しましょう。</p>
+  </section>
+
+  <!-- Gacha cards -->
+  <div class="cards">
+    <!-- Normal -->
+    <article class="gcard" data-tier="normal">
+      <div class="gcard-img" style="background-image:url(images/gacha/card-normal.png)"></div>
+      <div class="gcard-body">
+        <div class="gcard-tier">NORMAL</div>
+        <div class="gcard-title">ノーマルガチャ</div>
+        <div class="gcard-desc">ノーマルカード（r0）確定</div>
+        <div class="gcard-rate">r0 100%</div>
+      </div>
+      <span id="btnNormalWrap">
+        <button class="pull" data-tier="normal" id="btnNormal">
+          <span class="pull-inner">
+            <span class="pull-label">引く</span>
+            <span class="pull-cost"><span class="coin-chip"></span> 1枚</span>
+          </span>
+        </button>
+      </span>
+    </article>
+
+    <!-- Rare -->
+    <article class="gcard" data-tier="rare">
+      <div class="gcard-img" style="background-image:url(images/gacha/card-rare.png)"></div>
+      <div class="gcard-body">
+        <div class="gcard-tier">RARE</div>
+        <div class="gcard-title">レアガチャ</div>
+        <div class="gcard-desc">レアカード（r1）確定</div>
+        <div class="gcard-rate">r1 100%</div>
+      </div>
+      <span id="btnRareWrap">
+        <button class="pull" data-tier="rare" id="btnRare">
+          <span class="pull-inner">
+            <span class="pull-label">引く</span>
+            <span class="pull-cost"><span class="coin-chip"></span> 3枚</span>
+          </span>
+        </button>
+      </span>
+    </article>
+
+    <!-- Super -->
+    <article class="gcard" data-tier="super">
+      <div class="gcard-img" style="background-image:url(images/gacha/card-super.png)"></div>
+      <div class="gcard-body">
+        <div class="gcard-tier">SUPER</div>
+        <div class="gcard-title">スーパーガチャ</div>
+        <div class="gcard-desc">r2以上が確定で出現</div>
+        <div class="gcard-rate">r2 70% / r3 25% / r4 5%</div>
+      </div>
+      <span id="btnSuperWrap">
+        <button class="pull" data-tier="super" id="btnSuper">
+          <span class="pull-inner">
+            <span class="pull-label">引く</span>
+            <span class="pull-cost"><span class="coin-chip"></span> 5枚</span>
+          </span>
+        </button>
+      </span>
+    </article>
   </div>
 
-  <!-- ガチャ3種 -->
-  <div class="gacha-list">
-    <div class="gacha-card">
-      <div class="gacha-icon"><img src="https://bigfive.jr-genius.jp/ogp-image?code=31313&gender=M&rarity=r0" alt="NORMAL" loading="lazy"></div>
-      <div class="gacha-info">
-        <div class="gacha-name">ノーマルガチャ</div>
-        <div class="gacha-desc">ノーマルカード（r0）確定</div>
-      </div>
-      <button class="gacha-btn normal" id="btnNormal">
-        <span>引く</span>
-        <span class="btn-cost">🪙 1枚</span>
-      </button>
+  <!-- Earn Coins -->
+  <div class="section-h">Earn Coins</div>
+  <div class="earn">
+    <div class="earn-row" data-kind="daily">
+      <div class="ico">&#x1F3E0;</div>
+      <div>毎日トップページを開くと <span class="coin-chip"></span> <b>1枚</b> もらえます</div>
     </div>
-    <div class="gacha-card">
-      <div class="gacha-icon"><img src="https://bigfive.jr-genius.jp/ogp-image?code=24342&gender=F&rarity=r1" alt="RARE" loading="lazy"></div>
-      <div class="gacha-info">
-        <div class="gacha-name">レアガチャ</div>
-        <div class="gacha-desc">レアカード（r1）確定</div>
-      </div>
-      <button class="gacha-btn rare" id="btnRare">
-        <span>引く</span>
-        <span class="btn-cost">🪙 3枚</span>
-      </button>
+    <div class="earn-row" data-kind="streak">
+      <div class="ico">&#x1F525;</div>
+      <div>7日連続で開くと <span class="coin-chip"></span> <b>3枚</b> ボーナス（7の倍数日）</div>
     </div>
-    <div class="gacha-card">
-      <div class="gacha-icon"><img src="https://bigfive.jr-genius.jp/ogp-image?code=55155&gender=M&rarity=r5" alt="SUPER" loading="lazy"></div>
-      <div class="gacha-info">
-        <div class="gacha-name">スーパーガチャ</div>
-        <div class="gacha-desc">r2以上が確定で出現</div>
-      </div>
-      <button class="gacha-btn super" id="btnSuper">
-        <span>引く</span>
-        <span class="btn-cost">🪙 5枚</span>
-      </button>
+    <div class="earn-row" data-kind="welcome">
+      <div class="ico">&#x1F381;</div>
+      <div>初回は <span class="coin-chip"></span> <b>3枚</b> からスタート</div>
     </div>
   </div>
 
-  <!-- コイン獲得方法 -->
-  <div class="earn-section">
-    <div class="earn-title">コインの増やし方</div>
-    <div class="earn-list">
-      <div class="earn-item">🏠 <span>毎日トップページを開くと <strong>🪙 1枚</strong> もらえます</span></div>
-      <div class="earn-item">🔥 <span>7日連続で開くと <strong>🪙 3枚</strong> ボーナス（7の倍数日）</span></div>
-      <div class="earn-item">🎁 <span>初回は <strong>🪙 3枚</strong> からスタート</span></div>
+  <!-- PGG Banner -->
+  <a class="banner" href="pgg.html">
+    <div class="banner-glyph">&#x1FA99;</div>
+    <div class="banner-body">
+      <div class="banner-h"><span class="coin-chip"></span> コインが増やせるゲーム</div>
+      <div class="banner-sub">4人で参加する共同投資ゲーム。当たればコインが増えるかも？</div>
     </div>
-  </div>
-
-  <!-- 公共財ゲームバナー -->
-  <a href="pgg.html" style="display:block;margin-bottom:28px;background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(139,92,246,0.1));border:1px solid rgba(245,158,11,0.3);border-radius:16px;padding:18px 20px;text-decoration:none;color:inherit;transition:opacity 0.2s;">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <div style="font-size:36px;flex-shrink:0;">🪙</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:900;color:#f59e0b;margin-bottom:4px;">コインが増やせるゲーム</div>
-        <div style="font-size:12px;color:var(--dim);line-height:1.5;">4人で参加する共同投資ゲーム。当たればコインが増えるかも？</div>
-      </div>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--dim);"><path d="M9 18l6-6-6-6"/></svg>
-    </div>
+    <div class="banner-arrow">&rarr;</div>
   </a>
+
+  <div class="foot-note">&copy; Big Five Diagnosis &middot; Card Gacha v1.0</div>
 </div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <!-- カードダス演出オーバーレイ -->
 <div class="carddas-overlay" id="carddasOverlay">
   <div class="carddas-flash" id="carddasFlash"></div>
   <div class="carddas-scene">
     <div class="carddas-machine" id="carddasMachine">
-      <!-- 機械本体 -->
       <div class="carddas-body">
         <img class="carddas-body-img" src="images/gacha/carddas_machine.webp" alt="">
         <div class="carddas-brand">BIG FIVE</div>
@@ -685,7 +1003,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
         </div>
         <div class="carddas-exit"></div>
       </div>
-      <!-- カードエリア（機械の下） -->
       <div class="carddas-card-area">
         <div class="carddas-sparkles" id="carddasSparkles"></div>
         <div class="carddas-glow" id="carddasGlow"></div>
@@ -704,7 +1021,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
         </div>
       </div>
     </div>
-    <!-- 結果情報 -->
     <div class="carddas-result" id="carddasResult">
       <div class="carddas-result-label" id="carddasResultLabel"></div>
       <div class="carddas-result-name" id="carddasResultName"></div>
@@ -723,7 +1039,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 (function() {
 
   var RARITY_LABEL = { r0:'NORMAL', r1:'RARE', r2:'R2', r3:'R3', r4:'R4', r5:'SUPER RARE', r6:'SECRET', r7:'DARK SECRET' };
-  var RARITY_EMOJI = { r0:'🎴', r1:'✨', r2:'💚', r3:'💙', r4:'💜', r5:'⭐', r6:'🌈', r7:'💀' };
+  var RARITY_EMOJI = { r0:'\u{1F0CF}', r1:'✨', r2:'\u{1F49A}', r3:'\u{1F499}', r4:'\u{1F49C}', r5:'⭐', r6:'\u{1F308}', r7:'\u{1F480}' };
   var RARITY_COLOR = {
     r0: { bg:'rgba(107,114,128,0.15)', border:'#6b7280', badge:'#6b7280' },
     r1: { bg:'rgba(148,163,184,0.15)', border:'#94a3b8', badge:'#94a3b8' },
@@ -742,7 +1058,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
   function updateCoinDisplay() {
     var c = GachaUtils.getCoins();
-    document.getElementById('coinDisplay').textContent = '\u{1FA99} ' + c + '枚';
+    document.getElementById('coinDisplay').textContent = c.toLocaleString() + '枚';
     updateButtons(c);
   }
 
@@ -752,23 +1068,28 @@ body.theme-light .earn-item strong { color: #1e293b; }
       { id: 'btnRare',   cost: COSTS.rare },
       { id: 'btnSuper',  cost: COSTS.super },
     ];
-    defs.forEach(function(d) {
+    for (var i = 0; i < defs.length; i++) {
+      var d = defs[i];
       var btn = document.getElementById(d.id);
+      var existing = btn.querySelector('.btn-lack');
       if (coins < d.cost) {
         btn.disabled = true;
-        var lack = btn.querySelector('.btn-lack');
-        if (!lack) { lack = document.createElement('span'); lack.className = 'btn-lack'; btn.appendChild(lack); }
-        lack.textContent = 'あと' + (d.cost - coins) + '枚';
+        if (!existing) {
+          var lack = document.createElement('span');
+          lack.className = 'btn-lack';
+          btn.querySelector('.pull-inner').appendChild(lack);
+          existing = lack;
+        }
+        existing.textContent = 'あと' + (d.cost - coins) + '枚';
       } else {
         btn.disabled = false;
-        var lack2 = btn.querySelector('.btn-lack');
-        if (lack2) btn.removeChild(lack2);
+        if (existing) existing.parentNode.removeChild(existing);
       }
-    });
+    }
   }
 
   function clearAnimTimers() {
-    animTimers.forEach(function(t) { clearTimeout(t); });
+    for (var i = 0; i < animTimers.length; i++) clearTimeout(animTimers[i]);
     animTimers = [];
   }
 
@@ -800,7 +1121,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
     display.textContent = 'SELECT';
     sparkles.innerHTML = '';
 
-    // カード画像リセット
     cardImg.removeAttribute('src');
     cardImg.style.display = 'block';
     cardImg.onerror = null;
@@ -809,14 +1129,13 @@ body.theme-light .earn-item strong { color: #1e293b; }
     for (var i = 1; i <= 3; i++) {
       document.getElementById('led' + i).className = 'carddas-led';
     }
-
     clearAnimTimers();
   }
 
   function spawnSparkles(count, colors) {
     var container = document.getElementById('carddasSparkles');
     for (var i = 0; i < count; i++) {
-      (function(idx) {
+      (function() {
         var s = document.createElement('div');
         s.className = 'sparkle';
         s.style.left = (20 + Math.random() * 60) + '%';
@@ -826,6 +1145,41 @@ body.theme-light .earn-item strong { color: #1e293b; }
         s.style.height = s.style.width;
         s.style.animationDelay = (Math.random() * 0.5) + 's';
         container.appendChild(s);
+      })();
+    }
+  }
+
+  function flashToast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(flashToast._t);
+    flashToast._t = setTimeout(function() { el.classList.remove('show'); }, 2200);
+  }
+
+  function flyCoins(count, fromEl) {
+    if (!fromEl) return;
+    var pill = document.getElementById('coin-pill');
+    if (!pill) return;
+    var from = fromEl.getBoundingClientRect();
+    var to = pill.getBoundingClientRect();
+    var n = Math.min(count, 5);
+    for (var i = 0; i < n; i++) {
+      (function(idx) {
+        var c = document.createElement('span');
+        c.className = 'coin-fly';
+        c.style.left = (from.left + from.width / 2 - 9) + 'px';
+        c.style.top  = (from.top + from.height / 2 - 9) + 'px';
+        c.style.transition = 'transform .6s cubic-bezier(.4,.0,.2,1), opacity .6s';
+        document.body.appendChild(c);
+        var dx = (to.left + to.width / 2) - (from.left + from.width / 2);
+        var dy = (to.top + to.height / 2) - (from.top + from.height / 2);
+        var delay = idx * 60;
+        setTimeout(function() {
+          c.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.7)';
+          c.style.opacity = '0.2';
+        }, delay);
+        setTimeout(function() { c.remove(); }, 800 + delay);
       })(i);
     }
   }
@@ -849,7 +1203,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
     var machine   = document.getElementById('carddasMachine');
     var rc        = RARITY_COLOR[card.rarity] || RARITY_COLOR.r0;
 
-    // カード表面の準備（コレクション・図鑑と同じOGP画像を使用）
     var imgPath = '';
     var cacheBust = '&_t=' + Date.now();
     if (card.isHidden && card.hiddenId) {
@@ -864,66 +1217,52 @@ body.theme-light .earn-item strong { color: #1e293b; }
       cardImg.onerror = function() {
         cardImg.style.display = 'none';
         emojiEl.style.display = 'flex';
-        emojiEl.textContent = RARITY_EMOJI[card.rarity] || '🃏';
+        emojiEl.textContent = RARITY_EMOJI[card.rarity] || '\u{1F0CF}';
       };
     } else {
       cardImg.style.display = 'none';
       emojiEl.style.display = 'flex';
-      emojiEl.textContent = RARITY_EMOJI[card.rarity] || '🃏';
+      emojiEl.textContent = RARITY_EMOJI[card.rarity] || '\u{1F0CF}';
     }
 
-    // レアリティバッジ
     rarityEl.textContent = RARITY_LABEL[card.rarity] || card.rarity.toUpperCase();
     rarityEl.style.background = rc.badge;
     rarityEl.style.color = '#fff';
 
-    // カード前面のボーダー色
     cardFront.style.border = 'none';
     cardFront.style.background = 'transparent';
 
-    // 表示窓
     display.textContent = TIER_LABEL[tier] || 'GACHA';
 
-    // オーバーレイ表示
     overlay.classList.add('active');
 
-    // Phase 1: 表示窓アクティブ + LED1 (0.5s)
     animTimers.push(setTimeout(function() {
       display.classList.add('active');
       document.getElementById('led1').classList.add('on');
     }, 500 * SLOW));
 
-    // Phase 2: コイン投入 (0.7s)
     animTimers.push(setTimeout(function() {
       coin.classList.add('inserting');
       document.getElementById('led2').classList.add('on');
     }, 700 * SLOW));
 
-    // Phase 3: ダイアル回転 (1.5s)
     animTimers.push(setTimeout(function() {
       dial.classList.add('spinning');
       document.getElementById('led3').classList.add(rc.flash ? 'rare' : 'on');
     }, 1500 * SLOW));
 
-    // Phase 4: カード排出 (3.0s)
     animTimers.push(setTimeout(function() {
       cardEl.classList.add('sliding');
     }, 3000 * SLOW));
 
-    // Phase 5: カードフリップ + 拡大 (4.0s)
     animTimers.push(setTimeout(function() {
       cardInner.classList.add('flipped');
       cardEl.classList.add('expanded');
     }, 4000 * SLOW));
 
-    // Phase 6: レアリティ演出 (4.5s)
     animTimers.push(setTimeout(function() {
-      if (rc.glow) {
-        glow.classList.add(rc.glow, 'show');
-      }
-      if (rc.flash) {
-        flash.classList.add(rc.flash);
-      }
+      if (rc.glow) glow.classList.add(rc.glow, 'show');
+      if (rc.flash) flash.classList.add(rc.flash);
       if (card.rarity === 'r5') {
         spawnSparkles(12, ['#fbbf24', '#f59e0b', '#fff']);
       } else if (card.rarity === 'r6') {
@@ -937,7 +1276,6 @@ body.theme-light .earn-item strong { color: #1e293b; }
       }
     }, 4500 * SLOW));
 
-    // Phase 7: 結果表示 (5.0s)
     animTimers.push(setTimeout(function() {
       var labelEl = document.getElementById('carddasResultLabel');
       var nameEl  = document.getElementById('carddasResultName');
@@ -950,12 +1288,11 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
       result.classList.add('show');
 
-      // 機能解放チェック
       if (typeof getNewUnlocks === 'function' && typeof oldCount === 'number') {
         var newCount = getCardCount();
         var unlocked = getNewUnlocks(oldCount, newCount);
         if (unlocked.length > 0) {
-          setTimeout(function() { if(window.showUnlockBanners) showUnlockBanners(unlocked); }, 1200);
+          setTimeout(function() { if (window.showUnlockBanners) showUnlockBanners(unlocked); }, 1200);
         }
       }
     }, 5000 * SLOW));
@@ -963,7 +1300,17 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
   function doGacha(tier) {
     var cost = COSTS[tier];
-    if (!GachaUtils.spendCoins(cost)) return;
+    if (!GachaUtils.spendCoins(cost)) {
+      flashToast('コインが足りません');
+      return;
+    }
+
+    var wrapId = { normal: 'btnNormalWrap', rare: 'btnRareWrap', super: 'btnSuperWrap' }[tier];
+    flyCoins(cost, document.getElementById(wrapId));
+
+    var pill = document.getElementById('coin-pill');
+    pill.style.transform = 'scale(1.08)';
+    setTimeout(function() { pill.style.transform = ''; }, 320);
 
     var card;
     if (tier === 'normal') card = GachaUtils.drawNormal();
@@ -999,11 +1346,9 @@ body.theme-light .earn-item strong { color: #1e293b; }
     resetCarddas();
   });
 
-  // デバッグ: URLに ?coins=99 でコイン追加
   var dbg = new URLSearchParams(location.search).get('coins');
   if (dbg) { localStorage.setItem('bigfive_coins', dbg); location.search = ''; }
 
-  // 初期表示
   updateCoinDisplay();
 
 })();
