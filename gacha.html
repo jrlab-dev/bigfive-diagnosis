@@ -227,7 +227,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* 表示窓 */
 .carddas-display {
   position: absolute;
-  top: 15%;
+  top: 28%;
   left: 50%;
   transform: translateX(-50%);
   width: 56%;
@@ -236,34 +236,38 @@ body.theme-light .earn-item strong { color: #1e293b; }
   border: none;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700;
-  color: #9ca3af;
-  text-shadow: 0 0 6px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.5);
+  font-size: 18px; font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 2px 6px rgba(0,0,0,0.8), 0 0 24px rgba(0,0,0,0.6);
+  letter-spacing: 0.15em;
   transition: color 0.3s, text-shadow 0.3s;
-  z-index: 2;
 }
 .carddas-display.active {
   color: #a78bfa;
   text-shadow: 0 0 8px rgba(139,92,246,0.6), 0 0 16px rgba(139,92,246,0.3);
+  animation: displayGlow 2s ease-in-out infinite;
+}
+@keyframes displayGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(139,92,246,0.6), 0 0 16px rgba(139,92,246,0.3); }
+  50%      { text-shadow: 0 0 14px rgba(139,92,246,0.8), 0 0 28px rgba(139,92,246,0.5), 0 0 42px rgba(139,92,246,0.2); }
 }
 
 /* コイン投入エリア */
 .carddas-coin-area {
   position: absolute;
-  top: 28%;
+  top: 38%;
   left: 50%;
   transform: translateX(-50%);
-  text-align: center;
   z-index: 2;
 }
 .carddas-coin-label { display: none; }
 .carddas-slot {
   width: 56px; height: 8px;
-  background: rgba(0,0,0,0.6);
-  border: 2px solid rgba(100,100,100,0.5);
+  background: transparent;
+  border: none;
   border-radius: 4px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .carddas-coin {
   position: absolute;
@@ -288,15 +292,16 @@ body.theme-light .earn-item strong { color: #1e293b; }
 @keyframes coinDrop {
   0%   { opacity: 0; top: -50px; }
   8%   { opacity: 1; top: -50px; }
-  55%  { opacity: 1; top: -6px; }
-  75%  { opacity: 0.7; top: -2px; transform: translateX(-50%) scaleY(0.5); }
-  100% { opacity: 0; top: 6px; transform: translateX(-50%) scaleY(0.15) scaleX(1.3); }
+  45%  { opacity: 1; top: -6px; }
+  65%  { opacity: 0.8; top: 4px; transform: translateX(-50%) scaleY(0.6); }
+  80%  { opacity: 0.5; top: 12px; transform: translateX(-50%) scaleY(0.3) scaleX(1.2); }
+  100% { opacity: 0; top: 21px; transform: translateX(-50%) scaleY(0.1) scaleX(1.4); }
 }
 
 /* ダイアル（画像ベース） */
 .carddas-dial-area {
   position: absolute;
-  top: 48%;
+  top: 48.1%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -345,13 +350,13 @@ body.theme-light .earn-item strong { color: #1e293b; }
 
 /* カード */
 .carddas-card {
-  width: 200px; height: 200px;
+  width: 270px; height: 270px;
   perspective: 800px;
   position: absolute;
-  top: -220px;
+  top: -560px;
   opacity: 0;
   z-index: 2;
-  transform: scale(0.55);
+  transform: scale(0.32);
   transition: transform 0.7s cubic-bezier(0.2, 0, 0.2, 1);
 }
 .carddas-card.expanded {
@@ -361,12 +366,12 @@ body.theme-light .earn-item strong { color: #1e293b; }
   animation: cardSlideOut 0.9s cubic-bezier(0.15, 0, 0.35, 1) forwards;
 }
 @keyframes cardSlideOut {
-  0%   { opacity: 0; top: -220px; }
-  28%  { opacity: 0; top: -80px; }
-  35%  { opacity: 1; top: -55px; }
-  55%  { top: 0px; }
-  65%  { top: -5px; }
-  100% { opacity: 1; top: 8px; }
+  0%   { opacity: 0; top: -560px; }
+  12%  { opacity: 0; top: -230px; }
+  20%  { opacity: 1; top: -150px; }
+  55%  { top: -20px; }
+  65%  { top: -25px; }
+  100% { opacity: 1; top: -18px; }
 }
 
 .carddas-card-inner {
@@ -423,6 +428,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   border-radius: 8px;
+  transform: scale(1.15);
 }
 .carddas-front-emoji {
   display: none;
@@ -445,8 +451,11 @@ body.theme-light .earn-item strong { color: #1e293b; }
 /* レアリティ別カード演出 */
 .carddas-glow {
   position: absolute;
-  inset: -8px;
-  border-radius: 14px;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 270px; height: 270px;
+  border-radius: 12px;
   opacity: 0;
   z-index: 1;
   pointer-events: none;
@@ -562,7 +571,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
 @media (max-height: 700px) {
   .carddas-machine { width: 240px; }
   .carddas-dial { width: 70px; height: 70px; }
-  .carddas-card { width: 170px; height: 170px; top: -190px; transform: scale(0.55); }
+  .carddas-card { width: 230px; height: 230px; top: -470px; transform: scale(0.32); }
   .carddas-card.expanded { transform: scale(1); }
   .carddas-card-area { height: 210px; }
 }
@@ -728,6 +737,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
   var COSTS = { normal: 1, rare: 3, super: 5 };
   var TIER_LABEL = { normal: 'NORMAL', rare: 'RARE', super: 'SUPER' };
 
+  var SLOW = new URLSearchParams(location.search).has('slow') ? 10 : 1;
   var animTimers = [];
 
   function updateCoinDisplay() {
@@ -881,30 +891,30 @@ body.theme-light .earn-item strong { color: #1e293b; }
     animTimers.push(setTimeout(function() {
       display.classList.add('active');
       document.getElementById('led1').classList.add('on');
-    }, 500));
+    }, 500 * SLOW));
 
     // Phase 2: コイン投入 (0.7s)
     animTimers.push(setTimeout(function() {
       coin.classList.add('inserting');
       document.getElementById('led2').classList.add('on');
-    }, 700));
+    }, 700 * SLOW));
 
     // Phase 3: ダイアル回転 (1.5s)
     animTimers.push(setTimeout(function() {
       dial.classList.add('spinning');
       document.getElementById('led3').classList.add(rc.flash ? 'rare' : 'on');
-    }, 1500));
+    }, 1500 * SLOW));
 
     // Phase 4: カード排出 (3.0s)
     animTimers.push(setTimeout(function() {
       cardEl.classList.add('sliding');
-    }, 3000));
+    }, 3000 * SLOW));
 
     // Phase 5: カードフリップ + 拡大 (4.0s)
     animTimers.push(setTimeout(function() {
       cardInner.classList.add('flipped');
       cardEl.classList.add('expanded');
-    }, 4000));
+    }, 4000 * SLOW));
 
     // Phase 6: レアリティ演出 (4.5s)
     animTimers.push(setTimeout(function() {
@@ -925,7 +935,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
       } else if (card.rarity === 'r4') {
         spawnSparkles(8, ['#8b5cf6', '#c4b5fd']);
       }
-    }, 4500));
+    }, 4500 * SLOW));
 
     // Phase 7: 結果表示 (5.0s)
     animTimers.push(setTimeout(function() {
@@ -948,7 +958,7 @@ body.theme-light .earn-item strong { color: #1e293b; }
           setTimeout(function() { if(window.showUnlockBanners) showUnlockBanners(unlocked); }, 1200);
         }
       }
-    }, 5000));
+    }, 5000 * SLOW));
   }
 
   function doGacha(tier) {
