@@ -332,7 +332,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <div class="rr-title" id="rrTitle">ラウンド 1 結果</div>
     <div class="rr-bars" id="rrBars"></div>
     <div class="rr-summary" id="rrSummary"></div>
-    <div class="rr-next" id="rrNext"></div>
+    <div class="rr-note" id="rrNote" style="font-size:12px;color:var(--dim);margin-top:12px;line-height:1.7"></div>
+    <button class="round-submit ready" id="rrNextBtn" style="margin-top:16px">次へ</button>
   </div>
 
   <!-- FINAL -->
@@ -636,12 +637,16 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('poolAmount').textContent = state.poolTotal;
 
     // ラウンドごとのナラティブ
+    var examples = '<div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:8px;text-align:left;font-size:12px;line-height:1.8;color:var(--dim)">' +
+      '<div style="margin-bottom:2px">💎 全員が3枚入れた場合 → <b style="color:#10b981">手元に4枚</b>戻る</div>' +
+      '<div style="margin-bottom:2px">⚠️ あなただけ3枚・他が0枚 → <b style="color:#ef4444">手元に1枚</b>しか戻らない</div>' +
+      '<div>😈 あなたが0枚・他が3枚ずつ → <b style="color:#f59e0b">手元に6枚</b>も戻る</div></div>';
     var narratives = [
-      'あなたは' + state.bots.length + '人のメンバーと共同プロジェクトに参加しました。各自が手持ちのトークンを共同プールに投じます。プールは2倍になって全員に均等に配分されます。多く投じればグループ全体の利益は増えますが、自分の手元には少なくなります。',
-      '2ラウンド目です。前回のメンバーの投じ方を見て、どう動きますか？相手が多く投じていれば、自分は少なくても恩恵を受けられます。でも全員がそう考えたら……。',
-      '最終ラウンド。これが最後のチャンスです。ここでの選択が、あなたのスタイルを決めます。'
+      'あなたは3人のメンバーと共同プロジェクトに参加しました。好きな枚数を共同プールに入れてください。集まったコインは増やされて4人に均等配分されます。' + examples,
+      '2ラウンド目です。前回のメンバーの投じ方を見て、どう動きますか？' + examples,
+      '最終ラウンド。ここでの選択が、あなたのスタイルを決めます。' + examples
     ];
-    $('roundNarrative').textContent = narratives[n];
+    $('roundNarrative').innerHTML = narratives[n];
 
     // トークン表示
     var tokenHtml = '';
@@ -753,17 +758,22 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       '<div class="rr-summary-row"><span>配分総額</span><span class="rr-summary-val">' + multiplied + '枚</span></div>' +
       '<div class="rr-summary-row"><span>1人あたり</span><span class="rr-summary-val">' + perPlayer + '枚</span></div>';
 
-    // 次へ
+    // コメント
+    var rrNotes = [
+      '全員が多く投じれば全員が得をする。でも、誰かが0枚なら……？',
+      '他人の選択が見えると、自分の選択も変わるものです。',
+      '3ラウンドの結果から、あなたの協力スタイルを分析します。'
+    ];
+    $('rrNote').textContent = rrNotes[n];
+
+    // 次へボタン（自動遷移しない）
+    var nextBtn = $('rrNextBtn');
     if (n < TOTAL_ROUNDS - 1) {
-      var rrNotes = [
-        '全員が多く投じれば全員が得をする。でも、誰かが0枚なら……？',
-        '他人の選択が見えると、自分の選択も変わるものです。'
-      ];
-      $('rrNext').innerHTML = '<div style="margin-bottom:6px">' + rrNotes[n] + '</div><div>次のラウンドへ...</div>';
-      state.timers.push(setTimeout(function() { showRound(n + 1); }, 4000));
+      nextBtn.textContent = '次のラウンドへ';
+      nextBtn.onclick = function() { showRound(n + 1); };
     } else {
-      $('rrNext').innerHTML = '3ラウンドの結果から、あなたの協力スタイルを分析します...';
-      state.timers.push(setTimeout(function() { showFinal(); }, 3500));
+      nextBtn.textContent = '結果を見る';
+      nextBtn.onclick = function() { showFinal(); };
     }
   }
 
