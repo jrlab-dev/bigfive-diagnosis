@@ -569,6 +569,22 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
 }
 .carddas-close-btn:hover { background: rgba(139,92,246,0.25); }
 
+/* 機能解放バナー */
+.unlock-banner {
+  position: fixed; bottom: -120px; left: 50%; transform: translateX(-50%);
+  min-width: 300px; max-width: 90vw;
+  background: linear-gradient(135deg, rgba(139,92,246,0.95), rgba(236,72,153,0.95));
+  color: #fff; border-radius: 16px;
+  padding: 16px 20px; text-align: center;
+  z-index: 200; box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+  transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.unlock-banner.show { bottom: 20px; }
+.unlock-banner-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+.unlock-banner-label { font-size: 18px; font-weight: 900; }
+.unlock-banner-sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
+
 /* 小画面対応 */
 @media (max-height: 700px) {
   .carddas-body { height: 320px; }
@@ -770,6 +786,8 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
     var display   = document.getElementById('carddasDisplay');
     var machine   = document.getElementById('carddasMachine');
     var sparkles  = document.getElementById('carddasSparkles');
+    var cardImg   = document.getElementById('carddasCardImg');
+    var emojiEl   = document.getElementById('carddasEmoji');
 
     overlay.classList.remove('active');
     coin.classList.remove('inserting');
@@ -783,6 +801,12 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
     display.classList.remove('active');
     display.textContent = 'SELECT';
     sparkles.innerHTML = '';
+
+    // カード画像リセット
+    cardImg.removeAttribute('src');
+    cardImg.style.display = 'block';
+    cardImg.onerror = null;
+    emojiEl.style.display = 'none';
 
     for (var i = 1; i <= 3; i++) {
       document.getElementById('led' + i).className = 'carddas-led';
@@ -808,7 +832,7 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
     }
   }
 
-  function playCarddasAnimation(card, isNew, tier) {
+  function playCarddasAnimation(card, isNew, tier, oldCount) {
     resetCarddas();
 
     var overlay   = document.getElementById('carddasOverlay');
@@ -925,6 +949,15 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
       addedEl.textContent = isNew ? 'コレクションに追加しました' : '（すでにコレクション済み）';
 
       result.classList.add('show');
+
+      // 機能解放チェック
+      if (typeof getNewUnlocks === 'function' && typeof oldCount === 'number') {
+        var newCount = getCardCount();
+        var unlocked = getNewUnlocks(oldCount, newCount);
+        if (unlocked.length > 0) {
+          setTimeout(function() { showGachaUnlockBanners(unlocked); }, 1200);
+        }
+      }
     }, 5000));
   }
 
@@ -936,6 +969,8 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
     if (tier === 'normal') card = GachaUtils.drawNormal();
     else if (tier === 'rare') card = GachaUtils.drawRare();
     else card = GachaUtils.drawSuper();
+
+    var oldCount = (typeof getCardCount === 'function') ? getCardCount() : 0;
 
     var isNew = false;
     if (window.AlbumUtils) {
@@ -953,7 +988,7 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
     }
 
     updateCoinDisplay();
-    playCarddasAnimation(card, isNew, tier);
+    playCarddasAnimation(card, isNew, tier, oldCount);
   }
 
   document.getElementById('btnNormal').addEventListener('click', function() { doGacha('normal'); });
@@ -963,6 +998,39 @@ body.theme-light .earn-item { background: rgba(255,255,255,0.7); border-color: r
   document.getElementById('carddasCloseBtn').addEventListener('click', function() {
     resetCarddas();
   });
+
+  // 機能解放バナー
+  var unlockQueue = [];
+  var unlockShowing = false;
+
+  function showGachaUnlockBanners(unlocks) {
+    unlocks.forEach(function(u) { unlockQueue.push(u); });
+    if (!unlockShowing) showNextUnlock();
+  }
+
+  function showNextUnlock() {
+    if (unlockQueue.length === 0) { unlockShowing = false; return; }
+    unlockShowing = true;
+    var u = unlockQueue.shift();
+
+    var banner = document.createElement('div');
+    banner.className = 'unlock-banner';
+    banner.innerHTML =
+      '<div class="unlock-banner-title">🎉 新機能が解放されました！</div>' +
+      '<div class="unlock-banner-label">' + u.label + '</div>' +
+      (u.url ? '<div class="unlock-banner-sub">閉じる後にアクセスできます</div>' : '');
+
+    document.body.appendChild(banner);
+    setTimeout(function() { banner.classList.add('show'); }, 50);
+
+    setTimeout(function() {
+      banner.classList.remove('show');
+      setTimeout(function() {
+        if (banner.parentNode) banner.remove();
+        showNextUnlock();
+      }, 500);
+    }, 3000);
+  }
 
   // 初期表示
   updateCoinDisplay();
