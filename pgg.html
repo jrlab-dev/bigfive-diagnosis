@@ -143,15 +143,18 @@ body {
 .round-pool-label { font-size: 12px; color: var(--dim); margin-bottom: 4px; }
 .round-pool-amount { font-size: 28px; font-weight: 900; color: var(--amber); }
 .round-pool-amount span { font-size: 14px; font-weight: 400; color: var(--dim); }
-.round-opponent {
+.round-player {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-.round-opponent-img {
+.round-player-img {
   width: 52px; height: 52px; border-radius: 10px; overflow: hidden;
   border: 2px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.15);
 }
-.round-opponent-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
-.round-opponent-name { font-size: 10px; color: var(--dim); font-weight: 500; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.round-player-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.round-player-name { font-size: 10px; color: var(--dim); font-weight: 500; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.round-player.self .round-player-name { color: var(--amber); font-weight: 700; }
+.round-player-coins { font-size: 12px; font-weight: 700; color: var(--dim); display: flex; align-items: center; gap: 3px; }
+.round-player.self .round-player-coins { color: var(--amber); }
 .round-tokens { margin-bottom: 20px; }
 .round-tokens-label { font-size: 13px; color: var(--dim); margin-bottom: 8px; }
 .round-tokens-display { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; }
@@ -280,7 +283,7 @@ body.theme-light .choice-btn { background: rgba(255,255,255,0.7); border-color: 
 body.theme-light .choice-btn.selected { background: rgba(245,158,11,0.15); }
 body.theme-light .rr-bar-track { background: rgba(0,0,0,0.04); }
 body.theme-light .rr-summary { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
-body.theme-light .round-opponent-img { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+body.theme-light .round-player-img { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
 body.theme-light .rr-freerider { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
 body.theme-light .final-coins { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
 body.theme-light .analysis-card { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
@@ -339,13 +342,13 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <div class="round-header">ROUND <span id="roundNum">1</span> / 3</div>
     <div class="round-narrative" id="roundNarrative" style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:16px"></div>
     <div class="round-title">いくら投じますか？</div>
-    <div class="round-opponents" id="roundOpponents" style="display:flex;justify-content:center;gap:16px;margin-bottom:20px"></div>
-    <div class="round-mycoins" id="roundMyCoins" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;font-size:14px;font-weight:700;color:var(--amber)"></div>
+    <div class="round-players" id="roundPlayers" style="display:flex;justify-content:center;gap:20px;margin-bottom:24px"></div>
     <div class="round-pool-box">
       <div class="round-pool-label">現在の共同プール</div>
       <div class="round-pool-amount"><span id="poolAmount">0</span> <span>枚</span></div>
       <div class="round-pool-note" style="font-size:11px;color:var(--dim);margin-top:4px">集まったコインは増やされて4人に均等配分されます</div>
     </div>
+    <div class="round-mycoins" id="roundMyCoins" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;font-size:14px;font-weight:700;color:var(--amber)"></div>
     <div class="round-tokens">
       <div class="round-tokens-label">投じる枚数を選択</div>
       <div class="round-tokens-display" id="tokenDisplay"></div>
@@ -696,16 +699,27 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
     $('roundNum').textContent = n + 1;
 
-    // 相手の顔を表示
-    var oppHtml = '';
+    // 4人の顔を表示（自分左＋相手3人）
+    var myChar = getMyCharInfo();
+    var myImg = myChar ? myChar.img : null;
+    var myName = myChar ? myChar.name : 'あなた';
+    var playersHtml = '';
+    // 自分
+    playersHtml += '<div class="round-player self">' +
+      '<div class="round-player-img" style="border-color:var(--amber);background:rgba(245,158,11,0.12)">' +
+      (myImg ? '<img src="' + myImg + '">' : '\u{1FA99}') + '</div>' +
+      '<div class="round-player-name">' + myName + '</div>' +
+      '<div class="round-player-coins">\u{1FA99} ' + state.playerBalance + '枚</div></div>';
+    // 相手3人
     for (var oi = 0; oi < state.bots.length; oi++) {
       var ob = state.bots[oi];
-      oppHtml += '<div class="round-opponent">' +
-        '<div class="round-opponent-img" style="border-color:' + ob.color + '">' +
+      playersHtml += '<div class="round-player">' +
+        '<div class="round-player-img" style="border-color:' + ob.color + '">' +
         '<img src="' + ob.img + '"></div>' +
-        '<div class="round-opponent-name">' + ob.name + '</div></div>';
+        '<div class="round-player-name">' + ob.name + '</div>' +
+        '<div class="round-player-coins">\u{1FA99} ?枚</div></div>';
     }
-    $('roundOpponents').innerHTML = oppHtml;
+    $('roundPlayers').innerHTML = playersHtml;
 
     // 持ち金表示
     $('roundMyCoins').innerHTML = 'あなたの持ち金: 🪙 ' + state.playerBalance + '枚';
