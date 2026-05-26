@@ -8,8 +8,8 @@
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>コインゲーム｜ビッグファイブ診断</title>
-<meta name="description" content="コインが増やせる共同投資ゲーム。4人で参加して、あなたの協力スタイルを探ろう。">
+<title>コイン増やせるかな？｜ビッグファイブ診断</title>
+<meta name="description" content="あなたはコインを増やせるか！？共同投資でコインを増やすゲーム。3枚投じて、あなたの協力スタイルを探ろう。">
 <meta name="robots" content="noindex">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -277,7 +277,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     ガチャ
   </a>
-  <span class="header-title">コインゲーム</span>
+  <span class="header-title">Public Goods Game</span>
   <div class="coin-display" id="coinDisplay">🪙 0枚</div>
 </header>
 
@@ -285,14 +285,13 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   <!-- ENTRY -->
   <div class="phase active" id="phaseEntry">
-    <div class="entry-coin">🪙</div>
-    <div class="entry-badge">NOW PLAYING</div>
-    <div class="entry-title" id="entryTitle">コインが増やせるゲーム</div>
+    <div class="entry-title" id="entryTitle" style="font-size:28px;letter-spacing:0.08em;margin-bottom:6px">Public Goods Game</div>
+    <div class="entry-subtitle" style="font-size:15px;color:var(--amber);font-weight:700;margin-bottom:14px;letter-spacing:0.05em">公共財ゲームでコインを増やせるか！？</div>
     <div class="entry-desc" id="entryDesc">
-      あなたを含む4人が共同プロジェクトに参加します。<br>何枚投じるかは、あなたの判断です。
+      3枚のコインを投じて、増やして取り戻す共同投資ゲーム。<br>全員が協力すれば増える…でも、誰かがサボったら？
     </div>
     <div class="entry-rules">
-      <h3>ルール</h3>
+      <h3>どうやって増やす？</h3>
       <ul>
         <li>各ラウンド、あなたは3枚のコインを持っています</li>
         <li>好きな枚数を共同プールに入れてください</li>
@@ -302,7 +301,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         <li>逆にあなたが0枚・他が3枚ずつの場合、手元には<b>6枚</b>戻ります</li>
       </ul>
     </div>
-    <div class="entry-cost">投資額: 🪙 <strong>3枚</strong></div>
+    <div class="entry-cost">参加費: 🪙 <strong>3枚</strong></div>
     <button class="start-btn" id="startBtn">ゲームを始める</button>
     <div class="entry-lack" id="entryLack" style="display:none"></div>
     <div class="entry-replay-note" id="entryReplayNote" style="display:none"></div>
@@ -575,7 +574,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     if (isReplay) {
       try {
         var prev = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        $('entryTitle').textContent = 'もう一度チャレンジ！';
+        $('entryTitle').textContent = 'Public Goods Game';
         $('entryDesc').innerHTML = '前回のタイプ: <strong>' + (prev.typeName || '---') + '</strong><br>今回はどうなる？';
         $('entryReplayNote').style.display = 'block';
         $('entryReplayNote').textContent = '※ 再プレイはお楽しみ用途です（診断データは初回のまま）';
