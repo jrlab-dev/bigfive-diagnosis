@@ -254,35 +254,39 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .my-result-name-row {
+  .my-profile-name-row {
     display: flex;
     align-items: center;
-    gap: 7px;
-    margin: 6px 0 7px;
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 10px 12px;
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.18);
+    border-radius: 10px;
   }
-  .my-result-name-label {
+  .my-profile-name-label {
     flex-shrink: 0;
     color: var(--dim);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
   }
-  .my-result-name-input {
-    width: min(210px, 100%);
+  .my-profile-name-input {
+    flex: 1;
     min-width: 0;
-    padding: 6px 9px;
+    padding: 7px 10px;
     border-radius: 8px;
     border: 1px solid rgba(139,92,246,0.25);
     background: rgba(10,14,39,0.45);
     color: var(--text);
     font: inherit;
-    font-size: 12px;
+    font-size: 13px;
     outline: none;
   }
-  .my-result-name-input:focus {
+  .my-profile-name-input:focus {
     border-color: rgba(139,92,246,0.65);
     box-shadow: 0 0 0 2px rgba(139,92,246,0.14);
   }
-  .my-result-name-input::placeholder { color: var(--dim); }
+  .my-profile-name-input::placeholder { color: var(--dim); }
   .result-card-meta {
     font-size: 12px;
     color: var(--dim);
@@ -1601,6 +1605,7 @@
 <script>
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
+const STORAGE_KEY_MY_NAME = 'bigfive_my_name';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 const MAX_MY = 5;
 const MAX_OTHERS = 50;
@@ -1655,16 +1660,20 @@ function escAttr(value) {
   });
 }
 
-function saveMyResultName(index, value) {
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
-  if (!results[index]) return;
+function getMyDisplayName(results) {
+  const saved = (localStorage.getItem(STORAGE_KEY_MY_NAME) || '').trim();
+  if (saved) return saved;
+  const firstNamed = (results || []).find(r => r && r.name);
+  return firstNamed ? String(firstNamed.name || '').trim() : '';
+}
+
+function saveMyDisplayName(value) {
   const name = value.trim().slice(0, 20);
   if (name) {
-    results[index].name = name;
+    localStorage.setItem(STORAGE_KEY_MY_NAME, name);
   } else {
-    delete results[index].name;
+    localStorage.removeItem(STORAGE_KEY_MY_NAME);
   }
-  localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(results));
 }
 
 // 自分の結果レンダリング
@@ -1686,10 +1695,15 @@ function renderMyResults() {
   const activeIdx = getActiveMyIndex();
   const capacityColor = results.length >= MAX_MY ? '#ef4444' : results.length >= MAX_MY - 1 ? '#f97316' : '#8b5cf6';
   const capacityHtml = `<div style="text-align:right;font-size:12px;color:${capacityColor};margin-bottom:8px;font-weight:600;">${results.length}/${MAX_MY}件保存中${results.length >= MAX_MY ? '（上限・古いものから上書きされます）' : ''}</div>`;
+  const myNameHtml = `
+    <div class="my-profile-name-row">
+      <span class="my-profile-name-label">自分の名前</span>
+      <input class="my-profile-name-input" type="text" value="${escAttr(getMyDisplayName(results))}" placeholder="例：田中、自分など" maxlength="20" oninput="saveMyDisplayName(this.value)">
+    </div>`;
   const activeNoteHtml = `<div style="font-size:12px;color:#a78bfa;margin-bottom:10px;"><span class="icon-with-text"><svg class="icon-sm" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>適用中 = 相性診断などで使われる結果。タップして切替可</span></div>`;
 
   const vBadgeColors = { '10': '#64748b', '30': '#3b82f6', '120': '#8b5cf6' };
-  container.innerHTML = capacityHtml + activeNoteHtml + results.map((r, i) => {
+  container.innerHTML = capacityHtml + myNameHtml + activeNoteHtml + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
@@ -1713,10 +1727,6 @@ function renderMyResults() {
         </div>
         <div class="result-card-content">
           <div class="result-card-name">${r.typeName}</div>
-          <div class="my-result-name-row">
-            <span class="my-result-name-label">名前（任意）</span>
-            <input class="my-result-name-input" type="text" value="${escAttr(r.name || '')}" placeholder="例：自分、田中など" maxlength="20" onclick="event.preventDefault(); event.stopPropagation();" onkeydown="event.stopPropagation();" oninput="saveMyResultName(${i}, this.value)">
-          </div>
           <div class="result-card-meta">
             <span class="result-card-code">${r.code}</span>
             <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:${vColor}33;color:${vColor};border:1px solid ${vColor}66;">${vLabel}</span>
@@ -2341,6 +2351,7 @@ document.getElementById('deleteModal').addEventListener('click', (e) => {
 });
 document.getElementById('deleteModalConfirm').addEventListener('click', () => {
   localStorage.removeItem(STORAGE_KEY_MY);
+  localStorage.removeItem(STORAGE_KEY_MY_NAME);
   localStorage.removeItem(STORAGE_KEY_OTHERS);
   localStorage.removeItem(STORAGE_KEY_TEAMS);
   TEST_META.forEach(t => localStorage.removeItem(t.key));
@@ -2358,7 +2369,7 @@ document.getElementById('deleteModalConfirm').addEventListener('click', () => {
 const SYNC_ID_KEY = 'bigfive_sync_id';
 const SYNC_API = 'https://bigfive.jr-genius.jp/api';
 const SYNC_DATA_KEYS = [
-  'bigfive_my_results', 'bigfive_other_results',
+  'bigfive_my_results', 'bigfive_my_name', 'bigfive_other_results',
   'bigfive_album', 'bigfive_album_meta',
   'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
   'attachment_result', 'hsp_result', 'locus_result',

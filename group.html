@@ -633,10 +633,11 @@ document.getElementById('importBtn').addEventListener('click', openImportModal);
 function loadAllSaved() {
   const myRaw = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch(e) { return []; } })();
   const othersRaw = (() => { try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); } catch(e) { return []; } })();
+  const myDisplayName = (localStorage.getItem('bigfive_my_name') || '').trim();
   const all = [];
   // インデックスベースのUIDで重複を防ぐ
   myRaw.forEach((o, i) => {
-    all.push({ uid: 'my_' + i, name: o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
+    all.push({ uid: 'my_' + i, name: myDisplayName || o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
   });
   othersRaw.forEach((o, i) => {
     all.push({ uid: 'oth_' + i, name: o.name || `あの人(${o.code})`, code: o.code, tag: 'あの人' });
