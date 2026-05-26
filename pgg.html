@@ -624,7 +624,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     var selfAvatarHtml;
     if (myChar) {
       selfAvatarHtml = '<div class="lobby-player self joined">' +
-        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15);overflow:hidden"><img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
+        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15);overflow:hidden"><img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + myChar.name + '</div></div>';
     } else {
       selfAvatarHtml = '<div class="lobby-player self joined">' +
@@ -637,7 +637,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     for (var i = 0; i < 2; i++) {
       var bot0 = state.bots[i];
       grid.innerHTML += '<div class="lobby-player joined">' +
-        '<div class="lobby-avatar" style="border-color:' + bot0.color + ';background:' + bot0.color + '22;overflow:hidden"><img src="' + bot0.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
+        '<div class="lobby-avatar" style="border-color:' + bot0.color + ';background:' + bot0.color + '22;overflow:hidden"><img src="' + bot0.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + bot0.name + '</div></div>';
     }
 
@@ -651,7 +651,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       var el = $('lobbyBot2');
       var bot2 = state.bots[2];
       el.classList.add('joined');
-      el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot2.color + ';background:' + bot2.color + '22;overflow:hidden"><img src="' + bot2.img + '" style="width:100%;height:100%;object-fit:cover"></div>' +
+      el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot2.color + ';background:' + bot2.color + '22;overflow:hidden"><img src="' + bot2.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + bot2.name + '</div>';
     }, 2500));
 
@@ -878,7 +878,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     // 自分
     playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:6px;overflow:hidden;border:2px solid var(--amber);margin:0 auto 4px">';
     if (myChar) {
-      playersHtml += '<img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover">';
+      playersHtml += '<img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
     } else {
       playersHtml += '🪙';
     }
@@ -887,7 +887,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     for (var p = 0; p < state.bots.length; p++) {
       var bot = state.bots[p];
       playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:6px;overflow:hidden;border:2px solid ' + bot.color + ';margin:0 auto 4px">';
-      playersHtml += '<img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover">';
+      playersHtml += '<img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
       playersHtml += '</div><div style="font-size:10px;color:var(--dim);font-weight:500">' + bot.name + '</div></div>';
     }
     playersHtml += '</div>';
