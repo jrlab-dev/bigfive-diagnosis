@@ -1855,11 +1855,6 @@ function renderOtherResults() {
     const isShared = r.source === 'shared';
     return `
       <div class="result-card other-sortable${isChecked ? ' checked' : ''}" data-index="${i}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : isShared ? 'background:rgba(236,72,153,0.06);border-color:rgba(236,72,153,0.3);' : ''}">
-        <div class="other-reorder">
-          <button type="button" class="move-btn" title="上へ" ${i === 0 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, -1)">↑</button>
-          <button type="button" class="drag-handle" draggable="true" data-index="${i}" title="ドラッグして並び替え" onclick="event.preventDefault(); event.stopPropagation();">≡</button>
-          <button type="button" class="move-btn" title="下へ" ${i === results.length - 1 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, 1)">↓</button>
-        </div>
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
         <a href="${isChild ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}&idx=${i}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
@@ -1883,6 +1878,11 @@ function renderOtherResults() {
         </a>
         <button class="partner-btn${isPartner ? ' active' : ''}" title="トップに表示" onclick="event.preventDefault(); event.stopPropagation(); setPartner(${i})">${isPartner ? '<svg class="icon-sm" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' : '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'}</button>
         <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteOtherResult(${i})">削除</button>
+        <div class="other-reorder">
+          <button type="button" class="move-btn" title="上へ" ${i === 0 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, -1)">↑</button>
+          <button type="button" class="drag-handle" draggable="true" data-index="${i}" title="ドラッグして並び替え" onclick="event.preventDefault(); event.stopPropagation();">≡</button>
+          <button type="button" class="move-btn" title="下へ" ${i === results.length - 1 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, 1)">↓</button>
+        </div>
       </div>
     `;
   }).join('');
