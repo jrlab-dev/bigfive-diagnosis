@@ -348,7 +348,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       <div class="round-pool-amount"><span id="poolAmount">0</span> <span>枚</span></div>
       <div class="round-pool-note" style="font-size:11px;color:var(--dim);margin-top:4px">集まったコインは増やされて4人に均等配分されます</div>
     </div>
-    <div class="round-mycoins" id="roundMyCoins" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;font-size:14px;font-weight:700;color:var(--amber)"></div>
+    <div class="round-mycoins" id="roundMyCoins" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;font-size:14px;font-weight:700;color:var(--amber)"></div>
     <div class="round-tokens">
       <div class="round-tokens-label">投じる枚数を選択</div>
       <div class="round-tokens-display" id="tokenDisplay"></div>
@@ -701,30 +701,29 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
     $('roundNum').textContent = n + 1;
 
-    // 4人の顔を表示（自分左＋相手3人）
-    var myChar = getMyCharInfo();
-    var myImg = myChar ? myChar.img : null;
-    var myName = myChar ? myChar.name : 'あなた';
+    // 上段: 相手3人の顔 + コイン
     var playersHtml = '';
-    // 自分
-    playersHtml += '<div class="round-player self">' +
-      '<div class="round-player-img" style="border-color:var(--amber);background:rgba(245,158,11,0.12)">' +
-      (myImg ? '<img src="' + myImg + '">' : '\u{1FA99}') + '</div>' +
-      '<div class="round-player-name">' + myName + '</div>' +
-      '<div class="round-player-coins">\u{1FA99} ' + state.playerBalance + '枚</div></div>';
-    // 相手3人
     for (var oi = 0; oi < state.bots.length; oi++) {
       var ob = state.bots[oi];
+      var botBal = state.botBalances[oi];
       playersHtml += '<div class="round-player">' +
         '<div class="round-player-img" style="border-color:' + ob.color + '">' +
         '<img src="' + ob.img + '"></div>' +
         '<div class="round-player-name">' + ob.name + '</div>' +
-        '<div class="round-player-coins">\u{1FA99} ?枚</div></div>';
+        '<div class="round-player-coins">\u{1FA99} ' + botBal + '枚</div></div>';
     }
     $('roundPlayers').innerHTML = playersHtml;
 
-    // 持ち金表示
-    $('roundMyCoins').innerHTML = 'あなたの持ち金: 🪙 ' + state.playerBalance + '枚';
+    // 下段: 自分の顔 + 持ち金
+    var myChar = getMyCharInfo();
+    var myImg = myChar ? myChar.img : null;
+    var myName = myChar ? myChar.name : 'あなた';
+    var myFaceHtml = myImg
+      ? '<div class="round-player-img self" style="border-color:var(--amber);background:rgba(245,158,11,0.12);width:40px;height:40px;overflow:hidden;flex-shrink:0"><img src="' + myImg + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>'
+      : '<div style="font-size:24px;flex-shrink:0">\u{1FA99}</div>';
+    $('roundMyCoins').innerHTML = myFaceHtml +
+      '<div style="text-align:left"><div style="font-size:11px;color:var(--dim);font-weight:500">' + myName + '</div>' +
+      '<div>あなたの持ち金: \u{1FA99} ' + state.playerBalance + '枚</div></div>';
 
     $('poolAmount').textContent = state.poolTotal;
 
@@ -849,6 +848,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
     // 手持ちコイン表示
     state.playerBalance = state.playerBalance + perPlayer - playerC;
+    for (var bi = 0; bi < botCs.length; bi++) {
+      state.botBalances[bi] = state.botBalances[bi] + perPlayer - botCs[bi];
+    }
     $('rrWallet').innerHTML = '持ちコイン: <span class="coin">🪙 ' + state.playerBalance + '枚</span>（開始時3枚から）';
 
     // サマリー
@@ -1072,6 +1074,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       netGain: 0,
       timers: [],
       playerBalance: 3,
+      botBalances: [3, 3, 3],
       resultSaved: false
     };
     initEntry();
