@@ -296,6 +296,89 @@
   }
   .partner-btn:hover { background: rgba(251,191,36,0.25); border-color: rgba(251,191,36,0.6); }
   .partner-btn.active { background: rgba(251,191,36,0.3); border-color: #fbbf24; }
+  .other-reorder {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .drag-handle,
+  .move-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(139,92,246,0.24);
+    background: rgba(139,92,246,0.10);
+    color: var(--dim);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: grab;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s;
+  }
+  .move-btn {
+    height: 22px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .drag-handle:hover,
+  .move-btn:hover {
+    color: var(--purple);
+    border-color: rgba(139,92,246,0.55);
+    background: rgba(139,92,246,0.18);
+  }
+  .move-btn:disabled {
+    opacity: 0.28;
+    cursor: default;
+  }
+  .move-btn:disabled:hover {
+    color: var(--dim);
+    border-color: rgba(139,92,246,0.24);
+    background: rgba(139,92,246,0.10);
+  }
+  .result-card.dragging {
+    opacity: 0.55;
+    transform: scale(0.99);
+  }
+  .result-card.drag-over {
+    border-color: rgba(6,182,212,0.65);
+    box-shadow: 0 0 0 2px rgba(6,182,212,0.14), 0 8px 24px rgba(6,182,212,0.10);
+  }
+  @media (max-width: 480px) {
+    .result-card {
+      gap: 10px;
+      padding: 12px;
+    }
+    .result-card-icon {
+      width: 44px;
+      height: 44px;
+    }
+    .other-reorder {
+      gap: 3px;
+    }
+    .drag-handle {
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+    }
+    .move-btn {
+      width: 24px;
+      height: 20px;
+      font-size: 10px;
+    }
+    .partner-btn,
+    .delete-btn {
+      padding: 7px 8px;
+    }
+    .result-card-date {
+      display: block;
+      margin-left: 0;
+      margin-top: 3px;
+    }
+  }
 
   /* スコア表示 */
   .score-bars {
@@ -1605,6 +1688,7 @@ function renderMyResults() {
 
 // あの人の結果レンダリング
 let selectedOthers = new Set();
+let draggedOtherIndex = null;
 
 function toggleOtherCheck(index) {
   if (selectedOthers.has(index)) {
@@ -1649,6 +1733,69 @@ function renderOtherCheckUI() {
   } else {
     bar.style.display = 'none';
   }
+}
+
+function moveOtherResult(index, direction) {
+  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  const nextIndex = index + direction;
+  if (nextIndex < 0 || nextIndex >= results.length) return;
+  reorderOtherResults(index, nextIndex);
+}
+
+function reorderOtherResults(fromIndex, toIndex) {
+  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  if (fromIndex === toIndex) return;
+  if (fromIndex < 0 || toIndex < 0 || fromIndex >= results.length || toIndex >= results.length) return;
+
+  const moved = results.splice(fromIndex, 1)[0];
+  results.splice(toIndex, 0, moved);
+  localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(results));
+  selectedOthers.clear();
+  renderOtherResults();
+}
+
+function setupOtherReorder() {
+  const container = document.getElementById('otherResults');
+  if (!container) return;
+
+  container.querySelectorAll('.drag-handle').forEach(handle => {
+    handle.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    handle.addEventListener('dragstart', e => {
+      draggedOtherIndex = parseInt(handle.dataset.index, 10);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(draggedOtherIndex));
+      const card = handle.closest('.result-card');
+      if (card) setTimeout(() => card.classList.add('dragging'), 0);
+    });
+    handle.addEventListener('dragend', () => {
+      draggedOtherIndex = null;
+      container.querySelectorAll('.dragging, .drag-over').forEach(el => {
+        el.classList.remove('dragging', 'drag-over');
+      });
+    });
+  });
+
+  container.querySelectorAll('.other-sortable').forEach(card => {
+    card.addEventListener('dragover', e => {
+      if (draggedOtherIndex === null) return;
+      e.preventDefault();
+      const targetIndex = parseInt(card.dataset.index, 10);
+      if (targetIndex !== draggedOtherIndex) card.classList.add('drag-over');
+    });
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('drag-over');
+    });
+    card.addEventListener('drop', e => {
+      if (draggedOtherIndex === null) return;
+      e.preventDefault();
+      const targetIndex = parseInt(card.dataset.index, 10);
+      reorderOtherResults(draggedOtherIndex, targetIndex);
+      draggedOtherIndex = null;
+    });
+  });
 }
 
 function renderOtherResults() {
@@ -1707,7 +1854,12 @@ function renderOtherResults() {
     const isChild = r.relation === 'child46' || r.relation === 'child79';
     const isShared = r.source === 'shared';
     return `
-      <div class="result-card${isChecked ? ' checked' : ''}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : isShared ? 'background:rgba(236,72,153,0.06);border-color:rgba(236,72,153,0.3);' : ''}">
+      <div class="result-card other-sortable${isChecked ? ' checked' : ''}" data-index="${i}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : isShared ? 'background:rgba(236,72,153,0.06);border-color:rgba(236,72,153,0.3);' : ''}">
+        <div class="other-reorder">
+          <button type="button" class="move-btn" title="上へ" ${i === 0 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, -1)">↑</button>
+          <button type="button" class="drag-handle" draggable="true" data-index="${i}" title="ドラッグして並び替え" onclick="event.preventDefault(); event.stopPropagation();">≡</button>
+          <button type="button" class="move-btn" title="下へ" ${i === results.length - 1 ? 'disabled' : ''} onclick="event.preventDefault(); event.stopPropagation(); moveOtherResult(${i}, 1)">↓</button>
+        </div>
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
         <a href="${isChild ? `kodomo.html?type=${r.code}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation}` : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}&idx=${i}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
@@ -1736,6 +1888,7 @@ function renderOtherResults() {
   }).join('');
 
   renderOtherCheckUI();
+  setupOtherReorder();
 }
 
 // 削除機能
