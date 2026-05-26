@@ -325,6 +325,57 @@ body {
 .earn-row .coin-chip { width: 14px; height: 14px; vertical-align: -2px; margin: 0 1px; }
 .earn-row .coin-chip::after { inset: 2px; border-width: .5px; }
 
+.streak-card {
+  margin: 2px 0 0;
+  padding: 13px 14px 14px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(245,158,11,0.14), transparent 48%),
+    rgba(255,255,255,0.025);
+  border: 1px solid rgba(245,158,11,0.16);
+}
+.streak-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-bottom: 10px;
+}
+.streak-title { font-size: 12.5px; font-weight: 800; color: var(--ink-0); }
+.streak-status { font-size: 11px; color: #e8d8a0; font-weight: 700; white-space: nowrap; }
+.streak-stamps { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.streak-stamp {
+  min-width: 0; height: 48px; border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--ink-3);
+  font-size: 10px; font-weight: 800;
+  position: relative; overflow: hidden;
+}
+.streak-stamp::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 58%);
+  opacity: 0;
+}
+.streak-stamp .mark { font-size: 15px; line-height: 1; }
+.streak-stamp .day { font-size: 9px; letter-spacing: .04em; }
+.streak-stamp.done {
+  color: #fff4c2;
+  background: linear-gradient(180deg, rgba(245,158,11,0.22), rgba(146,64,14,0.12));
+  border-color: rgba(245,158,11,0.34);
+}
+.streak-stamp.done::before, .streak-stamp.today::before { opacity: 1; }
+.streak-stamp.today {
+  color: #fff;
+  border-color: rgba(6,182,212,0.55);
+  box-shadow: 0 0 0 1px rgba(6,182,212,0.12), 0 0 16px rgba(6,182,212,0.15);
+}
+.streak-stamp.bonus { border-color: rgba(245,158,11,0.48); }
+.streak-note {
+  margin-top: 9px;
+  color: var(--ink-2);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
 /* ── Public goods banner ── */
 .banner {
   margin: 18px 16px 0;
@@ -825,6 +876,29 @@ body.theme-light .earn-row {
   border-color: rgba(109,40,217,0.10);
 }
 body.theme-light .earn-row b { color: #8a6e1a; }
+body.theme-light .streak-card {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(245,158,11,0.16), transparent 48%),
+    rgba(255,255,255,0.72);
+  border-color: rgba(245,158,11,0.22);
+}
+body.theme-light .streak-title { color: #1e293b; }
+body.theme-light .streak-status { color: #92400e; }
+body.theme-light .streak-stamp {
+  background: rgba(255,255,255,0.75);
+  border-color: rgba(148,163,184,0.26);
+  color: #94a3b8;
+}
+body.theme-light .streak-stamp.done {
+  background: linear-gradient(180deg, rgba(245,158,11,0.22), rgba(251,191,36,0.10));
+  color: #92400e;
+  border-color: rgba(245,158,11,0.36);
+}
+body.theme-light .streak-stamp.today {
+  color: #0f172a;
+  border-color: rgba(8,145,178,0.50);
+}
+body.theme-light .streak-note { color: #64748b; }
 body.theme-light .banner {
   background:
     radial-gradient(circle at 0% 0%, rgba(200,160,60,0.15), transparent 60%),
@@ -937,6 +1011,14 @@ body.theme-light .foot-note { color: var(--ink-3); }
     <div class="earn-row" data-kind="streak">
       <div class="ico">&#x1F525;</div>
       <div>7日連続で開くと <span class="coin-chip"></span> <b>3枚</b> ボーナス（7の倍数日）</div>
+    </div>
+    <div class="streak-card" aria-label="7日連続ログインの進行状況">
+      <div class="streak-head">
+        <div class="streak-title">7日スタンプ</div>
+        <div class="streak-status" id="streakStatus">確認中</div>
+      </div>
+      <div class="streak-stamps" id="streakStamps"></div>
+      <div class="streak-note" id="streakNote">トップページを開くと、その日のスタンプとコインを受け取れます。</div>
     </div>
   </div>
 
@@ -1067,6 +1149,72 @@ body.theme-light .foot-note { color: var(--ink-3); }
         if (existing) existing.parentNode.removeChild(existing);
       }
     }
+  }
+
+  function daysBetweenJST(from, to) {
+    if (!from || !to) return 999;
+    var fromDate = new Date(from + 'T00:00:00+09:00');
+    var toDate = new Date(to + 'T00:00:00+09:00');
+    return Math.round((toDate - fromDate) / 86400000);
+  }
+
+  function updateStreakCard() {
+    var wrap = document.getElementById('streakStamps');
+    var status = document.getElementById('streakStatus');
+    var note = document.getElementById('streakNote');
+    if (!wrap || !status || !note || !window.GachaUtils) return;
+
+    var today = GachaUtils.getTodayJST();
+    var last = localStorage.getItem('bigfive_login_last') || '';
+    var streak = parseInt(localStorage.getItem('bigfive_login_streak') || '0', 10) || 0;
+    var diff = daysBetweenJST(last, today);
+    var doneCount = 0;
+    var todayDay = 1;
+    var state = 'empty';
+
+    if (!last || streak <= 0) {
+      status.textContent = '未スタート';
+      note.textContent = 'トップページを開くと1日目のスタンプとコインを受け取れます。';
+    } else if (diff <= 0) {
+      state = 'claimed';
+      doneCount = ((streak - 1) % 7) + 1;
+      todayDay = doneCount;
+      status.textContent = doneCount + '/7日目';
+      note.textContent = doneCount === 7
+        ? '今日は7日目ボーナス受け取り済みです。次はまた1日目から続きます。'
+        : '今日は受け取り済みです。明日トップページを開くと次のスタンプが進みます。';
+    } else if (diff === 1) {
+      state = 'available';
+      doneCount = streak % 7;
+      todayDay = doneCount + 1;
+      status.textContent = '今日 ' + todayDay + '/7日目';
+      note.textContent = todayDay === 7
+        ? '今日トップページを開くと7日目ボーナスでコイン3枚を受け取れます。'
+        : '今日トップページを開くと' + todayDay + '日目のスタンプとコイン1枚を受け取れます。';
+    } else {
+      state = 'missed';
+      doneCount = 0;
+      todayDay = 1;
+      status.textContent = '再スタート';
+      note.textContent = '連続記録が空いています。トップページを開くと1日目から再開します。';
+    }
+
+    var html = '';
+    for (var i = 1; i <= 7; i++) {
+      var cls = 'streak-stamp';
+      var mark = '&#x25CB;';
+      if (i <= doneCount) {
+        cls += ' done';
+        mark = '&#x2713;';
+      }
+      if (i === todayDay && state !== 'claimed') {
+        cls += ' today';
+        mark = i === 7 ? '&#x1F381;' : '&#x1F4CD;';
+      }
+      if (i === 7) cls += ' bonus';
+      html += '<div class="' + cls + '"><div class="mark">' + mark + '</div><div class="day">DAY ' + i + '</div></div>';
+    }
+    wrap.innerHTML = html;
   }
 
   function clearAnimTimers() {
@@ -1331,6 +1479,7 @@ body.theme-light .foot-note { color: var(--ink-3); }
   if (dbg) { localStorage.setItem('bigfive_coins', dbg); location.search = ''; }
 
   updateCoinDisplay();
+  updateStreakCard();
 
 })();
 </script>
