@@ -158,6 +158,10 @@
   .sbar { width: 4px; border-radius: 2px; }
   .del-btn { background: none; border: none; cursor: pointer; color: var(--dim); font-size: 14px; padding: 1px 3px; transition: color .2s; line-height: 1; flex-shrink: 0; }
   .del-btn:hover { color: #f87171; }
+  .leader-btn { background: none; border: none; cursor: pointer; font-size: 14px; padding: 1px 3px; transition: all .2s; line-height: 1; flex-shrink: 0; }
+  .leader-btn.off { color: var(--dim); opacity: .4; }
+  .leader-btn.off:hover { opacity: .8; }
+  .leader-btn.on { color: #fbbf24; opacity: 1; text-shadow: 0 0 6px rgba(251,191,36,.4); }
   .empty-roster { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
   .clear-btn { display: block; width: 100%; padding: 10px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--dim); background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 4px; }
   .clear-btn:hover { border-color: #f87171; color: #f87171; }
@@ -571,16 +575,26 @@ function renderRoster() {
       const h = Math.round((sc[k] / 5) * 20 + 2);
       return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75"></div>`;
     }).join('');
+    const leaderCls = s.leader ? 'on' : 'off';
+    const leaderIcon = s.leader ? '★' : '☆';
     return `
       <div class="student-item">
         <span class="student-num">${i+1}</span>
         <span class="student-name">${escHtml(s.name)}</span>
         <span class="student-code">${s.code}</span>
         <div class="student-bars">${bars}</div>
+        <button class="leader-btn ${leaderCls}" data-id="${s.id}" title="リーダー候補">${leaderIcon}</button>
         <button class="del-btn" data-id="${s.id}" title="削除">×</button>
       </div>`;
   }).join('');
 
+  list.querySelectorAll('.leader-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r2 = getActiveRoster();
+      const st = r2.students.find(s => s.id === btn.dataset.id);
+      if (st) { st.leader = !st.leader; saveRosters(); renderAll(); }
+    });
+  });
   list.querySelectorAll('.del-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const r2 = getActiveRoster();
@@ -787,8 +801,12 @@ function updateGroupingUI() {
   const warn = document.getElementById('settingsWarn');
   const btn  = document.getElementById('generateBtn');
 
+  const leaderCount = r.students.filter(s => s.leader).length;
+  const leaderInfo = leaderCount > 0
+    ? `　<span style="color:#fbbf24">★${leaderCount}名がリーダー候補</span>`
+    : '';
   document.getElementById('groupingRosterInfo').innerHTML =
-    `使用中の名簿：<span class="grouping-roster-name">${escHtml(r.name)}</span>　<span style="color:var(--dim)">${n}人</span>`;
+    `使用中の名簿：<span class="grouping-roster-name">${escHtml(r.name)}</span>　<span style="color:var(--dim)">${n}人</span>${leaderInfo}`;
 
   if (n < 2) {
     warn.textContent = '名簿にメンバーを2人以上登録してください';
@@ -810,23 +828,43 @@ document.getElementById('groupCount').addEventListener('input', updateGroupingUI
 function generateGroups(seed) {
   const r = getActiveRoster();
   const g = Math.max(2, Math.min(20, parseInt(document.getElementById('groupCount').value) || 4));
-  const shuffled = [...r.students];
 
   let rng = seed || Date.now();
   const rand = () => { rng = (rng * 1664525 + 1013904223) & 0xffffffff; return (rng >>> 0) / 0xffffffff; };
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
+  const shuffle = arr => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
 
-  shuffled.sort((a, b) => {
+  const leaders = shuffle(r.students.filter(s => s.leader));
+  const others = shuffle(r.students.filter(s => !s.leader));
+
+  // sort others by total score descending for balanced distribution
+  others.sort((a, b) => {
     const sa = Object.values(codeToScores(a.code)).reduce((x,y) => x+y, 0);
     const sb = Object.values(codeToScores(b.code)).reduce((x,y) => x+y, 0);
     return sb - sa;
   });
 
   const groups = Array.from({ length: g }, () => []);
-  shuffled.forEach((s, i) => {
+
+  // place up to 1 leader candidate per group via snake draft
+  leaders.forEach((s, i) => {
+    if (i < g) {
+      const round = Math.floor(i / g);
+      const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
+      groups[pos].push(s);
+    } else {
+      others.push(s); // excess leaders go to general pool
+    }
+  });
+
+  // fill remaining slots with serpentine draft
+  others.forEach((s, i) => {
     const round = Math.floor(i / g);
     const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
     groups[pos].push(s);
@@ -885,8 +923,10 @@ function calcSubLeader2Score(member, leader, sub1, members) {
 
 function getGroupRoleRows(members) {
   if (members.length === 0) return '';
+  // leader candidate takes priority, otherwise auto-select by personality
+  const designated = members.find(m => m.leader);
   const ranked = [...members].sort((a, b) => calcLeaderScore(b) - calcLeaderScore(a));
-  const leader = ranked[0];
+  const leader = designated || ranked[0];
   const leaderOthers = members.filter(m => m !== leader);
   const sub1 = leaderOthers.length
     ? [...leaderOthers].sort((a, b) => calcSubLeader1Score(b, leader) - calcSubLeader1Score(a, leader))[0]
@@ -896,8 +936,9 @@ function getGroupRoleRows(members) {
     ? [...sub2Pool].sort((a, b) => calcSubLeader2Score(b, leader, sub1, members) - calcSubLeader2Score(a, leader, sub1, members))[0]
     : null;
 
+  const leaderLabel = designated ? 'リーダー（候補）' : 'リーダー';
   const roleOrder = [
-    { member: leader, role: 'リーダー', cls: 'leader', score: null },
+    { member: leader, role: leaderLabel, cls: 'leader', score: null },
     sub1 ? { member: sub1, role: 'サブ1', cls: 'sub1', score: calcPairScore(leader, sub1) } : null,
     sub2 ? { member: sub2, role: 'サブ2', cls: 'sub2', score: calcPairScore(leader, sub2) } : null
   ].filter(Boolean);
