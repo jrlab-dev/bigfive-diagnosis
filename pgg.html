@@ -791,7 +791,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('rrBars').innerHTML = barsHtml;
 
     // 手持ちコイン表示
-    state.playerBalance = state.playerBalance + (TOKENS_PER_ROUND - playerC) + perPlayer;
+    state.playerBalance = state.playerBalance + perPlayer - playerC;
     $('rrWallet').innerHTML = '持ちコイン: <span class="coin">🪙 ' + state.playerBalance + '枚</span>（開始時3枚から）';
 
     // サマリー
