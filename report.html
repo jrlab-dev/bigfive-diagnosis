@@ -624,7 +624,8 @@ function loadData() {
   try { eq         = JSON.parse(localStorage.getItem('eq_result'));         } catch(e) {}
   try { impostor   = JSON.parse(localStorage.getItem('impostor_result'));   } catch(e) {}
   try { darkTriad  = JSON.parse(localStorage.getItem('dark_triad_result')); } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad };
+  try { pgg        = JSON.parse(localStorage.getItem('pgg_result'));        } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg };
 }
 
 // ===== 未受診チェック =====
@@ -640,6 +641,7 @@ function checkMissing(data) {
   if (!data.locus)      missing.push({ name: '統制の所在チェック',   url: 'locus.html' });
   if (!data.eq)         missing.push({ name: '感情知能チェック',     url: 'eq.html' });
   if (!data.impostor)   missing.push({ name: 'インポスター症候群チェック', url: 'impostor.html' });
+  if (!data.pgg)        missing.push({ name: '公共財ゲーム',             url: 'pgg.html' });
   return missing;
 }
 
@@ -751,6 +753,12 @@ function renderTestsGrid(data) {
       value: data.darkTriad ? data.darkTriad.profileName || null : null,
       color: '#dc2626',
       url: 'dark-triad.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="10" fill="currentColor" stroke="none">¥</text></svg>', label: '公共財ゲーム',
+      value: data.pgg ? data.pgg.typeName : null,
+      color: '#f59e0b',
+      url: 'pgg.html'
     },
   ];
 
