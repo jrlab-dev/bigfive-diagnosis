@@ -252,6 +252,18 @@
   .group-count { font-size: 12px; color: var(--dim); background: rgba(255,255,255,0.07); padding: 3px 10px; border-radius: 20px; }
   .group-members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
   .group-member-chip { font-size: 12px; font-weight: 500; padding: 4px 10px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); border-radius: 20px; }
+  .group-leader-box { margin: 12px 0 14px; padding: 12px 14px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.16); border-radius: 12px; }
+  .leader-main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--dim); }
+  .leader-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.22); font-weight: 700; }
+  .leader-name { color: var(--text); font-weight: 800; font-size: 13px; }
+  .leader-note { font-size: 11px; color: var(--dim); line-height: 1.6; }
+  .leader-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pair-block { padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); }
+  .pair-title { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .pair-block.good .pair-title { color: #34d399; }
+  .pair-block.warn .pair-title { color: #f87171; }
+  .pair-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pair-chip { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.05); color: var(--text); }
   .factor-bars { display: flex; flex-direction: column; gap: 6px; }
   .factor-row { display: flex; align-items: center; gap: 10px; }
   .factor-label { font-size: 11px; color: var(--dim); min-width: 40px; }
@@ -263,6 +275,7 @@
   @media (max-width: 400px) {
     body { padding: 24px 14px 60px; }
     .add-input.code { flex: 0 0 80px; }
+    .leader-pairs { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -809,6 +822,56 @@ function generateGroups(seed) {
   return groups;
 }
 
+function calcLeaderScore(member) {
+  const s = codeToScores(member.code);
+  return (s.E * 1.25) + (s.C * 1.15) + (s.A * 0.65) + ((6 - s.N) * 0.95) + (s.O * 0.25);
+}
+
+function calcPairScore(a, b) {
+  const sa = codeToScores(a.code);
+  const sb = codeToScores(b.code);
+  let diff = 0;
+  traitKeys.forEach(k => { diff += Math.abs(sa[k] - sb[k]); });
+  return Math.max(0, Math.round(100 - diff * 7.5));
+}
+
+function getGroupLeaderInsight(members) {
+  if (members.length === 0) return '';
+  const ranked = [...members].sort((a, b) => calcLeaderScore(b) - calcLeaderScore(a));
+  const leader = ranked[0];
+  const others = members.filter(m => m !== leader);
+  const pairRows = others
+    .map(m => ({ member: m, score: calcPairScore(leader, m) }))
+    .sort((a, b) => b.score - a.score);
+  const good = pairRows.slice(0, 2);
+  const warn = pairRows.slice(-2).reverse();
+  const goodHtml = good.length
+    ? good.map(p => `<span class="pair-chip">${escHtml(p.member.name)} ${p.score}</span>`).join('')
+    : '<span class="pair-chip">該当なし</span>';
+  const warnHtml = warn.length
+    ? warn.map(p => `<span class="pair-chip">${escHtml(p.member.name)} ${p.score}</span>`).join('')
+    : '<span class="pair-chip">該当なし</span>';
+
+  return `
+    <div class="group-leader-box">
+      <div class="leader-main">
+        <span class="leader-badge">リーダー候補</span>
+        <span class="leader-name">${escHtml(leader.name)}</span>
+        <span class="leader-note">外向性・誠実性・情緒安定を中心に推定</span>
+      </div>
+      <div class="leader-pairs">
+        <div class="pair-block good">
+          <div class="pair-title">相性がよさそうな2人</div>
+          <div class="pair-list">${goodHtml}</div>
+        </div>
+        <div class="pair-block warn">
+          <div class="pair-title">注意して組ませたい2人</div>
+          <div class="pair-list">${warnHtml}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderGroups(groups) {
   const r = getActiveRoster();
   const area  = document.getElementById('resultArea');
@@ -824,6 +887,7 @@ function renderGroups(groups) {
       avgs[k] = members.reduce((s, m) => s + codeToScores(m.code)[k], 0) / members.length;
     });
     const chips = members.map(m => `<span class="group-member-chip">${escHtml(m.name)}</span>`).join('');
+    const leaderInsight = getGroupLeaderInsight(members);
     const bars  = traitKeys.map(k => `
       <div class="factor-row">
         <span class="factor-label">${traitNames[k]}</span>
@@ -837,6 +901,7 @@ function renderGroups(groups) {
           <span class="group-count">${members.length}人</span>
         </div>
         <div class="group-members">${chips}</div>
+        ${leaderInsight}
         <div class="factor-bars">${bars}</div>
       </div>`;
   }).join('');
