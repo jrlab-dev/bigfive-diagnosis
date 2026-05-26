@@ -254,6 +254,35 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .my-result-name-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 6px 0 7px;
+  }
+  .my-result-name-label {
+    flex-shrink: 0;
+    color: var(--dim);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .my-result-name-input {
+    width: min(210px, 100%);
+    min-width: 0;
+    padding: 6px 9px;
+    border-radius: 8px;
+    border: 1px solid rgba(139,92,246,0.25);
+    background: rgba(10,14,39,0.45);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+  }
+  .my-result-name-input:focus {
+    border-color: rgba(139,92,246,0.65);
+    box-shadow: 0 0 0 2px rgba(139,92,246,0.14);
+  }
+  .my-result-name-input::placeholder { color: var(--dim); }
   .result-card-meta {
     font-size: 12px;
     color: var(--dim);
@@ -1620,6 +1649,24 @@ function getFactorColor(factor) {
   return colors[factor] || '#888';
 }
 
+function escAttr(value) {
+  return String(value || '').replace(/[&<>"']/g, function(ch) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+  });
+}
+
+function saveMyResultName(index, value) {
+  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  if (!results[index]) return;
+  const name = value.trim().slice(0, 20);
+  if (name) {
+    results[index].name = name;
+  } else {
+    delete results[index].name;
+  }
+  localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(results));
+}
+
 // 自分の結果レンダリング
 function renderMyResults() {
   const container = document.getElementById('myResults');
@@ -1666,6 +1713,10 @@ function renderMyResults() {
         </div>
         <div class="result-card-content">
           <div class="result-card-name">${r.typeName}</div>
+          <div class="my-result-name-row">
+            <span class="my-result-name-label">名前（任意）</span>
+            <input class="my-result-name-input" type="text" value="${escAttr(r.name || '')}" placeholder="例：自分、田中など" maxlength="20" onclick="event.preventDefault(); event.stopPropagation();" onkeydown="event.stopPropagation();" oninput="saveMyResultName(${i}, this.value)">
+          </div>
           <div class="result-card-meta">
             <span class="result-card-code">${r.code}</span>
             <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:${vColor}33;color:${vColor};border:1px solid ${vColor}66;">${vLabel}</span>
