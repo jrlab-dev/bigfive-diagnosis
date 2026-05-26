@@ -368,7 +368,7 @@
       <div class="settings-warn" id="settingsWarn"></div>
     </div>
 
-    <p style="font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:16px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;border-left:3px solid rgba(139,92,246,0.3)">💡 このツールは各グループの平均スコアが均等になるよう配分します。人と人の相性ではなく、<strong style="color:var(--text)">性格の多様性バランスを整えること</strong>を目的としています。</p>
+    <p style="font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:16px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;border-left:3px solid rgba(139,92,246,0.3)">💡 グループ配分は各グループの平均スコアが均等になるよう行います。ペアの相性は<strong style="color:var(--text)">心理学研究に基づいた関係性スコア</strong>で評価しています。</p>
 
     <button class="btn-generate" id="generateBtn">バランスよくグループ分けする</button>
 
@@ -407,6 +407,7 @@
   </div>
 </div>
 
+<script src="compat.js"></script>
 <script>
 const STORAGE_KEY   = 'bigfive_group_rosters_v2';
 const ACTIVE_KEY    = 'bigfive_group_active_roster';
@@ -841,9 +842,7 @@ function calcLeaderScore(member) {
 function calcPairScore(a, b) {
   const sa = codeToScores(a.code);
   const sb = codeToScores(b.code);
-  let diff = 0;
-  traitKeys.forEach(k => { diff += Math.abs(sa[k] - sb[k]); });
-  return Math.max(0, Math.round(100 - diff * 7.5));
+  return Math.round(calcCompatCore(sa, sb));
 }
 
 function getPairRows(members) {

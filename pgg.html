@@ -519,7 +519,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     selectedAmount: -1,
     won: false,
     timers: [],
-    playerBalance: 3
+    playerBalance: 3,
+    resultSaved: false
   };
 
   // ===== ユーティリティ =====
@@ -574,18 +575,18 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       if (fixed >= 0) return fixed;
       return bot.r3[0] + Math.floor(Math.random() * (bot.r3[1] - bot.r3[0] + 1));
     }
-    // 2回目以降: 難易度高め（BOTはほぼ自己中心的）
-    var base = Math.round(bot.base * bot.weights[roundIdx] * 0.35);
-    base = Math.max(0, Math.min(3, base));
+    // 2回目以降: 変換なし・自然な値をそのまま使用
+    var base = Math.round(bot.base * bot.weights[roundIdx]);
+    base = Math.min(3, base);
     if (roundIdx > 0 && allContribs.length > 0) {
       var prevRound = allContribs[allContribs.length - 1];
       var avg = prevRound.reduce(function(a,b){return a+b;},0) / prevRound.length;
       base += Math.round((avg - base) * bot.matchBias * 0.3);
-      base = Math.max(0, Math.min(3, base));
+      base = Math.min(3, base);
     }
     if (Math.random() < 0.3) {
       base += (Math.random() < 0.25 ? 1 : -1);
-      base = Math.max(0, Math.min(3, base));
+      base = Math.min(3, base);
     }
     return base;
   }
@@ -632,7 +633,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       netGain: 0,
       timers: [],
       playerBalance: 3,
-      isFirstPlay: isFirst
+      isFirstPlay: isFirst,
+      resultSaved: false
     };
 
     startLobby();
@@ -890,9 +892,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     state.won = netGain > 0;
     state.netGain = netGain;
 
-    // 実際のコイン変動（内部的には全額返却 + ボーナスのみ加算）
-    var coinChange = Math.max(0, netGain);
-    GachaUtils.addCoins(ENTRY_FEE + coinChange);
+    // 実際のコイン変動（損失は参戦費が上限）
+    var returnAmount = Math.max(0, ENTRY_FEE + netGain);
+    GachaUtils.addCoins(returnAmount);
     updateCoinDisplay();
 
     showPhase('phaseFinal');
@@ -913,6 +915,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       $('finalTitle').className = 'final-result-title lose';
       $('finalCoins').innerHTML = '投資額より ' + Math.abs(netGain) + '枚 少なく戻りました';
     }
+
+    // 結果画面まで到達した時点で保存する（分析画面を開かずに離脱しても記録を残す）
+    saveResult(classifyPlayer(state.playerContribs));
   }
 
   // ===== ANALYSIS =====
@@ -979,17 +984,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     for (var i = 0; i < state.playerContribs.length; i++) {
       contribHtml += '<span>R' + (i + 1) + ': ' + state.playerContribs[i] + '/' + TOKENS_PER_ROUND + '</span>';
     }
-    // 損失時は安心メッセージ
-    if (state.netGain < 0) {
-      contribHtml += '<span style="color:var(--green);font-weight:700">（投資額は全額戻りました）</span>';
-    }
     $('contribSummary').innerHTML = contribHtml;
-
-    // 損失があった場合はこっそり全額返却
-    if (state.netGain < 0) {
-      GachaUtils.addCoins(Math.abs(state.netGain));
-      updateCoinDisplay();
-    }
 
     // 保存
     saveResult(classification);
@@ -1026,6 +1021,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   // ===== 保存 =====
   function saveResult(classification) {
+    if (state.resultSaved) return;
+    state.resultSaved = true;
+
     if (state.isFirstPlay) {
       // 初回のみ：診断結果を保存
       var pggData = {
@@ -1073,7 +1071,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       won: false,
       netGain: 0,
       timers: [],
-      playerBalance: 3
+      playerBalance: 3,
+      resultSaved: false
     };
     initEntry();
     showPhase('phaseEntry');
