@@ -187,6 +187,15 @@ body {
 .rr-bar-row.self .rr-bar-amount { color: var(--amber); }
 .rr-bar-total { font-size: 11px; color: var(--dim); }
 .rr-bar-row.self .rr-bar-total { color: rgba(245,158,11,0.7); }
+.rr-bar-profit { font-size: 11px; font-weight: 700; }
+.rr-bar-profit.plus { color: var(--green); }
+.rr-bar-profit.minus { color: var(--red); }
+.rr-bar-profit.zero { color: var(--dim); }
+.rr-freerider {
+  display: inline-block; font-size: 9px; font-weight: 700; color: var(--red);
+  background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 4px; padding: 1px 5px; margin-left: 4px; letter-spacing: 0.03em;
+}
 .rr-wallet { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; padding: 10px 16px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 700; }
 .rr-wallet .coin { color: var(--amber); }
 .rr-summary {
@@ -262,6 +271,7 @@ body.theme-light .choice-btn { background: rgba(255,255,255,0.7); border-color: 
 body.theme-light .choice-btn.selected { background: rgba(245,158,11,0.15); }
 body.theme-light .rr-bar-track { background: rgba(0,0,0,0.04); }
 body.theme-light .rr-summary { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .rr-freerider { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
 body.theme-light .final-coins { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
 body.theme-light .analysis-card { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
 body.theme-light .analysis-cross { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
@@ -782,10 +792,15 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       var c = allContribs[j];
       var imgHtml = c.img ? '<img src="' + c.img + '">' : '🪙';
       var totalHtml = n > 0 ? '<div class="rr-bar-total">累計 ' + c.total + '枚</div>' : '';
+      var profit = perPlayer - c.amount;
+      var profitClass = profit > 0 ? 'plus' : (profit < 0 ? 'minus' : 'zero');
+      var profitSign = profit > 0 ? '+' : '';
+      var freeriderTag = c.amount === 0 ? '<span class="rr-freerider">タダ乗り</span>' : '';
       barsHtml += '<div class="rr-bar-row' + (c.self ? ' self' : '') + '">' +
         '<div class="rr-bar-img">' + imgHtml + '</div>' +
-        '<div class="rr-bar-name">' + c.name + '</div>' +
-        '<div class="rr-bar-amounts"><div class="rr-bar-amount">' + c.amount + '枚</div>' + totalHtml + '</div></div>';
+        '<div class="rr-bar-name">' + c.name + freeriderTag + '</div>' +
+        '<div class="rr-bar-amounts"><div class="rr-bar-amount">' + c.amount + '枚</div>' + totalHtml +
+        '<div class="rr-bar-profit ' + profitClass + '">利益 ' + profitSign + profit + '枚</div></div></div>';
     }
     $('rrBars').innerHTML = barsHtml;
 
