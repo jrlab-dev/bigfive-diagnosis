@@ -264,6 +264,7 @@
   .pair-block.warn .pair-title { color: #f87171; }
   .pair-list { display: flex; flex-wrap: wrap; gap: 5px; }
   .pair-chip { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.05); color: var(--text); }
+  .pair-score { color: #67e8f9; font-family: monospace; font-weight: 800; }
   .factor-bars { display: flex; flex-direction: column; gap: 6px; }
   .factor-row { display: flex; align-items: center; gap: 10px; }
   .factor-label { font-size: 11px; color: var(--dim); min-width: 40px; }
@@ -846,10 +847,10 @@ function getGroupLeaderInsight(members) {
   const good = pairRows.slice(0, 2);
   const warn = pairRows.slice(-2).reverse();
   const goodHtml = good.length
-    ? good.map(p => `<span class="pair-chip">${escHtml(p.member.name)} ${p.score}</span>`).join('')
+    ? good.map(p => `<span class="pair-chip">${escHtml(p.member.name)} <span class="pair-score">${p.score}点</span></span>`).join('')
     : '<span class="pair-chip">該当なし</span>';
   const warnHtml = warn.length
-    ? warn.map(p => `<span class="pair-chip">${escHtml(p.member.name)} ${p.score}</span>`).join('')
+    ? warn.map(p => `<span class="pair-chip">${escHtml(p.member.name)} <span class="pair-score">${p.score}点</span></span>`).join('')
     : '<span class="pair-chip">該当なし</span>';
 
   return `
@@ -861,11 +862,11 @@ function getGroupLeaderInsight(members) {
       </div>
       <div class="leader-pairs">
         <div class="pair-block good">
-          <div class="pair-title">相性がよさそうな2人</div>
+          <div class="pair-title">リーダーとの相性がよさそうな2人</div>
           <div class="pair-list">${goodHtml}</div>
         </div>
         <div class="pair-block warn">
-          <div class="pair-title">注意して組ませたい2人</div>
+          <div class="pair-title">リーダーとの相性に注意したい2人</div>
           <div class="pair-list">${warnHtml}</div>
         </div>
       </div>
