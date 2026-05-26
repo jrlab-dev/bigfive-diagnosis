@@ -253,10 +253,17 @@
   .group-members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
   .group-member-chip { font-size: 12px; font-weight: 500; padding: 4px 10px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); border-radius: 20px; }
   .group-leader-box { margin: 12px 0 14px; padding: 12px 14px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.16); border-radius: 12px; }
-  .leader-main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--dim); }
-  .leader-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.22); font-weight: 700; }
-  .leader-name { color: var(--text); font-weight: 800; font-size: 13px; }
-  .leader-note { font-size: 11px; color: var(--dim); line-height: 1.6; }
+  .leader-section-title { font-size: 11px; color: var(--dim); font-weight: 700; margin: 0 0 8px; }
+  .role-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+  .role-row { display: grid; grid-template-columns: 82px minmax(0,1fr) auto; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); }
+  .role-badge { display: inline-flex; align-items: center; justify-content: center; padding: 3px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; white-space: nowrap; }
+  .role-badge.leader { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.22); }
+  .role-badge.sub1 { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.22); }
+  .role-badge.sub2 { background: rgba(251,191,36,0.13); color: #fbbf24; border: 1px solid rgba(251,191,36,0.24); }
+  .role-badge.member { background: rgba(139,92,246,0.12); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.20); }
+  .role-name { color: var(--text); font-weight: 800; font-size: 12.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .role-score { color: #67e8f9; font-family: monospace; font-size: 11px; font-weight: 800; white-space: nowrap; }
+  .leader-note { font-size: 11px; color: var(--dim); line-height: 1.6; margin: -3px 0 11px; }
   .leader-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pair-block { padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); }
   .pair-title { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
@@ -276,6 +283,8 @@
   @media (max-width: 400px) {
     body { padding: 24px 14px 60px; }
     .add-input.code { flex: 0 0 80px; }
+    .role-row { grid-template-columns: 1fr; gap: 5px; }
+    .role-score { font-size: 10.5px; }
     .leader-pairs { grid-template-columns: 1fr; }
   }
 </style>
@@ -836,38 +845,103 @@ function calcPairScore(a, b) {
   return Math.max(0, Math.round(100 - diff * 7.5));
 }
 
-function getGroupLeaderInsight(members) {
+function getPairRows(members) {
+  const pairs = [];
+  for (let i = 0; i < members.length; i++) {
+    for (let j = i + 1; j < members.length; j++) {
+      pairs.push({ a: members[i], b: members[j], score: calcPairScore(members[i], members[j]) });
+    }
+  }
+  return pairs.sort((a, b) => b.score - a.score);
+}
+
+function calcSubLeader1Score(member, leader) {
+  const s = codeToScores(member.code);
+  return (calcPairScore(leader, member) * 0.42) + (s.C * 8.5) + (s.A * 7.5) + ((6 - s.N) * 7);
+}
+
+function calcSubLeader2Score(member, leader, sub1, members) {
+  const s = codeToScores(member.code);
+  const leaderScores = codeToScores(leader.code);
+  const sub1Scores = sub1 ? codeToScores(sub1.code) : leaderScores;
+  const avg = {};
+  traitKeys.forEach(k => {
+    avg[k] = members.reduce((sum, m) => sum + codeToScores(m.code)[k], 0) / members.length;
+  });
+
+  let teamNeed = 0;
+  let complement = 0;
+  traitKeys.forEach(k => {
+    if (avg[k] < 3.2 && s[k] > avg[k]) teamNeed += (s[k] - avg[k]) * 7;
+    if (avg[k] > 3.8 && s[k] < avg[k]) teamNeed += (avg[k] - s[k]) * 4;
+    const coreAvg = (leaderScores[k] + sub1Scores[k]) / 2;
+    complement += Math.abs(s[k] - coreAvg) * 3.2;
+  });
+
+  const stability = (s.A * 6) + ((6 - s.N) * 6) + (s.C * 3.5);
+  const leaderFit = calcPairScore(leader, member) * 0.18;
+  return teamNeed + complement + stability + leaderFit;
+}
+
+function getGroupRoleRows(members) {
   if (members.length === 0) return '';
   const ranked = [...members].sort((a, b) => calcLeaderScore(b) - calcLeaderScore(a));
   const leader = ranked[0];
-  const others = members.filter(m => m !== leader);
-  const pairRows = others
-    .map(m => ({ member: m, score: calcPairScore(leader, m) }))
+  const leaderOthers = members.filter(m => m !== leader);
+  const sub1 = leaderOthers.length
+    ? [...leaderOthers].sort((a, b) => calcSubLeader1Score(b, leader) - calcSubLeader1Score(a, leader))[0]
+    : null;
+  const sub2Pool = leaderOthers.filter(m => m !== sub1);
+  const sub2 = sub2Pool.length
+    ? [...sub2Pool].sort((a, b) => calcSubLeader2Score(b, leader, sub1, members) - calcSubLeader2Score(a, leader, sub1, members))[0]
+    : null;
+
+  const roleOrder = [
+    { member: leader, role: 'リーダー', cls: 'leader', score: null },
+    sub1 ? { member: sub1, role: 'サブ1', cls: 'sub1', score: calcPairScore(leader, sub1) } : null,
+    sub2 ? { member: sub2, role: 'サブ2', cls: 'sub2', score: calcPairScore(leader, sub2) } : null
+  ].filter(Boolean);
+  const picked = new Set(roleOrder.map(r => r.member));
+  const rest = members
+    .filter(m => !picked.has(m))
+    .map(m => ({ member: m, role: 'メンバー', cls: 'member', score: calcPairScore(leader, m) }))
     .sort((a, b) => b.score - a.score);
-  const good = pairRows.slice(0, 2);
-  const warn = pairRows.slice(-2).reverse();
-  const goodHtml = good.length
-    ? good.map(p => `<span class="pair-chip">${escHtml(p.member.name)} <span class="pair-score">${p.score}点</span></span>`).join('')
+  return roleOrder.concat(rest);
+}
+
+function getGroupLeaderInsight(members) {
+  if (members.length === 0) return '';
+  const roleRows = getGroupRoleRows(members);
+  const roleHtml = roleRows.map(row => `
+    <div class="role-row">
+      <span class="role-badge ${row.cls}">${row.role}</span>
+      <span class="role-name">${escHtml(row.member.name)}</span>
+      <span class="role-score">${row.score === null ? '基準' : 'リーダー相性 ' + row.score + '点'}</span>
+    </div>`).join('');
+
+  const pairRows = getPairRows(members);
+  const bestPair = pairRows[0] || null;
+  const riskyPair = pairRows.length ? pairRows[pairRows.length - 1] : null;
+  const bestHtml = bestPair
+    ? `<span class="pair-chip">${escHtml(bestPair.a.name)} × ${escHtml(bestPair.b.name)} <span class="pair-score">${bestPair.score}点</span></span>`
     : '<span class="pair-chip">該当なし</span>';
-  const warnHtml = warn.length
-    ? warn.map(p => `<span class="pair-chip">${escHtml(p.member.name)} <span class="pair-score">${p.score}点</span></span>`).join('')
+  const riskyHtml = riskyPair
+    ? `<span class="pair-chip">${escHtml(riskyPair.a.name)} × ${escHtml(riskyPair.b.name)} <span class="pair-score">${riskyPair.score}点</span></span>`
     : '<span class="pair-chip">該当なし</span>';
 
   return `
     <div class="group-leader-box">
-      <div class="leader-main">
-        <span class="leader-badge">リーダー候補</span>
-        <span class="leader-name">${escHtml(leader.name)}</span>
-        <span class="leader-note">外向性・誠実性・情緒安定を中心に推定</span>
-      </div>
+      <div class="leader-section-title">役割候補とリーダーとの相性</div>
+      <div class="role-list">${roleHtml}</div>
+      <div class="leader-note">リーダーは外向性・誠実性・情緒安定を中心に推定。サブ1は右腕型、サブ2は補完型として推定しています。</div>
       <div class="leader-pairs">
         <div class="pair-block good">
-          <div class="pair-title">リーダーとの相性がよさそうな2人</div>
-          <div class="pair-list">${goodHtml}</div>
+          <div class="pair-title">メンバー同士で仲がよさそうな2人</div>
+          <div class="pair-list">${bestHtml}</div>
         </div>
         <div class="pair-block warn">
-          <div class="pair-title">リーダーとの相性に注意したい2人</div>
-          <div class="pair-list">${warnHtml}</div>
+          <div class="pair-title">メンバー同士でぶつかりやすそうな2人</div>
+          <div class="pair-list">${riskyHtml}</div>
         </div>
       </div>
     </div>`;
@@ -887,7 +961,7 @@ function renderGroups(groups) {
     traitKeys.forEach(k => {
       avgs[k] = members.reduce((s, m) => s + codeToScores(m.code)[k], 0) / members.length;
     });
-    const chips = members.map(m => `<span class="group-member-chip">${escHtml(m.name)}</span>`).join('');
+    const chips = getGroupRoleRows(members).map(row => `<span class="group-member-chip">${escHtml(row.member.name)}</span>`).join('');
     const leaderInsight = getGroupLeaderInsight(members);
     const bars  = traitKeys.map(k => `
       <div class="factor-row">
