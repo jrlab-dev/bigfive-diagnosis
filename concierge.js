@@ -319,7 +319,7 @@ const CONCIERGE_CONFIG = {
     },
     {
       key: 'pgg_result',
-      title: 'コインゲーム（公共財ゲーム）',
+      title: 'コイン増やせるかな？（公共財ゲーム）',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>',
       url: 'pgg.html',
       gate: null,
