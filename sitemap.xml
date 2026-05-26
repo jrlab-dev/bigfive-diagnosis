@@ -745,6 +745,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：性格とお金 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-okane-kanjokankaku.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <!-- ブログ記事：性格と睡眠 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/seikaku-suimin-type.html</loc>
