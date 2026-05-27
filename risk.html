@@ -40,6 +40,10 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .entry-rules h3 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--blue); }
 .entry-rules li { font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 4px; list-style: none; padding-left: 16px; position: relative; }
 .entry-rules li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.reward-table { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+.reward-item { border: 1px solid rgba(139,92,246,0.16); border-radius: 8px; padding: 8px; background: rgba(139,92,246,0.06); }
+.reward-item .amount { font-size: 12px; font-weight: 900; color: var(--text); margin-bottom: 2px; }
+.reward-item .coins { font-size: 11px; color: var(--dim); }
 .entry-cost { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .start-btn { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; border-radius: 999px; padding: 14px 40px; font: inherit; font-size: 15px; font-weight: 900; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
 .start-btn:hover { opacity: 0.9; }
@@ -188,6 +192,7 @@ body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border
 body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(59,130,246,0.04), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.03), transparent 70%); }
 body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
 body.theme-light .entry-rules { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .reward-item { background: rgba(139,92,246,0.05); border-color: rgba(109,40,217,0.12); }
 body.theme-light .choice-card { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
 body.theme-light .picked-card,
 body.theme-light .roulette-card { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
@@ -248,6 +253,13 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
         <li>B：55,000円 または 1,500円</li>
         <li>当たり確率は10%ずつ上がっていきます</li>
       </ul>
+      <h3 style="margin-top:12px">コイン換算</h3>
+      <div class="reward-table">
+        <div class="reward-item"><div class="amount">1,500円</div><div class="coins">0コイン</div></div>
+        <div class="reward-item"><div class="amount">23,000円</div><div class="coins">2コイン</div></div>
+        <div class="reward-item"><div class="amount">29,000円</div><div class="coins">4コイン</div></div>
+        <div class="reward-item"><div class="amount">55,000円</div><div class="coins">8コイン</div></div>
+      </div>
       <p style="font-size:11px;color:var(--dim);margin-top:8px">※行動経済学の「Holt-Laury法」に基づく学術的なリスク測定です</p>
     </div>
     <div class="entry-cost" id="entryCost"></div>
@@ -585,7 +597,7 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
     var cards = $('rouletteGrid').querySelectorAll('.roulette-card');
     var target = state.resolvedRound ? state.resolvedRound.index : 0;
     var step = 0;
-    var totalSteps = 34 + target;
+    var totalSteps = 50 + target;
     var tones = ['tone-blue', 'tone-pink', 'tone-green', 'tone-red', 'tone-purple'];
     function clearActive() {
       for (var i = 0; i < cards.length; i++) {
@@ -594,18 +606,19 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
     }
     function tick() {
       clearActive();
-      var card = cards[step % TOTAL_ROUNDS];
+      var current = step % TOTAL_ROUNDS;
+      var card = cards[current];
       card.classList.add('active', tones[step % tones.length]);
-      step++;
-      if (step > totalSteps) {
+      if (step >= totalSteps) {
         clearActive();
         cards[target].classList.add('selected', 'blink');
         $('resolveStatus').textContent = 'Q' + (target + 1) + ' が選ばれました';
         setTimeout(showSelectedCard, 1600);
         return;
       }
+      step++;
       var progress = step / totalSteps;
-      var delay = 54 + Math.pow(progress, 2.25) * 235;
+      var delay = 82 + Math.pow(progress, 2.35) * 420;
       setTimeout(tick, delay);
     }
     tick();
@@ -649,22 +662,22 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
     var options = $('outcomeWheel').querySelectorAll('.outcome-option');
     var target = resolved.isHigh ? 0 : 1;
     var step = 0;
-    var totalSteps = 19 + target;
+    var totalSteps = 24 + target;
     function clearOptions() {
       for (var i = 0; i < options.length; i++) options[i].classList.remove('active');
     }
     function tick() {
       clearOptions();
       options[step % 2].classList.add('active');
-      step++;
-      if (step > totalSteps) {
+      if (step >= totalSteps) {
         clearOptions();
         options[target].classList.add(resolved.isHigh ? 'win' : 'low');
         setTimeout(showResolveResult, 1300);
         return;
       }
+      step++;
       var progress = step / totalSteps;
-      var delay = 70 + Math.pow(progress, 2.1) * 250;
+      var delay = 92 + Math.pow(progress, 2.25) * 390;
       setTimeout(tick, delay);
     }
     tick();
