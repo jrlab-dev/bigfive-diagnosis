@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ビューティーコンテストゲーム | ビッグファイブ診断</title>
+<meta name="description" content="みんなの平均の3分の2を読むビューティーコンテストゲームで、他者視点と戦略性を測定します。">
+<link rel="stylesheet" href="behavior-game.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<header class="site-header">
+  <a href="diagnoses.html" class="back-link">← 診断一覧</a>
+  <span class="header-title">ビューティーコンテスト</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+<main class="wrap">
+  <section class="phase active" id="phaseEntry"><div class="hero"><div class="badge" id="gameBadge"></div><div class="game-icon" id="gameIcon"></div><h1 class="title" id="gameTitle"></h1><p class="lead" id="gameLead"></p><div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div><div class="entry-cost" id="entryCost"></div><div class="entry-note" id="entryNote"></div><button class="btn" id="startBtn" type="button">はじめる</button><div class="entry-lack" id="entryLack"></div></div></section>
+  <section class="phase" id="phaseQuestion"><div class="panel"><div class="question-head"><span id="questionNo"></span><span>0〜100の数字</span></div><div class="scenario" id="scenario"></div><div id="answerArea"></div><div class="btn-row"><button class="btn" id="submitBtn" type="button">結果を見る</button></div></div></section>
+  <section class="phase" id="phaseResult"><div class="panel result-type"><div class="result-icon" id="resultIcon"></div><div class="result-name" id="resultName"></div><p class="result-summary" id="resultSummary"></p><div class="stat-grid" id="statGrid"></div><div class="analysis" id="analysis"></div><div class="btn-row"><button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button><button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button><button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button></div></div></section>
+</main>
+<script src="gacha-utils.js"></script>
+<script>
+window.BEHAVIOR_GAME = {
+  id: 'beauty',
+  storageKey: 'beauty_result',
+  badge: 'BEAUTY CONTEST',
+  icon: '🎯',
+  title: 'ビューティーコンテストゲーム',
+  lead: 'みんなが選ぶ平均値を予測し、その3分の2に近い数字を狙うゲームです。',
+  questionLabel: 'PREDICTION',
+  scenario: '参加者全員が0〜100の数字を1つ選びます。<br>勝つのは「全員の平均値の3分の2」に最も近い人です。<br>あなたはどの数字を選びますか？',
+  rules: ['単純に50を選ぶゲームではありません', '他の人がどう考えるかを読んで、さらにその先を考えるゲームです', '戦略性・他者視点・読みの深さを見ます'],
+  inputType: 'number',
+  min: 0,
+  max: 100,
+  defaultValue: 33,
+  numberHint: '0〜100の範囲で入力してください。',
+  evaluate: function(v, scores) {
+    v = Math.round(Math.max(0, Math.min(100, v)));
+    var virtualAverage = 42;
+    if (scores) {
+      virtualAverage += ((scores.O || 3) - 3) * -2 + ((scores.C || 3) - 3) * -1 + ((scores.E || 3) - 3) * 2;
+    }
+    virtualAverage = Math.max(28, Math.min(55, Math.round(virtualAverage)));
+    var target = Math.round(virtualAverage * 2 / 3);
+    var diff = Math.abs(v - target);
+    var key = v >= 50 ? 'naive' : v >= 34 ? 'first' : v >= 22 ? 'second' : v >= 12 ? 'deep' : 'extreme';
+    var map = {
+      naive: ['素直平均型', '🌤️', '#38bdf8', 'まず平均そのものを考えやすいタイプです。', '相手の行動を素直に見積もる傾向があります。読み合いでは、もう一段だけ相手の思考を読むと強くなります。'],
+      first: ['一段読み型', '🧠', '#22c55e', '平均の3分の2というルールを素直に反映できるタイプです。', '基本的な戦略理解があり、集団の平均から一歩先を読む判断ができます。'],
+      second: ['二段読み型', '🎯', '#f59e0b', '他の人も3分の2を狙うと考え、さらに一段低く読めるタイプです。', '相手の戦略を想定して動く力があり、交渉や企画で読みの深さが出やすいです。'],
+      deep: ['深読み型', '🔍', '#8b5cf6', '多くの人が戦略的に考える前提で、かなり低い数字を選ぶタイプです。', '高度な読み合いに向く一方、相手が素直な場面では読みすぎることがあります。'],
+      extreme: ['完全合理寄せ型', '♟️', '#ef4444', '理論上の均衡にかなり寄せて考えるタイプです。', '論理を突き詰める力がありますが、実際の人間集団では相手の直感も織り込むと精度が上がります。']
+    };
+    var m = map[key];
+    var cross = scores ? (((scores.O || 3) >= 4) ? '開放性が高い場合、複数段階の読みや仮説思考が働きやすいです。' : '開放性が低めの場合、現実的な平均感覚を重視しやすいです。') : 'ビッグファイブ結果があると、開放性や誠実性との組み合わせでより詳しく見られます。';
+    return { key: key, name: m[0], icon: m[1], color: m[2], summary: m[3], detail: m[4], cross: cross, metrics: { chosenNumber: v, virtualAverage: virtualAverage, target: target, diff: diff }, stats: [{ label: '選んだ数字', value: String(v) }, { label: '仮想平均', value: String(virtualAverage) }, { label: '目標値', value: String(target) }, { label: '差', value: String(diff) }] };
+  }
+};
+</script>
+<script src="behavior-game.js"></script>
+</body>
+</html>

@@ -376,6 +376,54 @@ const CONCIERGE_CONFIG = {
           message: '不安を感じやすい傾向があるあなた。リスクに対する本当の態度をゲームで確かめてみましょう。'
         }
       ]
+    },
+    {
+      key: 'trust_result',
+      title: '信頼ゲームの返報率',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-3-3a2.83 2.83 0 00-4 4l3 3a2.83 2.83 0 004 0l1-1"/><path d="M13 7l3 3a2.83 2.83 0 004-4l-3-3a2.83 2.83 0 00-4 0l-1 1"/></svg>',
+      url: 'trust.html',
+      gate: null,
+      bgColor: 'rgba(56,189,248,0.15)',
+      getResult: (d) => ({ name: d.typeName || '完了', color: '#38bdf8' }),
+      triggers: [
+        {
+          condition: (sc) => sc.A >= 4,
+          priority: 3,
+          message: '協調性が高いあなたに。信頼されたときの返し方をゲームで見てみませんか？'
+        }
+      ]
+    },
+    {
+      key: 'ultimatum_result',
+      title: '最後通牒ゲームの拒否ライン',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>',
+      url: 'ultimatum.html',
+      gate: null,
+      bgColor: 'rgba(139,92,246,0.15)',
+      getResult: (d) => ({ name: d.typeName || '完了', color: '#8b5cf6' }),
+      triggers: [
+        {
+          condition: (sc) => sc.N >= 4 || sc.A >= 4,
+          priority: 3,
+          message: '不公平さへの反応が気になる方に。最後通牒ゲームで自分の拒否ラインを測れます。'
+        }
+      ]
+    },
+    {
+      key: 'beauty_result',
+      title: 'ビューティーコンテストゲーム',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>',
+      url: 'beauty.html',
+      gate: null,
+      bgColor: 'rgba(245,158,11,0.15)',
+      getResult: (d) => ({ name: d.typeName || '完了', color: '#f59e0b' }),
+      triggers: [
+        {
+          condition: (sc) => sc.O >= 4 || sc.C >= 4,
+          priority: 3,
+          message: '読み合いや戦略が得意かも。ビューティーコンテストゲームで他者視点を試せます。'
+        }
+      ]
     }
   ]
 };

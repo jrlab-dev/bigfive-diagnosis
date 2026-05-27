@@ -8,18 +8,18 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>心理学診断 一覧 | ビッグファイブで本当の自分を知る【公式】</title>
-<meta name="description" content="完全無料・登録不要。13種類の心理学診断が全て無料。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・マインドセット・価値観・キャリア診断など。登録不要で今すぐ始められる。">
+<meta name="description" content="完全無料・登録不要。心理学診断、キャリア診断、行動経済ミニゲームを一覧で掲載。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・価値観・キャリア診断など。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
 <meta property="og:title" content="心理学診断 一覧 | ビッグファイブで本当の自分を知る【公式】">
-<meta property="og:description" content="完全無料・登録不要。13種類の心理学診断が全て無料。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・マインドセット・価値観・キャリア診断など。登録不要で今すぐ始められる。">
+<meta property="og:description" content="完全無料・登録不要。心理学診断、キャリア診断、行動経済ミニゲームを一覧で掲載。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・価値観・キャリア診断など。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/diagnoses.html">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/images/bigfive-psychology-diagnoses-science-map.webp">
 <meta property="og:image:width" content="1062">
 <meta property="og:image:height" content="909">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="心理学診断 一覧 | ビッグファイブで本当の自分を知る【公式】">
-<meta name="twitter:description" content="完全無料・登録不要。13種類の心理学診断が全て無料。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・マインドセット・価値観・キャリア診断など。登録不要で今すぐ始められる。">
+<meta name="twitter:description" content="完全無料・登録不要。心理学診断、キャリア診断、行動経済ミニゲームを一覧で掲載。ビッグファイブ・HSP・愛着スタイル・恋愛・EQ・価値観・キャリア診断など。">
 <meta name="twitter:image" content="https://bigfive.jr-genius.jp/images/bigfive-psychology-diagnoses-science-map.webp">
 
 <script type="application/ld+json">
@@ -28,7 +28,7 @@
   "@type": "CollectionPage",
   "name": "心理学診断 一覧【公式】",
   "url": "https://bigfive.jr-genius.jp/diagnoses.html",
-  "description": "ビッグファイブ診断を含む心理学診断一覧。自分の性格分析11種＋応用診断3種。HSP・愛着スタイル・恋愛スタイル・マインドセット・ダークトライアド・価値観・動機タイプ・統制の所在・EQ・インポスター症候群など。",
+  "description": "ビッグファイブ診断を含む心理学診断一覧。性格分析、応用診断、キャリア診断、行動経済ミニゲームを掲載。HSP・愛着スタイル・恋愛スタイル・マインドセット・価値観・EQ・公共財ゲームなど。",
   "isPartOf": {
     "@type": "WebSite",
     "name": "ビッグファイブで本当の自分を知る【公式】",
@@ -161,6 +161,11 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <p class="section-label">キャリア・職業診断（3種類）</p>
   <p class="section-sub-note">科学的根拠に基づき、性格や職業興味からキャリア適性を分析します。</p>
   <div class="diag-grid" id="careerGrid"></div>
+
+  <!-- 行動経済ミニゲーム -->
+  <p class="section-label">行動経済ミニゲーム（5種類）</p>
+  <p class="section-sub-note">選択・協力・公平性・読み合いなど、実際の行動傾向をゲーム形式で測定します。</p>
+  <div class="diag-grid" id="gameGrid"></div>
 </div>
 
 <script src="unlock.js"></script>
@@ -371,6 +376,33 @@ const DIAGNOSES = [
     questions: 10,
     minutes: 3,
   },
+  {
+    id: 'trust', fc: 'A',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-3-3a2.83 2.83 0 00-4 4l3 3a2.83 2.83 0 004 0l1-1"/><path d="M13 7l3 3a2.83 2.83 0 004-4l-3-3a2.83 2.83 0 00-4 0l-1 1"/><path d="M8 12h8"/></svg>',
+    name: '信頼ゲームの返報率',
+    desc: '相手から信頼されて増えたコインを、どれくらい返すか。返報性・公平性・協力関係への反応を測定します。',
+    url: 'trust.html',
+    questions: 1,
+    minutes: 2,
+  },
+  {
+    id: 'ultimatum', fc: 'A',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>',
+    name: '最後通牒ゲームの拒否ライン',
+    desc: '不公平な提案をどこまで受け入れるか。損をしてでも拒否するラインから、公平性への感度を測定します。',
+    url: 'ultimatum.html',
+    questions: 1,
+    minutes: 2,
+  },
+  {
+    id: 'beauty', fc: 'O',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    name: 'ビューティーコンテストゲーム',
+    desc: 'みんなの平均値の3分の2を予測する読み合いゲーム。他者視点・戦略性・読みの深さを測定します。',
+    url: 'beauty.html',
+    questions: 1,
+    minutes: 2,
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -401,6 +433,9 @@ function getDoneIds() {
     if (localStorage.getItem('dark_triad_result')) done.add('dark-triad');
     if (localStorage.getItem('pgg_result')) done.add('pgg');
     if (localStorage.getItem('risk_result')) done.add('risk');
+    if (localStorage.getItem('trust_result')) done.add('trust');
+    if (localStorage.getItem('ultimatum_result')) done.add('ultimatum');
+    if (localStorage.getItem('beauty_result')) done.add('beauty');
     if (localStorage.getItem('riasec_result')) done.add('riasec');
     if (localStorage.getItem('riasec_result') && localStorage.getItem('bigfive_my_results')) done.add('career-integration');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
@@ -485,8 +520,10 @@ if (scores) {
 const selfGrid   = document.getElementById('selfGrid');
 const otherGrid  = document.getElementById('otherGrid');
 const careerGrid = document.getElementById('careerGrid');
-const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor','pgg','risk'];
+const gameGrid   = document.getElementById('gameGrid');
+const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
 const CAREER_IDS = ['career','riasec','career-integration'];
+const GAME_IDS   = ['pgg','risk','trust','ultimatum','beauty'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
   const req = typeof getRequiredCards === 'function' ? getRequiredCards : () => 0;
   return req(a.id) - req(b.id);
@@ -495,6 +532,7 @@ sortedDiagnoses.forEach(d => {
   let target;
   if (SELF_IDS.includes(d.id)) target = selfGrid;
   else if (CAREER_IDS.includes(d.id)) target = careerGrid;
+  else if (GAME_IDS.includes(d.id)) target = gameGrid;
   else target = otherGrid;
   target.innerHTML += diagCardHTML(d, done);
 });

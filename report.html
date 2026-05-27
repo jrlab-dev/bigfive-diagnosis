@@ -614,6 +614,7 @@ function loadData() {
   const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, bfList.length - 1));
   const bf     = bfList.length > 0 ? bfList[activeIdx] : null;
   let love = null, mindset = null, sdt = null, schwartz = null, hsp = null, attachment = null, locus = null, eq = null, impostor = null, darkTriad = null;
+  let pgg = null, risk = null, trust = null, ultimatum = null, beauty = null;
   try { love       = JSON.parse(localStorage.getItem('love_result'));       } catch(e) {}
   try { mindset    = JSON.parse(localStorage.getItem('mindset_result'));    } catch(e) {}
   try { sdt        = JSON.parse(localStorage.getItem('sdt_result'));        } catch(e) {}
@@ -626,7 +627,10 @@ function loadData() {
   try { darkTriad  = JSON.parse(localStorage.getItem('dark_triad_result')); } catch(e) {}
   try { pgg        = JSON.parse(localStorage.getItem('pgg_result'));        } catch(e) {}
   try { risk       = JSON.parse(localStorage.getItem('risk_result'));       } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg, risk };
+  try { trust      = JSON.parse(localStorage.getItem('trust_result'));      } catch(e) {}
+  try { ultimatum  = JSON.parse(localStorage.getItem('ultimatum_result'));  } catch(e) {}
+  try { beauty     = JSON.parse(localStorage.getItem('beauty_result'));     } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg, risk, trust, ultimatum, beauty };
 }
 
 // ===== 未受診チェック =====
@@ -644,6 +648,9 @@ function checkMissing(data) {
   if (!data.impostor)   missing.push({ name: 'インポスター症候群チェック', url: 'impostor.html' });
   if (!data.pgg)        missing.push({ name: '公共財ゲーム',             url: 'pgg.html' });
   if (!data.risk)       missing.push({ name: 'リスク選好ゲーム',         url: 'risk.html' });
+  if (!data.trust)      missing.push({ name: '信頼ゲーム',               url: 'trust.html' });
+  if (!data.ultimatum)  missing.push({ name: '最後通牒ゲーム',           url: 'ultimatum.html' });
+  if (!data.beauty)     missing.push({ name: 'ビューティーコンテスト',   url: 'beauty.html' });
   return missing;
 }
 
@@ -767,6 +774,24 @@ function renderTestsGrid(data) {
       value: data.risk ? data.risk.typeName : null,
       color: '#ef4444',
       url: 'risk.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-3-3a2.83 2.83 0 00-4 4l3 3a2.83 2.83 0 004 0l1-1"/><path d="M13 7l3 3a2.83 2.83 0 004-4l-3-3a2.83 2.83 0 00-4 0l-1 1"/></svg>', label: '信頼ゲーム',
+      value: data.trust ? data.trust.typeName : null,
+      color: '#38bdf8',
+      url: 'trust.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>', label: '最後通牒ゲーム',
+      value: data.ultimatum ? data.ultimatum.typeName : null,
+      color: '#8b5cf6',
+      url: 'ultimatum.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', label: 'ビューティーコンテスト',
+      value: data.beauty ? data.beauty.typeName : null,
+      color: '#f59e0b',
+      url: 'beauty.html'
     },
   ];
 
