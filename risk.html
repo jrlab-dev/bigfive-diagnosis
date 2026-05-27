@@ -312,9 +312,9 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
 
   var STORAGE_KEY = 'risk_result';
   var TOTAL_ROUNDS = 10;
-  var REPLAY_FEE = 5;
+  var REPLAY_FEE = 3;
   var POINTS = { safeHigh: 29000, safeLow: 23000, riskyHigh: 55000, riskyLow: 1500 };
-  var POINT_TO_COINS = { 1500: 3, 23000: 5, 29000: 6, 55000: 11 };
+  var POINT_TO_COINS = { 1500: 0, 23000: 2, 29000: 4, 55000: 8 };
 
   // Holt-Laury style: A and B share the same high-payoff probability.
   // Only the payoff spread differs. The probability rises from 10% to 100%.
@@ -461,7 +461,7 @@ body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: 
         $('entryReplayNote').style.display = 'block';
         $('entryReplayNote').textContent = '前回のタイプ: ' + (prev.typeName || '---') + '　※再プレイはミニゲーム扱いで、診断結果は上書きされません';
       } catch(e) {}
-      $('entryCost').textContent = '2回目以降の参加費：5コイン';
+      $('entryCost').textContent = '2回目以降の参加費：3コイン';
       if (window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
         $('startBtn').disabled = true;
         $('entryLack').style.display = 'block';
