@@ -60,15 +60,19 @@ window.BEHAVIOR_GAME = {
   title: '信頼ゲームの返報率',
   lead: '相手があなたを信頼してコインを預けたとき、あなたはどれくらい返すのかを見ます。',
   questionLabel: 'TRUST DECISION',
-  scenario: '相手があなたに10コインを送りました。<br>そのコインは3倍になり、あなたは30コインを受け取りました。<br>あなたは相手に何コイン返しますか？',
-  rules: ['相手が送った10コインは、あなたの手元で30コインになります', '0〜30コインの範囲で返す額を選びます', '返す割合から、信頼への返報性・公平性を判定します'],
-  inputType: 'slider',
-  min: 0,
-  max: 30,
-  step: 1,
-  defaultValue: 15,
-  valueLabel: '返すコイン',
-  formatValue: function(v) { return v + 'コイン'; },
+  scenario: '相手があなたに10コインを送りました。<br>そのコインは3倍になり、あなたは30コインを受け取りました。<br>30コインのうち、相手に返す額を選んでください。',
+  rules: ['相手が送った10コインは、あなたの手元で30コインになります', '返す額を7つの選択肢から選びます', '返す割合から、信頼への返報性・公平性を判定します'],
+  inputType: 'options',
+  defaultValue: null,
+  options: [
+    { value: 0, label: '0コイン', note: 'すべて自分に残す' },
+    { value: 5, label: '5コイン', note: '少しだけ返す' },
+    { value: 10, label: '10コイン', note: '相手の元の額を返す' },
+    { value: 15, label: '15コイン', note: '半分ずつ分ける' },
+    { value: 20, label: '20コイン', note: '多めに返す' },
+    { value: 25, label: '25コイン', note: 'かなり多く返す' },
+    { value: 30, label: '30コイン', note: 'すべて相手に返す' }
+  ],
   evaluate: function(v, scores) {
     var rate = Math.round(v / 30 * 100);
     var key = rate < 25 ? 'self' : rate < 45 ? 'guarded' : rate <= 60 ? 'fair' : rate <= 80 ? 'generous' : 'altruist';
