@@ -2053,6 +2053,7 @@ function renderStampCard() {
     { label: 'ダークトライアド', key: 'dark_triad_result',   icon: '🌑', color: '#6366f1' },
     { label: 'RIASEC',         key: 'riasec_result',       icon: '🎨', color: '#8b5cf6' },
     { label: '公共財ゲーム',    key: 'pgg_result',          icon: '🪙', color: '#f59e0b' },
+    { label: 'リスク選好ゲーム', key: 'risk_result',         icon: '⚠', color: '#ef4444' },
   ];
 
   var results = STAMPS.map(function(s) {
@@ -2156,7 +2157,7 @@ function renderBadges() {
 
   var STAMP_KEYS = ['bigfive_my_results','hsp_result','love_result','impostor_result',
     'attachment_result','mindset_result','schwartz_result','sdt_result',
-    'eq_result','locus_result','dark_triad_result','riasec_result','pgg_result'];
+    'eq_result','locus_result','dark_triad_result','riasec_result','pgg_result','risk_result'];
   var stampComplete = STAMP_KEYS.every(function(k) {
     var v = localStorage.getItem(k);
     if (k === 'bigfive_my_results') { try { return JSON.parse(v||'[]').length > 0; } catch(e) { return false; } }
@@ -2376,6 +2377,7 @@ const SYNC_DATA_KEYS = [
   'eq_result', 'impostor_result', 'sdt_result',
   'schwartz_result', 'mindset_result', 'love_result',
   'pgg_result',
+  'risk_result',
 ];
 
 function getSyncId() {
@@ -2618,6 +2620,7 @@ function renderReportBanner() {
     { key: 'love_result', name: '恋愛スタイル診断', url: 'love.html' },
     { key: 'impostor_result', name: 'インポスター症候群チェック', url: 'impostor.html' },
     { key: 'pgg_result', name: 'コイン増やせるかな？（公共財ゲーム）', url: 'pgg.html' },
+    { key: 'risk_result', name: 'リスク選好ゲーム', url: 'risk.html' },
   ];
   const missing = tests.filter(t =>
     !localStorage.getItem(t.key) &&
@@ -2700,8 +2703,9 @@ function renderAIProfile() {
   const hasEQ = !!localStorage.getItem('eq_result');
   const hasImpostor = !!localStorage.getItem('impostor_result');
   const hasPGG = !!localStorage.getItem('pgg_result');
+  const hasRisk = !!localStorage.getItem('risk_result');
 
-  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor && !hasPGG) return;
+  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor && !hasPGG && !hasRisk) return;
   section.style.display = 'block';
 
   // マッピング
@@ -2820,6 +2824,15 @@ function renderAIProfile() {
       const d = JSON.parse(localStorage.getItem('pgg_result'));
       lines.push('■ コインゲーム（公共財ゲーム）');
       lines.push('タイプ: ' + d.typeName + ' / 平均寄付率: ' + Math.round(d.avgRate * 100) + '%');
+    } catch(e) {}
+  }
+
+  // リスク選好ゲーム
+  if (hasRisk) {
+    try {
+      const d = JSON.parse(localStorage.getItem('risk_result'));
+      lines.push('■ リスク選好ゲーム');
+      lines.push('タイプ: ' + d.typeName + ' / スイッチングポイント: ' + d.switchPoint + '問目');
     } catch(e) {}
   }
 

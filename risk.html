@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/risk.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リスク選好ゲーム｜ビッグファイブ診断</title>
+<meta name="description" content="あなたはリスクを取るタイプ？それとも慎重派？コインを使った心理ゲームで、あなたの本当のリスク許容度を測定します。完全無料・登録不要。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0e27; --text: #e2e8f0; --dim: #94a3b8;
+  --amber: #f59e0b; --amber2: #d97706; --green: #10b981; --red: #ef4444;
+  --blue: #3b82f6; --purple: #8b5cf6; --pink: #ec4899;
+  --border: rgba(139,92,246,0.18); --card-bg: rgba(255,255,255,0.045);
+}
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0 0 80px; }
+.bg-grad { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(239,68,68,0.06), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(59,130,246,0.06), transparent 70%); }
+.wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+.site-header { position: sticky; top: 0; z-index: 10; background: rgba(10,14,39,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.back-link { color: var(--dim); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+.back-link:hover { color: var(--text); }
+.header-title { font-size: 15px; font-weight: 900; }
+.coin-display { display: flex; align-items: center; gap: 5px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700; color: #fde68a; }
+.phase { display: none; padding: 24px 0; text-align: center; }
+.phase.active { display: block; animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ENTRY */
+.entry-icon { font-size: 64px; margin-bottom: 16px; }
+.entry-badge { display: inline-block; background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; font-size: 12px; font-weight: 900; padding: 4px 14px; border-radius: 999px; margin-bottom: 16px; letter-spacing: 0.1em; }
+.entry-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+.entry-desc { font-size: 13px; color: var(--dim); line-height: 1.8; margin-bottom: 24px; }
+.entry-rules { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left; }
+.entry-rules h3 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--blue); }
+.entry-rules li { font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 4px; list-style: none; padding-left: 16px; position: relative; }
+.entry-rules li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.entry-cost { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.start-btn { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border: none; border-radius: 999px; padding: 14px 40px; font: inherit; font-size: 15px; font-weight: 900; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+.start-btn:hover { opacity: 0.9; }
+.start-btn:active { transform: scale(0.97); }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.entry-lack { font-size: 12px; color: #fca5a5; margin-top: 8px; }
+.entry-replay-note { font-size: 12px; color: var(--dim); margin-top: 12px; }
+
+/* CHOICE */
+.choice-round-header { font-size: 13px; color: var(--blue); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.1em; }
+.choice-round-title { font-size: 18px; font-weight: 900; margin-bottom: 24px; }
+.choice-progress { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; }
+.choice-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.08); transition: all 0.3s; }
+.choice-dot.done { background: var(--blue); }
+.choice-dot.current { background: var(--amber); box-shadow: 0 0 8px rgba(245,158,11,0.4); transform: scale(1.3); }
+.choice-options { display: flex; gap: 12px; margin-bottom: 24px; }
+.choice-card {
+  flex: 1; border: 2px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 14px;
+  background: var(--card-bg); cursor: pointer; transition: all 0.25s; text-align: center;
+}
+.choice-card:hover { border-color: rgba(255,255,255,0.25); }
+.choice-card.selected-safe { border-color: var(--green); background: rgba(16,185,129,0.1); box-shadow: 0 0 20px rgba(16,185,129,0.15); }
+.choice-card.selected-risky { border-color: var(--red); background: rgba(239,68,68,0.1); box-shadow: 0 0 20px rgba(239,68,68,0.15); }
+.choice-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 10px; }
+.choice-card:nth-child(1) .choice-label { color: var(--green); }
+.choice-card:nth-child(2) .choice-label { color: var(--red); }
+.choice-amount { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+.choice-note { font-size: 11px; color: var(--dim); line-height: 1.5; }
+.choice-ev { font-size: 10px; color: var(--dim); margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+.choice-submit {
+  background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff;
+  border: none; border-radius: 999px; padding: 12px 32px; font: inherit;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s;
+  opacity: 0.4; pointer-events: none;
+}
+.choice-submit.ready { opacity: 1; pointer-events: auto; }
+
+/* RESOLUTION */
+.res-icon { font-size: 64px; margin-bottom: 12px; }
+.res-title { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.res-title.win { color: var(--green); }
+.res-title.lose { color: var(--dim); }
+.res-detail { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; text-align: left; }
+.res-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.res-row:last-child { margin-bottom: 0; }
+.res-val { font-weight: 700; }
+.res-val.plus { color: var(--green); }
+.res-val.minus { color: var(--red); }
+.res-coins { font-size: 15px; font-weight: 700; margin: 12px 0; }
+.res-coins .plus { color: var(--green); }
+.res-coins .minus { color: var(--red); }
+
+/* ANALYSIS */
+.analysis-type-icon { font-size: 48px; margin-bottom: 8px; }
+.analysis-type-name { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+.analysis-type-summary { font-size: 13px; color: var(--dim); margin-bottom: 20px; }
+.analysis-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 16px; }
+.analysis-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.analysis-card p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+.analysis-cross { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 16px; }
+.analysis-cross h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.analysis-cross p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+.analysis-cross .no-bf { font-size: 13px; color: var(--dim); }
+.analysis-cross .no-bf a { color: var(--amber); text-decoration: none; font-weight: 700; }
+.analysis-choices { font-size: 12px; color: var(--dim); margin-bottom: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.nav-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.nav-btn { border-radius: 999px; padding: 10px 24px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; border: none; }
+.nav-btn.primary { background: linear-gradient(135deg, var(--amber), var(--amber2)); color: #fff; }
+.nav-btn.secondary { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+.nav-btn.accent { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; }
+.reveal-btn { background: linear-gradient(135deg, var(--purple), var(--pink)); color: #fff; border: none; border-radius: 999px; padding: 14px 40px; font: inherit; font-size: 15px; font-weight: 900; cursor: pointer; transition: opacity 0.2s; margin-top: 8px; }
+
+/* light mode */
+body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border: rgba(109,40,217,0.14); --card-bg: rgba(255,255,255,0.82); }
+body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(59,130,246,0.04), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.03), transparent 70%); }
+body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
+body.theme-light .entry-rules { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .choice-card { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
+body.theme-light .choice-card.selected-safe { background: rgba(16,185,129,0.1); }
+body.theme-light .choice-card.selected-risky { background: rgba(239,68,68,0.08); }
+body.theme-light .analysis-card { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .analysis-cross { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); color: #1e293b; }
+body.theme-light .res-detail { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+@media (max-width: 430px) {
+  .choice-options { gap: 8px; }
+  .choice-card { padding: 16px 10px; }
+  .choice-amount { font-size: 22px; }
+  .choice-note { font-size: 10px; }
+}
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<div class="bg-grad"></div>
+
+<header class="site-header">
+  <a href="diagnoses.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    診断一覧
+  </a>
+  <span class="header-title">リスク選好ゲーム</span>
+  <div class="coin-display" id="coinDisplay">&#x1FA99; 0枚</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ENTRY -->
+  <div class="phase active" id="phaseEntry">
+    <div class="entry-icon">&#x1F3B0;</div>
+    <div class="entry-badge">RISK PREFERENCE</div>
+    <div class="entry-title">リスク選好ゲーム</div>
+    <div class="entry-desc">あなたは「安定したくじ」を選ぶか、それとも「大きく狙えるくじ」を選ぶか。<br>10問の選択から、あなたのリスク許容度を測定します。</div>
+    <div class="entry-rules">
+      <h3>これからやること</h3>
+      <ul>
+        <li>全10問の二択が出題されます</li>
+        <li>毎回「A：安定くじ」と「B：勝負くじ」のどちらかを選びます</li>
+        <li>最後に10問のうち1問だけを抽選し、ポイントに応じてコインがもらえます</li>
+        <li>正解・不正解はありません。あなたの直感で選んでください</li>
+        <li>選択パターンからリスク許容度を判定し、ビッグファイブ診断と照合します</li>
+      </ul>
+      <h3>選択の例</h3>
+      <ul>
+        <li>A：29,000pt または 23,000pt</li>
+        <li>B：55,000pt または 1,500pt</li>
+        <li>当たり確率は10%ずつ上がっていきます</li>
+      </ul>
+      <p style="font-size:11px;color:var(--dim);margin-top:8px">※行動経済学の「Holt-Laury法」に基づく学術的なリスク測定です</p>
+    </div>
+    <div class="entry-cost" id="entryCost"></div>
+    <button class="start-btn" id="startBtn">はじめる</button>
+    <div class="entry-lack" id="entryLack" style="display:none">コインが足りません</div>
+    <div class="entry-replay-note" id="entryReplayNote" style="display:none"></div>
+  </div>
+
+  <!-- CHOICES -->
+  <div class="phase" id="phaseChoice">
+    <div class="choice-round-header">QUESTION <span id="choiceNum">1</span> / 10</div>
+    <div class="choice-progress" id="choiceProgress"></div>
+    <div class="choice-round-title">どちらを選びますか？</div>
+    <div class="choice-options" id="choiceOptions"></div>
+    <button class="choice-submit" id="choiceSubmit">決定</button>
+  </div>
+
+  <!-- RESOLUTION (removed - questionnaire-based) -->
+
+  <!-- ANALYSIS -->
+  <div class="phase" id="phaseAnalysis">
+    <div class="analysis-type-icon" id="typeIcon"></div>
+    <div class="analysis-type-name" id="typeName"></div>
+    <div class="analysis-type-summary" id="typeSummary"></div>
+    <div class="res-detail" id="payoutCard"></div>
+    <div class="analysis-card" id="detailCard"></div>
+    <div class="analysis-cross" id="crossAnalysis"></div>
+    <div class="analysis-choices" id="choicesSummary"></div>
+    <div class="nav-btns">
+      <button class="nav-btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button>
+      <button class="nav-btn secondary" onclick="location.href='mypage.html'">マイページ</button>
+      <button class="nav-btn accent" id="replayBtn">もう一度プレイ</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="gacha-utils.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'risk_result';
+  var TOTAL_ROUNDS = 10;
+  var REPLAY_FEE = 5;
+  var POINTS = { safeHigh: 29000, safeLow: 23000, riskyHigh: 55000, riskyLow: 1500 };
+  var POINT_TO_COINS = { 1500: 3, 23000: 5, 29000: 6, 55000: 11 };
+
+  // Holt-Laury style: A and B share the same high-payoff probability.
+  // Only the payoff spread differs. The probability rises from 10% to 100%.
+  var ROUNDS = Array.from({ length: TOTAL_ROUNDS }, function(_, i) {
+    return { highProb: (i + 1) * 10 };
+  });
+
+  // types based on switching point
+  var TYPES = {
+    'ultra-conservative': {
+      name: '超慎重派', emoji: '&#x1F6E1;&#xFE0F;', color: '#10b981',
+      summary: 'リスクを一切取らない、最も安全志向のタイプ',
+      detail: 'あなたはどんなに大きなリターンが見込まれても、不確実な選択を避ける傾向があります。これは決して「弱い」のではなく、損失を確実に防ぐ合理的な戦略です。金融庁の調査でも、日本人の約6割は元本保証を好むことが分かっており、あなたはその傾向が強い方と言えます。',
+      bfNote: '神経症性（Neuroticism）が高めで、誠実性（Conscientiousness）が高い方に多く見られます。慎重な計画性と損失への敏感さが、このタイプを形作っています。'
+    },
+    'cautious': {
+      name: '慎重派', emoji: '&#x1F9D1;&#x200D;&#x2696;&#xFE0F;', color: '#3b82f6',
+      summary: 'リスクは取るが、大きな見返りがなければ動かないタイプ',
+      detail: 'あなたはリスクを完全に拒絶するわけではありませんが、見返りが十分に大きい場合にのみリスクを受け入れます。バランスの取れた判断力があり、投資でも「分散投資」を好む傾向があります。行動経済学では「リスク回避的」と分類され、最も一般的なタイプです。',
+      bfNote: '誠実性と協調性が高めの方に多く見られます。社会的な規範を重んじ、堅実な道を選ぶ傾向があります。'
+    },
+    'balanced': {
+      name: 'バランス型', emoji: '&#x2696;&#xFE0F;', color: '#f59e0b',
+      summary: 'リスクとリターンを冷静に天秤にかけるタイプ',
+      detail: 'あなたは期待値に基づいて合理的な判断をするタイプです。リスクそのものを好むわけでも避けるわけでもなく、確率と金額を冷静に評価します。経済学で言う「リスク中立」に近く、プロスペクト理論の基準では少数派です。',
+      bfNote: '開放性が高く、分析力がある方に多く見られます。感情よりも論理で判断する傾向があります。'
+    },
+    'challenger': {
+      name: 'チャレンジャー', emoji: '&#x1F680;', color: '#f97316',
+      summary: 'リスクを恐れず、大きなリターンを狙うタイプ',
+      detail: 'あなたは確実な小さな利益よりも、不確実でも大きな利益を好む傾向があります。起業家や投資家に多いタイプで、行動経済学では「リスク愛好的」と分類されます。ただし、損失が続いた時のメンタルケアが重要になるタイプでもあります。',
+      bfNote: '外向性と開放性が高い方に多く見られます。新しい経験を求め、失敗を恐れない傾向があります。'
+    },
+    'high-roller': {
+      name: 'ハイローラー', emoji: '&#x1F3B0;', color: '#dc2626',
+      summary: 'リスクそのものを楽しむ、最もギャンブル的なタイプ',
+      detail: 'あなたは期待値が低くても、ギャンブル的な選択を好む傾向があります。これは必ずしも「無謀」ではありません。スリルを楽しむ能力、後悔をあまり感じない性格など、ポジティブな側面もあります。ただし、日常生活での金銭判断では注意が必要なタイプです。',
+      bfNote: '外向性が非常に高く、神経症性が低めの方に多く見られます。感情の波が少なく、リスクの結果に動じにくい傾向があります。'
+    }
+  };
+
+  // cross-analysis patterns
+  var CROSS = {
+    'high-O-high-risk': { title: '革新的リスクテイカー', text: '開放性が高くリスクも取るあなたは、新しい領域に飛び込む起業家タイプ。イノベーションにはリスクがつきものだと理解しています。' },
+    'high-O-low-risk': { title: '慎重な探求者', text: '開放性が高いもののリスクは取らないあなたは、新しいアイデアを安全な範囲で試すタイプ。研究職や企画職に向いています。' },
+    'high-E-high-risk': { title: '行動派アドベンチャー', text: '外向的でリスクを取るあなたは、人を巻き込んで新しいプロジェクトを始めるタイプ。営業や起業で力を発揮します。' },
+    'high-C-low-risk': { title: '計画的な守り手', text: '誠実性が高くリスクを避けるあなたは、堅実な計画を立てて着実に実行するタイプ。管理職や専門職に向いています。' },
+    'high-N-low-risk': { title: '慎重な予測者', text: '神経症性が高くリスクを避けるあなたは、悪いシナリオを先読みする能力があります。リスク管理や品質管理に向いています。' },
+    'default': { title: '独自のバランス', text: 'あなたの性格とリスク許容度は独自のバランスを持っています。どのタイプにも当てはまらないということは、状況に応じて柔軟に対応できる可能性があります。' }
+  };
+
+  var state = {
+    choices: [],
+    selectedType: null,
+    resolvedRound: null,
+    payoutPoints: 0,
+    payoutCoins: 0,
+    feePaid: 0,
+    resultSaved: false,
+    isFirstPlay: true
+  };
+
+  function $(id) { return document.getElementById(id); }
+
+  function showPhase(id) {
+    var phases = document.querySelectorAll('.phase');
+    for (var i = 0; i < phases.length; i++) phases[i].classList.remove('active');
+    $(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function updateCoinDisplay() {
+    $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
+  }
+
+  function formatPt(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'pt';
+  }
+
+  function expectedValue(high, low, prob) {
+    return Math.round(high * (prob / 100) + low * (1 - prob / 100));
+  }
+
+  function getCoinReward(points) {
+    return POINT_TO_COINS[points] || 0;
+  }
+
+  function resolvePayout() {
+    var idx = Math.floor(Math.random() * TOTAL_ROUNDS);
+    var choice = state.choices[idx] || 'safe';
+    var round = ROUNDS[idx];
+    var roll = Math.random() * 100;
+    var isHigh = roll < round.highProb;
+    var points = choice === 'safe'
+      ? (isHigh ? POINTS.safeHigh : POINTS.safeLow)
+      : (isHigh ? POINTS.riskyHigh : POINTS.riskyLow);
+    var coins = getCoinReward(points);
+    state.resolvedRound = {
+      index: idx,
+      choice: choice,
+      highProb: round.highProb,
+      isHigh: isHigh,
+      points: points,
+      roll: Math.floor(roll) + 1
+    };
+    state.payoutPoints = points;
+    state.payoutCoins = coins;
+    if (window.GachaUtils && coins > 0) GachaUtils.addCoins(coins);
+    updateCoinDisplay();
+  }
+
+  function classify(choices) {
+    var firstRisky = -1;
+    for (var i = 0; i < choices.length; i++) {
+      if (choices[i] === 'risky') { firstRisky = i; break; }
+    }
+    var riskyCount = choices.filter(function(c) { return c === 'risky'; }).length;
+    if (riskyCount === 0) return 'ultra-conservative';
+    if (riskyCount === TOTAL_ROUNDS) return 'high-roller';
+    if (firstRisky >= 7) return 'ultra-conservative';
+    if (firstRisky >= 5) return 'cautious';
+    if (firstRisky >= 3) return 'balanced';
+    if (firstRisky >= 1) return 'challenger';
+    return 'high-roller';
+  }
+
+  // ===== ENTRY =====
+  function initEntry() {
+    updateCoinDisplay();
+    var isReplay = !!localStorage.getItem(STORAGE_KEY);
+    state.isFirstPlay = !isReplay;
+    $('entryLack').style.display = 'none';
+    $('startBtn').disabled = false;
+
+    if (isReplay) {
+      try {
+        var prev = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        $('entryReplayNote').style.display = 'block';
+        $('entryReplayNote').textContent = '前回のタイプ: ' + (prev.typeName || '---') + '　※再プレイはミニゲーム扱いで、診断結果は上書きされません';
+      } catch(e) {}
+      $('entryCost').textContent = '2回目以降の参加費：5コイン';
+      if (window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
+        $('startBtn').disabled = true;
+        $('entryLack').style.display = 'block';
+      }
+    } else {
+      $('entryReplayNote').style.display = 'none';
+      $('entryCost').textContent = '初回無料：診断結果として保存されます';
+    }
+  }
+
+  $('startBtn').addEventListener('click', function() {
+    var isFirst = state.isFirstPlay;
+    if (!isFirst && window.GachaUtils && !GachaUtils.spendCoins(REPLAY_FEE)) {
+      $('entryLack').style.display = 'block';
+      updateCoinDisplay();
+      return;
+    }
+    state = {
+      choices: [],
+      selectedType: null,
+      resolvedRound: null,
+      payoutPoints: 0,
+      payoutCoins: 0,
+      feePaid: isFirst ? 0 : REPLAY_FEE,
+      resultSaved: false,
+      isFirstPlay: isFirst
+    };
+    updateCoinDisplay();
+    showChoice(0);
+  });
+
+  // ===== CHOICES =====
+  function showChoice(n) {
+    showPhase('phaseChoice');
+    $('choiceNum').textContent = n + 1;
+
+    // progress dots
+    var dots = '';
+    for (var i = 0; i < TOTAL_ROUNDS; i++) {
+      var cls = i < n ? 'done' : (i === n ? 'current' : '');
+      dots += '<div class="choice-dot ' + cls + '"></div>';
+    }
+    $('choiceProgress').innerHTML = dots;
+
+    var r = ROUNDS[n];
+    state.selectedType = null;
+
+    var safeEv = expectedValue(POINTS.safeHigh, POINTS.safeLow, r.highProb);
+    var riskEv = expectedValue(POINTS.riskyHigh, POINTS.riskyLow, r.highProb);
+    var lowProb = 100 - r.highProb;
+    $('choiceOptions').innerHTML =
+      '<div class="choice-card" data-type="safe">' +
+        '<div class="choice-label">A：安定くじ</div>' +
+        '<div class="choice-amount">' + formatPt(POINTS.safeHigh) + '</div>' +
+        '<div class="choice-note">' + r.highProb + '%で ' + formatPt(POINTS.safeHigh) + '<br>' + lowProb + '%で ' + formatPt(POINTS.safeLow) + '</div>' +
+        '<div class="choice-ev">期待値: ' + formatPt(safeEv) + '</div>' +
+      '</div>' +
+      '<div class="choice-card" data-type="risky">' +
+        '<div class="choice-label">B：勝負くじ</div>' +
+        '<div class="choice-amount">' + formatPt(POINTS.riskyHigh) + '</div>' +
+        '<div class="choice-note">' + r.highProb + '%で ' + formatPt(POINTS.riskyHigh) + '<br>' + lowProb + '%で ' + formatPt(POINTS.riskyLow) + '</div>' +
+        '<div class="choice-ev">期待値: ' + formatPt(riskEv) + '</div>' +
+      '</div>';
+
+    var cards = $('choiceOptions').querySelectorAll('.choice-card');
+    cards[0].addEventListener('click', function() {
+      cards[0].className = 'choice-card selected-safe';
+      cards[1].className = 'choice-card';
+      state.selectedType = 'safe';
+      $('choiceSubmit').classList.add('ready');
+    });
+    cards[1].addEventListener('click', function() {
+      cards[0].className = 'choice-card';
+      cards[1].className = 'choice-card selected-risky';
+      state.selectedType = 'risky';
+      $('choiceSubmit').classList.add('ready');
+    });
+
+    $('choiceSubmit').classList.remove('ready');
+    $('choiceSubmit').onclick = function() {
+      if (!state.selectedType) return;
+      state.choices.push(state.selectedType);
+      if (n < TOTAL_ROUNDS - 1) {
+        showChoice(n + 1);
+      } else {
+        resolvePayout();
+        saveResult(classify(state.choices));
+        showAnalysis();
+      }
+    };
+  }
+
+  // ===== ANALYSIS =====
+  function showAnalysis() {
+    var typeKey = classify(state.choices);
+    var typeInfo = TYPES[typeKey];
+    showPhase('phaseAnalysis');
+
+    $('typeIcon').innerHTML = typeInfo.emoji;
+    $('typeName').textContent = typeInfo.name;
+    $('typeName').style.color = typeInfo.color;
+    $('typeSummary').textContent = typeInfo.summary;
+    var resolved = state.resolvedRound;
+    if (resolved) {
+      $('payoutCard').innerHTML =
+        '<div class="res-row"><span>抽選された問題</span><span class="res-val">Q' + (resolved.index + 1) + '</span></div>' +
+        '<div class="res-row"><span>選んだくじ</span><span class="res-val">' + (resolved.choice === 'safe' ? 'A：安定くじ' : 'B：勝負くじ') + '</span></div>' +
+        '<div class="res-row"><span>当たり確率</span><span class="res-val">' + resolved.highProb + '%</span></div>' +
+        '<div class="res-row"><span>獲得ポイント</span><span class="res-val">' + formatPt(state.payoutPoints) + '</span></div>' +
+        '<div class="res-row"><span>コイン換算</span><span class="res-val plus">+' + state.payoutCoins + 'コイン</span></div>' +
+        (state.feePaid ? '<div class="res-row"><span>参加費</span><span class="res-val minus">-' + state.feePaid + 'コイン</span></div>' : '');
+    }
+
+    $('detailCard').innerHTML = '<h3>詳細分析</h3><p>' + typeInfo.detail + '</p><p style="margin-top:10px;color:' + typeInfo.color + ';font-weight:700">' + typeInfo.bfNote + '</p>';
+
+    // Big Five cross
+    var bfHtml = '';
+    try {
+      var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+      if (myResults[idx] && myResults[idx].scores) {
+        var sc = myResults[idx].scores;
+        var crossKey = 'default';
+        var isHighRisk = typeKey === 'challenger' || typeKey === 'high-roller';
+
+        if ((sc.O || 3) >= 4 && isHighRisk) crossKey = 'high-O-high-risk';
+        else if ((sc.O || 3) >= 4 && !isHighRisk) crossKey = 'high-O-low-risk';
+        else if ((sc.E || 3) >= 4 && isHighRisk) crossKey = 'high-E-high-risk';
+        else if ((sc.C || 3) >= 4 && !isHighRisk) crossKey = 'high-C-low-risk';
+        else if ((sc.N || 3) >= 4 && !isHighRisk) crossKey = 'high-N-low-risk';
+
+        var cross = CROSS[crossKey] || CROSS['default'];
+        bfHtml = '<h3>ビッグファイブ×リスクタイプ</h3><p><b style="color:' + typeInfo.color + '">' + cross.title + '</b></p><p style="margin-top:6px">' + cross.text + '</p>';
+      } else {
+        bfHtml = '<h3>ビッグファイブ×リスクタイプ</h3><p class="no-bf">ビッグファイブ診断の結果があると、より詳細なクロス分析が見られます。<a href="quiz.html?v=10">診断する</a></p>';
+      }
+    } catch(e) {
+      bfHtml = '<h3>ビッグフイブ×リスクタイプ</h3><p class="no-bf">ビッグファイブ診断の結果があると、より詳細なクロス分析が見られます。<a href="quiz.html?v=10">診断する</a></p>';
+    }
+    $('crossAnalysis').innerHTML = bfHtml;
+
+    // choices summary
+    var cHtml = '';
+    for (var i = 0; i < state.choices.length; i++) {
+      var isSafe = state.choices[i] === 'safe';
+      cHtml += '<span style="color:' + (isSafe ? 'var(--green)' : 'var(--red)') + '">Q' + (i + 1) + ':' + (isSafe ? 'A' : 'B') + '</span>';
+    }
+    $('choicesSummary').innerHTML = cHtml;
+  }
+
+  $('replayBtn').addEventListener('click', function() {
+    state = { choices: [], selectedType: null, resolvedRound: null, payoutPoints: 0, payoutCoins: 0, feePaid: 0, resultSaved: false, isFirstPlay: false };
+    initEntry();
+    showPhase('phaseEntry');
+  });
+
+  // ===== SAVE =====
+  function saveResult(typeKey) {
+    if (state.resultSaved) return;
+    state.resultSaved = true;
+
+    var typeInfo = TYPES[typeKey];
+    if (state.isFirstPlay) {
+      var data = {
+        type: typeKey,
+        typeName: typeInfo.name,
+        choices: state.choices.slice(),
+        switchPoint: state.choices.indexOf('risky') >= 0 ? state.choices.indexOf('risky') + 1 : 0,
+        riskyCount: state.choices.filter(function(c) { return c === 'risky'; }).length,
+        payoutPoints: state.payoutPoints,
+        payoutCoins: state.payoutCoins,
+        resolvedRound: state.resolvedRound,
+        playCount: 1,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('risk');
+      try {
+        var myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+        var activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+        if (myResults[activeIdx]) {
+          myResults[activeIdx].risk = data;
+          localStorage.setItem('bigfive_my_results', JSON.stringify(myResults));
+        }
+      } catch(e) {}
+    } else {
+      try {
+        var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        existing.playCount = (existing.playCount || 1) + 1;
+        existing.lastPayoutPoints = state.payoutPoints;
+        existing.lastPayoutCoins = state.payoutCoins;
+        existing.lastResolvedRound = state.resolvedRound;
+        existing.lastPlayedAt = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+      } catch(e) {}
+    }
+  }
+
+  initEntry();
+
+})();
+</script>
+<script src="unlock.js"></script>
+</body>
+</html>

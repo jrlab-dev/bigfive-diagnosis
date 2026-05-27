@@ -625,7 +625,8 @@ function loadData() {
   try { impostor   = JSON.parse(localStorage.getItem('impostor_result'));   } catch(e) {}
   try { darkTriad  = JSON.parse(localStorage.getItem('dark_triad_result')); } catch(e) {}
   try { pgg        = JSON.parse(localStorage.getItem('pgg_result'));        } catch(e) {}
-  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg };
+  try { risk       = JSON.parse(localStorage.getItem('risk_result'));       } catch(e) {}
+  return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg, risk };
 }
 
 // ===== 未受診チェック =====
@@ -642,6 +643,7 @@ function checkMissing(data) {
   if (!data.eq)         missing.push({ name: '感情知能チェック',     url: 'eq.html' });
   if (!data.impostor)   missing.push({ name: 'インポスター症候群チェック', url: 'impostor.html' });
   if (!data.pgg)        missing.push({ name: '公共財ゲーム',             url: 'pgg.html' });
+  if (!data.risk)       missing.push({ name: 'リスク選好ゲーム',         url: 'risk.html' });
   return missing;
 }
 
@@ -759,6 +761,12 @@ function renderTestsGrid(data) {
       value: data.pgg ? data.pgg.typeName : null,
       color: '#f59e0b',
       url: 'pgg.html'
+    },
+    {
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/></svg>', label: 'リスク選好ゲーム',
+      value: data.risk ? data.risk.typeName : null,
+      color: '#ef4444',
+      url: 'risk.html'
     },
   ];
 

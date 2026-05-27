@@ -346,6 +346,36 @@ const CONCIERGE_CONFIG = {
           message: '自分の利益を守る傾向があるあなた。ゲームで自分の本当の協力スタイルを確かめてみませんか？'
         }
       ]
+    },
+    {
+      key: 'risk_result',
+      title: 'リスク選好ゲーム',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/></svg>',
+      url: 'risk.html',
+      gate: null,
+      bgColor: 'rgba(239,68,68,0.15)',
+      getResult: (d) => {
+        var map = {
+          'ultra-conservative': { name: '超慎重派', color: '#6366f1' },
+          'cautious': { name: '慎重派', color: '#3b82f6' },
+          'balanced': { name: 'バランス型', color: '#f59e0b' },
+          'challenger': { name: 'チャレンジャー', color: '#f97316' },
+          'high-roller': { name: 'ハイローラー', color: '#ef4444' }
+        };
+        return map[d.type] || { name: '完了', color: '#ef4444' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.O >= 4,
+          priority: 3,
+          message: '新しい経験を好むあなた。リスク選好ゲームで自分の冒険心を測ってみませんか？'
+        },
+        {
+          condition: (sc) => sc.N >= 4,
+          priority: 2,
+          message: '不安を感じやすい傾向があるあなた。リスクに対する本当の態度をゲームで確かめてみましょう。'
+        }
+      ]
     }
   ]
 };
