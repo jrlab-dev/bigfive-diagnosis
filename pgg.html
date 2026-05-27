@@ -622,6 +622,12 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
   }
 
+  function clampContrib(value) {
+    var n = parseInt(value, 10);
+    if (isNaN(n)) return 0;
+    return Math.max(0, Math.min(TOKENS_PER_ROUND, n));
+  }
+
   function setMode(mode) {
     selectedMode = mode;
     $('modeNormalBtn').classList.toggle('active', mode === 'normal');
@@ -688,8 +694,8 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     // 初回: 固定シナリオ
     if (bot.fixedContribs) {
       var fixed = bot.fixedContribs[roundIdx];
-      if (fixed >= 0) return fixed;
-      return bot.r3[0] + Math.floor(Math.random() * (bot.r3[1] - bot.r3[0] + 1));
+      if (fixed >= 0) return clampContrib(fixed);
+      return clampContrib(bot.r3[0] + Math.floor(Math.random() * (bot.r3[1] - bot.r3[0] + 1)));
     }
     // 2回目以降: 変換なし・自然な値をそのまま使用
     var base = Math.round(bot.base * bot.weights[roundIdx]);
@@ -704,7 +710,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       base += (Math.random() < 0.25 ? 1 : -1);
       base = Math.max(0, Math.min(3, base));
     }
-    return base;
+    return clampContrib(base);
   }
 
   // ===== ENTRY =====
@@ -924,7 +930,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     // BOT計算
     var botCs = [];
     for (var i = 0; i < state.bots.length; i++) {
-      botCs.push(calcBotContrib(state.bots[i], state.currentRound, state.botContribs));
+      botCs.push(clampContrib(calcBotContrib(state.bots[i], state.currentRound, state.botContribs)));
     }
     state.botContribs.push(botCs);
 
