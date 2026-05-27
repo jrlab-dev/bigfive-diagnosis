@@ -20,25 +20,110 @@
 </main>
 <script src="gacha-utils.js"></script>
 <script>
-window.BEHAVIOR_GAME = {
-  id: 'ultimatum',
-  storageKey: 'ultimatum_result',
-  badge: 'ULTIMATUM GAME',
-  icon: '🧾',
-  title: '最後通牒ゲームの拒否ライン',
-  lead: '不公平な分け方をされたとき、何コイン以下なら拒否するかを見ます。',
-  questionLabel: 'REJECTION LINE',
-  scenario: '相手が100コインの分け方を決めます。<br>あなたが受け入れれば、その分け方で確定。拒否すれば、2人とも0コインです。<br>あなたは「自分の取り分が何コイン以下」なら拒否しますか？',
-  rules: ['拒否すると自分も相手も0コインになります', '拒否ラインが高いほど、不公平への反応が強いと見ます', '正解はありません。納得できる最低ラインを選んでください'],
-  inputType: 'slider',
-  min: 0,
-  max: 50,
-  step: 1,
-  defaultValue: 25,
-  valueLabel: '拒否ライン',
-  formatValue: function(v) { return v + 'コイン以下'; },
-  evaluate: function(v, scores) {
-    var key = v <= 10 ? 'profit' : v <= 20 ? 'tolerant' : v <= 30 ? 'standard' : v <= 40 ? 'fairness' : 'strict';
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'ultimatum_result';
+  var REPLAY_FEE = 3;
+  var REWARD_COINS = 2;
+  var proposals = [
+    { you: 10, other: 90 },
+    { you: 20, other: 80 },
+    { you: 30, other: 70 },
+    { you: 40, other: 60 },
+    { you: 50, other: 50 }
+  ];
+  var state = {
+    index: 0,
+    answers: [],
+    feePaid: 0,
+    rewardGranted: false,
+    resultSaved: false,
+    isFirstPlay: true,
+    result: null
+  };
+
+  function $(id) { return document.getElementById(id); }
+
+  function showPhase(id) {
+    document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
+    $(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function updateCoins() {
+    if (window.GachaUtils) $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
+  }
+
+  function initEntry() {
+    updateCoins();
+    var isReplay = !!localStorage.getItem(STORAGE_KEY);
+    state.isFirstPlay = !isReplay;
+    $('gameBadge').textContent = 'ULTIMATUM GAME';
+    $('gameIcon').textContent = '🧾';
+    $('gameTitle').textContent = '最後通牒ゲームの拒否ライン';
+    $('gameLead').textContent = '匿名の相手が100コインの分け方を決めました。あなたは受け入れるか、拒否するかだけを選べます。';
+    $('ruleList').innerHTML = [
+      '受け入れたら、その提案どおりに2人へコインが配られます',
+      '拒否したら、相手もあなたも0コインになります',
+      '5つの提案を順番に見て、受け入れるか拒否するか選びます'
+    ].map(function(t) { return '<li>' + t + '</li>'; }).join('');
+    $('entryLack').style.display = 'none';
+    $('entryNote').textContent = isReplay ? '前回の結果は残したまま、今回はミニゲームとして遊びます。' : '初回無料：診断結果として保存されます。';
+    $('entryCost').textContent = isReplay ? '2回目以降の参加費：3コイン / 終了報酬：2コイン' : '終了報酬：2コイン + 初回診断ボーナス';
+    $('startBtn').disabled = false;
+    if (isReplay && window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
+      $('startBtn').disabled = true;
+      $('entryLack').style.display = 'block';
+      $('entryLack').textContent = 'コインが足りません（あと' + (REPLAY_FEE - GachaUtils.getCoins()) + '枚）';
+    }
+  }
+
+  function renderQuestion() {
+    var p = proposals[state.index];
+    $('questionNo').textContent = 'PROPOSAL ' + (state.index + 1) + ' / ' + proposals.length;
+    $('scenario').innerHTML = '匿名の相手が、次の分け方を提案しました。<br>この提案を受け入れますか？';
+    $('submitBtn').style.display = 'none';
+    $('answerArea').innerHTML =
+      '<div class="stat-grid">' +
+        '<div class="stat"><div class="label">相手の取り分</div><div class="value">' + p.other + 'コイン</div></div>' +
+        '<div class="stat"><div class="label">あなたの取り分</div><div class="value">' + p.you + 'コイン</div></div>' +
+      '</div>' +
+      '<div class="analysis">拒否すると、相手もあなたも0コインになります。</div>' +
+      '<div class="btn-row">' +
+        '<button class="btn secondary" id="rejectBtn" type="button">拒否する</button>' +
+        '<button class="btn" id="acceptBtn" type="button">受け入れる</button>' +
+      '</div>';
+    $('rejectBtn').addEventListener('click', function() { answer('reject'); });
+    $('acceptBtn').addEventListener('click', function() { answer('accept'); });
+    showPhase('phaseQuestion');
+  }
+
+  function answer(choice) {
+    var p = proposals[state.index];
+    state.answers.push({ you: p.you, other: p.other, choice: choice });
+    if (state.index < proposals.length - 1) {
+      state.index++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function getMyScores() {
+    try {
+      var list = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0', 10), Math.max(0, list.length - 1));
+      return list[idx] && list[idx].scores ? list[idx].scores : null;
+    } catch(e) { return null; }
+  }
+
+  function evaluate() {
+    var rejected = state.answers.filter(function(a) { return a.choice === 'reject'; }).map(function(a) { return a.you; });
+    var accepted = state.answers.filter(function(a) { return a.choice === 'accept'; }).map(function(a) { return a.you; });
+    var line = rejected.length ? Math.max.apply(null, rejected) : 0;
+    var minAccepted = accepted.length ? Math.min.apply(null, accepted) : null;
+    var key = line <= 10 ? 'profit' : line <= 20 ? 'tolerant' : line <= 30 ? 'standard' : line <= 40 ? 'fairness' : 'strict';
     var map = {
       profit: ['実利優先型', '📈', '#22c55e', '不公平でも、もらえるなら受け入れやすいタイプです。', '感情よりも結果を重視し、交渉では現実的な判断をしやすい傾向があります。'],
       tolerant: ['許容型', '🤲', '#38bdf8', '多少の不公平なら受け入れるタイプです。', '関係維持や損失回避を優先し、衝突を大きくしない判断を取りやすいです。'],
@@ -46,12 +131,117 @@ window.BEHAVIOR_GAME = {
       fairness: ['公平重視型', '🛡️', '#ef4444', 'かなり公平でないと受け入れにくいタイプです。', '損をしてでも不公平を止めることで、長期的なルールや尊厳を守ろうとします。'],
       strict: ['強い公正要求型', '🔥', '#8b5cf6', '少しの不公平にも強く反応しやすいタイプです。', '理不尽さへの感度が高く、集団内のルール違反を見逃しにくい傾向があります。']
     };
-    var m = map[key];
+    var scores = getMyScores();
     var cross = scores ? (((scores.N || 3) >= 4) ? '感受性が高い場合、不公平への不快感が拒否ラインに出やすくなります。' : '感情の安定性が高い場合、拒否ラインは価値観としての公平性を表しやすいです。') : 'ビッグファイブ結果があると、感受性や協調性との組み合わせでより詳しく見られます。';
-    return { key: key, name: m[0], icon: m[1], color: m[2], summary: m[3], detail: m[4], cross: cross, metrics: { rejectionLine: v }, stats: [{ label: '拒否ライン', value: v + 'コイン以下' }, { label: '受け入れる最低額', value: (v + 1) + 'コイン' }, { label: '公平基準', value: v >= 25 ? '高め' : '低め' }] };
+    var m = map[key];
+    return {
+      key: key,
+      name: m[0],
+      icon: m[1],
+      color: m[2],
+      summary: m[3],
+      detail: m[4],
+      cross: cross,
+      metrics: { rejectionLine: line, minAccepted: minAccepted, answers: state.answers.slice() },
+      stats: [
+        { label: '拒否ライン', value: line > 0 ? line + 'コイン以下' : '拒否なし' },
+        { label: '受け入れた最低額', value: minAccepted === null ? 'なし' : minAccepted + 'コイン' },
+        { label: '拒否した提案', value: rejected.length + '件' }
+      ]
+    };
   }
-};
+
+  function grantReward() {
+    if (state.rewardGranted) return;
+    state.rewardGranted = true;
+    if (window.GachaUtils) {
+      GachaUtils.addCoins(REWARD_COINS);
+      updateCoins();
+    }
+  }
+
+  function saveResult() {
+    if (state.resultSaved) return;
+    state.resultSaved = true;
+    var result = state.result;
+    var data = {
+      type: result.key,
+      typeName: result.name,
+      value: result.metrics.rejectionLine,
+      metrics: result.metrics,
+      rewardCoins: REWARD_COINS,
+      playCount: 1,
+      timestamp: Date.now()
+    };
+
+    if (state.isFirstPlay) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('ultimatum');
+      try {
+        var list = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+        var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0', 10), Math.max(0, list.length - 1));
+        if (list[idx]) {
+          list[idx].ultimatum = data;
+          localStorage.setItem('bigfive_my_results', JSON.stringify(list));
+        }
+      } catch(e) {}
+    } else {
+      try {
+        var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        existing.playCount = (existing.playCount || 1) + 1;
+        existing.lastValue = result.metrics.rejectionLine;
+        existing.lastType = result.key;
+        existing.lastTypeName = result.name;
+        existing.lastMetrics = result.metrics;
+        existing.lastRewardCoins = REWARD_COINS;
+        existing.lastPlayedAt = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+      } catch(e) {}
+    }
+  }
+
+  function showResult() {
+    state.result = evaluate();
+    grantReward();
+    saveResult();
+    var r = state.result;
+    $('resultIcon').textContent = r.icon;
+    $('resultName').textContent = r.name;
+    $('resultName').style.color = r.color;
+    $('resultSummary').textContent = r.summary;
+    $('statGrid').innerHTML = r.stats.map(function(s) {
+      return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + '</div></div>';
+    }).join('');
+    var answerHtml = state.answers.map(function(a) {
+      return 'あなた' + a.you + ' / 相手' + a.other + '：' + (a.choice === 'accept' ? '受け入れ' : '拒否');
+    }).join('、');
+    $('analysis').innerHTML =
+      '<p><b>行動傾向：</b>' + r.detail + '</p>' +
+      '<p><b>ビッグファイブとの見方：</b>' + r.cross + '</p>' +
+      '<p><b>選択の流れ：</b>' + answerHtml + '</p>' +
+      '<p><b>コイン：</b>終了報酬 +' + REWARD_COINS + 'コイン' + (state.feePaid ? ' / 参加費 -' + state.feePaid + 'コイン' : '') + '</p>';
+    showPhase('phaseResult');
+  }
+
+  $('startBtn').addEventListener('click', function() {
+    var isFirst = state.isFirstPlay;
+    if (!isFirst && window.GachaUtils && !GachaUtils.spendCoins(REPLAY_FEE)) {
+      $('entryLack').style.display = 'block';
+      updateCoins();
+      return;
+    }
+    state = { index: 0, answers: [], feePaid: isFirst ? 0 : REPLAY_FEE, rewardGranted: false, resultSaved: false, isFirstPlay: isFirst, result: null };
+    updateCoins();
+    renderQuestion();
+  });
+
+  $('replayBtn').addEventListener('click', function() {
+    initEntry();
+    showPhase('phaseEntry');
+  });
+
+  initEntry();
+})();
 </script>
-<script src="behavior-game.js"></script>
 </body>
 </html>
