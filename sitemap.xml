@@ -1167,6 +1167,22 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：AIに代替されない人材の条件 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-jidai-shigoto.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：仕事で評価されやすい性格・損しやすい性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-hyoka-seikaku.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/</loc>
