@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>信頼ゲームの返報率 | ビッグファイブ診断</title>
+<meta name="description" content="信頼されたあと、どれくらい返すか。信頼ゲームで返報率と公平性の行動傾向を測定します。">
+<link rel="stylesheet" href="behavior-game.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<header class="site-header">
+  <a href="diagnoses.html" class="back-link">← 診断一覧</a>
+  <span class="header-title">信頼ゲーム</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+<main class="wrap">
+  <section class="phase active" id="phaseEntry">
+    <div class="hero">
+      <div class="badge" id="gameBadge"></div>
+      <div class="game-icon" id="gameIcon"></div>
+      <h1 class="title" id="gameTitle"></h1>
+      <p class="lead" id="gameLead"></p>
+      <div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div>
+      <div class="entry-cost" id="entryCost"></div>
+      <div class="entry-note" id="entryNote"></div>
+      <button class="btn" id="startBtn" type="button">はじめる</button>
+      <div class="entry-lack" id="entryLack"></div>
+    </div>
+  </section>
+  <section class="phase" id="phaseQuestion">
+    <div class="panel">
+      <div class="question-head"><span id="questionNo"></span><span>直感で選んでください</span></div>
+      <div class="scenario" id="scenario"></div>
+      <div id="answerArea"></div>
+      <div class="btn-row"><button class="btn" id="submitBtn" type="button">結果を見る</button></div>
+    </div>
+  </section>
+  <section class="phase" id="phaseResult">
+    <div class="panel result-type">
+      <div class="result-icon" id="resultIcon"></div>
+      <div class="result-name" id="resultName"></div>
+      <p class="result-summary" id="resultSummary"></p>
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="analysis" id="analysis"></div>
+      <div class="btn-row">
+        <button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button>
+        <button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button>
+        <button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="gacha-utils.js"></script>
+<script>
+window.BEHAVIOR_GAME = {
+  id: 'trust',
+  storageKey: 'trust_result',
+  badge: 'TRUST GAME',
+  icon: '🤝',
+  title: '信頼ゲームの返報率',
+  lead: '相手があなたを信頼してコインを預けたとき、あなたはどれくらい返すのかを見ます。',
+  questionLabel: 'TRUST DECISION',
+  scenario: '相手があなたに10コインを送りました。<br>そのコインは3倍になり、あなたは30コインを受け取りました。<br>あなたは相手に何コイン返しますか？',
+  rules: ['相手が送った10コインは、あなたの手元で30コインになります', '0〜30コインの範囲で返す額を選びます', '返す割合から、信頼への返報性・公平性を判定します'],
+  inputType: 'slider',
+  min: 0,
+  max: 30,
+  step: 1,
+  defaultValue: 15,
+  valueLabel: '返すコイン',
+  formatValue: function(v) { return v + 'コイン'; },
+  evaluate: function(v, scores) {
+    var rate = Math.round(v / 30 * 100);
+    var key = rate < 25 ? 'self' : rate < 45 ? 'guarded' : rate <= 60 ? 'fair' : rate <= 80 ? 'generous' : 'altruist';
+    var map = {
+      self: ['自己利益優先型', '💼', '#ef4444', '信頼は受け取るが、返す量はかなり少ないタイプです。', '短期的な得を重視しやすく、交渉や競争場面では強く出やすい傾向があります。'],
+      guarded: ['慎重返報型', '🧭', '#f59e0b', '返す意思はあるものの、自分の取り分もはっきり守るタイプです。', '相手を信じすぎず、状況を見ながら公平さを調整する現実的な傾向があります。'],
+      fair: ['公平返報型', '⚖️', '#22c55e', '受けた信頼に対して、かなり公平に返すタイプです。', '協力関係を長く保つ力があり、チーム内で信頼を積み上げやすい傾向があります。'],
+      generous: ['厚意返報型', '🌱', '#38bdf8', '相手の信頼に、やや多めに応えようとするタイプです。', '関係性を大切にし、相手に安心感を与えやすい一方、損を引き受けすぎない意識も大切です。'],
+      altruist: ['強い利他型', '✨', '#8b5cf6', '自分の利益よりも、相手に返すことを強く優先するタイプです。', '思いやりが強く、信頼関係では大きな安心感を生みます。ただし負担を抱えすぎない設計が必要です。']
+    };
+    var m = map[key];
+    var cross = scores ? (((scores.A || 3) >= 4) ? '協調性が高い場合、この返報率は「相手との関係を守る力」として出やすいです。' : '協調性が低めの場合、この返報率は「合理的な線引き」として出やすいです。') : 'ビッグファイブ結果があると、協調性や誠実性との組み合わせでより詳しく見られます。';
+    return { key: key, name: m[0], icon: m[1], color: m[2], summary: m[3], detail: m[4], cross: cross, metrics: { returnCoins: v, returnRate: rate }, stats: [{ label: '返した額', value: v + 'コイン' }, { label: '返報率', value: rate + '%' }, { label: '自分の残り', value: (30 - v) + 'コイン' }] };
+  }
+};
+</script>
+<script src="behavior-game.js"></script>
+</body>
+</html>

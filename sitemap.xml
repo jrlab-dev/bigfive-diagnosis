@@ -145,6 +145,30 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- 信頼ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/trust.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 最後通牒ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/ultimatum.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ビューティーコンテストゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/beauty.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- あの人のダークトライアド診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/other_dark_triad.html</loc>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>最後通牒ゲームの拒否ライン | ビッグファイブ診断</title>
+<meta name="description" content="不公平な提案をどこまで受け入れるか。最後通牒ゲームで拒否ラインを測定します。">
+<link rel="stylesheet" href="behavior-game.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<header class="site-header">
+  <a href="diagnoses.html" class="back-link">← 診断一覧</a>
+  <span class="header-title">最後通牒ゲーム</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+<main class="wrap">
+  <section class="phase active" id="phaseEntry"><div class="hero"><div class="badge" id="gameBadge"></div><div class="game-icon" id="gameIcon"></div><h1 class="title" id="gameTitle"></h1><p class="lead" id="gameLead"></p><div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div><div class="entry-cost" id="entryCost"></div><div class="entry-note" id="entryNote"></div><button class="btn" id="startBtn" type="button">はじめる</button><div class="entry-lack" id="entryLack"></div></div></section>
+  <section class="phase" id="phaseQuestion"><div class="panel"><div class="question-head"><span id="questionNo"></span><span>損してでも拒否するライン</span></div><div class="scenario" id="scenario"></div><div id="answerArea"></div><div class="btn-row"><button class="btn" id="submitBtn" type="button">結果を見る</button></div></div></section>
+  <section class="phase" id="phaseResult"><div class="panel result-type"><div class="result-icon" id="resultIcon"></div><div class="result-name" id="resultName"></div><p class="result-summary" id="resultSummary"></p><div class="stat-grid" id="statGrid"></div><div class="analysis" id="analysis"></div><div class="btn-row"><button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button><button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button><button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button></div></div></section>
+</main>
+<script src="gacha-utils.js"></script>
+<script>
+window.BEHAVIOR_GAME = {
+  id: 'ultimatum',
+  storageKey: 'ultimatum_result',
+  badge: 'ULTIMATUM GAME',
+  icon: '🧾',
+  title: '最後通牒ゲームの拒否ライン',
+  lead: '不公平な分け方をされたとき、何コイン以下なら拒否するかを見ます。',
+  questionLabel: 'REJECTION LINE',
+  scenario: '相手が100コインの分け方を決めます。<br>あなたが受け入れれば、その分け方で確定。拒否すれば、2人とも0コインです。<br>あなたは「自分の取り分が何コイン以下」なら拒否しますか？',
+  rules: ['拒否すると自分も相手も0コインになります', '拒否ラインが高いほど、不公平への反応が強いと見ます', '正解はありません。納得できる最低ラインを選んでください'],
+  inputType: 'slider',
+  min: 0,
+  max: 50,
+  step: 1,
+  defaultValue: 25,
+  valueLabel: '拒否ライン',
+  formatValue: function(v) { return v + 'コイン以下'; },
+  evaluate: function(v, scores) {
+    var key = v <= 10 ? 'profit' : v <= 20 ? 'tolerant' : v <= 30 ? 'standard' : v <= 40 ? 'fairness' : 'strict';
+    var map = {
+      profit: ['実利優先型', '📈', '#22c55e', '不公平でも、もらえるなら受け入れやすいタイプです。', '感情よりも結果を重視し、交渉では現実的な判断をしやすい傾向があります。'],
+      tolerant: ['許容型', '🤲', '#38bdf8', '多少の不公平なら受け入れるタイプです。', '関係維持や損失回避を優先し、衝突を大きくしない判断を取りやすいです。'],
+      standard: ['標準バランス型', '⚖️', '#f59e0b', '多くの人に近い、公平性と実利のバランス型です。', '不公平を嫌いながらも、完全な対等さまでは求めすぎない現実的なラインです。'],
+      fairness: ['公平重視型', '🛡️', '#ef4444', 'かなり公平でないと受け入れにくいタイプです。', '損をしてでも不公平を止めることで、長期的なルールや尊厳を守ろうとします。'],
+      strict: ['強い公正要求型', '🔥', '#8b5cf6', '少しの不公平にも強く反応しやすいタイプです。', '理不尽さへの感度が高く、集団内のルール違反を見逃しにくい傾向があります。']
+    };
+    var m = map[key];
+    var cross = scores ? (((scores.N || 3) >= 4) ? '感受性が高い場合、不公平への不快感が拒否ラインに出やすくなります。' : '感情の安定性が高い場合、拒否ラインは価値観としての公平性を表しやすいです。') : 'ビッグファイブ結果があると、感受性や協調性との組み合わせでより詳しく見られます。';
+    return { key: key, name: m[0], icon: m[1], color: m[2], summary: m[3], detail: m[4], cross: cross, metrics: { rejectionLine: v }, stats: [{ label: '拒否ライン', value: v + 'コイン以下' }, { label: '受け入れる最低額', value: (v + 1) + 'コイン' }, { label: '公平基準', value: v >= 25 ? '高め' : '低め' }] };
+  }
+};
+</script>
+<script src="behavior-game.js"></script>
+</body>
+</html>
