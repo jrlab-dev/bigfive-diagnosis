@@ -105,6 +105,18 @@ body {
 .start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .entry-lack { font-size: 12px; color: #fca5a5; margin-top: 8px; }
 .entry-replay-note { font-size: 12px; color: var(--dim); margin-top: 12px; }
+.mode-select { display: none; gap: 10px; margin: 0 0 18px; }
+.mode-select.show { display: flex; }
+.mode-btn {
+  flex: 1; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+  background: var(--card-bg); color: var(--text); padding: 12px 10px;
+  font: inherit; cursor: pointer; text-align: left; transition: all 0.2s;
+}
+.mode-btn.active { border-color: var(--amber); background: rgba(245,158,11,0.14); box-shadow: 0 0 14px rgba(245,158,11,0.14); }
+.mode-title { display: block; font-size: 13px; font-weight: 900; margin-bottom: 4px; }
+.mode-desc { display: block; font-size: 11px; color: var(--dim); line-height: 1.45; }
+.mode-note { display: none; font-size: 12px; color: var(--dim); line-height: 1.7; margin: -6px 0 14px; }
+.mode-note.show { display: block; }
 
 /* LOBBY */
 .lobby-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
@@ -278,6 +290,8 @@ body.theme-light { background: #f8fafc; color: #1e293b; --dim: #475569; --border
 body.theme-light .bg-grad { background: radial-gradient(ellipse 60% 40% at 20% 10%, rgba(245,158,11,0.06), transparent 70%), radial-gradient(ellipse 50% 35% at 80% 80%, rgba(139,92,246,0.04), transparent 70%); }
 body.theme-light .site-header { background: rgba(255,255,255,0.9); border-bottom-color: rgba(109,40,217,0.14); }
 body.theme-light .entry-rules { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
+body.theme-light .mode-btn { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
+body.theme-light .mode-btn.active { background: rgba(245,158,11,0.16); }
 body.theme-light .lobby-avatar { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
 body.theme-light .choice-btn { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
 body.theme-light .choice-btn.selected { background: rgba(245,158,11,0.15); }
@@ -324,6 +338,17 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         <li>逆にあなたが0枚・他が3枚ずつの場合、手元には<b>6枚</b>戻ります</li>
       </ul>
     </div>
+    <div class="mode-select" id="modeSelect">
+      <button class="mode-btn active" id="modeNormalBtn" type="button">
+        <span class="mode-title">通常プレイ</span>
+        <span class="mode-desc">固定BOTと対戦。コイン報酬あり</span>
+      </button>
+      <button class="mode-btn" id="modeFriendsBtn" type="button">
+        <span class="mode-title">知り合いプレイ</span>
+        <span class="mode-desc">あの人を最大3人登用。報酬控えめ</span>
+      </button>
+    </div>
+    <div class="mode-note" id="modeNote"></div>
     <div class="entry-cost">参加費: 🪙 <strong>3枚</strong></div>
     <button class="start-btn" id="startBtn">ゲームを始める</button>
     <div class="entry-lack" id="entryLack" style="display:none"></div>
@@ -409,6 +434,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
   var TOTAL_ROUNDS = 3;
   var MULTIPLIER = 4 / 3;
   var STORAGE_KEY = 'pgg_result';
+  var OTHERS_KEY = 'bigfive_other_results';
+  var FRIEND_REWARD_CAP = 2;
+  var selectedMode = 'normal';
 
   // ===== BOTプール（ビッグファイブ性格タイプ） =====
   function genTypeName(scores) {
@@ -439,6 +467,63 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       code += (v <= 2) ? 1 : (v === 3) ? 3 : 5; // toScale: 1-2→1, 3→3, 4-5→5
     }
     return 'images/characters/' + gender + '/' + code + '.webp';
+  }
+
+  function scoresFromResult(item) {
+    if (item && item.scores) {
+      return [item.scores.O || 3, item.scores.C || 3, item.scores.E || 3, item.scores.A || 3, item.scores.N || 3];
+    }
+    if (item && item.code && String(item.code).length >= 5) {
+      return String(item.code).slice(0, 5).split('').map(function(v) {
+        var n = parseInt(v, 10);
+        return isNaN(n) ? 3 : Math.max(1, Math.min(5, n));
+      });
+    }
+    return [3, 3, 3, 3, 3];
+  }
+
+  function getSimilarity(a, b) {
+    var diff = 0;
+    for (var i = 0; i < 5; i++) diff += Math.abs((a[i] || 3) - (b[i] || 3));
+    return 20 - diff;
+  }
+
+  function getOtherResults() {
+    try {
+      var list = JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function buildBotFromResult(item, idx) {
+    var scores = scoresFromResult(item);
+    var gender = item.gender || 'F';
+    var a = scores[3], c = scores[1], e = scores[2], n = scores[4], o = scores[0];
+    var coop = (a * 0.42) + (c * 0.22) + ((6 - n) * 0.18) + (e * 0.10) + (o * 0.08);
+    var base = Math.round(((coop - 1) / 4) * 3);
+    base = Math.max(0, Math.min(3, base));
+    var stability = 0.78 + (c - 3) * 0.07 - (n - 3) * 0.06;
+    var reactivity = 0.18 + (a - 3) * 0.04 + (n - 3) * 0.05;
+    var bot = {
+      name: item.name || item.typeName || ('あの人' + (idx + 1)),
+      scores: scores,
+      gender: gender,
+      base: base,
+      weights: [
+        1,
+        Math.max(0.45, Math.min(1.1, stability)),
+        Math.max(0.35, Math.min(1.05, stability - 0.08 + (a - 3) * 0.04))
+      ],
+      matchBias: Math.max(0.08, Math.min(0.42, reactivity)),
+      fromOther: true
+    };
+    bot.img = charImgUrl(gender, scores);
+    var topIdx = 0;
+    for (var j = 1; j < scores.length; j++) { if (scores[j] > scores[topIdx]) topIdx = j; }
+    bot.color = FACTOR_COLORS[topIdx];
+    return bot;
   }
 
   var BOT_POOL = [
@@ -520,6 +605,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     won: false,
     timers: [],
     playerBalance: 3,
+    mode: 'normal',
     resultSaved: false
   };
 
@@ -536,6 +622,19 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
   }
 
+  function setMode(mode) {
+    selectedMode = mode;
+    $('modeNormalBtn').classList.toggle('active', mode === 'normal');
+    $('modeFriendsBtn').classList.toggle('active', mode === 'friends');
+    if (mode === 'friends') {
+      $('modeNote').classList.add('show');
+      $('modeNote').textContent = '知り合いプレイは保存済みの「あの人」を最大3人まで登用します。診断結果は上書きせず、コイン報酬は最大' + FRIEND_REWARD_CAP + '枚です。';
+    } else {
+      $('modeNote').classList.remove('show');
+      $('modeNote').textContent = '';
+    }
+  }
+
   // ===== BOT選択・貢献度計算 =====
   function pickBots() {
     var pool = BOT_POOL.slice();
@@ -545,6 +644,23 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       picked.push(pool.splice(idx, 1)[0]);
     }
     return picked;
+  }
+
+  function pickFriendBots() {
+    var others = getOtherResults();
+    var myChar = getMyCharInfo();
+    var myScores = myChar ? myChar.scores : [3, 3, 3, 3, 3];
+    var friendBots = others.map(function(item, idx) {
+      var bot = buildBotFromResult(item, idx);
+      bot.similarity = getSimilarity(myScores, bot.scores);
+      return bot;
+    }).sort(function(a, b) {
+      return b.similarity - a.similarity;
+    }).slice(0, 3);
+
+    var fallback = pickBots();
+    for (var i = 0; friendBots.length < 3 && i < fallback.length; i++) friendBots.push(fallback[i]);
+    return friendBots;
   }
 
   // 初回専用：固定シナリオBOT（裏切者・真中・協力者）
@@ -577,16 +693,16 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     }
     // 2回目以降: 変換なし・自然な値をそのまま使用
     var base = Math.round(bot.base * bot.weights[roundIdx]);
-    base = Math.min(3, base);
+    base = Math.max(0, Math.min(3, base));
     if (roundIdx > 0 && allContribs.length > 0) {
       var prevRound = allContribs[allContribs.length - 1];
       var avg = prevRound.reduce(function(a,b){return a+b;},0) / prevRound.length;
       base += Math.round((avg - base) * bot.matchBias * 0.3);
-      base = Math.min(3, base);
+      base = Math.max(0, Math.min(3, base));
     }
     if (Math.random() < 0.3) {
       base += (Math.random() < 0.25 ? 1 : -1);
-      base = Math.min(3, base);
+      base = Math.max(0, Math.min(3, base));
     }
     return base;
   }
@@ -596,6 +712,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     updateCoinDisplay();
     var coins = GachaUtils.getCoins();
     var isReplay = !!localStorage.getItem(STORAGE_KEY);
+    var hasOthers = getOtherResults().length > 0;
 
     if (isReplay) {
       try {
@@ -605,6 +722,18 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         $('entryReplayNote').style.display = 'block';
         $('entryReplayNote').textContent = '※ 再プレイはお楽しみ用途です（診断データは初回のまま）';
       } catch(e) {}
+      $('modeSelect').classList.add('show');
+      $('modeFriendsBtn').disabled = !hasOthers;
+      if (!hasOthers && selectedMode === 'friends') selectedMode = 'normal';
+      setMode(selectedMode);
+      if (!hasOthers) {
+        $('modeNote').classList.add('show');
+        $('modeNote').textContent = '知り合いプレイには、マイページに「あの人の結果」が1人以上必要です。';
+      }
+    } else {
+      $('modeSelect').classList.remove('show');
+      $('modeNote').classList.remove('show');
+      selectedMode = 'normal';
     }
 
     if (coins < ENTRY_FEE) {
@@ -622,11 +751,12 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     updateCoinDisplay();
 
     var isFirst = !localStorage.getItem(STORAGE_KEY);
+    var mode = (!isFirst && selectedMode === 'friends' && getOtherResults().length > 0) ? 'friends' : 'normal';
     state = {
       currentRound: 0,
       playerContribs: [],
       botContribs: [],
-      bots: isFirst ? buildFirstGameBots() : pickBots(),
+      bots: isFirst ? buildFirstGameBots() : (mode === 'friends' ? pickFriendBots() : pickBots()),
       poolTotal: 0,
       selectedAmount: -1,
       won: false,
@@ -635,6 +765,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       playerBalance: 3,
       botBalances: [3, 3, 3],
       isFirstPlay: isFirst,
+      mode: mode,
       resultSaved: false
     };
 
@@ -897,6 +1028,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
     // 実際のコイン変動（損失は参戦費が上限）
     var returnAmount = Math.max(0, ENTRY_FEE + netGain);
+    if (state.mode === 'friends') returnAmount = Math.min(returnAmount, FRIEND_REWARD_CAP);
     GachaUtils.addCoins(returnAmount);
     updateCoinDisplay();
 
@@ -917,6 +1049,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       $('finalTitle').textContent = netGain + '枚の損失...';
       $('finalTitle').className = 'final-result-title lose';
       $('finalCoins').innerHTML = '投資額より ' + Math.abs(netGain) + '枚 少なく戻りました';
+    }
+    if (state.mode === 'friends') {
+      $('finalCoins').innerHTML += '<div class="return-note">知り合いプレイのため、実際の報酬は最大' + FRIEND_REWARD_CAP + '枚に調整されています。今回の付与: ' + returnAmount + '枚</div>';
     }
 
     // 結果画面まで到達した時点で保存する（分析画面を開かずに離脱しても記録を残す）
@@ -1036,6 +1171,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
         avgRate: Math.round(classification.avgRate * 100) / 100,
         won: state.won,
         netGain: state.netGain,
+        mode: state.mode || 'normal',
         playCount: 1,
         timestamp: Date.now()
       };
@@ -1056,6 +1192,9 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       try {
         var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
         existing.playCount = (existing.playCount || 1) + 1;
+        existing.lastMode = state.mode || 'normal';
+        existing.lastNetGain = state.netGain;
+        existing.lastPlayedAt = Date.now();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
       } catch(e) {}
     }
@@ -1076,6 +1215,7 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       timers: [],
       playerBalance: 3,
       botBalances: [3, 3, 3],
+      mode: 'normal',
       resultSaved: false
     };
     initEntry();
@@ -1084,6 +1224,11 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 
   // ===== イベント =====
   $('startBtn').addEventListener('click', startGame);
+  $('modeNormalBtn').addEventListener('click', function() { setMode('normal'); });
+  $('modeFriendsBtn').addEventListener('click', function() {
+    if (this.disabled) return;
+    setMode('friends');
+  });
   $('revealBtn').addEventListener('click', showAnalysis);
   $('replayBtn').addEventListener('click', resetGame);
 
