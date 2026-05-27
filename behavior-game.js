@@ -45,6 +45,7 @@
     $('scenario').innerHTML = config.scenario;
     $('answerArea').innerHTML = '';
     state.value = config.defaultValue;
+    $('submitBtn').disabled = false;
 
     if (config.inputType === 'slider') {
       $('answerArea').innerHTML =
@@ -72,15 +73,19 @@
         state.value = Math.max(config.min, Math.min(config.max, v));
       });
     } else {
+      state.value = null;
+      $('submitBtn').disabled = true;
       $('answerArea').innerHTML = '<div class="option-grid">' + config.options.map(function(opt) {
         return '<button class="option" type="button" data-value="' + opt.value + '">' +
           '<div class="main">' + opt.label + '</div><div class="sub">' + opt.note + '</div></button>';
-      }).join('') + '</div>';
+      }).join('') + '</div><div class="entry-lack" id="answerError" style="display:none">返す額を選んでください</div>';
       document.querySelectorAll('.option').forEach(function(btn) {
         btn.addEventListener('click', function() {
           document.querySelectorAll('.option').forEach(function(el) { el.classList.remove('selected'); });
           btn.classList.add('selected');
           state.value = Number(btn.getAttribute('data-value'));
+          $('submitBtn').disabled = false;
+          $('answerError').style.display = 'none';
         });
       });
     }
@@ -173,7 +178,13 @@
     renderQuestion();
   });
 
-  $('submitBtn').addEventListener('click', showResult);
+  $('submitBtn').addEventListener('click', function() {
+    if (state.value === null || typeof state.value === 'undefined') {
+      if ($('answerError')) $('answerError').style.display = 'block';
+      return;
+    }
+    showResult();
+  });
   $('replayBtn').addEventListener('click', function() {
     initEntry();
     showPhase('phaseEntry');
