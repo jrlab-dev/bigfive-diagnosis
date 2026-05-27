@@ -1167,6 +1167,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：子育てスタイルは性格で決まる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kosodate-seikaku-style.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：AIに代替されない人材の条件 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ai-jidai-shigoto.html</loc>
