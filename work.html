@@ -1616,16 +1616,94 @@ function locusHtml(lc) {
   </div>`;
 }
 
-function allTestsHtml(code, r) {
+function riskHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">🎲</span>
+    <div><div style="font-size:12px;font-weight:700;color:#b45309;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">リスク選択: ${d.riskyCount!=null?d.riskyCount+'回':'—'}</div></div>
+  </div>`;
+}
+function delayHtml(d) {
+  const pct = d.value!=null ? Math.round(d.value*100)+'%' : '—';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">⏳</span>
+    <div><div style="font-size:12px;font-weight:700;color:#0e7490;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">将来選択率: ${pct}</div></div>
+  </div>`;
+}
+function ultimatumHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">🤝</span>
+    <div><div style="font-size:12px;font-weight:700;color:#1d4ed8;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">拒否ライン: ${d.value!=null?Math.round(d.value*100)+'%':'—'}</div></div>
+  </div>`;
+}
+function pggHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">🏛️</span>
+    <div><div style="font-size:12px;font-weight:700;color:#7c3aed;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">平均貢献率: ${d.avgRate!=null?Math.round(d.avgRate*100)+'%':'—'}</div></div>
+  </div>`;
+}
+
+// 独立キー診断（自分のみ）
+function standaloneTestsHtml() {
+  const LS = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e) { return null; } };
+  const hsp = LS('hsp_result');
+  const imp = LS('impostor_result');
+  const love= LS('love_result');
+  const sw  = LS('schwartz_result');
+  const ri  = LS('riasec_result');
+  const sdt = LS('sdt_result');
+
+  const LOVE_LB = {eros:'エロス（情熱的）',storge:'ストルゲ（友情から）',ludus:'ルダス（ゲーム的）',pragma:'プラグマ（実用的）',mania:'マニア（執着的）',agape:'アガペ（献身的）'};
+  const SW_LB   = {conformity:'同調',tradition:'伝統',benevolence:'親切心',universalism:'普遍主義','self-direction':'自律性',stimulation:'刺激',hedonism:'快楽',achievement:'達成',power:'権力',security:'安全'};
+  const SDT_LB  = {autonomy:'自律性',competence:'有能感',relatedness:'関係性'};
+  const RI_LB   = {R:'現実的',I:'研究的',A:'芸術的',S:'社会的',E:'企業的',C:'慣習的'};
+
+  let items = [];
+  if (hsp) {
+    const t = hsp.scores?.total;
+    const lvl = t>=42?'蘭型（最高域）':t>=34?'蘭型（高め）':t>=28?'チューリップ型':t>=20?'おだやか感受性':t!=null?'安定型':'—';
+    items.push({icon:'🌸',label:'HSP（感覚処理感受性）',val:lvl,sub:`スコア: ${t!=null?t:'—'}点`,color:'#be185d'});
+  }
+  if (imp) items.push({icon:'🎭',label:'インポスター症候群',val:esc(imp.severityName||'—'),sub:esc(imp.dominantTypeName||''),color:'#6b21a8'});
+  if (love) items.push({icon:'💝',label:'愛情スタイル',val:esc(LOVE_LB[love.mainStyle]||love.mainStyle||'—'),sub:'',color:'#ec4899'});
+  if (sw && sw.top3) items.push({icon:'🏅',label:'シュワルツ価値観',val:sw.top3.map(k=>SW_LB[k]||k).join(' · '),sub:'上位3価値観',color:'#2563eb'});
+  if (ri && ri.scores) {
+    const top2 = Object.entries(ri.scores).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k])=>RI_LB[k]||k).join(' · ');
+    items.push({icon:'💼',label:'RIASEC職業適性',val:top2||'—',sub:'上位2タイプ',color:'#0e7490'});
+  }
+  if (sdt) items.push({icon:'⚡',label:'基本的心理欲求（SDT）',val:esc(SDT_LB[sdt.strongest]||sdt.strongest||'—'),sub:'最も強い欲求',color:'#217346'});
+
+  if (!items.length) return '<div style="font-size:10px;color:#aaa;font-style:italic;">該当する診断データがありません</div>';
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;">' + items.map(it =>
+    `<div style="flex:1;min-width:150px;border:1px solid #e0e0e0;border-top:3px solid ${it.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:9px;font-weight:700;color:${it.color};margin-bottom:2px;">${it.icon} ${it.label}</div>
+      <div style="font-size:11px;font-weight:700;color:#333;line-height:1.3;">${it.val}</div>
+      ${it.sub?`<div style="font-size:9px;color:#888;">${it.sub}</div>`:''}
+    </div>`
+  ).join('') + '</div>';
+}
+
+function allTestsHtml(code, r, showStandalone) {
   r = r || {};
-  let h = '<div style="overflow-y:auto;max-height:340px;padding:0 4px 8px;">';
+  let h = '<div style="overflow-y:auto;max-height:360px;padding:0 4px 8px;">';
   h += secHd('ビッグファイブ（性格の5因子）', '#217346');
   h += bigFiveCardsHtml(code);
-  if (r.darkTriad) { h += secHd('ダークトライアド', '#6b21a8'); h += darkTriadHtml(r.darkTriad); }
-  if (r.eq)        { h += secHd('EQ（感情知性）', '#0e7490');  h += eqHtml(r.eq); }
-  if (r.attachment){ h += secHd('愛着スタイル', '#be185d');    h += attachmentHtml(r.attachment); }
-  if (r.mindset)   { h += secHd('マインドセット', '#b45309');   h += mindsetHtml(r.mindset); }
-  if (r.locus)     { h += secHd('統制の所在', '#0f766e');       h += locusHtml(r.locus); }
+  if (r.darkTriad) { h += secHd('ダークトライアド', '#6b21a8');    h += darkTriadHtml(r.darkTriad); }
+  if (r.eq)        { h += secHd('EQ（感情知性）', '#0e7490');       h += eqHtml(r.eq); }
+  if (r.attachment){ h += secHd('愛着スタイル', '#be185d');         h += attachmentHtml(r.attachment); }
+  if (r.mindset)   { h += secHd('マインドセット', '#b45309');        h += mindsetHtml(r.mindset); }
+  if (r.locus)     { h += secHd('統制の所在', '#0f766e');            h += locusHtml(r.locus); }
+  if (r.risk)      { h += secHd('リスク選好', '#b45309');            h += riskHtml(r.risk); }
+  if (r.delay)     { h += secHd('時間割引（遅延報酬）', '#0e7490'); h += delayHtml(r.delay); }
+  if (r.ultimatum) { h += secHd('最後通牒ゲーム', '#1d4ed8');       h += ultimatumHtml(r.ultimatum); }
+  if (r.pgg)       { h += secHd('公共財ゲーム', '#7c3aed');          h += pggHtml(r.pgg); }
+  if (showStandalone) {
+    h += secHd('その他の診断（最新結果）', '#555');
+    h += standaloneTestsHtml();
+  }
   h += '</div>';
   return h;
 }
@@ -1665,7 +1743,7 @@ function renderSheet2() {
       <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:12px;color:#217346;">${isExp?'▲':'▼'}</td>
     </tr>`;
     if (isExp) {
-      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, r)}</td></tr>`;
+      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, r, true)}</td></tr>`;
     }
     return html;
   }).join('');
