@@ -1,0 +1,983 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仕事用ダッシュボード — ビッグファイブ</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+body.theme-light {
+  --bg: #f4f3ff;
+  --surface: #ffffff;
+  --surface2: #f8f7ff;
+  --border: rgba(109,40,217,0.18);
+  --text: #1e1b4b;
+  --dim: #6b7280;
+  --purple: #7c3aed;
+}
+:root {
+  --bg: #080b20;
+  --surface: #0f1229;
+  --surface2: #0d1025;
+  --border: rgba(139,92,246,0.18);
+  --text: #e2e8f0;
+  --dim: #94a3b8;
+  --purple: #8b5cf6;
+  --c-O: #8b5cf6;
+  --c-C: #3b82f6;
+  --c-E: #f97316;
+  --c-A: #f472b6;
+  --c-N: #14b8a6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+a { color: var(--purple); text-decoration: none; }
+
+/* ===== Layout ===== */
+.work-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== Page header ===== */
+.work-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 28px 0 16px;
+  flex-wrap: wrap;
+}
+.work-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.work-title small {
+  display: block;
+  font-size: 11px;
+  color: var(--dim);
+  font-weight: 400;
+  margin-top: 3px;
+}
+.work-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+  white-space: nowrap;
+}
+.btn:hover { opacity: 0.82; }
+.btn-primary { background: var(--purple); color: #fff; }
+.btn-secondary {
+  background: rgba(139,92,246,0.12);
+  color: var(--purple);
+  border: 1px solid rgba(139,92,246,0.28);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { color: var(--text); }
+.btn-danger {
+  background: rgba(239,68,68,0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.28);
+}
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+
+/* ===== Stats bar ===== */
+.stats-bar {
+  display: flex;
+  gap: 20px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--dim);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.stats-bar .stat-item strong {
+  color: var(--text);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  margin-right: 3px;
+}
+
+/* ===== Notice banner ===== */
+.notice {
+  padding: 9px 14px;
+  border-radius: 7px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  display: none;
+}
+.notice.show { display: block; }
+.notice-info { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; }
+.notice-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: #86efac; }
+body.theme-light .notice-info { color: #1d4ed8; }
+body.theme-light .notice-success { color: #15803d; }
+
+/* ===== Legend ===== */
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--dim);
+}
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* ===== Table wrapper ===== */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+/* ===== Main table ===== */
+.people-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 820px;
+}
+.people-table thead th {
+  background: var(--surface2);
+  padding: 9px 10px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border);
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.people-table thead th.sortable { cursor: pointer; }
+.people-table thead th.sortable:hover { background: rgba(139,92,246,0.12); }
+.people-table thead th .sort-arrow { opacity: 0.35; font-size: 10px; margin-left: 3px; }
+.people-table thead th.sort-asc .sort-arrow { opacity: 1; color: var(--purple); }
+.people-table thead th.sort-asc .sort-arrow::after { content: '▲'; }
+.people-table thead th.sort-desc .sort-arrow { opacity: 1; color: var(--purple); }
+.people-table thead th.sort-desc .sort-arrow::after { content: '▼'; }
+.people-table thead th:not(.sort-asc):not(.sort-desc) .sort-arrow::after { content: '⇅'; }
+
+/* Column alignment */
+.people-table th.col-name,
+.people-table th.col-memo,
+.people-table td.col-name,
+.people-table td.col-memo { text-align: left; }
+
+.people-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(139,92,246,0.07);
+  vertical-align: middle;
+  text-align: center;
+}
+.people-table tr:last-child td { border-bottom: none; }
+.people-table tbody tr:hover td { background: rgba(139,92,246,0.04); }
+
+/* Name cell */
+.cell-name { font-weight: 600; white-space: nowrap; font-size: 14px; }
+
+/* Memo cell */
+.cell-memo {
+  color: var(--dim);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.cell-memo.empty { color: rgba(148,163,184,0.35); font-style: italic; }
+
+/* Score cells */
+.score-cell {
+  font-weight: 700;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  min-width: 42px;
+  border-radius: 3px;
+  padding: 8px 4px;
+}
+.score-5 { background: rgba(34,197,94,0.18); color: #4ade80; }
+.score-4 { background: rgba(34,197,94,0.07); color: #86efac; }
+.score-3 { color: var(--dim); }
+.score-2 { background: rgba(249,115,22,0.08); color: #fdba74; }
+.score-1 { background: rgba(239,68,68,0.14); color: #fca5a5; }
+body.theme-light .score-5 { background: rgba(34,197,94,0.14); color: #15803d; }
+body.theme-light .score-4 { background: rgba(34,197,94,0.07); color: #22c55e; }
+body.theme-light .score-3 { color: #9ca3af; }
+body.theme-light .score-2 { background: rgba(249,115,22,0.1); color: #c2410c; }
+body.theme-light .score-1 { background: rgba(239,68,68,0.1); color: #b91c1c; }
+
+/* Sub-label under score header */
+.th-factor { font-size: 9px; font-weight: 400; display: block; color: var(--dim); margin-top: 1px; }
+
+/* Date cell */
+.cell-date {
+  font-size: 11px;
+  color: var(--dim);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Source badge */
+.src-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.src-manual { background: rgba(139,92,246,0.14); color: #a78bfa; }
+.src-imported { background: rgba(20,184,166,0.14); color: #2dd4bf; }
+body.theme-light .src-manual { color: #7c3aed; }
+body.theme-light .src-imported { color: #0d9488; }
+
+/* Actions cell */
+.cell-actions { white-space: nowrap; }
+.cell-actions { display: flex; gap: 4px; justify-content: center; }
+
+/* Row index number */
+.cell-no {
+  font-size: 11px;
+  color: rgba(148,163,184,0.4);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+}
+
+/* ===== Empty state ===== */
+.empty-state {
+  text-align: center;
+  padding: 56px 20px;
+  color: var(--dim);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+.empty-state p { font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: 100%;
+  max-width: 440px;
+  margin: 16px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.form-row { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dim);
+  margin-bottom: 5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.form-input {
+  width: 100%;
+  padding: 8px 11px;
+  background: rgba(139,92,246,0.06);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: border-color 0.2s;
+}
+.form-input:focus { outline: none; border-color: var(--purple); }
+body.theme-light .form-input { background: rgba(109,40,217,0.04); }
+
+/* Score inputs */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.score-wrap { text-align: center; }
+.score-wrap-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.score-num-input {
+  width: 100%;
+  padding: 8px 4px;
+  text-align: center;
+  background: rgba(139,92,246,0.06);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  -moz-appearance: textfield;
+  transition: border-color 0.2s;
+}
+.score-num-input::-webkit-outer-spin-button,
+.score-num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.score-num-input:focus { outline: none; border-color: var(--purple); }
+body.theme-light .score-num-input { background: rgba(109,40,217,0.04); }
+.score-hint { font-size: 10px; color: var(--dim); text-align: center; margin-top: 5px; }
+
+/* Modal footer */
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== Import modal ===== */
+.import-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+.import-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(139,92,246,0.08);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.import-item:last-child { border-bottom: none; }
+.import-item:hover { background: rgba(139,92,246,0.06); }
+.import-item.already { opacity: 0.45; pointer-events: none; }
+.import-check {
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.import-item.selected .import-check { background: var(--purple); border-color: var(--purple); }
+.import-item-name { font-weight: 600; flex: 1; }
+.import-item-code { font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.import-item-already { font-size: 10px; color: var(--dim); background: rgba(148,163,184,0.12); border-radius: 999px; padding: 1px 6px; }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  z-index: 20000;
+  opacity: 0;
+  transition: opacity 0.22s, transform 0.22s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="work-container">
+
+  <!-- ページヘッダー -->
+  <div class="work-header">
+    <div class="work-title">
+      仕事用ダッシュボード
+      <small>このページはナビに表示されません。データはこの端末にのみ保存されます。</small>
+    </div>
+    <div class="work-actions">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        人物を追加
+      </button>
+      <button class="btn btn-secondary" onclick="openImportModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        あの人データを取り込む
+      </button>
+      <button class="btn btn-outline" onclick="exportCSV()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        CSVダウンロード
+      </button>
+      <button class="btn btn-outline" onclick="copyForAI()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        AI用コピー
+      </button>
+    </div>
+  </div>
+
+  <!-- 統計バー -->
+  <div class="stats-bar" id="statsBar">
+    <span class="stat-item">登録人数 <strong id="statCount">0</strong>人</span>
+    <span class="stat-item">スコアあり <strong id="statScored">0</strong>人</span>
+    <span id="statLast" style="margin-left:auto; font-size:11px;"></span>
+  </div>
+
+  <!-- お知らせ -->
+  <div class="notice notice-success" id="notice"></div>
+
+  <!-- 凡例 -->
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#4ade80"></span> 5 = とても高い</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#86efac"></span> 4 = やや高い</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#94a3b8"></span> 3 = 中程度</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#fdba74"></span> 2 = やや低い</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#fca5a5"></span> 1 = 低い</span>
+  </div>
+
+  <!-- テーブル -->
+  <div class="table-wrap">
+    <table class="people-table" id="peopleTable">
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th class="col-name sortable" data-col="name">名前 <span class="sort-arrow"></span></th>
+          <th class="col-memo sortable" data-col="memo">役割・メモ <span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="O" style="color:var(--c-O)">O<span class="th-factor">開放性</span><span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="C" style="color:var(--c-C)">C<span class="th-factor">誠実性</span><span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="E" style="color:var(--c-E)">E<span class="th-factor">外向性</span><span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="A" style="color:var(--c-A)">A<span class="th-factor">協調性</span><span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="N" style="color:var(--c-N)">N<span class="th-factor">感受性</span><span class="sort-arrow"></span></th>
+          <th class="sortable" data-col="date">診断日 <span class="sort-arrow"></span></th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- 空の場合のメッセージ（テーブル外） -->
+<div class="empty-state" id="emptyState" style="display:none">
+  <div class="empty-state-icon">📋</div>
+  <h3>まだ登録された人物がいません</h3>
+  <p>「人物を追加」で手動登録、<br>または「あの人データを取り込む」で診断済みデータをインポートできます。</p>
+  <button class="btn btn-primary" onclick="openAddModal()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    人物を追加する
+  </button>
+</div>
+
+<!-- 追加・編集モーダル -->
+<div class="modal-overlay" id="editModal" onclick="closeEditModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-title" id="editModalTitle">人物を追加</div>
+    <div class="form-row">
+      <label class="form-label" for="inputName">名前 <span style="color:#ef4444">*</span></label>
+      <input class="form-input" type="text" id="inputName" placeholder="例：田中太郎" maxlength="30">
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="inputMemo">役割・メモ（任意）</label>
+      <input class="form-input" type="text" id="inputMemo" placeholder="例：営業部長、採用候補など" maxlength="50">
+    </div>
+    <div class="form-row">
+      <label class="form-label">ビッグファイブスコア（1〜5）</label>
+      <div class="score-grid">
+        <div class="score-wrap">
+          <span class="score-wrap-label" style="color:var(--c-O)">O</span>
+          <input class="score-num-input" type="number" id="inputO" min="1" max="5" placeholder="3">
+        </div>
+        <div class="score-wrap">
+          <span class="score-wrap-label" style="color:var(--c-C)">C</span>
+          <input class="score-num-input" type="number" id="inputC" min="1" max="5" placeholder="3">
+        </div>
+        <div class="score-wrap">
+          <span class="score-wrap-label" style="color:var(--c-E)">E</span>
+          <input class="score-num-input" type="number" id="inputE" min="1" max="5" placeholder="3">
+        </div>
+        <div class="score-wrap">
+          <span class="score-wrap-label" style="color:var(--c-A)">A</span>
+          <input class="score-num-input" type="number" id="inputA" min="1" max="5" placeholder="3">
+        </div>
+        <div class="score-wrap">
+          <span class="score-wrap-label" style="color:var(--c-N)">N</span>
+          <input class="score-num-input" type="number" id="inputN" min="1" max="5" placeholder="3">
+        </div>
+      </div>
+      <div class="score-hint">スコアは「あの人診断」の結果ページ → コードの数字を参考に。空欄でも登録できます。</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeEditModal()">キャンセル</button>
+      <button class="btn btn-primary" id="editSaveBtn" onclick="savePerson()">登録する</button>
+    </div>
+  </div>
+</div>
+
+<!-- インポートモーダル -->
+<div class="modal-overlay" id="importModal" onclick="closeImportModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-title">あの人データを取り込む</div>
+    <p style="font-size:12px; color:var(--dim); margin-bottom:12px; line-height:1.7">
+      マイページの「あの人」タブに保存済みの診断結果を取り込みます。<br>
+      すでに同名で登録済みの人物はスキップされます。
+    </p>
+    <div class="import-list" id="importList">
+      <div style="padding:20px; text-align:center; font-size:12px; color:var(--dim)">読み込み中...</div>
+    </div>
+    <div style="font-size:11px; color:var(--dim); margin-bottom:12px;" id="importSelectInfo">0件 選択中</div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeImportModal()">キャンセル</button>
+      <button class="btn btn-primary" id="importExecBtn" onclick="execImport()">取り込む</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== データ管理 =====
+const WORK_KEY = 'bigfive_work_people';
+const OTHER_KEY = 'bigfive_other_results';
+
+function loadPeople() {
+  try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; }
+}
+function savePeopleData(arr) {
+  localStorage.setItem(WORK_KEY, JSON.stringify(arr));
+}
+function genId() {
+  return 'w-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+}
+
+// ===== ソート状態 =====
+let sortCol = 'date';
+let sortDir = 'desc';
+
+// ===== レンダリング =====
+function render() {
+  const people = loadPeople();
+  const tbody = document.getElementById('tableBody');
+  const emptyState = document.getElementById('emptyState');
+  const tableWrap = document.querySelector('.table-wrap');
+
+  // ソート
+  const sorted = [...people].sort((a, b) => {
+    let va = a[sortCol] ?? '';
+    let vb = b[sortCol] ?? '';
+    if (typeof va === 'number' && typeof vb === 'number') {
+      return sortDir === 'asc' ? va - vb : vb - va;
+    }
+    va = String(va).toLowerCase();
+    vb = String(vb).toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // ソートヘッダー更新
+  document.querySelectorAll('.people-table th.sortable').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.col === sortCol) {
+      th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+    }
+  });
+
+  // 空状態
+  if (people.length === 0) {
+    tableWrap.style.display = 'none';
+    emptyState.style.display = 'block';
+    updateStats(people);
+    return;
+  }
+  tableWrap.style.display = '';
+  emptyState.style.display = 'none';
+
+  const LABELS = { O:'開', C:'誠', E:'外', A:'協', N:'感' };
+
+  tbody.innerHTML = sorted.map((p, i) => {
+    const scores = ['O','C','E','A','N'].map(f => {
+      const v = p[f];
+      if (!v) return `<td class="score-cell col-score-${f}">—</td>`;
+      return `<td class="score-cell score-${v} col-score-${f}" title="${LABELS[f]}=${v}">${v}</td>`;
+    }).join('');
+
+    const dateStr = p.date ? p.date.slice(0, 10).replace(/-/g, '/') : '—';
+    const srcBadge = p.source === 'imported'
+      ? '<span class="src-badge src-imported">取込</span>'
+      : '<span class="src-badge src-manual">手動</span>';
+    const memoClass = p.memo ? '' : ' empty';
+    const memoText = p.memo || '—';
+
+    return `<tr>
+      <td class="cell-no">${i + 1}</td>
+      <td class="col-name cell-name">${esc(p.name)}</td>
+      <td class="col-memo cell-memo${memoClass}" title="${esc(p.memo || '')}">${esc(memoText)}</td>
+      ${scores}
+      <td class="cell-date">${dateStr}<br>${srcBadge}</td>
+      <td class="cell-actions">
+        <button class="btn btn-outline btn-sm" onclick="openEditModal('${p.id}')">編集</button>
+        <button class="btn btn-danger btn-sm" onclick="deletePerson('${p.id}')">削除</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  updateStats(people);
+}
+
+function updateStats(people) {
+  document.getElementById('statCount').textContent = people.length;
+  const scored = people.filter(p => p.O || p.C || p.E || p.A || p.N).length;
+  document.getElementById('statScored').textContent = scored;
+  if (people.length > 0) {
+    const latest = people.reduce((a, b) => (a.date > b.date ? a : b));
+    document.getElementById('statLast').textContent = '最終更新: ' + (latest.date || '').slice(0, 10).replace(/-/g, '/');
+  } else {
+    document.getElementById('statLast').textContent = '';
+  }
+}
+
+// ===== ソート =====
+document.querySelectorAll('.people-table th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortCol = col;
+      sortDir = col === 'date' ? 'desc' : 'asc';
+    }
+    render();
+  });
+});
+
+// ===== エスケープ =====
+function esc(v) {
+  return String(v || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// ===== 追加・編集モーダル =====
+let editingId = null;
+
+function openAddModal() {
+  editingId = null;
+  document.getElementById('editModalTitle').textContent = '人物を追加';
+  document.getElementById('editSaveBtn').textContent = '登録する';
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputMemo').value = '';
+  ['O','C','E','A','N'].forEach(f => { document.getElementById('input' + f).value = ''; });
+  document.getElementById('editModal').classList.add('show');
+  setTimeout(() => document.getElementById('inputName').focus(), 80);
+}
+
+function openEditModal(id) {
+  const people = loadPeople();
+  const p = people.find(x => x.id === id);
+  if (!p) return;
+  editingId = id;
+  document.getElementById('editModalTitle').textContent = '編集：' + p.name;
+  document.getElementById('editSaveBtn').textContent = '保存する';
+  document.getElementById('inputName').value = p.name || '';
+  document.getElementById('inputMemo').value = p.memo || '';
+  ['O','C','E','A','N'].forEach(f => { document.getElementById('input' + f).value = p[f] || ''; });
+  document.getElementById('editModal').classList.add('show');
+  setTimeout(() => document.getElementById('inputName').focus(), 80);
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('show');
+}
+function closeEditModalOnOverlay(e) {
+  if (e.target === document.getElementById('editModal')) closeEditModal();
+}
+
+function savePerson() {
+  const name = document.getElementById('inputName').value.trim();
+  if (!name) { showToast('名前を入力してください'); document.getElementById('inputName').focus(); return; }
+
+  const memo = document.getElementById('inputMemo').value.trim();
+  const scores = {};
+  let hasScore = false;
+  for (const f of ['O','C','E','A','N']) {
+    const v = parseInt(document.getElementById('input' + f).value);
+    if (!isNaN(v) && v >= 1 && v <= 5) { scores[f] = v; hasScore = true; }
+    else { scores[f] = null; }
+  }
+
+  const people = loadPeople();
+  if (editingId) {
+    const idx = people.findIndex(x => x.id === editingId);
+    if (idx >= 0) {
+      people[idx] = { ...people[idx], name, memo, ...scores, date: people[idx].date };
+      savePeopleData(people);
+      closeEditModal();
+      render();
+      showToast('保存しました');
+    }
+  } else {
+    const entry = {
+      id: genId(),
+      name, memo,
+      O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
+      date: new Date().toISOString().slice(0, 10),
+      source: 'manual'
+    };
+    people.push(entry);
+    savePeopleData(people);
+    closeEditModal();
+    render();
+    showToast('追加しました');
+  }
+}
+
+function deletePerson(id) {
+  const people = loadPeople();
+  const p = people.find(x => x.id === id);
+  if (!p) return;
+  if (!confirm(`「${p.name}」を削除しますか？`)) return;
+  savePeopleData(people.filter(x => x.id !== id));
+  render();
+  showToast('削除しました');
+}
+
+// ===== インポートモーダル =====
+let importSelections = new Set();
+
+function openImportModal() {
+  importSelections.clear();
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
+  const existingNames = new Set(loadPeople().map(p => p.name));
+  const list = document.getElementById('importList');
+
+  if (others.length === 0) {
+    list.innerHTML = '<div style="padding:20px; text-align:center; font-size:12px; color:var(--dim)">取り込める「あの人」データがありません。<br>先にビッグファイブの「あの人診断」を受けてください。</div>';
+    document.getElementById('importExecBtn').disabled = true;
+  } else {
+    document.getElementById('importExecBtn').disabled = false;
+    list.innerHTML = others.map((r, i) => {
+      const alreadyExists = existingNames.has(r.name);
+      const code = r.code || '?????';
+      const dateStr = r.date ? r.date.slice(0, 10).replace(/-/g, '/') : '不明';
+      return `<div class="import-item${alreadyExists ? ' already' : ''}" data-idx="${i}" onclick="toggleImportItem(this, ${i})">
+        <div class="import-check" id="icheck-${i}">${alreadyExists ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
+        <span class="import-item-name">${esc(r.name || '名前なし')}</span>
+        <span class="import-item-code">${code} | ${dateStr}</span>
+        ${alreadyExists ? '<span class="import-item-already">登録済み</span>' : ''}
+      </div>`;
+    }).join('');
+    // デフォルトで未登録のものを全選択
+    others.forEach((r, i) => {
+      if (!existingNames.has(r.name)) {
+        importSelections.add(i);
+        const check = document.getElementById('icheck-' + i);
+        if (check) check.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+        const item = list.querySelector(`[data-idx="${i}"]`);
+        if (item) item.classList.add('selected');
+      }
+    });
+    updateImportInfo();
+  }
+  document.getElementById('importModal').classList.add('show');
+}
+
+function toggleImportItem(el, idx) {
+  if (el.classList.contains('already')) return;
+  if (importSelections.has(idx)) {
+    importSelections.delete(idx);
+    el.classList.remove('selected');
+    document.getElementById('icheck-' + idx).innerHTML = '';
+  } else {
+    importSelections.add(idx);
+    el.classList.add('selected');
+    document.getElementById('icheck-' + idx).innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+  }
+  updateImportInfo();
+}
+
+function updateImportInfo() {
+  document.getElementById('importSelectInfo').textContent = `${importSelections.size}件 選択中`;
+  document.getElementById('importExecBtn').disabled = importSelections.size === 0;
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').classList.remove('show');
+}
+function closeImportModalOnOverlay(e) {
+  if (e.target === document.getElementById('importModal')) closeImportModal();
+}
+
+function execImport() {
+  if (importSelections.size === 0) return;
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
+  const people = loadPeople();
+  let added = 0;
+
+  importSelections.forEach(idx => {
+    const r = others[idx];
+    if (!r) return;
+    const code = r.code || '';
+    const entry = {
+      id: genId(),
+      name: r.name || '名前なし',
+      memo: '',
+      O: code[0] ? parseInt(code[0]) : null,
+      C: code[1] ? parseInt(code[1]) : null,
+      E: code[2] ? parseInt(code[2]) : null,
+      A: code[3] ? parseInt(code[3]) : null,
+      N: code[4] ? parseInt(code[4]) : null,
+      date: r.date ? r.date.slice(0, 10) : new Date().toISOString().slice(0, 10),
+      source: 'imported'
+    };
+    people.push(entry);
+    added++;
+  });
+
+  savePeopleData(people);
+  closeImportModal();
+  render();
+  showNotice(`${added}人のデータを取り込みました`, 'success');
+}
+
+// ===== CSV エクスポート =====
+function exportCSV() {
+  const people = loadPeople();
+  if (people.length === 0) { showToast('登録データがありません'); return; }
+
+  const FACTOR_LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const header = ['名前', '役割・メモ', ...['O','C','E','A','N'].map(f => f + '_' + FACTOR_LABELS[f]), '診断日', '登録種別'];
+  const rows = people.map(p => [
+    p.name, p.memo || '',
+    p.O || '', p.C || '', p.E || '', p.A || '', p.N || '',
+    p.date || '',
+    p.source === 'imported' ? '取込' : '手動'
+  ]);
+
+  const csv = [header, ...rows].map(row =>
+    row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')
+  ).join('\r\n');
+
+  const bom = '﻿';
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'bigfive_dashboard_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSVをダウンロードしました');
+}
+
+// ===== AI 用テキストコピー =====
+function copyForAI() {
+  const people = loadPeople();
+  if (people.length === 0) { showToast('登録データがありません'); return; }
+
+  const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const lines = [
+    '【ビッグファイブ スコア一覧】',
+    '※ スコアは1〜5。5=非常に高い / 3=平均 / 1=非常に低い',
+    ''
+  ];
+  people.forEach(p => {
+    const scoreParts = ['O','C','E','A','N'].map(f => {
+      return p[f] ? `${LABELS[f]}(${f})=${p[f]}` : null;
+    }).filter(Boolean).join('、');
+    lines.push(`■ ${p.name}${p.memo ? '（' + p.memo + '）' : ''}`);
+    if (scoreParts) lines.push(`  ${scoreParts}`);
+    lines.push('');
+  });
+
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('クリップボードにコピーしました');
+  }).catch(() => {
+    showToast('コピーに失敗しました（ブラウザの設定をご確認ください）');
+  });
+}
+
+// ===== Toast / Notice =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+function showNotice(msg, type = 'info') {
+  const n = document.getElementById('notice');
+  n.textContent = msg;
+  n.className = `notice notice-${type} show`;
+  setTimeout(() => n.classList.remove('show'), 5000);
+}
+
+// ===== Enterキーで保存 =====
+document.querySelectorAll('#editModal .form-input, #editModal .score-num-input').forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') savePerson(); });
+});
+
+// ===== 初期レンダリング =====
+render();
+</script>
+<script src="nav.js" defer></script>
+</body>
+</html>
