@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIに渡す情報が偏っていたら、AIは正しそうな間違いを返す——コンテキスト不足の落とし穴｜ビッグファイブ診断</title>
+<meta name="description" content="AIに相談しても「なんか違う」「そのまま動いたら失敗した」という経験はないだろうか。AIへの相談は、渡した情報の中だけで判断が行われる。コンテキスト不足がいかに危険か、ビッグファイブ心理学の視点から解説します。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="AIに渡す情報が偏っていたら、AIは正しそうな間違いを返す——コンテキスト不足の落とし穴">
+<meta property="og:description" content="AIへの相談は、渡した情報の中だけで判断が行われる。あなたが見えていないものは、AIにも見えない。コンテキストを欠いたまま動いたとき、AIの答えは「論理的に見えた誤答」になる。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/ai-context-taisetsu.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIに渡す情報が偏っていたら、AIは正しそうな間違いを返す——コンテキスト不足の落とし穴">
+<meta name="twitter:description" content="AIへの相談は、渡した情報の中だけで判断が行われる。あなたが見えていないものは、AIにも見えない。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AIに渡す情報が偏っていたら、AIは正しそうな間違いを返す——コンテキスト不足の落とし穴",
+  "description": "AIへの相談は渡した情報の中だけで判断が行われる。コンテキスト不足がいかに危険か、ビッグファイブ心理学の視点から解説。",
+  "url": "https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html",
+  "datePublished": "2026-05-28",
+  "dateModified": "2026-05-28",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブで本当の自分を知る【公式】",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "about": [
+    { "@type": "Thing", "name": "AI相談" },
+    { "@type": "Thing", "name": "コンテキスト" },
+    { "@type": "Thing", "name": "確証バイアス" },
+    { "@type": "Thing", "name": "ビッグファイブ" },
+    { "@type": "Thing", "name": "認知バイアス" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --bg2: #0f1535;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --accent: #22d3ee;
+    --accent2: #0ea5e9;
+    --warm: #f472b6;
+    --border: rgba(34,211,238,0.15);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.8;
+  }
+
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(34,211,238,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(139,92,246,0.05) 0%, transparent 70%);
+  }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 13px;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .header-title {
+    font-size: 13px; color: var(--dim); font-weight: 500;
+  }
+
+  .main-wrap {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .article-header { margin-bottom: 48px; }
+  .article-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(34,211,238,0.05);
+  }
+  .article-title {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .article-title span { color: var(--accent); }
+  .article-lead {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+  .article-meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--text); }
+
+  .article-body { font-size: 16px; }
+
+  .article-body h2 {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 900;
+    color: var(--text);
+    margin: 56px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .article-body h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 36px 0 16px;
+  }
+
+  .article-body p {
+    margin-bottom: 20px;
+    color: var(--text);
+    line-height: 1.9;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 700;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .highlight-box {
+    background: rgba(34,211,238,0.05);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+  .highlight-box p { margin-bottom: 12px; }
+  .highlight-box p:last-child { margin-bottom: 0; }
+
+  .big-text {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.5;
+    text-align: center;
+    padding: 32px 24px;
+    margin: 40px 0;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .big-text span { color: var(--accent); }
+
+  .keyword-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  @media (max-width: 560px) {
+    .keyword-block { grid-template-columns: 1fr; }
+  }
+  .keyword-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .keyword-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: .05em;
+  }
+  .keyword-card p {
+    font-size: 14px;
+    color: var(--dim);
+    margin-bottom: 0;
+    line-height: 1.7;
+  }
+
+  .flow-list {
+    list-style: none;
+    margin: 24px 0;
+    padding: 0;
+  }
+  .flow-list li {
+    position: relative;
+    padding: 12px 16px 12px 40px;
+    margin-bottom: 8px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .flow-list li::before {
+    content: '\2713';
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(14,165,233,0.05));
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin: 56px 0 0;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 900;
+    margin-bottom: 16px;
+    border: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .cta-box h2::before { display: none; }
+  .cta-box p {
+    font-size: 15px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .cta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .cta-badge {
+    padding: 4px 14px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--accent);
+    color: #0a0e27;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 24px rgba(34,211,238,0.3);
+  }
+  .cta-btn:hover {
+    background: #67e8f9;
+    box-shadow: 0 0 36px rgba(34,211,238,0.5);
+    transform: translateY(-2px);
+  }
+
+  .related-articles {
+    margin: 40px 0 0;
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .related-articles h2 {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .related-articles h2::before { display: none; }
+  .related-articles ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .related-articles a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: color .2s;
+  }
+  .related-articles a:hover {
+    color: #67e8f9;
+    text-decoration: underline;
+  }
+
+  .article-footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--dim); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-link:hover { color: var(--accent); }
+
+  .hero-img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; max-width: 720px; border-radius: 12px; margin-bottom: 36px; display: block; }
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ブログ",
+      "item": "https://bigfive.jr-genius.jp/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AIに渡す情報が偏っていたら、AIは正しそうな間違いを返す",
+      "item": "https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html"
+    }
+  ]
+}
+</script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+
+<header class="site-header">
+  <a href="../index.html" class="back-link">&larr; トップへ戻る</a>
+  <span class="header-title">ビッグファイブ診断 公式ブログ</span>
+</header>
+
+<main class="main-wrap">
+
+  <article>
+
+    <header class="article-header">
+      <div class="article-tags">
+        <span class="tag">AI活用</span>
+        <span class="tag">認知バイアス</span>
+        <span class="tag">確証バイアス</span>
+        <span class="tag">ビッグファイブ</span>
+      </div>
+      <h1 class="article-title">AIに渡す情報が偏っていたら、<span>AIは正しそうな間違いを返す</span>——コンテキスト不足の落とし穴</h1>
+      <p class="article-lead">AIへの相談は、渡した情報の中だけで判断が行われる。あなたが見えていないものは、AIにも見えない。コンテキストを欠いたまま動いたとき、AIの答えは「論理的に見えた誤答」になる。</p>
+      <p class="article-meta">公開：2026年5月28日 ｜ ビッグファイブ診断 編集部</p>
+    </header>
+
+    <img
+      class="hero-img"
+      src="../images/blog/ai-context-taisetsu.webp"
+      alt="AIへの相談とコンテキストの重要性をテーマにした解説画像"
+      width="1536" height="864"
+      loading="eager"
+    >
+
+    <nav class="toc" aria-label="目次">
+      <p class="toc-title">目次</p>
+      <ol>
+        <li><a href="#sec1">AIは「渡された世界」の中で考える</a></li>
+        <li><a href="#sec2">自分の説明は、すでに自分に都合よく整理されている</a></li>
+        <li><a href="#sec3">ビッグファイブで見る「AIに頼りすぎやすい性格パターン」</a></li>
+        <li><a href="#sec4">コンテキストを渡すとは何か</a></li>
+        <li><a href="#sec5">AIが映し返すのは、あなたが見せたものだけだ</a></li>
+      </ol>
+    </nav>
+
+    <div class="article-body">
+
+      <section id="sec1">
+        <h2>AIは「渡された世界」の中で考える</h2>
+
+        <p>「上司が毎日理不尽に怒鳴る。もう限界です」とAIに打ち込んだとする。AIは「それは辛い状況ですね」と応じ、「その環境は問題がある」という方向の回答を返す。当然だ。AIはあなたが書いた言葉を、事実として受け取る。</p>
+
+        <p>でも、AIは知らない。上司の怒りの背景にある納期プレッシャーを。あなた自身の報告漏れを。「毎日」という認識が月に5回なのか30回なのかを。</p>
+
+        <p>AIは文脈を持たない計算機だ。渡した情報の中だけで、論理的に「正しそうに見える答え」を組み立てる。その答えが実際に正しいかどうかは、渡した情報の精度に全面的に依存する。</p>
+
+        <div class="big-text">
+          精度が低ければ、<br>
+          論理は通っていても<span>結論はズレる</span>。
+        </div>
+
+        <p>これは「AIが嘘をついた」のではなく、「入力が偏っていた」という話だ。どんなに賢いシステムも、渡されなかった情報の存在は知ることができない。</p>
+      </section>
+
+      <section id="sec2">
+        <h2>自分の説明は、すでに自分に都合よく整理されている</h2>
+
+        <p>AIに相談するとき、人は状況を「説明」する。ここに問題の核心がある。</p>
+
+        <p>説明するという行為は、必ず取捨選択を伴う。自分が「大事だ」と思う情報を選び、「関係ない」と思う情報は省く。自分に都合のいい解釈は詳しく書き、都合の悪い事実は薄く書く傾向がある。これは意地悪ではなく、人間の認知の仕組みだ。</p>
+
+        <p>心理学では<strong>確証バイアス</strong>と呼ばれる。自分が信じたい結論を支持する情報に目が向きやすく、反証する情報には鈍感になる傾向だ。</p>
+
+        <div class="highlight-box">
+          <p><strong>確証バイアスとは</strong></p>
+          <p>自分がすでに信じていることを裏付ける情報を優先的に集め、それと矛盾する情報を無視または過小評価する認知の傾向。無意識に起こるため、本人は気づきにくい。</p>
+        </div>
+
+        <p>AIはこのバイアスを検出しない。むしろ、渡された情報に沿って「あなたが正しい」という方向に結論を出しやすい。なぜなら、AIは渡されなかった情報の存在を知らないからだ。相談する側が自分に都合よく整理した話を渡せば、AIはその解釈を前提として答えを組み立てる。</p>
+
+        <p>これは「AIを使った確証バイアスの増幅」とも言える。自分の見方を強化したい人ほど、AIに相談するほど、その見方が強化されていく構造がある。</p>
+      </section>
+
+      <section id="sec3">
+        <h2>ビッグファイブで見る「AIに頼りすぎやすい性格パターン」</h2>
+
+        <p>ビッグファイブの観点から見ると、断片的な情報をAIに渡して行動しやすい性格パターンがある。</p>
+
+        <div class="keyword-block">
+          <div class="keyword-card">
+            <p class="keyword-card-title">神経症傾向（N）が高い人</p>
+            <p>不安なときに「白黒つけてほしい」という欲求が強くなる。感情が揺れているときのAIへの相談は特に偏りやすく、自分の不安や怒りに沿った情報だけが選ばれる。AIはその感情的文脈の中で答えを返す。</p>
+          </div>
+          <div class="keyword-card">
+            <p class="keyword-card-title">協調性（A）が高い人</p>
+            <p>自分の判断への確信が薄く、「AIがそう言うなら」と安心したがる傾向がある。AIを「権威」として使い、自分の行動の根拠にしてしまうことがある。</p>
+          </div>
+          <div class="keyword-card">
+            <p class="keyword-card-title">誠実性（C）が高い人</p>
+            <p>「正しい答えを出したい」という欲求から、AIの回答を行動の根拠にしやすい。「調べて確認した」という行為の代替として、AIへの相談が機能してしまう。</p>
+          </div>
+          <div class="keyword-card">
+            <p class="keyword-card-title">開放性（O）が高い人</p>
+            <p>AIを積極的に活用する分、多用する場面も多い。多様な視点を求めて相談する姿勢は良いが、AI の答えを「新しい可能性」として過剰に評価するリスクもある。</p>
+          </div>
+        </div>
+
+        <p>どのパターンも、AIが悪いのではない。自分の中にある心理的な需要が、AIを「お墨付きを与えてくれるもの」として使わせている。AIを使うことで「確認した」「調べた」という安心感を得るが、その確認の中身は自分の見方のエコーだったりする。</p>
+      </section>
+
+      <section id="sec4">
+        <h2>コンテキストを渡すとは何か</h2>
+
+        <p>では、どうすればいいのか。単純に「もっと詳しく書く」というよりは、<strong>「自分が間違っている可能性を意図的に入れる」</strong>という発想が効く。</p>
+
+        <p>たとえばこう聞くことができる。</p>
+
+        <ul class="flow-list">
+          <li>「私の認識に偏りがある前提で、別の見方を教えてください」</li>
+          <li>「この状況で、私自身に問題がある可能性はありますか」</li>
+          <li>「相手側の立場から見たら、どう解釈できますか」</li>
+          <li>「私が見えていない情報があるとしたら、何が考えられますか」</li>
+        </ul>
+
+        <p>これらの問いは、AIに対して「反証の余地」を与える。すると、AIはあなたの認識を追認するだけでなく、別の角度からの可能性を提示し始める。</p>
+
+        <p>コンテキストを渡すとは、「状況の詳細」を書くことではない。<strong>「自分の見方の限界」も一緒に渡すこと</strong>だ。自分が何を見えていないかを伝えることが、AIから見えていないものを引き出す。</p>
+
+        <div class="highlight-box">
+          <p><strong>自分の性格データをAIに渡す</strong></p>
+          <p>当サイトの自己プロファイル機能では、ビッグファイブのスコアを含む自分の情報をまとめてAIへのプロンプトとして出力できる。「神経症傾向が高め」「協調性が高い」といった情報を渡すと、AIは「この人は感情的に揺れているかもしれない」という文脈で回答を調整できる。自分の認知のクセをAIに伝えることが、より精度の高い相談につながる。</p>
+        </div>
+      </section>
+
+      <section id="sec5">
+        <h2>AIが映し返すのは、あなたが見せたものだけだ</h2>
+
+        <p>AIが返す答えの品質は、渡した情報の品質で決まる。この原則はシンプルだが、意外と忘れられる。</p>
+
+        <p>「AIがそう言った」という言葉には、常に「私がこう説明したら」という前提が隠れている。AIは鏡だ。映し返すのは、あなたが見せたものだけだ。</p>
+
+        <p>渡す情報が偏っていれば、返ってくる答えも偏る。それは論理的に正しそうに見えても、現実とはズレている可能性がある。特に感情が動いているとき、対人関係の問題、自分が当事者である判断——こういった場面では、渡す情報が無意識に偏りやすい。</p>
+
+        <p>AIを道具として使いこなすためには、「AIに何を渡したか」を自分で確認する習慣が必要だ。そしてその習慣は、自分の認知のクセを知ることから始まる。ビッグファイブが教えてくれるのは、自分の判断がどういう方向に偏りやすいかの傾向だ。その傾向を知っていれば、「今の自分は偏った情報を渡していないか」という問いを立てやすくなる。</p>
+
+        <p>AIは賢くなっている。でも、賢いAIに正しく問えるかどうかは、使う人間の側の問題だ。</p>
+      </section>
+
+    </div>
+
+    <section class="cta-box">
+      <h2>自分の認知のクセを知ろう</h2>
+      <p>ビッグファイブ診断で、自分がどんな場面で判断が偏りやすいかを把握できます。</p>
+      <p>10問の簡易版から、120問の詳細版まで選べます。</p>
+      <div class="cta-badges">
+        <span class="cta-badge">約5分〜</span>
+        <span class="cta-badge">無料</span>
+        <span class="cta-badge">登録不要</span>
+        <span class="cta-badge">科学的根拠あり</span>
+      </div>
+      <a href="https://bigfive.jr-genius.jp/" class="cta-btn">ビッグファイブ診断を受ける &rarr;</a>
+    </section>
+
+    <section class="related-articles">
+      <h2>関連記事</h2>
+      <ul>
+        <li><a href="chatgpt-seikaku-data.html">ChatGPTに相談したことがある人へ——性格データをAIに渡す意味</a></li>
+        <li><a href="ai-jidai-shigoto.html">AIに代替されない人材の条件——ビッグファイブが示す「自分だけの武器」の見つけ方</a></li>
+        <li><a href="seikaku-kaereru.html">性格は変えられる？心理学が出した、正直な答え</a></li>
+        <li><a href="mindset-toha.html">マインドセットとは何か——「成長できる人」と「できない人」の本当の違い</a></li>
+        <li><a href="kachikan-no-kagaku.html">価値観を科学する——シュワルツの価値観理論</a></li>
+      </ul>
+    </section>
+
+  </article>
+
+  <footer class="article-footer">
+    <a href="../index.html" class="footer-link">&larr; ビッグファイブ診断トップへ</a>
+  </footer>
+
+</main>
+
+</body>
+</html>
