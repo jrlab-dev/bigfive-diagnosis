@@ -765,7 +765,7 @@ tr:hover .s1 { background: #f5bac4; }
         <th style="width:34px; color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span></th>
         <th style="width:68px">診断日</th>
         <th style="width:80px">コード</th>
-        <th style="width:60px">詳細</th>
+        <th style="width:36px">展開</th>
       </tr>
     </thead>
     <tbody id="tbody2"></tbody>
@@ -1454,6 +1454,43 @@ function switchSheet(n) {
 }
 
 // ===== SHEET 2: 自分の診断 =====
+let expandedResult2 = null;
+function toggleResult2(idx) {
+  expandedResult2 = expandedResult2 === idx ? null : idx;
+  renderSheet2();
+}
+
+function scoreCardHtml(code) {
+  const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const COLORS = { O:'#5b21b6', C:'#1d4ed8', E:'#c2410c', A:'#be185d', N:'#065f46' };
+  const DESCS = {
+    O: ['','非常に保守的。伝統・慣例を強く重んじる','保守的な傾向。安定・実績を優先する','均衡型。場面に応じて柔軟に対応できる','好奇心旺盛。新しい体験・考えを好む','非常に開放的。独創性と知的好奇心が非常に高い'],
+    C: ['','自由奔放。大局観で動く','おおらかな傾向。融通が利く柔軟さがある','均衡型。メリハリをつけて行動できる','几帳面で勤勉。計画的に物事を進める','非常に誠実・几帳面。細部へのこだわりが強い'],
+    E: ['','非常に内向的。独りの時間・静寂を好む','内向的な傾向。静かな環境が合う','均衡型。場に応じて使い分けができる','外向的な傾向。人との交流でエネルギーを得る','非常に外向的。社交性が高くリーダー的素養あり'],
+    A: ['','非常に競争的。自己主張・独立心が非常に強い','自己主張寄り。独立心が強め','均衡型。協調と自立のバランスが取れている','協調性が高い。他者への思いやりがある','非常に協調的。他者への配慮を最優先にする'],
+    N: ['','非常に情緒安定。プレッシャーに動じない','情緒安定。落ち着いた行動が多い','均衡型。感情の浮き沈みは普通程度','感受性が高め。環境の影響を受けやすい','非常に感受性が高い。感情の波が大きくなりやすい'],
+  };
+  const SC_BG = {5:'#c6efce',4:'#e2efda',3:'#f5f5f5',2:'#fce4d6',1:'#ffc7ce'};
+  const SC_CL = {5:'#276221',4:'#375623',3:'#555',2:'#833c0b',1:'#9c0006'};
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px 0;">' +
+    ['O','C','E','A','N'].map((f, fi) => {
+      const v = parseInt(code[fi]);
+      const valid = v >= 1 && v <= 5;
+      const color = COLORS[f];
+      const bars = [1,2,3,4,5].map(n =>
+        `<span style="display:inline-block;width:14px;height:10px;border-radius:2px;margin:0 1px;background:${n<=v?color:'#e0e0e0'};"></span>`
+      ).join('');
+      return `<div style="flex:1;min-width:130px;max-width:200px;border:1px solid #e0e0e0;border-top:3px solid ${color};border-radius:2px;padding:6px 8px;background:#fff;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+          <span style="font-size:11px;font-weight:700;color:${color}">${f} ${LABELS[f]}</span>
+          <span style="font-size:18px;font-weight:700;background:${SC_BG[v]||'#f0f0f0'};color:${SC_CL[v]||'#555'};padding:0 7px;border-radius:2px;line-height:1.4;">${valid?v:'?'}</span>
+        </div>
+        <div style="margin-bottom:5px;">${bars}</div>
+        <div style="font-size:10px;color:#444;line-height:1.5;">${valid?DESCS[f][v]:'—'}</div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
 function renderSheet2() {
   const MY_KEY = 'bigfive_my_results';
   const MY_NAME_KEY = 'bigfive_my_name';
@@ -1465,6 +1502,7 @@ function renderSheet2() {
     return;
   }
   const VER = { '10':'10問', '30':'30問', '120':'120問' };
+  const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
   tbody.innerHTML = results.map((r, i) => {
     const code = r.code || '?????';
     const sc = ['O','C','E','A','N'].map((f, fi) => {
@@ -1476,19 +1514,21 @@ function renderSheet2() {
     const ds = r.date ? r.date.slice(0,10).replace(/-/g,'/') : '—';
     const ver = VER[r.version || '10'] || (r.version + '問');
     const name = r.name || myName || '—';
-    const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
     const isActive = i === activeIdx;
-    return `<tr>
+    const isExp = expandedResult2 === i;
+    let html = `<tr onclick="toggleResult2(${i})" style="cursor:pointer;${isExp?'background:#f0f7f0;':''}">
       <td class="sh-rn">${i+1}</td>
       <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-weight:${isActive?'700':'400'};font-size:11px;">${esc(name)}${isActive?' <span style="font-size:9px;background:#d1fae5;color:#065f46;border-radius:2px;padding:0 3px;margin-left:2px">使用中</span>':''}</td>
       <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ver}</td>
       ${sc}
       <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ds}</td>
       <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#888;font-family:monospace;">${code}</td>
-      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">
-        <a href="result.html?type=${code}&v=${r.version||'10'}&gender=${r.gender||'F'}" target="_blank" style="font-size:10px;color:#1d4ed8;text-decoration:none;border:1px solid #c0d0e8;padding:0 5px;border-radius:1px;background:#f0f5ff;">結果を見る</a>
-      </td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:12px;color:#217346;">${isExp?'▲':'▼'}</td>
     </tr>`;
+    if (isExp) {
+      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${scoreCardHtml(code)}</td></tr>`;
+    }
+    return html;
   }).join('');
 }
 
