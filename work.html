@@ -201,7 +201,7 @@ body {
 .c-date { width: 66px; }
 .c-memo { width: 120px; }
 .c-src  { width: 36px; }
-.c-ops  { width: 70px; }
+.c-ops  { width: 88px; }
 
 /* Corner */
 .sh-corner {
@@ -1080,6 +1080,14 @@ function render() {
   const PAD_TO = 50;
   const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(14 + cols.length);
 
+  // あの人データをname→objectのMapに
+  const othersList = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const otherMap = {};
+  othersList.forEach(o => { if (o.name) otherMap[o.name] = o; });
+  // 自分データのactiveも取得
+  const myResults = (() => { try { return JSON.parse(localStorage.getItem('bigfive_my_results')||'[]'); } catch(e) { return []; } })();
+  const myActive = myResults[parseInt(localStorage.getItem('bigfive_active_my_index')||'0')] || {};
+
   const dataHtml = sorted.map((p, i) => {
     const isSel = selId === p.id;
     const sc = ['O','C','E','A','N'].map(f => {
@@ -1101,7 +1109,7 @@ function render() {
       }
       return `<td class="sh-td" onclick="startEdit(event,'${p.id}','extra:${c.id}')">${disp}</td>`;
     }).join('');
-    return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
+    let rowHtml = `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
       <td class="sh-rn">${i+1}</td>
       <td class="sh-td" onclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
       ${customCells}
@@ -1117,9 +1125,18 @@ function render() {
         <div class="c-ops-wrap">
           <button class="c-btn" onclick="event.stopPropagation();openEditModal('${p.id}')">編集</button>
           <button class="c-btn del" onclick="event.stopPropagation();del('${p.id}')">削除</button>
+          <button class="c-btn" onclick="event.stopPropagation();toggleExpand1('${p.id}')" title="全診断を表示">${expandedPerson1===p.id?'▲':'▼'}</button>
         </div>
       </td>
     </tr>`;
+    // 展開パネル
+    if (expandedPerson1 === p.id) {
+      const code = ['O','C','E','A','N'].map(f => p[f]||'?').join('');
+      const extra = otherMap[p.name] || (p.source==='self' ? myActive : {});
+      const totalCols = 15 + cols.length;
+      rowHtml += `<tr><td colspan="${totalCols}" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, extra)}</td></tr>`;
+    }
+    return rowHtml;
   }).join('');
 
   const padCount = Math.max(0, PAD_TO - sorted.length);
@@ -1460,6 +1477,13 @@ function switchSheet(n) {
   if (n === 3) renderSheet3();
 }
 
+// ===== SHEET 1 EXPAND =====
+let expandedPerson1 = null;
+function toggleExpand1(id) {
+  expandedPerson1 = expandedPerson1 === id ? null : id;
+  render();
+}
+
 // ===== SHEET 2: 自分の診断 =====
 let expandedResult2 = null;
 function toggleResult2(idx) {
@@ -1467,7 +1491,12 @@ function toggleResult2(idx) {
   renderSheet2();
 }
 
-function scoreCardHtml(code) {
+// ===== 診断詳細表示ヘルパー =====
+function secHd(label, color) {
+  return `<div style="font-size:10px;font-weight:700;color:${color};border-bottom:2px solid ${color};padding-bottom:2px;margin:10px 0 6px;letter-spacing:0.04em;">${label}</div>`;
+}
+
+function bigFiveCardsHtml(code) {
   const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
   const COLORS = { O:'#5b21b6', C:'#1d4ed8', E:'#c2410c', A:'#be185d', N:'#065f46' };
   const DESCS = {
@@ -1479,7 +1508,7 @@ function scoreCardHtml(code) {
   };
   const SC_BG = {5:'#c6efce',4:'#e2efda',3:'#f5f5f5',2:'#fce4d6',1:'#ffc7ce'};
   const SC_CL = {5:'#276221',4:'#375623',3:'#555',2:'#833c0b',1:'#9c0006'};
-  return '<div style="display:flex;gap:8px;flex-wrap:wrap;padding:4px 0;">' +
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
     ['O','C','E','A','N'].map((f, fi) => {
       const v = parseInt(code[fi]);
       const valid = v >= 1 && v <= 5;
@@ -1496,6 +1525,109 @@ function scoreCardHtml(code) {
         <div style="font-size:10px;color:#444;line-height:1.5;">${valid?DESCS[f][v]:'—'}</div>
       </div>`;
     }).join('') + '</div>';
+}
+
+function darkTriadHtml(dt) {
+  const items = [
+    {label:'N ナルシシズム', val:dt.nPct, color:'#9333ea'},
+    {label:'M マキャベリズム', val:dt.mPct, color:'#2563eb'},
+    {label:'P サイコパシー', val:dt.pPct, color:'#dc2626'},
+  ];
+  let h = '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  items.forEach(it => {
+    const p = Math.min(100, Math.round(it.val||0));
+    h += `<div style="flex:1;min-width:120px;border:1px solid #e0e0e0;border-top:3px solid ${it.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:10px;font-weight:700;color:${it.color};margin-bottom:4px;">${it.label}</div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="flex:1;height:7px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:${it.color};width:${p}%;"></div></div>
+        <span style="font-size:12px;font-weight:700;color:${it.color};min-width:30px;">${p}%</span>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+  if (dt.profileName) h += `<div style="font-size:10px;color:#555;margin-top:5px;">タイプ: <strong>${esc(dt.profileName)}</strong></div>`;
+  return h;
+}
+
+function eqHtml(eq) {
+  const sc = eq.scores || {};
+  const overall = +(sc.overall||0).toFixed(1);
+  const fields = [{key:'self',label:'自己認識'},{key:'others',label:'他者認識'},{key:'social',label:'社会スキル'},{key:'stress',label:'ストレス管理'}];
+  let h = `<div style="margin-bottom:6px;"><span style="font-size:11px;color:#555;">総合: </span><strong style="font-size:16px;color:#0e7490;">${overall}</strong><span style="font-size:10px;color:#888;"> / 5.0　${esc(eq.levelName||'')}</span></div>`;
+  h += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  fields.forEach(f => {
+    const v = +(sc[f.key]||0).toFixed(1);
+    const p = Math.round((v/5)*100);
+    h += `<div style="flex:1;min-width:100px;border:1px solid #e0e0e0;border-radius:2px;padding:4px 7px;background:#fff;">
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">${f.label}</div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="flex:1;height:7px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:#0e7490;width:${p}%;"></div></div>
+        <span style="font-size:11px;font-weight:700;color:#0e7490;">${v}</span>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+function attachmentHtml(at) {
+  const TYPES = {
+    secure:{name:'安定型',color:'#217346',desc:'安定した愛着。信頼と親密さを自然に築ける'},
+    anxious:{name:'不安型',color:'#c2410c',desc:'見捨てられ不安が高い傾向。強い結びつきを求める'},
+    avoidant:{name:'回避型',color:'#1d4ed8',desc:'親密さへの抵抗感が強い。独立性を重視する'},
+    fearful:{name:'恐れ回避型',color:'#6b21a8',desc:'親密さを求めながらも傷つくことを恐れる'},
+  };
+  const t = TYPES[at.typeKey] || {name:at.typeKey||'不明',color:'#888',desc:''};
+  const aP = Math.round(((at.anxiety||0)/5)*100);
+  const vP = Math.round(((at.avoidance||0)/5)*100);
+  return `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <div style="flex:2;min-width:150px;border:1px solid #e0e0e0;border-top:3px solid ${t.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:12px;font-weight:700;color:${t.color};margin-bottom:3px;">${t.name}</div>
+      <div style="font-size:10px;color:#555;line-height:1.4;">${t.desc}</div>
+    </div>
+    <div style="flex:1;min-width:120px;border:1px solid #e0e0e0;border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">不安 ${(at.anxiety||0).toFixed(1)}</div>
+      <div style="height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;margin-bottom:6px;"><div style="height:100%;background:#c2410c;width:${aP}%;"></div></div>
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">回避 ${(at.avoidance||0).toFixed(1)}</div>
+      <div style="height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:#1d4ed8;width:${vP}%;"></div></div>
+    </div>
+  </div>`;
+}
+
+function mindsetHtml(ms) {
+  const g = ms.type === 'growth';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">${g?'🌱':'🧱'}</span>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:${g?'#217346':'#1d4ed8'}">${g?'成長マインドセット':'固定マインドセット'}</div>
+      <div style="font-size:10px;color:#666;">${g?'努力で能力は伸びると信じる傾向':'能力は固定されていると考える傾向'}</div>
+    </div>
+  </div>`;
+}
+
+function locusHtml(lc) {
+  const isInt = lc.type === 'internal';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <span style="font-size:20px;">${isInt?'🎯':'🌊'}</span>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:${isInt?'#217346':'#b45309'}">${esc(lc.typeName||lc.type||'')}</div>
+      <div style="font-size:10px;color:#666;">${isInt?'原因は自分の行動にあると感じる傾向':'結果は外部要因に左右されると感じる傾向'}</div>
+    </div>
+  </div>`;
+}
+
+function allTestsHtml(code, r) {
+  r = r || {};
+  let h = '<div style="overflow-y:auto;max-height:340px;padding:0 4px 8px;">';
+  h += secHd('ビッグファイブ（性格の5因子）', '#217346');
+  h += bigFiveCardsHtml(code);
+  if (r.darkTriad) { h += secHd('ダークトライアド', '#6b21a8'); h += darkTriadHtml(r.darkTriad); }
+  if (r.eq)        { h += secHd('EQ（感情知性）', '#0e7490');  h += eqHtml(r.eq); }
+  if (r.attachment){ h += secHd('愛着スタイル', '#be185d');    h += attachmentHtml(r.attachment); }
+  if (r.mindset)   { h += secHd('マインドセット', '#b45309');   h += mindsetHtml(r.mindset); }
+  if (r.locus)     { h += secHd('統制の所在', '#0f766e');       h += locusHtml(r.locus); }
+  h += '</div>';
+  return h;
 }
 
 function renderSheet2() {
@@ -1533,7 +1665,7 @@ function renderSheet2() {
       <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:12px;color:#217346;">${isExp?'▲':'▼'}</td>
     </tr>`;
     if (isExp) {
-      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${scoreCardHtml(code)}</td></tr>`;
+      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, r)}</td></tr>`;
     }
     return html;
   }).join('');
