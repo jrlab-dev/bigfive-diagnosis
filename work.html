@@ -635,6 +635,17 @@ tr:hover .s1 { background: #f5bac4; }
 .inline-edit-inp::-webkit-inner-spin-button { -webkit-appearance:none; }
 .sh-td.is-editing { overflow:visible; padding:0; position:relative; z-index:20; }
 
+/* Custom column header */
+.custom-col-hd { position:relative; }
+.custom-col-hd:hover .col-del-btn { opacity:1; }
+.col-del-btn {
+  position:absolute; right:2px; top:1px;
+  background:rgba(255,255,255,0.85); border:none; border-radius:2px;
+  color:#c00; cursor:pointer; font-size:9px; padding:0 3px; line-height:14px;
+  opacity:0; transition:opacity 0.15s; font-weight:700;
+}
+.col-del-btn:hover { background:#fee2e2; opacity:1; }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 28px; left: 50%;
@@ -685,6 +696,16 @@ tr:hover .s1 { background: #f5bac4; }
 
   <div class="rg">
     <div class="rg-btns">
+      <button class="rb" onclick="openColModal()">
+        <span class="ri">🗂️</span>
+        <span class="rl">列を追加</span>
+      </button>
+    </div>
+    <span class="rg-label">カスタム列</span>
+  </div>
+
+  <div class="rg">
+    <div class="rg-btns">
       <button class="rb" onclick="openPane('other')" title="あの人診断をパネルで開く">
         <span class="ri">👤</span>
         <span class="rl">あの人診断</span>
@@ -723,38 +744,8 @@ tr:hover .s1 { background: #f5bac4; }
 <!-- Sheet 1: 人物管理 -->
 <div id="sheet1" class="sheet-wrap" style="flex:1; overflow:auto;">
   <table class="sh" id="sheetTable">
-    <colgroup>
-      <col class="c-no">
-      <col class="c-name">
-      <col class="c-pos">
-      <col class="c-dept">
-      <col class="c-age">
-      <col class="c-addr">
-      <col class="c-sc"><col class="c-sc"><col class="c-sc"><col class="c-sc"><col class="c-sc">
-      <col class="c-date">
-      <col class="c-memo">
-      <col class="c-src">
-      <col class="c-ops">
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="sh-corner"></th>
-        <th class="sh-ch sortable" data-col="name">名前<span class="sa-arrow" id="sa-name"></span></th>
-        <th class="sh-ch sortable" data-col="pos">役職<span class="sa-arrow" id="sa-pos"></span></th>
-        <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
-        <th class="sh-ch sortable" data-col="age" title="年齢">年齢<span class="sa-arrow" id="sa-age"></span></th>
-        <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
-        <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
-        <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
-        <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
-        <th class="sh-ch sortable" data-col="A" style="color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span><span class="sa-arrow" id="sa-A"></span></th>
-        <th class="sh-ch sortable" data-col="N" style="color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span><span class="sa-arrow" id="sa-N"></span></th>
-        <th class="sh-ch sortable" data-col="date">診断日<span class="sa-arrow" id="sa-date"></span></th>
-        <th class="sh-ch sortable" data-col="memo">メモ<span class="sa-arrow" id="sa-memo"></span></th>
-        <th class="sh-ch">種別</th>
-        <th class="sh-ch">操作</th>
-      </tr>
-    </thead>
+    <colgroup id="sheetColgroup"></colgroup>
+    <thead id="sheetThead"></thead>
     <tbody id="tbody"></tbody>
   </table>
 </div><!-- /sheet1 -->
@@ -869,6 +860,7 @@ tr:hover .s1 { background: #f5bac4; }
           <input class="f-inp" type="text" id="iMemo" placeholder="自由メモ" maxlength="60">
         </div>
       </div>
+      <div id="extraFields"></div>
       <div style="margin-bottom:4px">
         <label class="f-lbl">ビッグファイブスコア（1〜5）</label>
         <div class="sc-grid">
@@ -907,15 +899,151 @@ tr:hover .s1 { background: #f5bac4; }
   </div>
 </div>
 
+<!-- 列追加モーダル -->
+<div class="mo" id="colMo" onclick="closeMoOverlay('colMo')">
+  <div class="mo-box" style="max-width:320px">
+    <div class="mo-hd">
+      <span>列を追加</span>
+      <button class="mo-x" onclick="closeMo('colMo')">✕</button>
+    </div>
+    <div class="mo-bd">
+      <div class="f-row" style="margin-bottom:10px">
+        <label class="f-lbl" for="colLabel">列名 <span style="color:#c00">*</span></label>
+        <input class="f-inp" type="text" id="colLabel" placeholder="例: 姓、電話番号、生年月日" maxlength="20">
+      </div>
+      <div class="f-row">
+        <label class="f-lbl" for="colType">データ型</label>
+        <select class="f-inp" id="colType">
+          <option value="text">テキスト（氏名・住所など）</option>
+          <option value="tel">電話番号</option>
+          <option value="email">メールアドレス</option>
+          <option value="number">数値</option>
+          <option value="birthday">生年月日（年齢を自動計算）</option>
+          <option value="date">日付</option>
+        </select>
+      </div>
+    </div>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('colMo')">キャンセル</button>
+      <button class="mb mb-ok" onclick="addColumn()">追加する</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const WORK_KEY = 'bigfive_work_people';
 const OTHER_KEY = 'bigfive_other_results';
+const WORK_COLS_KEY = 'bigfive_work_columns';
 
 function load() { try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; } }
 function save(arr) { localStorage.setItem(WORK_KEY, JSON.stringify(arr)); }
 function genId() { return 'w' + Date.now() + Math.random().toString(36).slice(2, 6); }
+function loadCols() { try { return JSON.parse(localStorage.getItem(WORK_COLS_KEY)||'[]'); } catch(e) { return []; } }
+function saveCols(arr) { localStorage.setItem(WORK_COLS_KEY, JSON.stringify(arr)); }
+function genColId() { return 'col' + Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+function calcAge(birthday) {
+  if (!birthday) return null;
+  const b = new Date(birthday), t = new Date();
+  let age = t.getFullYear() - b.getFullYear();
+  if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) age--;
+  return age >= 0 ? age : null;
+}
+
+// ===== DYNAMIC HEADERS =====
+function renderHeaders() {
+  const cols = loadCols();
+  document.getElementById('sheetColgroup').innerHTML =
+    '<col style="width:32px"><col style="width:100px">' +
+    cols.map(c => `<col style="width:${c.width||90}px">`).join('') +
+    '<col style="width:90px"><col style="width:80px"><col style="width:38px"><col style="width:120px">' +
+    '<col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px">' +
+    '<col style="width:66px"><col style="width:120px"><col style="width:36px"><col style="width:70px">';
+
+  const custTh = cols.map(c =>
+    `<th class="sh-ch custom-col-hd" title="${esc(c.label)}">${esc(c.label)}<button class="col-del-btn" onclick="event.stopPropagation();deleteColumn('${c.id}')">×</button></th>`
+  ).join('');
+  document.getElementById('sheetThead').innerHTML = `<tr>
+    <th class="sh-corner"></th>
+    <th class="sh-ch sortable" data-col="name">名前<span class="sa-arrow" id="sa-name"></span></th>
+    ${custTh}
+    <th class="sh-ch sortable" data-col="pos">役職<span class="sa-arrow" id="sa-pos"></span></th>
+    <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
+    <th class="sh-ch sortable" data-col="age">年齢<span class="sa-arrow" id="sa-age"></span></th>
+    <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
+    <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
+    <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
+    <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
+    <th class="sh-ch sortable" data-col="A" style="color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span><span class="sa-arrow" id="sa-A"></span></th>
+    <th class="sh-ch sortable" data-col="N" style="color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span><span class="sa-arrow" id="sa-N"></span></th>
+    <th class="sh-ch sortable" data-col="date">診断日<span class="sa-arrow" id="sa-date"></span></th>
+    <th class="sh-ch sortable" data-col="memo">メモ<span class="sa-arrow" id="sa-memo"></span></th>
+    <th class="sh-ch">種別</th>
+    <th class="sh-ch">操作</th>
+  </tr>`;
+  attachSortListeners();
+}
+
+function attachSortListeners() {
+  document.querySelectorAll('#sheetThead .sh-ch.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const c = th.dataset.col;
+      if (sortCol === c) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      else { sortCol = c; sortDir = c === 'date' ? 'desc' : 'asc'; }
+      render();
+    });
+  });
+}
+
+// ===== COLUMN MODAL =====
+function openColModal() {
+  document.getElementById('colLabel').value = '';
+  document.getElementById('colType').value = 'text';
+  document.getElementById('colMo').classList.add('show');
+  setTimeout(() => document.getElementById('colLabel').focus(), 60);
+}
+function addColumn() {
+  const label = document.getElementById('colLabel').value.trim();
+  if (!label) { toast('列名を入力してください'); return; }
+  const type = document.getElementById('colType').value;
+  const cols = loadCols();
+  cols.push({ id: genColId(), label, type });
+  saveCols(cols);
+  closeMo('colMo');
+  renderHeaders();
+  render();
+  toast(`「${label}」列を追加しました`);
+}
+function deleteColumn(colId) {
+  const cols = loadCols();
+  const col = cols.find(c => c.id === colId);
+  if (!col || !confirm(`「${col.label}」列を削除しますか？\nこの列のデータも全て消えます。`)) return;
+  saveCols(cols.filter(c => c.id !== colId));
+  const ppl = load();
+  ppl.forEach(p => { if (p.extra) delete p.extra[colId]; });
+  save(ppl);
+  renderHeaders();
+  render();
+  toast(`「${col.label}」列を削除しました`);
+}
+
+// ===== EXTRA FIELDS IN MODAL =====
+function populateExtraFields(person) {
+  const cols = loadCols();
+  const container = document.getElementById('extraFields');
+  if (!cols.length) { container.innerHTML = ''; return; }
+  container.innerHTML = `<div class="f-grid" style="border-top:1px solid #e8e8e8;padding-top:8px;margin-bottom:8px;">` +
+    cols.map(c => {
+      const val = (person && person.extra && person.extra[c.id] != null) ? person.extra[c.id] : '';
+      const itype = {text:'text',tel:'tel',email:'email',number:'number',birthday:'date',date:'date'}[c.type]||'text';
+      return `<div class="f-row">
+        <label class="f-lbl" for="iX_${c.id}">${esc(c.label)}</label>
+        <input class="f-inp" type="${itype}" id="iX_${c.id}" value="${esc(String(val))}">
+      </div>`;
+    }).join('') + `</div>`;
+}
 
 let sortCol = 'date', sortDir = 'desc', selId = null;
 
@@ -948,8 +1076,9 @@ function render() {
   document.getElementById('statusSort').textContent =
     '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
 
+  const cols = loadCols();
   const PAD_TO = 50;
-  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(14);
+  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(14 + cols.length);
 
   const dataHtml = sorted.map((p, i) => {
     const isSel = selId === p.id;
@@ -963,9 +1092,19 @@ function render() {
     const src = p.source === 'self' ? '<span class="src src-s">自分</span>'
       : p.source === 'imported' ? '<span class="src src-i">取込</span>'
       : '<span class="src src-m">手動</span>';
+    const customCells = cols.map(c => {
+      const val = (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : '';
+      let disp = esc(String(val));
+      if (c.type === 'birthday' && val) {
+        const a = calcAge(val);
+        disp = `${String(val).replace(/-/g,'/')} <span style="font-size:9px;color:#888">(${a != null ? a+'歳' : '?'})</span>`;
+      }
+      return `<td class="sh-td" ondblclick="startEdit(event,'${p.id}','extra:${c.id}')">${disp}</td>`;
+    }).join('');
     return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
       <td class="sh-rn">${i+1}</td>
       <td class="sh-td" ondblclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
+      ${customCells}
       <td class="sh-td" ondblclick="startEdit(event,'${p.id}','pos')"><span class="cv-sub">${esc(p.pos||'')}</span></td>
       <td class="sh-td" ondblclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
       <td class="sh-td" style="text-align:center" ondblclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
@@ -1017,13 +1156,23 @@ function startEdit(e, id, field) {
   if (!p) return;
   selId = id;
 
-  const isScore = ['O','C','E','A','N'].includes(field);
-  const isAge   = field === 'age';
-  const val = p[field] != null ? p[field] : '';
+  const isExtra  = field.startsWith('extra:');
+  const extraId  = isExtra ? field.slice(6) : null;
+  const colDef   = extraId ? loadCols().find(c => c.id === extraId) : null;
+  const isScore  = ['O','C','E','A','N'].includes(field);
+  const isAge    = field === 'age';
+  const isNumber = colDef?.type === 'number';
+  const isDateT  = colDef?.type === 'date' || colDef?.type === 'birthday';
+  const isTel    = colDef?.type === 'tel';
+  const isEmail  = colDef?.type === 'email';
+  const val = isExtra
+    ? ((p.extra && p.extra[extraId] != null) ? p.extra[extraId] : '')
+    : (p[field] != null ? p[field] : '');
 
   td.classList.add('is-editing');
   td.innerHTML = '';
-  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${FIELD_LABELS[field]||field}]`;
+  const lbl = colDef ? colDef.label : (FIELD_LABELS[field]||field);
+  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${lbl}]`;
 
   const inp = document.createElement('input');
   inp.className = 'inline-edit-inp';
@@ -1031,8 +1180,14 @@ function startEdit(e, id, field) {
   if (isScore) {
     inp.type = 'number'; inp.min = 1; inp.max = 5;
     inp.style.textAlign = 'center'; inp.style.fontWeight = '700'; inp.style.fontSize = '13px';
-  } else if (isAge) {
-    inp.type = 'number'; inp.min = 0; inp.max = 120; inp.style.textAlign = 'center';
+  } else if (isAge || isNumber) {
+    inp.type = 'number'; if (isAge) { inp.min = 0; inp.max = 120; } inp.style.textAlign = 'center';
+  } else if (isDateT) {
+    inp.type = 'date';
+  } else if (isTel) {
+    inp.type = 'tel';
+  } else if (isEmail) {
+    inp.type = 'email';
   }
   td.appendChild(inp);
   inp.focus(); inp.select();
@@ -1044,7 +1199,11 @@ function startEdit(e, id, field) {
     const idx = ppl.findIndex(x => x.id === id);
     if (idx < 0) { render(); return; }
     const raw = inp.value.trim();
-    if (isScore) {
+    if (isExtra) {
+      if (!ppl[idx].extra) ppl[idx].extra = {};
+      ppl[idx].extra[extraId] = raw || null;
+      if (colDef?.type === 'birthday' && raw) ppl[idx].age = calcAge(raw);
+    } else if (isScore) {
       const n = parseInt(raw);
       ppl[idx][field] = (n >= 1 && n <= 5) ? n : null;
     } else if (isAge) {
@@ -1071,16 +1230,6 @@ function selRow(id, name, row) {
   render();
 }
 
-// ===== SORT =====
-document.querySelectorAll('.sh-ch.sortable').forEach(th => {
-  th.addEventListener('click', () => {
-    const c = th.dataset.col;
-    if (sortCol === c) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    else { sortCol = c; sortDir = c === 'date' ? 'desc' : 'asc'; }
-    render();
-  });
-});
-
 // ===== ESC =====
 function esc(v) {
   return String(v||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
@@ -1095,6 +1244,7 @@ function openAddModal() {
   document.getElementById('editSaveBtn').textContent = '登録する';
   ['Name','Pos','Dept','Age','Addr','Memo'].forEach(f => document.getElementById('i'+f).value = '');
   ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = '');
+  populateExtraFields(null);
   document.getElementById('editMo').classList.add('show');
   setTimeout(() => document.getElementById('iName').focus(), 60);
 }
@@ -1111,6 +1261,7 @@ function openEditModal(id) {
   document.getElementById('iAddr').value = p.addr || '';
   document.getElementById('iMemo').value = p.memo || '';
   ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = p[f] || '');
+  populateExtraFields(p);
   document.getElementById('editMo').classList.add('show');
   setTimeout(() => document.getElementById('iName').focus(), 60);
 }
@@ -1122,8 +1273,8 @@ function savePerson() {
   if (!name) { toast('名前を入力してください'); document.getElementById('iName').focus(); return; }
   const pos  = document.getElementById('iPos').value.trim();
   const dept = document.getElementById('iDept').value.trim();
-  const ageV = parseInt(document.getElementById('iAge').value);
-  const age  = !isNaN(ageV) && ageV >= 0 ? ageV : null;
+  let ageV = parseInt(document.getElementById('iAge').value);
+  let age  = !isNaN(ageV) && ageV >= 0 ? ageV : null;
   const addr = document.getElementById('iAddr').value.trim();
   const memo = document.getElementById('iMemo').value.trim();
   const sc = {};
@@ -1131,13 +1282,22 @@ function savePerson() {
     const v = parseInt(document.getElementById('i'+f).value);
     sc[f] = (!isNaN(v) && v >= 1 && v <= 5) ? v : null;
   }
+  const extra = {};
+  loadCols().forEach(c => {
+    const el = document.getElementById('iX_' + c.id);
+    if (el) {
+      const v = el.value.trim();
+      extra[c.id] = v || null;
+      if (c.type === 'birthday' && v) { age = calcAge(v); }
+    }
+  });
   const ppl = load();
   if (editId) {
     const i = ppl.findIndex(x => x.id === editId);
-    if (i >= 0) { ppl[i] = { ...ppl[i], name, pos, dept, age, addr, memo, ...sc }; }
+    if (i >= 0) { ppl[i] = { ...ppl[i], name, pos, dept, age, addr, memo, ...sc, extra }; }
     save(ppl); closeMo('editMo'); render(); toast('保存しました');
   } else {
-    ppl.push({ id: genId(), name, pos, dept, age, addr, memo, ...sc, date: new Date().toISOString().slice(0,10), source: 'manual' });
+    ppl.push({ id: genId(), name, pos, dept, age, addr, memo, ...sc, extra, date: new Date().toISOString().slice(0,10), source: 'manual' });
     save(ppl); closeMo('editMo'); render(); toast('追加しました');
   }
 }
@@ -1230,8 +1390,12 @@ function execImport() {
 function exportCSV() {
   const ppl = load();
   if (!ppl.length) { toast('データがありません'); return; }
-  const hdr = ['名前','役職','部署','年齢','住所','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
-  const rows = ppl.map(p => [p.name, p.pos||'', p.dept||'', p.age||'', p.addr||'',
+  const cols = loadCols();
+  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
+  const rows = ppl.map(p => [
+    p.name,
+    ...cols.map(c => (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : ''),
+    p.pos||'', p.dept||'', p.age||'', p.addr||'',
     p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.memo||'', p.source==='imported'?'取込':'手動']);
   const csv = [hdr, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
   const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
@@ -1438,6 +1602,7 @@ function dismissNotify() {
   document.getElementById('tpNotify').classList.remove('show');
 }
 
+renderHeaders();
 render();
 </script>
 </body>
