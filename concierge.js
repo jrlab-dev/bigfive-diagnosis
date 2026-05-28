@@ -424,6 +424,22 @@ const CONCIERGE_CONFIG = {
           message: '読み合いや戦略が得意かも。ビューティーコンテストゲームで他者視点を試せます。'
         }
       ]
+    },
+    {
+      key: 'delay_result',
+      title: '時間割引ゲーム',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      url: 'delay.html',
+      gate: null,
+      bgColor: 'rgba(56,189,248,0.15)',
+      getResult: (d) => ({ name: d.typeName || '完了', color: '#38bdf8' }),
+      triggers: [
+        {
+          condition: (sc) => sc.C >= 4 || sc.N >= 4,
+          priority: 3,
+          message: '将来のために待てるタイプかも。時間割引ゲームで、今と未来の選び方を見てみませんか？'
+        }
+      ]
     }
   ]
 };

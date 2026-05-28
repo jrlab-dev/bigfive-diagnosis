@@ -169,6 +169,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- 時間割引ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/delay.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- あの人のダークトライアド診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/other_dark_triad.html</loc>

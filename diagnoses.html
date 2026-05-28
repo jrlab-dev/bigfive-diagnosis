@@ -163,7 +163,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="careerGrid"></div>
 
   <!-- 行動経済ミニゲーム -->
-  <p class="section-label">行動経済ミニゲーム（5種類）</p>
+  <p class="section-label">行動経済ミニゲーム（6種類）</p>
   <p class="section-sub-note">選択・協力・公平性・読み合いなど、実際の行動傾向をゲーム形式で測定します。</p>
   <div class="diag-grid" id="gameGrid"></div>
 </div>
@@ -403,6 +403,15 @@ const DIAGNOSES = [
     questions: 1,
     minutes: 2,
   },
+  {
+    id: 'delay', fc: 'C',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    name: '時間割引ゲーム',
+    desc: '今すぐ小さな報酬か、後で大きな報酬か。将来志向・待てる力・衝動性をゲーム形式で測定します。',
+    url: 'delay.html',
+    questions: 7,
+    minutes: 2,
+  },
 ];
 
 // ===== ビッグファイブの保存結果を取得 =====
@@ -436,6 +445,7 @@ function getDoneIds() {
     if (localStorage.getItem('trust_result')) done.add('trust');
     if (localStorage.getItem('ultimatum_result')) done.add('ultimatum');
     if (localStorage.getItem('beauty_result')) done.add('beauty');
+    if (localStorage.getItem('delay_result')) done.add('delay');
     if (localStorage.getItem('riasec_result')) done.add('riasec');
     if (localStorage.getItem('riasec_result') && localStorage.getItem('bigfive_my_results')) done.add('career-integration');
     if ((JSON.parse(localStorage.getItem('bigfive_other_results') || '[]')).some(r => r.relation && r.relation.startsWith('child'))) done.add('kodomo');
@@ -523,7 +533,7 @@ const careerGrid = document.getElementById('careerGrid');
 const gameGrid   = document.getElementById('gameGrid');
 const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
 const CAREER_IDS = ['career','riasec','career-integration'];
-const GAME_IDS   = ['pgg','risk','trust','ultimatum','beauty'];
+const GAME_IDS   = ['pgg','risk','trust','ultimatum','beauty','delay'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
   const req = typeof getRequiredCards === 'function' ? getRequiredCards : () => 0;
   return req(a.id) - req(b.id);
