@@ -1,353 +1,455 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" href="favicon.ico" sizes="48x48">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>仕事用ダッシュボード — ビッグファイブ</title>
+<title>仕事用ダッシュボード.xlsx — ビッグファイブ</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-body.theme-light {
-  --bg: #f4f3ff;
-  --surface: #ffffff;
-  --surface2: #f8f7ff;
-  --border: rgba(109,40,217,0.18);
-  --text: #1e1b4b;
-  --dim: #6b7280;
-  --purple: #7c3aed;
-}
-:root {
-  --bg: #080b20;
-  --surface: #0f1229;
-  --surface2: #0d1025;
-  --border: rgba(139,92,246,0.18);
-  --text: #e2e8f0;
-  --dim: #94a3b8;
-  --purple: #8b5cf6;
-  --c-O: #8b5cf6;
-  --c-C: #3b82f6;
-  --c-E: #f97316;
-  --c-A: #f472b6;
-  --c-N: #14b8a6;
-}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  font-family: 'Noto Sans JP', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: 'Noto Sans JP', 'Segoe UI', Meiryo, sans-serif;
+  background: #f0f0f0;
+  color: #1a1a1a;
   min-height: 100vh;
-  padding-bottom: 60px;
-}
-a { color: var(--purple); text-decoration: none; }
-
-/* ===== Layout ===== */
-.work-container {
-  max-width: 1160px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* ===== Page header ===== */
-.work-header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 28px 0 16px;
-  flex-wrap: wrap;
-}
-.work-title {
-  font-size: 20px;
-  font-weight: 700;
-}
-.work-title small {
-  display: block;
-  font-size: 11px;
-  color: var(--dim);
-  font-weight: 400;
-  margin-top: 3px;
-}
-.work-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-/* ===== Buttons ===== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s, background 0.15s;
-  font-family: 'Noto Sans JP', sans-serif;
-  white-space: nowrap;
-}
-.btn:hover { opacity: 0.82; }
-.btn-primary { background: var(--purple); color: #fff; }
-.btn-secondary {
-  background: rgba(139,92,246,0.12);
-  color: var(--purple);
-  border: 1px solid rgba(139,92,246,0.28);
-}
-.btn-outline {
-  background: transparent;
-  color: var(--dim);
-  border: 1px solid var(--border);
-}
-.btn-outline:hover { color: var(--text); }
-.btn-danger {
-  background: rgba(239,68,68,0.12);
-  color: #ef4444;
-  border: 1px solid rgba(239,68,68,0.28);
-}
-.btn-sm { padding: 4px 10px; font-size: 11px; }
-
-/* ===== Stats bar ===== */
-.stats-bar {
-  display: flex;
-  gap: 20px;
-  padding: 8px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 12px;
-  color: var(--dim);
-  flex-wrap: wrap;
-  align-items: center;
-}
-.stats-bar .stat-item strong {
-  color: var(--text);
-  font-size: 18px;
-  font-variant-numeric: tabular-nums;
-  margin-right: 3px;
-}
-
-/* ===== Notice banner ===== */
-.notice {
-  padding: 9px 14px;
-  border-radius: 7px;
-  margin-bottom: 12px;
-  font-size: 12px;
-  display: none;
-}
-.notice.show { display: block; }
-.notice-info { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; }
-.notice-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: #86efac; }
-body.theme-light .notice-info { color: #1d4ed8; }
-body.theme-light .notice-success { color: #15803d; }
-
-/* ===== Legend ===== */
-.legend {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: var(--dim);
-}
-.legend-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-
-/* ===== Table wrapper ===== */
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-/* ===== Main table ===== */
-.people-table {
-  width: 100%;
-  border-collapse: collapse;
+  flex-direction: column;
   font-size: 13px;
-  min-width: 820px;
 }
-.people-table thead th {
-  background: var(--surface2);
-  padding: 9px 10px;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-  border-bottom: 2px solid var(--border);
+
+/* ===== TITLE BAR ===== */
+.excel-titlebar {
+  background: #217346;
+  color: #fff;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 10px;
+  flex-shrink: 0;
   user-select: none;
-  position: sticky;
-  top: 0;
-  z-index: 2;
 }
-.people-table thead th.sortable { cursor: pointer; }
-.people-table thead th.sortable:hover { background: rgba(139,92,246,0.12); }
-.people-table thead th .sort-arrow { opacity: 0.35; font-size: 10px; margin-left: 3px; }
-.people-table thead th.sort-asc .sort-arrow { opacity: 1; color: var(--purple); }
-.people-table thead th.sort-asc .sort-arrow::after { content: '▲'; }
-.people-table thead th.sort-desc .sort-arrow { opacity: 1; color: var(--purple); }
-.people-table thead th.sort-desc .sort-arrow::after { content: '▼'; }
-.people-table thead th:not(.sort-asc):not(.sort-desc) .sort-arrow::after { content: '⇅'; }
-
-/* Column alignment */
-.people-table th.col-name,
-.people-table th.col-memo,
-.people-table td.col-name,
-.people-table td.col-memo { text-align: left; }
-
-.people-table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(139,92,246,0.07);
-  vertical-align: middle;
-  text-align: center;
+.excel-titlebar-icon {
+  font-size: 18px;
+  line-height: 1;
 }
-.people-table tr:last-child td { border-bottom: none; }
-.people-table tbody tr:hover td { background: rgba(139,92,246,0.04); }
-
-/* Name cell */
-.cell-name { font-weight: 600; white-space: nowrap; font-size: 14px; }
-
-/* Memo cell */
-.cell-memo {
-  color: var(--dim);
-  max-width: 180px;
+.excel-titlebar-name {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.excel-titlebar-back {
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  padding: 3px 9px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 3px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.excel-titlebar-back:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+/* ===== RIBBON TABS ===== */
+.excel-tabs {
+  background: #1a5c38;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 8px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.excel-tab {
+  padding: 6px 14px 5px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.80);
+  cursor: pointer;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+  white-space: nowrap;
+}
+.excel-tab:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.excel-tab.active {
+  background: #f0f0f0;
+  color: #1a1a1a;
+  font-weight: 700;
+  border-color: #c0c0c0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== RIBBON ===== */
+.excel-ribbon {
+  background: #f0f0f0;
+  border-bottom: 1px solid #c0c0c0;
+  display: flex;
+  align-items: stretch;
+  padding: 4px 8px;
+  gap: 0;
+  flex-shrink: 0;
+  min-height: 64px;
+  flex-wrap: wrap;
+}
+.ribbon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 8px 0;
+  border-right: 1px solid #d0d0d0;
+  gap: 2px;
+}
+.ribbon-group:last-child { border-right: none; }
+.ribbon-group-buttons {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+}
+.ribbon-group-label {
+  font-size: 10px;
+  color: #767676;
+  margin-top: auto;
+  padding-top: 3px;
+  white-space: nowrap;
+}
+
+/* Ribbon buttons */
+.rbtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 8px;
+  min-width: 42px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', 'Segoe UI', sans-serif;
+  font-size: 11px;
+  text-align: center;
+  transition: background 0.1s, border-color 0.1s;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.rbtn:hover { background: #e0ecf8; border-color: #a0c4e8; }
+.rbtn:active { background: #cce0f5; border-color: #7ab0da; }
+.rbtn-icon { font-size: 20px; line-height: 1; }
+.rbtn-label { font-size: 10px; color: #333; }
+
+/* Small ribbon button (horizontal) */
+.rbtn-sm {
+  flex-direction: row;
+  gap: 5px;
+  padding: 3px 8px;
+  min-width: auto;
+  font-size: 11px;
+  min-height: 20px;
+  align-items: center;
+  justify-content: flex-start;
+}
+.rbtn-sm .rbtn-icon { font-size: 13px; }
+
+/* Stats in ribbon */
+.ribbon-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  color: #555;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.ribbon-stat strong {
+  font-size: 22px;
+  color: #217346;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ===== FORMULA BAR ===== */
+.formula-bar {
+  background: #fff;
+  border-bottom: 1px solid #c8c8c8;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px;
+  gap: 6px;
+  flex-shrink: 0;
   font-size: 12px;
 }
-.cell-memo.empty { color: rgba(148,163,184,0.35); font-style: italic; }
-
-/* Score cells */
-.score-cell {
-  font-weight: 700;
-  font-size: 17px;
-  font-variant-numeric: tabular-nums;
-  min-width: 42px;
-  border-radius: 3px;
-  padding: 8px 4px;
+.formula-cell-ref {
+  width: 72px;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 12px;
+  text-align: center;
+  color: #444;
+  flex-shrink: 0;
 }
-.score-5 { background: rgba(34,197,94,0.18); color: #4ade80; }
-.score-4 { background: rgba(34,197,94,0.07); color: #86efac; }
-.score-3 { color: var(--dim); }
-.score-2 { background: rgba(249,115,22,0.08); color: #fdba74; }
-.score-1 { background: rgba(239,68,68,0.14); color: #fca5a5; }
-body.theme-light .score-5 { background: rgba(34,197,94,0.14); color: #15803d; }
-body.theme-light .score-4 { background: rgba(34,197,94,0.07); color: #22c55e; }
-body.theme-light .score-3 { color: #9ca3af; }
-body.theme-light .score-2 { background: rgba(249,115,22,0.1); color: #c2410c; }
-body.theme-light .score-1 { background: rgba(239,68,68,0.1); color: #b91c1c; }
-
-/* Sub-label under score header */
-.th-factor { font-size: 9px; font-weight: 400; display: block; color: var(--dim); margin-top: 1px; }
-
-/* Date cell */
-.cell-date {
+.formula-divider {
+  width: 1px;
+  height: 16px;
+  background: #d0d0d0;
+  flex-shrink: 0;
+}
+.formula-bar-text {
+  color: #555;
   font-size: 11px;
-  color: var(--dim);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  font-style: italic;
 }
+
+/* ===== SPREADSHEET AREA ===== */
+.sheet-wrapper {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+
+/* ===== TABLE ===== */
+.sheet-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 900px;
+}
+
+/* Corner cell */
+.sh-corner {
+  background: #e8e8e8;
+  border-right: 1px solid #bfbfbf;
+  border-bottom: 2px solid #217346;
+  width: 40px;
+  min-width: 40px;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* Column headers */
+.sh-col-header {
+  background: #e8e8e8;
+  border: 1px solid #d0d0d0;
+  border-bottom: 2px solid #217346;
+  padding: 4px 6px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  color: #333;
+}
+.sh-col-header:hover { background: #d8e8d8; }
+.sh-col-header.sort-asc { background: #d0e8d0; color: #1a5c38; }
+.sh-col-header.sort-desc { background: #d0e8d0; color: #1a5c38; }
+.sh-col-header .sh-sort { font-size: 9px; margin-left: 2px; color: #217346; }
+
+/* Row number cells */
+.sh-row-num {
+  background: #e8e8e8;
+  border: 1px solid #d0d0d0;
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+  width: 40px;
+  min-width: 40px;
+  padding: 3px 4px;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  user-select: none;
+}
+tr.row-selected .sh-row-num {
+  background: #217346;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Data cells */
+.sh-cell {
+  border: 1px solid #d0d0d0;
+  padding: 3px 6px;
+  height: 24px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: cell;
+}
+.sh-cell:focus { outline: 2px solid #217346; outline-offset: -2px; }
+tr:hover .sh-cell { background: #f5faf7; }
+tr.row-selected .sh-cell { background: #e2f0e9; }
+
+/* Column widths */
+.col-name    { width: 130px; min-width: 100px; }
+.col-memo    { width: 180px; min-width: 120px; }
+.col-score   { width: 44px; min-width: 40px; text-align: center; }
+.col-date    { width: 78px; min-width: 70px; text-align: center; }
+.col-src     { width: 46px; min-width: 42px; text-align: center; }
+.col-ops     { width: 86px; min-width: 80px; text-align: center; }
+
+/* Score coloring (Excel-style: pastel fill) */
+.s5 { background: #e2efda; color: #375623; font-weight: 700; }
+.s4 { background: #ebf4e4; color: #375623; }
+.s3 { color: #555; }
+.s2 { background: #fce4d6; color: #843c0c; }
+.s1 { background: #ffc7ce; color: #9c0006; font-weight: 700; }
+tr:hover .s5 { background: #d8e9cf; }
+tr:hover .s4 { background: #e2eeda; }
+tr:hover .s2 { background: #f5d8ca; }
+tr:hover .s1 { background: #f5bdc8; }
 
 /* Source badge */
 .src-badge {
   font-size: 9px;
-  padding: 1px 5px;
-  border-radius: 999px;
-  font-weight: 700;
-  white-space: nowrap;
+  padding: 0px 4px;
+  border-radius: 2px;
+  font-weight: 600;
 }
-.src-manual { background: rgba(139,92,246,0.14); color: #a78bfa; }
-.src-imported { background: rgba(20,184,166,0.14); color: #2dd4bf; }
-body.theme-light .src-manual { color: #7c3aed; }
-body.theme-light .src-imported { color: #0d9488; }
+.src-m { background: #e8e0f8; color: #5b21b6; }
+.src-i { background: #d1fae5; color: #065f46; }
 
-/* Actions cell */
-.cell-actions { white-space: nowrap; }
-.cell-actions { display: flex; gap: 4px; justify-content: center; }
+/* Cell name, memo */
+.cell-name-val { font-weight: 600; font-size: 13px; }
+.cell-memo-val { color: #555; font-size: 12px; }
+.cell-memo-val.empty { color: #bbb; font-style: italic; }
+.cell-date-val { font-size: 11px; color: #555; font-variant-numeric: tabular-nums; }
 
-/* Row index number */
-.cell-no {
+/* Action buttons in cell */
+.cell-ops { display: flex; gap: 3px; justify-content: center; }
+.cell-btn {
+  padding: 1px 7px;
   font-size: 11px;
-  color: rgba(148,163,184,0.4);
-  font-variant-numeric: tabular-nums;
-  min-width: 28px;
+  border: 1px solid #c0c0c0;
+  border-radius: 2px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.1s;
+  color: #333;
 }
+.cell-btn:hover { background: #e0ecf8; border-color: #90b8d8; }
+.cell-btn.del:hover { background: #fde8e8; border-color: #f0a0a0; color: #c00; }
 
-/* ===== Empty state ===== */
-.empty-state {
+/* Empty state row */
+.empty-row td {
   text-align: center;
-  padding: 56px 20px;
-  color: var(--dim);
+  padding: 40px 20px;
+  color: #999;
+  font-size: 13px;
+  border: 1px solid #e0e0e0;
 }
-.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
-.empty-state p { font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
 
-/* ===== Modal ===== */
+/* ===== STATUS BAR ===== */
+.excel-statusbar {
+  background: #217346;
+  color: rgba(255,255,255,0.85);
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 16px;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+.statusbar-item { white-space: nowrap; }
+
+/* ===== MODAL ===== */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 10000;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
   display: none;
   align-items: center;
   justify-content: center;
 }
 .modal-overlay.show { display: flex; }
 .modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid #ababab;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   width: 100%;
-  max-width: 440px;
+  max-width: 420px;
   margin: 16px;
   max-height: 90vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
-.modal-title {
-  font-size: 16px;
+.modal-header {
+  background: #217346;
+  color: #fff;
+  padding: 9px 14px;
+  font-size: 13px;
   font-weight: 700;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.modal-close:hover { color: #fff; }
+.modal-body { padding: 16px; flex: 1; overflow-y: auto; }
+.modal-footer {
+  padding: 10px 16px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
-/* Form */
-.form-row { margin-bottom: 14px; }
+/* Modal form */
+.form-row { margin-bottom: 12px; }
 .form-label {
   display: block;
   font-size: 11px;
   font-weight: 700;
-  color: var(--dim);
-  margin-bottom: 5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 4px;
 }
 .form-input {
   width: 100%;
-  padding: 8px 11px;
-  background: rgba(139,92,246,0.06);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  font-size: 14px;
-  font-family: 'Noto Sans JP', sans-serif;
-  transition: border-color 0.2s;
+  padding: 5px 8px;
+  border: 1px solid #ababab;
+  border-radius: 2px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1a1a1a;
+  transition: border-color 0.15s;
 }
-.form-input:focus { outline: none; border-color: var(--purple); }
-body.theme-light .form-input { background: rgba(109,40,217,0.04); }
+.form-input:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.15); }
 
 /* Score inputs */
 .score-grid {
@@ -356,239 +458,295 @@ body.theme-light .form-input { background: rgba(109,40,217,0.04); }
   gap: 6px;
 }
 .score-wrap { text-align: center; }
-.score-wrap-label {
+.score-factor-label {
   display: block;
   font-size: 11px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .score-num-input {
   width: 100%;
-  padding: 8px 4px;
+  padding: 6px 2px;
   text-align: center;
-  background: rgba(139,92,246,0.06);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
+  border: 1px solid #ababab;
+  border-radius: 2px;
   font-size: 18px;
   font-weight: 700;
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: inherit;
+  color: #1a1a1a;
   -moz-appearance: textfield;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s;
 }
 .score-num-input::-webkit-outer-spin-button,
 .score-num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.score-num-input:focus { outline: none; border-color: var(--purple); }
-body.theme-light .score-num-input { background: rgba(109,40,217,0.04); }
-.score-hint { font-size: 10px; color: var(--dim); text-align: center; margin-top: 5px; }
+.score-num-input:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.15); }
+.score-hint { font-size: 10px; color: #888; text-align: center; margin-top: 5px; }
 
-/* Modal footer */
-.modal-footer {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+/* Modal buttons */
+.mbtn {
+  padding: 5px 16px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid #ababab;
+  transition: background 0.1s;
+  font-weight: 600;
 }
+.mbtn-primary { background: #217346; color: #fff; border-color: #1a5c38; }
+.mbtn-primary:hover { background: #1a5c38; }
+.mbtn-default { background: #fff; color: #333; }
+.mbtn-default:hover { background: #f0f0f0; }
 
-/* ===== Import modal ===== */
+/* Import list */
 .import-list {
-  max-height: 260px;
+  max-height: 240px;
   overflow-y: auto;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  margin-bottom: 16px;
+  border: 1px solid #d0d0d0;
+  margin-bottom: 10px;
 }
 .import-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-bottom: 1px solid rgba(139,92,246,0.08);
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
   font-size: 12px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.1s;
+  user-select: none;
 }
 .import-item:last-child { border-bottom: none; }
-.import-item:hover { background: rgba(139,92,246,0.06); }
+.import-item:hover:not(.already) { background: #f0f8f4; }
 .import-item.already { opacity: 0.45; pointer-events: none; }
+.import-item.selected { background: #e2f0e9; }
 .import-check {
-  width: 16px; height: 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 3px;
+  width: 15px; height: 15px;
+  border: 1.5px solid #ababab;
+  border-radius: 2px;
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
+  background: #fff;
 }
-.import-item.selected .import-check { background: var(--purple); border-color: var(--purple); }
+.import-item.selected .import-check { background: #217346; border-color: #217346; color: #fff; }
 .import-item-name { font-weight: 600; flex: 1; }
-.import-item-code { font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
-.import-item-already { font-size: 10px; color: var(--dim); background: rgba(148,163,184,0.12); border-radius: 999px; padding: 1px 6px; }
+.import-item-code { font-size: 10px; color: #888; font-variant-numeric: tabular-nums; }
+.import-item-already { font-size: 10px; color: #999; }
+.import-select-info { font-size: 11px; color: #666; margin-bottom: 6px; }
 
-/* ===== Toast ===== */
+/* ===== TOAST ===== */
 .toast {
   position: fixed;
-  bottom: 24px;
+  bottom: 32px;
   left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-size: 13px;
-  z-index: 20000;
+  transform: translateX(-50%) translateY(12px);
+  background: #333;
+  color: #fff;
+  padding: 8px 18px;
+  font-size: 12px;
+  border-radius: 3px;
+  z-index: 9999;
   opacity: 0;
-  transition: opacity 0.22s, transform 0.22s;
-  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.2s;
   pointer-events: none;
+  white-space: nowrap;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="work-container">
+<!-- ===== TITLE BAR ===== -->
+<div class="excel-titlebar">
+  <span class="excel-titlebar-icon">📗</span>
+  <span class="excel-titlebar-name">仕事用ダッシュボード.xlsx — ビッグファイブ スコア管理</span>
+  <a href="mypage.html" class="excel-titlebar-back">← サイトに戻る</a>
+</div>
 
-  <!-- ページヘッダー -->
-  <div class="work-header">
-    <div class="work-title">
-      仕事用ダッシュボード
-      <small>このページはナビに表示されません。データはこの端末にのみ保存されます。</small>
+<!-- ===== RIBBON TABS ===== -->
+<div class="excel-tabs">
+  <div class="excel-tab active">ホーム</div>
+  <div class="excel-tab" style="opacity:0.6; cursor:default">データ</div>
+  <div class="excel-tab" style="opacity:0.6; cursor:default">表示</div>
+</div>
+
+<!-- ===== RIBBON ===== -->
+<div class="excel-ribbon">
+
+  <!-- グループ：新規 -->
+  <div class="ribbon-group">
+    <div class="ribbon-group-buttons">
+      <button class="rbtn" onclick="openAddModal()" title="新しい人物を追加">
+        <span class="rbtn-icon">➕</span>
+        <span class="rbtn-label">人物を追加</span>
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:2px;">
+        <button class="rbtn rbtn-sm" onclick="openImportModal()" title="あの人診断データを取り込む">
+          <span class="rbtn-icon">⬇️</span> あの人データ取込
+        </button>
+      </div>
     </div>
-    <div class="work-actions">
-      <button class="btn btn-primary" onclick="openAddModal()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        人物を追加
+    <span class="ribbon-group-label">入力</span>
+  </div>
+
+  <!-- グループ：クリップボード -->
+  <div class="ribbon-group">
+    <div class="ribbon-group-buttons">
+      <button class="rbtn" onclick="exportCSV()" title="Excelで開けるCSVをダウンロード">
+        <span class="rbtn-icon">📥</span>
+        <span class="rbtn-label">CSV保存</span>
       </button>
-      <button class="btn btn-secondary" onclick="openImportModal()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        あの人データを取り込む
-      </button>
-      <button class="btn btn-outline" onclick="exportCSV()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        CSVダウンロード
-      </button>
-      <button class="btn btn-outline" onclick="copyForAI()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        AI用コピー
+      <button class="rbtn" onclick="copyForAI()" title="AI（ChatGPT等）に貼り付けるテキストをコピー">
+        <span class="rbtn-icon">🤖</span>
+        <span class="rbtn-label">AI用コピー</span>
       </button>
     </div>
+    <span class="ribbon-group-label">エクスポート</span>
   </div>
 
-  <!-- 統計バー -->
-  <div class="stats-bar" id="statsBar">
-    <span class="stat-item">登録人数 <strong id="statCount">0</strong>人</span>
-    <span class="stat-item">スコアあり <strong id="statScored">0</strong>人</span>
-    <span id="statLast" style="margin-left:auto; font-size:11px;"></span>
-  </div>
-
-  <!-- お知らせ -->
-  <div class="notice notice-success" id="notice"></div>
-
-  <!-- 凡例 -->
-  <div class="legend">
-    <span class="legend-item"><span class="legend-dot" style="background:#4ade80"></span> 5 = とても高い</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#86efac"></span> 4 = やや高い</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#94a3b8"></span> 3 = 中程度</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#fdba74"></span> 2 = やや低い</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#fca5a5"></span> 1 = 低い</span>
-  </div>
-
-  <!-- テーブル -->
-  <div class="table-wrap">
-    <table class="people-table" id="peopleTable">
-      <thead>
-        <tr>
-          <th style="width:30px">#</th>
-          <th class="col-name sortable" data-col="name">名前 <span class="sort-arrow"></span></th>
-          <th class="col-memo sortable" data-col="memo">役割・メモ <span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="O" style="color:var(--c-O)">O<span class="th-factor">開放性</span><span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="C" style="color:var(--c-C)">C<span class="th-factor">誠実性</span><span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="E" style="color:var(--c-E)">E<span class="th-factor">外向性</span><span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="A" style="color:var(--c-A)">A<span class="th-factor">協調性</span><span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="N" style="color:var(--c-N)">N<span class="th-factor">感受性</span><span class="sort-arrow"></span></th>
-          <th class="sortable" data-col="date">診断日 <span class="sort-arrow"></span></th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+  <!-- グループ：統計 -->
+  <div class="ribbon-group" style="border-right:none">
+    <div class="ribbon-group-buttons">
+      <div class="ribbon-stat">
+        <strong id="statCount">0</strong>
+        件登録
+      </div>
+      <div class="ribbon-stat" style="color:#217346">
+        <strong id="statScored" style="color:#217346">0</strong>
+        件スコアあり
+      </div>
+    </div>
+    <span class="ribbon-group-label">集計</span>
   </div>
 
 </div>
 
-<!-- 空の場合のメッセージ（テーブル外） -->
-<div class="empty-state" id="emptyState" style="display:none">
-  <div class="empty-state-icon">📋</div>
-  <h3>まだ登録された人物がいません</h3>
-  <p>「人物を追加」で手動登録、<br>または「あの人データを取り込む」で診断済みデータをインポートできます。</p>
-  <button class="btn btn-primary" onclick="openAddModal()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    人物を追加する
-  </button>
+<!-- ===== FORMULA BAR ===== -->
+<div class="formula-bar">
+  <span class="formula-cell-ref" id="cellRef">A1</span>
+  <span class="formula-divider"></span>
+  <span class="formula-bar-text" id="formulaText">データはこの端末にのみ保存されます（localStorage）</span>
 </div>
 
-<!-- 追加・編集モーダル -->
+<!-- ===== SPREADSHEET ===== -->
+<div class="sheet-wrapper">
+  <table class="sheet-table" id="sheetTable">
+    <thead>
+      <tr>
+        <th class="sh-corner"></th>
+        <th class="sh-col-header col-name sortable" data-col="name">
+          名前 <span class="sh-sort" id="sort-name"></span>
+        </th>
+        <th class="sh-col-header col-memo sortable" data-col="memo">
+          役割・メモ <span class="sh-sort" id="sort-memo"></span>
+        </th>
+        <th class="sh-col-header col-score sortable" data-col="O" style="color:#5b21b6">
+          O<br><span style="font-size:9px;font-weight:400;color:#888">開放性</span>
+          <span class="sh-sort" id="sort-O"></span>
+        </th>
+        <th class="sh-col-header col-score sortable" data-col="C" style="color:#1d4ed8">
+          C<br><span style="font-size:9px;font-weight:400;color:#888">誠実性</span>
+          <span class="sh-sort" id="sort-C"></span>
+        </th>
+        <th class="sh-col-header col-score sortable" data-col="E" style="color:#c2410c">
+          E<br><span style="font-size:9px;font-weight:400;color:#888">外向性</span>
+          <span class="sh-sort" id="sort-E"></span>
+        </th>
+        <th class="sh-col-header col-score sortable" data-col="A" style="color:#be185d">
+          A<br><span style="font-size:9px;font-weight:400;color:#888">協調性</span>
+          <span class="sh-sort" id="sort-A"></span>
+        </th>
+        <th class="sh-col-header col-score sortable" data-col="N" style="color:#065f46">
+          N<br><span style="font-size:9px;font-weight:400;color:#888">感受性</span>
+          <span class="sh-sort" id="sort-N"></span>
+        </th>
+        <th class="sh-col-header col-date sortable" data-col="date">
+          診断日 <span class="sh-sort" id="sort-date"></span>
+        </th>
+        <th class="sh-col-header col-src">種別</th>
+        <th class="sh-col-header col-ops">操作</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- ===== STATUS BAR ===== -->
+<div class="excel-statusbar">
+  <span class="statusbar-item" id="statusText">準備完了</span>
+  <span class="statusbar-item" style="margin-left:auto" id="statusSort">並び順: 診断日（新しい順）</span>
+</div>
+
+<!-- ===== 追加・編集モーダル ===== -->
 <div class="modal-overlay" id="editModal" onclick="closeEditModalOnOverlay(event)">
   <div class="modal">
-    <div class="modal-title" id="editModalTitle">人物を追加</div>
-    <div class="form-row">
-      <label class="form-label" for="inputName">名前 <span style="color:#ef4444">*</span></label>
-      <input class="form-input" type="text" id="inputName" placeholder="例：田中太郎" maxlength="30">
+    <div class="modal-header">
+      <span id="editModalTitle">人物を追加</span>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
     </div>
-    <div class="form-row">
-      <label class="form-label" for="inputMemo">役割・メモ（任意）</label>
-      <input class="form-input" type="text" id="inputMemo" placeholder="例：営業部長、採用候補など" maxlength="50">
-    </div>
-    <div class="form-row">
-      <label class="form-label">ビッグファイブスコア（1〜5）</label>
-      <div class="score-grid">
-        <div class="score-wrap">
-          <span class="score-wrap-label" style="color:var(--c-O)">O</span>
-          <input class="score-num-input" type="number" id="inputO" min="1" max="5" placeholder="3">
-        </div>
-        <div class="score-wrap">
-          <span class="score-wrap-label" style="color:var(--c-C)">C</span>
-          <input class="score-num-input" type="number" id="inputC" min="1" max="5" placeholder="3">
-        </div>
-        <div class="score-wrap">
-          <span class="score-wrap-label" style="color:var(--c-E)">E</span>
-          <input class="score-num-input" type="number" id="inputE" min="1" max="5" placeholder="3">
-        </div>
-        <div class="score-wrap">
-          <span class="score-wrap-label" style="color:var(--c-A)">A</span>
-          <input class="score-num-input" type="number" id="inputA" min="1" max="5" placeholder="3">
-        </div>
-        <div class="score-wrap">
-          <span class="score-wrap-label" style="color:var(--c-N)">N</span>
-          <input class="score-num-input" type="number" id="inputN" min="1" max="5" placeholder="3">
-        </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label" for="inputName">名前 <span style="color:#c00">*</span></label>
+        <input class="form-input" type="text" id="inputName" placeholder="例：田中太郎" maxlength="30">
       </div>
-      <div class="score-hint">スコアは「あの人診断」の結果ページ → コードの数字を参考に。空欄でも登録できます。</div>
+      <div class="form-row">
+        <label class="form-label" for="inputMemo">役割・メモ（任意）</label>
+        <input class="form-input" type="text" id="inputMemo" placeholder="例：営業部長、採用候補 など" maxlength="50">
+      </div>
+      <div class="form-row">
+        <label class="form-label">ビッグファイブスコア（1〜5）</label>
+        <div class="score-grid">
+          <div class="score-wrap">
+            <span class="score-factor-label" style="color:#5b21b6">O</span>
+            <input class="score-num-input" type="number" id="inputO" min="1" max="5" placeholder="3">
+          </div>
+          <div class="score-wrap">
+            <span class="score-factor-label" style="color:#1d4ed8">C</span>
+            <input class="score-num-input" type="number" id="inputC" min="1" max="5" placeholder="3">
+          </div>
+          <div class="score-wrap">
+            <span class="score-factor-label" style="color:#c2410c">E</span>
+            <input class="score-num-input" type="number" id="inputE" min="1" max="5" placeholder="3">
+          </div>
+          <div class="score-wrap">
+            <span class="score-factor-label" style="color:#be185d">A</span>
+            <input class="score-num-input" type="number" id="inputA" min="1" max="5" placeholder="3">
+          </div>
+          <div class="score-wrap">
+            <span class="score-factor-label" style="color:#065f46">N</span>
+            <input class="score-num-input" type="number" id="inputN" min="1" max="5" placeholder="3">
+          </div>
+        </div>
+        <div class="score-hint">「あの人診断」の結果コード（例：32413）の各桁がスコアです。空欄でも登録できます。</div>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeEditModal()">キャンセル</button>
-      <button class="btn btn-primary" id="editSaveBtn" onclick="savePerson()">登録する</button>
+      <button class="mbtn mbtn-default" onclick="closeEditModal()">キャンセル</button>
+      <button class="mbtn mbtn-primary" id="editSaveBtn" onclick="savePerson()">登録する</button>
     </div>
   </div>
 </div>
 
-<!-- インポートモーダル -->
+<!-- ===== インポートモーダル ===== -->
 <div class="modal-overlay" id="importModal" onclick="closeImportModalOnOverlay(event)">
   <div class="modal">
-    <div class="modal-title">あの人データを取り込む</div>
-    <p style="font-size:12px; color:var(--dim); margin-bottom:12px; line-height:1.7">
-      マイページの「あの人」タブに保存済みの診断結果を取り込みます。<br>
-      すでに同名で登録済みの人物はスキップされます。
-    </p>
-    <div class="import-list" id="importList">
-      <div style="padding:20px; text-align:center; font-size:12px; color:var(--dim)">読み込み中...</div>
+    <div class="modal-header">
+      <span>あの人データを取り込む</span>
+      <button class="modal-close" onclick="closeImportModal()">✕</button>
     </div>
-    <div style="font-size:11px; color:var(--dim); margin-bottom:12px;" id="importSelectInfo">0件 選択中</div>
+    <div class="modal-body">
+      <p style="font-size:12px; color:#555; margin-bottom:10px; line-height:1.7">
+        マイページの「あの人」に保存済みの診断結果を取り込みます。<br>
+        すでに同名で登録済みの人物はスキップされます。
+      </p>
+      <div class="import-list" id="importList">
+        <div style="padding:20px; text-align:center; font-size:12px; color:#999">読み込み中...</div>
+      </div>
+      <div class="import-select-info" id="importSelectInfo">0件 選択中</div>
+    </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeImportModal()">キャンセル</button>
-      <button class="btn btn-primary" id="importExecBtn" onclick="execImport()">取り込む</button>
+      <button class="mbtn mbtn-default" onclick="closeImportModal()">キャンセル</button>
+      <button class="mbtn mbtn-primary" id="importExecBtn" onclick="execImport()">取り込む</button>
     </div>
   </div>
 </div>
@@ -604,25 +762,18 @@ const OTHER_KEY = 'bigfive_other_results';
 function loadPeople() {
   try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; }
 }
-function savePeopleData(arr) {
-  localStorage.setItem(WORK_KEY, JSON.stringify(arr));
-}
-function genId() {
-  return 'w-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-}
+function savePeopleData(arr) { localStorage.setItem(WORK_KEY, JSON.stringify(arr)); }
+function genId() { return 'w-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7); }
 
 // ===== ソート状態 =====
 let sortCol = 'date';
 let sortDir = 'desc';
+let selectedRow = null;
 
 // ===== レンダリング =====
 function render() {
   const people = loadPeople();
   const tbody = document.getElementById('tableBody');
-  const emptyState = document.getElementById('emptyState');
-  const tableWrap = document.querySelector('.table-wrap');
-
-  // ソート
   const sorted = [...people].sort((a, b) => {
     let va = a[sortCol] ?? '';
     let vb = b[sortCol] ?? '';
@@ -636,49 +787,49 @@ function render() {
     return 0;
   });
 
-  // ソートヘッダー更新
-  document.querySelectorAll('.people-table th.sortable').forEach(th => {
-    th.classList.remove('sort-asc', 'sort-desc');
-    if (th.dataset.col === sortCol) {
-      th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
-    }
+  // ソートインジケーター更新
+  ['name','memo','O','C','E','A','N','date'].forEach(c => {
+    const el = document.getElementById('sort-' + c);
+    if (!el) return;
+    el.textContent = sortCol === c ? (sortDir === 'asc' ? '▲' : '▼') : '';
   });
+  document.getElementById('statusSort').textContent =
+    '並び順: ' + ({name:'名前',memo:'役割',O:'O開放性',C:'C誠実性',E:'E外向性',A:'A協調性',N:'N感受性',date:'診断日'}[sortCol] || sortCol) +
+    (sortDir === 'asc' ? '（昇順）' : '（降順）');
 
-  // 空状態
   if (people.length === 0) {
-    tableWrap.style.display = 'none';
-    emptyState.style.display = 'block';
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="11">
+      登録データがありません。「人物を追加」または「あの人データ取込」から始めてください。
+    </td></tr>`;
     updateStats(people);
     return;
   }
-  tableWrap.style.display = '';
-  emptyState.style.display = 'none';
-
-  const LABELS = { O:'開', C:'誠', E:'外', A:'協', N:'感' };
 
   tbody.innerHTML = sorted.map((p, i) => {
+    const isSelected = selectedRow === p.id;
     const scores = ['O','C','E','A','N'].map(f => {
       const v = p[f];
-      if (!v) return `<td class="score-cell col-score-${f}">—</td>`;
-      return `<td class="score-cell score-${v} col-score-${f}" title="${LABELS[f]}=${v}">${v}</td>`;
+      if (!v) return `<td class="sh-cell col-score" style="color:#ccc; text-align:center;">—</td>`;
+      return `<td class="sh-cell col-score s${v}" style="text-align:center; font-weight:700; font-size:14px;">${v}</td>`;
     }).join('');
-
     const dateStr = p.date ? p.date.slice(0, 10).replace(/-/g, '/') : '—';
     const srcBadge = p.source === 'imported'
-      ? '<span class="src-badge src-imported">取込</span>'
-      : '<span class="src-badge src-manual">手動</span>';
-    const memoClass = p.memo ? '' : ' empty';
-    const memoText = p.memo || '—';
-
-    return `<tr>
-      <td class="cell-no">${i + 1}</td>
-      <td class="col-name cell-name">${esc(p.name)}</td>
-      <td class="col-memo cell-memo${memoClass}" title="${esc(p.memo || '')}">${esc(memoText)}</td>
+      ? '<span class="src-badge src-i">取込</span>'
+      : '<span class="src-badge src-m">手動</span>';
+    return `<tr class="${isSelected ? 'row-selected' : ''}" onclick="selectRow('${p.id}', '${esc(p.name)}', ${i+1})">
+      <td class="sh-row-num">${i + 1}</td>
+      <td class="sh-cell col-name"><span class="cell-name-val">${esc(p.name)}</span></td>
+      <td class="sh-cell col-memo" title="${esc(p.memo || '')}">
+        <span class="cell-memo-val${p.memo ? '' : ' empty'}">${esc(p.memo || '—')}</span>
+      </td>
       ${scores}
-      <td class="cell-date">${dateStr}<br>${srcBadge}</td>
-      <td class="cell-actions">
-        <button class="btn btn-outline btn-sm" onclick="openEditModal('${p.id}')">編集</button>
-        <button class="btn btn-danger btn-sm" onclick="deletePerson('${p.id}')">削除</button>
+      <td class="sh-cell col-date"><span class="cell-date-val">${dateStr}</span></td>
+      <td class="sh-cell col-src" style="text-align:center">${srcBadge}</td>
+      <td class="sh-cell col-ops">
+        <div class="cell-ops">
+          <button class="cell-btn" onclick="event.stopPropagation(); openEditModal('${p.id}')">編集</button>
+          <button class="cell-btn del" onclick="event.stopPropagation(); deletePerson('${p.id}')">削除</button>
+        </div>
       </td>
     </tr>`;
   }).join('');
@@ -690,16 +841,20 @@ function updateStats(people) {
   document.getElementById('statCount').textContent = people.length;
   const scored = people.filter(p => p.O || p.C || p.E || p.A || p.N).length;
   document.getElementById('statScored').textContent = scored;
-  if (people.length > 0) {
-    const latest = people.reduce((a, b) => (a.date > b.date ? a : b));
-    document.getElementById('statLast').textContent = '最終更新: ' + (latest.date || '').slice(0, 10).replace(/-/g, '/');
-  } else {
-    document.getElementById('statLast').textContent = '';
-  }
+  document.getElementById('statusText').textContent = people.length > 0
+    ? `${people.length} 件登録済 | スコアあり ${scored} 件`
+    : '準備完了';
+}
+
+function selectRow(id, name, rowNum) {
+  selectedRow = (selectedRow === id) ? null : id;
+  document.getElementById('cellRef').textContent = `A${rowNum}`;
+  document.getElementById('formulaText').textContent = selectedRow ? `${name}` : 'データはこの端末にのみ保存されます（localStorage）';
+  render();
 }
 
 // ===== ソート =====
-document.querySelectorAll('.people-table th.sortable').forEach(th => {
+document.querySelectorAll('.sh-col-header.sortable').forEach(th => {
   th.addEventListener('click', () => {
     const col = th.dataset.col;
     if (sortCol === col) {
@@ -732,8 +887,7 @@ function openAddModal() {
 }
 
 function openEditModal(id) {
-  const people = loadPeople();
-  const p = people.find(x => x.id === id);
+  const p = loadPeople().find(x => x.id === id);
   if (!p) return;
   editingId = id;
   document.getElementById('editModalTitle').textContent = '編集：' + p.name;
@@ -745,60 +899,37 @@ function openEditModal(id) {
   setTimeout(() => document.getElementById('inputName').focus(), 80);
 }
 
-function closeEditModal() {
-  document.getElementById('editModal').classList.remove('show');
-}
-function closeEditModalOnOverlay(e) {
-  if (e.target === document.getElementById('editModal')) closeEditModal();
-}
+function closeEditModal() { document.getElementById('editModal').classList.remove('show'); }
+function closeEditModalOnOverlay(e) { if (e.target === document.getElementById('editModal')) closeEditModal(); }
 
 function savePerson() {
   const name = document.getElementById('inputName').value.trim();
   if (!name) { showToast('名前を入力してください'); document.getElementById('inputName').focus(); return; }
-
   const memo = document.getElementById('inputMemo').value.trim();
   const scores = {};
-  let hasScore = false;
   for (const f of ['O','C','E','A','N']) {
     const v = parseInt(document.getElementById('input' + f).value);
-    if (!isNaN(v) && v >= 1 && v <= 5) { scores[f] = v; hasScore = true; }
-    else { scores[f] = null; }
+    scores[f] = (!isNaN(v) && v >= 1 && v <= 5) ? v : null;
   }
-
   const people = loadPeople();
   if (editingId) {
     const idx = people.findIndex(x => x.id === editingId);
     if (idx >= 0) {
-      people[idx] = { ...people[idx], name, memo, ...scores, date: people[idx].date };
-      savePeopleData(people);
-      closeEditModal();
-      render();
-      showToast('保存しました');
+      people[idx] = { ...people[idx], name, memo, ...scores };
+      savePeopleData(people); closeEditModal(); render(); showToast('保存しました');
     }
   } else {
-    const entry = {
-      id: genId(),
-      name, memo,
-      O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
-      date: new Date().toISOString().slice(0, 10),
-      source: 'manual'
-    };
-    people.push(entry);
-    savePeopleData(people);
-    closeEditModal();
-    render();
-    showToast('追加しました');
+    people.push({ id: genId(), name, memo, ...scores, date: new Date().toISOString().slice(0, 10), source: 'manual' });
+    savePeopleData(people); closeEditModal(); render(); showToast('追加しました');
   }
 }
 
 function deletePerson(id) {
-  const people = loadPeople();
-  const p = people.find(x => x.id === id);
-  if (!p) return;
-  if (!confirm(`「${p.name}」を削除しますか？`)) return;
-  savePeopleData(people.filter(x => x.id !== id));
-  render();
-  showToast('削除しました');
+  const p = loadPeople().find(x => x.id === id);
+  if (!p || !confirm(`「${p.name}」を削除しますか？`)) return;
+  savePeopleData(loadPeople().filter(x => x.id !== id));
+  if (selectedRow === id) selectedRow = null;
+  render(); showToast('削除しました');
 }
 
 // ===== インポートモーダル =====
@@ -809,31 +940,26 @@ function openImportModal() {
   const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
   const existingNames = new Set(loadPeople().map(p => p.name));
   const list = document.getElementById('importList');
-
   if (others.length === 0) {
-    list.innerHTML = '<div style="padding:20px; text-align:center; font-size:12px; color:var(--dim)">取り込める「あの人」データがありません。<br>先にビッグファイブの「あの人診断」を受けてください。</div>';
+    list.innerHTML = '<div style="padding:20px; text-align:center; font-size:12px; color:#999">「あの人」のデータがありません。<br>先にビッグファイブの「あの人診断」を受けてください。</div>';
     document.getElementById('importExecBtn').disabled = true;
   } else {
     document.getElementById('importExecBtn').disabled = false;
     list.innerHTML = others.map((r, i) => {
-      const alreadyExists = existingNames.has(r.name);
-      const code = r.code || '?????';
+      const already = existingNames.has(r.name);
       const dateStr = r.date ? r.date.slice(0, 10).replace(/-/g, '/') : '不明';
-      return `<div class="import-item${alreadyExists ? ' already' : ''}" data-idx="${i}" onclick="toggleImportItem(this, ${i})">
-        <div class="import-check" id="icheck-${i}">${alreadyExists ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
+      return `<div class="import-item${already ? ' already' : ''}" data-idx="${i}" onclick="toggleImportItem(this, ${i})">
+        <div class="import-check" id="icheck-${i}">${already ? '✓' : ''}</div>
         <span class="import-item-name">${esc(r.name || '名前なし')}</span>
-        <span class="import-item-code">${code} | ${dateStr}</span>
-        ${alreadyExists ? '<span class="import-item-already">登録済み</span>' : ''}
+        <span class="import-item-code">${r.code || '?????'} | ${dateStr}</span>
+        ${already ? '<span class="import-item-already">登録済み</span>' : ''}
       </div>`;
     }).join('');
-    // デフォルトで未登録のものを全選択
     others.forEach((r, i) => {
       if (!existingNames.has(r.name)) {
         importSelections.add(i);
-        const check = document.getElementById('icheck-' + i);
-        if (check) check.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
         const item = list.querySelector(`[data-idx="${i}"]`);
-        if (item) item.classList.add('selected');
+        if (item) { item.classList.add('selected'); document.getElementById('icheck-' + i).textContent = '✓'; }
       }
     });
     updateImportInfo();
@@ -846,41 +972,31 @@ function toggleImportItem(el, idx) {
   if (importSelections.has(idx)) {
     importSelections.delete(idx);
     el.classList.remove('selected');
-    document.getElementById('icheck-' + idx).innerHTML = '';
+    document.getElementById('icheck-' + idx).textContent = '';
   } else {
     importSelections.add(idx);
     el.classList.add('selected');
-    document.getElementById('icheck-' + idx).innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+    document.getElementById('icheck-' + idx).textContent = '✓';
   }
   updateImportInfo();
 }
-
 function updateImportInfo() {
   document.getElementById('importSelectInfo').textContent = `${importSelections.size}件 選択中`;
   document.getElementById('importExecBtn').disabled = importSelections.size === 0;
 }
-
-function closeImportModal() {
-  document.getElementById('importModal').classList.remove('show');
-}
-function closeImportModalOnOverlay(e) {
-  if (e.target === document.getElementById('importModal')) closeImportModal();
-}
+function closeImportModal() { document.getElementById('importModal').classList.remove('show'); }
+function closeImportModalOnOverlay(e) { if (e.target === document.getElementById('importModal')) closeImportModal(); }
 
 function execImport() {
-  if (importSelections.size === 0) return;
   const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
   const people = loadPeople();
   let added = 0;
-
   importSelections.forEach(idx => {
     const r = others[idx];
     if (!r) return;
     const code = r.code || '';
-    const entry = {
-      id: genId(),
-      name: r.name || '名前なし',
-      memo: '',
+    people.push({
+      id: genId(), name: r.name || '名前なし', memo: '',
       O: code[0] ? parseInt(code[0]) : null,
       C: code[1] ? parseInt(code[1]) : null,
       E: code[2] ? parseInt(code[2]) : null,
@@ -888,96 +1004,61 @@ function execImport() {
       N: code[4] ? parseInt(code[4]) : null,
       date: r.date ? r.date.slice(0, 10) : new Date().toISOString().slice(0, 10),
       source: 'imported'
-    };
-    people.push(entry);
+    });
     added++;
   });
-
-  savePeopleData(people);
-  closeImportModal();
-  render();
-  showNotice(`${added}人のデータを取り込みました`, 'success');
+  savePeopleData(people); closeImportModal(); render();
+  showToast(`${added}人を取り込みました`);
 }
 
 // ===== CSV エクスポート =====
 function exportCSV() {
   const people = loadPeople();
   if (people.length === 0) { showToast('登録データがありません'); return; }
-
-  const FACTOR_LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
-  const header = ['名前', '役割・メモ', ...['O','C','E','A','N'].map(f => f + '_' + FACTOR_LABELS[f]), '診断日', '登録種別'];
-  const rows = people.map(p => [
-    p.name, p.memo || '',
-    p.O || '', p.C || '', p.E || '', p.A || '', p.N || '',
-    p.date || '',
-    p.source === 'imported' ? '取込' : '手動'
-  ]);
-
-  const csv = [header, ...rows].map(row =>
-    row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')
-  ).join('\r\n');
-
-  const bom = '﻿';
-  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
+  const header = ['名前', '役割・メモ', 'O_開放性', 'C_誠実性', 'E_外向性', 'A_協調性', 'N_感受性', '診断日', '種別'];
+  const rows = people.map(p => [p.name, p.memo||'', p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.source==='imported'?'取込':'手動']);
+  const csv = [header, ...rows].map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'bigfive_dashboard_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bigfive_' + new Date().toISOString().slice(0,10) + '.csv';
   a.click();
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(a.href);
   showToast('CSVをダウンロードしました');
 }
 
-// ===== AI 用テキストコピー =====
+// ===== AI コピー =====
 function copyForAI() {
   const people = loadPeople();
   if (people.length === 0) { showToast('登録データがありません'); return; }
-
-  const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
-  const lines = [
-    '【ビッグファイブ スコア一覧】',
-    '※ スコアは1〜5。5=非常に高い / 3=平均 / 1=非常に低い',
-    ''
-  ];
+  const LB = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const lines = ['【ビッグファイブ スコア一覧】', '※ スコア 1〜5。5=非常に高い / 3=平均 / 1=非常に低い', ''];
   people.forEach(p => {
-    const scoreParts = ['O','C','E','A','N'].map(f => {
-      return p[f] ? `${LABELS[f]}(${f})=${p[f]}` : null;
-    }).filter(Boolean).join('、');
+    const sc = ['O','C','E','A','N'].map(f => p[f] ? `${LB[f]}(${f})=${p[f]}` : null).filter(Boolean).join('、');
     lines.push(`■ ${p.name}${p.memo ? '（' + p.memo + '）' : ''}`);
-    if (scoreParts) lines.push(`  ${scoreParts}`);
+    if (sc) lines.push(`  ${sc}`);
     lines.push('');
   });
-
-  const text = lines.join('\n');
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('クリップボードにコピーしました');
-  }).catch(() => {
-    showToast('コピーに失敗しました（ブラウザの設定をご確認ください）');
-  });
+  navigator.clipboard.writeText(lines.join('\n')).then(
+    () => showToast('クリップボードにコピーしました'),
+    () => showToast('コピーに失敗しました')
+  );
 }
 
-// ===== Toast / Notice =====
+// ===== Toast =====
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2400);
 }
-function showNotice(msg, type = 'info') {
-  const n = document.getElementById('notice');
-  n.textContent = msg;
-  n.className = `notice notice-${type} show`;
-  setTimeout(() => n.classList.remove('show'), 5000);
-}
 
-// ===== Enterキーで保存 =====
+// ===== Enter キーで保存 =====
 document.querySelectorAll('#editModal .form-input, #editModal .score-num-input').forEach(el => {
   el.addEventListener('keydown', e => { if (e.key === 'Enter') savePerson(); });
 });
 
-// ===== 初期レンダリング =====
 render();
 </script>
-<script src="nav.js" defer></script>
 </body>
 </html>
