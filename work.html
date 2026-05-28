@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Noto Sans JP', 'Segoe UI', Meiryo, sans-serif;
   background: #f0f0f0;
@@ -17,72 +16,62 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-size: 13px;
+  font-size: 11px;
+  overflow: hidden;
+  height: 100vh;
 }
 
 /* ===== TITLE BAR ===== */
-.excel-titlebar {
+.xl-title {
   background: #217346;
   color: #fff;
-  height: 34px;
+  height: 26px;
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  gap: 10px;
+  padding: 0 8px;
+  gap: 8px;
   flex-shrink: 0;
   user-select: none;
 }
-.excel-titlebar-icon {
-  font-size: 18px;
-  line-height: 1;
-}
-.excel-titlebar-name {
-  font-size: 13px;
-  font-weight: 600;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.excel-titlebar-back {
-  font-size: 11px;
-  color: rgba(255,255,255,0.75);
+.xl-title-icon { font-size: 14px; }
+.xl-title-name { font-size: 12px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xl-title-back {
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
   text-decoration: none;
-  padding: 3px 9px;
+  padding: 2px 7px;
   border: 1px solid rgba(255,255,255,0.35);
-  border-radius: 3px;
-  transition: background 0.15s;
+  border-radius: 2px;
+  transition: background 0.1s;
   white-space: nowrap;
 }
-.excel-titlebar-back:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.xl-title-back:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
 /* ===== RIBBON TABS ===== */
-.excel-tabs {
+.xl-tabs {
   background: #1a5c38;
   display: flex;
   align-items: flex-end;
-  padding: 0 8px;
-  gap: 2px;
+  padding: 0 6px;
+  gap: 1px;
   flex-shrink: 0;
 }
-.excel-tab {
-  padding: 6px 14px 5px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.80);
-  cursor: pointer;
-  border-radius: 3px 3px 0 0;
+.xl-tab {
+  padding: 4px 11px 3px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.78);
+  cursor: default;
+  border-radius: 2px 2px 0 0;
   border: 1px solid transparent;
   border-bottom: none;
-  transition: background 0.1s, color 0.1s;
   user-select: none;
   white-space: nowrap;
 }
-.excel-tab:hover { background: rgba(255,255,255,0.12); color: #fff; }
-.excel-tab.active {
+.xl-tab.active {
   background: #f0f0f0;
   color: #1a1a1a;
   font-weight: 700;
-  border-color: #c0c0c0;
+  border-color: #b0b0b0;
   border-bottom: 1px solid #f0f0f0;
   margin-bottom: -1px;
   position: relative;
@@ -90,167 +79,146 @@ body {
 }
 
 /* ===== RIBBON ===== */
-.excel-ribbon {
+.xl-ribbon {
   background: #f0f0f0;
-  border-bottom: 1px solid #c0c0c0;
+  border-bottom: 1px solid #b8b8b8;
   display: flex;
   align-items: stretch;
-  padding: 4px 8px;
+  padding: 2px 6px;
   gap: 0;
   flex-shrink: 0;
-  min-height: 64px;
-  flex-wrap: wrap;
+  min-height: 52px;
 }
-.ribbon-group {
+.rg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2px 8px 0;
-  border-right: 1px solid #d0d0d0;
-  gap: 2px;
+  justify-content: space-between;
+  padding: 2px 6px 1px;
+  border-right: 1px solid #c8c8c8;
 }
-.ribbon-group:last-child { border-right: none; }
-.ribbon-group-buttons {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  flex: 1;
-}
-.ribbon-group-label {
-  font-size: 10px;
-  color: #767676;
-  margin-top: auto;
-  padding-top: 3px;
-  white-space: nowrap;
-}
+.rg:last-child { border-right: none; }
+.rg-btns { display: flex; align-items: center; gap: 2px; flex: 1; padding-top: 2px; }
+.rg-label { font-size: 9px; color: #888; padding-top: 2px; white-space: nowrap; }
 
-/* Ribbon buttons */
-.rbtn {
+/* Ribbon button – large (icon above label) */
+.rb {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 4px 8px;
-  min-width: 42px;
+  gap: 1px;
+  padding: 2px 5px;
+  min-width: 36px;
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: 2px;
   background: transparent;
-  color: #1a1a1a;
+  color: #222;
   cursor: pointer;
-  font-family: 'Noto Sans JP', 'Segoe UI', sans-serif;
-  font-size: 11px;
+  font-family: inherit;
+  font-size: 9px;
   text-align: center;
   transition: background 0.1s, border-color 0.1s;
-  line-height: 1.3;
+  line-height: 1.2;
   white-space: nowrap;
 }
-.rbtn:hover { background: #e0ecf8; border-color: #a0c4e8; }
-.rbtn:active { background: #cce0f5; border-color: #7ab0da; }
-.rbtn-icon { font-size: 20px; line-height: 1; }
-.rbtn-label { font-size: 10px; color: #333; }
+.rb:hover { background: #dcedf8; border-color: #9bc0de; }
+.rb:active { background: #c8dff0; }
+.rb .ri { font-size: 16px; line-height: 1; }
+.rb .rl { font-size: 9px; color: #333; }
 
-/* Small ribbon button (horizontal) */
-.rbtn-sm {
+/* Ribbon button – small (icon + text horizontal) */
+.rb-sm {
   flex-direction: row;
-  gap: 5px;
-  padding: 3px 8px;
+  gap: 3px;
+  padding: 2px 6px;
   min-width: auto;
-  font-size: 11px;
-  min-height: 20px;
+  height: 18px;
+  font-size: 10px;
   align-items: center;
-  justify-content: flex-start;
 }
-.rbtn-sm .rbtn-icon { font-size: 13px; }
+.rb-sm .ri { font-size: 11px; }
 
 /* Stats in ribbon */
-.ribbon-stat {
+.rstat {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4px 12px;
-  color: #555;
-  font-size: 11px;
-  line-height: 1.8;
+  padding: 2px 10px;
+  line-height: 1.6;
 }
-.ribbon-stat strong {
-  font-size: 22px;
-  color: #217346;
-  font-weight: 700;
-  line-height: 1;
-}
+.rstat strong { font-size: 18px; color: #217346; font-weight: 700; line-height: 1; }
+.rstat span { font-size: 9px; color: #666; }
 
 /* ===== FORMULA BAR ===== */
-.formula-bar {
+.xl-fbar {
   background: #fff;
-  border-bottom: 1px solid #c8c8c8;
+  border-bottom: 1px solid #c0c0c0;
   display: flex;
   align-items: center;
-  height: 26px;
-  padding: 0 8px;
-  gap: 6px;
+  height: 21px;
+  padding: 0 6px;
+  gap: 5px;
   flex-shrink: 0;
-  font-size: 12px;
 }
-.formula-cell-ref {
-  width: 72px;
-  background: #fff;
-  border: 1px solid #d0d0d0;
-  border-radius: 2px;
-  padding: 2px 6px;
-  font-size: 12px;
+.xl-fbar-ref {
+  width: 60px;
+  border: 1px solid #c8c8c8;
+  border-radius: 1px;
+  padding: 1px 5px;
+  font-size: 11px;
   text-align: center;
   color: #444;
   flex-shrink: 0;
+  font-family: inherit;
 }
-.formula-divider {
-  width: 1px;
-  height: 16px;
-  background: #d0d0d0;
-  flex-shrink: 0;
-}
-.formula-bar-text {
-  color: #555;
-  font-size: 11px;
-  font-style: italic;
-}
+.xl-fbar-div { width: 1px; height: 14px; background: #ccc; flex-shrink: 0; }
+.xl-fbar-text { color: #777; font-size: 10px; font-style: italic; }
 
-/* ===== SPREADSHEET AREA ===== */
-.sheet-wrapper {
+/* ===== SHEET WRAPPER ===== */
+.sheet-wrap {
   flex: 1;
   overflow: auto;
   background: #fff;
 }
 
-/* ===== TABLE ===== */
-.sheet-table {
+/* ===== SHEET TABLE ===== */
+.sh {
   border-collapse: collapse;
   table-layout: fixed;
-  min-width: 900px;
+  min-width: 100%;
 }
 
-/* Corner cell */
+/* Column widths */
+.c-no   { width: 32px; }
+.c-name { width: 100px; }
+.c-pos  { width: 90px; }
+.c-dept { width: 80px; }
+.c-age  { width: 38px; }
+.c-addr { width: 120px; }
+.c-sc   { width: 34px; }
+.c-date { width: 66px; }
+.c-memo { width: 120px; }
+.c-src  { width: 36px; }
+.c-ops  { width: 70px; }
+
+/* Corner */
 .sh-corner {
-  background: #e8e8e8;
-  border-right: 1px solid #bfbfbf;
+  background: #e0e0e0;
+  border-right: 1px solid #bbb;
   border-bottom: 2px solid #217346;
-  width: 40px;
-  min-width: 40px;
-  position: sticky;
-  left: 0;
-  top: 0;
-  z-index: 10;
+  position: sticky; left: 0; top: 0; z-index: 10;
 }
 
 /* Column headers */
-.sh-col-header {
+.sh-ch {
   background: #e8e8e8;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #c8c8c8;
   border-bottom: 2px solid #217346;
-  padding: 4px 6px;
+  padding: 2px 4px;
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
   user-select: none;
@@ -259,802 +227,667 @@ body {
   top: 0;
   z-index: 5;
   color: #333;
+  line-height: 1.3;
 }
-.sh-col-header:hover { background: #d8e8d8; }
-.sh-col-header.sort-asc { background: #d0e8d0; color: #1a5c38; }
-.sh-col-header.sort-desc { background: #d0e8d0; color: #1a5c38; }
-.sh-col-header .sh-sort { font-size: 9px; margin-left: 2px; color: #217346; }
+.sh-ch:hover { background: #d8ead8; }
+.sh-ch.sa { background: #cce0cc; color: #1a5c38; }
+.sh-ch.sd { background: #cce0cc; color: #1a5c38; }
+.sh-ch .sa-arrow { font-size: 8px; color: #217346; }
 
-/* Row number cells */
-.sh-row-num {
+/* Row number */
+.sh-rn {
   background: #e8e8e8;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #c8c8c8;
   text-align: center;
-  font-size: 11px;
-  color: #666;
-  width: 40px;
-  min-width: 40px;
-  padding: 3px 4px;
-  position: sticky;
-  left: 0;
-  z-index: 3;
+  font-size: 10px;
+  color: #777;
+  width: 32px;
+  padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
   user-select: none;
 }
-tr.row-selected .sh-row-num {
-  background: #217346;
-  color: #fff;
-  font-weight: 700;
-}
+tr.row-sel .sh-rn { background: #217346; color: #fff; font-weight: 700; }
 
 /* Data cells */
-.sh-cell {
-  border: 1px solid #d0d0d0;
-  padding: 3px 6px;
-  height: 24px;
+.sh-td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 4px;
+  height: 20px;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: cell;
+  font-size: 11px;
 }
-.sh-cell:focus { outline: 2px solid #217346; outline-offset: -2px; }
-tr:hover .sh-cell { background: #f5faf7; }
-tr.row-selected .sh-cell { background: #e2f0e9; }
+tr:hover .sh-td { background: #f4faf6; }
+tr.row-sel .sh-td { background: #e0eee6; }
 
-/* Column widths */
-.col-name    { width: 130px; min-width: 100px; }
-.col-memo    { width: 180px; min-width: 120px; }
-.col-score   { width: 44px; min-width: 40px; text-align: center; }
-.col-date    { width: 78px; min-width: 70px; text-align: center; }
-.col-src     { width: 46px; min-width: 42px; text-align: center; }
-.col-ops     { width: 86px; min-width: 80px; text-align: center; }
+/* Score cells */
+.sh-sc {
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.s5 { background: #c6efce; color: #276221; }
+.s4 { background: #e2efda; color: #375623; }
+.s3 { color: #666; }
+.s2 { background: #fce4d6; color: #833c0b; }
+.s1 { background: #ffc7ce; color: #9c0006; }
+tr:hover .s5 { background: #b8e5be; }
+tr:hover .s4 { background: #d5e8cc; }
+tr:hover .s2 { background: #f0d4c4; }
+tr:hover .s1 { background: #f5bac4; }
 
-/* Score coloring (Excel-style: pastel fill) */
-.s5 { background: #e2efda; color: #375623; font-weight: 700; }
-.s4 { background: #ebf4e4; color: #375623; }
-.s3 { color: #555; }
-.s2 { background: #fce4d6; color: #843c0c; }
-.s1 { background: #ffc7ce; color: #9c0006; font-weight: 700; }
-tr:hover .s5 { background: #d8e9cf; }
-tr:hover .s4 { background: #e2eeda; }
-tr:hover .s2 { background: #f5d8ca; }
-tr:hover .s1 { background: #f5bdc8; }
+/* Cell content */
+.cv-name { font-weight: 600; font-size: 12px; }
+.cv-sub  { font-size: 10px; color: #555; }
+.cv-dim  { font-size: 10px; color: #aaa; font-style: italic; }
+.cv-date { font-size: 10px; color: #666; font-variant-numeric: tabular-nums; }
 
 /* Source badge */
-.src-badge {
-  font-size: 9px;
-  padding: 0px 4px;
-  border-radius: 2px;
-  font-weight: 600;
-}
-.src-m { background: #e8e0f8; color: #5b21b6; }
-.src-i { background: #d1fae5; color: #065f46; }
-
-/* Cell name, memo */
-.cell-name-val { font-weight: 600; font-size: 13px; }
-.cell-memo-val { color: #555; font-size: 12px; }
-.cell-memo-val.empty { color: #bbb; font-style: italic; }
-.cell-date-val { font-size: 11px; color: #555; font-variant-numeric: tabular-nums; }
+.src { font-size: 8px; padding: 0 3px; border-radius: 2px; font-weight: 700; }
+.src-m { background: #e0d8f8; color: #4c1d95; }
+.src-i { background: #d1f5e8; color: #065f46; }
 
 /* Action buttons in cell */
-.cell-ops { display: flex; gap: 3px; justify-content: center; }
-.cell-btn {
-  padding: 1px 7px;
-  font-size: 11px;
+.c-ops-wrap { display: flex; gap: 2px; justify-content: center; }
+.c-btn {
+  padding: 0 5px;
+  height: 16px;
+  font-size: 10px;
   border: 1px solid #c0c0c0;
-  border-radius: 2px;
+  border-radius: 1px;
   background: #fff;
   cursor: pointer;
   font-family: inherit;
   transition: background 0.1s;
   color: #333;
+  line-height: 1;
 }
-.cell-btn:hover { background: #e0ecf8; border-color: #90b8d8; }
-.cell-btn.del:hover { background: #fde8e8; border-color: #f0a0a0; color: #c00; }
+.c-btn:hover { background: #dce8f5; border-color: #8ab4d5; }
+.c-btn.del:hover { background: #fde8e8; border-color: #f0a0a0; color: #c00; }
 
-/* Empty state row */
+/* Empty row */
 .empty-row td {
   text-align: center;
-  padding: 40px 20px;
-  color: #999;
-  font-size: 13px;
+  padding: 28px 20px;
+  color: #aaa;
+  font-size: 12px;
   border: 1px solid #e0e0e0;
+  font-style: italic;
 }
 
 /* ===== STATUS BAR ===== */
-.excel-statusbar {
+.xl-status {
   background: #217346;
-  color: rgba(255,255,255,0.85);
-  height: 22px;
+  color: rgba(255,255,255,0.88);
+  height: 18px;
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  gap: 16px;
-  font-size: 11px;
+  padding: 0 10px;
+  gap: 14px;
+  font-size: 10px;
   flex-shrink: 0;
-  margin-top: auto;
 }
-.statusbar-item { white-space: nowrap; }
+.xl-status span { white-space: nowrap; }
 
 /* ===== MODAL ===== */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-.modal-overlay.show { display: flex; }
-.modal {
+.mo { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.mo.show { display: flex; }
+.mo-box {
   background: #fff;
-  border: 1px solid #ababab;
-  border-radius: 4px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
   width: 100%;
-  max-width: 420px;
-  margin: 16px;
-  max-height: 90vh;
+  max-width: 480px;
+  margin: 12px;
+  max-height: 92vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
-.modal-header {
+.mo-hd {
   background: #217346;
   color: #fff;
-  padding: 9px 14px;
-  font-size: 13px;
+  padding: 7px 12px;
+  font-size: 12px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
 }
-.modal-close {
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.8);
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 4px;
-  line-height: 1;
-}
-.modal-close:hover { color: #fff; }
-.modal-body { padding: 16px; flex: 1; overflow-y: auto; }
-.modal-footer {
-  padding: 10px 16px;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
+.mo-x { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 14px; padding: 0 3px; line-height: 1; }
+.mo-x:hover { color: #fff; }
+.mo-bd { padding: 12px 14px; overflow-y: auto; }
+.mo-ft { padding: 8px 14px; border-top: 1px solid #e0e0e0; display: flex; gap: 6px; justify-content: flex-end; flex-shrink: 0; }
 
-/* Modal form */
-.form-row { margin-bottom: 12px; }
-.form-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: #555;
-  margin-bottom: 4px;
-}
-.form-input {
+/* Form in modal */
+.f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.f-row { margin-bottom: 0; }
+.f-lbl { display: block; font-size: 10px; font-weight: 700; color: #666; margin-bottom: 3px; }
+.f-inp {
   width: 100%;
-  padding: 5px 8px;
-  border: 1px solid #ababab;
+  padding: 4px 7px;
+  border: 1px solid #b8b8b8;
   border-radius: 2px;
-  font-size: 13px;
+  font-size: 12px;
   font-family: inherit;
   color: #1a1a1a;
   transition: border-color 0.15s;
 }
-.form-input:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.15); }
+.f-inp:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.12); }
+.f-full { grid-column: 1 / -1; }
 
 /* Score inputs */
-.score-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-}
-.score-wrap { text-align: center; }
-.score-factor-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-.score-num-input {
+.sc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+.sc-wrap { text-align: center; }
+.sc-fl { display: block; font-size: 10px; font-weight: 700; margin-bottom: 2px; }
+.sc-inp {
   width: 100%;
-  padding: 6px 2px;
+  padding: 5px 2px;
   text-align: center;
-  border: 1px solid #ababab;
+  border: 1px solid #b8b8b8;
   border-radius: 2px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   font-family: inherit;
   color: #1a1a1a;
   -moz-appearance: textfield;
   transition: border-color 0.15s;
 }
-.score-num-input::-webkit-outer-spin-button,
-.score-num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.score-num-input:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.15); }
-.score-hint { font-size: 10px; color: #888; text-align: center; margin-top: 5px; }
+.sc-inp::-webkit-outer-spin-button,
+.sc-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.sc-inp:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.12); }
+.sc-hint { font-size: 9px; color: #999; text-align: center; margin-top: 4px; }
 
 /* Modal buttons */
-.mbtn {
-  padding: 5px 16px;
-  font-size: 12px;
-  font-family: inherit;
-  border-radius: 2px;
-  cursor: pointer;
-  border: 1px solid #ababab;
-  transition: background 0.1s;
-  font-weight: 600;
-}
-.mbtn-primary { background: #217346; color: #fff; border-color: #1a5c38; }
-.mbtn-primary:hover { background: #1a5c38; }
-.mbtn-default { background: #fff; color: #333; }
-.mbtn-default:hover { background: #f0f0f0; }
+.mb { padding: 4px 14px; font-size: 11px; font-family: inherit; border-radius: 2px; cursor: pointer; border: 1px solid #aaa; font-weight: 600; }
+.mb-ok { background: #217346; color: #fff; border-color: #1a5c38; }
+.mb-ok:hover { background: #1a5c38; }
+.mb-ng { background: #fff; color: #333; }
+.mb-ng:hover { background: #f0f0f0; }
 
 /* Import list */
-.import-list {
-  max-height: 240px;
-  overflow-y: auto;
-  border: 1px solid #d0d0d0;
-  margin-bottom: 10px;
+.imp-list { max-height: 220px; overflow-y: auto; border: 1px solid #d0d0d0; margin-bottom: 8px; }
+.imp-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 4px 8px; border-bottom: 1px solid #eee;
+  font-size: 11px; cursor: pointer; transition: background 0.1s; user-select: none;
 }
-.import-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-bottom: 1px solid #eee;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.1s;
-  user-select: none;
+.imp-item:last-child { border-bottom: none; }
+.imp-item:hover:not(.already) { background: #f0f8f4; }
+.imp-item.already { opacity: 0.4; pointer-events: none; }
+.imp-item.sel { background: #e2f0e9; }
+.imp-ck {
+  width: 13px; height: 13px;
+  border: 1.5px solid #aaa; border-radius: 2px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; background: #fff;
 }
-.import-item:last-child { border-bottom: none; }
-.import-item:hover:not(.already) { background: #f0f8f4; }
-.import-item.already { opacity: 0.45; pointer-events: none; }
-.import-item.selected { background: #e2f0e9; }
-.import-check {
-  width: 15px; height: 15px;
-  border: 1.5px solid #ababab;
-  border-radius: 2px;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  background: #fff;
-}
-.import-item.selected .import-check { background: #217346; border-color: #217346; color: #fff; }
-.import-item-name { font-weight: 600; flex: 1; }
-.import-item-code { font-size: 10px; color: #888; font-variant-numeric: tabular-nums; }
-.import-item-already { font-size: 10px; color: #999; }
-.import-select-info { font-size: 11px; color: #666; margin-bottom: 6px; }
+.imp-item.sel .imp-ck { background: #217346; border-color: #217346; color: #fff; }
+.imp-nm { font-weight: 600; flex: 1; }
+.imp-cd { font-size: 9px; color: #999; font-variant-numeric: tabular-nums; }
+.imp-al { font-size: 9px; color: #bbb; }
+.imp-info { font-size: 10px; color: #777; margin-bottom: 5px; }
 
-/* ===== TOAST ===== */
+/* Toast */
 .toast {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(12px);
-  background: #333;
-  color: #fff;
-  padding: 8px 18px;
-  font-size: 12px;
-  border-radius: 3px;
-  z-index: 9999;
-  opacity: 0;
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #333; color: #fff;
+  padding: 6px 16px; font-size: 11px; border-radius: 2px;
+  z-index: 9999; opacity: 0;
   transition: opacity 0.2s, transform 0.2s;
-  pointer-events: none;
-  white-space: nowrap;
+  pointer-events: none; white-space: nowrap;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- ===== TITLE BAR ===== -->
-<div class="excel-titlebar">
-  <span class="excel-titlebar-icon">📗</span>
-  <span class="excel-titlebar-name">仕事用ダッシュボード.xlsx — ビッグファイブ スコア管理</span>
-  <a href="mypage.html" class="excel-titlebar-back">← サイトに戻る</a>
+<!-- TITLE BAR -->
+<div class="xl-title">
+  <span class="xl-title-icon">📗</span>
+  <span class="xl-title-name">仕事用ダッシュボード.xlsx — ビッグファイブ スコア管理</span>
+  <a href="mypage.html" class="xl-title-back">← サイトに戻る</a>
 </div>
 
-<!-- ===== RIBBON TABS ===== -->
-<div class="excel-tabs">
-  <div class="excel-tab active">ホーム</div>
-  <div class="excel-tab" style="opacity:0.6; cursor:default">データ</div>
-  <div class="excel-tab" style="opacity:0.6; cursor:default">表示</div>
+<!-- RIBBON TABS -->
+<div class="xl-tabs">
+  <div class="xl-tab active">ホーム</div>
+  <div class="xl-tab">データ</div>
+  <div class="xl-tab">表示</div>
 </div>
 
-<!-- ===== RIBBON ===== -->
-<div class="excel-ribbon">
+<!-- RIBBON -->
+<div class="xl-ribbon">
 
-  <!-- グループ：新規 -->
-  <div class="ribbon-group">
-    <div class="ribbon-group-buttons">
-      <button class="rbtn" onclick="openAddModal()" title="新しい人物を追加">
-        <span class="rbtn-icon">➕</span>
-        <span class="rbtn-label">人物を追加</span>
+  <div class="rg">
+    <div class="rg-btns">
+      <button class="rb" onclick="openAddModal()">
+        <span class="ri">➕</span>
+        <span class="rl">人物追加</span>
       </button>
-      <div style="display:flex;flex-direction:column;gap:2px;padding-top:2px;">
-        <button class="rbtn rbtn-sm" onclick="openImportModal()" title="あの人診断データを取り込む">
-          <span class="rbtn-icon">⬇️</span> あの人データ取込
-        </button>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button class="rb rb-sm" onclick="openImportModal()"><span class="ri">⬇️</span>あの人データ取込</button>
+        <button class="rb rb-sm" onclick="exportCSV()"><span class="ri">📥</span>CSV保存</button>
+        <button class="rb rb-sm" onclick="copyForAI()"><span class="ri">🤖</span>AI用コピー</button>
       </div>
     </div>
-    <span class="ribbon-group-label">入力</span>
+    <span class="rg-label">操作</span>
   </div>
 
-  <!-- グループ：クリップボード -->
-  <div class="ribbon-group">
-    <div class="ribbon-group-buttons">
-      <button class="rbtn" onclick="exportCSV()" title="Excelで開けるCSVをダウンロード">
-        <span class="rbtn-icon">📥</span>
-        <span class="rbtn-label">CSV保存</span>
-      </button>
-      <button class="rbtn" onclick="copyForAI()" title="AI（ChatGPT等）に貼り付けるテキストをコピー">
-        <span class="rbtn-icon">🤖</span>
-        <span class="rbtn-label">AI用コピー</span>
-      </button>
+  <div class="rg" style="border-right:none">
+    <div class="rg-btns">
+      <div class="rstat"><strong id="statCount">0</strong><span>件登録</span></div>
+      <div class="rstat"><strong id="statScored" style="color:#217346">0</strong><span>件スコアあり</span></div>
     </div>
-    <span class="ribbon-group-label">エクスポート</span>
-  </div>
-
-  <!-- グループ：統計 -->
-  <div class="ribbon-group" style="border-right:none">
-    <div class="ribbon-group-buttons">
-      <div class="ribbon-stat">
-        <strong id="statCount">0</strong>
-        件登録
-      </div>
-      <div class="ribbon-stat" style="color:#217346">
-        <strong id="statScored" style="color:#217346">0</strong>
-        件スコアあり
-      </div>
-    </div>
-    <span class="ribbon-group-label">集計</span>
+    <span class="rg-label">集計</span>
   </div>
 
 </div>
 
-<!-- ===== FORMULA BAR ===== -->
-<div class="formula-bar">
-  <span class="formula-cell-ref" id="cellRef">A1</span>
-  <span class="formula-divider"></span>
-  <span class="formula-bar-text" id="formulaText">データはこの端末にのみ保存されます（localStorage）</span>
+<!-- FORMULA BAR -->
+<div class="xl-fbar">
+  <input class="xl-fbar-ref" id="cellRef" value="A1" readonly>
+  <span class="xl-fbar-div"></span>
+  <span class="xl-fbar-text" id="fbarText">データはこの端末にのみ保存されます（localStorage）</span>
 </div>
 
-<!-- ===== SPREADSHEET ===== -->
-<div class="sheet-wrapper">
-  <table class="sheet-table" id="sheetTable">
+<!-- SHEET -->
+<div class="sheet-wrap">
+  <table class="sh" id="sheetTable">
+    <colgroup>
+      <col class="c-no">
+      <col class="c-name">
+      <col class="c-pos">
+      <col class="c-dept">
+      <col class="c-age">
+      <col class="c-addr">
+      <col class="c-sc"><col class="c-sc"><col class="c-sc"><col class="c-sc"><col class="c-sc">
+      <col class="c-date">
+      <col class="c-memo">
+      <col class="c-src">
+      <col class="c-ops">
+    </colgroup>
     <thead>
       <tr>
         <th class="sh-corner"></th>
-        <th class="sh-col-header col-name sortable" data-col="name">
-          名前 <span class="sh-sort" id="sort-name"></span>
-        </th>
-        <th class="sh-col-header col-memo sortable" data-col="memo">
-          役割・メモ <span class="sh-sort" id="sort-memo"></span>
-        </th>
-        <th class="sh-col-header col-score sortable" data-col="O" style="color:#5b21b6">
-          O<br><span style="font-size:9px;font-weight:400;color:#888">開放性</span>
-          <span class="sh-sort" id="sort-O"></span>
-        </th>
-        <th class="sh-col-header col-score sortable" data-col="C" style="color:#1d4ed8">
-          C<br><span style="font-size:9px;font-weight:400;color:#888">誠実性</span>
-          <span class="sh-sort" id="sort-C"></span>
-        </th>
-        <th class="sh-col-header col-score sortable" data-col="E" style="color:#c2410c">
-          E<br><span style="font-size:9px;font-weight:400;color:#888">外向性</span>
-          <span class="sh-sort" id="sort-E"></span>
-        </th>
-        <th class="sh-col-header col-score sortable" data-col="A" style="color:#be185d">
-          A<br><span style="font-size:9px;font-weight:400;color:#888">協調性</span>
-          <span class="sh-sort" id="sort-A"></span>
-        </th>
-        <th class="sh-col-header col-score sortable" data-col="N" style="color:#065f46">
-          N<br><span style="font-size:9px;font-weight:400;color:#888">感受性</span>
-          <span class="sh-sort" id="sort-N"></span>
-        </th>
-        <th class="sh-col-header col-date sortable" data-col="date">
-          診断日 <span class="sh-sort" id="sort-date"></span>
-        </th>
-        <th class="sh-col-header col-src">種別</th>
-        <th class="sh-col-header col-ops">操作</th>
+        <th class="sh-ch sortable" data-col="name">名前<span class="sa-arrow" id="sa-name"></span></th>
+        <th class="sh-ch sortable" data-col="pos">役職<span class="sa-arrow" id="sa-pos"></span></th>
+        <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
+        <th class="sh-ch sortable" data-col="age" title="年齢">年齢<span class="sa-arrow" id="sa-age"></span></th>
+        <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
+        <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
+        <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
+        <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
+        <th class="sh-ch sortable" data-col="A" style="color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span><span class="sa-arrow" id="sa-A"></span></th>
+        <th class="sh-ch sortable" data-col="N" style="color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span><span class="sa-arrow" id="sa-N"></span></th>
+        <th class="sh-ch sortable" data-col="date">診断日<span class="sa-arrow" id="sa-date"></span></th>
+        <th class="sh-ch sortable" data-col="memo">メモ<span class="sa-arrow" id="sa-memo"></span></th>
+        <th class="sh-ch">種別</th>
+        <th class="sh-ch">操作</th>
       </tr>
     </thead>
-    <tbody id="tableBody"></tbody>
+    <tbody id="tbody"></tbody>
   </table>
 </div>
 
-<!-- ===== STATUS BAR ===== -->
-<div class="excel-statusbar">
-  <span class="statusbar-item" id="statusText">準備完了</span>
-  <span class="statusbar-item" style="margin-left:auto" id="statusSort">並び順: 診断日（新しい順）</span>
+<!-- STATUS BAR -->
+<div class="xl-status">
+  <span id="statusMain">準備完了</span>
+  <span style="margin-left:auto" id="statusSort">並び順: 診断日（新しい順）</span>
 </div>
 
-<!-- ===== 追加・編集モーダル ===== -->
-<div class="modal-overlay" id="editModal" onclick="closeEditModalOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <span id="editModalTitle">人物を追加</span>
-      <button class="modal-close" onclick="closeEditModal()">✕</button>
+<!-- 追加/編集モーダル -->
+<div class="mo" id="editMo" onclick="closeMoOverlay('editMo')">
+  <div class="mo-box">
+    <div class="mo-hd">
+      <span id="editMoTitle">人物を追加</span>
+      <button class="mo-x" onclick="closeMo('editMo')">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="form-row">
-        <label class="form-label" for="inputName">名前 <span style="color:#c00">*</span></label>
-        <input class="form-input" type="text" id="inputName" placeholder="例：田中太郎" maxlength="30">
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="inputMemo">役割・メモ（任意）</label>
-        <input class="form-input" type="text" id="inputMemo" placeholder="例：営業部長、採用候補 など" maxlength="50">
-      </div>
-      <div class="form-row">
-        <label class="form-label">ビッグファイブスコア（1〜5）</label>
-        <div class="score-grid">
-          <div class="score-wrap">
-            <span class="score-factor-label" style="color:#5b21b6">O</span>
-            <input class="score-num-input" type="number" id="inputO" min="1" max="5" placeholder="3">
-          </div>
-          <div class="score-wrap">
-            <span class="score-factor-label" style="color:#1d4ed8">C</span>
-            <input class="score-num-input" type="number" id="inputC" min="1" max="5" placeholder="3">
-          </div>
-          <div class="score-wrap">
-            <span class="score-factor-label" style="color:#c2410c">E</span>
-            <input class="score-num-input" type="number" id="inputE" min="1" max="5" placeholder="3">
-          </div>
-          <div class="score-wrap">
-            <span class="score-factor-label" style="color:#be185d">A</span>
-            <input class="score-num-input" type="number" id="inputA" min="1" max="5" placeholder="3">
-          </div>
-          <div class="score-wrap">
-            <span class="score-factor-label" style="color:#065f46">N</span>
-            <input class="score-num-input" type="number" id="inputN" min="1" max="5" placeholder="3">
-          </div>
+    <div class="mo-bd">
+      <div class="f-grid" style="margin-bottom:8px">
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iName">名前 <span style="color:#c00">*</span></label>
+          <input class="f-inp" type="text" id="iName" placeholder="田中太郎" maxlength="30">
         </div>
-        <div class="score-hint">「あの人診断」の結果コード（例：32413）の各桁がスコアです。空欄でも登録できます。</div>
+        <div class="f-row">
+          <label class="f-lbl" for="iPos">役職</label>
+          <input class="f-inp" type="text" id="iPos" placeholder="営業部長" maxlength="30">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iDept">部署</label>
+          <input class="f-inp" type="text" id="iDept" placeholder="営業部" maxlength="30">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iAge">年齢</label>
+          <input class="f-inp" type="number" id="iAge" placeholder="35" min="0" max="120">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iAddr">住所（都道府県など）</label>
+          <input class="f-inp" type="text" id="iAddr" placeholder="東京都渋谷区" maxlength="40">
+        </div>
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iMemo">メモ</label>
+          <input class="f-inp" type="text" id="iMemo" placeholder="自由メモ" maxlength="60">
+        </div>
+      </div>
+      <div style="margin-bottom:4px">
+        <label class="f-lbl">ビッグファイブスコア（1〜5）</label>
+        <div class="sc-grid">
+          <div class="sc-wrap"><span class="sc-fl" style="color:#5b21b6">O</span><input class="sc-inp" type="number" id="iO" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#1d4ed8">C</span><input class="sc-inp" type="number" id="iC" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#c2410c">E</span><input class="sc-inp" type="number" id="iE" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#be185d">A</span><input class="sc-inp" type="number" id="iA" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#065f46">N</span><input class="sc-inp" type="number" id="iN" min="1" max="5" placeholder="3"></div>
+        </div>
+        <div class="sc-hint">「あの人診断」の結果コード（例: 32413）の各桁がスコアです</div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="mbtn mbtn-default" onclick="closeEditModal()">キャンセル</button>
-      <button class="mbtn mbtn-primary" id="editSaveBtn" onclick="savePerson()">登録する</button>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('editMo')">キャンセル</button>
+      <button class="mb mb-ok" id="editSaveBtn" onclick="savePerson()">登録する</button>
     </div>
   </div>
 </div>
 
-<!-- ===== インポートモーダル ===== -->
-<div class="modal-overlay" id="importModal" onclick="closeImportModalOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-header">
+<!-- インポートモーダル -->
+<div class="mo" id="impMo" onclick="closeMoOverlay('impMo')">
+  <div class="mo-box">
+    <div class="mo-hd">
       <span>あの人データを取り込む</span>
-      <button class="modal-close" onclick="closeImportModal()">✕</button>
+      <button class="mo-x" onclick="closeMo('impMo')">✕</button>
     </div>
-    <div class="modal-body">
-      <p style="font-size:12px; color:#555; margin-bottom:10px; line-height:1.7">
-        マイページの「あの人」に保存済みの診断結果を取り込みます。<br>
-        すでに同名で登録済みの人物はスキップされます。
-      </p>
-      <div class="import-list" id="importList">
-        <div style="padding:20px; text-align:center; font-size:12px; color:#999">読み込み中...</div>
-      </div>
-      <div class="import-select-info" id="importSelectInfo">0件 選択中</div>
+    <div class="mo-bd">
+      <p style="font-size:11px; color:#666; margin-bottom:8px; line-height:1.6">マイページの「あの人」に保存済みの診断結果を取り込みます。<br>すでに同名で登録済みの人物はスキップされます。</p>
+      <div class="imp-list" id="impList"></div>
+      <div class="imp-info" id="impInfo">0件 選択中</div>
     </div>
-    <div class="modal-footer">
-      <button class="mbtn mbtn-default" onclick="closeImportModal()">キャンセル</button>
-      <button class="mbtn mbtn-primary" id="importExecBtn" onclick="execImport()">取り込む</button>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('impMo')">キャンセル</button>
+      <button class="mb mb-ok" id="impBtn" onclick="execImport()">取り込む</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== データ管理 =====
 const WORK_KEY = 'bigfive_work_people';
 const OTHER_KEY = 'bigfive_other_results';
 
-function loadPeople() {
-  try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; }
-}
-function savePeopleData(arr) { localStorage.setItem(WORK_KEY, JSON.stringify(arr)); }
-function genId() { return 'w-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7); }
+function load() { try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; } }
+function save(arr) { localStorage.setItem(WORK_KEY, JSON.stringify(arr)); }
+function genId() { return 'w' + Date.now() + Math.random().toString(36).slice(2, 6); }
 
-// ===== ソート状態 =====
-let sortCol = 'date';
-let sortDir = 'desc';
-let selectedRow = null;
+let sortCol = 'date', sortDir = 'desc', selId = null;
 
-// ===== レンダリング =====
+// ===== RENDER =====
 function render() {
-  const people = loadPeople();
-  const tbody = document.getElementById('tableBody');
-  const sorted = [...people].sort((a, b) => {
-    let va = a[sortCol] ?? '';
-    let vb = b[sortCol] ?? '';
-    if (typeof va === 'number' && typeof vb === 'number') {
-      return sortDir === 'asc' ? va - vb : vb - va;
-    }
-    va = String(va).toLowerCase();
-    vb = String(vb).toLowerCase();
+  const ppl = load();
+  const tbody = document.getElementById('tbody');
+
+  const sorted = [...ppl].sort((a, b) => {
+    let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+    if (typeof va === 'number' && typeof vb === 'number') return sortDir === 'asc' ? va - vb : vb - va;
+    va = String(va).toLowerCase(); vb = String(vb).toLowerCase();
     if (va < vb) return sortDir === 'asc' ? -1 : 1;
     if (va > vb) return sortDir === 'asc' ? 1 : -1;
     return 0;
   });
 
-  // ソートインジケーター更新
-  ['name','memo','O','C','E','A','N','date'].forEach(c => {
-    const el = document.getElementById('sort-' + c);
-    if (!el) return;
-    el.textContent = sortCol === c ? (sortDir === 'asc' ? '▲' : '▼') : '';
+  // Sort arrows
+  ['name','pos','dept','age','addr','O','C','E','A','N','date','memo'].forEach(c => {
+    const el = document.getElementById('sa-' + c);
+    if (el) el.textContent = sortCol === c ? (sortDir === 'asc' ? '▲' : '▼') : '';
   });
-  document.getElementById('statusSort').textContent =
-    '並び順: ' + ({name:'名前',memo:'役割',O:'O開放性',C:'C誠実性',E:'E外向性',A:'A協調性',N:'N感受性',date:'診断日'}[sortCol] || sortCol) +
-    (sortDir === 'asc' ? '（昇順）' : '（降順）');
+  document.querySelectorAll('.sh-ch.sortable').forEach(th => {
+    th.classList.remove('sa', 'sd');
+    if (th.dataset.col === sortCol) th.classList.add(sortDir === 'asc' ? 'sa' : 'sd');
+  });
 
-  if (people.length === 0) {
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="11">
-      登録データがありません。「人物を追加」または「あの人データ取込」から始めてください。
-    </td></tr>`;
-    updateStats(people);
-    return;
+  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所',
+    O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受', date:'診断日', memo:'メモ' };
+  document.getElementById('statusSort').textContent =
+    '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
+
+  if (ppl.length === 0) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="15">登録データがありません。「人物追加」または「あの人データ取込」から始めてください。</td></tr>`;
+    updateStats(ppl); return;
   }
 
   tbody.innerHTML = sorted.map((p, i) => {
-    const isSelected = selectedRow === p.id;
-    const scores = ['O','C','E','A','N'].map(f => {
+    const isSel = selId === p.id;
+    const sc = ['O','C','E','A','N'].map(f => {
       const v = p[f];
-      if (!v) return `<td class="sh-cell col-score" style="color:#ccc; text-align:center;">—</td>`;
-      return `<td class="sh-cell col-score s${v}" style="text-align:center; font-weight:700; font-size:14px;">${v}</td>`;
+      return v
+        ? `<td class="sh-td sh-sc s${v}">${v}</td>`
+        : `<td class="sh-td sh-sc" style="color:#ddd">—</td>`;
     }).join('');
-    const dateStr = p.date ? p.date.slice(0, 10).replace(/-/g, '/') : '—';
-    const srcBadge = p.source === 'imported'
-      ? '<span class="src-badge src-i">取込</span>'
-      : '<span class="src-badge src-m">手動</span>';
-    return `<tr class="${isSelected ? 'row-selected' : ''}" onclick="selectRow('${p.id}', '${esc(p.name)}', ${i+1})">
-      <td class="sh-row-num">${i + 1}</td>
-      <td class="sh-cell col-name"><span class="cell-name-val">${esc(p.name)}</span></td>
-      <td class="sh-cell col-memo" title="${esc(p.memo || '')}">
-        <span class="cell-memo-val${p.memo ? '' : ' empty'}">${esc(p.memo || '—')}</span>
-      </td>
-      ${scores}
-      <td class="sh-cell col-date"><span class="cell-date-val">${dateStr}</span></td>
-      <td class="sh-cell col-src" style="text-align:center">${srcBadge}</td>
-      <td class="sh-cell col-ops">
-        <div class="cell-ops">
-          <button class="cell-btn" onclick="event.stopPropagation(); openEditModal('${p.id}')">編集</button>
-          <button class="cell-btn del" onclick="event.stopPropagation(); deletePerson('${p.id}')">削除</button>
+    const ds = p.date ? p.date.slice(0,10).replace(/-/g,'/') : '—';
+    const src = p.source === 'imported' ? '<span class="src src-i">取込</span>' : '<span class="src src-m">手動</span>';
+    return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
+      <td class="sh-rn">${i+1}</td>
+      <td class="sh-td"><span class="cv-name">${esc(p.name)}</span></td>
+      <td class="sh-td"><span class="cv-sub">${esc(p.pos||'')}</span></td>
+      <td class="sh-td"><span class="cv-sub">${esc(p.dept||'')}</span></td>
+      <td class="sh-td" style="text-align:center"><span class="cv-sub">${p.age||'—'}</span></td>
+      <td class="sh-td" title="${esc(p.addr||'')}"><span class="cv-sub">${esc(p.addr||'')}</span></td>
+      ${sc}
+      <td class="sh-td"><span class="cv-date">${ds}</span></td>
+      <td class="sh-td" title="${esc(p.memo||'')}"><span class="cv-sub">${esc(p.memo||'')}</span></td>
+      <td class="sh-td" style="text-align:center">${src}</td>
+      <td class="sh-td">
+        <div class="c-ops-wrap">
+          <button class="c-btn" onclick="event.stopPropagation();openEditModal('${p.id}')">編集</button>
+          <button class="c-btn del" onclick="event.stopPropagation();del('${p.id}')">削除</button>
         </div>
       </td>
     </tr>`;
   }).join('');
-
-  updateStats(people);
+  updateStats(ppl);
 }
 
-function updateStats(people) {
-  document.getElementById('statCount').textContent = people.length;
-  const scored = people.filter(p => p.O || p.C || p.E || p.A || p.N).length;
-  document.getElementById('statScored').textContent = scored;
-  document.getElementById('statusText').textContent = people.length > 0
-    ? `${people.length} 件登録済 | スコアあり ${scored} 件`
-    : '準備完了';
+function updateStats(ppl) {
+  document.getElementById('statCount').textContent = ppl.length;
+  const sc = ppl.filter(p => p.O || p.C || p.E || p.A || p.N).length;
+  document.getElementById('statScored').textContent = sc;
+  document.getElementById('statusMain').textContent =
+    ppl.length > 0 ? `${ppl.length} 件登録 | スコアあり ${sc} 件` : '準備完了';
 }
 
-function selectRow(id, name, rowNum) {
-  selectedRow = (selectedRow === id) ? null : id;
-  document.getElementById('cellRef').textContent = `A${rowNum}`;
-  document.getElementById('formulaText').textContent = selectedRow ? `${name}` : 'データはこの端末にのみ保存されます（localStorage）';
+function selRow(id, name, row) {
+  selId = selId === id ? null : id;
+  document.getElementById('cellRef').value = `A${row}`;
+  document.getElementById('fbarText').textContent = selId ? name : 'データはこの端末にのみ保存されます（localStorage）';
   render();
 }
 
-// ===== ソート =====
-document.querySelectorAll('.sh-col-header.sortable').forEach(th => {
+// ===== SORT =====
+document.querySelectorAll('.sh-ch.sortable').forEach(th => {
   th.addEventListener('click', () => {
-    const col = th.dataset.col;
-    if (sortCol === col) {
-      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortCol = col;
-      sortDir = col === 'date' ? 'desc' : 'asc';
-    }
+    const c = th.dataset.col;
+    if (sortCol === c) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    else { sortCol = c; sortDir = c === 'date' ? 'desc' : 'asc'; }
     render();
   });
 });
 
-// ===== エスケープ =====
+// ===== ESC =====
 function esc(v) {
-  return String(v || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  return String(v||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 }
 
-// ===== 追加・編集モーダル =====
-let editingId = null;
+// ===== MODAL =====
+let editId = null;
 
 function openAddModal() {
-  editingId = null;
-  document.getElementById('editModalTitle').textContent = '人物を追加';
+  editId = null;
+  document.getElementById('editMoTitle').textContent = '人物を追加';
   document.getElementById('editSaveBtn').textContent = '登録する';
-  document.getElementById('inputName').value = '';
-  document.getElementById('inputMemo').value = '';
-  ['O','C','E','A','N'].forEach(f => { document.getElementById('input' + f).value = ''; });
-  document.getElementById('editModal').classList.add('show');
-  setTimeout(() => document.getElementById('inputName').focus(), 80);
+  ['Name','Pos','Dept','Age','Addr','Memo'].forEach(f => document.getElementById('i'+f).value = '');
+  ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = '');
+  document.getElementById('editMo').classList.add('show');
+  setTimeout(() => document.getElementById('iName').focus(), 60);
 }
-
 function openEditModal(id) {
-  const p = loadPeople().find(x => x.id === id);
+  const p = load().find(x => x.id === id);
   if (!p) return;
-  editingId = id;
-  document.getElementById('editModalTitle').textContent = '編集：' + p.name;
+  editId = id;
+  document.getElementById('editMoTitle').textContent = '編集: ' + p.name;
   document.getElementById('editSaveBtn').textContent = '保存する';
-  document.getElementById('inputName').value = p.name || '';
-  document.getElementById('inputMemo').value = p.memo || '';
-  ['O','C','E','A','N'].forEach(f => { document.getElementById('input' + f).value = p[f] || ''; });
-  document.getElementById('editModal').classList.add('show');
-  setTimeout(() => document.getElementById('inputName').focus(), 80);
+  document.getElementById('iName').value = p.name || '';
+  document.getElementById('iPos').value = p.pos || '';
+  document.getElementById('iDept').value = p.dept || '';
+  document.getElementById('iAge').value = p.age || '';
+  document.getElementById('iAddr').value = p.addr || '';
+  document.getElementById('iMemo').value = p.memo || '';
+  ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = p[f] || '');
+  document.getElementById('editMo').classList.add('show');
+  setTimeout(() => document.getElementById('iName').focus(), 60);
 }
-
-function closeEditModal() { document.getElementById('editModal').classList.remove('show'); }
-function closeEditModalOnOverlay(e) { if (e.target === document.getElementById('editModal')) closeEditModal(); }
+function closeMo(id) { document.getElementById(id).classList.remove('show'); }
+function closeMoOverlay(id) { if (event.target === document.getElementById(id)) closeMo(id); }
 
 function savePerson() {
-  const name = document.getElementById('inputName').value.trim();
-  if (!name) { showToast('名前を入力してください'); document.getElementById('inputName').focus(); return; }
-  const memo = document.getElementById('inputMemo').value.trim();
-  const scores = {};
+  const name = document.getElementById('iName').value.trim();
+  if (!name) { toast('名前を入力してください'); document.getElementById('iName').focus(); return; }
+  const pos  = document.getElementById('iPos').value.trim();
+  const dept = document.getElementById('iDept').value.trim();
+  const ageV = parseInt(document.getElementById('iAge').value);
+  const age  = !isNaN(ageV) && ageV >= 0 ? ageV : null;
+  const addr = document.getElementById('iAddr').value.trim();
+  const memo = document.getElementById('iMemo').value.trim();
+  const sc = {};
   for (const f of ['O','C','E','A','N']) {
-    const v = parseInt(document.getElementById('input' + f).value);
-    scores[f] = (!isNaN(v) && v >= 1 && v <= 5) ? v : null;
+    const v = parseInt(document.getElementById('i'+f).value);
+    sc[f] = (!isNaN(v) && v >= 1 && v <= 5) ? v : null;
   }
-  const people = loadPeople();
-  if (editingId) {
-    const idx = people.findIndex(x => x.id === editingId);
-    if (idx >= 0) {
-      people[idx] = { ...people[idx], name, memo, ...scores };
-      savePeopleData(people); closeEditModal(); render(); showToast('保存しました');
-    }
+  const ppl = load();
+  if (editId) {
+    const i = ppl.findIndex(x => x.id === editId);
+    if (i >= 0) { ppl[i] = { ...ppl[i], name, pos, dept, age, addr, memo, ...sc }; }
+    save(ppl); closeMo('editMo'); render(); toast('保存しました');
   } else {
-    people.push({ id: genId(), name, memo, ...scores, date: new Date().toISOString().slice(0, 10), source: 'manual' });
-    savePeopleData(people); closeEditModal(); render(); showToast('追加しました');
+    ppl.push({ id: genId(), name, pos, dept, age, addr, memo, ...sc, date: new Date().toISOString().slice(0,10), source: 'manual' });
+    save(ppl); closeMo('editMo'); render(); toast('追加しました');
   }
 }
 
-function deletePerson(id) {
-  const p = loadPeople().find(x => x.id === id);
+function del(id) {
+  const p = load().find(x => x.id === id);
   if (!p || !confirm(`「${p.name}」を削除しますか？`)) return;
-  savePeopleData(loadPeople().filter(x => x.id !== id));
-  if (selectedRow === id) selectedRow = null;
-  render(); showToast('削除しました');
+  save(load().filter(x => x.id !== id));
+  if (selId === id) selId = null;
+  render(); toast('削除しました');
 }
 
-// ===== インポートモーダル =====
-let importSelections = new Set();
-
+// ===== IMPORT =====
+let impSel = new Set();
 function openImportModal() {
-  importSelections.clear();
-  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
-  const existingNames = new Set(loadPeople().map(p => p.name));
-  const list = document.getElementById('importList');
-  if (others.length === 0) {
-    list.innerHTML = '<div style="padding:20px; text-align:center; font-size:12px; color:#999">「あの人」のデータがありません。<br>先にビッグファイブの「あの人診断」を受けてください。</div>';
-    document.getElementById('importExecBtn').disabled = true;
+  impSel.clear();
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const existing = new Set(load().map(p => p.name));
+  const list = document.getElementById('impList');
+  if (!others.length) {
+    list.innerHTML = '<div style="padding:16px;text-align:center;font-size:11px;color:#aaa">「あの人」データがありません</div>';
+    document.getElementById('impBtn').disabled = true;
   } else {
-    document.getElementById('importExecBtn').disabled = false;
+    document.getElementById('impBtn').disabled = false;
     list.innerHTML = others.map((r, i) => {
-      const already = existingNames.has(r.name);
-      const dateStr = r.date ? r.date.slice(0, 10).replace(/-/g, '/') : '不明';
-      return `<div class="import-item${already ? ' already' : ''}" data-idx="${i}" onclick="toggleImportItem(this, ${i})">
-        <div class="import-check" id="icheck-${i}">${already ? '✓' : ''}</div>
-        <span class="import-item-name">${esc(r.name || '名前なし')}</span>
-        <span class="import-item-code">${r.code || '?????'} | ${dateStr}</span>
-        ${already ? '<span class="import-item-already">登録済み</span>' : ''}
+      const al = existing.has(r.name);
+      const ds = r.date ? r.date.slice(0,10).replace(/-/g,'/') : '不明';
+      return `<div class="imp-item${al?' already':''}" data-idx="${i}" onclick="toggleImp(this,${i})">
+        <div class="imp-ck" id="ick-${i}">${al?'✓':''}</div>
+        <span class="imp-nm">${esc(r.name||'名前なし')}</span>
+        <span class="imp-cd">${r.code||'?????'} | ${ds}</span>
+        ${al?'<span class="imp-al">登録済</span>':''}
       </div>`;
     }).join('');
     others.forEach((r, i) => {
-      if (!existingNames.has(r.name)) {
-        importSelections.add(i);
-        const item = list.querySelector(`[data-idx="${i}"]`);
-        if (item) { item.classList.add('selected'); document.getElementById('icheck-' + i).textContent = '✓'; }
+      if (!existing.has(r.name)) {
+        impSel.add(i);
+        const el = list.querySelector(`[data-idx="${i}"]`);
+        if (el) { el.classList.add('sel'); document.getElementById('ick-'+i).textContent = '✓'; }
       }
     });
-    updateImportInfo();
+    updImpInfo();
   }
-  document.getElementById('importModal').classList.add('show');
+  document.getElementById('impMo').classList.add('show');
 }
-
-function toggleImportItem(el, idx) {
+function toggleImp(el, i) {
   if (el.classList.contains('already')) return;
-  if (importSelections.has(idx)) {
-    importSelections.delete(idx);
-    el.classList.remove('selected');
-    document.getElementById('icheck-' + idx).textContent = '';
-  } else {
-    importSelections.add(idx);
-    el.classList.add('selected');
-    document.getElementById('icheck-' + idx).textContent = '✓';
-  }
-  updateImportInfo();
+  if (impSel.has(i)) { impSel.delete(i); el.classList.remove('sel'); document.getElementById('ick-'+i).textContent = ''; }
+  else { impSel.add(i); el.classList.add('sel'); document.getElementById('ick-'+i).textContent = '✓'; }
+  updImpInfo();
 }
-function updateImportInfo() {
-  document.getElementById('importSelectInfo').textContent = `${importSelections.size}件 選択中`;
-  document.getElementById('importExecBtn').disabled = importSelections.size === 0;
+function updImpInfo() {
+  document.getElementById('impInfo').textContent = `${impSel.size}件 選択中`;
+  document.getElementById('impBtn').disabled = impSel.size === 0;
 }
-function closeImportModal() { document.getElementById('importModal').classList.remove('show'); }
-function closeImportModalOnOverlay(e) { if (e.target === document.getElementById('importModal')) closeImportModal(); }
-
 function execImport() {
-  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY) || '[]'); } catch(e) { return []; } })();
-  const people = loadPeople();
-  let added = 0;
-  importSelections.forEach(idx => {
-    const r = others[idx];
-    if (!r) return;
-    const code = r.code || '';
-    people.push({
-      id: genId(), name: r.name || '名前なし', memo: '',
-      O: code[0] ? parseInt(code[0]) : null,
-      C: code[1] ? parseInt(code[1]) : null,
-      E: code[2] ? parseInt(code[2]) : null,
-      A: code[3] ? parseInt(code[3]) : null,
-      N: code[4] ? parseInt(code[4]) : null,
-      date: r.date ? r.date.slice(0, 10) : new Date().toISOString().slice(0, 10),
-      source: 'imported'
-    });
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const ppl = load(); let added = 0;
+  impSel.forEach(i => {
+    const r = others[i]; if (!r) return;
+    const c = r.code || '';
+    ppl.push({ id: genId(), name: r.name||'名前なし', pos:'', dept:'', age:null, addr:'', memo:'',
+      O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
+      A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+      date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'imported' });
     added++;
   });
-  savePeopleData(people); closeImportModal(); render();
-  showToast(`${added}人を取り込みました`);
+  save(ppl); closeMo('impMo'); render(); toast(`${added}人を取り込みました`);
 }
 
-// ===== CSV エクスポート =====
+// ===== CSV =====
 function exportCSV() {
-  const people = loadPeople();
-  if (people.length === 0) { showToast('登録データがありません'); return; }
-  const header = ['名前', '役割・メモ', 'O_開放性', 'C_誠実性', 'E_外向性', 'A_協調性', 'N_感受性', '診断日', '種別'];
-  const rows = people.map(p => [p.name, p.memo||'', p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.source==='imported'?'取込':'手動']);
-  const csv = [header, ...rows].map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
-  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  const ppl = load();
+  if (!ppl.length) { toast('データがありません'); return; }
+  const hdr = ['名前','役職','部署','年齢','住所','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
+  const rows = ppl.map(p => [p.name, p.pos||'', p.dept||'', p.age||'', p.addr||'',
+    p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.memo||'', p.source==='imported'?'取込':'手動']);
+  const csv = [hdr, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'bigfive_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast('CSVをダウンロードしました');
+  a.download = 'bigfive_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(a.href); toast('CSVをダウンロードしました');
 }
 
-// ===== AI コピー =====
+// ===== AI COPY =====
 function copyForAI() {
-  const people = loadPeople();
-  if (people.length === 0) { showToast('登録データがありません'); return; }
+  const ppl = load();
+  if (!ppl.length) { toast('データがありません'); return; }
   const LB = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
   const lines = ['【ビッグファイブ スコア一覧】', '※ スコア 1〜5。5=非常に高い / 3=平均 / 1=非常に低い', ''];
-  people.forEach(p => {
+  ppl.forEach(p => {
+    const info = [p.pos, p.dept, p.age ? p.age+'歳' : null].filter(Boolean).join('・');
     const sc = ['O','C','E','A','N'].map(f => p[f] ? `${LB[f]}(${f})=${p[f]}` : null).filter(Boolean).join('、');
-    lines.push(`■ ${p.name}${p.memo ? '（' + p.memo + '）' : ''}`);
+    lines.push(`■ ${p.name}${info ? '（'+info+'）' : ''}`);
     if (sc) lines.push(`  ${sc}`);
+    if (p.memo) lines.push(`  メモ: ${p.memo}`);
     lines.push('');
   });
-  navigator.clipboard.writeText(lines.join('\n')).then(
-    () => showToast('クリップボードにコピーしました'),
-    () => showToast('コピーに失敗しました')
-  );
+  navigator.clipboard.writeText(lines.join('\n'))
+    .then(() => toast('コピーしました'))
+    .catch(() => toast('コピーに失敗しました'));
 }
 
-// ===== Toast =====
-function showToast(msg) {
+// ===== TOAST =====
+function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-// ===== Enter キーで保存 =====
-document.querySelectorAll('#editModal .form-input, #editModal .score-num-input').forEach(el => {
+// Enter → save
+document.querySelectorAll('#editMo .f-inp, #editMo .sc-inp').forEach(el => {
   el.addEventListener('keydown', e => { if (e.key === 'Enter') savePerson(); });
 });
 
