@@ -1215,6 +1215,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：AIと人間関係コンテキスト -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-context-jidai-hajimari.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：AIとコンテキストの重要性 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html</loc>
