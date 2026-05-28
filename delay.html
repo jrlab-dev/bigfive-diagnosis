@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>時間割引ゲーム | ビッグファイブ診断</title>
+<meta name="description" content="今すぐ小さな報酬か、後で大きな報酬か。時間割引ゲームで将来志向・待てる力・衝動性を測定します。">
+<link rel="stylesheet" href="behavior-game.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
+<header class="site-header">
+  <a href="diagnoses.html" class="back-link">← 診断一覧</a>
+  <span class="header-title">時間割引ゲーム</span>
+  <div class="coin-display" id="coinDisplay">🪙 0枚</div>
+</header>
+<main class="wrap">
+  <section class="phase active" id="phaseEntry"><div class="hero"><div class="badge" id="gameBadge">DELAY DISCOUNTING</div><div class="game-icon" id="gameIcon">⏳</div><h1 class="title" id="gameTitle">時間割引ゲーム</h1><p class="lead" id="gameLead">今すぐもらえる小さな報酬と、待てばもらえる大きな報酬。どちらを選ぶかで、将来志向と待てる力を見ます。</p><div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div><div class="entry-cost" id="entryCost"></div><div class="entry-note" id="entryNote"></div><button class="btn" id="startBtn" type="button">はじめる</button><div class="entry-lack" id="entryLack"></div></div></section>
+  <section class="phase" id="phaseQuestion"><div class="panel"><div class="question-head"><span id="questionNo"></span><span>今すぐか、あとでか</span></div><div class="scenario" id="scenario"></div><div id="answerArea"></div><div class="analysis" id="choiceHistory"></div></div></section>
+  <section class="phase" id="phaseResult"><div class="panel result-type"><div class="result-icon" id="resultIcon"></div><div class="result-name" id="resultName"></div><p class="result-summary" id="resultSummary"></p><div class="stat-grid" id="statGrid"></div><div class="analysis" id="analysis"></div><div class="btn-row"><button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button><button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button><button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button></div></div></section>
+</main>
+<script src="gacha-utils.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'delay_result';
+  var REPLAY_FEE = 3;
+  var REWARD_COINS = 2;
+  var QUESTIONS = [
+    { now: 3, later: 4, wait: '明日' },
+    { now: 3, later: 5, wait: '3日後' },
+    { now: 4, later: 7, wait: '1週間後' },
+    { now: 5, later: 10, wait: '2週間後' },
+    { now: 6, later: 14, wait: '1か月後' },
+    { now: 8, later: 20, wait: '3か月後' },
+    { now: 10, later: 30, wait: '半年後' }
+  ];
+  var state = { index: 0, answers: [], feePaid: 0, rewardGranted: false, resultSaved: false, isFirstPlay: true, result: null };
+
+  function $(id) { return document.getElementById(id); }
+  function showPhase(id) {
+    document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
+    $(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function updateCoins() {
+    if (window.GachaUtils) $('coinDisplay').textContent = '\u{1FA99} ' + GachaUtils.getCoins() + '枚';
+  }
+
+  function initEntry() {
+    updateCoins();
+    var isReplay = !!localStorage.getItem(STORAGE_KEY);
+    state.isFirstPlay = !isReplay;
+    $('ruleList').innerHTML = [
+      '全7問で「今すぐ少なめ」か「あとで多め」を選びます',
+      '正解はありません。実際に自分なら選びそうな方を選んでください',
+      '将来の報酬をどれくらい重く見るかを測定します'
+    ].map(function(t) { return '<li>' + t + '</li>'; }).join('');
+    $('entryLack').style.display = 'none';
+    $('entryNote').textContent = isReplay ? '前回の結果は残したまま、今回はミニゲームとして遊びます。' : '初回無料：診断結果として保存されます。';
+    $('entryCost').textContent = isReplay ? '2回目以降の参加費：3コイン / 終了報酬：2コイン' : '終了報酬：2コイン + 初回診断ボーナス';
+    $('startBtn').disabled = false;
+    if (isReplay && window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
+      $('startBtn').disabled = true;
+      $('entryLack').style.display = 'block';
+      $('entryLack').textContent = 'コインが足りません（あと' + (REPLAY_FEE - GachaUtils.getCoins()) + '枚）';
+    }
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[state.index];
+    $('questionNo').textContent = 'QUESTION ' + (state.index + 1) + ' / ' + QUESTIONS.length;
+    $('scenario').innerHTML = 'どちらを選びますか？';
+    $('answerArea').innerHTML =
+      '<div class="option-grid">' +
+        '<button class="option" id="nowBtn" type="button"><div class="main">今すぐ ' + q.now + 'コイン</div><div class="sub">待たずに受け取る</div></button>' +
+        '<button class="option" id="laterBtn" type="button"><div class="main">' + q.wait + 'に ' + q.later + 'コイン</div><div class="sub">待って多く受け取る</div></button>' +
+      '</div>';
+    $('choiceHistory').textContent = state.answers.length ? 'ここまでの選択：' + state.answers.map(function(a, i) { return 'Q' + (i + 1) + ':' + (a.choice === 'later' ? 'あとで' : '今すぐ'); }).join(' / ') : '';
+    $('nowBtn').addEventListener('click', function() { answer('now'); });
+    $('laterBtn').addEventListener('click', function() { answer('later'); });
+    showPhase('phaseQuestion');
+  }
+
+  function answer(choice) {
+    var q = QUESTIONS[state.index];
+    state.answers.push({ choice: choice, now: q.now, later: q.later, wait: q.wait });
+    if (state.index < QUESTIONS.length - 1) {
+      state.index++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function getMyScores() {
+    try {
+      var list = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0', 10), Math.max(0, list.length - 1));
+      return list[idx] && list[idx].scores ? list[idx].scores : null;
+    } catch(e) { return null; }
+  }
+
+  function evaluate() {
+    var laterCount = state.answers.filter(function(a) { return a.choice === 'later'; }).length;
+    var pct = Math.round(laterCount / QUESTIONS.length * 100);
+    var key = laterCount <= 1 ? 'immediate' : laterCount <= 3 ? 'short' : laterCount <= 5 ? 'balanced' : laterCount === 6 ? 'future' : 'planner';
+    var map = {
+      immediate: ['即時報酬型', '⚡', '#ef4444', '今すぐ得られる報酬をかなり重視するタイプです。', '行動が早く、目の前のチャンスを逃しにくい一方、長期的な積み上げでは意識的な設計が役立ちます。'],
+      short: ['短期実利型', '🏃', '#f97316', '待つよりも、確実に今得られるものを選びやすいタイプです。', '不確実な将来よりも、手元の確実性を大切にします。日常の判断では現実的でスピード感があります。'],
+      balanced: ['バランス型', '⚖️', '#f59e0b', '今の満足と将来の利益を状況に応じて選び分けるタイプです。', '待つ価値が十分にあると感じたときは待てる、現実的な時間感覚を持っています。'],
+      future: ['将来志向型', '🌱', '#22c55e', '将来の大きな報酬をかなり重視できるタイプです。', '長期計画や貯蓄、学習投資に向きやすい一方、目の前の楽しみを後回しにしすぎないことも大切です。'],
+      planner: ['長期計画型', '🏗️', '#38bdf8', 'ほとんどの場面で、待って大きく得る選択をしやすいタイプです。', '長期の成果に向けて我慢できる力があります。仕事や資産形成では強みになりやすい傾向です。']
+    };
+    var scores = getMyScores();
+    var cross = scores ? (((scores.C || 3) >= 4) ? '誠実性が高い場合、この結果は計画性や自己管理の強さとして出やすいです。' : '誠実性が低めの場合、短期の刺激や柔軟さを優先する判断として出やすいです。') : 'ビッグファイブ結果があると、誠実性や感受性との組み合わせでより詳しく見られます。';
+    var m = map[key];
+    return {
+      key: key,
+      name: m[0],
+      icon: m[1],
+      color: m[2],
+      summary: m[3],
+      detail: m[4],
+      cross: cross,
+      metrics: { laterCount: laterCount, immediateCount: QUESTIONS.length - laterCount, futureChoiceRate: pct, answers: state.answers.slice() },
+      stats: [
+        { label: 'あとで多め', value: laterCount + '回' },
+        { label: '今すぐ', value: (QUESTIONS.length - laterCount) + '回' },
+        { label: '将来選択率', value: pct + '%' }
+      ]
+    };
+  }
+
+  function grantReward() {
+    if (state.rewardGranted) return;
+    state.rewardGranted = true;
+    if (window.GachaUtils) {
+      GachaUtils.addCoins(REWARD_COINS);
+      updateCoins();
+    }
+  }
+
+  function saveResult() {
+    if (state.resultSaved) return;
+    state.resultSaved = true;
+    var result = state.result;
+    var data = {
+      type: result.key,
+      typeName: result.name,
+      value: result.metrics.futureChoiceRate,
+      metrics: result.metrics,
+      rewardCoins: REWARD_COINS,
+      playCount: 1,
+      timestamp: Date.now()
+    };
+    if (state.isFirstPlay) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('delay');
+      try {
+        var list = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+        var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0', 10), Math.max(0, list.length - 1));
+        if (list[idx]) {
+          list[idx].delay = data;
+          localStorage.setItem('bigfive_my_results', JSON.stringify(list));
+        }
+      } catch(e) {}
+    } else {
+      try {
+        var existing = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        existing.playCount = (existing.playCount || 1) + 1;
+        existing.lastValue = result.metrics.futureChoiceRate;
+        existing.lastType = result.key;
+        existing.lastTypeName = result.name;
+        existing.lastMetrics = result.metrics;
+        existing.lastRewardCoins = REWARD_COINS;
+        existing.lastPlayedAt = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+      } catch(e) {}
+    }
+  }
+
+  function showResult() {
+    state.result = evaluate();
+    grantReward();
+    saveResult();
+    var r = state.result;
+    $('resultIcon').textContent = r.icon;
+    $('resultName').textContent = r.name;
+    $('resultName').style.color = r.color;
+    $('resultSummary').textContent = r.summary;
+    $('statGrid').innerHTML = r.stats.map(function(s) {
+      return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + '</div></div>';
+    }).join('');
+    var choices = state.answers.map(function(a, i) {
+      return 'Q' + (i + 1) + ':' + (a.choice === 'later' ? a.wait + 'に' + a.later + 'コイン' : '今すぐ' + a.now + 'コイン');
+    }).join('、');
+    $('analysis').innerHTML =
+      '<p><b>行動傾向：</b>' + r.detail + '</p>' +
+      '<p><b>ビッグファイブとの見方：</b>' + r.cross + '</p>' +
+      '<p><b>選択の流れ：</b>' + choices + '</p>' +
+      '<p><b>コイン：</b>終了報酬 +' + REWARD_COINS + 'コイン' + (state.feePaid ? ' / 参加費 -' + state.feePaid + 'コイン' : '') + '</p>';
+    showPhase('phaseResult');
+  }
+
+  $('startBtn').addEventListener('click', function() {
+    var isFirst = state.isFirstPlay;
+    if (!isFirst && window.GachaUtils && !GachaUtils.spendCoins(REPLAY_FEE)) {
+      $('entryLack').style.display = 'block';
+      updateCoins();
+      return;
+    }
+    state = { index: 0, answers: [], feePaid: isFirst ? 0 : REPLAY_FEE, rewardGranted: false, resultSaved: false, isFirstPlay: isFirst, result: null };
+    updateCoins();
+    renderQuestion();
+  });
+
+  $('replayBtn').addEventListener('click', function() {
+    initEntry();
+    showPhase('phaseEntry');
+  });
+
+  initEntry();
+})();
+</script>
+</body>
+</html>
