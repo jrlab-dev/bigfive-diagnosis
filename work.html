@@ -434,6 +434,122 @@ tr:hover .s1 { background: #f5bac4; }
 .imp-al { font-size: 9px; color: #bbb; }
 .imp-info { font-size: 10px; color: #777; margin-bottom: 5px; }
 
+/* ===== SHEET TABS ===== */
+.xl-sheettabs {
+  background: #d8d8d8;
+  border-top: 1px solid #b0b0b0;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 6px 0 6px;
+  gap: 2px;
+  flex-shrink: 0;
+  height: 22px;
+}
+.xl-stab {
+  padding: 2px 12px 1px;
+  font-size: 10px;
+  color: #555;
+  cursor: pointer;
+  border: 1px solid #b8b8b8;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  background: #c8c8c8;
+  white-space: nowrap;
+  user-select: none;
+  transition: background 0.1s;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.xl-stab:hover { background: #ddd; }
+.xl-stab.active {
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  border-color: #b0b0b0;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sheet 2: 自分の診断 */
+.sh2-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+}
+.sh2-table th {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  border-bottom: 2px solid #217346;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky; top: 0; z-index: 5;
+  color: #333;
+}
+.sh2-table td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 5px;
+  height: 20px;
+  font-size: 11px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sh2-table tr:hover td { background: #f4faf6; }
+.sh2-table .sh-rn {
+  background: #e8e8e8; border: 1px solid #c8c8c8;
+  text-align: center; font-size: 10px; color: #777;
+  width: 32px; padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
+}
+
+/* Sheet 3: チーム相性 */
+.sh3-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+}
+.sh3-table th {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  border-bottom: 2px solid #217346;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky; top: 0; z-index: 5;
+  color: #333;
+}
+.sh3-table td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 5px;
+  height: 20px;
+  font-size: 11px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sh3-table tr:hover td { background: #f4faf6; }
+.sh3-table .sh-rn {
+  background: #e8e8e8; border: 1px solid #c8c8c8;
+  text-align: center; font-size: 10px; color: #777;
+  width: 32px; padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
+}
+.rank-s { color: #c8a000; font-weight: 700; }
+.rank-a { color: #7c3aed; font-weight: 700; }
+.rank-b { color: #1d4ed8; }
+.rank-c { color: #555; }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 28px; left: 50%;
@@ -498,8 +614,11 @@ tr:hover .s1 { background: #f5bac4; }
   <span class="xl-fbar-text" id="fbarText">データはこの端末にのみ保存されます（localStorage）</span>
 </div>
 
-<!-- SHEET -->
-<div class="sheet-wrap">
+<!-- SHEET CONTENT WRAPPER -->
+<div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+
+<!-- Sheet 1: 人物管理 -->
+<div id="sheet1" class="sheet-wrap" style="flex:1; overflow:auto;">
   <table class="sh" id="sheetTable">
     <colgroup>
       <col class="c-no">
@@ -535,6 +654,58 @@ tr:hover .s1 { background: #f5bac4; }
     </thead>
     <tbody id="tbody"></tbody>
   </table>
+</div>
+
+</div><!-- /sheet1 -->
+
+<!-- Sheet 2: 自分の診断 -->
+<div id="sheet2" class="sheet-wrap" style="flex:1; overflow:auto; display:none;">
+  <table class="sh2-table">
+    <thead>
+      <tr>
+        <th style="width:32px"></th>
+        <th style="width:100px; text-align:left">診断名</th>
+        <th style="width:50px">問題数</th>
+        <th style="width:34px; color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span></th>
+        <th style="width:34px; color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span></th>
+        <th style="width:34px; color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span></th>
+        <th style="width:34px; color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span></th>
+        <th style="width:34px; color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span></th>
+        <th style="width:68px">診断日</th>
+        <th style="width:80px">コード</th>
+        <th style="width:60px">詳細</th>
+      </tr>
+    </thead>
+    <tbody id="tbody2"></tbody>
+  </table>
+</div>
+
+<!-- Sheet 3: チーム相性 -->
+<div id="sheet3" class="sheet-wrap" style="flex:1; overflow:auto; display:none;">
+  <table class="sh3-table">
+    <thead>
+      <tr>
+        <th style="width:32px"></th>
+        <th style="width:140px; text-align:left">チーム名</th>
+        <th style="width:40px">人数</th>
+        <th style="width:64px">相性スコア</th>
+        <th style="width:36px">ランク</th>
+        <th style="text-align:left">メンバー</th>
+        <th style="width:68px">診断日</th>
+        <th style="width:60px">詳細</th>
+      </tr>
+    </thead>
+    <tbody id="tbody3"></tbody>
+  </table>
+</div>
+
+</div><!-- /sheet content wrapper -->
+
+<!-- SHEET TABS -->
+<div class="xl-sheettabs">
+  <div class="xl-stab active" id="stab1" onclick="switchSheet(1)">📋 人物管理</div>
+  <div class="xl-stab" id="stab2" onclick="switchSheet(2)">👤 自分の診断</div>
+  <div class="xl-stab" id="stab3" onclick="switchSheet(3)">👥 チーム相性</div>
 </div>
 
 <!-- STATUS BAR -->
@@ -890,6 +1061,97 @@ function toast(msg) {
 document.querySelectorAll('#editMo .f-inp, #editMo .sc-inp').forEach(el => {
   el.addEventListener('keydown', e => { if (e.key === 'Enter') savePerson(); });
 });
+
+// ===== SHEET SWITCHING =====
+let activeSheet = 1;
+function switchSheet(n) {
+  activeSheet = n;
+  [1,2,3].forEach(i => {
+    document.getElementById('sheet'+i).style.display = i === n ? '' : 'none';
+    document.getElementById('stab'+i).classList.toggle('active', i === n);
+  });
+  document.getElementById('fbarText').textContent = {
+    1: 'データはこの端末にのみ保存されます（localStorage）',
+    2: '自分の診断履歴（マイページの「自分の結果」と同じデータ）',
+    3: 'チーム相性診断の保存済み結果（マイページの「チーム」と同じデータ）'
+  }[n];
+  if (n === 2) renderSheet2();
+  if (n === 3) renderSheet3();
+}
+
+// ===== SHEET 2: 自分の診断 =====
+function renderSheet2() {
+  const MY_KEY = 'bigfive_my_results';
+  const MY_NAME_KEY = 'bigfive_my_name';
+  const results = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY)||'[]'); } catch(e) { return []; } })();
+  const myName = localStorage.getItem(MY_NAME_KEY) || '';
+  const tbody = document.getElementById('tbody2');
+  if (!results.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:28px;color:#aaa;font-style:italic">自分の診断データがありません。まずビッグファイブ診断を受けてください。</td></tr>`;
+    return;
+  }
+  const VER = { '10':'10問', '30':'30問', '120':'120問' };
+  tbody.innerHTML = results.map((r, i) => {
+    const code = r.code || '?????';
+    const sc = ['O','C','E','A','N'].map((f, fi) => {
+      const v = parseInt(code[fi]);
+      return v >= 1 && v <= 5
+        ? `<td class="sh-sc s${v}" style="text-align:center;font-weight:700;font-size:12px;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">${v}</td>`
+        : `<td style="text-align:center;color:#ddd;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">—</td>`;
+    }).join('');
+    const ds = r.date ? r.date.slice(0,10).replace(/-/g,'/') : '—';
+    const ver = VER[r.version || '10'] || (r.version + '問');
+    const name = r.name || myName || '—';
+    const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
+    const isActive = i === activeIdx;
+    return `<tr>
+      <td class="sh-rn">${i+1}</td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-weight:${isActive?'700':'400'};font-size:11px;">${esc(name)}${isActive?' <span style="font-size:9px;background:#d1fae5;color:#065f46;border-radius:2px;padding:0 3px;margin-left:2px">使用中</span>':''}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ver}</td>
+      ${sc}
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ds}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#888;font-family:monospace;">${code}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">
+        <a href="result.html?type=${code}&v=${r.version||'10'}&gender=${r.gender||'F'}" target="_blank" style="font-size:10px;color:#1d4ed8;text-decoration:none;border:1px solid #c0d0e8;padding:0 5px;border-radius:1px;background:#f0f5ff;">結果を見る</a>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== SHEET 3: チーム相性 =====
+function renderSheet3() {
+  const TEAM_KEY = 'bigfive_team_results';
+  const teams = (() => { try { return JSON.parse(localStorage.getItem(TEAM_KEY)||'[]'); } catch(e) { return []; } })();
+  const tbody = document.getElementById('tbody3');
+  if (!teams.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:#aaa;font-style:italic">チームデータがありません。チーム相性診断でチームを保存してください。</td></tr>`;
+    return;
+  }
+  const RANK_COLORS = { S:'rank-s', A:'rank-a', B:'rank-b', C:'rank-c' };
+  tbody.innerHTML = teams.map((t, i) => {
+    const members = (t.members || []).map(m => m.name).join('、');
+    const memberCount = (t.members || []).length;
+    const ds = t.date ? t.date.slice(0,10).replace(/-/g,'/') : '—';
+    const score = typeof t.score === 'number' ? t.score : '—';
+    const rank = t.rank || '—';
+    const rankCls = RANK_COLORS[rank] || '';
+    const scoreColor = typeof t.score === 'number'
+      ? (t.score >= 80 ? '#276221' : t.score >= 60 ? '#1d4ed8' : '#833c0b')
+      : '#666';
+    return `<tr>
+      <td class="sh-rn">${i+1}</td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-weight:600;font-size:12px;">${esc(t.teamName||'チーム')}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">${memberCount}人</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-weight:700;font-size:14px;color:${scoreColor};">${score}${typeof t.score==='number'?'点':''}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;"><span class="${rankCls}">${rank}</span></td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-size:10px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(members)}">${esc(members)}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ds}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">
+        <a href="team.html" target="_blank" style="font-size:10px;color:#1d4ed8;text-decoration:none;border:1px solid #c0d0e8;padding:0 5px;border-radius:1px;background:#f0f5ff;">診断へ</a>
+      </td>
+    </tr>`;
+  }).join('');
+}
 
 render();
 </script>
