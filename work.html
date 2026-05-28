@@ -434,6 +434,80 @@ tr:hover .s1 { background: #f5bac4; }
 .imp-al { font-size: 9px; color: #bbb; }
 .imp-info { font-size: 10px; color: #777; margin-bottom: 5px; }
 
+/* ===== TASK PANE ===== */
+#taskPane {
+  width: 400px;
+  flex-shrink: 0;
+  border-left: 2px solid #217346;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.tp-hd {
+  background: #217346;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 6px;
+}
+.tp-tabs {
+  display: flex;
+  background: #1a5c38;
+  flex-shrink: 0;
+}
+.tp-tab {
+  flex: 1;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.tp-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.tp-tab.active { color: #fff; border-bottom-color: #7dd3b0; background: rgba(255,255,255,0.08); }
+.tp-iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  background: #fff;
+}
+.tp-close { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 14px; padding: 0 2px; line-height: 1; }
+.tp-close:hover { color: #fff; }
+/* Import notification bar */
+.tp-notify {
+  background: #d1fae5;
+  border-top: 1px solid #6ee7b7;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: #065f46;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.tp-notify.show { display: flex; }
+.tp-notify-btn {
+  background: #217346;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  padding: 2px 8px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ===== SHEET TABS ===== */
 .xl-sheettabs {
   background: #d8d8d8;
@@ -597,6 +671,20 @@ tr:hover .s1 { background: #f5bac4; }
     <span class="rg-label">操作</span>
   </div>
 
+  <div class="rg">
+    <div class="rg-btns">
+      <button class="rb" onclick="openPane('other')" title="あの人診断をパネルで開く">
+        <span class="ri">👤</span>
+        <span class="rl">あの人診断</span>
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:2px;">
+        <button class="rb rb-sm" onclick="openPane('self')"><span class="ri">🙋</span>自分の診断</button>
+        <button class="rb rb-sm" onclick="openPane('team')"><span class="ri">👥</span>チーム相性</button>
+      </div>
+    </div>
+    <span class="rg-label">診断パネル</span>
+  </div>
+
   <div class="rg" style="border-right:none">
     <div class="rg-btns">
       <div class="rstat"><strong id="statCount">0</strong><span>件登録</span></div>
@@ -614,8 +702,11 @@ tr:hover .s1 { background: #f5bac4; }
   <span class="xl-fbar-text" id="fbarText">データはこの端末にのみ保存されます（localStorage）</span>
 </div>
 
-<!-- SHEET CONTENT WRAPPER -->
-<div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+<!-- MAIN AREA (left: sheet | right: task pane) -->
+<div style="flex:1; overflow:hidden; display:flex; flex-direction:row;">
+
+<!-- LEFT: SHEET AREA -->
+<div id="sheetArea" style="flex:1; overflow:hidden; display:flex; flex-direction:column; min-width:0;">
 
 <!-- Sheet 1: 人物管理 -->
 <div id="sheet1" class="sheet-wrap" style="flex:1; overflow:auto;">
@@ -699,14 +790,34 @@ tr:hover .s1 { background: #f5bac4; }
   </table>
 </div>
 
-</div><!-- /sheet content wrapper -->
-
-<!-- SHEET TABS -->
-<div class="xl-sheettabs">
+<!-- SHEET TABS (inside left area) -->
+<div class="xl-sheettabs" style="flex-shrink:0;">
   <div class="xl-stab active" id="stab1" onclick="switchSheet(1)">📋 人物管理</div>
   <div class="xl-stab" id="stab2" onclick="switchSheet(2)">👤 自分の診断</div>
   <div class="xl-stab" id="stab3" onclick="switchSheet(3)">👥 チーム相性</div>
 </div>
+</div><!-- /sheet area -->
+
+<!-- RIGHT: TASK PANE -->
+<div id="taskPane" style="display:none;">
+  <div class="tp-hd">
+    <span id="tpTitle">📋 診断パネル</span>
+    <button class="tp-close" onclick="closePane()" title="閉じる">✕</button>
+  </div>
+  <div class="tp-tabs">
+    <div class="tp-tab active" id="tptab-other" onclick="switchPaneTab('other')">👤 あの人診断</div>
+    <div class="tp-tab" id="tptab-self" onclick="switchPaneTab('self')">🙋 自分の診断</div>
+    <div class="tp-tab" id="tptab-team" onclick="switchPaneTab('team')">👥 チーム相性</div>
+  </div>
+  <div class="tp-notify" id="tpNotify">
+    <span id="tpNotifyMsg">新しい診断結果が保存されました</span>
+    <button class="tp-notify-btn" onclick="importLatestFromPane()">人物管理に追加</button>
+    <button style="background:none;border:none;color:#065f46;cursor:pointer;font-size:11px;margin-left:auto;" onclick="dismissNotify()">✕</button>
+  </div>
+  <iframe id="tpFrame" class="tp-iframe" src="about:blank"></iframe>
+</div>
+
+</div><!-- /main area -->
 
 <!-- STATUS BAR -->
 <div class="xl-status">
@@ -1151,6 +1262,81 @@ function renderSheet3() {
       </td>
     </tr>`;
   }).join('');
+}
+
+// ===== TASK PANE =====
+const PANE_URLS = {
+  other: 'other_quiz.html',
+  self:  'quiz.html',
+  team:  'team.html'
+};
+const PANE_TITLES = {
+  other: '👤 あの人診断',
+  self:  '🙋 自分の診断',
+  team:  '👥 チーム相性診断'
+};
+let paneTab = 'other';
+let paneOpen = false;
+let prevOtherCount = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]').length; } catch(e) { return 0; } })();
+
+function openPane(tab) {
+  paneOpen = true;
+  document.getElementById('taskPane').style.display = 'flex';
+  switchPaneTab(tab || paneTab);
+}
+function closePane() {
+  paneOpen = false;
+  document.getElementById('taskPane').style.display = 'none';
+  document.getElementById('tpFrame').src = 'about:blank';
+}
+function switchPaneTab(tab) {
+  paneTab = tab;
+  ['other','self','team'].forEach(t => {
+    document.getElementById('tptab-'+t).classList.toggle('active', t === tab);
+  });
+  document.getElementById('tpTitle').textContent = PANE_TITLES[tab];
+  document.getElementById('tpFrame').src = PANE_URLS[tab];
+  if (tab === 'other') {
+    prevOtherCount = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]').length; } catch(e2) { return 0; } })();
+  }
+  dismissNotify();
+}
+
+// localStorage 変化を監視（iframeが診断を保存したとき検知）
+window.addEventListener('storage', e => {
+  if (e.key === OTHER_KEY && paneOpen && paneTab === 'other') {
+    const newData = (() => { try { return JSON.parse(e.newValue||'[]'); } catch(e2) { return []; } })();
+    if (newData.length > prevOtherCount) {
+      const added = newData.slice(0, newData.length - prevOtherCount);
+      const names = added.map(r => r.name || '名前なし').join('、');
+      document.getElementById('tpNotifyMsg').textContent = `「${names}」の診断が完了しました`;
+      document.getElementById('tpNotify').classList.add('show');
+      prevOtherCount = newData.length;
+    }
+  }
+  if (e.key === 'bigfive_my_results' && activeSheet === 2) renderSheet2();
+  if (e.key === 'bigfive_team_results' && activeSheet === 3) renderSheet3();
+});
+
+function importLatestFromPane() {
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e2) { return []; } })();
+  const ppl = load();
+  const existing = new Set(ppl.map(p => p.name));
+  let added = 0;
+  others.filter(r => !existing.has(r.name)).slice(0, 5).forEach(r => {
+    const c = r.code || '';
+    ppl.push({ id: genId(), name: r.name||'名前なし', pos:'', dept:'', age:null, addr:'', memo:'',
+      O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
+      A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+      date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'imported' });
+    added++;
+  });
+  if (added) { save(ppl); render(); toast(`${added}人を人物管理に追加しました`); }
+  else { toast('すでに登録済みです'); }
+  dismissNotify();
+}
+function dismissNotify() {
+  document.getElementById('tpNotify').classList.remove('show');
 }
 
 render();
