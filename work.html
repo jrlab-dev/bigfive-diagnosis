@@ -1155,6 +1155,13 @@ function startEdit(e, id, field) {
   const p = load().find(x => x.id === id);
   if (!p) return;
   selId = id;
+  document.querySelectorAll('#tbody .row-sel').forEach(r => r.classList.remove('row-sel'));
+  const tr = td.closest('tr');
+  if (tr) {
+    tr.classList.add('row-sel');
+    const rnCell = tr.querySelector('.sh-rn');
+    if (rnCell) document.getElementById('cellRef').value = `A${rnCell.textContent.trim()}`;
+  }
 
   const isExtra  = field.startsWith('extra:');
   const extraId  = isExtra ? field.slice(6) : null;
