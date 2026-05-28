@@ -1085,8 +1085,8 @@ function render() {
     const sc = ['O','C','E','A','N'].map(f => {
       const v = p[f];
       return v
-        ? `<td class="sh-td sh-sc s${v}" ondblclick="startEdit(event,'${p.id}','${f}')">${v}</td>`
-        : `<td class="sh-td sh-sc" style="color:#ddd" ondblclick="startEdit(event,'${p.id}','${f}')">—</td>`;
+        ? `<td class="sh-td sh-sc s${v}" onclick="startEdit(event,'${p.id}','${f}')">${v}</td>`
+        : `<td class="sh-td sh-sc" style="color:#ddd" onclick="startEdit(event,'${p.id}','${f}')">—</td>`;
     }).join('');
     const ds = p.date ? p.date.slice(0,10).replace(/-/g,'/') : '—';
     const src = p.source === 'self' ? '<span class="src src-s">自分</span>'
@@ -1099,19 +1099,19 @@ function render() {
         const a = calcAge(val);
         disp = `${String(val).replace(/-/g,'/')} <span style="font-size:9px;color:#888">(${a != null ? a+'歳' : '?'})</span>`;
       }
-      return `<td class="sh-td" ondblclick="startEdit(event,'${p.id}','extra:${c.id}')">${disp}</td>`;
+      return `<td class="sh-td" onclick="startEdit(event,'${p.id}','extra:${c.id}')">${disp}</td>`;
     }).join('');
     return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
       <td class="sh-rn">${i+1}</td>
-      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
       ${customCells}
-      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','pos')"><span class="cv-sub">${esc(p.pos||'')}</span></td>
-      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
-      <td class="sh-td" style="text-align:center" ondblclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
-      <td class="sh-td" title="${esc(p.addr||'')}" ondblclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','pos')"><span class="cv-sub">${esc(p.pos||'')}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
+      <td class="sh-td" style="text-align:center" onclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
+      <td class="sh-td" title="${esc(p.addr||'')}" onclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
       ${sc}
       <td class="sh-td"><span class="cv-date">${ds}</span></td>
-      <td class="sh-td" title="${esc(p.memo||'')}" ondblclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
+      <td class="sh-td" title="${esc(p.memo||'')}" onclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
       <td class="sh-td" style="text-align:center">${src}</td>
       <td class="sh-td">
         <div class="c-ops-wrap">
@@ -1172,7 +1172,7 @@ function startEdit(e, id, field) {
   td.classList.add('is-editing');
   td.innerHTML = '';
   const lbl = colDef ? colDef.label : (FIELD_LABELS[field]||field);
-  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${lbl}]`;
+  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${lbl}]（Enter で確定 / Esc でキャンセル）`;
 
   const inp = document.createElement('input');
   inp.className = 'inline-edit-inp';
