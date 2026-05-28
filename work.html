@@ -624,6 +624,16 @@ tr:hover .s1 { background: #f5bac4; }
 .rank-b { color: #1d4ed8; }
 .rank-c { color: #555; }
 
+/* Inline cell editing */
+.inline-edit-inp {
+  width:100%; height:100%; border:2px solid #217346; outline:none;
+  padding:0 3px; font-size:11px; font-family:inherit;
+  background:#fffbe6; box-sizing:border-box; -moz-appearance:textfield;
+}
+.inline-edit-inp::-webkit-outer-spin-button,
+.inline-edit-inp::-webkit-inner-spin-button { -webkit-appearance:none; }
+.sh-td.is-editing { overflow:visible; padding:0; position:relative; z-index:20; }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 28px; left: 50%;
@@ -946,21 +956,21 @@ function render() {
     const sc = ['O','C','E','A','N'].map(f => {
       const v = p[f];
       return v
-        ? `<td class="sh-td sh-sc s${v}">${v}</td>`
-        : `<td class="sh-td sh-sc" style="color:#ddd">—</td>`;
+        ? `<td class="sh-td sh-sc s${v}" ondblclick="startEdit(event,'${p.id}','${f}')">${v}</td>`
+        : `<td class="sh-td sh-sc" style="color:#ddd" ondblclick="startEdit(event,'${p.id}','${f}')">—</td>`;
     }).join('');
     const ds = p.date ? p.date.slice(0,10).replace(/-/g,'/') : '—';
     const src = p.source === 'imported' ? '<span class="src src-i">取込</span>' : '<span class="src src-m">手動</span>';
     return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
       <td class="sh-rn">${i+1}</td>
-      <td class="sh-td"><span class="cv-name">${esc(p.name)}</span></td>
-      <td class="sh-td"><span class="cv-sub">${esc(p.pos||'')}</span></td>
-      <td class="sh-td"><span class="cv-sub">${esc(p.dept||'')}</span></td>
-      <td class="sh-td" style="text-align:center"><span class="cv-sub">${p.age||'—'}</span></td>
-      <td class="sh-td" title="${esc(p.addr||'')}"><span class="cv-sub">${esc(p.addr||'')}</span></td>
+      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
+      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','pos')"><span class="cv-sub">${esc(p.pos||'')}</span></td>
+      <td class="sh-td" ondblclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
+      <td class="sh-td" style="text-align:center" ondblclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
+      <td class="sh-td" title="${esc(p.addr||'')}" ondblclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
       ${sc}
       <td class="sh-td"><span class="cv-date">${ds}</span></td>
-      <td class="sh-td" title="${esc(p.memo||'')}"><span class="cv-sub">${esc(p.memo||'')}</span></td>
+      <td class="sh-td" title="${esc(p.memo||'')}" ondblclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
       <td class="sh-td" style="text-align:center">${src}</td>
       <td class="sh-td">
         <div class="c-ops-wrap">
@@ -979,6 +989,62 @@ function updateStats(ppl) {
   document.getElementById('statScored').textContent = sc;
   document.getElementById('statusMain').textContent =
     ppl.length > 0 ? `${ppl.length} 件登録 | スコアあり ${sc} 件` : '準備完了';
+}
+
+// ===== INLINE EDIT =====
+const FIELD_LABELS = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
+function startEdit(e, id, field) {
+  e.stopPropagation();
+  const td = e.currentTarget;
+  const p = load().find(x => x.id === id);
+  if (!p) return;
+  selId = id;
+
+  const isScore = ['O','C','E','A','N'].includes(field);
+  const isAge   = field === 'age';
+  const val = p[field] != null ? p[field] : '';
+
+  td.classList.add('is-editing');
+  td.innerHTML = '';
+  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${FIELD_LABELS[field]||field}]`;
+
+  const inp = document.createElement('input');
+  inp.className = 'inline-edit-inp';
+  inp.value = val;
+  if (isScore) {
+    inp.type = 'number'; inp.min = 1; inp.max = 5;
+    inp.style.textAlign = 'center'; inp.style.fontWeight = '700'; inp.style.fontSize = '13px';
+  } else if (isAge) {
+    inp.type = 'number'; inp.min = 0; inp.max = 120; inp.style.textAlign = 'center';
+  }
+  td.appendChild(inp);
+  inp.focus(); inp.select();
+
+  let done = false;
+  function commit() {
+    if (done) return; done = true;
+    const ppl = load();
+    const idx = ppl.findIndex(x => x.id === id);
+    if (idx < 0) { render(); return; }
+    const raw = inp.value.trim();
+    if (isScore) {
+      const n = parseInt(raw);
+      ppl[idx][field] = (n >= 1 && n <= 5) ? n : null;
+    } else if (isAge) {
+      const n = parseInt(raw);
+      ppl[idx][field] = (n >= 0 && n <= 120) ? n : null;
+    } else {
+      if (field === 'name' && !raw) { render(); return; }
+      ppl[idx][field] = raw || null;
+    }
+    save(ppl); render();
+  }
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', e2 => {
+    if (e2.key === 'Enter') { e2.preventDefault(); inp.blur(); }
+    else if (e2.key === 'Escape') { done = true; render(); }
+    e2.stopPropagation();
+  });
 }
 
 function selRow(id, name, row) {
