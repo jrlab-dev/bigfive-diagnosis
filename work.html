@@ -290,6 +290,7 @@ tr:hover .s1 { background: #f5bac4; }
 .src { font-size: 8px; padding: 0 3px; border-radius: 2px; font-weight: 700; }
 .src-m { background: #e0d8f8; color: #4c1d95; }
 .src-i { background: #d1f5e8; color: #065f46; }
+.src-s { background: #dbeafe; color: #1e40af; }
 
 /* Action buttons in cell */
 .c-ops-wrap { display: flex; gap: 2px; justify-content: center; }
@@ -673,6 +674,7 @@ tr:hover .s1 { background: #f5bac4; }
         <span class="rl">人物追加</span>
       </button>
       <div style="display:flex;flex-direction:column;gap:2px">
+        <button class="rb rb-sm" onclick="addSelf()"><span class="ri">🙋</span>自分を追加</button>
         <button class="rb rb-sm" onclick="openImportModal()"><span class="ri">⬇️</span>あの人データ取込</button>
         <button class="rb rb-sm" onclick="exportCSV()"><span class="ri">📥</span>CSV保存</button>
         <button class="rb rb-sm" onclick="copyForAI()"><span class="ri">🤖</span>AI用コピー</button>
@@ -946,12 +948,10 @@ function render() {
   document.getElementById('statusSort').textContent =
     '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
 
-  if (ppl.length === 0) {
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="15">登録データがありません。「人物追加」または「あの人データ取込」から始めてください。</td></tr>`;
-    updateStats(ppl); return;
-  }
+  const PAD_TO = 50;
+  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(14);
 
-  tbody.innerHTML = sorted.map((p, i) => {
+  const dataHtml = sorted.map((p, i) => {
     const isSel = selId === p.id;
     const sc = ['O','C','E','A','N'].map(f => {
       const v = p[f];
@@ -960,7 +960,9 @@ function render() {
         : `<td class="sh-td sh-sc" style="color:#ddd" ondblclick="startEdit(event,'${p.id}','${f}')">—</td>`;
     }).join('');
     const ds = p.date ? p.date.slice(0,10).replace(/-/g,'/') : '—';
-    const src = p.source === 'imported' ? '<span class="src src-i">取込</span>' : '<span class="src src-m">手動</span>';
+    const src = p.source === 'self' ? '<span class="src src-s">自分</span>'
+      : p.source === 'imported' ? '<span class="src src-i">取込</span>'
+      : '<span class="src src-m">手動</span>';
     return `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
       <td class="sh-rn">${i+1}</td>
       <td class="sh-td" ondblclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
@@ -980,6 +982,21 @@ function render() {
       </td>
     </tr>`;
   }).join('');
+
+  const padCount = Math.max(0, PAD_TO - sorted.length);
+  const padHtml = Array.from({length: padCount}, (_, i) =>
+    `<tr><td class="sh-rn" style="color:#ccc">${sorted.length + i + 1}</td>${EMPTY_PAD}</tr>`
+  ).join('');
+
+  if (sorted.length === 0) {
+    const hintRow = `<tr><td class="sh-rn" style="color:#ccc">1</td><td class="sh-td" colspan="14" style="color:#bbb;font-style:italic;font-size:10px;padding:2px 10px;">「人物追加」または「あの人データ取込」から始めてください</td></tr>`;
+    const restPad = Array.from({length: PAD_TO - 1}, (_, i) =>
+      `<tr><td class="sh-rn" style="color:#ccc">${i + 2}</td>${EMPTY_PAD}</tr>`
+    ).join('');
+    tbody.innerHTML = hintRow + restPad;
+  } else {
+    tbody.innerHTML = dataHtml + padHtml;
+  }
   updateStats(ppl);
 }
 
@@ -1131,6 +1148,24 @@ function del(id) {
   save(load().filter(x => x.id !== id));
   if (selId === id) selId = null;
   render(); toast('削除しました');
+}
+
+// ===== ADD SELF =====
+function addSelf() {
+  const MY_KEY = 'bigfive_my_results';
+  const results = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY)||'[]'); } catch(e) { return []; } })();
+  if (!results.length) { toast('自分の診断データがありません。まず診断を受けてください'); return; }
+  const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
+  const r = results[activeIdx] || results[0];
+  const myName = (r.name || localStorage.getItem('bigfive_my_name') || '自分').trim();
+  const ppl = load();
+  if (ppl.some(p => p.name === myName)) { toast(`「${myName}」はすでに登録済みです`); return; }
+  const c = r.code || '';
+  ppl.push({ id: genId(), name: myName, pos:'', dept:'', age:null, addr:'', memo:'',
+    O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
+    A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+    date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'self' });
+  save(ppl); render(); toast(`「${myName}」を追加しました`);
 }
 
 // ===== IMPORT =====
