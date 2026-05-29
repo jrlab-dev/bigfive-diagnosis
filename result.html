@@ -103,246 +103,7 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ===== カード ===== */
-  .card-wrapper {
-    position: relative; width: 100%;
-    max-width: 480px; aspect-ratio: 1 / 1;
-    margin-bottom: 32px;
-    perspective: 1000px;
-    perspective-origin: 50% 50%;
-  }
-  .card {
-    position: relative; width: 100%; height: 100%;
-    border-radius: 8px; overflow: hidden;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 24px 20px 20px;
-    box-shadow:
-      0 8px 32px rgba(0,0,0,0.6),
-      0 0 60px rgba(49,30,90,0.2),
-      inset 2px 2px 0 rgba(255,255,255,0.12),
-      inset -2px -2px 0 rgba(0,0,0,0.6),
-      inset 0 0 0 2px rgba(255,255,255,0.05);
-    border: 2px solid rgba(255,255,255,0.08);
-    border-style: solid;
-    will-change: transform;
-    transition: border-color 0.15s, border-width 0.15s;
-  }
-  /* エッジハイライト（マウス位置に光の反射） */
-  .edge-light {
-    position: absolute; inset: 0; z-index: 1;
-    pointer-events: none; border-radius: inherit;
-    opacity: 0; transition: opacity 0.3s;
-    background: radial-gradient(
-      circle 160px at var(--ex, 50%) var(--ey, 50%),
-      rgba(255,255,255,0.13) 0%,
-      rgba(255,255,255,0.04) 45%,
-      transparent 70%
-    );
-  }
-  .card-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 25% 20%, rgba(139,92,246,0.35) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 80% 75%, rgba(59,130,246,0.25) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 30% at 60% 40%, rgba(26,10,62,0.8) 0%, transparent 70%),
-      linear-gradient(160deg, #0a0e27 0%, #1a0a3e 40%, #0f172a 100%);
-  }
-  /* ===== 新レアリティシステム ===== */
-  /* R0: Common (10問版) — ベージュ背景 */
-  .card.rarity-r0 {
-    box-shadow: 0 4px 20px rgba(0,0,0,.15);
-    border-color: rgba(180,140,90,.4);
-  }
-  .card.rarity-r0 .card-bg {
-    background: linear-gradient(160deg, #fdf6ec 0%, #f5e6cc 50%, #ead8b4 100%);
-  }
-  .card.rarity-r0 .card-content {
-    background: linear-gradient(to top, rgba(234,216,180,.95) 0%, rgba(224,200,154,.9) 30%, transparent 100%);
-  }
-  .card.rarity-r0 .type-name, .card.rarity-r0 .type-label {
-    color: #3a2e1e; text-shadow: none;
-  }
-  .card.rarity-r0 .type-code, .card.rarity-r0 .score-label, .card.rarity-r0 .score-val {
-    color: #3a2e1e; text-shadow: none;
-  }
-  .card.rarity-r0 .description {
-    background: rgba(255,255,255,.92); border-radius: 8px; color: #3a2e1e;
-  }
-  .card.rarity-r0 .shimmer { opacity: 0; }
-
-  /* R1: グリッターのみ */
-  .card.rarity-r1 {
-    box-shadow: 0 4px 20px rgba(0,0,0,.5);
-    border-color: rgba(255,255,255,.06);
-  }
-
-  /* R2: グリッター + 金属箔（MAX因子色反映） */
-  .card.rarity-r2 {
-    box-shadow: 0 4px 20px rgba(0,0,0,.5), 0 0 20px rgba(212,190,140,.15);
-    border-color: rgba(200,180,120,.2);
-  }
-
-  /* R3: レインボー/オーロラ */
-  .card.rarity-r3 {
-    box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 35px rgba(255,215,0,.2), 0 0 60px rgba(139,92,246,.1);
-    border-color: rgba(255,215,0,.35);
-  }
-
-  /* R4: ダイヤモンドホログラム（金） */
-  .card.rarity-r4 {
-    box-shadow: 0 8px 40px rgba(0,0,0,.8), 0 0 60px rgba(255,200,50,.4), 0 0 100px rgba(255,180,0,.2);
-    border-color: rgba(255,210,80,.6);
-  }
-
-  /* R5: サンドホログラム */
-  .card.rarity-r5 {
-    box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 35px rgba(59,130,246,.25), 0 0 60px rgba(14,184,166,.1);
-    border-color: rgba(59,130,246,.35);
-  }
-  .card.rarity-r5 .card-bg {
-    background:
-      radial-gradient(ellipse 60% 40% at 30% 30%, rgba(14,184,166,0.22) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 35% at 75% 70%, rgba(59,130,246,0.18) 0%, transparent 55%),
-      linear-gradient(160deg, #071c28 0%, #0a2540 35%, #061e30 70%, #040e18 100%);
-  }
-
-  /* R6: Secret（ランダムホログラム） */
-  .card.rarity-r6 {
-    box-shadow: 0 6px 30px rgba(0,0,0,.6), 0 0 40px rgba(139,92,246,.25), 0 0 40px rgba(245,158,11,.15), 0 0 60px rgba(59,130,246,.1);
-    border-color: rgba(139,92,246,.4);
-  }
-
-  /* R7: Dark Secret（ダークランダムホログラム） */
-  .card.rarity-r7 {
-    box-shadow: 0 8px 40px rgba(0,0,0,.95), 0 0 50px rgba(160,160,200,.18), 0 0 80px rgba(80,80,120,.15);
-    border-color: rgba(180,180,210,.3);
-  }
-
-  /* 共通グロー */
-  .glow {
-    position: absolute; inset: 0; z-index: 3; pointer-events: none;
-    opacity: 0; transition: opacity .5s; border-radius: inherit;
-  }
-  .card:hover .glow { opacity: 1 !important; }
-  .card.rarity-r3 .glow { opacity: .4; background: radial-gradient(circle at 50% 50%, rgba(255,215,0,.05) 0%, transparent 70%); }
-  .card.rarity-r4 .glow { opacity: .7; background: radial-gradient(circle at 50% 50%, rgba(255,200,50,.12) 0%, transparent 70%); }
-  .card.rarity-r5 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,.05) 0%, transparent 70%); }
-  .card.rarity-r6 .glow { opacity: .6; background: radial-gradient(circle at 50% 50%, rgba(139,92,246,.06) 0%, transparent 70%); }
-  .card.rarity-r7 .glow { opacity: .5; background: radial-gradient(circle at 50% 50%, rgba(180,180,220,.05) 0%, transparent 70%); }
-  .stars {
-    position: absolute; inset: 0; z-index: 1;
-    pointer-events: none;
-    animation: star-twinkle 4s ease-in-out infinite alternate;
-  }
-  @keyframes star-twinkle {
-    0% { opacity: 0.7; } 100% { opacity: 1; }
-  }
-  .shimmer {
-    position: absolute; inset: -100%; z-index: 2;
-    pointer-events: none; opacity: 0; transition: opacity 0.5s;
-  }
-  /* ===== 新レアリティ演出Canvas ===== */
-  .holo-cv { position: absolute; inset: -100px; z-index: 1; border-radius: inherit; pointer-events: none; }
-  .foil-cv { position: absolute; inset: -100px; z-index: 1; border-radius: inherit; pointer-events: none; }
-  .glitter-cv { position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none; }
-
-
-  .rarity-secret.holo-on .glow-overlay {
-    opacity: 1;
-    background: radial-gradient(circle at 50% 50%, rgba(255,220,80,0.09) 0%, transparent 70%);
-  }
-  @keyframes glow-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-  /* ===== SECRET ダーク: 黒ダイヤホログラム ===== */
-  .rarity-secret.dark-secret .card {
-    box-shadow:
-      0 12px 50px rgba(0,0,0,0.9),
-      0 0 50px rgba(40,40,40,0.6),
-      0 0 100px rgba(20,20,20,0.3),
-      inset 0 0 30px rgba(0,0,0,0.15);
-    border-color: rgba(80,80,80,0.7);
-  }
-  .rarity-secret.dark-secret .shimmer {
-    opacity: 1;
-    background: linear-gradient(125deg, transparent 15%, rgba(200,200,200,0.06) 35%, rgba(255,255,255,0.18) 50%, rgba(200,200,200,0.06) 65%, transparent 85%);
-    animation: shimmer-dark 9s ease-in-out infinite;
-  }
-  .rarity-secret.dark-secret.holo-on .shimmer {
-    opacity: 1;
-    background: linear-gradient(125deg, transparent 15%, rgba(200,200,200,0.08) 35%, rgba(255,255,255,0.25) 50%, rgba(200,200,200,0.08) 65%, transparent 85%);
-    animation: shimmer-dark 6s ease-in-out infinite;
-  }
-  @keyframes shimmer-dark {
-    0%, 100% { transform: translateX(-70%) rotate(20deg); }
-    50%       { transform: translateX(70%) rotate(20deg); }
-  }
-  .rarity-secret.dark-secret .glow-overlay {
-    opacity: 1;
-    background: radial-gradient(circle at 50% 50%, rgba(200,200,200,0.06) 0%, transparent 70%);
-  }
-  .rarity-secret.dark-secret.holo-on .glow-overlay {
-    opacity: 1;
-    background: radial-gradient(circle at 50% 50%, rgba(200,200,200,0.06) 0%, transparent 70%);
-  }
-
-  /* キャラクター */
-  .char-area {
-    position: absolute; top: 5%; left: 50%;
-    transform: translateX(-50%);
-    width: 90%; height: 82%;
-    display: flex; align-items: flex-start; justify-content: center;
-    z-index: 3; pointer-events: none;
-  }
-  .char-img {
-    height: 100%; object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-  }
-
-  /* タイプ名 */
-  .type-name {
-    position: absolute; top: 8px; left: 0; right: 0;
-    font-size: clamp(14px, 7vw, 42px);
-    font-weight: 900; text-align: center;
-    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 2px 8px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.9), 0 0 48px rgba(0,0,0,0.5);
-    letter-spacing: 0.08em; z-index: 6;
-    padding: 0 16px; line-height: 1.2;
-    white-space: nowrap; overflow: visible;
-  }
-  .type-code {
-    font-size: 13px; color: #cbd5e1; font-weight: 500;
-    letter-spacing: 0.15em;
-    position: absolute; top: 56px; left: 0; right: 0;
-    text-align: center; z-index: 6;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
-  }
-  .type-code::after {
-    content: none;
-  }
-
-  /* 下部コンテンツ */
-  .card-content {
-    position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 0 16px 12px;
-    background: linear-gradient(to bottom, transparent 0%, rgba(10,14,39,0.7) 20%, rgba(10,14,39,0.85) 100%);
-  }
-  .scores {
-    width: 100%; display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 12px; margin-bottom: 0;
-  }
-  .score-item { display: flex; align-items: center; gap: 4px; }
-  .score-label { font-size: 11px; font-weight: 700; width: 14px; text-align: center; }
-  .score-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.4); border-radius: 3px; overflow: hidden; }
-  .score-bar { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
-  .score-val { font-size: 10px; color: var(--dim); width: 12px; text-align: right; }
-  .description {
-    font-size: 12px; line-height: 1.6; text-align: left;
-    color: #cbd5e1; padding: 6px 10px;
-    background: rgba(0,0,0,0.10); border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.05);
-    width: 100%; backdrop-filter: blur(4px);
-  }
+  /* カードスタイルは card.css に移動 */
 
   /* ===== 性格説明 ===== */
   .result-desc {
@@ -869,10 +630,6 @@
   }
 
   @media (max-width: 400px) {
-    .card { padding: 16px 14px 14px; }
-    .type-name { font-size: 17px; }
-    .description { font-size: 11px; padding: 6px 8px; }
-    .scores { gap: 4px 12px; }
     .result-buttons { flex-direction: column; align-items: center; }
   }
 
@@ -897,6 +654,7 @@
   body.theme-light #eqSection * { color: #1e293b !important; }
   body.theme-light #eqSection a { color: #0e7490 !important; }
 </style>
+<link rel="stylesheet" href="card.css">
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
 <script type="application/ld+json">
@@ -1197,6 +955,7 @@
 <script src="unlock.js"></script>
 <script src="concierge.js"></script>
 <script src="rarity.js"></script>
+<script src="card.js"></script>
 <script src="compat.js"></script>
 <script src="advice.js"></script>
 <script>
