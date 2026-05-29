@@ -676,31 +676,11 @@ body {
 
 /* カード裏面 */
 .carddas-card-back {
-  background: linear-gradient(135deg, #4c1d95, #6d28d9, #5b21b6);
+  background: #0a0a0a url(images/gacha/card-back.webp) center/cover no-repeat;
   border: 2px solid #7c3aed;
 }
-.carddas-card-back-design {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 4px;
-}
-.carddas-card-back-design::before {
-  content: '';
-  width: 50px; height: 50px;
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: 50%;
-}
-.carddas-card-back-design::after {
-  content: 'B5';
-  font-size: 14px; font-weight: 900;
-  color: rgba(255,255,255,0.15);
-  letter-spacing: 0.1em;
-}
-.carddas-card-back-inner {
-  position: absolute; inset: 5px;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 5px;
-}
+.carddas-card-back-design { display: none; }
+.carddas-card-back-inner { display: none; }
 
 /* カード表面 */
 .carddas-card-front { transform: rotateY(180deg); }
