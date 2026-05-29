@@ -454,6 +454,48 @@
   }
   .premium-close:hover { color: var(--text); }
 
+  /* 診断モード選択 */
+  .mode-options { display:flex; gap:10px; width:100%; margin-top:6px; }
+  .mode-btn {
+    flex:1; padding:14px 10px; border-radius:12px;
+    border:2px solid rgba(139,92,246,0.2); background:var(--card-bg);
+    color:var(--text); cursor:pointer; font-family:inherit;
+    text-align:center; transition:.2s;
+    display:flex; flex-direction:column; gap:4px; align-items:center;
+  }
+  .mode-btn strong { font-size:14px; font-weight:700; }
+  .mode-sub { font-size:11px; color:var(--dim); line-height:1.4; }
+  .mode-btn.selected { border-color:var(--purple); background:rgba(139,92,246,0.15); }
+  .mode-btn.selected strong { color:var(--purple); }
+
+  /* ファセット詳細カード */
+  .facet-card {
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:16px; padding:20px; margin-bottom:16px; width:100%;
+  }
+  .facet-section { margin-bottom:20px; }
+  .facet-section:last-child { margin-bottom:0; }
+  .facet-section-title {
+    font-size:13px; font-weight:700; margin:0 0 12px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .facet-row { margin-bottom:8px; }
+  .facet-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
+  .facet-name { font-size:12px; color:var(--dim); }
+  .facet-lv { font-size:11px; font-weight:600; }
+  .facet-lv.lv-high { color:#f97316; }
+  .facet-lv.lv-mid  { color:var(--dim); }
+  .facet-lv.lv-low  { color:#60a5fa; }
+  .facet-bar-bg { height:5px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; }
+  .facet-bar-fill { height:100%; border-radius:3px; transition:width .6s ease; }
+  .facet-toggle-btn {
+    width:100%; padding:12px; border:1px solid var(--card-border);
+    border-radius:12px; background:var(--card-bg); color:var(--dim);
+    font-family:inherit; font-size:13px; cursor:pointer; margin-bottom:16px;
+    transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .facet-toggle-btn:hover { color:var(--text); border-color:rgba(139,92,246,0.4); }
+
   /* シックなアイコン */
   .icon { width: 18px; height: 18px; flex-shrink: 0; }
   .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
@@ -549,6 +591,20 @@
     </div>
   </div>
 
+  <div class="input-group" id="modeGroup" style="display:none;">
+    <span class="input-label">診断モード</span>
+    <div class="mode-options">
+      <button class="mode-btn selected" data-mode="simple">
+        <strong>かんたん 30問</strong>
+        <span class="mode-sub">約5分・全体の性格傾向</span>
+      </button>
+      <button class="mode-btn" data-mode="detailed">
+        <strong>くわしく 60問</strong>
+        <span class="mode-sub">約10分・ファセット詳細まで</span>
+      </button>
+    </div>
+  </div>
+
   <div class="accuracy-note" id="accuracyNote"></div>
 
   <button class="start-btn" id="startBtn" disabled>診断スタート →</button>
@@ -609,6 +665,13 @@
   <div class="compat-card" id="compatCard"></div>
   <div class="advice-card" id="adviceCard" style="display:none;"></div>
   <div class="desc-card" id="descCard"></div>
+  <div id="facetCardWrap" style="display:none;width:100%;">
+    <button class="facet-toggle-btn" id="facetToggleBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      ファセット詳細を見る
+    </button>
+    <div class="facet-card" id="facetCard" style="display:none;"></div>
+  </div>
   <div class="accuracy-card" id="resultAccuracyNote"></div>
 
   <!-- 観察者情報パネル -->
@@ -721,6 +784,70 @@ const questions = [
 let activeQuestions = questions;
 let total = questions.length;
 
+// ===== 精密版60問（ファセット対応） =====
+const questionsDetailed = [
+  { text: '先のことを心配して、事前に何度も確認を取ろうとする様子がある', factor:'N', facet:'N1', dir:'+' },
+  { text: '先が見えない状況でも焦らず、落ち着いて行動する様子がある', factor:'N', facet:'N1', dir:'-' },
+  { text: '小さなミスや思い通りにいかないことで、声を荒げたり苛立ちを見せることがある', factor:'N', facet:'N2', dir:'+' },
+  { text: '理不尽なことがあっても、感情的にならず穏やかに対応することが多い', factor:'N', facet:'N2', dir:'-' },
+  { text: 'うまくいかないことが続くと、表情が暗くなったり口数が減る様子がある', factor:'N', facet:'N3', dir:'+' },
+  { text: '失敗や挫折があっても、翌日には通常通りのペースで動いている様子がある', factor:'N', facet:'N3', dir:'-' },
+  { text: '大勢の前で話したり注目を浴びる場面で、明らかに緊張したり縮こまる様子がある', factor:'N', facet:'N4', dir:'+' },
+  { text: '大勢の前でのプレゼンや発表でも、声のトーンや姿勢が普段と変わらない様子がある', factor:'N', facet:'N4', dir:'-' },
+  { text: '衝動的に発言したり行動したりして、後から後悔している様子が見受けられる', factor:'N', facet:'N5', dir:'+' },
+  { text: '感情的になりそうな場面でも、すぐには発言せず間を置いてから応答することが多い', factor:'N', facet:'N5', dir:'-' },
+  { text: '急なトラブルや予定外の変更が重なると、対応が止まってパニック状態になることがある', factor:'N', facet:'N6', dir:'+' },
+  { text: 'プレッシャーのかかる状況でも、冷静さを保って対処する様子がある', factor:'N', facet:'N6', dir:'-' },
+  { text: '見知らぬ人が集まる場でも積極的に話しかけ、打ち解けた雰囲気を作ることが多い', factor:'E', facet:'E1', dir:'+' },
+  { text: 'パーティや懇親会など大人数の場では、自分から話しかけることをほとんどしない様子がある', factor:'E', facet:'E1', dir:'-' },
+  { text: '休日や空き時間も誰かと過ごすことを好み、積極的に誘いをかけることが多い', factor:'E', facet:'E2', dir:'+' },
+  { text: '誘いを断って一人で過ごす選択をすることが多い', factor:'E', facet:'E2', dir:'-' },
+  { text: '話し合いの場で、はっきりと自分の立場や意見を述べることが多い', factor:'E', facet:'E3', dir:'+' },
+  { text: '自分の考えがあっても、場の雰囲気を読んで発言を控えることが多い', factor:'E', facet:'E3', dir:'-' },
+  { text: '仕事や活動に取り組む際のエネルギーが高く、テキパキと行動する様子がある', factor:'E', facet:'E4', dir:'+' },
+  { text: '作業量が多い局面でも急ぐそぶりを見せず、一定の遅めのペースで動くことが多い', factor:'E', facet:'E4', dir:'-' },
+  { text: '日常の中でも新しい体験や刺激を求めて、チャレンジングな選択をすることが多い', factor:'E', facet:'E5', dir:'+' },
+  { text: 'リスクを伴う仕事や活動の話が出ると、参加を断ったり消極的な反応をすることが多い', factor:'E', facet:'E5', dir:'-' },
+  { text: '日常の中でよく笑い、ユーモアを交えながら場の雰囲気を明るくすることが多い', factor:'E', facet:'E6', dir:'+' },
+  { text: '会話の場でも笑いや冗談はほとんど見られず、場の雰囲気はフラットなままであることが多い', factor:'E', facet:'E6', dir:'-' },
+  { text: '普通とは違う視点からアイデアを出したり、独創的な解決策を提案することがある', factor:'O', facet:'O1', dir:'+' },
+  { text: '実績のある方法を好み、奇抜なアイデアより定石を重視する様子がある', factor:'O', facet:'O1', dir:'-' },
+  { text: 'インテリアや服装など日常の中でも美的センスへのこだわりを見せることがある', factor:'O', facet:'O2', dir:'+' },
+  { text: '服装や持ち物に統一感がなく、見た目のコーディネートに時間をかけない様子がある', factor:'O', facet:'O2', dir:'-' },
+  { text: '映画や音楽を体験したあと、感動や興奮を言葉や表情で積極的に伝える様子がある', factor:'O', facet:'O3', dir:'+' },
+  { text: '感動的な場面でも表情を変えず、感情があまり表に出ない様子がある', factor:'O', facet:'O3', dir:'-' },
+  { text: '予定外の変更や急な方針転換があっても、不満を見せずに新しい方向に即座に動く様子がある', factor:'O', facet:'O4', dir:'+' },
+  { text: '馴染みのある場所・食べ物・やり方にとどまる選択が多い様子がある', factor:'O', facet:'O4', dir:'-' },
+  { text: '難しいテーマや複雑な問題を前にしても、食いついて考え続ける様子がある', factor:'O', facet:'O5', dir:'+' },
+  { text: '説明を一度聞いただけで次の話題に移り、深掘りする質問をほとんどしない様子がある', factor:'O', facet:'O5', dir:'-' },
+  { text: '前例と異なるやり方を提案したり、既存の手順を独自に変更して進めることがある', factor:'O', facet:'O6', dir:'+' },
+  { text: '組織のルールや社会的な規範を重んじ、慣例に沿って行動することが多い', factor:'O', facet:'O6', dir:'-' },
+  { text: '相手の言葉を疑わずそのまま受け入れ、素直に行動することが多い', factor:'A', facet:'A1', dir:'+' },
+  { text: '相手の話を聞いても、すぐには同意せず確認や裏取りをしようとする様子がある', factor:'A', facet:'A1', dir:'-' },
+  { text: 'ミスが発覚したとき、言い訳より先に事実をそのまま報告する様子がある', factor:'A', facet:'A2', dir:'+' },
+  { text: '都合が悪いときは事実をぼかしたり、ルールを都合よく解釈した行動が見られることがある', factor:'A', facet:'A2', dir:'-' },
+  { text: '誰かが困っているとき、自分の作業を中断してでも助けに行く行動が見られる', factor:'A', facet:'A3', dir:'+' },
+  { text: '自分に直接関係のないことには手を貸さず、自分の用事を優先する様子がある', factor:'A', facet:'A3', dir:'-' },
+  { text: 'グループ作業では全員が貢献できるよう気を配り、孤立しそうな人に声をかけて参加を促す行動が見られる', factor:'A', facet:'A4', dir:'+' },
+  { text: 'チームで決めたやり方が合わないと、断りなく独自の方法で進めてしまうことがある', factor:'A', facet:'A4', dir:'-' },
+  { text: '実績や成果を自ら語らず、功績を他の人や状況のおかげとして話すことが多い', factor:'A', facet:'A5', dir:'+' },
+  { text: '自分の実績や能力を場の雰囲気に関係なく積極的にアピールすることが多い', factor:'A', facet:'A5', dir:'-' },
+  { text: '相手が落ち込んでいるとき、解決策より先に気持ちを聞こうとする言動が見られる', factor:'A', facet:'A6', dir:'+' },
+  { text: '相手の気持ちより事実や効率を優先し、感情的な配慮が少ない発言をすることがある', factor:'A', facet:'A6', dir:'-' },
+  { text: '複雑な問題や状況に直面しても、素早く状況を整理して対処策を出す様子がある', factor:'C', facet:'C1', dir:'+' },
+  { text: '問題が起きると何から手をつければよいか分からなくなり、周囲に指示を求めることが多い', factor:'C', facet:'C1', dir:'-' },
+  { text: '情報やタスクをメモやリストで管理し、頭の中だけに頼らない様子がある', factor:'C', facet:'C2', dir:'+' },
+  { text: '持ち物や書類が整理されておらず、必要なものを探すことが多い様子がある', factor:'C', facet:'C2', dir:'-' },
+  { text: '一度引き受けたことは途中で諦めず、最後まで責任を持って仕上げる様子がある', factor:'C', facet:'C3', dir:'+' },
+  { text: '途中で興味を失ったり大変になると、やりかけのことを放り出す様子がある', factor:'C', facet:'C3', dir:'-' },
+  { text: '成果がすぐに見えなくても、途中で諦めずコツコツ取り組み続ける様子がある', factor:'C', facet:'C4', dir:'+' },
+  { text: '目に見える成果がすぐに出ない活動には興味を失い、別のことに切り替えてしまうことが多い', factor:'C', facet:'C4', dir:'-' },
+  { text: 'やるべきことがあれば誘惑や気分に流されず、集中して取り組める様子がある', factor:'C', facet:'C5', dir:'+' },
+  { text: '面白いものや楽な選択肢があると、本来の課題から脱線してしまうことが多い', factor:'C', facet:'C5', dir:'-' },
+  { text: '大きな決断をする前に情報を集め、じっくりと考えてから行動に移す様子がある', factor:'C', facet:'C6', dir:'+' },
+  { text: '十分な情報がそろっていない状態でも、その場の判断で決定してしまうことが多い', factor:'C', facet:'C6', dir:'-' },
+];
+
 // ===== 関係性設定 =====
 const relConfig = {
   love: {
@@ -803,6 +930,7 @@ const periodNotes = {
 
 // ===== 状態 =====
 let personName = '', personPeriod = '', personRel = '', personGender = 'F';
+let diagMode = 'simple';
 let current = 0;
 const ans = new Array(total).fill(null);
 
@@ -864,7 +992,16 @@ document.querySelectorAll('.period-btn').forEach(btn => {
     personPeriod = btn.dataset.period;
     accNote.innerHTML = periodNotes[personPeriod];
     accNote.classList.add('show');
+    document.getElementById('modeGroup').style.display = '';
     checkReady();
+  });
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    diagMode = btn.dataset.mode;
   });
 });
 
@@ -884,11 +1021,13 @@ startBtn.addEventListener('click', () => {
   personName = nameInput.value.trim();
   const cfg = relConfig[personRel];
 
-  // 子供用は質問セットを切り替え
+  // 質問セットを切り替え
   if (personRel === 'child46') {
     activeQuestions = [...questionsFixed15, ...questionsChild46];
   } else if (personRel === 'child79') {
     activeQuestions = [...questionsFixed15, ...questionsChild79];
+  } else if (diagMode === 'detailed') {
+    activeQuestions = questionsDetailed;
   } else {
     activeQuestions = questions;
   }
@@ -965,15 +1104,29 @@ backBtn.addEventListener('click', () => {
 // ===== スコア計算 =====
 function calcScores() {
   const fm = { E:[], N:[], O:[], C:[], A:[] };
+  const facetMap = {};
   activeQuestions.forEach((q,i) => {
     const raw = ans[i] || 3;
     const val = q.dir==='-' ? (6-raw) : raw;
     fm[q.factor].push(val);
+    if (q.facet) {
+      if (!facetMap[q.facet]) facetMap[q.facet] = [];
+      facetMap[q.facet].push(val);
+    }
   });
   const sc = {};
   for (const [f, vals] of Object.entries(fm)) {
-    const sum = vals.reduce((a,b)=>a+b,0); // 3〜15
-    sc[f] = sum<=10 ? 1 : sum<=20 ? 3 : 5;
+    const n = vals.length;
+    const sum = vals.reduce((a,b)=>a+b,0);
+    sc[f] = sum <= n*5/3 ? 1 : sum <= n*10/3 ? 3 : 5;
+  }
+  if (Object.keys(facetMap).length > 0) {
+    sc.facets = {};
+    for (const [facetId, vals] of Object.entries(facetMap)) {
+      const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+      const pct = (avg - 1) / 4;
+      sc.facets[facetId] = pct < 0.2 ? 1 : pct < 0.4 ? 2 : pct < 0.6 ? 3 : pct < 0.8 ? 4 : 5;
+    }
   }
   return sc;
 }
@@ -1192,6 +1345,76 @@ function showResult() {
       <strong style="color:var(--text);">情緒安定性・開放性</strong>は本人の自己評価の方が正確と言われています。
     </div>`;
 
+  // ファセット詳細表示（60問版のみ）
+  const facetWrap = document.getElementById('facetCardWrap');
+  const facetCard = document.getElementById('facetCard');
+  const facetToggleBtn = document.getElementById('facetToggleBtn');
+  if (sc.facets) {
+    const facetDefs = {
+      N: { label: '神経症傾向', color: '#14b8a6', facets: [
+        { id:'N1', name:'不安' }, { id:'N2', name:'怒り' }, { id:'N3', name:'抑うつ' },
+        { id:'N4', name:'自己意識' }, { id:'N5', name:'無抑制' }, { id:'N6', name:'脆弱性' }
+      ]},
+      E: { label: '外向性', color: '#f97316', facets: [
+        { id:'E1', name:'友好性' }, { id:'E2', name:'群居性' }, { id:'E3', name:'主張性' },
+        { id:'E4', name:'活動性' }, { id:'E5', name:'刺激追求' }, { id:'E6', name:'陽気さ' }
+      ]},
+      O: { label: '開放性', color: '#8b5cf6', facets: [
+        { id:'O1', name:'想像力' }, { id:'O2', name:'芸術的興味' }, { id:'O3', name:'感情性' },
+        { id:'O4', name:'冒険性' }, { id:'O5', name:'知性' }, { id:'O6', name:'自由主義' }
+      ]},
+      A: { label: '協調性', color: '#f472b6', facets: [
+        { id:'A1', name:'信頼' }, { id:'A2', name:'道徳性' }, { id:'A3', name:'利他性' },
+        { id:'A4', name:'協調性' }, { id:'A5', name:'謙虚さ' }, { id:'A6', name:'共感性' }
+      ]},
+      C: { label: '誠実性', color: '#3b82f6', facets: [
+        { id:'C1', name:'有能性' }, { id:'C2', name:'秩序性' }, { id:'C3', name:'義務感' },
+        { id:'C4', name:'達成努力' }, { id:'C5', name:'自己規律' }, { id:'C6', name:'慎重さ' }
+      ]},
+    };
+    let facetHtml = '';
+    for (const [fKey, fDef] of Object.entries(facetDefs)) {
+      facetHtml += `<div class="facet-section">
+        <p class="facet-section-title" style="color:${fDef.color}">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${fDef.color};"></span>
+          ${fDef.label}
+        </p>`;
+      for (const f of fDef.facets) {
+        const s = sc.facets[f.id] || 3;
+        const pct = s * 20;
+        const lv = s <= 2 ? '低め' : s === 3 ? '普通' : s === 4 ? 'やや高め' : '高め';
+        const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
+        facetHtml += `<div class="facet-row">
+          <div class="facet-header">
+            <span class="facet-name">${f.name}</span>
+            <span class="facet-lv ${lvClass}">${lv}</span>
+          </div>
+          <div class="facet-bar-bg">
+            <div class="facet-bar-fill" style="width:0%;background:${fDef.color};" data-w="${pct}%"></div>
+          </div>
+        </div>`;
+      }
+      facetHtml += '</div>';
+    }
+    facetCard.innerHTML = facetHtml;
+    facetWrap.style.display = '';
+    let facetOpen = false;
+    facetToggleBtn.addEventListener('click', () => {
+      facetOpen = !facetOpen;
+      facetCard.style.display = facetOpen ? '' : 'none';
+      facetToggleBtn.innerHTML = facetOpen
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> ファセット詳細を閉じる'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> ファセット詳細を見る';
+      if (facetOpen) {
+        setTimeout(() => {
+          facetCard.querySelectorAll('.facet-bar-fill').forEach(b => b.style.width = b.dataset.w);
+        }, 50);
+      }
+    });
+  } else {
+    facetWrap.style.display = 'none';
+  }
+
   showScreen('resultScreen');
 
   // バーアニメーション
@@ -1207,7 +1430,7 @@ function showResult() {
     relation: personRel,
     gender: personGender,
     date: new Date().toISOString(),
-    version: '30',
+    version: diagMode === 'detailed' ? '60' : '30',
     rarity: 'common'
   };
 
@@ -1218,8 +1441,11 @@ function showResult() {
 // ===== もう一度 =====
 document.getElementById('retryBtn').addEventListener('click', () => {
   nameInput.value = ''; personName = ''; personPeriod = ''; personRel = '';
+  diagMode = 'simple';
   document.querySelectorAll('.rel-btn, .period-btn').forEach(b => b.classList.remove('selected','sel-love','sel-work','sel-friend'));
+  document.querySelectorAll('.mode-btn').forEach(b => { b.classList.toggle('selected', b.dataset.mode === 'simple'); });
   accNote.classList.remove('show');
+  document.getElementById('modeGroup').style.display = 'none';
   startBtn.disabled = true;
   showScreen('startScreen');
 });
