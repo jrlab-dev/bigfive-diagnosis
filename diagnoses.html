@@ -482,7 +482,7 @@ function diagCardHTML(d, done) {
         <div class="diag-name">${d.name}</div>
         <div class="diag-desc">${d.desc}</div>
       </div>
-      <div class="diag-lock-badge">🔒 あと${remaining}枚で解放</div>
+      <div class="diag-lock-badge">🔒 あとカード${remaining}枚で解放</div>
     </div>`;
   }
 
@@ -608,7 +608,7 @@ body.theme-light .diag-lock-badge {
 window._showLockedToast = function(remaining) {
   var toast = document.getElementById('diagLockedToast');
   if (!toast) return;
-  toast.textContent = 'カードをあと' + remaining + '枚集めると解放されます。診断を受けるか、友達のシェアを受け取るとカードが増えます';
+  toast.textContent = '診断カードをあと' + remaining + '枚集めると解放されます（コインとは別です）。診断を受けるか、友達のシェアを受け取るとカードが増えます';
   toast.classList.add('show');
   setTimeout(function() { toast.classList.remove('show'); }, 6000);
 };
