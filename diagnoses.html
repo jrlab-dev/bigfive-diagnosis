@@ -35,7 +35,15 @@
     "url": "https://bigfive.jr-genius.jp/"
   },
   "inLanguage": "ja",
-  "keywords": ["心理学診断", "性格診断一覧", "無料診断"]
+  "keywords": ["心理学診断", "性格診断一覧", "無料診断"],
+  "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://bigfive.jr-genius.jp/images/bigfive-psychology-diagnoses-science-map.webp",
+    "width": 1062,
+    "height": 909,
+    "name": "ビッグファイブを中心とした心理学診断の科学的信憑性マップ",
+    "description": "ビッグファイブ性格診断を中心に、HSP・EQ・愛着スタイル・ダークトライアド・マインドセットなど各心理学診断の科学的信憑性と相互関係を図示したマップ"
+  }
 }
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
@@ -57,8 +65,10 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .page-title { font-size: 26px; font-weight: 900; line-height: 1.4; margin-bottom: 10px; }
 .page-title em { font-style: normal; background: linear-gradient(135deg, var(--purple), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .page-sub { font-size: 14px; color: var(--dim); line-height: 1.8; margin-bottom: 28px; }
-.science-map-wrap { margin-bottom: 36px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+.science-map-title { font-size: 15px; font-weight: 700; color: var(--dim); margin-bottom: 10px; }
+.science-map-wrap { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
 .science-map-img { width: 100%; height: auto; display: block; }
+.science-map-caption { font-size: 12px; color: var(--dim); line-height: 1.7; margin-bottom: 32px; }
 
 /* ===== おすすめセクション ===== */
 #recSection { display: none; margin-bottom: 36px; }
@@ -137,9 +147,11 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <p class="page-sub">すべて無料・登録不要。各診断は独立して受けられます。<br>ビッグファイブの結果がある方には、あなたに合ったおすすめを表示します。</p>
 
   <!-- 科学的信憑性マップ -->
+  <h2 class="science-map-title">ビッグファイブを中心とした心理学診断マップ</h2>
   <div class="science-map-wrap">
-    <img src="images/bigfive-psychology-diagnoses-science-map.webp" alt="各診断の科学的信憑性マップ　ビッグファイブを中心に各心理学診断の位置関係と信頼性を図示" class="science-map-img" width="1062" height="909" loading="lazy">
+    <img src="images/bigfive-psychology-diagnoses-science-map.webp" alt="各診断の科学的信憑性マップ　ビッグファイブを中心に各心理学診断の位置関係と信頼性を図示" class="science-map-img" width="1062" height="909" loading="eager" fetchpriority="high">
   </div>
+  <p class="science-map-caption">ビッグファイブ性格診断を基軸に、各心理学診断の科学的信憑性と相互関係を図示。メタ分析による研究蓄積が最も厚いビッグファイブを中心に、EQ・愛着スタイル・ダークトライアドなどの位置づけを確認できます。</p>
 
   <!-- おすすめセクション（ビッグファイブ結果がある場合のみ表示） -->
   <section id="recSection">
