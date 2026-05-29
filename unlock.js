@@ -25,9 +25,10 @@ var UNLOCK_TABLE = [
   { cards: 50, id: 'other_limit_50',     label: 'あの人保存50件に拡張',   url: null },
   { cards: 55, id: 'other-dark-triad',   label: 'あの人のダークトライアド診断', url: 'other_dark_triad.html' },
   { cards: 60, id: 'other-attachment',   label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
-  { cards: 65, id: 'other-eq',           label: 'あの人のEQ診断',        url: 'other_eq.html' },
-  { cards: 70, id: 'bigfiveman',          label: 'ビッグファイブマン分析', url: 'team.html' },
-  { cards: 80, id: 'group',              label: 'グループ分けツール',     url: 'group.html' },
+  { cards: 65, id: 'other-eq',           label: 'あの人のEQ診断',          url: 'other_eq.html' },
+  { cards: 70, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
+  { cards: 77, id: 'bigfiveman',         label: 'ビッグファイブマン分析',   url: 'team.html' },
+  { cards: 90, id: 'group',             label: 'グループ分けツール',       url: 'group.html' },
   { cards: 100, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
 ];
 
