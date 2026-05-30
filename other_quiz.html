@@ -640,6 +640,15 @@
       </button>
     </div>
   </div>
+  <div class="input-group" id="detailed2Group" style="display:none;">
+    <div class="mode-options">
+      <button class="mode-btn" id="detailed2Btn" data-mode="detailed2" style="border-color:#10b981;background:rgba(16,185,129,0.08);">
+        <strong style="color:#10b981;">追加精密診断 60問</strong>
+        <span class="mode-sub">2回目・合計120問相当の精度へ</span>
+      </button>
+    </div>
+    <p style="font-size:11px;color:var(--dim);margin:6px 0 0;text-align:center;">この人の60問データが見つかりました。追加診断で精度が上がります。</p>
+  </div>
 
   <div class="accuracy-note" id="accuracyNote"></div>
 
@@ -693,6 +702,7 @@
     <span class="result-rel-badge" id="relBadge">—</span>
     <p class="result-name"><em id="resultName">—</em>の推定性格</p>
     <p class="result-sub">ビッグファイブ理論による観察分析</p>
+    <div id="badge120" style="display:none;margin-top:8px;padding:6px 14px;background:linear-gradient(135deg,#10b981,#059669);border-radius:20px;font-size:12px;font-weight:700;color:#fff;text-align:center;">120問相当・精密版</div>
   </div>
   <div class="char-area" id="charArea" style="display:none;">
     <img class="char-img-other" id="charImgOther" src="" alt="キャラクター">
@@ -885,6 +895,70 @@ const questionsDetailed = [
   { text: '十分な情報がそろっていない状態でも、その場の判断で決定してしまうことが多い', factor:'C', facet:'C6', dir:'-' },
 ];
 
+// ===== 追加精密版60問（2回目・バイアス除去・行動観察ベース） =====
+const questionsDetailed2 = [
+  { text: '前日から何度も持ち物や準備物を確認したり、当日の朝早くから準備を始める様子がある', factor:'N', facet:'N1', dir:'+' },
+  { text: '大事な問題が未解決でも、その日の業務を普段通りのペースで進めることができる様子がある', factor:'N', facet:'N1', dir:'-' },
+  { text: '自分のミスや不手際を指摘されたとき、反論や言い訳が受け入れより先に出ることが多い', factor:'N', facet:'N2', dir:'+' },
+  { text: '理不尽な状況に置かれても、その場では声を荒げず後から静かに対処する様子がある', factor:'N', facet:'N2', dir:'-' },
+  { text: 'うまくいかないことが続くと「自分はだめだ」「向いていない」という発言が増える様子がある', factor:'N', facet:'N3', dir:'+' },
+  { text: '批判を受けた後も自己嫌悪に陥らず、「次どうするか」の話に素早く切り替える様子がある', factor:'N', facet:'N3', dir:'-' },
+  { text: '大勢の場で急に静かになったり、周囲の視線を気にしてそわそわする様子が見受けられる', factor:'N', facet:'N4', dir:'+' },
+  { text: '服装や行動を他者に指摘されても特に動じず、気にしていない様子を見せることが多い', factor:'N', facet:'N4', dir:'-' },
+  { text: '「甘いものをやめる」「スマホを控える」と言いながら短期間で元に戻るパターンが繰り返される様子がある', factor:'N', facet:'N5', dir:'+' },
+  { text: 'カッとなりそうな場面でその場を離れたり沈黙を選ぶ行動が見られることがある', factor:'N', facet:'N5', dir:'-' },
+  { text: '締め切りやプレッシャーが重なると、急に体調不良を訴えたりやる気を失う様子がある', factor:'N', facet:'N6', dir:'+' },
+  { text: '突発的なトラブルが重なっても「まずこれ」と1つずつ着手できる様子がある', factor:'N', facet:'N6', dir:'-' },
+  { text: '初めて会った人の名前や特徴を後日も覚えており、次に会ったとき自然に使う様子がある', factor:'E', facet:'E1', dir:'+' },
+  { text: '一対一では話せるが、グループになると発言の頻度が目に見えて減ることが多い', factor:'E', facet:'E1', dir:'-' },
+  { text: '連絡が途絶えている友人や知人に自分から連絡を取ることが多い様子がある', factor:'E', facet:'E2', dir:'+' },
+  { text: '長期休暇を一人か少人数でゆっくり過ごすことを好んでいる様子がある', factor:'E', facet:'E2', dir:'-' },
+  { text: '上の立場の人が間違っていると思ったとき、直接指摘できる場面が見受けられる', factor:'E', facet:'E3', dir:'+' },
+  { text: '自分の案が却下されても特に不満を表に出さず、多数決に黙って従う様子がある', factor:'E', facet:'E3', dir:'-' },
+  { text: '仕事が終わった後も、何か別のことを始めたり学んだりしている様子がある', factor:'E', facet:'E4', dir:'+' },
+  { text: '休日でもエネルギーが余っている様子がなく、少し動いたら長時間休む生活リズムの様子がある', factor:'E', facet:'E4', dir:'-' },
+  { text: '行ったことのない場所や食べたことのない料理を率先して試そうとする行動が見られる', factor:'E', facet:'E5', dir:'+' },
+  { text: '旅行先でも定番コースや有名店を選び、なるべくはずれのない選択をしようとする様子がある', factor:'E', facet:'E5', dir:'-' },
+  { text: '些細な日常の出来事を楽しそうに話し、周りを笑わせる話題を自然に提供することが多い', factor:'E', facet:'E6', dir:'+' },
+  { text: '楽しい場面でも感情の起伏がほとんど見えず、テンションの変化が表情に出にくい様子がある', factor:'E', facet:'E6', dir:'-' },
+  { text: '「もしこうだったら？」という仮定の話を好んで展開させ、会話を広げることが多い', factor:'O', facet:'O1', dir:'+' },
+  { text: '議論の場でアイデアを求められると、既存の事例や前例を引用して答えることが多い', factor:'O', facet:'O1', dir:'-' },
+  { text: '場の雰囲気やデザインの細部（照明・配色など）に気づいてコメントすることがある', factor:'O', facet:'O2', dir:'+' },
+  { text: '機能的に問題がなければ見た目へのこだわりは示さず、実用性を優先する様子がある', factor:'O', facet:'O2', dir:'-' },
+  { text: '自然の景色や場の雰囲気に感化されて「なんかすごい」「きれいだね」と感情を口にする場面がある', factor:'O', facet:'O3', dir:'+' },
+  { text: '相手が感情的な話をしているとき、共感より先に「で、どうするの？」と解決策を求めることが多い', factor:'O', facet:'O3', dir:'-' },
+  { text: '同じやり方でうまくいっていても「もっと良い方法があるはず」と探し続ける様子がある', factor:'O', facet:'O4', dir:'+' },
+  { text: 'メニューや選択肢が多い場面でいつもの定番を選び、試してみようとしないことが多い', factor:'O', facet:'O4', dir:'-' },
+  { text: '自分の専門外の分野（芸術・歴史・科学など）の話題にも積極的に参加し、意見を述べることがある', factor:'O', facet:'O5', dir:'+' },
+  { text: '知らないことを聞かれたとき「詳しくないので」と打ち切り、それ以上調べようとしないことが多い', factor:'O', facet:'O5', dir:'-' },
+  { text: '異なる文化や価値観の話を聞くと、否定せず興味深そうに掘り下げる様子がある', factor:'O', facet:'O6', dir:'+' },
+  { text: '「昔からそうしてきた」「みんなそうだから」という理由で行動を正当化することが多い', factor:'O', facet:'O6', dir:'-' },
+  { text: '初対面の人でも相手の言葉を額面通りに受け取り、善意を前提に接することが多い', factor:'A', facet:'A1', dir:'+' },
+  { text: '頼みごとや提案を受けたとき、相手の意図や裏事情を考えてから動くことが多い', factor:'A', facet:'A1', dir:'-' },
+  { text: '自分が不利な状況でも、嘘や言い訳より事実を伝えることを選ぶ場面が見受けられる', factor:'A', facet:'A2', dir:'+' },
+  { text: '自分に有利になるよう事実を少し誇張したり省略して伝えることがある', factor:'A', facet:'A2', dir:'-' },
+  { text: '見返りが期待できない状況でも、困っている相手の手伝いを引き受けることが多い', factor:'A', facet:'A3', dir:'+' },
+  { text: '忙しいときに頼まれごとをされると、断ったり後回しにすることが多い様子がある', factor:'A', facet:'A3', dir:'-' },
+  { text: '意見の違う相手と議論になっても「どちらも正しい部分がある」と着地させることが多い', factor:'A', facet:'A4', dir:'+' },
+  { text: 'グループで作業するとき、自分のやり方を押し通して他のメンバーの方法を試そうとしないことが多い', factor:'A', facet:'A4', dir:'-' },
+  { text: '自分より他の人の功績を褒め、場の注目を他に向けることが多い', factor:'A', facet:'A5', dir:'+' },
+  { text: 'グループでの成功でも「自分がやった」という文脈で話すことが多い様子がある', factor:'A', facet:'A5', dir:'-' },
+  { text: '問題が解決していなくても「つらかったね」と相手の感情を受け止める発言が自然に出ることが多い', factor:'A', facet:'A6', dir:'+' },
+  { text: '泣いている人や落ち込んでいる人に対してどう対応すれば良いか迷っている様子が見受けられる', factor:'A', facet:'A6', dir:'-' },
+  { text: '初めて取り組む作業でも、まず自分でやってみようとする姿勢が見られる', factor:'C', facet:'C1', dir:'+' },
+  { text: '自分のスキルや判断に自信がなく、よく「私にできるでしょうか」「これで合ってますか」と確認することが多い', factor:'C', facet:'C1', dir:'-' },
+  { text: '使ったものを元の場所に戻したり共用スペースを使う前より綺麗にする行動が見られる', factor:'C', facet:'C2', dir:'+' },
+  { text: '作業スペースや持ち物が散らかっていても気にする様子がなく、整頓を促されても優先度が低い様子がある', factor:'C', facet:'C2', dir:'-' },
+  { text: '自分が直接担当ではなくても問題が起きた仕事には自分から名乗り出て解決しようとする場面がある', factor:'C', facet:'C3', dir:'+' },
+  { text: '締め切りや約束をほぼ守るがギリギリか少し遅れることが多い様子がある', factor:'C', facet:'C3', dir:'-' },
+  { text: '目標を数値や期日で具体化し進捗を定期的に確認している様子がある', factor:'C', facet:'C4', dir:'+' },
+  { text: '途中から成果物のクオリティが落ち、最初に宣言していた基準より明らかに低い状態で完成とすることが多い', factor:'C', facet:'C4', dir:'-' },
+  { text: '気が乗らなくても毎日決まった時間に同じ行動をとる習慣が身についている様子がある', factor:'C', facet:'C5', dir:'+' },
+  { text: '気乗りしない仕事を前にして、まず環境を整えたり別の準備を始めて本題に入るまでが長い様子がある', factor:'C', facet:'C5', dir:'-' },
+  { text: '大きな買い物や契約をする前に比較検討や下調べを念入りに行う様子がある', factor:'C', facet:'C6', dir:'+' },
+  { text: '勢いで決断して後から「もっと考えればよかった」と言うことが繰り返される様子がある', factor:'C', facet:'C6', dir:'-' },
+];
+
 // ===== 関係性設定 =====
 const relConfig = {
   love: {
@@ -1020,7 +1094,20 @@ document.querySelectorAll('.rel-btn').forEach(btn => {
   });
 });
 
-nameInput.addEventListener('input', checkReady);
+nameInput.addEventListener('input', () => {
+  checkReady();
+  checkDetailed2Available();
+});
+
+function checkDetailed2Available() {
+  try {
+    const name = nameInput.value.trim();
+    if (!name) { document.getElementById('detailed2Group').style.display = 'none'; return; }
+    const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+    const has60 = others.some(r => r.name === name && r.version === '60');
+    document.getElementById('detailed2Group').style.display = has60 ? '' : 'none';
+  } catch(e) { document.getElementById('detailed2Group').style.display = 'none'; }
+}
 
 document.querySelectorAll('.period-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1087,6 +1174,8 @@ startBtn.addEventListener('click', () => {
     activeQuestions = [...questionsFixed15, ...questionsChild79];
   } else if (diagMode === 'detailed') {
     activeQuestions = questionsDetailed;
+  } else if (diagMode === 'detailed2') {
+    activeQuestions = questionsDetailed2;
   } else {
     activeQuestions = questions;
   }
@@ -1111,7 +1200,7 @@ startBtn.addEventListener('click', () => {
 
   current = 0;
   ans.length = total; ans.fill(null);
-  document.getElementById('saveProgressBtn').style.display = diagMode === 'detailed' ? '' : 'none';
+  document.getElementById('saveProgressBtn').style.display = (diagMode === 'detailed' || diagMode === 'detailed2') ? '' : 'none';
   render();
   showScreen('quizScreen');
 });
@@ -1162,6 +1251,38 @@ backBtn.addEventListener('click', () => {
 });
 
 // ===== スコア計算 =====
+// ===== 120問合成スコア計算 =====
+function calcCombined120(name, sc2) {
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+    const r60 = others.find(r => r.name === name && r.version === '60');
+    if (!r60 || !r60.scores || !r60.scores.facets || !sc2.facets) return sc2;
+    const f1 = r60.scores.facets, f2 = sc2.facets;
+    const facetFactorMap = {
+      N1:'N',N2:'N',N3:'N',N4:'N',N5:'N',N6:'N',
+      E1:'E',E2:'E',E3:'E',E4:'E',E5:'E',E6:'E',
+      O1:'O',O2:'O',O3:'O',O4:'O',O5:'O',O6:'O',
+      A1:'A',A2:'A',A3:'A',A4:'A',A5:'A',A6:'A',
+      C1:'C',C2:'C',C3:'C',C4:'C',C5:'C',C6:'C'
+    };
+    const combined = {};
+    for (const fId of Object.keys(facetFactorMap)) {
+      combined[fId] = Math.round(((f1[fId]||3) + (f2[fId]||3)) / 2);
+    }
+    const factors = {N:[],E:[],O:[],A:[],C:[]};
+    for (const [fId, score] of Object.entries(combined)) {
+      factors[facetFactorMap[fId]].push(score);
+    }
+    const result = {};
+    for (const [f, scores] of Object.entries(factors)) {
+      const avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+      result[f] = avg < 7/3 ? 1 : avg < 11/3 ? 3 : 5;
+    }
+    result.facets = combined;
+    return result;
+  } catch(e) { return sc2; }
+}
+
 function calcScores() {
   const fm = { E:[], N:[], O:[], C:[], A:[] };
   const facetMap = {};
@@ -1264,6 +1385,7 @@ function calcCompat(other, my, weights) {
 
 // ===== 結果表示 =====
 function showResult() {
+  document.getElementById('badge120').style.display = 'none';
   if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('other');
   const sc = calcScores();
   const cfg = relConfig[personRel];
@@ -1485,19 +1607,52 @@ function showResult() {
     document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
   }, 100);
 
-  // 保存用に結果をグローバル変数に保存
-  window.currentOtherResult = {
-    name: personName,
-    code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
-    scores: sc,
-    relation: personRel,
-    gender: personGender,
-    date: new Date().toISOString(),
-    version: diagMode === 'detailed' ? '60' : '30',
-    rarity: 'common'
-  };
-  saveOtherResultToList(window.currentOtherResult);
-  addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+  // detailed2: 既存60問データと合成してversion:'120'で保存
+  if (diagMode === 'detailed2') {
+    const combinedSc = calcCombined120(personName, sc);
+    window.currentOtherResult = {
+      name: personName,
+      code: `${combinedSc.O}${combinedSc.C}${combinedSc.E}${combinedSc.A}${combinedSc.N}`,
+      scores: combinedSc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString(),
+      version: '120',
+      rarity: 'common'
+    };
+    // 既存の60問エントリを120問に上書き更新
+    try {
+      const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+      const idx = others.findIndex(r => r.name === personName && r.version === '60');
+      if (idx >= 0) {
+        others[idx] = window.currentOtherResult;
+        localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+      } else {
+        saveOtherResultToList(window.currentOtherResult);
+      }
+    } catch(e) { saveOtherResultToList(window.currentOtherResult); }
+    // 120問相当バッジを結果画面に表示
+    const badge120 = document.getElementById('badge120');
+    if (badge120) badge120.style.display = '';
+    // ファセットは合成済みのものを上書き
+    sc.O = combinedSc.O; sc.C = combinedSc.C; sc.E = combinedSc.E;
+    sc.A = combinedSc.A; sc.N = combinedSc.N;
+    if (combinedSc.facets) sc.facets = combinedSc.facets;
+  } else {
+    // 通常保存
+    window.currentOtherResult = {
+      name: personName,
+      code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+      scores: sc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString(),
+      version: diagMode === 'detailed' ? '60' : '30',
+      rarity: 'common'
+    };
+    saveOtherResultToList(window.currentOtherResult);
+    addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+  }
   deleteDraft();
 
   // 保存済みチェック
@@ -1512,6 +1667,7 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   document.querySelectorAll('.mode-btn').forEach(b => { b.classList.toggle('selected', b.dataset.mode === 'simple'); });
   accNote.classList.remove('show');
   document.getElementById('modeGroup').style.display = 'none';
+  document.getElementById('detailed2Group').style.display = 'none';
   startBtn.disabled = true;
   showScreen('startScreen');
 });
@@ -1563,6 +1719,8 @@ function resumeFromDraft() {
       activeQuestions = [...questionsFixed15, ...questionsChild79];
     } else if (diagMode === 'detailed') {
       activeQuestions = questionsDetailed;
+    } else if (diagMode === 'detailed2') {
+      activeQuestions = questionsDetailed2;
     } else {
       activeQuestions = questions;
     }
@@ -1592,7 +1750,7 @@ function resumeFromDraft() {
     badge.innerHTML = cfg.badge;
     badge.className = `result-rel-badge ${cfg.badgeClass}`;
 
-    document.getElementById('saveProgressBtn').style.display = diagMode === 'detailed' ? '' : 'none';
+    document.getElementById('saveProgressBtn').style.display = (diagMode === 'detailed' || diagMode === 'detailed2') ? '' : 'none';
 
     render();
     showScreen('quizScreen');
@@ -1608,7 +1766,7 @@ function initDraftBanner() {
     const d = JSON.parse(raw);
     if (!d.personName || !d.personRel) { deleteDraft(); return; }
     const answered = (d.ans || []).filter(v => v !== null).length;
-    const total60 = d.diagMode === 'detailed' ? 60 : 30;
+    const total60 = (d.diagMode === 'detailed' || d.diagMode === 'detailed2') ? 60 : 30;
     document.getElementById('draftSub').textContent = `${d.personName}さん（${answered}/${total60}問 回答済み）`;
     document.getElementById('draftResumeBtn').textContent = `${d.personName}さんの続きから始める`;
     document.getElementById('draftBanner').style.display = '';
