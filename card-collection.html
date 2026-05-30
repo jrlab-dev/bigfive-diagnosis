@@ -243,6 +243,56 @@
       box-shadow: 0 4px 12px rgba(139,92,246,0.4);
     }
 
+    /* 機能解放マップ */
+    .unlock-map-section {
+      max-width: 580px;
+      margin: 32px auto 0;
+      padding: 0 12px;
+    }
+    .unlock-map-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: .06em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .umap-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      border: 1px solid #1e293b;
+      background: #0f172a;
+    }
+    .umap-row.umap-unlocked { border-color: #1e3a2f; background: rgba(16,185,129,0.06); }
+    .umap-count {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      min-width: 38px;
+      text-align: right;
+    }
+    .umap-row.umap-unlocked .umap-count { color: #10b981; }
+    .umap-name {
+      flex: 1;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+    .umap-row.umap-locked .umap-name { color: #475569; }
+    .umap-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #10b981;
+      white-space: nowrap;
+    }
+    .umap-row.umap-locked .umap-status { color: #475569; }
+    .umap-link { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; flex: 1; }
+
     /* 戻るリンク */
     .back-link {
       display: block;
@@ -322,11 +372,17 @@
   </div>
 </div>
 
+<div class="unlock-map-section">
+  <div class="unlock-map-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> 機能解放マップ</div>
+  <div id="unlockMapList"></div>
+</div>
+
 <a href="zukan.html" class="full-zukan-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>全種類図鑑を開く</a>
 
 <a href="mypage.html" class="back-link">← マイページに戻る</a>
 
 <script src="nav.js"></script>
+<script src="unlock.js"></script>
 <script src="album.js"></script>
 <script src="rarity.js"></script>
 <script>
@@ -492,6 +548,33 @@
   }
 
   init();
+})();
+
+// ===== 機能解放マップ =====
+(function() {
+  if (typeof UNLOCK_TABLE === 'undefined') return;
+  var cardCount = typeof getCardCount === 'function' ? getCardCount() : 0;
+  var legacy = typeof isLegacyUser === 'function' && isLegacyUser();
+  // Stage 2 範囲：25〜99枚の機能のみ表示（urlありのもの）
+  var features = UNLOCK_TABLE.filter(function(e) {
+    return e.cards >= 25 && e.cards <= 99 && e.url;
+  });
+  var html = '';
+  features.forEach(function(f) {
+    var unlocked = legacy || cardCount >= f.cards;
+    var remaining = f.cards - cardCount;
+    var link = unlocked ? '<a class="umap-link" href="' + f.url + '">' : '<span class="umap-link">';
+    var linkClose = unlocked ? '</a>' : '</span>';
+    html += '<div class="umap-row ' + (unlocked ? 'umap-unlocked' : 'umap-locked') + '">'
+      + link
+      + '<div class="umap-count">' + f.cards + '枚</div>'
+      + '<div class="umap-name">' + f.label + '</div>'
+      + linkClose
+      + '<div class="umap-status">' + (unlocked ? '解放済み' : 'あと' + remaining + '枚') + '</div>'
+      + '</div>';
+  });
+  var el = document.getElementById('unlockMapList');
+  if (el) el.innerHTML = html;
 })();
 </script>
 
