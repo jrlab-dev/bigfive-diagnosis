@@ -1102,10 +1102,14 @@ nameInput.addEventListener('input', () => {
 function checkDetailed2Available() {
   try {
     const name = nameInput.value.trim();
-    if (!name) { document.getElementById('detailed2Group').style.display = 'none'; return; }
+    const grp = document.getElementById('detailed2Group');
+    if (!name) { grp.style.display = 'none'; return; }
+    if (typeof isUnlocked === 'function' && !isUnlocked('other-detailed2')) {
+      grp.style.display = 'none'; return;
+    }
     const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
     const has60 = others.some(r => r.name === name && r.version === '60');
-    document.getElementById('detailed2Group').style.display = has60 ? '' : 'none';
+    grp.style.display = has60 ? '' : 'none';
   } catch(e) { document.getElementById('detailed2Group').style.display = 'none'; }
 }
 
