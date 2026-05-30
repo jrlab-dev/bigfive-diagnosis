@@ -1263,6 +1263,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：ストレス解消法は性格によって違う -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/stress-kaishoho-seikaku.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：SNSの使い方は性格で決まる -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/sns-seikaku-type.html</loc>
