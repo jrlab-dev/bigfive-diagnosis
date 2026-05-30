@@ -937,6 +937,21 @@ tr:hover .s1 { background: #f5bac4; }
 <script>
 const WORK_KEY = 'bigfive_work_people';
 const OTHER_KEY = 'bigfive_other_results';
+
+function codeToTypeName(O, C, E, A, N) {
+  if (!O||!C||!E||!A||!N) return '';
+  const scores = { O, C, E, A, N };
+  let main = 'O', max = O;
+  for (const [k, v] of Object.entries(scores)) { if (v > max) { max = v; main = k; } }
+  const mainLabels = { O:{high:'探求者',low:'確実派'}, C:{high:'実行者',low:'自由人'}, E:{high:'社交家',low:'内省家'}, A:{high:'調停者',low:'競争者'}, N:{high:'感受家',low:'平静派'} };
+  const subLabels  = { O:{high:'発想家',low:'現実派'}, C:{high:'規律派',low:'柔軟派'}, E:{high:'ムードメーカー',low:'思考家'}, A:{high:'支援者',low:'自立派'}, N:{high:'繊細派',low:'泰然家'} };
+  const mainLabel = max >= 4 ? mainLabels[main].high : mainLabels[main].low;
+  let sub = '';
+  for (const [k, v] of Object.entries(scores)) {
+    if (k !== main && (v === 1 || v === 5)) { sub = subLabels[k][v === 5 ? 'high' : 'low']; break; }
+  }
+  return sub ? `${sub}・${mainLabel}` : mainLabel;
+}
 const WORK_COLS_KEY = 'bigfive_work_columns';
 
 function load() { try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; } }
@@ -1126,7 +1141,7 @@ function render() {
       <td class="sh-td" onclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
       <td class="sh-td" style="text-align:center" onclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
       <td class="sh-td" title="${esc(p.addr||'')}" onclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
-      <td class="sh-td" title="${esc(p.fullName||'')}" onclick="startEdit(event,'${p.id}','fullName')"><span class="cv-sub">${esc(p.fullName||'')}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','fullName')">${p.fullName ? `<span class="cv-sub">${esc(p.fullName)}</span>` : `<span style="color:#bbb;font-style:italic;">${codeToTypeName(p.O,p.C,p.E,p.A,p.N)}</span>`}</td>
       ${sc}
       <td class="sh-td"><span class="cv-date">${ds}</span></td>
       <td class="sh-td" title="${esc(p.memo||'')}" onclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
@@ -1357,9 +1372,9 @@ function addSelf() {
   const ppl = load();
   if (ppl.some(p => p.name === myName)) { toast(`「${myName}」はすでに登録済みです`); return; }
   const c = r.code || '';
-  ppl.push({ id: genId(), name: myName, pos:'', dept:'', age:null, addr:'', memo:'',
-    O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
-    A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+  const sO=c[0]?parseInt(c[0]):null, sC=c[1]?parseInt(c[1]):null, sE=c[2]?parseInt(c[2]):null, sA=c[3]?parseInt(c[3]):null, sN=c[4]?parseInt(c[4]):null;
+  ppl.push({ id: genId(), name: myName, fullName: r.typeName || codeToTypeName(sO,sC,sE,sA,sN), pos:'', dept:'', age:null, addr:'', memo:'',
+    O: sO, C: sC, E: sE, A: sA, N: sN,
     date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'self' });
   save(ppl); render(); toast(`「${myName}」を追加しました`);
 }
@@ -1413,9 +1428,9 @@ function execImport() {
   impSel.forEach(i => {
     const r = others[i]; if (!r) return;
     const c = r.code || '';
-    ppl.push({ id: genId(), name: r.name||'名前なし', pos:'', dept:'', age:null, addr:'', memo:'',
-      O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
-      A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+    const iO=c[0]?parseInt(c[0]):null, iC=c[1]?parseInt(c[1]):null, iE=c[2]?parseInt(c[2]):null, iA=c[3]?parseInt(c[3]):null, iN=c[4]?parseInt(c[4]):null;
+    ppl.push({ id: genId(), name: r.name||'名前なし', fullName: codeToTypeName(iO,iC,iE,iA,iN), pos:'', dept:'', age:null, addr:'', memo:'',
+      O: iO, C: iC, E: iE, A: iA, N: iN,
       date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'imported' });
     added++;
   });
