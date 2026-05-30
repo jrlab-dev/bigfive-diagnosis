@@ -838,8 +838,8 @@ tr:hover .s1 { background: #f5bac4; }
           <input class="f-inp" type="text" id="iName" placeholder="田中太郎" maxlength="30">
         </div>
         <div class="f-row f-full">
-          <label class="f-lbl" for="iFullName">正確な名前（フルネームなど）</label>
-          <input class="f-inp" type="text" id="iFullName" placeholder="田中 太郎（たなか たろう）" maxlength="40">
+          <label class="f-lbl" for="iFullName">性格名（診断結果のタイプ名）</label>
+          <input class="f-inp" type="text" id="iFullName" placeholder="例：調停者、探偵、戦略家" maxlength="40">
         </div>
         <div class="f-row">
           <label class="f-lbl" for="iPos">役職</label>
@@ -981,7 +981,7 @@ function renderHeaders() {
     <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
     <th class="sh-ch sortable" data-col="age">年齢<span class="sa-arrow" id="sa-age"></span></th>
     <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
-    <th class="sh-ch sortable" data-col="fullName">正確な名前<span class="sa-arrow" id="sa-fullName"></span></th>
+    <th class="sh-ch sortable" data-col="fullName">性格名<span class="sa-arrow" id="sa-fullName"></span></th>
     <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
     <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
     <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
@@ -1080,7 +1080,7 @@ function render() {
     if (th.dataset.col === sortCol) th.classList.add(sortDir === 'asc' ? 'sa' : 'sd');
   });
 
-  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', fullName:'正確な名前',
+  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', fullName:'性格名',
     O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受', date:'診断日', memo:'メモ' };
   document.getElementById('statusSort').textContent =
     '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
@@ -1175,7 +1175,7 @@ function updateStats(ppl) {
 }
 
 // ===== INLINE EDIT =====
-const FIELD_LABELS = { name:'名前', fullName:'正確な名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
+const FIELD_LABELS = { name:'名前', fullName:'性格名', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
 function startEdit(e, id, field) {
   e.stopPropagation();
   const td = e.currentTarget;
@@ -1427,7 +1427,7 @@ function exportCSV() {
   const ppl = load();
   if (!ppl.length) { toast('データがありません'); return; }
   const cols = loadCols();
-  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','正確な名前','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
+  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','性格名','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
   const rows = ppl.map(p => [
     p.name,
     ...cols.map(c => (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : ''),
