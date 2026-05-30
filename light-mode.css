@@ -780,6 +780,37 @@ body.theme-light .delete-confirm-box .btn-cancel {
   color: var(--dim) !important;
 }
 
+/* 機能解放マップ（card-collection.html） */
+body.theme-light .unlock-map-title {
+  color: #475569 !important;
+}
+body.theme-light .umap-row {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+body.theme-light .umap-row.umap-unlocked {
+  background: rgba(16,185,129,0.08) !important;
+  border-color: rgba(16,185,129,0.3) !important;
+}
+body.theme-light .umap-name {
+  color: #1e293b !important;
+}
+body.theme-light .umap-row.umap-locked .umap-name {
+  color: #64748b !important;
+}
+body.theme-light .umap-count {
+  color: #64748b !important;
+}
+body.theme-light .umap-row.umap-unlocked .umap-count {
+  color: #059669 !important;
+}
+body.theme-light .umap-status {
+  color: #059669 !important;
+}
+body.theme-light .umap-row.umap-locked .umap-status {
+  color: #94a3b8 !important;
+}
+
 /* 全種類図鑑ボタン */
 body.theme-light .full-zukan-btn {
   background: linear-gradient(135deg, oklch(0.48 0.22 285), oklch(0.65 0.22 340)) !important;
