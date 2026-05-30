@@ -191,17 +191,18 @@ body {
 }
 
 /* Column widths */
-.c-no   { width: 32px; }
-.c-name { width: 100px; }
-.c-pos  { width: 90px; }
-.c-dept { width: 80px; }
-.c-age  { width: 38px; }
-.c-addr { width: 120px; }
-.c-sc   { width: 34px; }
-.c-date { width: 66px; }
-.c-memo { width: 120px; }
-.c-src  { width: 36px; }
-.c-ops  { width: 88px; }
+.c-no    { width: 32px; }
+.c-name  { width: 100px; }
+.c-pos   { width: 90px; }
+.c-dept  { width: 80px; }
+.c-age   { width: 38px; }
+.c-addr  { width: 120px; }
+.c-fname { width: 120px; }
+.c-sc    { width: 34px; }
+.c-date  { width: 66px; }
+.c-memo  { width: 120px; }
+.c-src   { width: 36px; }
+.c-ops   { width: 88px; }
 
 /* Corner */
 .sh-corner {
@@ -833,8 +834,12 @@ tr:hover .s1 { background: #f5bac4; }
     <div class="mo-bd">
       <div class="f-grid" style="margin-bottom:8px">
         <div class="f-row f-full">
-          <label class="f-lbl" for="iName">名前 <span style="color:#c00">*</span></label>
+          <label class="f-lbl" for="iName">名前（呼び名・ニックネーム） <span style="color:#c00">*</span></label>
           <input class="f-inp" type="text" id="iName" placeholder="田中太郎" maxlength="30">
+        </div>
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iFullName">正確な名前（フルネームなど）</label>
+          <input class="f-inp" type="text" id="iFullName" placeholder="田中 太郎（たなか たろう）" maxlength="40">
         </div>
         <div class="f-row">
           <label class="f-lbl" for="iPos">役職</label>
@@ -952,10 +957,16 @@ function calcAge(birthday) {
 // ===== DYNAMIC HEADERS =====
 function renderHeaders() {
   const cols = loadCols();
+  const custW = cols.reduce((s, c) => s + (c.width || 90), 0);
+  const totalW = 32 + 100 + custW + 90 + 80 + 38 + 120 + 120 + 34 * 5 + 66 + 120 + 36 + 70;
+  const tbl = document.getElementById('sheetTable');
+  tbl.style.width = Math.max(totalW, tbl.parentElement.clientWidth) + 'px';
+
   document.getElementById('sheetColgroup').innerHTML =
     '<col style="width:32px"><col style="width:100px">' +
     cols.map(c => `<col style="width:${c.width||90}px">`).join('') +
     '<col style="width:90px"><col style="width:80px"><col style="width:38px"><col style="width:120px">' +
+    '<col style="width:120px">' +
     '<col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px">' +
     '<col style="width:66px"><col style="width:120px"><col style="width:36px"><col style="width:70px">';
 
@@ -970,6 +981,7 @@ function renderHeaders() {
     <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
     <th class="sh-ch sortable" data-col="age">年齢<span class="sa-arrow" id="sa-age"></span></th>
     <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
+    <th class="sh-ch sortable" data-col="fullName">正確な名前<span class="sa-arrow" id="sa-fullName"></span></th>
     <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
     <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
     <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
@@ -1059,7 +1071,7 @@ function render() {
   });
 
   // Sort arrows
-  ['name','pos','dept','age','addr','O','C','E','A','N','date','memo'].forEach(c => {
+  ['name','pos','dept','age','addr','fullName','O','C','E','A','N','date','memo'].forEach(c => {
     const el = document.getElementById('sa-' + c);
     if (el) el.textContent = sortCol === c ? (sortDir === 'asc' ? '▲' : '▼') : '';
   });
@@ -1068,14 +1080,14 @@ function render() {
     if (th.dataset.col === sortCol) th.classList.add(sortDir === 'asc' ? 'sa' : 'sd');
   });
 
-  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所',
+  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', fullName:'正確な名前',
     O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受', date:'診断日', memo:'メモ' };
   document.getElementById('statusSort').textContent =
     '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
 
   const cols = loadCols();
   const PAD_TO = 50;
-  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(14 + cols.length);
+  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(15 + cols.length);
 
   // あの人データをname→objectのMapに
   const othersList = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
@@ -1114,6 +1126,7 @@ function render() {
       <td class="sh-td" onclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
       <td class="sh-td" style="text-align:center" onclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
       <td class="sh-td" title="${esc(p.addr||'')}" onclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
+      <td class="sh-td" title="${esc(p.fullName||'')}" onclick="startEdit(event,'${p.id}','fullName')"><span class="cv-sub">${esc(p.fullName||'')}</span></td>
       ${sc}
       <td class="sh-td"><span class="cv-date">${ds}</span></td>
       <td class="sh-td" title="${esc(p.memo||'')}" onclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
@@ -1130,7 +1143,7 @@ function render() {
     if (expandedPerson1 === p.id) {
       const code = ['O','C','E','A','N'].map(f => p[f]||'?').join('');
       const extra = otherMap[p.name] || (p.source==='self' ? myActive : {});
-      const totalCols = 15 + cols.length;
+      const totalCols = 16 + cols.length;
       rowHtml += `<tr><td colspan="${totalCols}" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, extra)}</td></tr>`;
     }
     return rowHtml;
@@ -1162,7 +1175,7 @@ function updateStats(ppl) {
 }
 
 // ===== INLINE EDIT =====
-const FIELD_LABELS = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
+const FIELD_LABELS = { name:'名前', fullName:'正確な名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
 function startEdit(e, id, field) {
   e.stopPropagation();
   const td = e.currentTarget;
@@ -1263,7 +1276,7 @@ function openAddModal() {
   editId = null;
   document.getElementById('editMoTitle').textContent = '人物を追加';
   document.getElementById('editSaveBtn').textContent = '登録する';
-  ['Name','Pos','Dept','Age','Addr','Memo'].forEach(f => document.getElementById('i'+f).value = '');
+  ['Name','FullName','Pos','Dept','Age','Addr','Memo'].forEach(f => document.getElementById('i'+f).value = '');
   ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = '');
   populateExtraFields(null);
   document.getElementById('editMo').classList.add('show');
@@ -1276,6 +1289,7 @@ function openEditModal(id) {
   document.getElementById('editMoTitle').textContent = '編集: ' + p.name;
   document.getElementById('editSaveBtn').textContent = '保存する';
   document.getElementById('iName').value = p.name || '';
+  document.getElementById('iFullName').value = p.fullName || '';
   document.getElementById('iPos').value = p.pos || '';
   document.getElementById('iDept').value = p.dept || '';
   document.getElementById('iAge').value = p.age || '';
@@ -1292,6 +1306,7 @@ function closeMoOverlay(id) { if (event.target === document.getElementById(id)) 
 function savePerson() {
   const name = document.getElementById('iName').value.trim();
   if (!name) { toast('名前を入力してください'); document.getElementById('iName').focus(); return; }
+  const fullName = document.getElementById('iFullName').value.trim();
   const pos  = document.getElementById('iPos').value.trim();
   const dept = document.getElementById('iDept').value.trim();
   let ageV = parseInt(document.getElementById('iAge').value);
@@ -1315,10 +1330,10 @@ function savePerson() {
   const ppl = load();
   if (editId) {
     const i = ppl.findIndex(x => x.id === editId);
-    if (i >= 0) { ppl[i] = { ...ppl[i], name, pos, dept, age, addr, memo, ...sc, extra }; }
+    if (i >= 0) { ppl[i] = { ...ppl[i], name, fullName, pos, dept, age, addr, memo, ...sc, extra }; }
     save(ppl); closeMo('editMo'); render(); toast('保存しました');
   } else {
-    ppl.push({ id: genId(), name, pos, dept, age, addr, memo, ...sc, extra, date: new Date().toISOString().slice(0,10), source: 'manual' });
+    ppl.push({ id: genId(), name, fullName, pos, dept, age, addr, memo, ...sc, extra, date: new Date().toISOString().slice(0,10), source: 'manual' });
     save(ppl); closeMo('editMo'); render(); toast('追加しました');
   }
 }
@@ -1412,11 +1427,11 @@ function exportCSV() {
   const ppl = load();
   if (!ppl.length) { toast('データがありません'); return; }
   const cols = loadCols();
-  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
+  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','正確な名前','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
   const rows = ppl.map(p => [
     p.name,
     ...cols.map(c => (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : ''),
-    p.pos||'', p.dept||'', p.age||'', p.addr||'',
+    p.pos||'', p.dept||'', p.age||'', p.addr||'', p.fullName||'',
     p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.memo||'', p.source==='imported'?'取込':'手動']);
   const csv = [hdr, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
   const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
@@ -1435,7 +1450,8 @@ function copyForAI() {
   ppl.forEach(p => {
     const info = [p.pos, p.dept, p.age ? p.age+'歳' : null].filter(Boolean).join('・');
     const sc = ['O','C','E','A','N'].map(f => p[f] ? `${LB[f]}(${f})=${p[f]}` : null).filter(Boolean).join('、');
-    lines.push(`■ ${p.name}${info ? '（'+info+'）' : ''}`);
+    const nameStr = p.fullName ? `${p.name}（${p.fullName}）` : p.name;
+    lines.push(`■ ${nameStr}${info ? '（'+info+'）' : ''}`);
     if (sc) lines.push(`  ${sc}`);
     if (p.memo) lines.push(`  メモ: ${p.memo}`);
     lines.push('');
