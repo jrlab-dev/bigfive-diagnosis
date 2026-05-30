@@ -352,6 +352,31 @@
   .btn-save:hover { box-shadow:0 8px 32px rgba(16,185,129,0.4); }
   .btn-saved { background:linear-gradient(135deg,rgba(6,182,212,0.8),rgba(59,130,246,0.8)); pointer-events:none; }
 
+  /* 途中保存バナー */
+  .draft-banner {
+    width:100%; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.35);
+    border-radius:12px; padding:14px 16px; margin-bottom:20px; text-align:left;
+  }
+  .draft-banner-title { font-size:13px; font-weight:700; color:#059669; margin-bottom:6px; }
+  .draft-banner-sub { font-size:11px; color:#555; margin-bottom:10px; }
+  .draft-banner-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .draft-resume-btn {
+    flex:1; min-width:140px; padding:10px 14px; border:none; border-radius:8px; cursor:pointer;
+    font-family:inherit; font-size:13px; font-weight:700;
+    background:linear-gradient(135deg,#10b981,#059669); color:#fff;
+  }
+  .draft-discard-btn {
+    padding:10px 14px; border:1px solid #ccc; border-radius:8px; cursor:pointer;
+    font-family:inherit; font-size:12px; color:#888; background:transparent;
+  }
+  /* クイズ画面の途中保存ボタン */
+  .save-progress-btn {
+    display:block; width:100%; margin-top:16px; padding:10px; border:1px solid rgba(16,185,129,0.5);
+    border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600;
+    color:#059669; background:rgba(16,185,129,0.07); text-align:center;
+  }
+  .save-progress-btn:active { background:rgba(16,185,129,0.15); }
+
   @media(max-width:400px){
     .question-text{font-size:16px}
     .answer-btn{font-size:11px;padding:12px 2px}
@@ -537,6 +562,17 @@
 
 <!-- ===== スタート画面 ===== -->
 <div class="screen active" id="startScreen">
+
+  <!-- 途中保存バナー -->
+  <div class="draft-banner" id="draftBanner" style="display:none;">
+    <div class="draft-banner-title" id="draftTitle">途中まで回答しています</div>
+    <div class="draft-banner-sub" id="draftSub"></div>
+    <div class="draft-banner-btns">
+      <button class="draft-resume-btn" id="draftResumeBtn" onclick="resumeFromDraft()"></button>
+      <button class="draft-discard-btn" onclick="discardDraft()">破棄して最初から</button>
+    </div>
+  </div>
+
   <p class="start-eyebrow">
     <span class="icon-with-text">
       <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -640,6 +676,7 @@
       <button class="answer-btn" data-val="5">とても<br>そう</button>
     </div>
     <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+    <button class="save-progress-btn" id="saveProgressBtn" style="display:none;" onclick="saveDraft()">ここまで保存する</button>
   </div>
 </div>
 
@@ -1074,6 +1111,7 @@ startBtn.addEventListener('click', () => {
 
   current = 0;
   ans.length = total; ans.fill(null);
+  document.getElementById('saveProgressBtn').style.display = diagMode === 'detailed' ? '' : 'none';
   render();
   showScreen('quizScreen');
 });
@@ -1288,6 +1326,9 @@ function showResult() {
       version: '30',
       rarity: 'common'
     };
+    saveOtherResultToList(window.currentOtherResult);
+    addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+    deleteDraft();
     checkAlreadySaved();
     showScreen('resultScreen');
     setTimeout(() => {
@@ -1455,6 +1496,9 @@ function showResult() {
     version: diagMode === 'detailed' ? '60' : '30',
     rarity: 'common'
   };
+  saveOtherResultToList(window.currentOtherResult);
+  addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+  deleteDraft();
 
   // 保存済みチェック
   checkAlreadySaved();
@@ -1472,6 +1516,108 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   showScreen('startScreen');
 });
 
+// ===== 途中保存機能 =====
+const DRAFT_KEY = 'bigfive_other_quiz_draft';
+
+function saveDraft() {
+  const draft = {
+    personName, personPeriod, personRel, personGender, diagMode,
+    current,
+    ans: Array.from(ans),
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  const btn = document.getElementById('saveProgressBtn');
+  const orig = btn.textContent;
+  btn.textContent = '保存しました';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1500);
+}
+
+function deleteDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+}
+
+function discardDraft() {
+  deleteDraft();
+  document.getElementById('draftBanner').style.display = 'none';
+}
+
+function resumeFromDraft() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+
+    // 状態を復元
+    personName = d.personName || '';
+    personPeriod = d.personPeriod || '';
+    personRel = d.personRel || '';
+    personGender = d.personGender || 'F';
+    diagMode = d.diagMode || 'simple';
+
+    // 質問セットを再設定
+    if (personRel === 'child46') {
+      activeQuestions = [...questionsFixed15, ...questionsChild46];
+    } else if (personRel === 'child79') {
+      activeQuestions = [...questionsFixed15, ...questionsChild79];
+    } else if (diagMode === 'detailed') {
+      activeQuestions = questionsDetailed;
+    } else {
+      activeQuestions = questions;
+    }
+    total = activeQuestions.length;
+
+    // 回答を復元
+    ans.length = total;
+    ans.fill(null);
+    if (d.ans) d.ans.forEach((v, i) => { if (i < total) ans[i] = v; });
+
+    // 最後に回答済みの問題から再開
+    current = Math.min(d.current || 0, total - 1);
+
+    // UI を復元
+    const cfg = relConfig[personRel];
+    if (!cfg) return;
+    const whoBar = document.getElementById('whoBar');
+    whoBar.className = `who-bar ${cfg.whoClass}`;
+    document.getElementById('whoIcon').innerHTML = cfg.icon;
+    document.getElementById('whoName').textContent = personName;
+    document.getElementById('whoSub').textContent = `を観察して答えてください（${cfg.label}）`;
+    document.getElementById('progressWrap').className = `progress ${cfg.barClass}`;
+    document.getElementById('questionNum').className = `question-num ${cfg.qClass}`;
+    document.getElementById('loadingName').textContent = personName;
+    document.getElementById('resultName').textContent = personName;
+    const badge = document.getElementById('relBadge');
+    badge.innerHTML = cfg.badge;
+    badge.className = `result-rel-badge ${cfg.badgeClass}`;
+
+    document.getElementById('saveProgressBtn').style.display = diagMode === 'detailed' ? '' : 'none';
+
+    render();
+    showScreen('quizScreen');
+  } catch(e) {
+    deleteDraft();
+  }
+}
+
+function initDraftBanner() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if (!d.personName || !d.personRel) { deleteDraft(); return; }
+    const answered = (d.ans || []).filter(v => v !== null).length;
+    const total60 = d.diagMode === 'detailed' ? 60 : 30;
+    document.getElementById('draftSub').textContent = `${d.personName}さん（${answered}/${total60}問 回答済み）`;
+    document.getElementById('draftResumeBtn').textContent = `${d.personName}さんの続きから始める`;
+    document.getElementById('draftBanner').style.display = '';
+  } catch(e) { deleteDraft(); }
+}
+
+// ページ読み込み時にバナーチェック
+initDraftBanner();
+
 // ===== 結果保存機能（LocalStorage） =====
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
@@ -1480,6 +1626,57 @@ const MAX_OTHERS_UNLOCKED = 30;
 // 開放状態に応じた上限を取得
 function getMaxOthers() {
   return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
+}
+
+function saveOtherResultToList(result) {
+  if (!result) return false;
+
+  const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  const isDuplicate = others.some(r =>
+    r.name === result.name && r.code === result.code
+  );
+
+  if (isDuplicate) return false;
+
+  others.unshift(result);
+  const maxOthers = getMaxOthers();
+  if (others.length > maxOthers) others.pop();
+  localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+  return true;
+}
+
+function addOtherResultToAlbumAndUnlock(result) {
+  if (!result || !window.AlbumUtils) return;
+
+  const oldAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const version = result.version || '30';
+  const rarity = AlbumUtils.computeRarityForAlbum
+    ? AlbumUtils.computeRarityForAlbum(result.code, version, result.gender)
+    : (result.rarity || 'common');
+
+  const added = AlbumUtils.addToAlbum({
+    code: result.code,
+    gender: result.gender,
+    typeName: result.code,
+    version,
+    rarity,
+    isHidden: false,
+    hiddenId: null,
+    date: result.date,
+    source: String(result.relation || '').indexOf('child') === 0 ? 'child' : 'other'
+  });
+
+  if (!added || typeof getNewUnlocks !== 'function' || typeof showUnlockBanners !== 'function') return;
+
+  const newAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const unlocked = getNewUnlocks(oldAlbumCount, newAlbumCount);
+  if (unlocked.length > 0) {
+    setTimeout(() => showUnlockBanners(unlocked), 800);
+  }
 }
 
 // 保存済みチェック
@@ -1573,5 +1770,6 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 <script src="advice.js"></script>
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
+<script src="unlock-banner.js"></script>
 </body>
 </html>
