@@ -357,7 +357,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
   <div class="form-group">
     <label class="form-label" for="childName">お子さんのニックネーム（呼び名）</label>
-    <input type="text" class="text-input" id="childName" placeholder="例：たろう、はなちゃん…" maxlength="20">
+    <input type="text" class="text-input" id="childName" placeholder="例：れん、ひなちゃん…" maxlength="20">
   </div>
 
   <div class="form-group">
@@ -489,6 +489,10 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <a href="index.html" class="action-btn btn-retry" style="display:block;">トップに戻る</a>
 </div>
 
+<script src="hidden_characters.js"></script>
+<script src="album.js"></script>
+<script src="unlock.js"></script>
+<script src="unlock-banner.js"></script>
 <script>
 // ===== 質問データ =====
 const questionsFixed15 = [
@@ -1084,8 +1088,14 @@ function showResult(scOverride) {
     scores: sc,
     relation: ageGroup,
     gender: childGender,
-    date: new Date().toISOString()
+    date: new Date().toISOString(),
+    version: '30',
+    rarity: 'common'
   };
+  if (!scOverride) {
+    saveChildResultToList(window.currentChildResult);
+    addChildResultToAlbumAndUnlock(window.currentChildResult);
+  }
   checkAlreadySaved();
 
   showScreen('resultScreen');
@@ -1103,6 +1113,55 @@ const MAX_OTHERS_UNLOCKED = 30;
 function getMaxOthers() {
   return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
 }
+
+function saveChildResultToList(result) {
+  if (!result) return false;
+
+  const others = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const isDuplicate = others.some(r => r.name === result.name && r.code === result.code);
+  if (isDuplicate) return false;
+
+  others.unshift(result);
+  const maxOthers = getMaxOthers();
+  if (others.length > maxOthers) others.pop();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(others));
+  return true;
+}
+
+function addChildResultToAlbumAndUnlock(result) {
+  if (!result || !window.AlbumUtils) return;
+
+  const oldAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const version = result.version || '30';
+  const rarity = AlbumUtils.computeRarityForAlbum
+    ? AlbumUtils.computeRarityForAlbum(result.code, version, result.gender)
+    : (result.rarity || 'common');
+
+  const added = AlbumUtils.addToAlbum({
+    code: result.code,
+    gender: result.gender,
+    typeName: result.code,
+    version,
+    rarity,
+    isHidden: false,
+    hiddenId: null,
+    date: result.date,
+    source: 'child'
+  });
+
+  if (!added || typeof getNewUnlocks !== 'function' || typeof showUnlockBanners !== 'function') return;
+
+  const newAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const unlocked = getNewUnlocks(oldAlbumCount, newAlbumCount);
+  if (unlocked.length > 0) {
+    setTimeout(() => showUnlockBanners(unlocked), 800);
+  }
+}
+
 function checkAlreadySaved() {
   if (!window.currentChildResult) return;
   const others = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
