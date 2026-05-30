@@ -10,7 +10,7 @@ var UNLOCK_TABLE = [
   { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
   { cards:  5, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
   { cards:  6, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
-  { cards:  7, id: 'other-detailed2',   label: 'あの人診断 120問相当精密版', url: 'other_quiz.html' },
+  { cards: 70, id: 'other-detailed2',   label: 'あの人診断 120問相当精密版', url: 'other_quiz.html' },
   { cards:  8, id: 'report',             label: '総合レポート',          url: 'report.html' },
   { cards: 10, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
   { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
