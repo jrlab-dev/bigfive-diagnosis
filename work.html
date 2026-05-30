@@ -663,7 +663,7 @@ tr:hover .s1 { background: #f5bac4; }
 
 <!-- TITLE BAR -->
 <div class="xl-title">
-  <span class="xl-title-icon">📗</span>
+  <span class="xl-title-icon"></span>
   <span class="xl-title-name">仕事用ダッシュボード.xlsx — ビッグファイブ スコア管理</span>
   <a href="mypage.html" class="xl-title-back">← サイトに戻る</a>
 </div>
@@ -681,14 +681,13 @@ tr:hover .s1 { background: #f5bac4; }
   <div class="rg">
     <div class="rg-btns">
       <button class="rb" onclick="openAddModal()">
-        <span class="ri">➕</span>
         <span class="rl">人物追加</span>
       </button>
       <div style="display:flex;flex-direction:column;gap:2px">
-        <button class="rb rb-sm" onclick="addSelf()"><span class="ri">🙋</span>自分を追加</button>
-        <button class="rb rb-sm" onclick="openImportModal()"><span class="ri">⬇️</span>あの人データ取込</button>
-        <button class="rb rb-sm" onclick="exportCSV()"><span class="ri">📥</span>CSV保存</button>
-        <button class="rb rb-sm" onclick="copyForAI()"><span class="ri">🤖</span>AI用コピー</button>
+        <button class="rb rb-sm" onclick="addSelf()">自分を追加</button>
+        <button class="rb rb-sm" onclick="openImportModal()">あの人データ取込</button>
+        <button class="rb rb-sm" onclick="exportCSV()">CSV保存</button>
+        <button class="rb rb-sm" onclick="copyForAI()">AI用コピー</button>
       </div>
     </div>
     <span class="rg-label">操作</span>
@@ -697,7 +696,6 @@ tr:hover .s1 { background: #f5bac4; }
   <div class="rg">
     <div class="rg-btns">
       <button class="rb" onclick="openColModal()">
-        <span class="ri">🗂️</span>
         <span class="rl">列を追加</span>
       </button>
     </div>
@@ -707,12 +705,11 @@ tr:hover .s1 { background: #f5bac4; }
   <div class="rg">
     <div class="rg-btns">
       <button class="rb" onclick="openPane('other')" title="あの人診断をパネルで開く">
-        <span class="ri">👤</span>
         <span class="rl">あの人診断</span>
       </button>
       <div style="display:flex;flex-direction:column;gap:2px;padding-top:2px;">
-        <button class="rb rb-sm" onclick="openPane('self')"><span class="ri">🙋</span>自分の診断</button>
-        <button class="rb rb-sm" onclick="openPane('team')"><span class="ri">👥</span>チーム相性</button>
+        <button class="rb rb-sm" onclick="openPane('self')">自分の診断</button>
+        <button class="rb rb-sm" onclick="openPane('team')">チーム相性</button>
       </div>
     </div>
     <span class="rg-label">診断パネル</span>
@@ -793,22 +790,22 @@ tr:hover .s1 { background: #f5bac4; }
 
 <!-- SHEET TABS (inside left area) -->
 <div class="xl-sheettabs" style="flex-shrink:0;">
-  <div class="xl-stab active" id="stab1" onclick="switchSheet(1)">📋 人物管理</div>
-  <div class="xl-stab" id="stab2" onclick="switchSheet(2)">👤 自分の診断</div>
-  <div class="xl-stab" id="stab3" onclick="switchSheet(3)">👥 チーム相性</div>
+  <div class="xl-stab active" id="stab1" onclick="switchSheet(1)">人物管理</div>
+  <div class="xl-stab" id="stab2" onclick="switchSheet(2)">自分の診断</div>
+  <div class="xl-stab" id="stab3" onclick="switchSheet(3)">チーム相性</div>
 </div>
 </div><!-- /sheet area -->
 
 <!-- RIGHT: TASK PANE -->
 <div id="taskPane" style="display:none;">
   <div class="tp-hd">
-    <span id="tpTitle">📋 診断パネル</span>
+    <span id="tpTitle">診断パネル</span>
     <button class="tp-close" onclick="closePane()" title="閉じる">✕</button>
   </div>
   <div class="tp-tabs">
-    <div class="tp-tab active" id="tptab-other" onclick="switchPaneTab('other')">👤 あの人診断</div>
-    <div class="tp-tab" id="tptab-self" onclick="switchPaneTab('self')">🙋 自分の診断</div>
-    <div class="tp-tab" id="tptab-team" onclick="switchPaneTab('team')">👥 チーム相性</div>
+    <div class="tp-tab active" id="tptab-other" onclick="switchPaneTab('other')">あの人診断</div>
+    <div class="tp-tab" id="tptab-self" onclick="switchPaneTab('self')">自分の診断</div>
+    <div class="tp-tab" id="tptab-team" onclick="switchPaneTab('team')">チーム相性</div>
   </div>
   <div class="tp-notify" id="tpNotify">
     <span id="tpNotifyMsg">新しい診断結果が保存されました</span>
@@ -1196,7 +1193,7 @@ function startEdit(e, id, field) {
   td.classList.add('is-editing');
   td.innerHTML = '';
   const lbl = colDef ? colDef.label : (FIELD_LABELS[field]||field);
-  document.getElementById('fbarText').textContent = `✏ 編集中: ${p.name} [${lbl}]（Enter で確定 / Esc でキャンセル）`;
+  document.getElementById('fbarText').textContent = `編集中: ${p.name} [${lbl}]（Enter で確定 / Esc でキャンセル）`;
 
   const inp = document.createElement('input');
   inp.className = 'inline-edit-inp';
@@ -1496,7 +1493,7 @@ function secHd(label, color) {
   return `<div style="font-size:10px;font-weight:700;color:${color};border-bottom:2px solid ${color};padding-bottom:2px;margin:10px 0 6px;letter-spacing:0.04em;">${label}</div>`;
 }
 
-function bigFiveCardsHtml(code) {
+function bigFiveCardsHtml(code, facets) {
   const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
   const COLORS = { O:'#5b21b6', C:'#1d4ed8', E:'#c2410c', A:'#be185d', N:'#065f46' };
   const DESCS = {
@@ -1506,9 +1503,16 @@ function bigFiveCardsHtml(code) {
     A: ['','非常に競争的。自己主張・独立心が非常に強い','自己主張寄り。独立心が強め','均衡型。協調と自立のバランスが取れている','協調性が高い。他者への思いやりがある','非常に協調的。他者への配慮を最優先にする'],
     N: ['','非常に情緒安定。プレッシャーに動じない','情緒安定。落ち着いた行動が多い','均衡型。感情の浮き沈みは普通程度','感受性が高め。環境の影響を受けやすい','非常に感受性が高い。感情の波が大きくなりやすい'],
   };
+  const FACET_NAMES = {
+    N: ['不安','怒り','抑うつ','自己意識','無抑制','脆弱性'],
+    E: ['友好性','群居性','主張性','活動性','刺激追求','陽気さ'],
+    O: ['想像力','芸術的興味','感情性','冒険性','知性','自由主義'],
+    A: ['信頼','道徳性','利他性','協調性','謙虚さ','共感性'],
+    C: ['有能性','秩序性','義務感','達成努力','自己規律','慎重さ'],
+  };
   const SC_BG = {5:'#c6efce',4:'#e2efda',3:'#f5f5f5',2:'#fce4d6',1:'#ffc7ce'};
   const SC_CL = {5:'#276221',4:'#375623',3:'#555',2:'#833c0b',1:'#9c0006'};
-  return '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+  let html = '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
     ['O','C','E','A','N'].map((f, fi) => {
       const v = parseInt(code[fi]);
       const valid = v >= 1 && v <= 5;
@@ -1525,6 +1529,34 @@ function bigFiveCardsHtml(code) {
         <div style="font-size:10px;color:#444;line-height:1.5;">${valid?DESCS[f][v]:'—'}</div>
       </div>`;
     }).join('') + '</div>';
+
+  if (facets && typeof facets === 'object' && Object.keys(facets).length >= 30) {
+    let fhtml = '';
+    ['O','C','E','A','N'].forEach(f => {
+      const color = COLORS[f];
+      fhtml += `<div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:700;color:${color};margin-bottom:4px;">${f} ${LABELS[f]}の下位尺度</div>`;
+      fhtml += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+      FACET_NAMES[f].forEach((name, i) => {
+        const s = facets[f+(i+1)] || 3;
+        const pct = s * 20;
+        fhtml += `<div style="flex:1;min-width:80px;padding:3px 6px;background:#fff;border:1px solid #e8e8e8;border-radius:2px;">
+          <div style="font-size:9px;color:#666;margin-bottom:2px;">${name}</div>
+          <div style="display:flex;align-items:center;gap:3px;">
+            <div style="flex:1;height:5px;background:#ebebeb;border-radius:2px;overflow:hidden;"><div style="height:100%;background:${color};opacity:0.75;width:${pct}%;"></div></div>
+            <span style="font-size:10px;font-weight:700;color:${color};min-width:12px;">${s}</span>
+          </div>
+        </div>`;
+      });
+      fhtml += '</div></div>';
+    });
+    html += `<details style="margin-top:8px;">
+      <summary style="cursor:pointer;font-size:10px;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:2px;user-select:none;list-style:none;display:flex;align-items:center;gap:4px;">
+        <span style="font-size:8px;color:#888;">&#9654;</span> 下位尺度の詳細（30項目）
+      </summary>
+      <div style="margin-top:8px;">${fhtml}</div>
+    </details>`;
+  }
+  return html;
 }
 
 function darkTriadHtml(dt) {
@@ -1597,7 +1629,6 @@ function attachmentHtml(at) {
 function mindsetHtml(ms) {
   const g = ms.type === 'growth';
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">${g?'🌱':'🧱'}</span>
     <div>
       <div style="font-size:12px;font-weight:700;color:${g?'#217346':'#1d4ed8'}">${g?'成長マインドセット':'固定マインドセット'}</div>
       <div style="font-size:10px;color:#666;">${g?'努力で能力は伸びると信じる傾向':'能力は固定されていると考える傾向'}</div>
@@ -1608,7 +1639,6 @@ function mindsetHtml(ms) {
 function locusHtml(lc) {
   const isInt = lc.type === 'internal';
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">${isInt?'🎯':'🌊'}</span>
     <div>
       <div style="font-size:12px;font-weight:700;color:${isInt?'#217346':'#b45309'}">${esc(lc.typeName||lc.type||'')}</div>
       <div style="font-size:10px;color:#666;">${isInt?'原因は自分の行動にあると感じる傾向':'結果は外部要因に左右されると感じる傾向'}</div>
@@ -1618,7 +1648,6 @@ function locusHtml(lc) {
 
 function riskHtml(d) {
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">🎲</span>
     <div><div style="font-size:12px;font-weight:700;color:#b45309;">${esc(d.typeName||d.type||'—')}</div>
     <div style="font-size:10px;color:#666;">リスク選択: ${d.riskyCount!=null?d.riskyCount+'回':'—'}</div></div>
   </div>`;
@@ -1626,21 +1655,18 @@ function riskHtml(d) {
 function delayHtml(d) {
   const pct = d.value!=null ? Math.round(d.value*100)+'%' : '—';
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">⏳</span>
     <div><div style="font-size:12px;font-weight:700;color:#0e7490;">${esc(d.typeName||d.type||'—')}</div>
     <div style="font-size:10px;color:#666;">将来選択率: ${pct}</div></div>
   </div>`;
 }
 function ultimatumHtml(d) {
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">🤝</span>
     <div><div style="font-size:12px;font-weight:700;color:#1d4ed8;">${esc(d.typeName||d.type||'—')}</div>
     <div style="font-size:10px;color:#666;">拒否ライン: ${d.value!=null?Math.round(d.value*100)+'%':'—'}</div></div>
   </div>`;
 }
 function pggHtml(d) {
   return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
-    <span style="font-size:20px;">🏛️</span>
     <div><div style="font-size:12px;font-weight:700;color:#7c3aed;">${esc(d.typeName||d.type||'—')}</div>
     <div style="font-size:10px;color:#666;">平均貢献率: ${d.avgRate!=null?Math.round(d.avgRate*100)+'%':'—'}</div></div>
   </div>`;
@@ -1665,21 +1691,21 @@ function standaloneTestsHtml() {
   if (hsp) {
     const t = hsp.scores?.total;
     const lvl = t>=42?'蘭型（最高域）':t>=34?'蘭型（高め）':t>=28?'チューリップ型':t>=20?'おだやか感受性':t!=null?'安定型':'—';
-    items.push({icon:'🌸',label:'HSP（感覚処理感受性）',val:lvl,sub:`スコア: ${t!=null?t:'—'}点`,color:'#be185d'});
+    items.push({label:'HSP（感覚処理感受性）',val:lvl,sub:`スコア: ${t!=null?t:'—'}点`,color:'#be185d'});
   }
-  if (imp) items.push({icon:'🎭',label:'インポスター症候群',val:esc(imp.severityName||'—'),sub:esc(imp.dominantTypeName||''),color:'#6b21a8'});
-  if (love) items.push({icon:'💝',label:'愛情スタイル',val:esc(LOVE_LB[love.mainStyle]||love.mainStyle||'—'),sub:'',color:'#ec4899'});
-  if (sw && sw.top3) items.push({icon:'🏅',label:'シュワルツ価値観',val:sw.top3.map(k=>SW_LB[k]||k).join(' · '),sub:'上位3価値観',color:'#2563eb'});
+  if (imp) items.push({label:'インポスター症候群',val:esc(imp.severityName||'—'),sub:esc(imp.dominantTypeName||''),color:'#6b21a8'});
+  if (love) items.push({label:'愛情スタイル',val:esc(LOVE_LB[love.mainStyle]||love.mainStyle||'—'),sub:'',color:'#ec4899'});
+  if (sw && sw.top3) items.push({label:'シュワルツ価値観',val:sw.top3.map(k=>SW_LB[k]||k).join(' · '),sub:'上位3価値観',color:'#2563eb'});
   if (ri && ri.scores) {
     const top2 = Object.entries(ri.scores).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k])=>RI_LB[k]||k).join(' · ');
-    items.push({icon:'💼',label:'RIASEC職業適性',val:top2||'—',sub:'上位2タイプ',color:'#0e7490'});
+    items.push({label:'RIASEC職業適性',val:top2||'—',sub:'上位2タイプ',color:'#0e7490'});
   }
-  if (sdt) items.push({icon:'⚡',label:'基本的心理欲求（SDT）',val:esc(SDT_LB[sdt.strongest]||sdt.strongest||'—'),sub:'最も強い欲求',color:'#217346'});
+  if (sdt) items.push({label:'基本的心理欲求（SDT）',val:esc(SDT_LB[sdt.strongest]||sdt.strongest||'—'),sub:'最も強い欲求',color:'#217346'});
 
   if (!items.length) return '<div style="font-size:10px;color:#aaa;font-style:italic;">該当する診断データがありません</div>';
   return '<div style="display:flex;gap:8px;flex-wrap:wrap;">' + items.map(it =>
     `<div style="flex:1;min-width:150px;border:1px solid #e0e0e0;border-top:3px solid ${it.color};border-radius:2px;padding:5px 8px;background:#fff;">
-      <div style="font-size:9px;font-weight:700;color:${it.color};margin-bottom:2px;">${it.icon} ${it.label}</div>
+      <div style="font-size:9px;font-weight:700;color:${it.color};margin-bottom:2px;">${it.label}</div>
       <div style="font-size:11px;font-weight:700;color:#333;line-height:1.3;">${it.val}</div>
       ${it.sub?`<div style="font-size:9px;color:#888;">${it.sub}</div>`:''}
     </div>`
@@ -1688,9 +1714,10 @@ function standaloneTestsHtml() {
 
 function allTestsHtml(code, r, showStandalone) {
   r = r || {};
+  const facets = r.facets || (r.scores && r.scores.facets) || null;
   let h = '<div style="overflow-y:auto;max-height:360px;padding:0 4px 8px;">';
   h += secHd('ビッグファイブ（性格の5因子）', '#217346');
-  h += bigFiveCardsHtml(code);
+  h += bigFiveCardsHtml(code, facets);
   if (r.darkTriad) { h += secHd('ダークトライアド', '#6b21a8');    h += darkTriadHtml(r.darkTriad); }
   if (r.eq)        { h += secHd('EQ（感情知性）', '#0e7490');       h += eqHtml(r.eq); }
   if (r.attachment){ h += secHd('愛着スタイル', '#be185d');         h += attachmentHtml(r.attachment); }
@@ -1791,9 +1818,9 @@ const PANE_URLS = {
   team:  'team.html'
 };
 const PANE_TITLES = {
-  other: '👤 あの人診断',
-  self:  '🙋 自分の診断',
-  team:  '👥 チーム相性診断'
+  other: 'あの人診断',
+  self:  '自分の診断',
+  team:  'チーム相性診断'
 };
 let paneTab = 'other';
 let paneOpen = false;

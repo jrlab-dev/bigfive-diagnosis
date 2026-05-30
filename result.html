@@ -2736,6 +2736,13 @@ if (isOtherMode) {
   const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 
   // 現在の結果データ
+  function parseFacetsToObj(s) {
+    if (!s || !/^[1-5]{30}$/.test(s)) return null;
+    const order = ['N','E','O','A','C'];
+    const obj = {};
+    order.forEach((f, fi) => { for (let i = 0; i < 6; i++) obj[f+(i+1)] = parseInt(s[fi*6+i]); });
+    return obj;
+  }
   const currentResult = {
     code: typeCode,
     scores: { O, C, E, A, N },
@@ -2743,7 +2750,8 @@ if (isOtherMode) {
     date: new Date().toISOString(),
     version: version,
     gender: params.get('gender') || 'F',
-    rarity: rarity
+    rarity: rarity,
+    ...(version === '120' && facetsParam ? { facets: parseFacetsToObj(facetsParam) } : {})
   };
 
   // 他者診断から来た場合の相手のデータ
