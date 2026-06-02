@@ -1192,7 +1192,7 @@
     }
 
     cards.forEach(function(c){ c.style.display = 'none'; });
-    visible.forEach(function(c){ c.style.display = 'block'; });
+    visible.forEach(function(c){ c.style.display = 'block'; grid.appendChild(c); });
 
     loadImages(visible);
     if (!skipScroll) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
