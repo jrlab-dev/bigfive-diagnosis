@@ -401,6 +401,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：占いから「使える診断」へ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/uranai-kara-shindan-e.html</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- ブログ記事：MBTIの診断結果、嘘じゃない？ビッグファイブとの違い -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/mbti-vs-bigfive.html</loc>
