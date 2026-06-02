@@ -1247,6 +1247,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：職場で「仕事してるアピール」が強い人のビッグファイブ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-apiru-personality.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- ブログ記事：仕事で評価されやすい性格・損しやすい性格 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-hyoka-seikaku.html</loc>
