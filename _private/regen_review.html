@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>再生成キャラクター確認</title>
+<style>
+body { background: #1a1a2e; color: #eee; font-family: sans-serif; margin: 0; padding: 20px; }
+h1 { font-size: 18px; margin-bottom: 10px; }
+.controls { margin-bottom: 15px; }
+.controls button { padding: 6px 14px; margin-right: 6px; cursor: pointer; border: 1px solid #555; background: #2a2a4a; color: #eee; border-radius: 4px; }
+.controls button.active { background: #4a4a8a; border-color: #88f; }
+.controls button:hover { background: #3a3a6a; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.card { background: #2a2a4a; border-radius: 8px; padding: 8px; text-align: center; }
+.card .code { font-size: 14px; font-weight: bold; color: #aaf; margin-bottom: 4px; }
+.card .imgs { display: flex; justify-content: center; gap: 6px; align-items: end; }
+.card .imgs img { max-height: 180px; max-width: 48%; background: repeating-conic-gradient(#333 0% 25%, #444 0% 50%) 50% / 16px 16px; border-radius: 6px; }
+.card .label { font-size: 10px; color: #888; margin-top: 2px; }
+.card .size { font-size: 10px; color: #6a6; }
+.stats { margin-top: 20px; padding: 12px; background: #2a2a4a; border-radius: 8px; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>再生成キャラクター確認 (61コード・95ファイル)</h1>
+<div class="controls">
+  <button onclick="filter('all')" class="active" id="btn-all">全表示</button>
+  <button onclick="filter('both')" id="btn-both">both (34)</button>
+  <button onclick="filter('F')" id="btn-F">Fのみ (20)</button>
+  <button onclick="filter('M')" id="btn-M">Mのみ (7)</button>
+  <button onclick="toggleBg()" id="btn-bg">背景: チェッカー</button>
+</div>
+<div class="grid" id="grid"></div>
+<script>
+const DATA = [
+  {code:"11511",clip:"both"},{code:"11533",clip:"F"},{code:"11551",clip:"F"},
+  {code:"11553",clip:"F"},{code:"13151",clip:"both"},{code:"15331",clip:"M"},
+  {code:"15353",clip:"both"},{code:"31511",clip:"F"},{code:"31513",clip:"both"},
+  {code:"31531",clip:"F"},{code:"31551",clip:"F"},{code:"33115",clip:"both"},
+  {code:"33133",clip:"F"},{code:"33331",clip:"F"},{code:"33513",clip:"F"},
+  {code:"33515",clip:"F"},{code:"33533",clip:"M"},{code:"33553",clip:"both"},
+  {code:"35553",clip:"M"},{code:"51111",clip:"both"},{code:"51113",clip:"both"},
+  {code:"51151",clip:"both"},{code:"51155",clip:"F"},{code:"51311",clip:"F"},
+  {code:"51315",clip:"both"},{code:"51331",clip:"F"},{code:"51351",clip:"M"},
+  {code:"51353",clip:"both"},{code:"51355",clip:"both"},{code:"51515",clip:"both"},
+  {code:"51531",clip:"both"},{code:"51551",clip:"F"},{code:"51553",clip:"M"},
+  {code:"51555",clip:"both"},{code:"53115",clip:"F"},{code:"53131",clip:"both"},
+  {code:"53133",clip:"both"},{code:"53151",clip:"F"},{code:"53311",clip:"both"},
+  {code:"53313",clip:"F"},{code:"53315",clip:"both"},{code:"53335",clip:"F"},
+  {code:"53353",clip:"both"},{code:"53511",clip:"M"},{code:"53513",clip:"both"},
+  {code:"53551",clip:"both"},{code:"53553",clip:"both"},{code:"53555",clip:"both"},
+  {code:"55111",clip:"both"},{code:"55113",clip:"both"},{code:"55151",clip:"both"},
+  {code:"55153",clip:"both"},{code:"55155",clip:"F"},{code:"55311",clip:"both"},
+  {code:"55313",clip:"both"},{code:"55315",clip:"M"},{code:"55351",clip:"both"},
+  {code:"55513",clip:"both"},{code:"55533",clip:"both"},{code:"55553",clip:"F"},
+  {code:"55555",clip:"both"}
+];
+
+let bgMode = 'checker';
+const base = '../images/characters/';
+
+function render(filter) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const list = filter === 'all' ? DATA : DATA.filter(d => d.clip === filter);
+
+  list.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    let html = `<div class="code">${d.code} <span style="color:#888;font-weight:normal">(${d.clip})</span></div><div class="imgs">`;
+
+    if (d.clip === 'both' || d.clip === 'F') {
+      html += `<div><img src="${base}F/${d.code}.webp" onload="addSize(this)" onerror="this.alt='missing'"><div class="label">F</div></div>`;
+    }
+    if (d.clip === 'both' || d.clip === 'M') {
+      html += `<div><img src="${base}M/${d.code}.webp" onload="addSize(this)" onerror="this.alt='missing'"><div class="label">M</div></div>`;
+    }
+    html += '</div>';
+    card.innerHTML = html;
+    grid.appendChild(card);
+  });
+}
+
+function addSize(img) {
+  const d = img.parentElement.parentElement.parentElement;
+  const s = document.createElement('div');
+  s.className = 'size';
+  s.textContent = `${img.naturalWidth}x${img.naturalHeight}`;
+  d.appendChild(s);
+}
+
+function filter(type) {
+  document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + type.replace('both','both')).classList.add('active');
+  render(type);
+}
+
+function toggleBg() {
+  const imgs = document.querySelectorAll('.card .imgs img');
+  if (bgMode === 'checker') {
+    bgMode = 'white';
+    imgs.forEach(i => i.style.background = '#fff');
+    document.getElementById('btn-bg').textContent = '背景: 白';
+  } else if (bgMode === 'white') {
+    bgMode = 'black';
+    imgs.forEach(i => i.style.background = '#000');
+    document.getElementById('btn-bg').textContent = '背景: 黒';
+  } else {
+    bgMode = 'checker';
+    imgs.forEach(i => i.style.background = '');
+    document.getElementById('btn-bg').textContent = '背景: チェッカー';
+  }
+}
+
+render('all');
+</script>
+</body>
+</html>
