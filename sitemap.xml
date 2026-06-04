@@ -1247,6 +1247,13 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：仕事ができるのに自信がない人の性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-jishin-nai.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- ブログ記事：職場で「仕事してるアピール」が強い人のビッグファイブ -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shigoto-apiru-personality.html</loc>
@@ -1266,7 +1273,7 @@
   <!-- ブログ一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/</loc>
-    <lastmod>2026-05-23</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -1299,6 +1306,14 @@
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/tomodachi-seikaku.html</loc>
     <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：なぜあの人は人をいじるのか -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ijiru-seikaku-naze.html</loc>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
