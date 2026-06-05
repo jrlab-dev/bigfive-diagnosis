@@ -56,6 +56,13 @@
     // 10問版：r0固定
     if (version === '10') return 'r0';
 
+    // オリジナルアニメキャラ上書き
+    var ov = ANIME_RARITY_OVERRIDE[code];
+    if (ov) {
+      if (gender && ov[gender]) return ov[gender];
+      return ov.default;
+    }
+
     // MAX因子判定ヘルパー
     function isMax(factor, value) {
       if (factor === 'N') return value === 1;
