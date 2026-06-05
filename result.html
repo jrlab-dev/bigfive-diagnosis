@@ -1746,6 +1746,13 @@ function getRarity() {
   // 10問：common固定
   if (version === '10') return 'r0';
 
+  // オリジナルアニメキャラ上書き
+  var ov = ANIME_RARITY_OVERRIDE[typeCode];
+  if (ov) {
+    if (gender && ov[gender]) return ov[gender];
+    return ov.default;
+  }
+
   // 120問のみ隠しキャラ判定
   if (version === '120') {
     const hiddenChar = findHiddenCharacter();
