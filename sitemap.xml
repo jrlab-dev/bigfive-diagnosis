@@ -1294,6 +1294,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ブログ記事：やたらと否定ばかりする人の心理学と対処法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitei-bakari-suru-hito.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- ブログ記事：SNSの使い方は性格で決まる -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/sns-seikaku-type.html</loc>
