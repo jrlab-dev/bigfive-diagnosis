@@ -1918,19 +1918,22 @@ if (hiddenChar && hiddenChar.img) {
   charImg.style.display = '';
   charImg.onerror = () => { charImg.style.display = 'none'; };
 } else {
-  // ドンピシャコードを優先、なければ1/3/5丸めにフォールバック
+  // 1. hidden/のドンピシャ画像を優先
   charImg.style.display = '';
   charImg.onerror = () => {
-    // ドンピシャ画像がない → 丸めコードでリトライ
-    const fallback = charImg.src.replace(/\/\d{5}\.webp$/, '');
-    const imgCode = typeCode.split('').map(d => {
-      const n = parseInt(d);
-      return n <= 2 ? '1' : n >= 4 ? '5' : '3';
-    }).join('');
-    charImg.src = `${fallback}/${imgCode}.webp`;
-    charImg.onerror = () => { charImg.style.display = 'none'; };
+    // 2. F/Mの完全一致
+    charImg.onerror = () => {
+      // 3. F/Mの丸めフォールバック（{1,3,5}のみ）
+      const imgCode = typeCode.split('').map(d => {
+        const n = parseInt(d);
+        return n <= 2 ? '1' : n >= 4 ? '5' : '3';
+      }).join('');
+      charImg.src = `images/characters/${gender}/${imgCode}.webp`;
+      charImg.onerror = () => { charImg.style.display = 'none'; };
+    };
+    charImg.src = `images/characters/${gender}/${typeCode}.webp`;
   };
-  charImg.src = `images/characters/${gender}/${typeCode}.webp`;
+  charImg.src = `images/characters/hidden/${gender}/${typeCode}.webp`;
 }
 
 // ===== 特性詳細カード =====
