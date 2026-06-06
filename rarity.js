@@ -8,7 +8,7 @@ var ANIME_RARITY_OVERRIDE = {
   '22455': { default: 'r3' },   // 仲田陽介 / 沢田誠子
   '44352': { default: 'r5' },   // 五味拓海（終盤）
   '35453': { default: 'r4' },   // 真士（覚醒後）
-  '54421': { F: 'secret', M: 'r4' }, // メンタリスト(F) / 神山凛(M)
+  '54421': { F: 'r4', M: 'secret' }, // 神山凛(F) / メンタリスト(M)
 };
 
 function isMax(factor, value) {
