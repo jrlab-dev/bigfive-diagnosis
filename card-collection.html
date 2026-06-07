@@ -383,6 +383,7 @@
 
 <script src="nav.js"></script>
 <script src="unlock.js"></script>
+<script src="hidden_characters.js"></script>
 <script src="album.js"></script>
 <script src="rarity.js"></script>
 <script>
@@ -450,8 +451,9 @@
 
     // 保存されたrarityが間違っている可能性があるため、コードから再計算
     albumCards.forEach(function(card) {
-      var correctRarity = (card.version === '10') ? 'r0' : computeRarity(card.code);
-      if (card.isHidden && card.hiddenId) correctRarity = 'r6';
+      var correctRarity = (typeof AlbumUtils !== 'undefined')
+        ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
+        : ((card.version === '10') ? 'r0' : computeRarity(card.code));
       card.rarity = correctRarity;
     });
 
@@ -505,8 +507,9 @@
 
     filtered.forEach(function(card) {
       // 保存されたrarityではなくコードから正しいrarityを再計算
-      var correctRarity = (card.version === '10') ? 'r0' : computeRarity(card.code);
-      if (card.isHidden && card.hiddenId) correctRarity = 'r6'; // Secret
+      var correctRarity = (typeof AlbumUtils !== 'undefined')
+        ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
+        : ((card.version === '10') ? 'r0' : computeRarity(card.code));
       card.rarity = correctRarity;
 
       var el = document.createElement('a');
