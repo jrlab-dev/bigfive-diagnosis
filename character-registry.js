@@ -32,7 +32,10 @@
     gender = normalizeGender(gender);
     var v = normalizeVersion(version);
     if (v === '10') return 'images/characters/' + gender + '/' + roundedCode(code) + '.webp';
-    return getOfficialHiddenImage(code, gender) || 'images/characters/hidden/' + gender + '/' + code + '.webp';
+    // 非R0コード（2や4を含む）は隠しキャラの完全一致 → なければ丸めてR0画像
+    var hiddenImg = getOfficialHiddenImage(code, gender);
+    if (hiddenImg) return hiddenImg;
+    return 'images/characters/' + gender + '/' + roundedCode(code) + '.webp';
   }
 
   function getFallbackImage(code, gender) {
