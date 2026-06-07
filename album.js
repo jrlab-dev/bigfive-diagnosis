@@ -1,4 +1,4 @@
-/**
+﻿/**
  * カード図鑑 — アルバム管理
  *
  * album.js は hidden_characters.js の後に読み込むこと。
@@ -143,6 +143,7 @@
         if (cardData.isHidden) {
           cards[existingIdx].isHidden = true;
           cards[existingIdx].hiddenId = cardData.hiddenId;
+          cards[existingIdx].hiddenImgPath = cardData.hiddenImgPath || cards[existingIdx].hiddenImgPath || null;
         }
         saveAlbumCards(cards);
         checkMilestones(cards.length);
@@ -161,6 +162,7 @@
       rarity: cardData.rarity || 'common',
       isHidden: !!cardData.isHidden,
       hiddenId: cardData.hiddenId || null,
+      hiddenImgPath: cardData.hiddenImgPath || null,
       date: cardData.date || new Date().toISOString(),
       source: cardData.source || 'my'
     });
@@ -270,6 +272,11 @@
   // --- 画像パス取得 ---
 
   function getCardImagePath(card) {
+    if (typeof CharacterRegistry !== 'undefined') {
+      var registryPath = CharacterRegistry.getDisplayImage(card.code, card.gender, card.version);
+      if (registryPath) return registryPath;
+    }
+    if (card.isHidden && card.hiddenImgPath) return card.hiddenImgPath;
     if (card.isHidden && card.hiddenId) {
       var hc = null;
       if (typeof HIDDEN_CHARACTERS !== 'undefined') {
@@ -300,3 +307,5 @@
   };
 
 })();
+
+

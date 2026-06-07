@@ -1193,6 +1193,7 @@
 </div>
 
 <script src="hidden_characters.js"></script>
+<script src="character-registry.js"></script>
 <script src="album.js"></script>
 <script src="unlock.js"></script>
 <script src="concierge.js"></script>
@@ -1705,23 +1706,15 @@ function toHiddenScale(v) {
   return v <= 2 ? 1 : v >= 4 ? 5 : 3;
 }
 
-// 隠しキャラ一致チェック（2段階照合）
-// ① ズバリスコア（1-5）で一致 → ② 1/3/5丸めで一致
+// 隠しキャラ一致チェック
+// ドンピシャスコア（1-5）で一致した時だけ隠しキャラ扱いにする。
+// 丸め一致は通常キャラ画像へフォールバックさせる。
 function findHiddenCharacter() {
   if (typeof HIDDEN_CHARACTERS === 'undefined') return null;
   function matchGender(ch) { return ch.gender === 'any' || ch.gender === gender; }
 
-  // ① ズバリ照合（診断スコアそのまま）
-  const exact = HIDDEN_CHARACTERS.find(ch =>
-    ch.o === O && ch.c === C && ch.e === E && ch.a === A && ch.n === N && matchGender(ch)
-  );
-  if (exact) return exact;
-
-  // ② 丸め照合（1/3/5変換後）
-  const os = toHiddenScale(O), cs = toHiddenScale(C);
-  const es = toHiddenScale(E), as = toHiddenScale(A), ns = toHiddenScale(N);
   return HIDDEN_CHARACTERS.find(ch =>
-    ch.o === os && ch.c === cs && ch.e === es && ch.a === as && ch.n === ns && matchGender(ch)
+    ch.o === O && ch.c === C && ch.e === E && ch.a === A && ch.n === N && matchGender(ch)
   ) || null;
 }
 
@@ -1753,8 +1746,8 @@ function getRarity() {
     return ov.default;
   }
 
-  // 120問のみ隠しキャラ判定
-  if (version === '120') {
+  // 30問版・120問版はドンピシャ隠しキャラ判定
+  if (version !== '10') {
     const hiddenChar = findHiddenCharacter();
     if (hiddenChar) {
       return hiddenChar.a === 1 ? 'r7' : 'r6';
@@ -1883,9 +1876,9 @@ const versionLabels = { '10': 'IPIP-10Q', '30': 'IPIP-30Q', '120': 'IPIP-NEO-120
 renderScores();
 document.getElementById('desc').textContent = genDescription();
 
-// 隠しキャラ判定（120問版のみ。レアリティ・画像・ダークホログラムで使用）
+// 隠しキャラ判定（30問版・120問版。10問版R0では使わない）
 const gender = params.get('gender') || 'F';
-const hiddenChar = (version === '120') ? findHiddenCharacter() : null;
+const hiddenChar = (version !== '10') ? findHiddenCharacter() : null;
 
 // レアリティ設定
 const card = document.getElementById('card');
@@ -1912,28 +1905,60 @@ if (!params.get('rarity')) {
 
 // キャラクター画像
 const charImg = document.getElementById('charImg');
-if (hiddenChar && hiddenChar.img) {
-  // 隠しキャラ一致 → 専用画像を読み込み
-  charImg.src = `images/characters/hidden/${hiddenChar.img}`;
+let selectedCharImagePath = '';
+let selectedCharIsHidden = false;
+function setCharImage(path, isHidden) {
+  selectedCharImagePath = path;
+  selectedCharIsHidden = !!isHidden;
+  charImg.src = path;
+}
+if (typeof CharacterRegistry !== 'undefined') {
+  const registryImage = CharacterRegistry.getDisplayImage(typeCode, gender, version);
+  const fallbackImage = CharacterRegistry.getFallbackImage(typeCode, gender);
   charImg.style.display = '';
+  charImg.onerror = () => {
+    if (fallbackImage && charImg.src.indexOf(fallbackImage) === -1) {
+      charImg.onerror = () => { charImg.style.display = 'none'; };
+      setCharImage(fallbackImage, false);
+    } else {
+      charImg.style.display = 'none';
+    }
+  };
+  setCharImage(registryImage || fallbackImage || `images/characters//.webp`, version !== '10' && !!registryImage && registryImage.indexOf('/hidden/') !== -1);
+} else if (hiddenChar && hiddenChar.img) {
+  // 30問版・120問版で隠しキャラ定義にドンピシャ一致 → 専用画像を読み込み
+  charImg.style.display = '';
+  setCharImage(`images/characters/hidden/${hiddenChar.img}`, true);
   charImg.onerror = () => { charImg.style.display = 'none'; };
-} else {
-  // 1. hidden/のドンピシャ画像を優先
+} else if (version !== '10') {
+  // 30問版・120問版は hidden/F・M のドンピシャ画像を優先
   charImg.style.display = '';
   charImg.onerror = () => {
     // 2. F/Mの完全一致
     charImg.onerror = () => {
       // 3. F/Mの丸めフォールバック（{1,3,5}のみ）
+      charImg.onerror = () => { charImg.style.display = 'none'; };
       const imgCode = typeCode.split('').map(d => {
         const n = parseInt(d);
         return n <= 2 ? '1' : n >= 4 ? '5' : '3';
       }).join('');
-      charImg.src = `images/characters/${gender}/${imgCode}.webp`;
-      charImg.onerror = () => { charImg.style.display = 'none'; };
+      setCharImage(`images/characters/${gender}/${imgCode}.webp`, false);
     };
-    charImg.src = `images/characters/${gender}/${typeCode}.webp`;
+    setCharImage(`images/characters/${gender}/${typeCode}.webp`, false);
   };
-  charImg.src = `images/characters/hidden/${gender}/${typeCode}.webp`;
+  setCharImage(`images/characters/hidden/${gender}/${typeCode}.webp`, true);
+} else {
+  // 10問版R0は隠しキャラを出さず、通常の丸め画像だけを使う
+  charImg.style.display = '';
+  charImg.onerror = () => {
+    charImg.onerror = () => { charImg.style.display = 'none'; };
+    const imgCode = typeCode.split('').map(d => {
+      const n = parseInt(d);
+      return n <= 2 ? '1' : n >= 4 ? '5' : '3';
+    }).join('');
+    setCharImage(`images/characters/${gender}/${imgCode}.webp`, false);
+  };
+  setCharImage(`images/characters/${gender}/${typeCode}.webp`, false);
 }
 
 // ===== 特性詳細カード =====
@@ -2835,7 +2860,7 @@ if (isOtherMode) {
       // アルバムに追加（rarityはURL由来ではなくコードから再計算）
       if (window.AlbumUtils) {
         var oldAlbumCount = (typeof getCardCount === 'function') ? getCardCount() : 0;
-        var hc = (version === '120' && typeof findHiddenCharacter === 'function') ? findHiddenCharacter() : null;
+        var hc = (version !== '10' && typeof findHiddenCharacter === 'function') ? findHiddenCharacter() : null;
         var albumRarity = AlbumUtils.computeRarityForAlbum(currentResult.code, currentResult.version, currentResult.gender);
         window.AlbumUtils.addToAlbum({
           code: currentResult.code,
@@ -2843,8 +2868,9 @@ if (isOtherMode) {
           typeName: currentResult.typeName,
           version: currentResult.version,
           rarity: albumRarity,
-          isHidden: !!hc,
+          isHidden: !!hc || selectedCharIsHidden,
           hiddenId: hc ? hc.id : null,
+          hiddenImgPath: selectedCharIsHidden ? selectedCharImagePath : null,
           date: currentResult.date,
           source: 'my'
         });
@@ -2932,7 +2958,7 @@ if (isOtherMode) {
 
       var rarityVal = AlbumUtils.computeRarityForAlbum(code, ver, g);
       var hc = null;
-      if (ver === '120' && typeof findHiddenCharacter === 'function') {
+      if (ver !== '10' && typeof findHiddenCharacter === 'function') {
         hc = findHiddenCharacter();
       }
 
@@ -2942,8 +2968,9 @@ if (isOtherMode) {
         typeName: document.getElementById('typeName').textContent || code,
         version: ver,
         rarity: rarityVal,
-        isHidden: !!hc,
+        isHidden: !!hc || selectedCharIsHidden,
         hiddenId: hc ? hc.id : null,
+        hiddenImgPath: selectedCharIsHidden ? selectedCharImagePath : null,
         date: new Date().toISOString(),
         source: 'share'
       });
@@ -3835,3 +3862,4 @@ if (isOtherMode) {
 
 </body>
 </html>
+
