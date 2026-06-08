@@ -61,7 +61,6 @@ body {
 .steps {
   display: flex;
   align-items: center;
-  gap: 0;
   margin-bottom: 28px;
 }
 .step-item {
@@ -85,13 +84,8 @@ body {
   font-size: 11px;
   font-weight: 700;
   flex-shrink: 0;
-  background: transparent;
 }
-.step-item.active .step-num {
-  background: var(--purple);
-  border-color: var(--purple);
-  color: #fff;
-}
+.step-item.active .step-num,
 .step-item.done .step-num {
   background: var(--purple);
   border-color: var(--purple);
@@ -110,7 +104,6 @@ body {
   font-weight: 700;
   color: var(--dim);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   margin-bottom: 12px;
 }
 
@@ -126,8 +119,8 @@ body {
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  background: var(--surface, rgba(26,10,62,0.45));
-  border: 1.5px solid var(--border, rgba(139,92,246,0.2));
+  background: var(--card-bg, rgba(26,10,62,0.45));
+  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
@@ -146,6 +139,18 @@ body {
   cursor: not-allowed;
   transform: none;
 }
+body.theme-light .person-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .person-card:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+}
+body.theme-light .person-card.selected {
+  background: oklch(0.92 0.04 350 / 0.3) !important;
+  border-color: #ec4899 !important;
+}
+
 .person-avatar {
   width: 48px;
   height: 48px;
@@ -158,12 +163,25 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(139,92,246,0.15);
+  background: rgba(139,92,246,0.12);
+  border: 1.5px solid rgba(139,92,246,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
   flex-shrink: 0;
+}
+body.theme-light .person-avatar-placeholder {
+  background: oklch(0.94 0.03 270);
+  border-color: var(--card-border);
+}
+.person-avatar-placeholder svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--dim);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .person-info { flex: 1; min-width: 0; }
 .person-name {
@@ -192,7 +210,7 @@ body {
 .mini-bar-bg {
   width: 16px;
   height: 28px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(128,128,128,0.12);
   border-radius: 3px;
   overflow: hidden;
   display: flex;
@@ -201,7 +219,6 @@ body {
 .mini-bar-fill {
   width: 100%;
   border-radius: 3px;
-  transition: height 0.3s;
 }
 .mini-bar-label {
   font-size: 9px;
@@ -228,37 +245,16 @@ body {
   color: #fff;
 }
 
-/* 選択済みバナー */
-.selected-banner {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: rgba(236,72,153,0.08);
-  border: 1px solid rgba(236,72,153,0.25);
-  border-radius: 10px;
-  margin-bottom: 16px;
+/* ヒント */
+.hint-text {
   font-size: 13px;
+  color: var(--dim);
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: rgba(139,92,246,0.06);
+  border-radius: 8px;
 }
-.selected-banner.show { display: flex; }
-.selected-names { font-weight: 700; color: #ec4899; }
-
-/* 次へボタン */
-.next-btn {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
-  display: none;
-}
-.next-btn.show { display: block; }
-.next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
 /* ステップ2: シチュエーション */
 .situation-grid {
@@ -269,8 +265,8 @@ body {
 }
 .situation-btn {
   padding: 20px 16px;
-  background: var(--surface, rgba(26,10,62,0.45));
-  border: 1.5px solid var(--border, rgba(139,92,246,0.2));
+  background: var(--card-bg, rgba(26,10,62,0.45));
+  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 14px;
   cursor: pointer;
   text-align: center;
@@ -283,7 +279,22 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(139,92,246,0.12);
 }
-.situation-emoji { font-size: 28px; margin-bottom: 8px; }
+body.theme-light .situation-btn {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .situation-btn:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+}
+.situation-icon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .situation-label {
   font-size: 13px;
   font-weight: 700;
@@ -296,16 +307,20 @@ body {
   line-height: 1.4;
 }
 
-/* 選択した2人の表示（ステップ2・3共通） */
+/* 選んだ2人の表示 */
 .pair-display {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--surface, rgba(26,10,62,0.45));
-  border: 1px solid var(--border, rgba(139,92,246,0.2));
+  background: var(--card-bg, rgba(26,10,62,0.45));
+  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 12px;
   margin-bottom: 24px;
+}
+body.theme-light .pair-display {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
 }
 .pair-person {
   display: flex;
@@ -325,11 +340,24 @@ body {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(139,92,246,0.15);
+  background: rgba(139,92,246,0.12);
+  border: 1.5px solid rgba(139,92,246,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+}
+body.theme-light .pair-avatar-placeholder {
+  background: oklch(0.94 0.03 270);
+  border-color: var(--card-border);
+}
+.pair-avatar-placeholder svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--dim);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .pair-name {
   font-size: 13px;
@@ -337,18 +365,23 @@ body {
   text-align: center;
 }
 .pair-divider {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--dim);
+  font-weight: 700;
   flex-shrink: 0;
 }
 
-/* ステップ3: 分析結果 */
+/* スコア比較 */
 .score-compare {
   padding: 16px;
-  background: var(--surface, rgba(26,10,62,0.45));
-  border: 1px solid var(--border, rgba(139,92,246,0.2));
+  background: var(--card-bg, rgba(26,10,62,0.45));
+  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 12px;
   margin-bottom: 20px;
+}
+body.theme-light .score-compare {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
 }
 .score-compare-title {
   font-size: 12px;
@@ -369,18 +402,10 @@ body {
   font-weight: 700;
   width: 56px;
   flex-shrink: 0;
+  line-height: 1.4;
 }
-.factor-bars {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.factor-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.factor-bars { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.factor-bar-row { display: flex; align-items: center; gap: 6px; }
 .factor-bar-name {
   font-size: 10px;
   color: var(--dim);
@@ -393,7 +418,7 @@ body {
 .factor-bar-bg {
   flex: 1;
   height: 8px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(128,128,128,0.12);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -411,25 +436,26 @@ body {
 }
 
 /* 分析カード */
-.analysis-section {
-  margin-bottom: 20px;
-}
+.analysis-section { margin-bottom: 20px; }
 .analysis-title {
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding-left: 10px;
+  border-left: 3px solid var(--purple);
 }
 .analysis-card {
   padding: 16px;
-  background: var(--surface, rgba(26,10,62,0.45));
-  border: 1px solid var(--border, rgba(139,92,246,0.2));
+  background: var(--card-bg, rgba(26,10,62,0.45));
+  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 12px;
   margin-bottom: 10px;
 }
 .analysis-card:last-child { margin-bottom: 0; }
+body.theme-light .analysis-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
 .analysis-point {
   font-size: 13px;
   font-weight: 700;
@@ -446,11 +472,15 @@ body {
 .advice-card {
   padding: 16px 18px;
   background: rgba(139,92,246,0.07);
-  border: 1px solid rgba(139,92,246,0.25);
+  border: 1px solid rgba(139,92,246,0.2);
   border-radius: 12px;
   margin-bottom: 10px;
 }
 .advice-card:last-child { margin-bottom: 0; }
+body.theme-light .advice-card {
+  background: oklch(0.96 0.02 285) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+}
 .advice-text {
   font-size: 13px;
   line-height: 1.7;
@@ -461,7 +491,7 @@ body {
   width: 100%;
   padding: 13px;
   background: transparent;
-  border: 1.5px solid var(--border, rgba(139,92,246,0.2));
+  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
   border-radius: 12px;
   color: var(--dim);
   font-size: 14px;
@@ -472,13 +502,15 @@ body {
   transition: all 0.2s;
 }
 .back-btn:hover { border-color: rgba(139,92,246,0.5); color: var(--text); }
+body.theme-light .back-btn {
+  border-color: var(--card-border) !important;
+}
 
 /* 空状態 */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
 }
-.empty-icon { font-size: 48px; margin-bottom: 16px; }
 .empty-text { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 .empty-sub { font-size: 13px; color: var(--dim); margin-bottom: 24px; }
 .empty-btn {
@@ -492,7 +524,7 @@ body {
   font-weight: 700;
 }
 
-/* ステップ非表示 */
+/* ステップ表示切替 */
 .step-view { display: none; }
 .step-view.active { display: block; }
 </style>
@@ -506,11 +538,11 @@ body {
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       マイページ
     </a>
-    <div class="page-title">💬 人間関係相談</div>
+    <div class="page-title">人間関係相談</div>
   </div>
 
   <!-- ステップインジケーター -->
-  <div class="steps" id="stepIndicator">
+  <div class="steps">
     <div class="step-item active" id="si1">
       <div class="step-num">1</div>
       <span>2人を選ぶ</span>
@@ -529,13 +561,9 @@ body {
 
   <!-- Step1: 2人を選ぶ -->
   <div class="step-view active" id="step1">
-    <div class="section-label">誰について相談しますか？（2人を選択）</div>
-    <div class="selected-banner" id="selectedBanner">
-      <span class="selected-names" id="selectedNames"></span>
-      <span style="font-size:12px;color:var(--dim);">2人選択済み</span>
-    </div>
+    <div class="section-label">2人を選んでください</div>
+    <div class="hint-text" id="hint1">2人選ぶとテーマ選択に進みます</div>
     <div class="person-grid" id="personGrid"></div>
-    <button class="next-btn" id="nextBtn1" onclick="goStep2()">次へ　→</button>
   </div>
 
   <!-- Step2: テーマを選ぶ -->
@@ -544,22 +572,30 @@ body {
     <div class="section-label">どんな相談ですか？</div>
     <div class="situation-grid">
       <button class="situation-btn" onclick="goStep3('like')">
-        <div class="situation-emoji">❤️</div>
+        <div class="situation-icon" style="background:rgba(236,72,153,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
         <div class="situation-label">好かれたい</div>
-        <div class="situation-sub">AさんにBさんを<br>好きになってもらうには</div>
+        <div class="situation-sub">Aが Bに好きになって<br>もらうには</div>
       </button>
       <button class="situation-btn" onclick="goStep3('rejected')">
-        <div class="situation-emoji">💔</div>
+        <div class="situation-icon" style="background:rgba(239,68,68,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
         <div class="situation-label">なぜ振られた？</div>
         <div class="situation-sub">うまくいかなかった<br>理由を知りたい</div>
       </button>
       <button class="situation-btn" onclick="goStep3('distance')">
-        <div class="situation-emoji">😐</div>
+        <div class="situation-icon" style="background:rgba(59,130,246,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="3"/><circle cx="16" cy="12" r="3"/></svg>
+        </div>
         <div class="situation-label">なぜ距離がある？</div>
         <div class="situation-sub">なかなか仲良くなれない<br>理由を分析</div>
       </button>
       <button class="situation-btn" onclick="goStep3('fight')">
-        <div class="situation-emoji">🔥</div>
+        <div class="situation-icon" style="background:rgba(249,115,22,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
         <div class="situation-label">ケンカが多い</div>
         <div class="situation-sub">衝突しやすい<br>根本の原因を知る</div>
       </button>
@@ -579,14 +615,14 @@ body {
 </div>
 
 <script>
-// ---- 定数 ----
-const FACTORS = [
-  { key: 'O', name: '開放性', color: '#8b5cf6' },
-  { key: 'C', name: '誠実性', color: '#3b82f6' },
-  { key: 'E', name: '外向性', color: '#f97316' },
-  { key: 'A', name: '協調性', color: '#f472b6' },
-  { key: 'N', name: '感受性', color: '#14b8a6' },
+var FACTORS = [
+  { key: 'O', name: '開放性',  color: '#8b5cf6' },
+  { key: 'C', name: '誠実性',  color: '#3b82f6' },
+  { key: 'E', name: '外向性',  color: '#f97316' },
+  { key: 'A', name: '協調性',  color: '#f472b6' },
+  { key: 'N', name: '感受性',  color: '#14b8a6' },
 ];
+var CODE_IDX = { O:0, C:1, E:2, A:3, N:4 };
 
 // ---- データ読み込み ----
 function loadAllPersons() {
@@ -594,8 +630,7 @@ function loadAllPersons() {
   try {
     var myArr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
     if (myArr.length > 0) {
-      var me = Object.assign({}, myArr[0], { _isSelf: true, name: '自分' });
-      persons.push(me);
+      persons.push(Object.assign({}, myArr[0], { _isSelf: true, name: '自分' }));
     }
   } catch(e) {}
   try {
@@ -607,15 +642,44 @@ function loadAllPersons() {
 
 // ---- 状態 ----
 var allPersons = [];
-var selected = []; // インデックス2件まで
+var selected = [];
 var currentSituation = '';
+
+// ---- スコア取得（scoresフィールドがなければcodeから） ----
+function sc(p, key) {
+  if (p.scores && p.scores[key] !== undefined && p.scores[key] !== null) {
+    return Number(p.scores[key]);
+  }
+  if (p.code && p.code.length >= 5 && CODE_IDX[key] !== undefined) {
+    var v = parseInt(p.code[CODE_IDX[key]]);
+    return isNaN(v) ? 3 : v;
+  }
+  return 3;
+}
+function isHigh(p, key) { return sc(p, key) >= 4; }
+function isLow(p, key)  { return sc(p, key) <= 2; }
+function diff(p1, p2, key) { return Math.abs(sc(p1, key) - sc(p2, key)); }
+
+// ---- 人物アバターHTML ----
+var PERSON_SVG = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>';
+
+function avatarHtml(p, size) {
+  var s = size || 48;
+  var gender = p.gender || '';
+  var code = p.code || '';
+  if (code && (gender === 'M' || gender === 'F')) {
+    return '<img class="person-avatar" style="width:' + s + 'px;height:' + s + 'px;" src="images/characters/' + gender + '/' + code + '.webp"'
+      + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
+      + '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;display:none;">' + PERSON_SVG + '</div>';
+  }
+  return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;">' + PERSON_SVG + '</div>';
+}
 
 // ---- 人物カード描画 ----
 function renderPersonGrid() {
   var grid = document.getElementById('personGrid');
   if (allPersons.length === 0) {
     grid.innerHTML = '<div class="empty-state">'
-      + '<div class="empty-icon">🔍</div>'
       + '<div class="empty-text">診断データがありません</div>'
       + '<div class="empty-sub">まずはビッグファイブ診断を受けるか、<br>「あの人を診断する」で登録してください</div>'
       + '<a href="quiz.html" class="empty-btn">診断をはじめる</a>'
@@ -629,21 +693,11 @@ function renderPersonGrid() {
     var isDisabled = !isSelected && selected.length >= 2;
     var card = document.createElement('div');
     card.className = 'person-card' + (isSelected ? ' selected' : '') + (isDisabled ? ' disabled' : '');
-    card.onclick = function() { toggleSelect(i); };
-
-    var avatarHtml = '';
-    var gender = p.gender || 'N';
-    var code = p.code || '';
-    if (code && (gender === 'M' || gender === 'F')) {
-      avatarHtml = '<img class="person-avatar" src="images/characters/' + gender + '/' + code + '.webp" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
-        + '<div class="person-avatar-placeholder" style="display:none;">' + (p._isSelf ? '👤' : '👥') + '</div>';
-    } else {
-      avatarHtml = '<div class="person-avatar-placeholder">' + (p._isSelf ? '👤' : '👥') + '</div>';
-    }
+    if (!isDisabled) card.onclick = function() { toggleSelect(i); };
 
     var miniBars = FACTORS.map(function(f) {
-      var sc = (p.scores && p.scores[f.key]) ? p.scores[f.key] : 3;
-      var h = Math.round(sc / 5 * 28);
+      var v = sc(p, f.key);
+      var h = Math.round(v / 5 * 28);
       return '<div class="mini-bar-wrap">'
         + '<div class="mini-bar-bg"><div class="mini-bar-fill" style="height:' + h + 'px;background:' + f.color + ';"></div></div>'
         + '<div class="mini-bar-label">' + f.key + '</div>'
@@ -652,12 +706,12 @@ function renderPersonGrid() {
 
     var typeName = p.typeName || '';
     var dateStr = p.date ? new Date(p.date).toLocaleDateString('ja-JP', {month:'numeric', day:'numeric'}) : '';
-    var metaStr = (typeName ? typeName : '') + (dateStr ? '　' + dateStr : '');
+    var meta = [typeName, dateStr].filter(Boolean).join('  ');
 
-    card.innerHTML = avatarHtml
+    card.innerHTML = avatarHtml(p, 48)
       + '<div class="person-info">'
         + '<div class="person-name">' + escHtml(p.name || '名前なし') + '</div>'
-        + '<div class="person-type">' + escHtml(metaStr) + '</div>'
+        + (meta ? '<div class="person-type">' + escHtml(meta) + '</div>' : '')
         + '<div class="mini-bars">' + miniBars + '</div>'
       + '</div>'
       + '<div class="select-badge">' + (isSelected ? selNum : '') + '</div>';
@@ -675,27 +729,16 @@ function toggleSelect(i) {
     selected.push(i);
   }
   renderPersonGrid();
-  updateBanner();
-}
-
-function updateBanner() {
-  var banner = document.getElementById('selectedBanner');
-  var names = document.getElementById('selectedNames');
-  var btn = document.getElementById('nextBtn1');
+  // 2人揃ったら自動遷移
   if (selected.length === 2) {
-    var n1 = allPersons[selected[0]].name || '名前なし';
-    var n2 = allPersons[selected[1]].name || '名前なし';
-    names.textContent = n1 + '　×　' + n2;
-    banner.classList.add('show');
-    btn.classList.add('show');
-  } else {
-    banner.classList.remove('show');
-    btn.classList.remove('show');
+    setTimeout(goStep2, 200);
   }
 }
 
 // ---- ステップ移動 ----
 function goStep1() {
+  selected = [];
+  renderPersonGrid();
   showStep(1);
 }
 
@@ -716,14 +759,13 @@ function goStep3(situation) {
 function showStep(n) {
   document.querySelectorAll('.step-view').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById('step' + n).classList.add('active');
-  // インジケーター更新
   [1,2,3].forEach(function(i) {
     var si = document.getElementById('si' + i);
-    si.classList.remove('active', 'done');
+    si.classList.remove('active','done');
     if (i < n) si.classList.add('done');
     else if (i === n) si.classList.add('active');
   });
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 // ---- ペア表示 ----
@@ -732,44 +774,40 @@ function renderPairDisplay(elId) {
   var p1 = allPersons[selected[0]];
   var p2 = allPersons[selected[1]];
   el.innerHTML = '<div class="pair-display">'
-    + personMini(p1)
-    + '<div class="pair-divider">×</div>'
-    + personMini(p2)
+    + personMini(p1) + '<div class="pair-divider">×</div>' + personMini(p2)
     + '</div>';
 }
 
 function personMini(p) {
-  var gender = p.gender || 'N';
+  var av = '';
+  var gender = p.gender || '';
   var code = p.code || '';
-  var avatarHtml = '';
   if (code && (gender === 'M' || gender === 'F')) {
-    avatarHtml = '<img class="pair-avatar" src="images/characters/' + gender + '/' + code + '.webp" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
-      + '<div class="pair-avatar-placeholder" style="display:none;">' + (p._isSelf ? '👤' : '👥') + '</div>';
+    av = '<img class="pair-avatar" src="images/characters/' + gender + '/' + code + '.webp"'
+       + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
+       + '<div class="pair-avatar-placeholder" style="display:none;">' + PERSON_SVG + '</div>';
   } else {
-    avatarHtml = '<div class="pair-avatar-placeholder">' + (p._isSelf ? '👤' : '👥') + '</div>';
+    av = '<div class="pair-avatar-placeholder">' + PERSON_SVG + '</div>';
   }
-  return '<div class="pair-person">' + avatarHtml + '<div class="pair-name">' + escHtml(p.name || '名前なし') + '</div></div>';
+  return '<div class="pair-person">' + av + '<div class="pair-name">' + escHtml(p.name || '名前なし') + '</div></div>';
 }
 
 // ---- スコア比較バー ----
 function renderScoreCompare() {
-  var el = document.getElementById('scoreCompare');
   var p1 = allPersons[selected[0]];
   var p2 = allPersons[selected[1]];
-  var n1 = shortenName(p1.name);
-  var n2 = shortenName(p2.name);
+  var n1 = shorten(p1.name);
+  var n2 = shorten(p2.name);
 
   var rows = FACTORS.map(function(f) {
-    var s1 = sc(p1, f.key);
-    var s2 = sc(p2, f.key);
-    var w1 = Math.round(s1 / 5 * 100);
-    var w2 = Math.round(s2 / 5 * 100);
+    var s1 = sc(p1, f.key), s2 = sc(p2, f.key);
+    var w1 = Math.round(s1/5*100), w2 = Math.round(s2/5*100);
     return '<div class="factor-row">'
       + '<div class="factor-label" style="color:' + f.color + ';">' + f.key + '<br><span style="font-size:10px;font-weight:400;color:var(--dim);">' + f.name + '</span></div>'
       + '<div class="factor-bars">'
         + '<div class="factor-bar-row">'
           + '<div class="factor-bar-name">' + escHtml(n1) + '</div>'
-          + '<div class="factor-bar-bg"><div class="factor-bar-fill" style="width:' + w1 + '%;background:' + f.color + ';opacity:0.85;"></div></div>'
+          + '<div class="factor-bar-bg"><div class="factor-bar-fill" style="width:' + w1 + '%;background:' + f.color + ';opacity:0.9;"></div></div>'
           + '<div class="factor-bar-val" style="color:' + f.color + ';">' + s1 + '</div>'
         + '</div>'
         + '<div class="factor-bar-row">'
@@ -781,207 +819,175 @@ function renderScoreCompare() {
       + '</div>';
   }).join('');
 
-  el.innerHTML = '<div class="score-compare">'
-    + '<div class="score-compare-title">📊 5因子スコア比較</div>'
-    + rows
-    + '</div>';
+  document.getElementById('scoreCompare').innerHTML = '<div class="score-compare">'
+    + '<div class="score-compare-title">5因子スコア比較</div>' + rows + '</div>';
 }
 
 // ---- 分析ロジック ----
-function sc(p, key) {
-  return (p.scores && p.scores[key]) ? p.scores[key] : 3;
-}
-function isHigh(p, key) { return sc(p, key) >= 4; }
-function isLow(p, key)  { return sc(p, key) <= 2; }
-function diff(p1, p2, key) { return Math.abs(sc(p1, key) - sc(p2, key)); }
-
 function renderAnalysis() {
   var el = document.getElementById('analysisResult');
   var p1 = allPersons[selected[0]];
   var p2 = allPersons[selected[1]];
-  var n1 = p1.name || '名前なし';
-  var n2 = p2.name || '名前なし';
-
-  var points = [];
-  var advice = [];
+  var n1 = escHtml(p1.name || '名前なし');
+  var n2 = escHtml(p2.name || '名前なし');
+  var points = [], advice = [];
+  var titleText = '';
 
   if (currentSituation === 'like') {
-    // AさんがBさんに好かれるためのアドバイス
-    var titleHtml = '❤️ ' + escHtml(n1) + ' が ' + escHtml(n2) + ' に好かれるには';
-
-    if (isHigh(p2, 'N')) {
-      points.push({ point: escHtml(n2) + 'さんは不安を感じやすく、安心感を求めています', detail: '感情的に繊細なため、予測できない行動や曖昧な態度は不安を招きやすいです。' });
+    titleText = n1 + ' が ' + n2 + ' に好かれるには';
+    if (isHigh(p2,'N')) {
+      points.push({ p: n2 + 'さんは不安を感じやすく、安心感を求めています', d: '感情的に繊細なため、予測できない行動や曖昧な態度は不安を招きやすいです。' });
       advice.push('予測可能な行動・細かい気遣いが信頼につながります。「また連絡する」と言ったら必ず連絡するなど、小さな約束を守ることが大切です。');
-    } else if (isLow(p2, 'N')) {
-      points.push({ point: escHtml(n2) + 'さんは感情より論理を重視する傾向があります', detail: '感情的な訴えより、落ち着いた事実ベースの話し方が届きやすいです。' });
+    } else if (isLow(p2,'N')) {
+      points.push({ p: n2 + 'さんは感情より論理を重視する傾向があります', d: '感情的な訴えより、落ち着いた事実ベースの話し方が届きやすいです。' });
       advice.push('感情的なアピールよりも、具体的な行動や事実で示す方が印象に残ります。');
     }
-    if (isHigh(p2, 'E')) {
-      points.push({ point: escHtml(n2) + 'さんは社交的で賑やかな場を楽しみます', detail: '一緒に何かを体験することで距離が縮まりやすいタイプです。' });
+    if (isHigh(p2,'E')) {
+      points.push({ p: n2 + 'さんは社交的で賑やかな場を楽しみます', d: '一緒に何かを体験することで距離が縮まりやすいタイプです。' });
       advice.push('積極的に誘ったり、新しい体験を一緒にすることで自然と関係が深まります。');
-    } else if (isLow(p2, 'E')) {
-      points.push({ point: escHtml(n2) + 'さんは少人数・静かな環境で本音を話せます', detail: '大勢の場では本来の自分を出しにくいタイプです。' });
+    } else if (isLow(p2,'E')) {
+      points.push({ p: n2 + 'さんは少人数・静かな環境で本音を話せます', d: '大勢の場では本来の自分を出しにくいタイプです。' });
       advice.push('2人きりや小さな場を意識的に作ることで、本音を引き出しやすくなります。');
     }
-    if (isHigh(p2, 'A')) {
-      points.push({ point: escHtml(n2) + 'さんは相手の気持ちを大切にする繊細な人です', detail: '話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。' });
+    if (isHigh(p2,'A')) {
+      points.push({ p: n2 + 'さんは相手の気持ちを大切にする繊細な人です', d: '話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。' });
       advice.push('話をよく聞いて感謝を言葉で伝えることが好感につながります。「ありがとう」を惜しまないことが大切です。');
-    } else if (isLow(p2, 'A')) {
-      points.push({ point: escHtml(n2) + 'さんははっきりした意見を持つ人を好む傾向があります', detail: '曖昧な態度や八方美人的な振る舞いよりも、自分の立場をはっきり示せる人に魅力を感じます。' });
+    } else if (isLow(p2,'A')) {
+      points.push({ p: n2 + 'さんははっきりした意見を持つ人を好む傾向があります', d: '曖昧な態度や八方美人的な振る舞いよりも、自分の立場をはっきり示せる人に魅力を感じます。' });
       advice.push('遠慮せずに自分の意見・好みをはっきり伝えましょう。媚びすぎない姿勢が好印象です。');
     }
-    if (isHigh(p2, 'C')) {
-      points.push({ point: escHtml(n2) + 'さんは約束・時間・ルールを大切にします', detail: 'ルーズな印象を与えると信頼を失いやすいタイプです。' });
+    if (isHigh(p2,'C')) {
+      points.push({ p: n2 + 'さんは約束・時間・ルールを大切にします', d: 'ルーズな印象を与えると信頼を失いやすいタイプです。' });
       advice.push('時間を守る・言ったことを実行するなど、信頼感を積み上げることが好感の土台になります。');
-    } else if (isLow(p2, 'C')) {
-      points.push({ point: escHtml(n2) + 'さんは自然体・気軽さを好みます', detail: '堅苦しい雰囲気よりも、リラックスして過ごせる関係を心地よく感じます。' });
+    } else if (isLow(p2,'C')) {
+      points.push({ p: n2 + 'さんは自然体・気軽さを好みます', d: '堅苦しい雰囲気よりも、リラックスして過ごせる関係を心地よく感じます。' });
       advice.push('完璧を目指さず、肩の力を抜いて気軽に接することで距離が縮まります。');
     }
-    if (isHigh(p2, 'O')) {
-      points.push({ point: escHtml(n2) + 'さんは新しいこと・知的な話題が好きです', detail: '好奇心旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。' });
+    if (isHigh(p2,'O')) {
+      points.push({ p: n2 + 'さんは新しいこと・知的な話題が好きです', d: '好奇心旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。' });
       advice.push('面白い話題・ちょっと変わった体験を提案することで興味を引けます。');
-    } else if (isLow(p2, 'O')) {
-      points.push({ point: escHtml(n2) + 'さんは安定・慣れ親しんだことを好みます', detail: '急な変化や冒険より、安心できる日常を大切にするタイプです。' });
+    } else if (isLow(p2,'O')) {
+      points.push({ p: n2 + 'さんは安定・慣れ親しんだことを好みます', d: '急な変化や冒険より、安心できる日常を大切にするタイプです。' });
       advice.push('いつもの場所・いつもの流れで一緒に過ごすことで自然と親しくなれます。');
     }
 
-    // 最大3点に絞る
-    points = points.slice(0, 3);
-    advice = advice.slice(0, 3);
-    renderResult(el, titleHtml, points, advice);
-
   } else if (currentSituation === 'rejected') {
-    var titleHtml = '💔 ' + escHtml(n1) + ' と ' + escHtml(n2) + '、うまくいかなかった理由';
-
-    if (diff(p1, p2, 'N') >= 2) {
-      points.push({ point: '感情のペースが合いませんでした', detail: '片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。' });
+    titleText = n1 + ' と ' + n2 + '、うまくいかなかった理由';
+    if (diff(p1,p2,'N') >= 2) {
+      points.push({ p: '感情のペースが合いませんでした', d: '片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。' });
       advice.push('感情のペースの違いは「冷たい」「重い」の誤解を生みます。お互いの感情スタイルを言葉で伝え合うことが大切でした。');
     }
-    if (diff(p1, p2, 'E') >= 2) {
-      points.push({ point: '一緒にいたい頻度・社交への欲求が違いました', detail: '「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。' });
+    if (diff(p1,p2,'E') >= 2) {
+      points.push({ p: '一緒にいたい頻度・社交への欲求が違いました', d: '「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。' });
       advice.push('外向性の差は「嫌いになった」ではなく「充電の仕方が違う」という問題です。お互いの時間の使い方を尊重できれば変わっていたかもしれません。');
     }
-    if (diff(p1, p2, 'A') >= 2) {
-      points.push({ point: '主張と協調のバランスが合いませんでした', detail: 'どちらかが「自分ばかり合わせている」と感じていた可能性があります。' });
+    if (diff(p1,p2,'A') >= 2) {
+      points.push({ p: '主張と協調のバランスが合いませんでした', d: 'どちらかが「自分ばかり合わせている」と感じていた可能性があります。' });
       advice.push('どちらが折れるか、という構造になってしまうと関係は疲弊します。対等に意見を出せる雰囲気が必要でした。');
     }
-    if (diff(p1, p2, 'C') >= 2) {
-      points.push({ point: '生活習慣・几帳面さの価値観がズレていました', detail: 'ルーズに見えた、または逆に窮屈に感じた可能性があります。こういった違いは長期になると摩擦になりやすいです。' });
+    if (diff(p1,p2,'C') >= 2) {
+      points.push({ p: '生活習慣・几帳面さの価値観がズレていました', d: 'ルーズに見えた、または逆に窮屈に感じた可能性があります。こういった違いは長期になると摩擦になりやすいです。' });
       advice.push('価値観のズレは時間が経つほど表面化します。早い段階でお互いの「当たり前」を確認し合えたらよかったかもしれません。');
     }
-    if (isLow(p1, 'A') && isLow(p2, 'A')) {
-      points.push({ point: 'お互いに自分の意見を曲げにくい組み合わせでした', detail: '両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。' });
+    if (isLow(p1,'A') && isLow(p2,'A')) {
+      points.push({ p: 'お互いに自分の意見を曲げにくい組み合わせでした', d: '両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。' });
       advice.push('どちらも「私が正しい」と感じやすい。小さなことでも意見を聞こうとする姿勢が鍵でした。');
     }
-    if (isHigh(p1, 'N') && isHigh(p2, 'N')) {
-      points.push({ point: '両者が感情的になりやすい組み合わせでした', detail: '小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。' });
+    if (isHigh(p1,'N') && isHigh(p2,'N')) {
+      points.push({ p: '両者が感情的になりやすい組み合わせでした', d: '小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。' });
       advice.push('感情が高まったときに距離を置いて冷静になる習慣が、この組み合わせには特に重要でした。');
     }
-
-    points = points.slice(0, 3);
-    advice = advice.slice(0, 3);
     if (points.length === 0) {
-      points.push({ point: 'スコア上の大きなズレは見つかりませんでした', detail: '相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。' });
+      points.push({ p: 'スコア上の大きなズレは見つかりませんでした', d: '相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。' });
       advice.push('ビッグファイブはあくまで性格傾向の参考です。相性だけで関係の結果を決めつけずに、自分の気持ちを大切にしてください。');
     }
-    renderResult(el, titleHtml, points, advice);
 
   } else if (currentSituation === 'distance') {
-    var titleHtml = '😐 ' + escHtml(n1) + ' と ' + escHtml(n2) + '、距離が縮まらない理由';
-
-    if (isLow(p2, 'E')) {
-      points.push({ point: escHtml(n2) + 'さんはもともと人との距離を大切にするタイプです', detail: '外向性が低い人は、少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。' });
-      advice.push('この距離感は' + escHtml(n2) + 'さんの特性であり、あなたへの拒否ではありません。焦らず、少しずつ関係を深めていきましょう。');
+    titleText = n1 + ' と ' + n2 + '、距離が縮まらない理由';
+    if (isLow(p2,'E')) {
+      points.push({ p: n2 + 'さんはもともと人との距離を大切にするタイプです', d: '外向性が低い人は、少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。' });
+      advice.push('この距離感は' + n2 + 'さんの特性であり、あなたへの拒否ではありません。焦らず、少しずつ関係を深めていきましょう。');
     }
-    if (diff(p1, p2, 'E') >= 2) {
-      points.push({ point: '社交のペースが違います', detail: '外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。' });
-      advice.push(escHtml(n2) + 'さんに合ったペースで接すると、かえって距離が縮まりやすくなります。');
+    if (diff(p1,p2,'E') >= 2) {
+      points.push({ p: '社交のペースが違います', d: '外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。' });
+      advice.push(n2 + 'さんに合ったペースで接すると、かえって距離が縮まりやすくなります。');
     }
-    if (isHigh(p2, 'N')) {
-      points.push({ point: escHtml(n2) + 'さんは不安から人を遠ざけることがあります', detail: '感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。' });
+    if (isHigh(p2,'N')) {
+      points.push({ p: n2 + 'さんは不安から人を遠ざけることがあります', d: '感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。' });
       advice.push('安心できる存在であることを、言葉ではなく継続した行動で示すことが重要です。');
     }
-    if (isHigh(p1, 'E') && isLow(p2, 'E')) {
-      points.push({ point: 'あなたの積極さが少し重く感じられているかもしれません', detail: '外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。' });
+    if (isHigh(p1,'E') && isLow(p2,'E')) {
+      points.push({ p: 'あなたの積極さが少し重く感じられているかもしれません', d: '外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。' });
       advice.push('アプローチを少し緩めると、かえって近づける場合があります。相手のペースに合わせてみてください。');
     }
-    if (isLow(p1, 'A')) {
-      points.push({ point: 'あなたの率直な言動が距離を作っている可能性があります', detail: '協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。' });
+    if (isLow(p1,'A')) {
+      points.push({ p: n1 + 'の率直な言動が距離を作っている可能性があります', d: '協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。' });
       advice.push('相手の気持ちに少し配慮した言葉選びを意識すると、関係が変わることがあります。');
     }
-
-    points = points.slice(0, 3);
-    advice = advice.slice(0, 3);
     if (points.length === 0) {
-      points.push({ point: '大きな特性のズレは見当たりませんでした', detail: '距離感はお互いの忙しさや環境による場合もあります。' });
+      points.push({ p: '大きな特性のズレは見当たりませんでした', d: '距離感はお互いの忙しさや環境による場合もあります。' });
       advice.push('まずは気軽に声をかけ続けることで、少しずつ関係が育っていく可能性があります。');
     }
-    renderResult(el, titleHtml, points, advice);
 
   } else if (currentSituation === 'fight') {
-    var titleHtml = '🔥 ' + escHtml(n1) + ' と ' + escHtml(n2) + '、ケンカが多い理由';
-
-    if (isLow(p1, 'A') && isLow(p2, 'A')) {
-      points.push({ point: 'お互いに主張が強く、譲り合いが少ない組み合わせです', detail: '両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。' });
+    titleText = n1 + ' と ' + n2 + '、ケンカが多い理由';
+    if (isLow(p1,'A') && isLow(p2,'A')) {
+      points.push({ p: 'お互いに主張が強く、譲り合いが少ない組み合わせです', d: '両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。' });
       advice.push('どちらかが先に聞く役に回ることで、ケンカの頻度が大幅に減ります。「聞く番」を意識的に作りましょう。');
     }
-    if (isHigh(p1, 'N') && isHigh(p2, 'N')) {
-      points.push({ point: '両者が感情的になりやすいため、発火しやすい組み合わせです', detail: '小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。' });
+    if (isHigh(p1,'N') && isHigh(p2,'N')) {
+      points.push({ p: '両者が感情的になりやすいため、発火しやすい組み合わせです', d: '小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。' });
       advice.push('感情が高ぶっているときは判断を後回しにする習慣を。「今は話せない」と伝えて時間を置くことが有効です。');
     }
-    if (diff(p1, p2, 'C') >= 2) {
-      points.push({ point: '几帳面さ・ルールへの価値観が違います', detail: '「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。' });
+    if (diff(p1,p2,'C') >= 2) {
+      points.push({ p: '几帳面さ・ルールへの価値観が違います', d: '「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。' });
       advice.push('何が「当たり前」かを一度すり合わせてみましょう。悪意ではなく価値観の違いだと認識するだけでも摩擦が減ります。');
     }
-    if (diff(p1, p2, 'E') >= 2) {
-      points.push({ point: '活動量・刺激への欲求が違います', detail: '外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。' });
+    if (diff(p1,p2,'E') >= 2) {
+      points.push({ p: '活動量・刺激への欲求が違います', d: '外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。' });
       advice.push('「一緒にやること」「それぞれでやること」を分けて決めると摩擦が減ります。');
     }
-    if (isHigh(p1, 'O') && isLow(p2, 'O') || isLow(p1, 'O') && isHigh(p2, 'O')) {
-      points.push({ point: '変化好きと安定好きの組み合わせです', detail: '新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。' });
+    if ((isHigh(p1,'O') && isLow(p2,'O')) || (isLow(p1,'O') && isHigh(p2,'O'))) {
+      points.push({ p: '変化好きと安定好きの組み合わせです', d: '新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。' });
       advice.push('変化を提案するときは「なぜ良いか」を丁寧に説明すると受け入れられやすくなります。');
     }
-
-    points = points.slice(0, 3);
-    advice = advice.slice(0, 3);
     if (points.length === 0) {
-      points.push({ point: 'スコア上での明らかな衝突要因は見つかりませんでした', detail: 'ケンカの原因は環境やストレスから来ている可能性もあります。' });
+      points.push({ p: 'スコア上での明らかな衝突要因は見つかりませんでした', d: 'ケンカの原因は環境やストレスから来ている可能性もあります。' });
       advice.push('お互いの「地雷」を言葉で共有し合う対話が、ケンカの予防に一番効果的です。');
     }
-    renderResult(el, titleHtml, points, advice);
   }
-}
 
-function renderResult(el, titleHtml, points, adviceArr) {
-  var analysisHtml = '<div class="analysis-section">'
-    + '<div class="analysis-title">🔍 分析</div>';
-  points.forEach(function(p) {
-    analysisHtml += '<div class="analysis-card">'
-      + '<div class="analysis-point">▶ ' + p.point + '</div>'
-      + '<div class="analysis-detail">' + p.detail + '</div>'
+  // 最大3点
+  points = points.slice(0,3);
+  advice  = advice.slice(0,3);
+
+  var html = '<div style="font-size:14px;font-weight:700;margin-bottom:18px;line-height:1.5;">' + titleText + '</div>';
+
+  html += '<div class="analysis-section"><div class="analysis-title">分析</div>';
+  points.forEach(function(pt) {
+    html += '<div class="analysis-card">'
+      + '<div class="analysis-point">- ' + pt.p + '</div>'
+      + '<div class="analysis-detail">' + pt.d + '</div>'
       + '</div>';
   });
-  analysisHtml += '</div>';
+  html += '</div>';
 
-  var adviceHtml = '<div class="analysis-section">'
-    + '<div class="analysis-title">💡 アドバイス</div>';
-  adviceArr.forEach(function(a) {
-    adviceHtml += '<div class="advice-card"><div class="advice-text">' + a + '</div></div>';
+  html += '<div class="analysis-section"><div class="analysis-title">アドバイス</div>';
+  advice.forEach(function(a) {
+    html += '<div class="advice-card"><div class="advice-text">' + a + '</div></div>';
   });
-  adviceHtml += '</div>';
+  html += '</div>';
 
-  el.innerHTML = '<div style="font-size:14px;font-weight:700;margin-bottom:18px;line-height:1.5;">' + titleHtml + '</div>'
-    + analysisHtml
-    + adviceHtml;
+  el.innerHTML = html;
 }
 
 // ---- ユーティリティ ----
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function shortenName(name) {
+function shorten(name) {
   if (!name) return '?';
-  return name.length > 4 ? name.slice(0, 4) + '…' : name;
+  return name.length > 5 ? name.slice(0,5) + '…' : name;
 }
 
 // ---- 初期化 ----
