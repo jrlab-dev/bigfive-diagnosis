@@ -29,502 +29,134 @@ body {
   min-height: 100vh;
   padding: 40px 20px 100px;
 }
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-}
+.container { max-width: 600px; margin: 0 auto; }
 
 /* ヘッダー */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
-}
+.header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
 .back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--dim);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s;
+  display: inline-flex; align-items: center; gap: 5px;
+  color: var(--dim); text-decoration: none; font-size: 14px; transition: color 0.2s;
 }
 .back-link:hover { color: var(--text); }
-.page-title {
-  font-size: 20px;
-  font-weight: 700;
-  flex: 1;
-}
+.page-title { font-size: 20px; font-weight: 700; flex: 1; }
 
 /* ステップインジケーター */
-.steps {
-  display: flex;
-  align-items: center;
-  margin-bottom: 28px;
-}
-.step-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--dim);
-  font-weight: 500;
-}
+.steps { display: flex; align-items: center; margin-bottom: 28px; }
+.step-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--dim); font-weight: 500; }
 .step-item.active { color: var(--text); }
 .step-item.done { color: var(--purple); }
 .step-num {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  flex-shrink: 0;
+  width: 24px; height: 24px; border-radius: 50%; border: 2px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
 }
 .step-item.active .step-num,
-.step-item.done .step-num {
-  background: var(--purple);
-  border-color: var(--purple);
-  color: #fff;
-}
-.step-line {
-  flex: 1;
-  height: 1px;
-  background: rgba(139,92,246,0.2);
-  margin: 0 6px;
-}
+.step-item.done .step-num { background: var(--purple); border-color: var(--purple); color: #fff; }
+.step-line { flex: 1; height: 1px; background: rgba(139,92,246,0.2); margin: 0 6px; }
 
-/* セクションラベル */
-.section-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dim);
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
-}
+.section-label { font-size: 12px; font-weight: 700; color: var(--dim); letter-spacing: 0.08em; margin-bottom: 12px; }
 
 /* 人物カード */
-.person-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+.person-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .person-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  background: var(--card-bg, rgba(26,10,62,0.45));
-  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  user-select: none;
-}
-.person-card:hover {
-  border-color: rgba(139,92,246,0.5);
-  transform: translateY(-1px);
-}
-.person-card.selected {
-  border-color: #ec4899;
-  background: rgba(236,72,153,0.08);
-}
-.person-card.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
-}
-body.theme-light .person-card {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
-}
-body.theme-light .person-card:hover {
-  border-color: oklch(0.58 0.22 285 / 0.5) !important;
-}
-body.theme-light .person-card.selected {
-  background: oklch(0.92 0.04 350 / 0.3) !important;
-  border-color: #ec4899 !important;
-}
-
-.person-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: rgba(139,92,246,0.15);
-}
-.person-avatar-placeholder {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(139,92,246,0.12);
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  background: rgba(26,10,62,0.45);
   border: 1.5px solid rgba(139,92,246,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  border-radius: 12px; cursor: pointer; transition: all 0.2s; user-select: none;
 }
-body.theme-light .person-avatar-placeholder {
-  background: oklch(0.94 0.03 270);
-  border-color: var(--card-border);
+.person-card:hover { border-color: rgba(139,92,246,0.5); transform: translateY(-1px); }
+.person-card.selected { border-color: #ec4899; background: rgba(236,72,153,0.08); }
+.person-card.disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.person-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.person-avatar-placeholder {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(139,92,246,0.12); border: 1.5px solid rgba(139,92,246,0.2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.person-avatar-placeholder svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--dim);
-  fill: none;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+.person-avatar-placeholder svg { width: 22px; height: 22px; stroke: var(--dim); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .person-info { flex: 1; min-width: 0; }
-.person-name {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.person-type {
-  font-size: 12px;
-  color: var(--dim);
-  margin-bottom: 6px;
-}
-.mini-bars {
-  display: flex;
-  gap: 4px;
-}
-.mini-bar-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.mini-bar-bg {
-  width: 16px;
-  height: 28px;
-  background: rgba(128,128,128,0.12);
-  border-radius: 3px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-}
-.mini-bar-fill {
-  width: 100%;
-  border-radius: 3px;
-}
-.mini-bar-label {
-  font-size: 9px;
-  color: var(--dim);
-  font-weight: 700;
-}
+.person-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.person-type { font-size: 12px; color: var(--dim); margin-bottom: 6px; }
+.mini-bars { display: flex; gap: 4px; }
+.mini-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mini-bar-bg { width: 16px; height: 28px; background: rgba(128,128,128,0.12); border-radius: 3px; overflow: hidden; display: flex; align-items: flex-end; }
+.mini-bar-fill { width: 100%; border-radius: 3px; }
+.mini-bar-label { font-size: 9px; color: var(--dim); font-weight: 700; }
 .select-badge {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+  width: 22px; height: 22px; border-radius: 50%;
   border: 2px solid rgba(139,92,246,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: transparent;
-  transition: all 0.2s;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: transparent; transition: all 0.2s; flex-shrink: 0;
 }
-.person-card.selected .select-badge {
-  background: #ec4899;
-  border-color: #ec4899;
-  color: #fff;
-}
+.person-card.selected .select-badge { background: #ec4899; border-color: #ec4899; color: #fff; }
 
-/* ヒント */
-.hint-text {
-  font-size: 13px;
-  color: var(--dim);
-  text-align: center;
-  margin-bottom: 16px;
-  padding: 10px;
-  background: rgba(139,92,246,0.06);
-  border-radius: 8px;
-}
+.hint-text { font-size: 13px; color: var(--dim); text-align: center; margin-bottom: 16px; padding: 10px; background: rgba(139,92,246,0.06); border-radius: 8px; }
 
-/* ステップ2: シチュエーション */
-.situation-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
+/* テーマ選択 */
+.situation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .situation-btn {
   padding: 20px 16px;
-  background: var(--card-bg, rgba(26,10,62,0.45));
-  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 14px;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.2s;
-  color: var(--text);
-  font-family: 'Noto Sans JP', sans-serif;
-}
-.situation-btn:hover {
-  border-color: rgba(139,92,246,0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(139,92,246,0.12);
-}
-body.theme-light .situation-btn {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
-}
-body.theme-light .situation-btn:hover {
-  border-color: oklch(0.58 0.22 285 / 0.5) !important;
-}
-.situation-icon {
-  width: 32px;
-  height: 32px;
-  margin: 0 auto 8px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.situation-label {
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-.situation-sub {
-  font-size: 11px;
-  color: var(--dim);
-  margin-top: 4px;
-  line-height: 1.4;
-}
-
-/* 選んだ2人の表示 */
-.pair-display {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--card-bg, rgba(26,10,62,0.45));
-  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 12px;
-  margin-bottom: 24px;
-}
-body.theme-light .pair-display {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
-}
-.pair-person {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-}
-.pair-avatar {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: rgba(139,92,246,0.15);
-}
-.pair-avatar-placeholder {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: rgba(139,92,246,0.12);
+  background: rgba(26,10,62,0.45);
   border: 1.5px solid rgba(139,92,246,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 14px; cursor: pointer; text-align: center;
+  transition: all 0.2s; color: var(--text); font-family: 'Noto Sans JP', sans-serif;
 }
-body.theme-light .pair-avatar-placeholder {
-  background: oklch(0.94 0.03 270);
-  border-color: var(--card-border);
-}
-.pair-avatar-placeholder svg {
-  width: 24px;
-  height: 24px;
-  stroke: var(--dim);
-  fill: none;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.pair-name {
-  font-size: 13px;
-  font-weight: 700;
-  text-align: center;
-}
-.pair-divider {
-  font-size: 18px;
-  color: var(--dim);
-  font-weight: 700;
-  flex-shrink: 0;
-}
+.situation-btn:hover { border-color: rgba(139,92,246,0.5); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.12); }
+.situation-icon { width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.situation-label { font-size: 13px; font-weight: 700; line-height: 1.4; }
+.situation-sub { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
 
-/* スコア比較 */
-.score-compare {
-  padding: 16px;
-  background: var(--card-bg, rgba(26,10,62,0.45));
-  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 12px;
-  margin-bottom: 20px;
+/* ペア表示 */
+.pair-display {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px; margin-bottom: 24px;
 }
-body.theme-light .score-compare {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
+.pair-person { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.pair-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+.pair-avatar-placeholder {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(139,92,246,0.12); border: 1.5px solid rgba(139,92,246,0.2);
+  display: flex; align-items: center; justify-content: center;
 }
-.score-compare-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dim);
-  margin-bottom: 14px;
-  letter-spacing: 0.05em;
-}
-.factor-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.factor-row:last-child { margin-bottom: 0; }
-.factor-label {
-  font-size: 11px;
-  font-weight: 700;
-  width: 56px;
-  flex-shrink: 0;
-  line-height: 1.4;
-}
-.factor-bars { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-.factor-bar-row { display: flex; align-items: center; gap: 6px; }
-.factor-bar-name {
-  font-size: 10px;
-  color: var(--dim);
-  width: 36px;
-  flex-shrink: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.factor-bar-bg {
-  flex: 1;
-  height: 8px;
-  background: rgba(128,128,128,0.12);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.factor-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.6s ease;
-}
-.factor-bar-val {
-  font-size: 11px;
-  font-weight: 700;
-  width: 16px;
-  text-align: right;
-  flex-shrink: 0;
-}
+.pair-avatar-placeholder svg { width: 24px; height: 24px; stroke: var(--dim); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.pair-name { font-size: 13px; font-weight: 700; text-align: center; }
+.pair-divider { font-size: 18px; color: var(--dim); font-weight: 700; flex-shrink: 0; }
 
 /* 分析カード */
 .analysis-section { margin-bottom: 20px; }
-.analysis-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  padding-left: 10px;
-  border-left: 3px solid var(--purple);
-}
+.analysis-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; padding-left: 10px; border-left: 3px solid var(--purple); }
 .analysis-card {
   padding: 16px;
-  background: var(--card-bg, rgba(26,10,62,0.45));
-  border: 1px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 12px;
-  margin-bottom: 10px;
+  background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px; margin-bottom: 10px;
 }
 .analysis-card:last-child { margin-bottom: 0; }
-body.theme-light .analysis-card {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
-}
-.analysis-point {
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  line-height: 1.5;
-}
-.analysis-detail {
-  font-size: 13px;
-  color: var(--dim);
-  line-height: 1.7;
-}
+.analysis-point { font-size: 13px; font-weight: 700; margin-bottom: 6px; line-height: 1.5; }
+.analysis-detail { font-size: 13px; color: var(--dim); line-height: 1.7; }
 
-/* アドバイスカード */
 .advice-card {
   padding: 16px 18px;
-  background: rgba(139,92,246,0.07);
-  border: 1px solid rgba(139,92,246,0.2);
-  border-radius: 12px;
-  margin-bottom: 10px;
+  background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px; margin-bottom: 10px;
 }
 .advice-card:last-child { margin-bottom: 0; }
-body.theme-light .advice-card {
-  background: oklch(0.96 0.02 285) !important;
-  border-color: oklch(0.58 0.22 285 / 0.2) !important;
-}
-.advice-text {
-  font-size: 13px;
-  line-height: 1.7;
-}
+.advice-text { font-size: 13px; line-height: 1.7; }
 
-/* 戻るボタン */
 .back-btn {
-  width: 100%;
-  padding: 13px;
-  background: transparent;
-  border: 1.5px solid var(--card-border, rgba(139,92,246,0.2));
-  border-radius: 12px;
-  color: var(--dim);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'Noto Sans JP', sans-serif;
-  margin-top: 12px;
-  transition: all 0.2s;
+  width: 100%; padding: 13px; background: transparent;
+  border: 1.5px solid rgba(139,92,246,0.2);
+  border-radius: 12px; color: var(--dim); font-size: 14px; font-weight: 500;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif; margin-top: 12px; transition: all 0.2s;
 }
 .back-btn:hover { border-color: rgba(139,92,246,0.5); color: var(--text); }
-body.theme-light .back-btn {
-  border-color: var(--card-border) !important;
-}
 
-/* 空状態 */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-}
+.empty-state { text-align: center; padding: 60px 20px; }
 .empty-text { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 .empty-sub { font-size: 13px; color: var(--dim); margin-bottom: 24px; }
-.empty-btn {
-  display: inline-block;
-  padding: 12px 28px;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 700;
-}
+.empty-btn { display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; text-decoration: none; border-radius: 100px; font-size: 14px; font-weight: 700; }
 
-/* ステップ表示切替 */
 .step-view { display: none; }
 .step-view.active { display: block; }
 </style>
@@ -532,7 +164,6 @@ body.theme-light .back-btn {
 <body>
 <div class="container">
 
-  <!-- ヘッダー -->
   <div class="header">
     <a href="mypage.html" class="back-link">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -541,32 +172,22 @@ body.theme-light .back-btn {
     <div class="page-title">人間関係相談</div>
   </div>
 
-  <!-- ステップインジケーター -->
   <div class="steps">
-    <div class="step-item active" id="si1">
-      <div class="step-num">1</div>
-      <span>2人を選ぶ</span>
-    </div>
+    <div class="step-item active" id="si1"><div class="step-num">1</div><span>2人を選ぶ</span></div>
     <div class="step-line"></div>
-    <div class="step-item" id="si2">
-      <div class="step-num">2</div>
-      <span>テーマ</span>
-    </div>
+    <div class="step-item" id="si2"><div class="step-num">2</div><span>テーマ</span></div>
     <div class="step-line"></div>
-    <div class="step-item" id="si3">
-      <div class="step-num">3</div>
-      <span>分析結果</span>
-    </div>
+    <div class="step-item" id="si3"><div class="step-num">3</div><span>分析結果</span></div>
   </div>
 
-  <!-- Step1: 2人を選ぶ -->
+  <!-- Step1 -->
   <div class="step-view active" id="step1">
     <div class="section-label">2人を選んでください</div>
-    <div class="hint-text" id="hint1">2人選ぶとテーマ選択に進みます</div>
+    <div class="hint-text">2人選ぶとテーマ選択に進みます</div>
     <div class="person-grid" id="personGrid"></div>
   </div>
 
-  <!-- Step2: テーマを選ぶ -->
+  <!-- Step2 -->
   <div class="step-view" id="step2">
     <div id="pairDisplay2"></div>
     <div class="section-label">どんな相談ですか？</div>
@@ -576,7 +197,7 @@ body.theme-light .back-btn {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
         </div>
         <div class="situation-label">好かれたい</div>
-        <div class="situation-sub">Aが Bに好きになって<br>もらうには</div>
+        <div class="situation-sub">AがBに好きになって<br>もらうには</div>
       </button>
       <button class="situation-btn" onclick="goStep3('rejected')">
         <div class="situation-icon" style="background:rgba(239,68,68,0.1);">
@@ -603,34 +224,33 @@ body.theme-light .back-btn {
     <button class="back-btn" onclick="goStep1()">← 人を選び直す</button>
   </div>
 
-  <!-- Step3: 分析結果 -->
+  <!-- Step3 -->
   <div class="step-view" id="step3">
     <div id="pairDisplay3"></div>
-    <div id="scoreCompare"></div>
     <div id="analysisResult"></div>
     <button class="back-btn" onclick="goStep2()">← テーマを選び直す</button>
     <button class="back-btn" onclick="goStep1()" style="margin-top:8px;">最初から</button>
   </div>
 
 </div>
-
 <script>
 var FACTORS = [
-  { key: 'O', name: '開放性',  color: '#8b5cf6' },
-  { key: 'C', name: '誠実性',  color: '#3b82f6' },
-  { key: 'E', name: '外向性',  color: '#f97316' },
-  { key: 'A', name: '協調性',  color: '#f472b6' },
-  { key: 'N', name: '感受性',  color: '#14b8a6' },
+  { key:'O', name:'開放性', color:'#8b5cf6' },
+  { key:'C', name:'誠実性', color:'#3b82f6' },
+  { key:'E', name:'外向性', color:'#f97316' },
+  { key:'A', name:'協調性', color:'#f472b6' },
+  { key:'N', name:'感受性', color:'#14b8a6' },
 ];
 var CODE_IDX = { O:0, C:1, E:2, A:3, N:4 };
+var PERSON_SVG = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>';
 
-// ---- データ読み込み ----
 function loadAllPersons() {
   var persons = [];
   try {
     var myArr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
     if (myArr.length > 0) {
-      persons.push(Object.assign({}, myArr[0], { _isSelf: true, name: '自分' }));
+      var myName = (localStorage.getItem('bigfive_my_name') || '').trim() || '自分';
+      persons.push(Object.assign({}, myArr[0], { _isSelf: true, name: myName }));
     }
   } catch(e) {}
   try {
@@ -640,19 +260,14 @@ function loadAllPersons() {
   return persons;
 }
 
-// ---- 状態 ----
 var allPersons = [];
 var selected = [];
 var currentSituation = '';
 
-// ---- スコア取得（scoresフィールドがなければcodeから） ----
 function sc(p, key) {
-  if (p.scores && p.scores[key] !== undefined && p.scores[key] !== null) {
-    return Number(p.scores[key]);
-  }
+  if (p.scores && p.scores[key] !== undefined && p.scores[key] !== null) return Number(p.scores[key]);
   if (p.code && p.code.length >= 5 && CODE_IDX[key] !== undefined) {
-    var v = parseInt(p.code[CODE_IDX[key]]);
-    return isNaN(v) ? 3 : v;
+    var v = parseInt(p.code[CODE_IDX[key]]); return isNaN(v) ? 3 : v;
   }
   return 3;
 }
@@ -660,337 +275,164 @@ function isHigh(p, key) { return sc(p, key) >= 4; }
 function isLow(p, key)  { return sc(p, key) <= 2; }
 function diff(p1, p2, key) { return Math.abs(sc(p1, key) - sc(p2, key)); }
 
-// ---- 人物アバターHTML ----
-var PERSON_SVG = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>';
-
-function avatarHtml(p, size) {
+function avatarImg(p, size) {
   var s = size || 48;
-  var gender = p.gender || '';
-  var code = p.code || '';
-  if (code && (gender === 'M' || gender === 'F')) {
-    return '<img class="person-avatar" style="width:' + s + 'px;height:' + s + 'px;" src="images/characters/' + gender + '/' + code + '.webp"'
+  var g = p.gender || '', code = p.code || '';
+  if (code && (g === 'M' || g === 'F')) {
+    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:50%;object-fit:cover;flex-shrink:0;" src="images/characters/' + g + '/' + code + '.webp"'
       + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
       + '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;display:none;">' + PERSON_SVG + '</div>';
   }
   return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;">' + PERSON_SVG + '</div>';
 }
 
-// ---- 人物カード描画 ----
 function renderPersonGrid() {
   var grid = document.getElementById('personGrid');
   if (allPersons.length === 0) {
     grid.innerHTML = '<div class="empty-state">'
       + '<div class="empty-text">診断データがありません</div>'
       + '<div class="empty-sub">まずはビッグファイブ診断を受けるか、<br>「あの人を診断する」で登録してください</div>'
-      + '<a href="quiz.html" class="empty-btn">診断をはじめる</a>'
-      + '</div>';
+      + '<a href="quiz.html" class="empty-btn">診断をはじめる</a></div>';
     return;
   }
   grid.innerHTML = '';
   allPersons.forEach(function(p, i) {
-    var isSelected = selected.indexOf(i) !== -1;
+    var isSel = selected.indexOf(i) !== -1;
     var selNum = selected.indexOf(i) + 1;
-    var isDisabled = !isSelected && selected.length >= 2;
+    var isDis = !isSel && selected.length >= 2;
     var card = document.createElement('div');
-    card.className = 'person-card' + (isSelected ? ' selected' : '') + (isDisabled ? ' disabled' : '');
-    if (!isDisabled) card.onclick = function() { toggleSelect(i); };
+    card.className = 'person-card' + (isSel ? ' selected' : '') + (isDis ? ' disabled' : '');
+    if (!isDis) card.onclick = function() { toggleSelect(i); };
 
     var miniBars = FACTORS.map(function(f) {
-      var v = sc(p, f.key);
-      var h = Math.round(v / 5 * 28);
-      return '<div class="mini-bar-wrap">'
-        + '<div class="mini-bar-bg"><div class="mini-bar-fill" style="height:' + h + 'px;background:' + f.color + ';"></div></div>'
-        + '<div class="mini-bar-label">' + f.key + '</div>'
-        + '</div>';
+      var h = Math.round(sc(p, f.key) / 5 * 28);
+      return '<div class="mini-bar-wrap"><div class="mini-bar-bg"><div class="mini-bar-fill" style="height:' + h + 'px;background:' + f.color + ';"></div></div><div class="mini-bar-label">' + f.key + '</div></div>';
     }).join('');
 
-    var typeName = p.typeName || '';
     var dateStr = p.date ? new Date(p.date).toLocaleDateString('ja-JP', {month:'numeric', day:'numeric'}) : '';
-    var meta = [typeName, dateStr].filter(Boolean).join('  ');
+    var meta = [p.typeName, dateStr].filter(Boolean).join('  ');
 
-    card.innerHTML = avatarHtml(p, 48)
+    card.innerHTML = avatarImg(p, 48)
       + '<div class="person-info">'
         + '<div class="person-name">' + escHtml(p.name || '名前なし') + '</div>'
         + (meta ? '<div class="person-type">' + escHtml(meta) + '</div>' : '')
         + '<div class="mini-bars">' + miniBars + '</div>'
       + '</div>'
-      + '<div class="select-badge">' + (isSelected ? selNum : '') + '</div>';
-
+      + '<div class="select-badge">' + (isSel ? selNum : '') + '</div>';
     grid.appendChild(card);
   });
 }
 
 function toggleSelect(i) {
   var idx = selected.indexOf(i);
-  if (idx !== -1) {
-    selected.splice(idx, 1);
-  } else {
-    if (selected.length >= 2) return;
-    selected.push(i);
-  }
+  if (idx !== -1) { selected.splice(idx, 1); }
+  else { if (selected.length >= 2) return; selected.push(i); }
   renderPersonGrid();
-  // 2人揃ったら自動遷移
-  if (selected.length === 2) {
-    setTimeout(goStep2, 200);
-  }
+  if (selected.length === 2) setTimeout(goStep2, 200);
 }
 
-// ---- ステップ移動 ----
-function goStep1() {
-  selected = [];
-  renderPersonGrid();
-  showStep(1);
-}
-
+function goStep1() { selected = []; renderPersonGrid(); showStep(1); }
 function goStep2() {
   if (selected.length < 2) return;
   renderPairDisplay('pairDisplay2');
   showStep(2);
 }
-
 function goStep3(situation) {
   currentSituation = situation;
   renderPairDisplay('pairDisplay3');
-  renderScoreCompare();
   renderAnalysis();
   showStep(3);
 }
-
 function showStep(n) {
   document.querySelectorAll('.step-view').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById('step' + n).classList.add('active');
   [1,2,3].forEach(function(i) {
     var si = document.getElementById('si' + i);
     si.classList.remove('active','done');
-    if (i < n) si.classList.add('done');
-    else if (i === n) si.classList.add('active');
+    if (i < n) si.classList.add('done'); else if (i === n) si.classList.add('active');
   });
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// ---- ペア表示 ----
 function renderPairDisplay(elId) {
-  var el = document.getElementById(elId);
-  var p1 = allPersons[selected[0]];
-  var p2 = allPersons[selected[1]];
-  el.innerHTML = '<div class="pair-display">'
-    + personMini(p1) + '<div class="pair-divider">×</div>' + personMini(p2)
-    + '</div>';
+  var p1 = allPersons[selected[0]], p2 = allPersons[selected[1]];
+  document.getElementById(elId).innerHTML = '<div class="pair-display">'
+    + pairMini(p1) + '<div class="pair-divider">×</div>' + pairMini(p2) + '</div>';
 }
-
-function personMini(p) {
-  var av = '';
-  var gender = p.gender || '';
-  var code = p.code || '';
-  if (code && (gender === 'M' || gender === 'F')) {
-    av = '<img class="pair-avatar" src="images/characters/' + gender + '/' + code + '.webp"'
+function pairMini(p) {
+  var g = p.gender || '', code = p.code || '', av = '';
+  if (code && (g === 'M' || g === 'F')) {
+    av = '<img class="pair-avatar" src="images/characters/' + g + '/' + code + '.webp"'
        + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
        + '<div class="pair-avatar-placeholder" style="display:none;">' + PERSON_SVG + '</div>';
-  } else {
-    av = '<div class="pair-avatar-placeholder">' + PERSON_SVG + '</div>';
-  }
+  } else { av = '<div class="pair-avatar-placeholder">' + PERSON_SVG + '</div>'; }
   return '<div class="pair-person">' + av + '<div class="pair-name">' + escHtml(p.name || '名前なし') + '</div></div>';
 }
 
-// ---- スコア比較バー ----
-function renderScoreCompare() {
-  var p1 = allPersons[selected[0]];
-  var p2 = allPersons[selected[1]];
-  var n1 = shorten(p1.name);
-  var n2 = shorten(p2.name);
-
-  var rows = FACTORS.map(function(f) {
-    var s1 = sc(p1, f.key), s2 = sc(p2, f.key);
-    var w1 = Math.round(s1/5*100), w2 = Math.round(s2/5*100);
-    return '<div class="factor-row">'
-      + '<div class="factor-label" style="color:' + f.color + ';">' + f.key + '<br><span style="font-size:10px;font-weight:400;color:var(--dim);">' + f.name + '</span></div>'
-      + '<div class="factor-bars">'
-        + '<div class="factor-bar-row">'
-          + '<div class="factor-bar-name">' + escHtml(n1) + '</div>'
-          + '<div class="factor-bar-bg"><div class="factor-bar-fill" style="width:' + w1 + '%;background:' + f.color + ';opacity:0.9;"></div></div>'
-          + '<div class="factor-bar-val" style="color:' + f.color + ';">' + s1 + '</div>'
-        + '</div>'
-        + '<div class="factor-bar-row">'
-          + '<div class="factor-bar-name">' + escHtml(n2) + '</div>'
-          + '<div class="factor-bar-bg"><div class="factor-bar-fill" style="width:' + w2 + '%;background:' + f.color + ';opacity:0.4;"></div></div>'
-          + '<div class="factor-bar-val" style="color:' + f.color + ';opacity:0.6;">' + s2 + '</div>'
-        + '</div>'
-      + '</div>'
-      + '</div>';
-  }).join('');
-
-  document.getElementById('scoreCompare').innerHTML = '<div class="score-compare">'
-    + '<div class="score-compare-title">5因子スコア比較</div>' + rows + '</div>';
-}
-
-// ---- 分析ロジック ----
 function renderAnalysis() {
   var el = document.getElementById('analysisResult');
-  var p1 = allPersons[selected[0]];
-  var p2 = allPersons[selected[1]];
-  var n1 = escHtml(p1.name || '名前なし');
-  var n2 = escHtml(p2.name || '名前なし');
-  var points = [], advice = [];
-  var titleText = '';
+  var p1 = allPersons[selected[0]], p2 = allPersons[selected[1]];
+  var n1 = escHtml(p1.name || '名前なし'), n2 = escHtml(p2.name || '名前なし');
+  var points = [], advice = [], titleText = '';
 
   if (currentSituation === 'like') {
     titleText = n1 + ' が ' + n2 + ' に好かれるには';
-    if (isHigh(p2,'N')) {
-      points.push({ p: n2 + 'さんは不安を感じやすく、安心感を求めています', d: '感情的に繊細なため、予測できない行動や曖昧な態度は不安を招きやすいです。' });
-      advice.push('予測可能な行動・細かい気遣いが信頼につながります。「また連絡する」と言ったら必ず連絡するなど、小さな約束を守ることが大切です。');
-    } else if (isLow(p2,'N')) {
-      points.push({ p: n2 + 'さんは感情より論理を重視する傾向があります', d: '感情的な訴えより、落ち着いた事実ベースの話し方が届きやすいです。' });
-      advice.push('感情的なアピールよりも、具体的な行動や事実で示す方が印象に残ります。');
-    }
-    if (isHigh(p2,'E')) {
-      points.push({ p: n2 + 'さんは社交的で賑やかな場を楽しみます', d: '一緒に何かを体験することで距離が縮まりやすいタイプです。' });
-      advice.push('積極的に誘ったり、新しい体験を一緒にすることで自然と関係が深まります。');
-    } else if (isLow(p2,'E')) {
-      points.push({ p: n2 + 'さんは少人数・静かな環境で本音を話せます', d: '大勢の場では本来の自分を出しにくいタイプです。' });
-      advice.push('2人きりや小さな場を意識的に作ることで、本音を引き出しやすくなります。');
-    }
-    if (isHigh(p2,'A')) {
-      points.push({ p: n2 + 'さんは相手の気持ちを大切にする繊細な人です', d: '話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。' });
-      advice.push('話をよく聞いて感謝を言葉で伝えることが好感につながります。「ありがとう」を惜しまないことが大切です。');
-    } else if (isLow(p2,'A')) {
-      points.push({ p: n2 + 'さんははっきりした意見を持つ人を好む傾向があります', d: '曖昧な態度や八方美人的な振る舞いよりも、自分の立場をはっきり示せる人に魅力を感じます。' });
-      advice.push('遠慮せずに自分の意見・好みをはっきり伝えましょう。媚びすぎない姿勢が好印象です。');
-    }
-    if (isHigh(p2,'C')) {
-      points.push({ p: n2 + 'さんは約束・時間・ルールを大切にします', d: 'ルーズな印象を与えると信頼を失いやすいタイプです。' });
-      advice.push('時間を守る・言ったことを実行するなど、信頼感を積み上げることが好感の土台になります。');
-    } else if (isLow(p2,'C')) {
-      points.push({ p: n2 + 'さんは自然体・気軽さを好みます', d: '堅苦しい雰囲気よりも、リラックスして過ごせる関係を心地よく感じます。' });
-      advice.push('完璧を目指さず、肩の力を抜いて気軽に接することで距離が縮まります。');
-    }
-    if (isHigh(p2,'O')) {
-      points.push({ p: n2 + 'さんは新しいこと・知的な話題が好きです', d: '好奇心旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。' });
-      advice.push('面白い話題・ちょっと変わった体験を提案することで興味を引けます。');
-    } else if (isLow(p2,'O')) {
-      points.push({ p: n2 + 'さんは安定・慣れ親しんだことを好みます', d: '急な変化や冒険より、安心できる日常を大切にするタイプです。' });
-      advice.push('いつもの場所・いつもの流れで一緒に過ごすことで自然と親しくなれます。');
-    }
+    if (isHigh(p2,'N')) { points.push({ p: n2+'さんは不安を感じやすく、安心感を求めています', d:'感情的に繊細なため、予測できない行動や曖昧な態度は不安を招きやすいです。' }); advice.push('予測可能な行動・細かい気遣いが信頼につながります。「また連絡する」と言ったら必ず連絡するなど、小さな約束を守ることが大切です。'); }
+    else if (isLow(p2,'N')) { points.push({ p: n2+'さんは感情より論理を重視する傾向があります', d:'感情的な訴えより、落ち着いた事実ベースの話し方が届きやすいです。' }); advice.push('感情的なアピールよりも、具体的な行動や事実で示す方が印象に残ります。'); }
+    if (isHigh(p2,'E')) { points.push({ p: n2+'さんは社交的で賑やかな場を楽しみます', d:'一緒に何かを体験することで距離が縮まりやすいタイプです。' }); advice.push('積極的に誘ったり、新しい体験を一緒にすることで自然と関係が深まります。'); }
+    else if (isLow(p2,'E')) { points.push({ p: n2+'さんは少人数・静かな環境で本音を話せます', d:'大勢の場では本来の自分を出しにくいタイプです。' }); advice.push('2人きりや小さな場を意識的に作ることで、本音を引き出しやすくなります。'); }
+    if (isHigh(p2,'A')) { points.push({ p: n2+'さんは相手の気持ちを大切にする繊細な人です', d:'話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。' }); advice.push('話をよく聞いて感謝を言葉で伝えることが好感につながります。'); }
+    else if (isLow(p2,'A')) { points.push({ p: n2+'さんははっきりした意見を持つ人を好む傾向があります', d:'曖昧な態度や八方美人的な振る舞いより、自分の立場をはっきり示せる人に魅力を感じます。' }); advice.push('遠慮せずに自分の意見・好みをはっきり伝えましょう。媚びすぎない姿勢が好印象です。'); }
+    if (isHigh(p2,'C')) { points.push({ p: n2+'さんは約束・時間・ルールを大切にします', d:'ルーズな印象を与えると信頼を失いやすいタイプです。' }); advice.push('時間を守る・言ったことを実行するなど、信頼感を積み上げることが好感の土台になります。'); }
+    else if (isLow(p2,'C')) { points.push({ p: n2+'さんは自然体・気軽さを好みます', d:'堅苦しい雰囲気よりも、リラックスして過ごせる関係を心地よく感じます。' }); advice.push('完璧を目指さず、肩の力を抜いて気軽に接することで距離が縮まります。'); }
+    if (isHigh(p2,'O')) { points.push({ p: n2+'さんは新しいこと・知的な話題が好きです', d:'好奇心旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。' }); advice.push('面白い話題・ちょっと変わった体験を提案することで興味を引けます。'); }
+    else if (isLow(p2,'O')) { points.push({ p: n2+'さんは安定・慣れ親しんだことを好みます', d:'急な変化より、安心できる日常を大切にするタイプです。' }); advice.push('いつもの場所・いつもの流れで一緒に過ごすことで自然と親しくなれます。'); }
 
   } else if (currentSituation === 'rejected') {
     titleText = n1 + ' と ' + n2 + '、うまくいかなかった理由';
-    if (diff(p1,p2,'N') >= 2) {
-      points.push({ p: '感情のペースが合いませんでした', d: '片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。' });
-      advice.push('感情のペースの違いは「冷たい」「重い」の誤解を生みます。お互いの感情スタイルを言葉で伝え合うことが大切でした。');
-    }
-    if (diff(p1,p2,'E') >= 2) {
-      points.push({ p: '一緒にいたい頻度・社交への欲求が違いました', d: '「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。' });
-      advice.push('外向性の差は「嫌いになった」ではなく「充電の仕方が違う」という問題です。お互いの時間の使い方を尊重できれば変わっていたかもしれません。');
-    }
-    if (diff(p1,p2,'A') >= 2) {
-      points.push({ p: '主張と協調のバランスが合いませんでした', d: 'どちらかが「自分ばかり合わせている」と感じていた可能性があります。' });
-      advice.push('どちらが折れるか、という構造になってしまうと関係は疲弊します。対等に意見を出せる雰囲気が必要でした。');
-    }
-    if (diff(p1,p2,'C') >= 2) {
-      points.push({ p: '生活習慣・几帳面さの価値観がズレていました', d: 'ルーズに見えた、または逆に窮屈に感じた可能性があります。こういった違いは長期になると摩擦になりやすいです。' });
-      advice.push('価値観のズレは時間が経つほど表面化します。早い段階でお互いの「当たり前」を確認し合えたらよかったかもしれません。');
-    }
-    if (isLow(p1,'A') && isLow(p2,'A')) {
-      points.push({ p: 'お互いに自分の意見を曲げにくい組み合わせでした', d: '両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。' });
-      advice.push('どちらも「私が正しい」と感じやすい。小さなことでも意見を聞こうとする姿勢が鍵でした。');
-    }
-    if (isHigh(p1,'N') && isHigh(p2,'N')) {
-      points.push({ p: '両者が感情的になりやすい組み合わせでした', d: '小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。' });
-      advice.push('感情が高まったときに距離を置いて冷静になる習慣が、この組み合わせには特に重要でした。');
-    }
-    if (points.length === 0) {
-      points.push({ p: 'スコア上の大きなズレは見つかりませんでした', d: '相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。' });
-      advice.push('ビッグファイブはあくまで性格傾向の参考です。相性だけで関係の結果を決めつけずに、自分の気持ちを大切にしてください。');
-    }
+    if (diff(p1,p2,'N') >= 2) { points.push({ p:'感情のペースが合いませんでした', d:'片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。' }); advice.push('感情のペースの違いは「冷たい」「重い」の誤解を生みます。お互いの感情スタイルを言葉で伝え合うことが大切でした。'); }
+    if (diff(p1,p2,'E') >= 2) { points.push({ p:'一緒にいたい頻度・社交への欲求が違いました', d:'「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。' }); advice.push('外向性の差は「嫌いになった」ではなく「充電の仕方が違う」という問題です。'); }
+    if (diff(p1,p2,'A') >= 2) { points.push({ p:'主張と協調のバランスが合いませんでした', d:'どちらかが「自分ばかり合わせている」と感じていた可能性があります。' }); advice.push('どちらが折れるか、という構造になってしまうと関係は疲弊します。対等に意見を出せる雰囲気が必要でした。'); }
+    if (diff(p1,p2,'C') >= 2) { points.push({ p:'生活習慣・几帳面さの価値観がズレていました', d:'ルーズに見えた、または逆に窮屈に感じた可能性があります。' }); advice.push('価値観のズレは時間が経つほど表面化します。早い段階でお互いの「当たり前」を確認し合えたらよかったかもしれません。'); }
+    if (isLow(p1,'A') && isLow(p2,'A')) { points.push({ p:'お互いに自分の意見を曲げにくい組み合わせでした', d:'両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。' }); advice.push('どちらも「私が正しい」と感じやすい。小さなことでも意見を聞こうとする姿勢が鍵でした。'); }
+    if (isHigh(p1,'N') && isHigh(p2,'N')) { points.push({ p:'両者が感情的になりやすい組み合わせでした', d:'小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。' }); advice.push('感情が高まったときに距離を置いて冷静になる習慣が、この組み合わせには特に重要でした。'); }
+    if (points.length === 0) { points.push({ p:'スコア上の大きなズレは見つかりませんでした', d:'相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。' }); advice.push('ビッグファイブはあくまで性格傾向の参考です。自分の気持ちを大切にしてください。'); }
 
   } else if (currentSituation === 'distance') {
     titleText = n1 + ' と ' + n2 + '、距離が縮まらない理由';
-    if (isLow(p2,'E')) {
-      points.push({ p: n2 + 'さんはもともと人との距離を大切にするタイプです', d: '外向性が低い人は、少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。' });
-      advice.push('この距離感は' + n2 + 'さんの特性であり、あなたへの拒否ではありません。焦らず、少しずつ関係を深めていきましょう。');
-    }
-    if (diff(p1,p2,'E') >= 2) {
-      points.push({ p: '社交のペースが違います', d: '外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。' });
-      advice.push(n2 + 'さんに合ったペースで接すると、かえって距離が縮まりやすくなります。');
-    }
-    if (isHigh(p2,'N')) {
-      points.push({ p: n2 + 'さんは不安から人を遠ざけることがあります', d: '感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。' });
-      advice.push('安心できる存在であることを、言葉ではなく継続した行動で示すことが重要です。');
-    }
-    if (isHigh(p1,'E') && isLow(p2,'E')) {
-      points.push({ p: 'あなたの積極さが少し重く感じられているかもしれません', d: '外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。' });
-      advice.push('アプローチを少し緩めると、かえって近づける場合があります。相手のペースに合わせてみてください。');
-    }
-    if (isLow(p1,'A')) {
-      points.push({ p: n1 + 'の率直な言動が距離を作っている可能性があります', d: '協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。' });
-      advice.push('相手の気持ちに少し配慮した言葉選びを意識すると、関係が変わることがあります。');
-    }
-    if (points.length === 0) {
-      points.push({ p: '大きな特性のズレは見当たりませんでした', d: '距離感はお互いの忙しさや環境による場合もあります。' });
-      advice.push('まずは気軽に声をかけ続けることで、少しずつ関係が育っていく可能性があります。');
-    }
+    if (isLow(p2,'E')) { points.push({ p: n2+'さんはもともと人との距離を大切にするタイプです', d:'外向性が低い人は少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。' }); advice.push('この距離感は'+n2+'さんの特性であり、あなたへの拒否ではありません。焦らず少しずつ関係を深めましょう。'); }
+    if (diff(p1,p2,'E') >= 2) { points.push({ p:'社交のペースが違います', d:'外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。' }); advice.push(n2+'さんに合ったペースで接すると、かえって距離が縮まりやすくなります。'); }
+    if (isHigh(p2,'N')) { points.push({ p: n2+'さんは不安から人を遠ざけることがあります', d:'感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。' }); advice.push('安心できる存在であることを、言葉ではなく継続した行動で示すことが重要です。'); }
+    if (isHigh(p1,'E') && isLow(p2,'E')) { points.push({ p:'あなたの積極さが少し重く感じられているかもしれません', d:'外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。' }); advice.push('アプローチを少し緩めると、かえって近づける場合があります。'); }
+    if (isLow(p1,'A')) { points.push({ p: n1+'の率直な言動が距離を作っている可能性があります', d:'協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。' }); advice.push('相手の気持ちに少し配慮した言葉選びを意識すると、関係が変わることがあります。'); }
+    if (points.length === 0) { points.push({ p:'大きな特性のズレは見当たりませんでした', d:'距離感はお互いの忙しさや環境による場合もあります。' }); advice.push('まずは気軽に声をかけ続けることで、少しずつ関係が育っていく可能性があります。'); }
 
   } else if (currentSituation === 'fight') {
     titleText = n1 + ' と ' + n2 + '、ケンカが多い理由';
-    if (isLow(p1,'A') && isLow(p2,'A')) {
-      points.push({ p: 'お互いに主張が強く、譲り合いが少ない組み合わせです', d: '両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。' });
-      advice.push('どちらかが先に聞く役に回ることで、ケンカの頻度が大幅に減ります。「聞く番」を意識的に作りましょう。');
-    }
-    if (isHigh(p1,'N') && isHigh(p2,'N')) {
-      points.push({ p: '両者が感情的になりやすいため、発火しやすい組み合わせです', d: '小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。' });
-      advice.push('感情が高ぶっているときは判断を後回しにする習慣を。「今は話せない」と伝えて時間を置くことが有効です。');
-    }
-    if (diff(p1,p2,'C') >= 2) {
-      points.push({ p: '几帳面さ・ルールへの価値観が違います', d: '「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。' });
-      advice.push('何が「当たり前」かを一度すり合わせてみましょう。悪意ではなく価値観の違いだと認識するだけでも摩擦が減ります。');
-    }
-    if (diff(p1,p2,'E') >= 2) {
-      points.push({ p: '活動量・刺激への欲求が違います', d: '外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。' });
-      advice.push('「一緒にやること」「それぞれでやること」を分けて決めると摩擦が減ります。');
-    }
-    if ((isHigh(p1,'O') && isLow(p2,'O')) || (isLow(p1,'O') && isHigh(p2,'O'))) {
-      points.push({ p: '変化好きと安定好きの組み合わせです', d: '新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。' });
-      advice.push('変化を提案するときは「なぜ良いか」を丁寧に説明すると受け入れられやすくなります。');
-    }
-    if (points.length === 0) {
-      points.push({ p: 'スコア上での明らかな衝突要因は見つかりませんでした', d: 'ケンカの原因は環境やストレスから来ている可能性もあります。' });
-      advice.push('お互いの「地雷」を言葉で共有し合う対話が、ケンカの予防に一番効果的です。');
-    }
+    if (isLow(p1,'A') && isLow(p2,'A')) { points.push({ p:'お互いに主張が強く、譲り合いが少ない組み合わせです', d:'両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。' }); advice.push('どちらかが先に聞く役に回ることで、ケンカの頻度が大幅に減ります。'); }
+    if (isHigh(p1,'N') && isHigh(p2,'N')) { points.push({ p:'両者が感情的になりやすいため、発火しやすい組み合わせです', d:'小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。' }); advice.push('感情が高ぶっているときは判断を後回しにする習慣を。「今は話せない」と伝えて時間を置くことが有効です。'); }
+    if (diff(p1,p2,'C') >= 2) { points.push({ p:'几帳面さ・ルールへの価値観が違います', d:'「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。' }); advice.push('何が「当たり前」かを一度すり合わせてみましょう。悪意ではなく価値観の違いだと認識するだけでも摩擦が減ります。'); }
+    if (diff(p1,p2,'E') >= 2) { points.push({ p:'活動量・刺激への欲求が違います', d:'外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。' }); advice.push('「一緒にやること」「それぞれでやること」を分けて決めると摩擦が減ります。'); }
+    if ((isHigh(p1,'O') && isLow(p2,'O')) || (isLow(p1,'O') && isHigh(p2,'O'))) { points.push({ p:'変化好きと安定好きの組み合わせです', d:'新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。' }); advice.push('変化を提案するときは「なぜ良いか」を丁寧に説明すると受け入れられやすくなります。'); }
+    if (points.length === 0) { points.push({ p:'スコア上での明らかな衝突要因は見つかりませんでした', d:'ケンカの原因は環境やストレスから来ている可能性もあります。' }); advice.push('お互いの「地雷」を言葉で共有し合う対話が、ケンカの予防に一番効果的です。'); }
   }
 
-  // 最大3点
-  points = points.slice(0,3);
-  advice  = advice.slice(0,3);
+  points = points.slice(0,3); advice = advice.slice(0,3);
 
   var html = '<div style="font-size:14px;font-weight:700;margin-bottom:18px;line-height:1.5;">' + titleText + '</div>';
-
   html += '<div class="analysis-section"><div class="analysis-title">分析</div>';
   points.forEach(function(pt) {
-    html += '<div class="analysis-card">'
-      + '<div class="analysis-point">- ' + pt.p + '</div>'
-      + '<div class="analysis-detail">' + pt.d + '</div>'
-      + '</div>';
+    html += '<div class="analysis-card"><div class="analysis-point">- ' + pt.p + '</div><div class="analysis-detail">' + pt.d + '</div></div>';
   });
   html += '</div>';
-
   html += '<div class="analysis-section"><div class="analysis-title">アドバイス</div>';
-  advice.forEach(function(a) {
-    html += '<div class="advice-card"><div class="advice-text">' + a + '</div></div>';
-  });
+  advice.forEach(function(a) { html += '<div class="advice-card"><div class="advice-text">' + a + '</div></div>'; });
   html += '</div>';
-
   el.innerHTML = html;
 }
 
-// ---- ユーティリティ ----
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function shorten(name) {
-  if (!name) return '?';
-  return name.length > 5 ? name.slice(0,5) + '…' : name;
-}
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ---- 初期化 ----
 allPersons = loadAllPersons();
 renderPersonGrid();
 </script>
