@@ -286,18 +286,27 @@ function isHigh(p, key) { return sc(p, key) >= 4; }
 function isLow(p, key)  { return sc(p, key) <= 2; }
 function diff(p1, p2, key) { return Math.abs(sc(p1, key) - sc(p2, key)); }
 
+function getImgPath(p) {
+  var code = p.code || '33333';
+  var gender = p.gender || 'F';
+  var version = p.version || '10';
+  if (typeof CharacterRegistry !== 'undefined') {
+    return CharacterRegistry.getDisplayImage(code, gender, version);
+  }
+  return 'images/characters/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
+}
+
 function avatarImg(p, size) {
   var s = size || 48;
   var r = Math.round(s * 0.167) + 'px';
-  var g = p.gender || '', code = p.code || '';
-  if (code && (g === 'M' || g === 'F')) {
-    var imgCode = toImgCode(code);
-    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="images/characters/' + g + '/' + imgCode + '.webp"'
+  var g = p.gender || '';
+  if (p.code && (g === 'M' || g === 'F')) {
+    var src = getImgPath(p);
+    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="' + src + '"'
       + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
       + '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';display:none;">' + PERSON_SVG + '</div>';
   }
-  var r2 = Math.round(size * 0.167) + 'px';
-  return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r2 + ';">' + PERSON_SVG + '</div>';
+  return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';">' + PERSON_SVG + '</div>';
 }
 
 function renderPersonGrid() {
@@ -374,10 +383,10 @@ function renderPairDisplay(elId) {
     + pairMini(p1) + '<div class="pair-divider">×</div>' + pairMini(p2) + '</div>';
 }
 function pairMini(p) {
-  var g = p.gender || '', code = p.code || '', av = '';
-  if (code && (g === 'M' || g === 'F')) {
-    var imgCode = toImgCode(code);
-    av = '<img class="pair-avatar" src="images/characters/' + g + '/' + imgCode + '.webp"'
+  var g = p.gender || '', av = '';
+  if (p.code && (g === 'M' || g === 'F')) {
+    var src = getImgPath(p);
+    av = '<img class="pair-avatar" src="' + src + '"'
        + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
        + '<div class="pair-avatar-placeholder" style="display:none;">' + PERSON_SVG + '</div>';
   } else { av = '<div class="pair-avatar-placeholder">' + PERSON_SVG + '</div>'; }
@@ -451,6 +460,8 @@ function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 allPersons = loadAllPersons();
 renderPersonGrid();
 </script>
+<script src="hidden_characters.js"></script>
+<script src="character-registry.js"></script>
 <script src="nav.js"></script>
 </body>
 </html>
