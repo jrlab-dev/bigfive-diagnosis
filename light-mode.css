@@ -55,7 +55,7 @@ body.theme-light .bg-stars {
 
 /* ─── body基本 ─── */
 body.theme-light {
-  background: var(--bg) !important;
+  background: #fff !important;
   color: var(--text) !important;
 }
 
@@ -128,22 +128,14 @@ body.theme-light .hero-title {
 body.theme-light .hero-sub {
   color: var(--dim) !important;
 }
-body.theme-light .hero-authority {
-  color: var(--dim) !important;
-}
-body.theme-light .hero-badge {
-  color: oklch(0.52 0.22 285) !important;
-  border-color: oklch(0.58 0.22 285 / 0.25) !important;
-  background: oklch(0.58 0.22 285 / 0.12) !important;
-}
 
-body.theme-light .trust-badge {
-  color: var(--dim) !important;
-  border-color: var(--card-border) !important;
-  background: oklch(0.99 0.005 270 / 0.8) !important;
+/* アニメーションヒーロー ライトテーマ */
+body.theme-light .hero-animated {
+  background: transparent;
 }
-body.theme-light .trust-badge .dot {
-  background: oklch(0.58 0.22 285) !important;
+/* ライトテーマ テキストグラデーションは index.html インラインで定義済み */
+body.theme-light #heroCanvas {
+  background: transparent;
 }
 
 /* stats */
@@ -288,7 +280,7 @@ body.theme-light .score-section {
 /* ─── テーマ切り替えボタン ─── */
 .theme-toggle {
   position: fixed;
-  bottom: 24px;
+  bottom: 64px;
   left: 24px;
   z-index: 10000;
   height: 36px;
@@ -2322,3 +2314,50 @@ body.theme-light .page-nav-btn:hover:not(:disabled) { color: oklch(0.42 0.22 275
 body.theme-light .diag-lock-badge { color: oklch(0.42 0.22 275) !important; }
 /* インラインスタイル直書き（属性セレクタで一括対応） */
 body.theme-light [style*="color:#a78bfa"] { color: oklch(0.42 0.22 275) !important; }
+
+/* mypage.html — あの人・自分のカード */
+body.theme-light .result-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--text) !important;
+}
+body.theme-light .result-card:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+  box-shadow: 0 8px 24px oklch(0.58 0.22 285 / 0.1) !important;
+}
+body.theme-light .result-card.checked {
+  background: oklch(0.93 0.04 350 / 0.4) !important;
+  border-color: #ec4899 !important;
+}
+
+/* reladvice.html — 人物選択カード・分析カード */
+body.theme-light .person-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .person-card:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+}
+body.theme-light .person-card.selected {
+  background: oklch(0.93 0.04 350 / 0.3) !important;
+  border-color: #ec4899 !important;
+}
+body.theme-light .pair-display,
+body.theme-light .analysis-card,
+body.theme-light .situation-btn {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .advice-card {
+  background: oklch(0.96 0.02 285) !important;
+  border-color: oklch(0.58 0.22 285 / 0.2) !important;
+}
+body.theme-light .person-avatar-placeholder,
+body.theme-light .pair-avatar-placeholder {
+  background: oklch(0.94 0.03 270) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .mini-bar-bg,
+body.theme-light .factor-bar-bg {
+  background: oklch(0.88 0.02 270) !important;
+}
