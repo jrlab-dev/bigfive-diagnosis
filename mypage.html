@@ -1884,6 +1884,8 @@ function renderOtherResults() {
     ? `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(236,72,153,0.1);border:1.5px dashed rgba(236,72,153,0.35);color:#ec4899;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">+ あの人を新しく診断する</a>`
     : `<a href="other_quiz.html" style="display:block;width:100%;padding:14px;border-radius:12px;background:rgba(239,68,68,0.1);border:1.5px dashed rgba(239,68,68,0.35);color:#ef4444;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;">上書き診断する（最も古い結果が削除されます）</a>`;
 
+  const adviceBtn = `<a href="reladvice.html" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;background:rgba(139,92,246,0.1);border:1.5px solid rgba(139,92,246,0.3);color:#8b5cf6;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:12px;box-sizing:border-box;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>💬 人間関係相談（保存データで分析）</a>`;
+
   const actionBar = `<div class="select-action" id="selectAction" style="display:none;">
     <span><span class="select-action-count">0人選択中</span></span>
     <a href="team.html" class="select-action-btn">
@@ -1901,7 +1903,7 @@ function renderOtherResults() {
     localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
   }
   const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
-  container.innerHTML = otherCapHtml + addBtn + actionBar + results.map((r, i) => {
+  container.innerHTML = otherCapHtml + addBtn + adviceBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
       E: parseInt(r.code[2]), A: parseInt(r.code[3]), N: parseInt(r.code[4])
