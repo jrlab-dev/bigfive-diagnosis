@@ -192,15 +192,6 @@
     will-change: opacity, clip-path;
   }
 
-  /* スマホ専用：ロゴをCSSだけで「ぼかし→くっきり＋拡大フェード」表示（重い糸アニメに依存しない＝高速） */
-  @keyframes heroLogoReveal {
-    0%   { opacity: 0; transform: scale(0.82); filter: blur(20px) brightness(2.2); }
-    100% { opacity: 1; transform: scale(1);    filter: blur(0)    brightness(1);   }
-  }
-  .logo-stage.mobile-reveal {
-    animation: heroLogoReveal 1.4s cubic-bezier(.22,.61,.36,1) both;
-  }
-  .logo-stage.mobile-reveal #heroLogo { opacity: 1; }
 
   /* ヒーロー内ボタン */
   .hero-start-btn {
@@ -1474,7 +1465,7 @@
       if (frame>=ALL_GROWN) { phase='hold'; phaseTime=0; }
     } else if (phase==='hold') {
       threads.forEach(t=>t.draw(ctx,timeAcc,baseAlpha));
-      if (phaseTime*FPS>=HOLD_FRAMES) { phase='retract'; phaseTime=0; }
+      if (phaseTime*FPS >= (isMobile ? 0 : HOLD_FRAMES)) { phase='retract'; phaseTime=0; }
     } else if (phase==='retract') {
       retractFrame = phaseTime * FPS;
       const overallProg = retractFrame / MAX_RETRACT;
@@ -1513,34 +1504,19 @@
     if (phase!=='done') rafId=requestAnimationFrame(tick);
   }
 
-  function handleResize() { if (isMobile) return; if (phase !== 'done') init(); }
+  function handleResize() { if (phase !== 'done') init(); }
   window.addEventListener('resize', handleResize);
 
-  if (isMobile) {
-    // スマホ：重いCanvas糸アニメは回さず、CSSでロゴを軽く出す（LCP・TBT改善）
-    canvas.style.display = 'none';
-    logoStage.classList.add('mobile-reveal');
-    logo.style.opacity = '1';
-    buildRevealText();
-    setTimeout(() => {
-      allChars.forEach(c => { setTimeout(() => c.el.classList.add('show'), c.delay); });
-    }, 1100);
-    setTimeout(() => {
-      var btn = document.getElementById('heroStartBtn');
-      if (btn) btn.classList.add('shimmer');
-    }, 900);
+  // 初期化：ロゴ画像のロードを待つ + フェイルセーフ（PC・スマホ共通で糸アニメ実行）
+  const fallbackTimer = setTimeout(init, 3000);
+  if (logo.complete) {
+    clearTimeout(fallbackTimer);
+    setTimeout(init, 600);
   } else {
-    // PC：従来どおりロゴ画像のロードを待って糸アニメ開始 + フェイルセーフ
-    const fallbackTimer = setTimeout(init, 3000);
-    if (logo.complete) {
+    logo.addEventListener('load', function() {
       clearTimeout(fallbackTimer);
       setTimeout(init, 600);
-    } else {
-      logo.addEventListener('load', function() {
-        clearTimeout(fallbackTimer);
-        setTimeout(init, 600);
-      });
-    }
+    });
   }
 })();
 </script>
