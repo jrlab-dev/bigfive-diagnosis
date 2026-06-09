@@ -112,6 +112,12 @@
     justify-content: flex-end;
     gap: 20px;
     pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.92) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  body:not(.theme-light) .top-header {
+    background: linear-gradient(to bottom, rgba(15,15,30,0.9) 60%, transparent);
   }
   .top-header a {
     font-size: 13px;
@@ -869,8 +875,7 @@
 
       <!-- 流れるテキスト（1行ずつ出現） -->
       <div class="cta-flow-title" data-scroll-anim="shrink">もっと深く知る</div>
-      <div class="cta-flow-line" data-scroll-anim="fade-up">より多くの質問に答えるほど、性格の輪郭が鮮明になります。</div>
-      <div class="cta-flow-line" data-scroll-anim="fade-up">120問版は学術研究と同等の精度に到達します。</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">より多くの質問に答えるほど、性格診断精度が上がり。120問版は学術研究と同等の精度になります。</div>
 
       <!-- カード（ボタン内蔵） -->
       <div class="cta-cards" data-scroll-anim="scale">
@@ -906,8 +911,8 @@
     <div class="cta-guide-content" data-scroll-group>
 
       <div class="cta-flow-title" data-scroll-anim="shrink">なぜ？あの人の性格を知る</div>
-      <div class="cta-flow-line" data-scroll-anim="fade-up">相手の性格を理解すると、関係の距離感が見えてきます。</div>
-      <div class="cta-flow-line" data-scroll-anim="fade-up">恋愛・仕事・友人関係。自分との相性も科学的に分析できます。</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">相手の性格を理解すると、相手との関係がよくなります。</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">恋愛・仕事・友人関係。チームの相性も科学的に分析できます。</div>
 
       <div class="cta-cards" data-scroll-anim="scale">
         <div class="cta-card cta-card--30">
