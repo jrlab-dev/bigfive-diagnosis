@@ -110,8 +110,7 @@
     z-index: 9999;
     padding: 14px 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
     gap: 20px;
     pointer-events: none;
     background: linear-gradient(to bottom, rgba(255,255,255,0.92) 60%, transparent);
@@ -131,8 +130,6 @@
   .top-header a:hover { color: rgba(148,163,184,1); }
   body.theme-light .top-header a { color: rgba(100,116,139,0.6); }
   body.theme-light .top-header a:hover { color: rgba(100,116,139,1); }
-  .top-header-nav { display: flex; gap: 20px; flex-wrap: wrap; }
-  .top-header a.top-header-brand { font-size: 14px; font-weight: 700; letter-spacing: 0.03em; }
 
   .content { position: relative; z-index: 1; }
 
@@ -195,6 +192,17 @@
     will-change: opacity, clip-path;
   }
 
+
+  /* ヒーロー：ビッグファイブ診断（ボタン補足・H2・控えめ） */
+  .hero-subtitle {
+    margin: 0 0 -14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-align: center;
+    color: rgba(100,116,139,0.75);
+  }
+  body:not(.theme-light) .hero-subtitle { color: rgba(148,163,184,0.7); }
 
   /* ヒーロー内ボタン */
   .hero-start-btn {
@@ -626,14 +634,12 @@
     .hero-animated { gap: 20px; padding: 50px 16px 32px; min-height: 480px; }
     .logo-stage { height: clamp(140px, 32vw, 240px); margin: 0 auto; }
     .top-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      padding: 10px 14px;
+      justify-content: center;
+      gap: 14px;
+      padding: 12px 12px;
+      flex-wrap: wrap;
     }
-    .top-header a { font-size: 11px; }
-    .top-header a.top-header-brand { font-size: 13px; white-space: nowrap; }
-    .top-header-nav { gap: 12px; flex-wrap: wrap; }
+    .top-header a { font-size: 12px; }
     .scroll-stage-inner { padding: 20px 12px; }
     .cta-flow-title { font-size: clamp(1.5rem, 7vw, 2.4rem); }
     .cta-flow-line { font-size: clamp(0.9rem, 3.8vw, 1.1rem); }
@@ -750,13 +756,10 @@
 
 <!-- トップページ専用ヘッダー（nav.jsのヘッダーは使わない） -->
 <header class="top-header">
-  <a href="/" class="top-header-brand">ビッグファイブ診断</a>
-  <nav class="top-header-nav">
-    <a href="mypage.html">マイページ</a>
-    <a href="blog/">ブログ</a>
-    <a href="diagnoses.html">性格診断</a>
-    <a href="report.html">総合レポート</a>
-  </nav>
+  <a href="mypage.html">マイページ</a>
+  <a href="blog/">ブログ</a>
+  <a href="diagnoses.html">性格診断</a>
+  <a href="report.html">総合レポート</a>
 </header>
 
 <!-- ログインボーナス ポップアップ -->
@@ -790,6 +793,7 @@
       <img class="logo-part" data-trait="N" src="images/logo-part-N.webp" alt="">
       <img id="heroLogo" src="images/ロゴ.webp" alt="ビッグファイブ診断">
     </div>
+    <h2 class="hero-subtitle">ビッグファイブ診断</h2>
     <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='quiz.html?v=10'">診断をはじめる</button>
     <div class="reveal-text" id="revealText">
       <h1 class="reveal-line reveal-line--main">
