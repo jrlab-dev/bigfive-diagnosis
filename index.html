@@ -138,9 +138,10 @@
   /* Apple風スクロールステージ */
   .scroll-stage { position: relative; }
   .scroll-stage-inner {
-    position: sticky; top: 0;
+    position: -webkit-sticky; position: sticky; top: 0;
     min-height: 100vh; min-height: 100dvh;
     display: flex; align-items: center; justify-content: center;
+    overflow-x: hidden;
   }
   .scroll-stage--stats { height: 150vh; }
   .scroll-stage--features { height: 260vh; }
@@ -617,7 +618,21 @@
     .stat-desc { font-size: 9px }
     .stat-item::after { top: 15%; bottom: 15% }
     .hero-animated { gap: 20px; padding: 50px 16px 32px; min-height: 480px; }
-    .logo-stage { height: clamp(140px, 32vw, 240px); }
+    .logo-stage { height: clamp(140px, 32vw, 240px); margin: 0 auto; }
+    .top-header {
+      justify-content: center;
+      gap: 14px;
+      padding: 12px 12px;
+      flex-wrap: wrap;
+    }
+    .top-header a { font-size: 12px; }
+    .scroll-stage-inner { padding: 20px 12px; }
+    .cta-flow-title { font-size: clamp(1.5rem, 7vw, 2.4rem); }
+    .cta-flow-line { font-size: clamp(0.9rem, 3.8vw, 1.1rem); }
+    .cta-card { padding: 18px 14px; }
+    .cta-card-num { font-size: 1.1rem; }
+    .cta-card-desc { font-size: 12px; }
+    .cta-card-btn { font-size: 13px; padding: 10px 16px; }
     .reveal-text { margin-top: 60px; }
     .reveal-line--main .char,
     .reveal-line--sub .char { font-size: clamp(1.2rem, 5vw, 1.8rem); }
