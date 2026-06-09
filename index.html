@@ -252,6 +252,7 @@
     margin-top: 160px;
   }
   .reveal-line { display: flex; justify-content: center; flex-wrap: wrap; }
+  h1.reveal-line { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit; }
   .reveal-line .char {
     display: inline-block; opacity: 0; transform: translateY(10px);
     transition: opacity 0.35s ease, transform 0.35s ease;
@@ -790,9 +791,9 @@
     </div>
     <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='quiz.html?v=10'">診断をはじめる</button>
     <div class="reveal-text" id="revealText">
-      <div class="reveal-line reveal-line--main" role="heading" aria-level="1">
+      <h1 class="reveal-line reveal-line--main">
         <span class="char">性</span><span class="char">格</span><span class="char">診</span><span class="char">断</span>
-      </div>
+      </h1>
       <div class="reveal-line reveal-line--sub">
         <span class="char">本</span><span class="char">当</span><span class="char">の</span><span class="char">自</span><span class="char">分</span><span class="char">を</span><span class="char">知</span><span class="char">る</span>
       </div>
@@ -1236,8 +1237,8 @@
 
   // テキスト設定
   const REVEAL_LINES = [
-    { text: '性格診断', cls: 'reveal-line--main' },
-    { text: '本当の自分を知る', cls: 'reveal-line--sub' },
+    { text: '性格診断', cls: 'reveal-line--main', tag: 'h1' },
+    { text: '本当の自分を知る', cls: 'reveal-line--sub', tag: 'div' },
   ];
   const CHAR_DELAY_MS = 100;
   const LINE_GAP_MS = 200;
@@ -1377,7 +1378,7 @@
     allChars = [];
     let totalChars = 0;
     REVEAL_LINES.forEach((line, lineIdx) => {
-      const lineEl = document.createElement('div');
+      const lineEl = document.createElement(line.tag || 'div');
       lineEl.className = 'reveal-line ' + line.cls;
       revealText.appendChild(lineEl);
       line.text.split('').forEach((ch, charIdx) => {
