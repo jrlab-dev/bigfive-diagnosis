@@ -213,7 +213,7 @@ body { padding-top: 52px !important; }
       var src = img.getAttribute('src');
       if (!src) return;
       if (isLight) {
-        img.src = src.replace('.webp', '-light.webp');
+        if (src.indexOf('-light.webp') === -1) img.src = src.replace('.webp', '-light.webp');
       } else {
         img.src = src.replace('-light.webp', '.webp');
       }
@@ -223,6 +223,7 @@ body { padding-top: 52px !important; }
   // ダーク明示保存時のみダーク、それ以外は全ページライト
   if (saved === 'dark') {
     document.body.classList.remove('theme-light');
+    setThemeImages(false);
   }
 
   // ボタン生成
