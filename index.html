@@ -1447,6 +1447,8 @@
 
       if (retractFrame>=MAX_RETRACT) {
         phase='done';
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        canvas.style.display='none';
         logoStage.style.transition='transform 0.5s ease, opacity 0.3s ease, filter 0.4s ease';
         logoStage.style.opacity='1';
         logoStage.style.filter='blur(0px) brightness(1)';
