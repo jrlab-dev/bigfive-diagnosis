@@ -6,12 +6,14 @@
  */
 
 const CONCIERGE_CONFIG = {
-  maxRecommendations: 3,
+  maxRecommendations: 1,
 
   tests: [
     {
       key: 'hsp_result',
       title: 'HSP感受性チェック',
+      catchcopy: 'その繊細さ、才能かも',
+      desc: '12問で音・光・人の気配への敏感さを3因子分析。感じ方の設計図がわかります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>',
       url: 'hsp.html',
       gate: null,
@@ -53,6 +55,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'attachment_result',
       title: '愛着スタイルチェック',
+      catchcopy: '愛のカタチがわかる',
+      desc: '20問で不安軸・回避軸の2軸を分析。あなたの「安心の育み方」が見えてきます。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
       url: 'attachment.html',
       gate: 'attachment',
@@ -92,6 +96,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'love_result',
       title: '恋愛スタイル診断',
+      catchcopy: 'あなたの愛し方を知る',
+      desc: '12問で6つの恋愛スタイルを分析。情熱型・献身型・現実型…あなたはどれ？',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
       url: 'love.html',
       gate: null,
@@ -133,6 +139,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'schwartz_result',
       title: '価値観診断',
+      catchcopy: '人生の羅針盤が見える',
+      desc: '21問で10の価値観からコアを分析。何を大切に生きるかが明確になります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
       url: 'schwartz.html',
       gate: 'schwartz',
@@ -168,6 +176,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'sdt_result',
       title: '動機タイプ診断',
+      catchcopy: 'あなたを動かす原動力',
+      desc: '自律性・有能感・関係性の3因子で「何があなたを突き動かすか」を分析。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
       url: 'sdt.html',
       gate: 'sdt',
@@ -206,6 +216,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'mindset_result',
       title: 'マインドセット診断',
+      catchcopy: '才能は伸びる？決まってる？',
+      desc: '8問で成長型か固定型かを判定。才能観が人生の選択肢を変えます。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M20 15h2M9 2v2M9 20v2M2 9h2M20 9h2"/></svg>',
       url: 'mindset.html',
       gate: 'mindset',
@@ -239,6 +251,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'locus_result',
       title: '統制の所在チェック',
+      catchcopy: '運命は自分次第？それとも…',
+      desc: '15問で内的統制・他者支配・偶然の3因子を分析。「コントロール感」の正体がわかります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
       url: 'locus.html',
       gate: 'locus',
@@ -267,6 +281,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'eq_result',
       title: '感情知能（EQ）チェック',
+      catchcopy: '共感力の正体を暴く',
+      desc: '20問で自己認識・共感・社会的スキルの5因子を分析。IQより人生を変えるのはEQです。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
       url: 'eq.html',
       gate: 'eq',
@@ -296,6 +312,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'impostor_result',
       title: 'インポスター症候群チェック',
+      catchcopy: '成功しているのに不安…なぜ？',
+      desc: '15問で「自分は偽物ではないか」という感覚の強さを分析。5つのタイプがわかります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
       url: 'impostor.html',
       gate: null,
@@ -320,6 +338,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'pgg_result',
       title: 'コイン増やせるかな？（公共財ゲーム）',
+      catchcopy: 'あなたは協力派？自己防衛派？',
+      desc: '行動経済学の実験ゲーム。コインの出し方であなたの協力スタイルが見えます。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>',
       url: 'pgg.html',
       gate: null,
@@ -350,6 +370,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'risk_result',
       title: 'リスク選好ゲーム',
+      catchcopy: 'チャンスを捉えるか、守るか',
+      desc: 'Holt-Laury法でリスク許容度を測定。慎重派かチャレンジャーかがわかります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/></svg>',
       url: 'risk.html',
       gate: null,
@@ -380,6 +402,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'trust_result',
       title: '信頼ゲームの返報率',
+      catchcopy: '信頼されたらどう返す？',
+      desc: '行動経済学の信頼ゲームで、あなたの「お返し」のクセを分析します。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-3-3a2.83 2.83 0 00-4 4l3 3a2.83 2.83 0 004 0l1-1"/><path d="M13 7l3 3a2.83 2.83 0 004-4l-3-3a2.83 2.83 0 00-4 0l-1 1"/></svg>',
       url: 'trust.html',
       gate: null,
@@ -396,6 +420,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'ultimatum_result',
       title: '最後通牒ゲームの拒否ライン',
+      catchcopy: 'どこまでなら許せる？',
+      desc: '不公平な提案をどこで拒否するか。あなたの「損得 vs 感情」の境界線がわかります。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>',
       url: 'ultimatum.html',
       gate: null,
@@ -412,6 +438,8 @@ const CONCIERGE_CONFIG = {
     {
       key: 'beauty_result',
       title: 'ビューティーコンテストゲーム',
+      catchcopy: 'みんなが選ぶ数字を当てろ',
+      desc: '他者がどう考えるかを読むゲーム。あなたの「メタ思考力」が試されます。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>',
       url: 'beauty.html',
       gate: null,
@@ -426,8 +454,73 @@ const CONCIERGE_CONFIG = {
       ]
     },
     {
+      key: 'dark_triad_result',
+      title: 'ダークトライアド診断',
+      catchcopy: 'あなたのダークサイドを分析',
+      desc: '17問でナルシシズム・マキャベリズム・サイコパシーの3因子を測定。誰にでもある影の部分を知ります。',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
+      url: 'dark-triad.html',
+      gate: 'dark-triad',
+      bgColor: 'rgba(239,68,68,0.15)',
+      getResult: (d) => {
+        var levelMap = { low: '低い', moderate: '中程度', high: '高い' };
+        return { name: 'ダーク度: ' + (levelMap[d.level] || '不明'), color: d.level === 'high' ? '#ef4444' : '#8b5cf6' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.N >= 4 && sc.A <= 2,
+          priority: 5,
+          message: '情緒的に不安定で自立心が強いあなた。ダークサイドの傾向を知ることで、自分との付き合い方が変わります。'
+        },
+        {
+          condition: (sc) => sc.A <= 2,
+          priority: 4,
+          message: '自分の意見をしっかり持つあなた。その強さの裏にあるダークサイドを科学してみましょう。'
+        },
+        {
+          condition: (sc) => sc.E >= 4 && sc.N >= 3,
+          priority: 3,
+          message: '社交的で影響力のあるあなた。その魅力がダークサイドにどう作用するか興味深い結果が出ます。'
+        }
+      ]
+    },
+    {
+      key: 'riasec_result',
+      title: 'RIASEC職業興味診断',
+      catchcopy: '天職の方向性が見つかる',
+      desc: '60問で6タイプから職業適性パターンを導く、Holland理論に基づく職業興味検査。',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      url: 'riasec.html',
+      gate: 'riasec',
+      bgColor: 'rgba(245,158,11,0.15)',
+      getResult: (d) => {
+        var jaMap = { R: '現実型', I: '研究型', A: '芸術型', S: '社会型', E: '企業型', C: '事務型' };
+        var top = d.scores ? Object.entries(d.scores).sort(function(a,b){return b[1]-a[1];})[0] : null;
+        return { name: top ? jaMap[top[0]] + 'タイプ' : '完了', color: '#f59e0b' };
+      },
+      triggers: [
+        {
+          condition: (sc) => sc.O >= 4,
+          priority: 5,
+          message: '好奇心が旺盛なあなたに。自分に合う職業の方向性が見つかります。'
+        },
+        {
+          condition: (sc) => sc.C >= 4,
+          priority: 4,
+          message: '真面目で計画的なあなた。キャリアの方向性を科学的に分析しましょう。'
+        },
+        {
+          condition: (sc) => sc.E >= 4,
+          priority: 3,
+          message: '人との関わりを得意とするあなた。社会型・企業型の適性があるかもしれません。'
+        }
+      ]
+    },
+    {
       key: 'delay_result',
       title: '時間割引ゲーム',
+      catchcopy: '今すぐ vs 後でもっと',
+      desc: '目先の利益と未来の大きな利益、あなたはどっちを選ぶ？時間的選好を分析します。',
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
       url: 'delay.html',
       gate: null,
@@ -468,10 +561,13 @@ function getRecommendations(sc) {
       }
     }
 
-    return { ...test, matched: bestPriority > 0, priority: bestPriority, message: bestMessage };
+    const unlocked = !test.gate || (typeof isUnlocked === 'function' && isUnlocked(test.gate));
+    return { ...test, matched: bestPriority > 0, priority: bestPriority, message: bestMessage, unlocked: unlocked };
   });
 
   scored.sort((a, b) => {
+    // 解放済みを優先（gateなし or gate解除済み）
+    if (a.unlocked !== b.unlocked) return a.unlocked ? -1 : 1;
     if (a.matched !== b.matched) return a.matched ? -1 : 1;
     return b.priority - a.priority;
   });
@@ -479,6 +575,8 @@ function getRecommendations(sc) {
   return scored.slice(0, CONCIERGE_CONFIG.maxRecommendations).map(item => ({
     key: item.key,
     title: item.title,
+    catchcopy: item.catchcopy,
+    desc: item.desc,
     icon: item.icon,
     url: item.url,
     message: item.message || `${item.title}でさらに自分を深く知りましょう。`,

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -96,110 +96,178 @@
   }
   html { scroll-behavior: smooth; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.8; }
+  /* ライトテーマ：白背景・blob非表示 */
+  body.theme-light { background: #fff !important; }
+  body.theme-light .bg-light-blobs { display: none !important; }
 
-  /* 星雲：すっきり＋ピンク混ぜ */
-  .bg-nebula {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 55% 35% at 72% 55%, rgba(232,121,176,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.05) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 50% at 90% 85%, rgba(6,182,212,0.04) 0%, transparent 70%),
-      radial-gradient(ellipse 30% 30% at 25% 80%, rgba(192,132,168,0.05) 0%, transparent 60%);
-    animation: nebula-drift 25s ease-in-out infinite alternate;
-  }
-  @keyframes nebula-drift {
-    0%   { transform: scale(1)    translate(0,0) }
-    25%  { transform: scale(1.05) translate(1.5%,-0.5%) }
-    50%  { transform: scale(1.03) translate(-1%,1.5%) }
-    75%  { transform: scale(1.06) translate(0.5%,0.5%) }
-    100% { transform: scale(1)    translate(-0.5%,-1%) }
-  }
-  .bg-stars { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
-  .bg-stars span {
-    position: absolute;
-    border-radius: 50%;
-    transform-origin: center;
-    transform: translate(-50%, -50%);
-  }
-  @keyframes star-twinkle {
-    0%, 100% { opacity: 0.15; transform: translate(-50%,-50%) scale(0.7); }
-    50%       { opacity: 1;    transform: translate(-50%,-50%) scale(1.3); }
-  }
-  /* ライトモード：ビッグファイブ5色の星 */
-  body.theme-light .bg-stars span[data-bf="0"]{background:rgba(139,92,246,.75)!important;box-shadow:0 0 8px 3px rgba(139,92,246,.35)!important}
-  body.theme-light .bg-stars span[data-bf="1"]{background:rgba(59,130,246,.75)!important;box-shadow:0 0 8px 3px rgba(59,130,246,.35)!important}
-  body.theme-light .bg-stars span[data-bf="2"]{background:rgba(249,115,22,.75)!important;box-shadow:0 0 8px 3px rgba(249,115,22,.35)!important}
-  body.theme-light .bg-stars span[data-bf="3"]{background:rgba(244,114,182,.75)!important;box-shadow:0 0 8px 3px rgba(244,114,182,.35)!important}
-  body.theme-light .bg-stars span[data-bf="4"]{background:rgba(20,184,166,.75)!important;box-shadow:0 0 8px 3px rgba(20,184,166,.35)!important}
   body.theme-light .feature-card--chara{background:#fff}
 
-  /* 流れ星 */
-  .shooting-star {
+  /* ===== トップページ専用ヘッダー ===== */
+  .top-header {
     position: fixed;
-    height: 1.5px;
-    background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.2) 25%, rgba(255,255,255,0.8) 70%, white 100%);
-    z-index: 2;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
     pointer-events: none;
-    border-radius: 2px;
-    animation: shooting-star-anim var(--dur) ease-out forwards;
   }
-  @keyframes shooting-star-anim {
-    0%   { opacity: 0;   transform: translateX(0) translateY(0) rotate(135deg); }
-    8%   { opacity: 1; }
-    85%  { opacity: 0.7; }
-    100% { opacity: 0;   transform: translateX(-650px) translateY(650px) rotate(135deg); }
+  .top-header a {
+    font-size: 13px;
+    color: rgba(148,163,184,0.7);
+    text-decoration: none;
+    pointer-events: auto;
+    transition: color 0.2s;
   }
+  .top-header a:hover { color: rgba(148,163,184,1); }
+  body.theme-light .top-header a { color: rgba(100,116,139,0.6); }
+  body.theme-light .top-header a:hover { color: rgba(100,116,139,1); }
 
   .content { position: relative; z-index: 1; }
 
-  /* ヒーロー */
-  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px 40px; position: relative; }
-  .hero::before {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    width: 620px; height: 620px;
-    background: radial-gradient(circle, rgba(232,121,176,0.08) 0%, rgba(139,92,246,0.08) 40%, transparent 70%);
-    border-radius: 50%; pointer-events: none;
-    animation: pulse 6s ease-in-out infinite alternate;
+  /* ===== スクロール連動アニメーション ===== */
+  [data-scroll-anim] { opacity: 0; will-change: transform, opacity; }
+
+  /* Apple風スクロールステージ */
+  .scroll-stage { position: relative; }
+  .scroll-stage-inner {
+    position: sticky; top: 0;
+    min-height: 100vh; min-height: 100dvh;
+    display: flex; align-items: center; justify-content: center;
   }
-  @keyframes pulse {
-    0%   { transform: translate(-50%,-50%) scale(1);    opacity: .7 }
-    100% { transform: translate(-50%,-50%) scale(1.18); opacity: 1  }
+  .scroll-stage--stats { height: 150vh; }
+  .scroll-stage--features { height: 260vh; }
+  .scroll-stage--voice { height: 260vh; }
+  .scroll-stage.stage-collapsed { height: auto !important; }
+  .scroll-stage.stage-collapsed .scroll-stage-inner { position: relative; min-height: 0; }
+
+  /* 自動アニメーション（stats用） */
+  .anim-scale {
+    opacity: 0; transform: scale(0.6);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .anim-scale.is-visible {
+    opacity: 1; transform: scale(1);
   }
 
-  .hero-badge {
-    display: inline-block; padding: 6px 20px;
-    border: 1px solid rgba(6,182,212,0.35);
-    border-radius: 100px; font-size: 12px; font-weight: 700; color: var(--cyan);
-    letter-spacing: .18em; margin-bottom: 20px;
-    background: rgba(6,182,212,0.06);
+  /* ===== アニメーションヒーロー（1画面目） ===== */
+  .hero-animated {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    gap: 28px;
+    padding: 60px 24px 40px;
   }
 
-  /* 信頼バッジ */
-  .trust-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
-  .trust-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 14px;
-    border: 1px solid rgba(6,182,212,0.25);
-    border-radius: 100px;
-    font-size: 11px; font-weight: 500; color: rgba(6,182,212,0.9);
-    background: rgba(6,182,212,0.05); letter-spacing: .04em;
+  /* ロゴステージ */
+  .logo-stage {
+    position: relative;
+    height: clamp(180px, 38vw, 320px);
+    width: auto;
+    opacity: 0;
+    transform: scale(0.78);
+    filter: blur(24px) brightness(2.6);
+    will-change: opacity, transform, filter;
   }
-  .trust-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); display: inline-block; flex-shrink: 0; }
+  #heroLogo, .logo-part { height: 100%; width: auto; display: block; }
+  #heroLogo { position: relative; z-index: 6; opacity: 0; }
+  .logo-part {
+    position: absolute; inset: 0; z-index: 2; opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    will-change: opacity, clip-path;
+  }
 
-  .hero-title {
-    font-size: clamp(2rem,6vw,4rem); font-weight: 900; line-height: 1.2; margin-bottom: 16px;
-    background: linear-gradient(135deg, #fff 0%, var(--rose) 35%, var(--purple) 65%, var(--blue) 100%);
-    background-size: 200% 200%;
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    animation: gradient-shift 7s ease-in-out infinite;
+  /* ヒーロー内ボタン */
+  .hero-start-btn {
+    padding: 18px 64px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hero-start-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -75%;
+    width: 50%; height: 200%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    transform: skewX(-20deg);
+    pointer-events: none;
+  }
+  .hero-start-btn.shimmer::after {
+    animation: btnShimmer 0.8s ease forwards;
+  }
+  .hero-start-btn:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+  }
+  body:not(.theme-light) .hero-start-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  @keyframes btnShimmer {
+    from { left: -75%; }
+    to   { left: 125%; }
+  }
+  body:not(.theme-light) .hero-start-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* リビールテキスト */
+  .reveal-text {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    margin-top: 160px;
+  }
+  .reveal-line { display: flex; justify-content: center; flex-wrap: wrap; }
+  .reveal-line .char {
+    display: inline-block; opacity: 0; transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .reveal-line .char.show { opacity: 1; transform: translateY(0); }
+  .reveal-line--main .char,
+  .reveal-line--sub .char {
+    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: transparent;
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 25%, #f97316 50%, #3b82f6 75%, #8b5cf6 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: gradient-shift 4s ease-in-out infinite;
   }
   @keyframes gradient-shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
-  .hero-sub { font-size: clamp(.9rem,2.5vw,1.1rem); font-weight: 300; color: var(--dim); max-width: 480px; margin-bottom: 10px; }
-  .hero-authority { font-size: 12px; color: rgba(6,182,212,0.7); margin-bottom: 36px; font-weight: 500; letter-spacing: .05em; }
+  /* Canvas */
+  #heroCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* ダークテーマ対応 */
+  body:not(.theme-light) .logo-stage {
+    filter: blur(24px) brightness(1.8);
+  }
 
   /* シマーボタン共通 */
   .shimmer-btn {
@@ -215,9 +283,6 @@
     transform: skewX(-20deg); transition: left .55s ease; pointer-events: none;
   }
   .shimmer-btn:hover::after { left: 125%; }
-
-  .hero-btn { padding: 14px 48px; background: linear-gradient(135deg, var(--purple), var(--pink)); }
-  .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,121,176,0.38), 0 0 60px rgba(139,92,246,0.18); }
 
   /* 数字セクション */
   .stats-section { max-width: 760px; margin: 0 auto; padding: 0 24px 60px; text-align: center; }
@@ -387,6 +452,68 @@
   .cta-btn-anohito { padding: 16px 44px; background: linear-gradient(135deg,#ec4899,var(--purple)); }
   .cta-btn-anohito:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(236,72,153,0.42); }
   .cta-note { font-size: 12px; color: rgba(148,163,184,0.6); margin-top: 16px; }
+
+  /* CTA Guide（スクロール連動：流れるテキスト＋カード） */
+  .scroll-stage--cta { height: 280vh; }
+  .scroll-stage--anohito { height: 260vh; }
+  .scroll-stage--concierge { height: 200vh; }
+  .cta-guide { max-width: 720px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .cta-guide-label {
+    font-size: 11px; font-weight: 700; color: var(--rose); letter-spacing: .25em; margin-bottom: 36px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .cta-guide-label::before, .cta-guide-label::after {
+    content: ''; display: block; height: 1px; width: 40px;
+    background: linear-gradient(to right, transparent, rgba(240,160,200,0.4));
+  }
+  .cta-guide-label::after { background: linear-gradient(to left, transparent, rgba(240,160,200,0.4)); }
+
+  /* 流れるテキスト */
+  .cta-flow-title {
+    font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.3;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 24px;
+  }
+  .cta-flow-line {
+    font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--text); line-height: 1.9;
+    margin-bottom: 4px;
+  }
+  .cta-flow-note {
+    font-size: clamp(0.85rem, 2vw, 1rem); color: var(--text-muted); line-height: 1.7;
+    text-align: center; margin-top: 24px; opacity: 0;
+  }
+
+  /* カード（ボタン内蔵） */
+  .cta-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    max-width: 560px; margin: 32px auto 0;
+  }
+  .cta-card {
+    background: var(--card-bg); border-radius: 16px;
+    padding: 24px 18px; text-align: center;
+    backdrop-filter: blur(8px); display: flex; flex-direction: column;
+    align-items: center; gap: 6px;
+  }
+  .cta-card--30 { border: 1px solid rgba(245,158,11,0.35); }
+  .cta-card--120 { border: 1px solid rgba(236,72,153,0.35); }
+  .cta-card-num { font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 900; line-height: 1; }
+  .cta-card--30 .cta-card-num { color: #f59e0b; }
+  .cta-card--120 .cta-card-num { color: var(--pink); }
+  .cta-card-time { font-size: 11px; color: var(--dim); }
+  .cta-card-desc { font-size: 12px; color: var(--text); line-height: 1.5; margin: 4px 0; }
+  .cta-card-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; letter-spacing: .06em;
+  }
+  .cta-card--30 .cta-card-badge { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .cta-card--120 .cta-card-badge { background: rgba(236,72,153,0.15); color: var(--pink); }
+  .cta-card-btn {
+    margin-top: 8px; padding: 12px 20px; width: 100%;
+    font-size: 14px; text-align: center; border-radius: 10px;
+  }
+  .cta-card--30 .cta-card-btn { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .cta-card--120 .cta-card-btn { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
   .anohito-section { margin-top: 64px; padding-top: 44px; border-top: 1px solid rgba(236,72,153,0.18); display: flex; flex-direction: column; align-items: center; }
   .anohito-lead { font-size: 14px; color: var(--dim); margin-bottom: 22px; font-weight: 300; text-align: center; }
 
@@ -483,9 +610,20 @@
     .stat-unit { font-size: 11px }
     .stat-desc { font-size: 9px }
     .stat-item::after { top: 15%; bottom: 15% }
-    .trust-badges { gap: 8px }
+    .hero-animated { gap: 20px; padding: 50px 16px 32px; min-height: 480px; }
+    .logo-stage { height: clamp(140px, 32vw, 240px); }
+    .reveal-text { margin-top: 60px; }
+    .reveal-line--main .char,
+    .reveal-line--sub .char { font-size: clamp(1.2rem, 5vw, 1.8rem); }
     .social-proof { padding: 40px 16px; }
     .proof-grid { grid-template-columns: 1fr; }
+    .scroll-stage--stats { height: 140vh; }
+    .scroll-stage--features { height: 230vh; }
+    .scroll-stage--voice { height: 230vh; }
+    .scroll-stage--cta { height: 250vh; }
+    .scroll-stage--anohito { height: 230vh; }
+    .scroll-stage--concierge { height: 180vh; }
+    .cta-cards { grid-template-columns: 1fr; max-width: 300px; }
   }
 
   /* デモモーダル */
@@ -580,8 +718,14 @@
 </script>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
-<div class="bg-nebula"></div>
-<div class="bg-stars" id="bgStars"></div>
+
+<!-- トップページ専用ヘッダー（nav.jsのヘッダーは使わない） -->
+<header class="top-header">
+  <a href="mypage.html">マイページ</a>
+  <a href="blog/">ブログ</a>
+  <a href="diagnoses.html">性格診断</a>
+  <a href="report.html">総合レポート</a>
+</header>
 
 <!-- ログインボーナス ポップアップ -->
 <div id="login-bonus-overlay">
@@ -603,22 +747,30 @@
 </div>
 <div class="content">
 
-  <!-- ヒーロー -->
-  <section class="hero">
-    <span class="hero-badge">SCIENCE-BASED PERSONALITY ANALYSIS</span>
-    <div class="trust-badges">
-      <span class="trust-badge"><span class="dot"></span>心理学研究に基づく</span>
-      <span class="trust-badge"><span class="dot"></span>世界で広く活用された手法</span>
-      <span class="trust-badge"><span class="dot"></span>5因子モデル採用</span>
+  <!-- ヒーロー：Canvas糸アニメーション + ロゴ表示 -->
+  <section class="hero-animated" id="heroAnimated">
+  <canvas id="heroCanvas"></canvas>
+    <div id="logoStage" class="logo-stage" aria-label="Big Five">
+      <img class="logo-part" data-trait="E" src="画像/ロゴ/parts/logo-part-E.webp" alt="">
+      <img class="logo-part" data-trait="O" src="画像/ロゴ/parts/logo-part-O.webp" alt="">
+      <img class="logo-part" data-trait="A" src="画像/ロゴ/parts/logo-part-A.webp" alt="">
+      <img class="logo-part" data-trait="C" src="画像/ロゴ/parts/logo-part-C.webp" alt="">
+      <img class="logo-part" data-trait="N" src="画像/ロゴ/parts/logo-part-N.webp" alt="">
+      <img id="heroLogo" src="画像/ロゴ/ロゴ.webp" alt="ビッグファイブ診断">
     </div>
-    <h1 class="hero-title">性格診断<br>本当の自分を知る</h1>
-    <p class="hero-sub">あなたの性格は、3125の星の中の1つ。<br>心理学が導き出す<br>あなただけの説明書。</p>
-    <p class="hero-authority">心理学者によって開発 ／ 世界的に認められた理論</p>
-    <button class="shimmer-btn hero-btn" id="startQuizBtn" onclick="document.getElementById('versionSelect').scrollIntoView({behavior:'smooth'})">診断を始める</button>
+    <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='quiz.html?v=10'">診断をはじめる</button>
+    <div class="reveal-text" id="revealText">
+      <div class="reveal-line reveal-line--main" role="heading" aria-level="1">
+        <span class="char">性</span><span class="char">格</span><span class="char">診</span><span class="char">断</span>
+      </div>
+      <div class="reveal-line reveal-line--sub">
+        <span class="char">本</span><span class="char">当</span><span class="char">の</span><span class="char">自</span><span class="char">分</span><span class="char">を</span><span class="char">知</span><span class="char">る</span>
+      </div>
+    </div>
   </section>
 
   <!-- 数字セクション -->
-  <section class="stats-section">
+  <section class="stats-section anim-scale" data-anim-auto>
     <p class="stats-label">DATA &amp; SCALE</p>
     <div class="stats-grid">
       <div class="stat-item">
@@ -637,144 +789,183 @@
   </section>
 
   <!-- 特徴 -->
+  <div class="scroll-stage scroll-stage--features" data-stage="features">
+  <div class="scroll-stage-inner">
   <section class="features">
     <p class="features-title">FEATURES</p>
-    <div class="feature-cards">
+    <div class="feature-cards" data-scroll-group>
 
-      <div class="feature-card">
-        <img class="feature-bg-img" src="images/features/patterns.webp" alt="" width="1024" height="1024" loading="eager" fetchpriority="high">
-        <div class="feature-content">
-          <span class="science-label">
-            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
-            研究で実証
-          </span>
-          <div class="feature-text-body">
-            <h3>3125通りの組み合わせ</h3>
-            <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125通りの分析からあなただけの性格タイプを導き出します。</p>
+          <div class="feature-card" data-scroll-anim="left">
+            <img class="feature-bg-img" src="images/features/patterns.webp" alt="" width="1024" height="1024" loading="eager" fetchpriority="high">
+            <div class="feature-content">
+              <span class="science-label">
+                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M6 3v3l2 1" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round"/></svg>
+                研究で実証
+              </span>
+              <div class="feature-text-body">
+                <h3>3125通りの組み合わせ</h3>
+                <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125通りの分析からあなただけの性格タイプを導き出します。</p>
+              </div>
+            </div>
           </div>
+
+          <div class="feature-card feature-card--chara" data-scroll-anim="right">
+            <div class="card-showcase">
+              <img src="images/features/card_showcase.webp" alt="キャラクターカード" width="1200" height="664" loading="lazy">
+            </div>
+            <div class="feature-content">
+              <span class="science-label" style="background:rgba(232,121,176,0.1);border-color:rgba(232,121,176,0.3);color:var(--rose);">
+                <svg viewBox="0 0 12 12" fill="none"><rect x="1.5" y="4" width="2" height="6.5" rx=".5" fill="#f0a0c8"/><rect x="5" y="2" width="2" height="8.5" rx=".5" fill="#f0a0c8"/><rect x="8.5" y="5.5" width="2" height="5" rx=".5" fill="#f0a0c8"/></svg>
+                可視化
+              </span>
+              <div class="feature-text-body">
+                <h3>キャラクターカード</h3>
+                <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-card" data-scroll-anim="left">
+            <img class="feature-bg-img" src="images/features/science.webp" alt="" width="1024" height="1024" loading="lazy">
+            <div class="feature-content">
+              <span class="science-label">
+                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                科学的根拠
+              </span>
+              <div class="feature-text-body">
+                <h3>科学的根拠</h3>
+                <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
+              </div>
+              <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
+            </div>
+          </div>
+
+          <div class="feature-card feature-card--anohito" data-scroll-anim="right">
+            <img class="feature-bg-img" src="images/features/observation.webp" alt="" width="1024" height="1024" loading="lazy">
+            <div class="feature-content">
+              <span class="science-label" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);color:#f472b6;">
+                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
+                行動観察
+              </span>
+              <div class="feature-text-body">
+                <h3>あの人を分析する</h3>
+                <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
+              </div>
+              <a href="#" id="demoOtherBtn" style="display:block;margin-top:auto;padding-top:12px;font-size:10px;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(236,72,153,0.3);align-self:flex-start;">▼ 结果イメージを見る</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+  </div>
+  </div>
+
+  <!-- CTA Guide（スクロール連動：説明→ボタン→補足） -->
+  <div class="scroll-stage scroll-stage--cta" data-stage="cta">
+  <div class="scroll-stage-inner">
+  <section class="cta-guide" id="versionSelect">
+    <p class="cta-guide-label">UPGRADE</p>
+    <div class="cta-guide-content" data-scroll-group>
+
+      <!-- 流れるテキスト（1行ずつ出現） -->
+      <div class="cta-flow-title" data-scroll-anim="shrink">もっと深く知る</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">より多くの質問に答えるほど、性格の輪郭が鮮明になります。</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">120問版は学術研究と同等の精度に到達します。</div>
+
+      <!-- カード（ボタン内蔵） -->
+      <div class="cta-cards" data-scroll-anim="scale">
+        <div class="cta-card cta-card--30">
+          <span class="cta-card-num">30問</span>
+          <span class="cta-card-time">約5分</span>
+          <p class="cta-card-desc">下位特性（ファセット）まで分析<br>より精密なキャラクター</p>
+          <span class="cta-card-badge">精度UP</span>
+          <a href="quiz.html?v=30" class="shimmer-btn cta-card-btn" data-done-key="bigfive_v30">本格診断（30問）</a>
+        </div>
+        <div class="cta-card cta-card--120">
+          <span class="cta-card-num">120問</span>
+          <span class="cta-card-time">約15分</span>
+          <p class="cta-card-desc">学術研究と同じ手法<br>最高精度の包括分析</p>
+          <span class="cta-card-badge">最高精度</span>
+          <a href="quiz.html?v=120" class="shimmer-btn cta-card-btn" data-done-key="bigfive_v120">徹底分析（120問）</a>
         </div>
       </div>
 
-      <div class="feature-card feature-card--chara">
-        <div class="card-showcase">
-          <img src="images/features/card_showcase.webp" alt="キャラクターカード" width="1200" height="664" loading="lazy">
-        </div>
-        <div class="feature-content">
-          <span class="science-label" style="background:rgba(232,121,176,0.1);border-color:rgba(232,121,176,0.3);color:var(--rose);">
-            <svg viewBox="0 0 12 12" fill="none"><rect x="1.5" y="4" width="2" height="6.5" rx=".5" fill="#f0a0c8"/><rect x="5" y="2" width="2" height="8.5" rx=".5" fill="#f0a0c8"/><rect x="8.5" y="5.5" width="2" height="5" rx=".5" fill="#f0a0c8"/></svg>
-            可視化
-          </span>
-          <div class="feature-text-body">
-            <h3>キャラクターカード</h3>
-            <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-card">
-        <img class="feature-bg-img" src="images/features/science.webp" alt="" width="1024" height="1024" loading="lazy">
-        <div class="feature-content">
-          <span class="science-label">
-            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#06b6d4" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#06b6d4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            科学的根拠
-          </span>
-          <div class="feature-text-body">
-            <h3>科学的根拠</h3>
-            <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
-          </div>
-          <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
-        </div>
-      </div>
-
-      <div class="feature-card feature-card--anohito">
-        <img class="feature-bg-img" src="images/features/observation.webp" alt="" width="1024" height="1024" loading="lazy">
-        <div class="feature-content">
-          <span class="science-label" style="background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);color:#f472b6;">
-            <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="3" stroke="#f472b6" stroke-width="1.2"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#f472b6" stroke-width="1.2" stroke-linecap="round"/></svg>
-            行動観察
-          </span>
-          <div class="feature-text-body">
-            <h3>あの人を分析する</h3>
-            <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
-          </div>
-          <a href="#" id="demoOtherBtn" style="display:block;margin-top:auto;padding-top:12px;font-size:10px;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(236,72,153,0.3);align-self:flex-start;">▼ 结果イメージを見る</a>
-        </div>
-      </div>
+      <!-- カード下の補足 -->
+      <div class="cta-flow-note" data-scroll-anim="fade-up">どちらも自動保存対応。隙間時間に少しずつ進めてください。</div>
 
     </div>
   </section>
+  </div>
+  </div>
+
+  <!-- あの人・チーム（スクロールステージ） -->
+  <div class="scroll-stage scroll-stage--anohito" data-stage="anohito">
+  <div class="scroll-stage-inner">
+  <section class="cta-guide" id="conciergeSection">
+    <p class="cta-guide-label">RELATIONSHIP</p>
+    <div class="cta-guide-content" data-scroll-group>
+
+      <div class="cta-flow-title" data-scroll-anim="shrink">なぜ？あの人の性格を知る</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">相手の性格を理解すると、関係の距離感が見えてきます。</div>
+      <div class="cta-flow-line" data-scroll-anim="fade-up">恋愛・仕事・友人関係。自分との相性も科学的に分析できます。</div>
+
+      <div class="cta-cards" data-scroll-anim="scale">
+        <div class="cta-card cta-card--30">
+          <span class="cta-card-num">あの人</span>
+          <span class="cta-card-time">約3分</span>
+          <p class="cta-card-desc">気になる相手の性格を<br>あなたが代わりに診断</p>
+          <span class="cta-card-badge">相性あり</span>
+          <a href="other_quiz.html" class="shimmer-btn cta-card-btn" data-done-key="bigfive_other">あの人を分析する</a>
+        </div>
+        <div class="cta-card cta-card--120" id="teamSection">
+          <span class="cta-card-num">チーム</span>
+          <span class="cta-card-time">最大8人</span>
+          <p class="cta-card-desc">メンバーの相性を<br>グループ全体で可視化</p>
+          <span class="cta-card-badge">チーム分析</span>
+          <a href="team.html" class="shimmer-btn cta-card-btn" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);">チーム相性を診断</a>
+        </div>
+      </div>
+
+      <div class="cta-flow-note" data-scroll-anim="fade-up">あの人のデータをためてチーム相性も分析できるのはここだけ</div>
+
+    </div>
+  </section>
+  </div>
+  </div>
+
+  <!-- 心理コンシェルジュ：スクロールステージ -->
+  <div class="scroll-stage scroll-stage--concierge" data-stage="concierge">
+  <div class="scroll-stage-inner">
+  <div id="dynamicConcierge"></div>
+  </div>
+  </div>
 
   <!-- ソーシャルプルーフ -->
+  <div class="scroll-stage scroll-stage--voice" data-stage="voice">
+  <div class="scroll-stage-inner">
   <section class="social-proof">
     <p class="proof-label">VOICE</p>
-    <div class="proof-grid">
-      <div class="proof-card">
-        <p class="proof-text">「初めて自分を客観的に理解できた。今の仕事が合わない理由がわかった」</p>
-        <p class="proof-user">20代女性・事務職</p>
-      </div>
-      <div class="proof-card">
-        <p class="proof-text">「チーム相性診断で配置転換がスムーズに。部下とのコミュニケーションが改善」</p>
-        <p class="proof-user">30代男性・マネージャー</p>
-      </div>
-      <div class="proof-card">
-        <p class="proof-text">「夫婦相性がわかって喧嘩が減った。相手の見方も変わりました」</p>
-        <p class="proof-user">40代女性・主婦</p>
-      </div>
-      <div class="proof-card">
-        <p class="proof-text">「就活活動で自分の強みを言語化できるようになった」</p>
-        <p class="proof-user">20代男性・学生</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta" id="versionSelect">
-    <p class="cta-text">診断を選んでください。</p>
-    <div class="cta-buttons">
-      <a href="quiz.html?v=10" class="shimmer-btn cta-btn" data-done-key="bigfive_v10">自分を診断する（10問）</a>
-      <a href="quiz.html?v=30" class="shimmer-btn cta-btn-premium" data-done-key="bigfive_v30">本格診断（30問）</a>
-      <a href="quiz.html?v=120" class="shimmer-btn cta-btn-premium" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-done-key="bigfive_v120">徹底分析（120問）</a>
-    </div>
-    <p class="cta-note" style="margin-top:8px;">
-      <span class="icon-with-text">
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-          <path d="M17 21v-8H7v8M7 3v5h8"/>
-        </svg>
-        自動保存つき ― 隙間時間に少しずつ進められます
-      </span>
-    </p>
-    <p class="cta-note">※ 30問・120問版はより精度の高い結果が得られます</p>
-    <div class="anohito-section" id="conciergeSection">
-      <p class="anohito-lead">気になる人の性格を見抜きたい方へ</p>
-      <a href="other_quiz.html" class="shimmer-btn cta-btn-anohito" data-done-key="bigfive_other">
-        <span class="icon-with-text">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          あの人の性格を分析する
-        </span>
-      </a>
-      <p class="cta-note" style="margin-top:10px;">恋愛・仕事・友人関係…相手の性格と相性がわかります</p>
-    </div>
-    <div class="anohito-section" id="teamSection">
-      <p class="anohito-lead">グループ・チームで診断したい方へ</p>
-      <a href="team.html" class="shimmer-btn cta-btn-anohito" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);">
-        <span class="icon-with-text">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
-          </svg>
-          チーム相性を診断する
-        </span>
-      </a>
-      <p class="cta-note" style="margin-top:10px;">最大8人のチーム相性がわかります（要：保存済みデータ）</p>
-    </div>
-    <!-- 心理コンシェルジュ：動的レンダリングエリア -->
-    <div id="dynamicConcierge"></div>
-  </section>
+    <div class="proof-grid" data-scroll-group>
+          <div class="proof-card" data-scroll-anim="shrink">
+            <p class="proof-text">「初めて自分を客観的に理解できた。今の仕事が合わない理由がわかった」</p>
+            <p class="proof-user">20代女性・事務職</p>
+          </div>
+          <div class="proof-card" data-scroll-anim="shrink">
+            <p class="proof-text">「チーム相性診断で配置転換がスムーズに。部下とのコミュニケーションが改善」</p>
+            <p class="proof-user">30代男性・マネージャー</p>
+          </div>
+          <div class="proof-card" data-scroll-anim="shrink">
+            <p class="proof-text">「夫婦相性がわかって喧嘩が減った。相手の見方も変わりました」</p>
+            <p class="proof-user">40代女性・主婦</p>
+          </div>
+          <div class="proof-card" data-scroll-anim="shrink">
+            <p class="proof-text">「就活活動で自分の強みを言語化できるようになった」</p>
+            <p class="proof-user">20代男性・学生</p>
+          </div>
+        </div>
+      </section>
+  </div>
+  </div>
 
   <!-- あの人分析 デモモーダル -->
   <div class="demo-overlay" id="demoOverlay">
@@ -849,101 +1040,135 @@
   </div>
 
   <footer>
-    <p>ビッグファイブ診断</p>
-    <p style="font-size:10px;color:rgba(148,163,184,0.7);margin-top:4px;">
-      <a href="faq.html" style="color:rgba(148,163,184,0.85);text-decoration:none;">よくある質問</a>
-      <span style="margin:0 8px;color:rgba(148,163,184,0.5);">|</span>
-      <a href="science.html" style="color:rgba(148,163,184,0.85);text-decoration:none;">科学的根拠</a>
-    </p>
-    <p style="font-size:10px;color:rgba(148,163,184,0.7);margin-top:4px;">
-      ビッグVマン / ビッグファイブマン / Big5性格診断 / 心理学テスト
+    <p style="font-size:11px;color:#333;">© Jr. Genius / ビッグファイブマン</p>
+    <p style="font-size:10px;color:#333;margin-top:4px;">
+      <a href="faq.html" style="color:#333;text-decoration:none;">よくある質問</a>
+      <span style="margin:0 8px;color:rgba(0,0,0,0.3);">|</span>
+      <a href="science.html" style="color:#333;text-decoration:none;">科学的根拠</a>
+      <span style="margin:0 8px;color:rgba(0,0,0,0.3);">|</span>
+      <a href="blog/" style="color:#333;text-decoration:none;">ブログ</a>
+      <span style="margin:0 8px;color:rgba(0,0,0,0.3);">|</span>
+      <a href="legal.html" style="color:#333;text-decoration:none;">利用規約</a>
+      <span style="margin:0 8px;color:rgba(0,0,0,0.3);">|</span>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSerzLle9YKVqQD6vaS3YlLsBHETnYRcXfukzgdJ5Rs_2HFaVg/viewform" target="_blank" rel="noopener" style="color:#333;text-decoration:none;">お問い合わせ</a>
     </p>
   </footer>
 </div>
 
 <script>
-(function(){
-  const el = document.getElementById('bgStars');
-  const total = 80;
-  const bright = new Set();
-  const superBright = new Set();
-  const pinkStars = new Set();
-  while(superBright.size < 10) superBright.add(Math.floor(Math.random()*total));
-  while(bright.size < 20){ const n=Math.floor(Math.random()*total); if(!superBright.has(n)) bright.add(n); }
-  while(pinkStars.size < 8){ const n=Math.floor(Math.random()*total); if(!superBright.has(n)&&!bright.has(n)) pinkStars.add(n); }
+// ===== Apple風スクロール連動アニメーション（ステージ進捗制御） =====
+(function() {
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
-  for(let i=0;i<total;i++){
-    const x = (Math.random()*100).toFixed(2);
-    const y = (Math.random()*100).toFixed(2);
-    const delay    = (Math.random()*7).toFixed(2);
-    const duration = (Math.random()*5+2).toFixed(2);
+  var locked = new WeakSet();
+  var stageDone = new WeakSet();
 
-    const span = document.createElement('span');
-    span.style.left = x + '%';
-    span.style.top  = y + '%';
-    span.style.animation = `star-twinkle ${duration}s ease-in-out ${delay}s infinite`;
-    span.setAttribute('data-bf', Math.floor(Math.random() * 5));
-
-    if(superBright.has(i)){
-      const s=(Math.random()*2+3).toFixed(1), o=(Math.random()*.2+.8).toFixed(2);
-      span.style.width  = s+'px'; span.style.height = s+'px';
-      span.style.background = `rgba(255,255,255,${o})`;
-      span.style.boxShadow  = `0 0 ${s*3}px ${s}px rgba(255,210,240,.5),0 0 ${s*7}px ${s*2}px rgba(200,160,255,.25)`;
-    } else if(pinkStars.has(i)){
-      const s=(Math.random()*2+2).toFixed(1), o=(Math.random()*.3+.65).toFixed(2);
-      span.style.width  = s+'px'; span.style.height = s+'px';
-      span.style.background = `rgba(255,220,235,${o})`;
-      span.style.boxShadow  = `0 0 ${s*2.5}px ${s}px rgba(232,121,176,.4)`;
-    } else if(bright.has(i)){
-      const s=(Math.random()*2+2).toFixed(1), o=(Math.random()*.3+.7).toFixed(2);
-      span.style.width  = s+'px'; span.style.height = s+'px';
-      span.style.background = `rgba(255,255,255,${o})`;
-      span.style.boxShadow  = `0 0 ${s*2.5}px ${s}px rgba(180,200,255,.4)`;
-    } else {
-      const s=(Math.random()*1.5+.5).toFixed(1), o=(Math.random()*.5+.2).toFixed(2);
-      span.style.width  = s+'px'; span.style.height = s+'px';
-      span.style.background = `rgba(255,255,255,${o})`;
+  function applyAnim(el, type, p) {
+    if (p >= 0.99) { locked.add(el); el.style.opacity = '1'; el.style.transform = ''; return; }
+    if (locked.has(el)) return;
+    switch (type) {
+      case 'left':   el.style.transform = 'translateX(' + ((1-p)*80) + 'vw)'; el.style.opacity = p; break;
+      case 'right':  el.style.transform = 'translateX(' + ((1-p)*-80) + 'vw)'; el.style.opacity = p; break;
+      case 'scale':  el.style.transform = 'scale(' + (0.6+p*0.4) + ')'; el.style.opacity = p; break;
+      case 'shrink': el.style.transform = 'scale(' + (6.0-p*5.0) + ')'; el.style.opacity = Math.min(1, p*4); break;
+      case 'fade-up': el.style.transform = 'translateY(' + ((1-p)*40) + 'px)'; el.style.opacity = p; break;
+      case 'fade':    el.style.opacity = p; break;
     }
-
-    el.appendChild(span);
   }
+
+  function update() {
+    var vh = window.innerHeight;
+
+    document.querySelectorAll('.scroll-stage').forEach(function(stage) {
+      var rect = stage.getBoundingClientRect();
+      var scrollable = stage.offsetHeight - vh;
+      if (scrollable <= 0) return;
+
+      // ステージ進捗: 0（ステージトップが画面上部に到達）→ 1（ステージ末端が画面下部に到達）
+      // ステージ進捗: 0（ステージが画面下端に入り始め）→ 1（ステージが画面上端を抜け終わる）
+      var progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + scrollable)));
+
+      // ステージ完了判定
+      if (progress >= 0.99) {
+        stageDone.add(stage);
+        stage.querySelectorAll('[data-scroll-anim]').forEach(function(el) {
+          if (!locked.has(el)) { locked.add(el); el.style.opacity = '1'; el.style.transform = ''; }
+        });
+        return;
+      }
+
+      // 完了済みステージは上スクロールでも固定
+      if (stageDone.has(stage)) return;
+
+      // 単体要素（stats等）
+      stage.querySelectorAll('[data-scroll-anim]:not([data-scroll-group] [data-scroll-anim])').forEach(function(el) {
+        if (locked.has(el)) return;
+        applyAnim(el, el.dataset.scrollAnim, easeOutCubic(progress));
+      });
+
+      // グループ要素（features, voice）: 順次アニメ
+      stage.querySelectorAll('[data-scroll-group]').forEach(function(group) {
+        var cards = group.querySelectorAll('[data-scroll-anim]');
+        var count = cards.length;
+        cards.forEach(function(card, i) {
+          if (locked.has(card)) return;
+          var start = i / count * 0.8;
+          var end = start + 0.8 / count;
+          var localP = Math.min(1, Math.max(0, (progress - start) / (end - start)));
+          applyAnim(card, card.dataset.scrollAnim, easeOutCubic(localP));
+        });
+      });
+    });
+  }
+
+  var ticking = false;
+  var lastScrollY = 0;
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY;
+    var goingUp = scrollY < lastScrollY;
+    lastScrollY = scrollY;
+
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        update();
+        // 折りたたみは上スクロール時のみ（下スクロール時のレイアウトシフト防止）
+        if (goingUp) {
+          document.querySelectorAll('.scroll-stage').forEach(function(s) {
+            if (stageDone.has(s) && !s.classList.contains('stage-collapsed')) {
+              var r = s.getBoundingClientRect();
+              if (r.bottom < -100) {
+                s.classList.add('stage-collapsed');
+              }
+            }
+          });
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+
+  // 自動アニメーション（stats等：画面に入ったら発火）
+  var autoObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        autoObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('[data-anim-auto]').forEach(function(el) { autoObserver.observe(el); });
 })();
+</script>
 
-// ===== 流れ星 =====
-(function(){
-  function shoot() {
-    const star = document.createElement('div');
-    star.className = 'shooting-star';
-    const len = Math.floor(Math.random() * 80 + 80);   // 80〜160px
-    const dur = (Math.random() * 0.5 + 0.65).toFixed(2); // 0.65〜1.15秒
-    const sx  = (Math.random() * 50 + 38).toFixed(1);  // 画面右寄り 38〜88%
-    const sy  = (Math.random() * 28).toFixed(1);        // 上部 0〜28%
-    star.style.cssText = `width:${len}px;left:${sx}%;top:${sy}%;--dur:${dur}s`;
-    document.body.appendChild(star);
-    star.addEventListener('animationend', () => star.remove(), { once: true });
-  }
-
-  function schedule(delay) {
-    setTimeout(function run() {
-      shoot();
-      // 30%の確率でもう1本すぐ続けて流れる
-      if (Math.random() < 0.3) setTimeout(shoot, Math.random() * 800 + 300);
-      // 次は15〜25秒後（平均約20秒）
-      setTimeout(run, Math.random() * 10000 + 15000);
-    }, delay);
-  }
-
-  // 最初の1本は5秒以内に出現
-  schedule(Math.random() * 5000);
-})();
-
+<script>
 // ===== 診断済みチェック欄表示 =====
 (function() {
   function isDone(key) {
     if (key === 'bigfive_v10' || key === 'bigfive_v30' || key === 'bigfive_v120') {
       const v = key.replace('bigfive_v', '');
       const arr = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
-      // version未設定の古いデータは '10' 扱い。保存済み or やり直し途中でもチェックを維持
       if (arr.some(function(r) { return String(r.version || '10') === v; })) return true;
       return !!localStorage.getItem('bigfive_progress_v' + v);
     }
@@ -953,27 +1178,317 @@
     return !!localStorage.getItem(key);
   }
 
-  // ボタンをラップしてチェック欄を右に追加（各ボタン1つずつ処理）
   document.querySelectorAll('[data-done-key]').forEach(function(btn) {
     const key = btn.getAttribute('data-done-key');
     const done = isDone(key);
-
-    // ラッパー作成
     const row = document.createElement('span');
     row.className = 'btn-check-row';
-
-    // チェック欄
     const col = document.createElement('span');
     col.className = 'check-col' + (done ? ' done' : '');
     col.innerHTML = '<span class="check-label">診断済み</span><span class="check-circle">✓</span>';
-
-    // ボタンをラッパーに移動
     btn.parentNode.insertBefore(row, btn);
     row.appendChild(btn);
     row.appendChild(col);
   });
 })();
+</script>
 
+<script>
+// ===== Canvas糸アニメーション =====
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  const ctx    = canvas.getContext('2d');
+  const logo   = document.getElementById('heroLogo');
+  const logoStage = document.getElementById('logoStage');
+  const logoParts = Array.from(document.querySelectorAll('.logo-part'));
+  const revealText = document.getElementById('revealText');
+
+  if (!canvas || !logo || !logoStage) return;
+
+  // テキスト設定
+  const REVEAL_LINES = [
+    { text: '性格診断', cls: 'reveal-line--main' },
+    { text: '本当の自分を知る', cls: 'reveal-line--sub' },
+  ];
+  const CHAR_DELAY_MS = 100;
+  const LINE_GAP_MS = 200;
+  const CHAR_GAP_AFTER_SHINE = 400;
+
+  // 特性ごと設定
+  const TRAITS = [
+    { color:'#f97316', delay:  0, retractDelay:  0, sxR: 0.94, syR:0.04, exF:0.72, eyF:0.14, converge:true },
+    { color:'#8b5cf6', delay: 50, retractDelay: 34, sxR: 0.06, syR:0.04, exF:0.31, eyF:0.24, converge:true },
+    { color:'#f472b6', delay:102, retractDelay: 66, sxR: 0.94, syR:0.96, exF:0.66, eyF:0.44 },
+    { color:'#3b82f6', delay:154, retractDelay: 98, sxR: 0.06, syR:0.96, exF:0.28, eyF:0.52 },
+    { color:'#14b8a6', delay:206, retractDelay:130, sxR: 0.50, syR:1.06, exF:0.50, eyF:0.82 },
+  ];
+
+  const GROW_FRAMES    = 38;
+  const HOLD_FRAMES    = 12;
+  const RETRACT_FRAMES = 24;
+  const FADE_AT        = 0.20;
+  const ALL_GROWN      = TRAITS[TRAITS.length-1].delay + GROW_FRAMES;
+  const MAX_RETRACT    = TRAITS[TRAITS.length-1].retractDelay + RETRACT_FRAMES;
+  const isMobile = window.innerWidth < 600;
+  const STEPS = isMobile ? 60 : 100;
+
+  function hexToRgba(hex, a) {
+    const r=parseInt(hex.slice(1,3),16);
+    const g=parseInt(hex.slice(3,5),16);
+    const b=parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a.toFixed(3)})`;
+  }
+  function cubicBez(t, p0, p1, p2, p3) {
+    const u = 1-t;
+    return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+  }
+  function easeInOut(t) { return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+  function easeIn(t)    { return t*t*t; }
+  function seeded(seed, n) {
+    return Math.abs(Math.sin(seed*127.1 + n*311.7) * 43758.5453) % 1;
+  }
+
+  class Thread {
+    constructor(sx, sy, bx, by, ex, ey, color, delay, retractDelay, idx, converge) {
+      this.sx=sx; this.sy=sy;
+      this.ex=ex; this.ey=ey;
+      this.color=color; this.delay=delay; this.retractDelay=retractDelay;
+      const r = n => seeded(idx, n);
+      if (converge) {
+        this.cp1x = sx + (bx-sx)*0.55 + (r(1)-0.5)*50;
+        this.cp1y = sy + (by-sy)*0.50 + (r(2)-0.5)*30;
+        this.cp2x = bx + (ex-bx)*0.30 + (r(3)-0.5)*25;
+        this.cp2y = by + (ey-by)*0.25 + (r(4)-0.5)*18;
+      } else {
+        this.cp1x = sx + (bx-sx)*0.38 + (r(1)-0.5)*120;
+        this.cp1y = sy + (by-sy)*0.22 + (r(2)-0.5)*80;
+        this.cp2x = bx + (ex-bx)*0.18 + (r(3)-0.5)*40;
+        this.cp2y = by + (ey-by)*0.14 + (r(4)-0.5)*28;
+      }
+      this.f1=1.0+r(5)*0.9; this.f2=2.4+r(6)*1.3;
+      this.ph1=r(7)*Math.PI*2; this.ph2=r(8)*Math.PI*2;
+      this.amp=18+r(9)*24;
+      this.headT=0; this.tailT=0; this.active=false;
+    }
+    update(frame, phase, retractFrame) {
+      const gf = frame - this.delay;
+      if (gf < 0) return;
+      this.active = true;
+      this.headT = Math.min(easeInOut(gf / GROW_FRAMES), 1);
+      if (phase === 'retract') {
+        const rf = retractFrame - this.retractDelay;
+        if (rf > 0) this.tailT = Math.min(easeIn(rf / RETRACT_FRAMES), 1);
+      }
+    }
+    getPoint(t, time, vs, ve) {
+      const bx = cubicBez(t, this.sx, this.cp1x, this.cp2x, this.ex);
+      const by = cubicBez(t, this.sy, this.cp1y, this.cp2y, this.ey);
+      const eps=0.004, t2=Math.min(t+eps,1);
+      const nx = cubicBez(t2,this.sx,this.cp1x,this.cp2x,this.ex)-bx;
+      const ny = cubicBez(t2,this.sy,this.cp1y,this.cp2y,this.ey)-by;
+      const len = Math.sqrt(nx*nx+ny*ny)||1e-4;
+      const px=-ny/len, py=nx/len;
+      const segLen = Math.max(ve-vs,1e-4);
+      const tRel = (t-vs)/segLen;
+      const env = Math.sin(tRel*Math.PI);
+      const wave = Math.sin(time*this.f1+this.ph1+t*6)*0.65
+                 + Math.sin(time*this.f2+this.ph2+t*3)*0.35;
+      return { x:bx+px*wave*this.amp*env, y:by+py*wave*this.amp*env };
+    }
+    draw(ctx, time, alpha) {
+      const vs=this.tailT, ve=this.headT;
+      if (!this.active || ve-vs<0.008) return;
+      const s0=Math.ceil(vs*STEPS), s1=Math.floor(ve*STEPS);
+      if (s1-s0<1) return;
+      const pts=[];
+      for (let s=s0;s<=s1;s++) pts.push(this.getPoint(s/STEPS,time,vs,ve));
+      const p0=pts[0], pN=pts[pts.length-1];
+      const grad=ctx.createLinearGradient(p0.x,p0.y,pN.x,pN.y);
+      grad.addColorStop(0, hexToRgba(this.color, alpha));
+      grad.addColorStop(0.65, hexToRgba(this.color, alpha));
+      grad.addColorStop(1, hexToRgba(this.color, 0));
+      ctx.save();
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=1.9;
+      ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x,pts[0].y);
+      for (let i=0;i<pts.length-1;i++) {
+        const pp=pts[Math.max(i-1,0)], p1=pts[i], p2=pts[i+1], pn=pts[Math.min(i+2,pts.length-1)];
+        ctx.bezierCurveTo(p1.x+(p2.x-pp.x)/6, p1.y+(p2.y-pp.y)/6, p2.x-(pn.x-p1.x)/6, p2.y-(pn.y-p1.y)/6, p2.x, p2.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  let threads=[], frame=0, phase='grow';
+  let holdCount=0, retractFrame=0;
+  let timeAcc=0, lastStamp=null, rafId=null;
+  let logoReveal=0;
+  let blurVal=24, brightVal=2.6;
+
+  function resize() { canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+
+  function updateLogoParts() {
+    threads.forEach((thread, i) => {
+      const part = logoParts[i];
+      if (!part) return;
+      const reveal = Math.max(0, Math.min(1, thread.headT));
+      part.style.opacity = reveal > 0.02 ? Math.min(1, reveal * 1.25) : 0;
+      part.style.clipPath = `inset(0 ${(100 - reveal * 100).toFixed(1)}% 0 0)`;
+    });
+  }
+
+  let allChars = [];
+  function buildRevealText() {
+    revealText.innerHTML = '';
+    allChars = [];
+    let totalChars = 0;
+    REVEAL_LINES.forEach((line, lineIdx) => {
+      const lineEl = document.createElement('div');
+      lineEl.className = 'reveal-line ' + line.cls;
+      revealText.appendChild(lineEl);
+      line.text.split('').forEach((ch, charIdx) => {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = ch;
+        lineEl.appendChild(span);
+        allChars.push({ el: span, delay: (totalChars + charIdx) * CHAR_DELAY_MS + lineIdx * LINE_GAP_MS });
+      });
+      totalChars += line.text.length;
+    });
+  }
+
+  function init() {
+    if (rafId) cancelAnimationFrame(rafId);
+    resize();
+
+    const isLight = document.body.classList.contains('theme-light');
+    const initBright = isLight ? 2.6 : 1.8;
+
+    logoStage.style.transition='none';
+    logoStage.style.transform='scale(1)';
+    logoStage.style.opacity='0';
+    logoStage.style.filter=`blur(24px) brightness(${initBright})`;
+    logo.style.opacity='0';
+    logoParts.forEach(part => { part.style.opacity='0'; part.style.clipPath='inset(0 100% 0 0)'; });
+
+    void logoStage.getBoundingClientRect();
+
+    const lr = logoStage.getBoundingClientRect();
+    const lx=lr.left, ly=lr.top, lw=lr.width, lh=lr.height;
+    const cx=lx+lw/2, cy=ly+lh/2;
+    const W=canvas.width, H=canvas.height;
+
+    threads = TRAITS.map((t,i) => new Thread(
+      t.sxR*W, t.syR*H, cx, cy, lx+lw*t.exF, ly+lh*t.eyF,
+      t.color, t.delay, t.retractDelay, i, !!t.converge
+    ));
+
+    logoStage.style.transform='scale(0.78)';
+    frame=0; phase='grow'; holdCount=0; retractFrame=0;
+    timeAcc=0; lastStamp=null; logoReveal=0;
+    blurVal=24; brightVal=initBright;
+
+    buildRevealText();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function tick(stamp) {
+    if (!lastStamp) lastStamp=stamp;
+    timeAcc+=(stamp-lastStamp)/1000;
+    lastStamp=stamp;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const isLight = document.body.classList.contains('theme-light');
+    const baseAlpha = isLight ? 1.0 : 0.85;
+
+    const arrived = threads.filter(t=>t.headT>=1).length;
+    logoReveal += (arrived/threads.length - logoReveal)*0.016;
+
+    let targetBlur, targetBright;
+    if (arrived === 0) {
+      targetBlur=24;
+      targetBright = isLight ? 2.6 : 1.8;
+    } else if (arrived <= 2) {
+      targetBlur=18;
+      targetBright = isLight ? 2.2 : 1.5;
+    } else if (arrived <= 4) {
+      targetBlur=7;
+      targetBright = isLight ? 1.4 : 1.2;
+    } else {
+      targetBlur=0;
+      targetBright=1.0;
+    }
+    blurVal   += (targetBlur   - blurVal)   * 0.045;
+    brightVal += (targetBright - brightVal) * 0.045;
+
+    logoStage.style.opacity   = logoReveal;
+    logoStage.style.transform = `scale(${0.78+0.22*logoReveal})`;
+    logoStage.style.filter    = `blur(${blurVal.toFixed(1)}px) brightness(${brightVal.toFixed(2)})`;
+    updateLogoParts();
+
+    if (phase==='grow') {
+      frame++;
+      threads.forEach(t=>t.update(frame,'grow',0));
+      threads.forEach(t=>t.draw(ctx,timeAcc,baseAlpha));
+      if (frame>=ALL_GROWN) { phase='hold'; holdCount=0; }
+    } else if (phase==='hold') {
+      holdCount++;
+      threads.forEach(t=>t.draw(ctx,timeAcc,baseAlpha));
+      if (holdCount>=HOLD_FRAMES) { phase='retract'; retractFrame=0; }
+    } else if (phase==='retract') {
+      retractFrame++;
+      const overallProg = retractFrame / MAX_RETRACT;
+      const alpha = overallProg < FADE_AT ? 1 : 1-(overallProg-FADE_AT)/(1-FADE_AT);
+      threads.forEach(t=>t.update(frame,'retract',retractFrame));
+      threads.forEach(t=>t.draw(ctx,timeAcc,Math.max(alpha*baseAlpha,0)));
+
+      if (retractFrame>=MAX_RETRACT) {
+        phase='done';
+        logoStage.style.transition='transform 0.5s ease, opacity 0.3s ease, filter 0.4s ease';
+        logoStage.style.opacity='1';
+        logoStage.style.filter='blur(0px) brightness(1)';
+        logoStage.style.transform='scale(1.04)';
+        logo.style.opacity='1';
+        logoParts.forEach(part => { part.style.opacity='1'; part.style.clipPath='inset(0 0 0 0)'; });
+        setTimeout(()=>{ logoStage.style.transform='scale(1)'; },500);
+
+        // テキスト表示
+        setTimeout(()=>{
+          allChars.forEach(c => c.el.classList.remove('show'));
+          allChars.forEach(c => { setTimeout(()=>{ c.el.classList.add('show'); }, c.delay); });
+        }, 900 + CHAR_GAP_AFTER_SHINE);
+
+        // ボタン光演出
+        setTimeout(()=>{
+          var btn = document.getElementById('heroStartBtn');
+          if (btn) btn.classList.add('shimmer');
+        }, 600);
+
+        return;
+      }
+    }
+
+    if (phase!=='done') rafId=requestAnimationFrame(tick);
+  }
+
+  function handleResize() { init(); }
+  window.addEventListener('resize', handleResize);
+
+  // 初期化：ロゴ画像のロードを待つ + フェイルセーフ
+  const fallbackTimer = setTimeout(init, 3000);
+  if (logo.complete) {
+    clearTimeout(fallbackTimer);
+    setTimeout(init, 600);
+  } else {
+    logo.addEventListener('load', function() {
+      clearTimeout(fallbackTimer);
+      setTimeout(init, 600);
+    });
+  }
+})();
 </script>
 <script src="unlock.js"></script>
 <script src="gacha-utils.js"></script>
@@ -989,11 +1504,7 @@
   const hasBf = bfResults.length > 0;
 
   if (!hasBf) {
-    container.innerHTML = `
-      <div class="anohito-section" style="text-align:center;">
-        <p class="anohito-lead" style="font-size:14px; color:var(--dim);">まずはビッグファイブ診断で自分を知りましょう</p>
-        <p class="cta-note">診断結果に基づいて、あなたに最適な心理テストをご提案します</p>
-      </div>`;
+    container.innerHTML = '<div style="text-align:center;padding:40px 0;"><p class="cta-flow-line" style="color:var(--dim);">まずはビッグファイブ診断で自分を知りましょう</p></div>';
     return;
   }
 
@@ -1002,28 +1513,52 @@
 
   if (recs.length === 0) {
     container.innerHTML = `
-      <div class="anohito-section" style="text-align:center;">
-        <p class="anohito-lead" style="color:#10b981;">✓ すべての心理テストが完了しています！</p>
-        <a href="report.html" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 総合レポートを見る</a>
+      <div class="cta-guide-content" data-scroll-group style="text-align:center;">
+        <div class="cta-flow-title" data-scroll-anim="shrink">すべて完了</div>
+        <div class="cta-flow-line" data-scroll-anim="fade-up">すべての心理テストが完了しています</div>
+        <div style="margin-top:24px;" data-scroll-anim="scale">
+          <a href="report.html" class="shimmer-btn cta-card-btn" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);max-width:280px;display:inline-block;">総合レポートを見る</a>
+        </div>
       </div>`;
     return;
   }
 
+  // スコアから性格の特徴テキスト生成
+  var traits = [];
+  if (sc.O >= 4) traits.push('好奇心旺盛');
+  if (sc.C >= 4) traits.push('真面目で几帳面');
+  if (sc.E >= 4) traits.push('社交的');
+  if (sc.A >= 4) traits.push('思いやりがある');
+  if (sc.N >= 4) traits.push('感受性が豊か');
+  if (sc.O <= 2) traits.push('現実的');
+  if (sc.C <= 2) traits.push('柔軟');
+  if (sc.E <= 2) traits.push('落ち着きがある');
+  if (sc.A <= 2) traits.push('自立心が強い');
+  if (sc.N <= 2) traits.push('精神的に安定');
+  var traitText = traits.slice(0, 3).join('・');
+
+  var rec = recs[0];
+
   container.innerHTML = `
-    <div class="anohito-section" style="text-align:center; margin-bottom:8px;">
-      <p class="anohito-lead" style="font-size:13px; color:#c4b5fd;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> あなたへのおすすめ</p>
-      <p class="cta-note">ビッグファイブのスコアから選びました</p>
-    </div>
-    ${recs.map(rec => `
-      <div class="anohito-section">
-        <a href="${rec.url}" class="shimmer-btn cta-btn-anohito" style="background:linear-gradient(135deg,rgba(139,92,246,0.6),rgba(236,72,153,0.4));">
-          ${rec.icon} ${rec.title}
-        </a>
-        <p class="cta-note" style="max-width:300px; margin:10px auto 0;">${rec.message}</p>
-      </div>`).join('')}
-    <div class="anohito-section" style="text-align:center;">
-      <a href="mypage.html" style="font-size:12px; color:var(--dim); text-decoration:none;">すべての心理テストを見る →</a>
-    </div>`;
+    <section class="cta-guide">
+      <p class="cta-guide-label">RECOMMEND</p>
+      <div class="cta-guide-content" data-scroll-group>
+        <div class="cta-flow-title" data-scroll-anim="shrink">あなたへのおすすめ</div>
+        <div class="cta-flow-line" data-scroll-anim="fade-up">${traitText}なあなたには、「${rec.title}」がおすすめです。</div>
+        <div style="max-width:520px;margin:0 auto;" data-scroll-anim="scale">
+          <div style="background:var(--card-bg);border:1px solid rgba(139,92,246,0.35);border-radius:16px;padding:28px 24px;backdrop-filter:blur(8px);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <span style="font-size:1.1rem;">${rec.icon}</span>
+              <span style="font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${rec.catchcopy}</span>
+            </div>
+            <p style="font-size:0.95rem;color:var(--text);line-height:1.7;margin:12px 0 16px;">${rec.desc}</p>
+            <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px;">${rec.message}</p>
+            <a href="${rec.url}" class="shimmer-btn" style="display:block;padding:14px 20px;text-align:center;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#ec4899);font-size:15px;">${rec.title}をはじめる</a>
+          </div>
+        </div>
+        <div class="cta-flow-note" data-scroll-anim="fade-up"><a href="diagnoses.html" style="color:var(--text-muted);text-decoration:none;">すべての診断を見る</a></div>
+      </div>
+    </section>`;
 })();
 </script>
 <script>
