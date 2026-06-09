@@ -206,6 +206,7 @@
 
   /* ヒーロー内ボタン */
   .hero-start-btn {
+    flex-shrink: 0; /* ウィンドウ高が低いときに潰れて文字が切れるのを防ぐ */
     padding: 18px 64px;
     background: #111;
     color: #fff;
@@ -1547,7 +1548,24 @@
   const hasBf = bfResults.length > 0;
 
   if (!hasBf) {
-    container.innerHTML = '<div style="text-align:center;padding:40px 0;"><p class="cta-flow-line" style="color:var(--dim);">まずはビッグファイブ診断で自分を知りましょう</p></div>';
+    container.innerHTML = `
+      <section class="cta-guide">
+        <p class="cta-guide-label">RECOMMEND</p>
+        <div class="cta-guide-content" data-scroll-group>
+          <div class="cta-flow-title" data-scroll-anim="shrink">性格診断、20種類以上。</div>
+          <div class="cta-flow-line" data-scroll-anim="fade-up">まずはビッグファイブ診断で自分を知りましょう</div>
+          <div style="max-width:520px;margin:24px auto 0;" data-scroll-anim="scale">
+            <div style="background:var(--card-bg);border:1px solid rgba(139,92,246,0.35);border-radius:16px;padding:28px 24px;backdrop-filter:blur(8px);">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <span style="font-size:1.1rem;">🔍</span>
+                <span style="font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">科学的根拠のある診断が勢ぞろい</span>
+              </div>
+              <p style="font-size:0.95rem;color:var(--text);line-height:1.7;margin:12px 0 16px;">心理学の研究にもとづく性格診断・心理テストを20種類以上収録。HSP感受性チェックや恋愛スタイル診断はいますぐ受けられて、診断を進めるほど新しい診断が解放されていきます。</p>
+              <a href="diagnoses.html" class="shimmer-btn" style="display:block;padding:14px 20px;text-align:center;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#ec4899);font-size:15px;">性格診断の一覧を見る</a>
+            </div>
+          </div>
+        </div>
+      </section>`;
     return;
   }
 
