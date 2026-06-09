@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
   <link rel="canonical" href="https://bigfive.jr-genius.jp/">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -190,6 +189,16 @@
     clip-path: inset(0 100% 0 0);
     will-change: opacity, clip-path;
   }
+
+  /* スマホ専用：ロゴをCSSだけで「ぼかし→くっきり＋拡大フェード」表示（重い糸アニメに依存しない＝高速） */
+  @keyframes heroLogoReveal {
+    0%   { opacity: 0; transform: scale(0.82); filter: blur(20px) brightness(2.2); }
+    100% { opacity: 1; transform: scale(1);    filter: blur(0)    brightness(1);   }
+  }
+  .logo-stage.mobile-reveal {
+    animation: heroLogoReveal 1.4s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .logo-stage.mobile-reveal #heroLogo { opacity: 1; }
 
   /* ヒーロー内ボタン */
   .hero-start-btn {
@@ -1251,6 +1260,7 @@
   const MAX_RETRACT    = TRAITS[TRAITS.length-1].retractDelay + RETRACT_FRAMES;
   const isMobile = window.innerWidth < 600;
   const STEPS = isMobile ? 60 : 100;
+  const ANIM_SPEED = isMobile ? 2 : 1;   // スマホは演出を2倍速（約半分の時間）に。PCは等速。
 
   function hexToRgba(hex, a) {
     const r=parseInt(hex.slice(1,3),16);
@@ -1345,6 +1355,7 @@
   let threads=[], frame=0, phase='grow';
   let holdCount=0, retractFrame=0;
   let timeAcc=0, lastStamp=null, rafId=null;
+  let phaseTime=0;
   let logoReveal=0;
   let blurVal=24, brightVal=2.6;
 
@@ -1408,7 +1419,7 @@
 
     logoStage.style.transform='scale(0.78)';
     frame=0; phase='grow'; holdCount=0; retractFrame=0;
-    timeAcc=0; lastStamp=null; logoReveal=0;
+    timeAcc=0; lastStamp=null; phaseTime=0; logoReveal=0;
     blurVal=24; brightVal=initBright;
 
     buildRevealText();
@@ -1417,15 +1428,18 @@
 
   function tick(stamp) {
     if (!lastStamp) lastStamp=stamp;
-    timeAcc+=(stamp-lastStamp)/1000;
+    const dt=(stamp-lastStamp)/1000;
+    timeAcc+=dt;
+    phaseTime+=dt;
     lastStamp=stamp;
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const isLight = document.body.classList.contains('theme-light');
     const baseAlpha = isLight ? 1.0 : 0.85;
 
+    const smooth = k => 1 - Math.pow(1-k, dt*60*ANIM_SPEED);
     const arrived = threads.filter(t=>t.headT>=1).length;
-    logoReveal += (arrived/threads.length - logoReveal)*0.016;
+    logoReveal += (arrived/threads.length - logoReveal)*smooth(0.016);
 
     let targetBlur, targetBright;
     if (arrived === 0) {
@@ -1441,25 +1455,25 @@
       targetBlur=0;
       targetBright=1.0;
     }
-    blurVal   += (targetBlur   - blurVal)   * 0.045;
-    brightVal += (targetBright - brightVal) * 0.045;
+    blurVal   += (targetBlur   - blurVal)   * smooth(0.045);
+    brightVal += (targetBright - brightVal) * smooth(0.045);
 
     logoStage.style.opacity   = logoReveal;
     logoStage.style.transform = `scale(${0.78+0.22*logoReveal})`;
     logoStage.style.filter    = `blur(${blurVal.toFixed(1)}px) brightness(${brightVal.toFixed(2)})`;
     updateLogoParts();
 
+    const FPS = 60 * ANIM_SPEED;
     if (phase==='grow') {
-      frame++;
+      frame = phaseTime * FPS;
       threads.forEach(t=>t.update(frame,'grow',0));
       threads.forEach(t=>t.draw(ctx,timeAcc,baseAlpha));
-      if (frame>=ALL_GROWN) { phase='hold'; holdCount=0; }
+      if (frame>=ALL_GROWN) { phase='hold'; phaseTime=0; }
     } else if (phase==='hold') {
-      holdCount++;
       threads.forEach(t=>t.draw(ctx,timeAcc,baseAlpha));
-      if (holdCount>=HOLD_FRAMES) { phase='retract'; retractFrame=0; }
+      if (phaseTime*FPS>=HOLD_FRAMES) { phase='retract'; phaseTime=0; }
     } else if (phase==='retract') {
-      retractFrame++;
+      retractFrame = phaseTime * FPS;
       const overallProg = retractFrame / MAX_RETRACT;
       const alpha = overallProg < FADE_AT ? 1 : 1-(overallProg-FADE_AT)/(1-FADE_AT);
       threads.forEach(t=>t.update(frame,'retract',retractFrame));
@@ -1496,19 +1510,34 @@
     if (phase!=='done') rafId=requestAnimationFrame(tick);
   }
 
-  function handleResize() { if (phase !== 'done') init(); }
+  function handleResize() { if (isMobile) return; if (phase !== 'done') init(); }
   window.addEventListener('resize', handleResize);
 
-  // 初期化：ロゴ画像のロードを待つ + フェイルセーフ
-  const fallbackTimer = setTimeout(init, 3000);
-  if (logo.complete) {
-    clearTimeout(fallbackTimer);
-    setTimeout(init, 600);
+  if (isMobile) {
+    // スマホ：重いCanvas糸アニメは回さず、CSSでロゴを軽く出す（LCP・TBT改善）
+    canvas.style.display = 'none';
+    logoStage.classList.add('mobile-reveal');
+    logo.style.opacity = '1';
+    buildRevealText();
+    setTimeout(() => {
+      allChars.forEach(c => { setTimeout(() => c.el.classList.add('show'), c.delay); });
+    }, 1100);
+    setTimeout(() => {
+      var btn = document.getElementById('heroStartBtn');
+      if (btn) btn.classList.add('shimmer');
+    }, 900);
   } else {
-    logo.addEventListener('load', function() {
+    // PC：従来どおりロゴ画像のロードを待って糸アニメ開始 + フェイルセーフ
+    const fallbackTimer = setTimeout(init, 3000);
+    if (logo.complete) {
       clearTimeout(fallbackTimer);
       setTimeout(init, 600);
-    });
+    } else {
+      logo.addEventListener('load', function() {
+        clearTimeout(fallbackTimer);
+        setTimeout(init, 600);
+      });
+    }
   }
 })();
 </script>
