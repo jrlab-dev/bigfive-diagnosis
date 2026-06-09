@@ -1476,7 +1476,7 @@
     if (phase!=='done') rafId=requestAnimationFrame(tick);
   }
 
-  function handleResize() { init(); }
+  function handleResize() { if (phase !== 'done') init(); }
   window.addEventListener('resize', handleResize);
 
   // 初期化：ロゴ画像のロードを待つ + フェイルセーフ
@@ -1495,6 +1495,7 @@
 <script src="unlock.js"></script>
 <script src="gacha-utils.js"></script>
 <script src="concierge.js"></script>
+<script>window.__SKIP_NAV=true;</script>
 <script src="nav.js" defer></script>
 <script>
 // ===== トップページ：心理コンシェルジュ動的CTA =====
