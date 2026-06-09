@@ -12,6 +12,9 @@
 
 // ===== グローバルナビゲーション =====
 (function() {
+  // トップページは専用ヘッダーを使うのでスキップ
+  if (window.__SKIP_NAV) return;
+  if (location.pathname === '/' || location.pathname.endsWith('/index.html')) return;
   var basePath = location.pathname.includes('/blog/') ? '../' : '';
 
   var NAV_HTML = `
