@@ -45,3 +45,6 @@ holo_card_*.html
 holo_diamond_pattern.html
 pattern_test.html
 capture_cards.js
+
+## Claude Code作業用フォルダ
+.claude/
