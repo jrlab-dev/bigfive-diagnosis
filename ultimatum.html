@@ -19,6 +19,7 @@
   <section class="phase" id="phaseResult"><div class="panel result-type"><div class="result-icon" id="resultIcon"></div><div class="result-name" id="resultName"></div><p class="result-summary" id="resultSummary"></p><div class="stat-grid" id="statGrid"></div><div class="analysis" id="analysis"></div><div class="btn-row"><button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button><button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button><button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button></div></div></section>
 </main>
 <script src="gacha-utils.js"></script>
+<script src="doctor-guide.js"></script>
 <script>
 (function() {
   'use strict';
@@ -33,6 +34,28 @@
     { you: 40, other: 60 },
     { you: 50, other: 50 }
   ];
+
+  // 研究員ガイドのセリフ
+  var DOCTOR = {
+    entry: [
+      { text: 'こんにちは！行動心理ラボの研究員です。今回は「最後通牒ゲーム」に挑戦してもらいますね。', pose: 'speaking' },
+      { text: '匿名の相手が「100コインの分け方」を一方的に決めてきます。あなたができるのは、受け入れるか、拒否するか。それだけです。', pose: 'speaking' },
+      { text: 'ただし注意！拒否すると相手もあなたも0コインになります。「損してでも不公平は許さない」か、「もらえるだけマシ」か…。提案は全部で5回。直感でどうぞ！', pose: 'smile' }
+    ],
+    questions: [
+      { text: 'いきなり強気な提案が来ましたね…あなたの取り分は10コインだけ。それでも「もらえるだけマシ」と考えますか？', pose: 'surprised' },
+      { text: 'まだだいぶ不公平ですね。さて、あなたはどこまで許せますか？', pose: 'thinking' },
+      { text: '少し歩み寄ってきました。このあたりから悩む人が多いんですよ。', pose: 'thinking' },
+      { text: 'かなり現実的な提案になってきましたね。どうしますか？', pose: 'thinking' },
+      { text: '最後はぴったり半分こ。これなら…どうでしょう？', pose: 'smile' }
+    ],
+    result: [
+      { text: '実験終了です！あなたの拒否ラインから判定すると…「{name}」でした。下に詳しい解説をまとめましたよ。', pose: 'smile' }
+    ],
+    replay: [
+      { text: 'おかえりなさい！今回はミニゲームとして気軽にどうぞ。', pose: 'smile' }
+    ]
+  };
   var state = {
     index: 0,
     answers: [],
@@ -72,10 +95,28 @@
     $('entryNote').textContent = isReplay ? '前回の結果は残したまま、今回はミニゲームとして遊びます。' : '初回無料：診断結果として保存されます。';
     $('entryCost').textContent = isReplay ? '2回目以降の参加費：3コイン / 終了報酬：2コイン' : '終了報酬：2コイン + 初回診断ボーナス';
     $('startBtn').disabled = false;
+    var coinLack = false;
     if (isReplay && window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
+      coinLack = true;
       $('startBtn').disabled = true;
       $('entryLack').style.display = 'block';
       $('entryLack').textContent = 'コインが足りません（あと' + (REPLAY_FEE - GachaUtils.getCoins()) + '枚）';
+    }
+
+    // 研究員ガイド：長文ルールの代わりに1つずつ説明する
+    if (window.DoctorGuide) {
+      var rulesEl = document.querySelector('#phaseEntry .rules');
+      rulesEl.style.display = 'none';
+      $('gameLead').style.display = 'none';
+      DoctorGuide.mount(rulesEl.parentNode, rulesEl);
+      if (isReplay) {
+        DoctorGuide.say(DOCTOR.replay);
+      } else {
+        $('startBtn').disabled = true;
+        DoctorGuide.say(DOCTOR.entry, {
+          onDone: function() { if (!coinLack) $('startBtn').disabled = false; }
+        });
+      }
     }
   }
 
@@ -96,6 +137,12 @@
       '</div>';
     $('rejectBtn').addEventListener('click', function() { answer('reject'); });
     $('acceptBtn').addEventListener('click', function() { answer('accept'); });
+
+    if (window.DoctorGuide) {
+      var panel = document.querySelector('#phaseQuestion .panel');
+      DoctorGuide.mount(panel, panel.querySelector('.question-head'));
+      DoctorGuide.say([DOCTOR.questions[state.index]], { compact: true });
+    }
     showPhase('phaseQuestion');
   }
 
@@ -220,6 +267,11 @@
       '<p><b>ビッグファイブとの見方：</b>' + r.cross + '</p>' +
       '<p><b>選択の流れ：</b>' + answerHtml + '</p>' +
       '<p><b>コイン：</b>終了報酬 +' + REWARD_COINS + 'コイン' + (state.feePaid ? ' / 参加費 -' + state.feePaid + 'コイン' : '') + '</p>';
+
+    if (window.DoctorGuide) {
+      DoctorGuide.mount(document.querySelector('#phaseResult .panel'), $('analysis'));
+      DoctorGuide.say([{ text: DOCTOR.result[0].text.replace('{name}', r.name), pose: DOCTOR.result[0].pose }], { compact: true });
+    }
     showPhase('phaseResult');
   }
 
