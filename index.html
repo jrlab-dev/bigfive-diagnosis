@@ -97,6 +97,11 @@
   }
   html { scroll-behavior: smooth; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.8; }
+  /* 改行の最適化：見出しは行長を揃え、本文は1〜2文字だけの行を防ぐ（非対応ブラウザでは無視される） */
+  h1, h2, h3, .stat-desc { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  /* 意味のまとまり単位でのみ改行させる（単語の途中で切らない） */
+  .nb { display: inline-block; }
   /* ライトテーマ：白背景・blob非表示 */
   body.theme-light { background: #fff !important; }
   body.theme-light .bg-light-blobs { display: none !important; }
@@ -841,7 +846,7 @@
               </span>
               <div class="feature-text-body">
                 <h3>3125通りの組み合わせ</h3>
-                <p>開放性・誠実性・外向性・協調性・感受性の5因子を組み合わせ、3125通りの分析からあなただけの性格タイプを導き出します。</p>
+                <p><span class="nb">開放性・誠実性・</span><span class="nb">外向性・協調性・</span><span class="nb">感受性の</span><span class="nb">5因子を</span><span class="nb">組み合わせ、</span><span class="nb">3125通りの</span><span class="nb">分析から</span><span class="nb">あなただけの</span><span class="nb">性格タイプを</span><span class="nb">導き出します。</span></p>
               </div>
             </div>
           </div>
@@ -857,7 +862,7 @@
               </span>
               <div class="feature-text-body">
                 <h3>キャラクターカード</h3>
-                <p>あなたの性格がちびキャラになります。タイプに応じて髪型・服装・表情が変わる、あなただけのカード。</p>
+                <p><span class="nb">あなたの性格が</span><span class="nb">ちびキャラに</span><span class="nb">なります。</span><span class="nb">タイプに応じて</span><span class="nb">髪型・服装・</span><span class="nb">表情が変わる、</span><span class="nb">あなただけの</span><span class="nb">カード。</span></p>
               </div>
             </div>
           </div>
@@ -871,9 +876,9 @@
               </span>
               <div class="feature-text-body">
                 <h3>科学的根拠</h3>
-                <p>心理学のビッグファイブ理論（Big Five）をベース。世界中の研究で実証された信頼性の高い性格分析です。</p>
+                <p><span class="nb">心理学の</span><span class="nb">ビッグファイブ理論</span><span class="nb">（Big Five）を</span><span class="nb">ベース。</span><span class="nb">世界中の研究で</span><span class="nb">実証された</span><span class="nb">信頼性の高い</span><span class="nb">性格分析です。</span></p>
               </div>
-              <a href="science.html" class="science-link">論文・研究データをすべて読む →</a>
+              <a href="science.html" class="science-link"><span class="nb">論文・研究データを</span><span class="nb">すべて読む →</span></a>
             </div>
           </div>
 
@@ -886,9 +891,9 @@
               </span>
               <div class="feature-text-body">
                 <h3>あの人を分析する</h3>
-                <p>気になる人・職場の上司・気難しい相手…観察した行動をもとに相手の性格を科学的に推測。相性スコアもわかります。</p>
+                <p><span class="nb">気になる人・</span><span class="nb">職場の上司・</span><span class="nb">気難しい相手…</span><span class="nb">観察した行動を</span><span class="nb">もとに</span><span class="nb">相手の性格を</span><span class="nb">科学的に推測。</span><span class="nb">相性スコアも</span><span class="nb">わかります。</span></p>
               </div>
-              <a href="#" id="demoOtherBtn" style="display:block;margin-top:auto;padding-top:12px;font-size:10px;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(236,72,153,0.3);align-self:flex-start;">▼ 结果イメージを見る</a>
+              <a href="#" id="demoOtherBtn" style="display:block;margin-top:auto;padding-top:12px;font-size:10px;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(236,72,153,0.3);align-self:flex-start;">▼ 結果イメージを見る</a>
             </div>
           </div>
 
@@ -983,19 +988,19 @@
     <h2 class="proof-label">VOICE</h2>
     <div class="proof-grid" data-scroll-group data-scroll-weights="1,1,0.65,0.55">
           <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「初めて自分を客観的に理解できた。今の仕事が合わない理由がわかった」</p>
+            <p class="proof-text">「<span class="nb">初めて自分を</span><span class="nb">客観的に</span><span class="nb">理解できた。</span><span class="nb">今の仕事が</span><span class="nb">合わない理由が</span><span class="nb">わかった」</span></p>
             <p class="proof-user">20代女性・事務職</p>
           </div>
           <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「チーム相性診断で配置転換がスムーズに。部下とのコミュニケーションが改善」</p>
+            <p class="proof-text">「<span class="nb">チーム相性診断で</span><span class="nb">配置転換が</span><span class="nb">スムーズに。</span><span class="nb">部下との</span><span class="nb">コミュニケーションが</span><span class="nb">改善」</span></p>
             <p class="proof-user">30代男性・マネージャー</p>
           </div>
           <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「夫婦相性がわかって喧嘩が減った。相手の見方も変わりました」</p>
+            <p class="proof-text">「<span class="nb">夫婦相性が</span><span class="nb">わかって</span><span class="nb">喧嘩が減った。</span><span class="nb">相手の見方も</span><span class="nb">変わりました」</span></p>
             <p class="proof-user">40代女性・主婦</p>
           </div>
           <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「就活活動で自分の強みを言語化できるようになった」</p>
+            <p class="proof-text">「<span class="nb">就活で</span><span class="nb">自分の強みを</span><span class="nb">言語化できる</span><span class="nb">ように</span><span class="nb">なった」</span></p>
             <p class="proof-user">20代男性・学生</p>
           </div>
         </div>
