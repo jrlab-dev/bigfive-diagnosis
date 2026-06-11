@@ -146,7 +146,7 @@
   }
   .scroll-stage--stats { height: 120vh; }
   .scroll-stage--features { height: 160vh; }
-  .scroll-stage--voice { height: 160vh; }
+  .scroll-stage--voice { height: 135vh; }
   .scroll-stage.stage-collapsed { height: auto !important; }
   .scroll-stage.stage-collapsed .scroll-stage-inner { position: relative; min-height: 0; }
 
@@ -655,7 +655,7 @@
     .proof-grid { grid-template-columns: 1fr; }
     .scroll-stage--stats { height: 120vh; }
     .scroll-stage--features { height: 150vh; }
-    .scroll-stage--voice { height: 150vh; }
+    .scroll-stage--voice { height: 125vh; }
     .scroll-stage--cta { height: 160vh; }
     .scroll-stage--anohito { height: 150vh; }
     .scroll-stage--concierge { height: 130vh; }
@@ -981,7 +981,7 @@
   <div class="scroll-stage-inner">
   <section class="social-proof">
     <h2 class="proof-label">VOICE</h2>
-    <div class="proof-grid" data-scroll-group>
+    <div class="proof-grid" data-scroll-group data-scroll-weights="1,1,0.65,0.55">
           <div class="proof-card" data-scroll-anim="shrink">
             <p class="proof-text">「初めて自分を客観的に理解できた。今の仕事が合わない理由がわかった」</p>
             <p class="proof-user">20代女性・事務職</p>
@@ -1146,10 +1146,19 @@
       stage.querySelectorAll('[data-scroll-group]').forEach(function(group) {
         var cards = group.querySelectorAll('[data-scroll-anim]');
         var count = cards.length;
+        // data-scroll-weights="1,1,0.65,0.55" のように指定すると後半カードを速くできる
+        var weights = (group.dataset.scrollWeights || '').split(',').map(parseFloat);
+        if (weights.length !== count || weights.some(isNaN)) {
+          weights = cards.length ? Array(count).fill(1) : [];
+        }
+        var total = 0;
+        var offsets = [];
+        weights.forEach(function(w) { offsets.push(total); total += w; });
+        var span = 0.95; // 全カードが進捗95%で出揃う（残りの無駄スクロールを最小化）
         cards.forEach(function(card, i) {
           if (locked.has(card)) return;
-          var start = i / count * 0.8;
-          var end = start + 0.8 / count;
+          var start = offsets[i] / total * span;
+          var end = start + weights[i] / total * span;
           var localP = Math.min(1, Math.max(0, (progress - start) / (end - start)));
           applyAnim(card, card.dataset.scrollAnim, easeOutCubic(localP));
         });
