@@ -10,6 +10,24 @@
 
   function $(id) { return document.getElementById(id); }
 
+  // ===== 研究員ガイド設定（ページ側のconfig.doctorで上書き可能） =====
+  var useGuide = !!window.DoctorGuide;
+  var doctor = config.doctor || {};
+  if (!doctor.entry) {
+    doctor.entry = [{ text: config.lead, pose: 'speaking' }]
+      .concat(config.rules.map(function(t) { return { text: t, pose: 'speaking' }; }))
+      .concat([{ text: '準備ができたら「はじめる」を押してください！', pose: 'smile' }]);
+  }
+  if (!doctor.replay) doctor.replay = [{ text: 'おかえりなさい！今回はミニゲームとして気軽にどうぞ。', pose: 'smile' }];
+  if (!doctor.question) doctor.question = [{ text: '直感で選んでみてください。正解・不正解はありませんよ。', pose: 'thinking' }];
+  if (!doctor.result) doctor.result = [{ text: '結果が出ました！あなたは「{name}」。下に詳しい解説をまとめましたよ。', pose: 'smile' }];
+
+  function doctorLines(lines, result) {
+    return lines.map(function(l) {
+      return { text: l.text.replace('{name}', result ? result.name : ''), pose: l.pose };
+    });
+  }
+
   function showPhase(id) {
     document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
     $(id).classList.add('active');
@@ -33,10 +51,30 @@
     $('entryNote').textContent = isReplay ? '前回の結果は残したまま、今回はミニゲームとして遊びます。' : '初回無料：診断結果として保存されます。';
     $('entryCost').textContent = isReplay ? '2回目以降の参加費：3コイン / 終了報酬：2コイン' : '終了報酬：2コイン + 初回診断ボーナス';
     $('startBtn').disabled = false;
+    var coinLack = false;
     if (isReplay && window.GachaUtils && GachaUtils.getCoins() < REPLAY_FEE) {
+      coinLack = true;
       $('startBtn').disabled = true;
       $('entryLack').style.display = 'block';
       $('entryLack').textContent = 'コインが足りません（あと' + (REPLAY_FEE - GachaUtils.getCoins()) + '枚）';
+    }
+
+    // 研究員ガイド：長文ルールの代わりに、その都度1つずつ説明する
+    if (useGuide) {
+      var rulesEl = document.querySelector('#phaseEntry .rules');
+      var leadEl = $('gameLead');
+      if (rulesEl) rulesEl.style.display = 'none';
+      if (leadEl) leadEl.style.display = 'none';
+      DoctorGuide.mount(rulesEl ? rulesEl.parentNode : $('phaseEntry'), rulesEl);
+      if (isReplay) {
+        DoctorGuide.say(doctorLines(doctor.replay));
+      } else {
+        // 初回は読み終わるまで「はじめる」を押せない（チュートリアル）
+        $('startBtn').disabled = true;
+        DoctorGuide.say(doctorLines(doctor.entry), {
+          onDone: function() { if (!coinLack) $('startBtn').disabled = false; }
+        });
+      }
     }
   }
 
@@ -88,6 +126,12 @@
           $('answerError').style.display = 'none';
         });
       });
+    }
+
+    if (useGuide) {
+      var panel = document.querySelector('#phaseQuestion .panel');
+      DoctorGuide.mount(panel, panel.querySelector('.question-head'));
+      DoctorGuide.say(doctorLines(doctor.question), { compact: true });
     }
     showPhase('phaseQuestion');
   }
@@ -163,6 +207,12 @@
       return '<div class="stat"><div class="label">' + s.label + '</div><div class="value">' + s.value + '</div></div>';
     }).join('');
     $('analysis').innerHTML = '<p><b>行動傾向：</b>' + r.detail + '</p><p><b>ビッグファイブとの見方：</b>' + r.cross + '</p><p><b>コイン：</b>終了報酬 +' + FIXED_REWARD + 'コイン' + (state.feePaid ? ' / 参加費 -' + state.feePaid + 'コイン' : '') + '</p>';
+
+    if (useGuide) {
+      var panel = document.querySelector('#phaseResult .panel');
+      DoctorGuide.mount(panel, $('analysis'));
+      DoctorGuide.say(doctorLines(doctor.result, r), { compact: true });
+    }
     showPhase('phaseResult');
   }
 

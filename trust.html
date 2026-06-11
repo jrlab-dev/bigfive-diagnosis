@@ -51,6 +51,7 @@
   </section>
 </main>
 <script src="gacha-utils.js"></script>
+<script src="doctor-guide.js"></script>
 <script>
 window.BEHAVIOR_GAME = {
   id: 'trust',
@@ -62,6 +63,19 @@ window.BEHAVIOR_GAME = {
   questionLabel: 'TRUST DECISION',
   scenario: '相手があなたに10コインを送りました。<br>そのコインは3倍になり、あなたは30コインを受け取りました。<br>30コインのうち、相手に返す額を選んでください。',
   rules: ['相手が送った10コインは、あなたの手元で30コインになります', '返す額を7つの選択肢から選びます', '返す割合から、信頼への返報性・公平性を判定します'],
+  doctor: {
+    entry: [
+      { text: 'こんにちは！行動心理ラボの研究員です。今日は「信頼ゲーム」を体験してもらいますね。', pose: 'speaking' },
+      { text: 'ルールは簡単。相手があなたを信頼して、10コインを預けてくれました。それが3倍に増えて、いまあなたの手元には30コインがあります。', pose: 'speaking' },
+      { text: 'あなたが決めるのは「30コインのうち、いくら相手に返すか」。これだけです。正解はないので、直感でどうぞ！', pose: 'smile' }
+    ],
+    question: [
+      { text: 'さて、いくら返しますか？この選択から、あなたの「信頼への返し方」が見えてきますよ。', pose: 'thinking' }
+    ],
+    result: [
+      { text: '結果が出ました！あなたは「{name}」。下に詳しい解説をまとめたので、ぜひ読んでみてください。', pose: 'smile' }
+    ]
+  },
   inputType: 'options',
   defaultValue: null,
   options: [

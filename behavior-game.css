@@ -210,10 +210,77 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 }
 .analysis b { color: var(--text); }
 
+/* ===== 研究員ガイド（doctor-guide.js） ===== */
+.dg-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 18px 0;
+  text-align: left;
+}
+.dg-img {
+  height: 132px;
+  width: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(2, 6, 23, 0.25));
+}
+.dg-bubble {
+  position: relative;
+  flex: 1;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+.dg-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  bottom: 28px;
+  width: 14px;
+  height: 14px;
+  background: var(--panel-2);
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+.dg-text {
+  font-size: 14px;
+  line-height: 1.75;
+  font-weight: 600;
+  color: var(--text);
+  min-height: 49px;
+  text-wrap: pretty;
+}
+.dg-pop { animation: dgPop 0.22s ease-out; }
+@keyframes dgPop {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dg-next {
+  display: block;
+  margin: 8px 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  color: white;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  cursor: pointer;
+}
+.dg-compact .dg-img { height: 96px; }
+.dg-compact .dg-text { min-height: 0; }
+
 @media (max-width: 640px) {
   .site-header { padding: 0 12px; }
   .header-title { display: none; }
   .wrap { width: min(100% - 20px, 920px); margin-top: 18px; }
   .hero, .panel { padding: 18px; }
   .option-grid { grid-template-columns: 1fr; }
+  .dg-img { height: 104px; }
+  .dg-compact .dg-img { height: 84px; }
+  .dg-text { font-size: 13px; }
 }
