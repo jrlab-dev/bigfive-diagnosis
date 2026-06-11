@@ -302,6 +302,21 @@ body.theme-light .final-coins { background: rgba(255,255,255,0.7); border-color:
 body.theme-light .analysis-card { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
 body.theme-light .analysis-cross { background: rgba(255,255,255,0.7); border-color: rgba(109,40,217,0.1); }
 body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); color: #1e293b; }
+
+/* 研究員ガイド（doctor-guide.js）*/
+.dg-wrap { display: flex; align-items: flex-end; gap: 12px; margin: 18px 0; text-align: left; }
+.dg-img { height: 132px; width: auto; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(2,6,23,0.25)); }
+.dg-bubble { position: relative; flex: 1; background: rgba(30,41,59,0.92); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; }
+.dg-bubble::before { content: ''; position: absolute; left: -8px; bottom: 28px; width: 14px; height: 14px; background: rgba(30,41,59,0.92); border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); transform: rotate(45deg); }
+.dg-text { font-size: 14px; line-height: 1.75; font-weight: 600; min-height: 49px; text-wrap: pretty; }
+.dg-pop { animation: dgPop 0.22s ease-out; }
+@keyframes dgPop { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.dg-next { display: block; margin: 8px 0 0 auto; border: 0; border-radius: 999px; padding: 6px 16px; font: inherit; font-size: 12px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #0284c7, #2563eb); cursor: pointer; }
+.dg-compact .dg-img { height: 96px; }
+.dg-compact .dg-text { min-height: 0; }
+body.theme-light .dg-bubble, body.theme-light .dg-bubble::before { background: rgba(255,255,255,0.92); }
+body.theme-light .dg-text { color: #1e293b; }
+@media (max-width: 640px) { .dg-img { height: 104px; } .dg-compact .dg-img { height: 84px; } .dg-text { font-size: 13px; } }
 </style>
 </head>
 <body class="theme-light">
@@ -425,8 +440,30 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
 </div>
 
 <script src="gacha-utils.js"></script>
+<script src="doctor-guide.js"></script>
 <script>
 (function() {
+
+  // 研究員ガイドのセリフ（長文ルールの代わりに1つずつ説明する）
+  var DOCTOR = {
+    entry: [
+      { text: 'こんにちは！行動心理ラボの研究員です。今回は「公共財ゲーム」で、コインを増やせるか挑戦してもらいますね。', pose: 'speaking' },
+      { text: 'ルールはシンプル。毎ラウンド、手持ちの3枚から好きな枚数を「共同プール」に入れます。集まったコインは増やされて、4人で山分けです。', pose: 'speaking' },
+      { text: 'みんなで出し合えば全員が得します。でも…自分は出さず、人の分け前だけ受け取る手も。さあ、あなたはどうしますか？全3ラウンド、いってみましょう！', pose: 'smile' }
+    ],
+    rounds: [
+      { text: 'まずは1ラウンド目。相手がどう動くかはまだ分かりません。あなたは何枚、共同プールに入れますか？', pose: 'speaking' },
+      { text: '2ラウンド目です。さっきのみんなの出し方を見て…今度はどう動きましょうか。', pose: 'thinking' },
+      { text: '最終ラウンド！ここでの選び方に、あなたの「素」が出ますよ。最後はどうしますか？', pose: 'thinking' }
+    ],
+    result: [
+      { text: 'お疲れさまでした！…実はこのゲーム、ただのコイン稼ぎじゃないんです。', pose: 'surprised' },
+      { text: '「公共財ゲーム」という心理学の有名な実験で、あなたの協力スタイルを見ていました。結果は「{name}」。下に詳しい解説をまとめましたよ。', pose: 'smile' }
+    ],
+    replay: [
+      { text: 'おかえりなさい！今回はミニゲームとして気軽にどうぞ。', pose: 'smile' }
+    ]
+  };
 
   var ENTRY_FEE = 3;
   var TOKENS_PER_ROUND = 3;
@@ -749,6 +786,23 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       $('startBtn').disabled = false;
       $('entryLack').style.display = 'none';
     }
+
+    // 研究員ガイド：長文ルールの代わりに研究員が説明する（初回は読了まで開始ボタン無効）
+    if (window.DoctorGuide) {
+      var rulesEl = document.querySelector('#phaseEntry .entry-rules');
+      rulesEl.style.display = 'none';
+      DoctorGuide.mount(rulesEl.parentNode, rulesEl);
+      if (isReplay) {
+        DoctorGuide.say(DOCTOR.replay);
+      } else if (coins >= ENTRY_FEE) {
+        $('startBtn').disabled = true;
+        DoctorGuide.say(DOCTOR.entry, {
+          onDone: function() { if (GachaUtils.getCoins() >= ENTRY_FEE) $('startBtn').disabled = false; }
+        });
+      } else {
+        DoctorGuide.say(DOCTOR.entry);
+      }
+    }
   }
 
   function startGame() {
@@ -875,6 +929,12 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
       '最終ラウンド。ここでの選択が、あなたのスタイルを決めます。' + examples
     ];
     $('roundNarrative').innerHTML = narratives[n];
+
+    // 研究員ガイド：各ラウンドで一言そえる
+    if (window.DoctorGuide && DOCTOR.rounds[n]) {
+      DoctorGuide.mount($('phaseRound'), document.querySelector('#phaseRound .round-title'));
+      DoctorGuide.say([DOCTOR.rounds[n]], { compact: true });
+    }
 
     // トークン表示
     var tokenHtml = '';
@@ -1074,6 +1134,17 @@ body.theme-light .nav-btn.secondary { background: rgba(255,255,255,0.7); border-
     $('typeName').textContent = typeInfo.name;
     $('typeName').style.color = typeInfo.color;
     $('typeSummary').textContent = typeInfo.summary;
+
+    // 研究員ガイド：どんでん返し（実は心理実験）→ 結果タイプ紹介
+    if (window.DoctorGuide) {
+      var revealEl = document.querySelector('#phaseAnalysis .analysis-reveal');
+      if (revealEl) revealEl.style.display = 'none';
+      DoctorGuide.mount($('phaseAnalysis'), revealEl || $('typeIcon'));
+      DoctorGuide.say([
+        DOCTOR.result[0],
+        { text: DOCTOR.result[1].text.replace('{name}', typeInfo.name), pose: DOCTOR.result[1].pose }
+      ], { compact: true });
+    }
 
     // 参加者一覧（キャラ画像付き）
     var myChar = getMyCharInfo();
