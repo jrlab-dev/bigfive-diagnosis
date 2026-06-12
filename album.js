@@ -272,6 +272,12 @@
   // --- 画像パス取得 ---
 
   function getCardImagePath(card) {
+    // ImageResolver を優先使用（secret → only → marume243 の3ステップ検索）
+    if (typeof ImageResolver !== 'undefined') {
+      var resolved = ImageResolver.getDisplayImage(card.code, card.gender, card.version);
+      if (resolved) return resolved;
+    }
+    // 旧フォールバック: CharacterRegistry
     if (typeof CharacterRegistry !== 'undefined') {
       var registryPath = CharacterRegistry.getDisplayImage(card.code, card.gender, card.version);
       if (registryPath) return registryPath;
@@ -282,13 +288,17 @@
       if (typeof HIDDEN_CHARACTERS !== 'undefined') {
         hc = HIDDEN_CHARACTERS.find(function(c) { return c.id === card.hiddenId; });
       }
-      if (hc) return 'images/characters/hidden/' + hc.img;
+      if (hc) {
+        // secret にコードベースのパスを返す
+        var code5 = '' + hc.o + hc.c + hc.e + hc.a + hc.n;
+        return 'images/characters/secret/' + card.gender + '/' + code5 + '.webp';
+      }
     }
-    // 1/3/5丸めで画像コードを取得
+    // 1/3/5丸めで marume243 フォールバック
     var code = card.code;
     var imgCode = toScale(+code[0]).toString() + toScale(+code[1]).toString() +
       toScale(+code[2]).toString() + toScale(+code[3]).toString() + toScale(+code[4]).toString();
-    return 'images/characters/' + card.gender + '/' + imgCode + '.webp';
+    return 'images/characters/marume243/' + card.gender + '/' + imgCode + '.webp';
   }
 
   // --- グローバル公開 ---

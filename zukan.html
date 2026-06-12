@@ -345,6 +345,7 @@
 
 <script src="nav.js"></script>
 <script src="unlock.js"></script>
+<script src="image-resolver.js"></script>
 <script src="hidden_characters.js"></script>
 <script src="album.js"></script>
 <script src="rarity.js"></script>
@@ -586,7 +587,8 @@
       if (owned) {
         img.src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + hc.id;
       } else {
-        img.src = 'images/characters/hidden/' + hc.img;
+        var code5 = '' + hc.o + hc.c + hc.e + hc.a + hc.n;
+        img.src = 'images/characters/secret/' + (hc.gender === 'M' ? 'M' : 'F') + '/' + code5 + '.webp';
       }
       img.loading = 'lazy';
       img.alt = '';
