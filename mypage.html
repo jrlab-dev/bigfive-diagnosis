@@ -2862,6 +2862,7 @@ function renderAIProfile() {
   };
 }
 </script>
+<script src="image-resolver.js"></script>
 <script src="hidden_characters.js"></script>
 <script src="character-registry.js"></script>
 <script src="album.js"></script>
@@ -2891,7 +2892,7 @@ function getHiddenCharImg(scores, gender) {
   const exact = HIDDEN_CHARACTERS.find(ch =>
     ch.o === scores.O && ch.c === scores.C && ch.e === scores.E && ch.a === scores.A && ch.n === scores.N && matchGender(ch)
   );
-  return exact && exact.img ? `images/characters/hidden/${exact.img}` : null;
+  return exact && exact.img ? `images/characters/secret/${gender}/${String(scores.O)+String(scores.C)+String(scores.E)+String(scores.A)+String(scores.N)}.webp` : null;
 }
 
 // 初期表示（全スクリプト読み込み後に実行）
