@@ -289,10 +289,18 @@ function getImgPath(p) {
   var code = p.code || '33333';
   var gender = p.gender || 'F';
   var version = p.version || '10';
-  if (typeof CharacterRegistry !== 'undefined') {
-    return CharacterRegistry.getDisplayImage(code, gender, version);
+  if (typeof ImageResolver !== 'undefined') {
+    return ImageResolver.getDisplayImage(code, gender, version);
   }
-  return 'images/characters/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
+  return 'images/characters/marume243/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
+}
+function getImgFallback(p) {
+  var code = p.code || '33333';
+  var gender = p.gender || 'F';
+  if (typeof ImageResolver !== 'undefined') {
+    return ImageResolver.getFallbackImage(code, gender);
+  }
+  return 'images/characters/marume243/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
 }
 
 function avatarImg(p, size) {
@@ -301,8 +309,9 @@ function avatarImg(p, size) {
   var g = p.gender || '';
   if (p.code && (g === 'M' || g === 'F')) {
     var src = getImgPath(p);
-    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="' + src + '"'
-      + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
+    var fb = getImgFallback(p);
+    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="' + src + '" data-fb="' + fb + '"'
+      + ' onerror="if(!this.dataset.t){this.dataset.t=\'1\';this.src=this.dataset.fb}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">'
       + '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';display:none;">' + PERSON_SVG + '</div>';
   }
   return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';">' + PERSON_SVG + '</div>';
