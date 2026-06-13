@@ -70,8 +70,8 @@
       return value === 5;
     }
 
-    // 30問版・120問版ともに隠しキャラ判定
-    if (version === '30' || version === '120') {
+    // 60問版・120問版のみ隠しキャラ判定（30問版はsecret画像を表示しないため）
+    if (version === '60' || version === '120') {
       var scores = { O: +code[0], C: +code[1], E: +code[2], A: +code[3], N: +code[4] };
       var hc = findHiddenCharForAlbum(scores, gender);
       if (hc) {
