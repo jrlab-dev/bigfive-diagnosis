@@ -108,12 +108,12 @@
   }
 
   /**
-   * 同期版: 最も可能性の高いパスを1つ返す（旧コード互換用）。
-   * ブラウザでは画像の実際の存在確認は onerror で行う前提。
+   * 同期版: 常に存在が保証された marume243 パスを返す。
+   * secret/only 画像を試したい場合は getCandidates() を使用し、
+   * onerror で順次フォールバックすること。
    */
   function getDisplayImage(code, gender, version) {
-    var c = getCandidates(code, gender, version);
-    return c.length > 0 ? c[0].path : null;
+    return getFallbackImage(code, gender);
   }
 
   /**
