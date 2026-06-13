@@ -153,7 +153,7 @@
   }
   .scroll-stage--stats { height: 120vh; }
   .scroll-stage--features { height: 160vh; }
-  .scroll-stage--voice { height: 135vh; }
+  .scroll-stage--voice { height: 116vh; }
   .scroll-stage.stage-collapsed { height: auto !important; }
   .scroll-stage.stage-collapsed .scroll-stage-inner { position: relative; min-height: 0; }
 
@@ -184,7 +184,7 @@
   /* ロゴステージ */
   .logo-stage {
     position: relative;
-    height: clamp(180px, 38vw, 320px);
+    height: clamp(150px, 28vw, 240px);
     width: auto;
     opacity: 0;
     transform: scale(0.78);
@@ -214,12 +214,12 @@
   /* ヒーロー内ボタン */
   .hero-start-btn {
     flex-shrink: 0; /* ウィンドウ高が低いときに潰れて文字が切れるのを防ぐ */
-    padding: 18px 64px;
+    padding: 15px 54px;
     background: #111;
     color: #fff;
     border: none;
     border-radius: 60px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     font-family: inherit;
     letter-spacing: 0.14em;
@@ -261,7 +261,7 @@
   .reveal-text {
     display: flex; flex-direction: column;
     align-items: center; gap: 4px;
-    margin-top: 160px;
+    margin-top: 100px;
   }
   .reveal-line { display: flex; justify-content: center; flex-wrap: wrap; }
   h1.reveal-line { margin: 0; font-size: inherit; font-weight: inherit; line-height: inherit; }
@@ -272,7 +272,7 @@
   .reveal-line .char.show { opacity: 1; transform: translateY(0); }
   .reveal-line--main .char,
   .reveal-line--sub .char {
-    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
     font-weight: 900;
     letter-spacing: 0.2em;
     color: transparent;
@@ -662,7 +662,7 @@
     .proof-grid { grid-template-columns: 1fr; }
     .scroll-stage--stats { height: 120vh; }
     .scroll-stage--features { height: 150vh; }
-    .scroll-stage--voice { height: 125vh; }
+    .scroll-stage--voice { height: 108vh; }
     .scroll-stage--cta { height: 160vh; }
     .scroll-stage--anohito { height: 150vh; }
     .scroll-stage--concierge { height: 130vh; }
@@ -988,7 +988,7 @@
   <div class="scroll-stage-inner">
   <section class="social-proof">
     <h2 class="proof-label">VOICE</h2>
-    <div class="proof-grid" data-scroll-group data-scroll-weights="1,1,0.65,0.55">
+    <div class="proof-grid" data-scroll-group data-scroll-weights="0.8,0.8,0.6,0.55">
           <div class="proof-card" data-scroll-anim="shrink">
             <p class="proof-text">「<span class="nb">初めて自分を</span><span class="nb">客観的に</span><span class="nb">理解できた。</span><span class="nb">今の仕事が</span><span class="nb">合わない理由が</span><span class="nb">わかった」</span></p>
             <p class="proof-user">20代女性・事務職</p>
