@@ -537,7 +537,24 @@
       });
 
       var img = document.createElement('img');
-      img.src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity;
+      // getCandidates() で result.html と同じ画像検索ロジックを使用（一貫性保証）
+      var IR = window.ImageResolver;
+      if (IR && IR.getCandidates) {
+        var candidates = IR.getCandidates(card.code, card.gender, card.version || '10');
+        var cIdx = 0;
+        img.src = candidates[0].path;
+        img.onerror = function() {
+          cIdx++;
+          if (cIdx < candidates.length) {
+            this.src = candidates[cIdx].path;
+          } else {
+            this.style.display = 'none';
+          }
+        };
+      } else {
+        img.src = AlbumUtils.getCardImagePath(card);
+        img.onerror = function() { this.style.display = 'none'; };
+      }
       img.loading = 'lazy';
       img.alt = '';
 
