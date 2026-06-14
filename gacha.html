@@ -470,6 +470,10 @@ body {
   background: rgba(0,0,0,0.88);
   pointer-events: auto;
 }
+/* ライトモードでは後ろの明るい画面が透けて演出が青白くにじむため、ほぼ不透明な暗色で締める */
+body.theme-light .carddas-overlay.active {
+  background: rgba(8,6,20,0.97);
+}
 
 /* フラッシュ効果 */
 .carddas-flash {
