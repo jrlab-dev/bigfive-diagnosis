@@ -58,6 +58,8 @@ const HIDDEN_CHARACTERS = [
   // ===== 同スコア・性別分岐ペア =====
 
   { id:'asuka',      name:'式波・アスカ・ラングレー',  work:'新世紀エヴァンゲリオン', o:4, c:4, e:5, a:1, n:5, gender:'F', img:'44515.webp' },
+  { id:'l',          name:'L',                        work:'デスノート',              o:5, c:3, e:1, a:1, n:1, gender:'M', img:'53111.webp' },
+  { id:'frieren',    name:'フリーレン',                work:'葬送のフリーレン',        o:5, c:3, e:1, a:1, n:1, gender:'F', img:'53111.webp' },
 
   // ===== オリジナル =====
 
