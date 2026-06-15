@@ -543,6 +543,7 @@ body {
 
 </div>
 
+<script src="image-resolver.js"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -664,10 +665,29 @@ function renderProfile(bf) {
     const n = parseInt(d);
     return n <= 2 ? '1' : n >= 4 ? '5' : '3';
   }).join('');
-  const imgPath = `images/characters/${gender}/${imgCode}.webp`;
-
+  const fbPath = `images/characters/marume243/${gender}/${imgCode}.webp`;
   const charEl = document.getElementById('profileChar');
-  charEl.innerHTML = `<img src="${imgPath}" alt="キャラクター" onerror="this.parentElement.innerHTML='<span class=\'profile-char-placeholder\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg></span>'">`;
+  const placeholderSvg = '<span class="profile-char-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>';
+  charEl.innerHTML = '';
+  const img = document.createElement('img');
+  img.alt = 'キャラクター';
+  const IR = window.ImageResolver;
+  if (IR && IR.getCandidates) {
+    // secret → only → marume243 の候補チェーン（result.htmlと同一仕様）
+    const candidates = IR.getCandidates(bf.code, gender, bf.version);
+    let idx = 0;
+    img.onerror = () => {
+      idx++;
+      if (idx < candidates.length) { img.src = candidates[idx].path; }
+      else { charEl.innerHTML = placeholderSvg; }
+    };
+    img.src = candidates[0].path;
+  } else {
+    // ImageResolver未読み込み時の保険（marume243丸めコード）
+    img.onerror = () => { charEl.innerHTML = placeholderSvg; };
+    img.src = fbPath;
+  }
+  charEl.appendChild(img);
 
   document.getElementById('profileCode').textContent = bf.code;
   document.getElementById('profileName').textContent = bf.typeName || '—';
