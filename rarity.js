@@ -8,7 +8,7 @@ var ANIME_RARITY_OVERRIDE = {
   '22455': { default: 'r3' },   // 仲田陽介 / 沢田誠子
   '44352': { default: 'r5' },   // 五味拓海（終盤）
   '35453': { default: 'r4' },   // 真士（覚醒後）
-  '54421': { F: 'r4', M: 'secret' }, // 神山凛(F) / メンタリスト(M)
+  '54421': { F: 'r4', M: 'secret' }, // メンタリスト（オリジナル）M=secret / F=r4(F版未実装) ※神山凜は別コード(45411)の通常キャラ・シークレット外
 };
 
 function isMax(factor, value) {
