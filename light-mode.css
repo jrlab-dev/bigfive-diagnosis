@@ -2361,3 +2361,19 @@ body.theme-light .mini-bar-bg,
 body.theme-light .factor-bar-bg {
   background: oklch(0.88 0.02 270) !important;
 }
+
+/* reladvice.html — カテゴリタブ（恋愛・仕事・友達） */
+body.theme-light .cat-tab {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--dim) !important;
+}
+body.theme-light .cat-tab:hover {
+  border-color: oklch(0.58 0.22 285 / 0.5) !important;
+  color: var(--text) !important;
+}
+body.theme-light .cat-tab.active {
+  background: oklch(0.93 0.04 350 / 0.35) !important;
+  border-color: var(--pink) !important;
+  color: var(--text) !important;
+}
