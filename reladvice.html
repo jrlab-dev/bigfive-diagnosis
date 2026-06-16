@@ -103,6 +103,7 @@ body {
 }
 .situation-btn:hover { border-color: rgba(139,92,246,0.5); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,0.12); }
 .situation-icon { width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.situation-icon svg { width: 18px; height: 18px; }
 .situation-label { font-size: 13px; font-weight: 700; line-height: 1.4; }
 .situation-sub { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
 
@@ -158,6 +159,19 @@ body {
 
 .step-view { display: none; }
 .step-view.active { display: block; }
+
+/* カテゴリタブ */
+.cat-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.cat-tab {
+  flex: 1; padding: 11px 6px; border: 1.5px solid rgba(139,92,246,0.2);
+  background: rgba(26,10,62,0.3); border-radius: 10px; cursor: pointer;
+  font-size: 13px; font-weight: 700; color: var(--dim); transition: all 0.2s;
+  font-family: 'Noto Sans JP', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.cat-tab:hover { border-color: rgba(139,92,246,0.45); color: var(--text); }
+.cat-tab svg { width: 14px; height: 14px; flex-shrink: 0; }
+.cat-tab.active { background: rgba(236,72,153,0.12); border-color: var(--pink); color: var(--text); }
 </style>
 </head>
 <body>
@@ -190,36 +204,8 @@ body {
   <div class="step-view" id="step2">
     <div id="pairDisplay2"></div>
     <div class="section-label">どんな相談ですか？</div>
-    <div class="situation-grid">
-      <button class="situation-btn" onclick="goStep3('like')">
-        <div class="situation-icon" style="background:rgba(236,72,153,0.1);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </div>
-        <div class="situation-label">好かれたい</div>
-        <div class="situation-sub">AがBに好きになって<br>もらうには</div>
-      </button>
-      <button class="situation-btn" onclick="goStep3('rejected')">
-        <div class="situation-icon" style="background:rgba(239,68,68,0.1);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </div>
-        <div class="situation-label">なぜ振られた？</div>
-        <div class="situation-sub">うまくいかなかった<br>理由を知りたい</div>
-      </button>
-      <button class="situation-btn" onclick="goStep3('distance')">
-        <div class="situation-icon" style="background:rgba(59,130,246,0.1);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="3"/><circle cx="16" cy="12" r="3"/></svg>
-        </div>
-        <div class="situation-label">なぜ距離がある？</div>
-        <div class="situation-sub">なかなか仲良くなれない<br>理由を分析</div>
-      </button>
-      <button class="situation-btn" onclick="goStep3('fight')">
-        <div class="situation-icon" style="background:rgba(249,115,22,0.1);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <div class="situation-label">ケンカが多い</div>
-        <div class="situation-sub">衝突しやすい<br>根本の原因を知る</div>
-      </button>
-    </div>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="situation-grid" id="themeGrid"></div>
     <button class="back-btn" onclick="goStep1()">← 人を選び直す</button>
   </div>
 
@@ -248,6 +234,433 @@ var FACTORS = [
 ];
 var CODE_IDX = { O:0, C:1, E:2, A:3, N:4 };
 var PERSON_SVG = '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>';
+
+/* ===== カテゴリ・テーマ定義（データ駆動） ===== */
+var CATEGORIES = [
+  { id:'love',   label:'恋愛', color:'#ec4899',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' },
+  { id:'work',   label:'仕事', color:'#3b82f6',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>' },
+  { id:'friend', label:'友達', color:'#f97316',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>' }
+];
+
+var THEMES = [
+  { id:'like',         cat:'love',   label:'好かれたい',         sub:'{name1}さんが{name2}さんに好かれるには' },
+  { id:'rejected',     cat:'love',   label:'なぜ振られた？',     sub:'{name1}さんと{name2}さん、うまくいかなかった理由' },
+  { id:'distance',     cat:'love',   label:'なぜ距離がある？',   sub:'{name1}さんと{name2}さん、距離が縮まらない理由' },
+  { id:'fight',        cat:'love',   label:'ケンカが多い',       sub:'{name1}さんと{name2}さん、ケンカが多い理由' },
+  { id:'work-close',   cat:'work',   label:'仲良くなりたい',     sub:'{name1}さんが{name2}さんと打ち解けるには' },
+  { id:'work-fric',    cat:'work',   label:'意見がぶつかる',     sub:'{name1}さんと{name2}さん、意見がぶつかる原因' },
+  { id:'work-trust',   cat:'work',   label:'信頼されたい',       sub:'{name1}さんが{name2}さんから信頼を得るには' },
+  { id:'work-hard',    cat:'work',   label:'仕事が進まない',     sub:'{name1}さんと{name2}さん、連携が進まない理由' },
+  { id:'friend-close', cat:'friend', label:'仲良くなりたい',     sub:'{name1}さんが{name2}さんと仲良くなるには' },
+  { id:'friend-cool',  cat:'friend', label:'最近なんとなく',     sub:'{name1}さんと{name2}さん、最近距離がある理由' },
+  { id:'friend-fun',   cat:'friend', label:'一緒にいて楽しい',   sub:'{name1}さんと{name2}さん、相性が良い理由' },
+  { id:'friend-conf',  cat:'friend', label:'価値観が合うか不安', sub:'{name1}さんと{name2}さん、価値観が合うかのポイント' }
+];
+var currentCat = 'love';
+
+/* ===== テンプレート評価エンジン ===== */
+function buildCtx(p1, p2, n1, n2) {
+  var LVL = { high:'高め', mid:'ふつう', low:'低め' };
+  var ctx = { name1: n1, name2: n2 };
+  FACTORS.forEach(function(f) {
+    var k = f.key;
+    ctx['factor:' + k] = f.name;
+    ctx['n1' + k] = sc(p1, k);
+    ctx['n2' + k] = sc(p2, k);
+    ctx['lvl1:' + k] = isHigh(p1, k) ? LVL.high : (isLow(p1, k) ? LVL.low : LVL.mid);
+    ctx['lvl2:' + k] = isHigh(p2, k) ? LVL.high : (isLow(p2, k) ? LVL.low : LVL.mid);
+  });
+  return ctx;
+}
+function fillTemplate(str, ctx) {
+  return String(str).replace(/\{(\w+(?::\w+)?)\}/g, function(_, key) {
+    return ctx[key] !== undefined ? ctx[key] : '';
+  });
+}
+function evaluateRules(themeId, p1, p2, ctx, maxN) {
+  var rules = RULES[themeId] || [];
+  var matched = [];
+  for (var i = 0; i < rules.length; i++) {
+    var r = rules[i];
+    try {
+      if (r.when(p1, p2, ctx)) {
+        matched.push({
+          priority: r.priority || 0, order: i,
+          title: fillTemplate(r.title, ctx),
+          detail: fillTemplate(r.detail, ctx),
+          advice: fillTemplate(r.advice, ctx)
+        });
+      }
+    } catch(e) {}
+  }
+  matched.sort(function(a, b) { return (b.priority - a.priority) || (a.order - b.order); });
+  if (matched.length === 0) {
+    matched.push({
+      priority: 0, order: 0,
+      title: 'おふたりのスコアから、特性の大きなズレは見つかりませんでした',
+      detail: 'ビッグファイブは性格傾向の参考です。関係の形は、おふたりのタイミングや環境の影響も大きく受けます。',
+      advice: 'スコアの数字だけでなく、実際のやり取りのなかで何が合って何が違うかを言葉にしてみるのがおすすめです。'
+    });
+  }
+  return matched.slice(0, maxN || 3);
+}
+function buildTitle(theme, ctx) {
+  if (!theme || !theme.sub) return '';
+  return fillTemplate(theme.sub, ctx);
+}
+
+/* ===== ルール定義（テーマごとの条件 + テンプレート文章） =====
+   追加は1ルール書き足すだけ。各テームの最後はフォールバック(when=常にtrue,priority=0)。 */
+var RULES = {
+  /* ---- 恋愛 ---- */
+  like: [
+    { when:function(p1,p2){ return isHigh(p2,'N'); }, priority:5,
+      title:'{name2}さんの{factor:N}が高く、安心感を求めています',
+      detail:'感情的に繊細で、予測できない行動や曖昧な態度は不安を招きやすい傾向があります。',
+      advice:'小さな約束を守り、行動を読みやすくすると安心感につながります。「また連絡する」と言ったら必ず連絡するなど、予測可能性が信頼の土台です。' },
+    { when:function(p1,p2){ return isLow(p2,'N'); }, priority:5,
+      title:'{name2}さんの{factor:N}は低め、感情より論理を好みます',
+      detail:'感情的な訴えより、落ち着いた事実ベースの話し方が届きやすい傾向があります。',
+      advice:'感情で迫るより、具体的な行動や事実で示す方が印象に残ります。' },
+    { when:function(p1,p2){ return isHigh(p2,'E'); }, priority:4,
+      title:'{name2}さんの{factor:E}が高く、賑やかな場を楽しみます',
+      detail:'一緒に何かを体験することで距離が縮まりやすいタイプです。',
+      advice:'積極的に誘ったり、新しい体験を一緒にすると自然と関係が深まります。' },
+    { when:function(p1,p2){ return isLow(p2,'E'); }, priority:4,
+      title:'{name2}さんの{factor:E}は低め、少人数・静かな場が本音を出しやすい',
+      detail:'大勢の場では本来の自分を出しにくいタイプです。',
+      advice:'2人きりや小さな場を意識的に作ることで、本音を引き出しやすくなります。' },
+    { when:function(p1,p2){ return isHigh(p2,'A'); }, priority:4,
+      title:'{name2}さんの{factor:A}が高く、相手の気持ちを大切にします',
+      detail:'話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。',
+      advice:'話をよく聞き、感謝を言葉で伝えることが好感につながります。' },
+    { when:function(p1,p2){ return isLow(p2,'A'); }, priority:4,
+      title:'{name2}さんの{factor:A}は低め、はっきり意見を持つ人を好みます',
+      detail:'曖昧な態度より、自分の立場をはっきり示せる人に魅力を感じます。',
+      advice:'遠慮せず自分の意見や好みをはっきり伝えましょう。媚びすぎない姿勢が好印象です。' },
+    { when:function(p1,p2){ return isHigh(p2,'C'); }, priority:3,
+      title:'{name2}さんの{factor:C}が高く、約束や時間を大切にします',
+      detail:'ルーズな印象を与えると信頼を失いやすいタイプです。',
+      advice:'時間を守る・言ったことを実行するなど、信頼感の積み上げが好感の土台になります。' },
+    { when:function(p1,p2){ return isLow(p2,'C'); }, priority:3,
+      title:'{name2}さんの{factor:C}は低め、自然体・気軽さを好みます',
+      detail:'堅苦しい雰囲気より、リラックスして過ごせる関係を心地よく感じます。',
+      advice:'完璧を目指さず、肩の力を抜いて気軽に接することで距離が縮まります。' },
+    { when:function(p1,p2){ return isHigh(p2,'O'); }, priority:3,
+      title:'{name2}さんの{factor:O}が高く、新しいこと・知的な話題が好きです',
+      detail:'好奇心が旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。',
+      advice:'面白い話題や、ちょっと変わった体験を提案すると興味を引けます。' },
+    { when:function(p1,p2){ return isLow(p2,'O'); }, priority:3,
+      title:'{name2}さんの{factor:O}は低め、安定・慣れ親しんだことを好みます',
+      detail:'急な変化より、安心できる日常を大切にするタイプです。',
+      advice:'いつもの場所・いつもの流れで一緒に過ごすことで、自然と親しくなれます。' },
+    { when:function(){ return true; }, priority:0,
+      title:'{name2}さんとの関係は、焦らず少しずつ育てるのが良さそうです',
+      detail:'ビッグファイブはあくまで傾向の参考です。実際のやり取りのなかで合う・合わないを確かめていくのが確実です。',
+      advice:'まずは相手の反応を見ながらペースを合わせることから始めるのがおすすめです。' }
+  ],
+  rejected: [
+    { when:function(p1,p2){ return diff(p1,p2,'N') >= 2; }, priority:6,
+      title:'{name1}さんと{name2}さんで{factor:N}の差が大きく、感情のペースが合わなかった',
+      detail:'片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。',
+      advice:'感情のペースの違いは「冷たい」「重い」という誤解を生みます。お互いの感情スタイルを言葉で伝え合うことが大切でした。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:6,
+      title:'一緒にいたい頻度・社交への欲求（{factor:E}）が違っていた',
+      detail:'「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。',
+      advice:'外向性の差は「嫌いになった」ではなく「充電の仕方が違う」という問題です。' },
+    { when:function(p1,p2){ return diff(p1,p2,'A') >= 2; }, priority:5,
+      title:'主張と協調のバランス（{factor:A}）が合わなかった',
+      detail:'どちらかが「自分ばかり合わせている」と感じていた可能性があります。',
+      advice:'どちらが折れるか、という構造になると関係は疲弊します。対等に意見を出せる雰囲気が必要でした。' },
+    { when:function(p1,p2){ return diff(p1,p2,'C') >= 2; }, priority:5,
+      title:'生活習慣・几帳面さ（{factor:C}）の価値観がズレていた',
+      detail:'ルーズに見えた、または逆に窮屈に感じた可能性があります。',
+      advice:'価値観のズレは時間が経つほど表面化します。早い段階でお互いの「当たり前」を確認できたかもしれません。' },
+    { when:function(p1,p2){ return isLow(p1,'A') && isLow(p2,'A'); }, priority:5,
+      title:'おふたりとも{factor:A}が低く、意見を譲りにくい組み合わせだった',
+      detail:'両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。',
+      advice:'どちらも「私が正しい」と感じやすい。小さなことでも意見を聞こうとする姿勢が鍵でした。' },
+    { when:function(p1,p2){ return isHigh(p1,'N') && isHigh(p2,'N'); }, priority:5,
+      title:'おふたりとも{factor:N}が高く、感情的になりやすい組み合わせだった',
+      detail:'小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。',
+      advice:'感情が高まったときに距離を置いて冷静になる習慣が、この組み合わせには特に重要でした。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上の大きなズレは見つかりませんでした',
+      detail:'相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。',
+      advice:'ビッグファイブはあくまで性格傾向の参考です。自分の気持ちを大切にしてください。' }
+  ],
+  distance: [
+    { when:function(p1,p2){ return isLow(p2,'E'); }, priority:6,
+      title:'{name2}さんの{factor:E}が低く、もともと距離を大切にするタイプ',
+      detail:'外向性が低い人は少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。',
+      advice:'この距離感は{name2}さんの特性であり、{name1}さんへの拒否ではありません。焦らず少しずつ関係を深めましょう。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:6,
+      title:'社交のペース（{factor:E}）が違う',
+      detail:'外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。',
+      advice:'{name2}さんに合ったペースで接すると、かえって距離が縮まりやすくなります。' },
+    { when:function(p1,p2){ return isHigh(p2,'N'); }, priority:5,
+      title:'{name2}さんの{factor:N}が高く、不安から人を遠ざけることがある',
+      detail:'感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。',
+      advice:'安心できる存在であることを、言葉ではなく継続した行動で示すことが重要です。' },
+    { when:function(p1,p2){ return isHigh(p1,'E') && isLow(p2,'E'); }, priority:5,
+      title:'{name1}さんの熱量が、{name2}さんには少し重く感じられているかもしれない',
+      detail:'外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。',
+      advice:'アプローチを少し緩めると、かえって近づける場合があります。' },
+    { when:function(p1,p2){ return isLow(p1,'A'); }, priority:4,
+      title:'{name1}さんの{factor:A}が低く、率直な言動が距離を作っている可能性がある',
+      detail:'協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。',
+      advice:'相手の気持ちに少し配慮した言葉選びを意識すると、関係が変わることがあります。' },
+    { when:function(){ return true; }, priority:0,
+      title:'大きな特性のズレは見当たりませんでした',
+      detail:'距離感はお互いの忙しさや環境による場合もあります。',
+      advice:'まずは気軽に声をかけ続けることで、少しずつ関係が育っていく可能性があります。' }
+  ],
+  fight: [
+    { when:function(p1,p2){ return isLow(p1,'A') && isLow(p2,'A'); }, priority:6,
+      title:'おふたりとも{factor:A}が低く、譲り合いが少ない組み合わせ',
+      detail:'両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。',
+      advice:'どちらかが先に聞く役に回ることで、ケンカの頻度が大幅に減ります。' },
+    { when:function(p1,p2){ return isHigh(p1,'N') && isHigh(p2,'N'); }, priority:6,
+      title:'おふたりとも{factor:N}が高く、感情的になって発火しやすい',
+      detail:'小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。',
+      advice:'感情が高ぶっているときは判断を後回しにする習慣を。「今は話せない」と伝えて時間を置くことが有効です。' },
+    { when:function(p1,p2){ return diff(p1,p2,'C') >= 2; }, priority:5,
+      title:'几帳面さ・ルール（{factor:C}）への価値観が違う',
+      detail:'「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。',
+      advice:'何が「当たり前」かを一度すり合わせてみましょう。悪意ではなく価値観の違いだと認識するだけでも摩擦が減ります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:5,
+      title:'活動量・刺激への欲求（{factor:E}）が違う',
+      detail:'外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。',
+      advice:'「一緒にやること」「それぞれでやること」を分けて決めると摩擦が減ります。' },
+    { when:function(p1,p2){ return (isHigh(p1,'O') && isLow(p2,'O')) || (isLow(p1,'O') && isHigh(p2,'O')); }, priority:4,
+      title:'変化好きと安定好き（{factor:O}）の組み合わせ',
+      detail:'新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。',
+      advice:'変化を提案するときは「なぜ良いか」を丁寧に説明すると受け入れられやすくなります。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上での明らかな衝突要因は見つかりませんでした',
+      detail:'ケンカの原因は環境やストレスから来ている可能性もあります。',
+      advice:'お互いの「地雷」を言葉で共有し合う対話が、ケンカの予防に一番効果的です。' }
+  ],
+
+  /* ---- 仕事 ---- */
+  'work-close': [
+    { when:function(p1,p2){ return isLow(p2,'E'); }, priority:6,
+      title:'{name2}さんの{factor:E}が低め、仕事と雑談は分けるタイプ',
+      detail:'外向性が低い人は、業務時間中は淡々と進め、余計な雑談より確実な連携を好む傾向があります。',
+      advice:'まずは仕事のやり取りを丁寧・正確に積み重ねると、自然と信頼が生まれます。' },
+    { when:function(p1,p2){ return isHigh(p2,'E'); }, priority:5,
+      title:'{name2}さんの{factor:E}が高く、コミュニケーションを活発に好む',
+      detail:'声かけや顔を合わせるやり取りを大切にするタイプです。',
+      advice:'挨拶やちょっとした報告をこまめにすると、{name2}さんとの距離が縮まりやすいです。' },
+    { when:function(p1,p2){ return isHigh(p2,'A'); }, priority:5,
+      title:'{name2}さんの{factor:A}が高く、チームの和を大切にする',
+      detail:'他者への配慮や協調を重んじるタイプで、協力的な姿勢に好感を持ちます。',
+      advice:'サポートを申し出たり、感謝を言葉にすると、関係がぐっと深まります。' },
+    { when:function(p1,p2){ return isLow(p2,'A'); }, priority:4,
+      title:'{name2}さんの{factor:A}が低め、実力や結果で人を測る',
+      detail:'和気あいあいより、各自が成果を出すことを好む傾向があります。',
+      advice:'挨拶回りより、まずは自分の担当を確実にこなして結果を見せると信頼が早いです。' },
+    { when:function(p1,p2){ return isHigh(p2,'C'); }, priority:4,
+      title:'{name2}さんの{factor:C}が高く、ルールや約束に厳しい',
+      detail:'期日や手順を守ることを重んじるタイプです。',
+      advice:'締切や報告の約束を必ず守る。それが{name2}さんとの信頼の一番の近道です。' },
+    { when:function(p1,p2){ return isHigh(p2,'N'); }, priority:4,
+      title:'{name2}さんの{factor:N}が高く、先回りした報告を好む',
+      detail:'不安を感じやすい分、進捗が見えないと信用しにくい傾向があります。',
+      advice:'報連相をこまめに。「ここまで終わりました」「ここで一度確認です」と進捗を見せると安心されます。' },
+    { when:function(){ return true; }, priority:0,
+      title:'{name2}さんとは、まず仕事の精度で信頼を作るのが良さそうです',
+      detail:'職場の人間関係は、業務での信頼が土台になります。',
+      advice:'挨拶と正確なやり取りを続けながら、少しずつ仕事以外の話題を増やしていくのがおすすめです。' }
+  ],
+  'work-fric': [
+    { when:function(p1,p2){ return isLow(p1,'A') && isLow(p2,'A'); }, priority:6,
+      title:'おふたりとも{factor:A}が低く、意見を引かない組み合わせ',
+      detail:'双方が自分の正しさを主張しやすく、会議やすり合わせが対立になりやすいです。',
+      advice:'「どちらが正しいか」ではなく「どうすれば両立するか」に問いを変えると、ぶつかりにくくなります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'C') >= 2; }, priority:6,
+      title:'{factor:C}の差が大きく、進め方の「正解」が違う',
+      detail:'片方は手堅く手順を、もう片方はスピード優先で進めたがる、といったズレが起きやすいです。',
+      advice:'「ここは手順を守る」「ここはスピードで」と、場面ごとに基準を分けると衝突が減ります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'O') >= 2; }, priority:5,
+      title:'{factor:O}の差が大きく、新しい手法と既存手法で対立する',
+      detail:'変化を好む人と、実績のあるやり方を好む人で、方針が割れやすいです。',
+      advice:'「新しい試みは小さく始めて検証する」という落とし所を事前に決めておくと、意見がまとまります。' },
+    { when:function(p1,p2){ return isHigh(p1,'N') && isHigh(p2,'N'); }, priority:5,
+      title:'おふたりとも{factor:N}が高く、プレッシャーで言葉が強くなる',
+      detail:'共に不安を感じやすく、繁忙期などに言葉が尖りやすい組み合わせです。',
+      advice:'余裕がないときは「今は判断を持ち帰る」と決めておくと、後悔する発言を減らせます。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:4,
+      title:'コミュニケーション頻度（{factor:E}）が合わない',
+      detail:'こまめに話したい人と、必要なときだけ話したい人で、連絡の温度差が出やすいです。',
+      advice:'「何をどこまで共有するか」の頻度を一度決めておくと、無用な摩擦が減ります。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上の明らかな対立要因は見つかりませんでした',
+      detail:'ぶつかりやすさは、現在の役割やプレッシャー環境の影響も受けます。',
+      advice:'意見の違いを「人」ではなく「やり方の違い」として扱うと、関係は壊れにくくなります。' }
+  ],
+  'work-trust': [
+    { when:function(p1,p2){ return isHigh(p2,'C'); }, priority:6,
+      title:'{name2}さんの{factor:C}が高く、期日と品質で人を測る',
+      detail:'正確さと計画性を重んじるタイプで、ルーズさは即、信用低下につながります。',
+      advice:'締切と品質を確実に守る。それが{name2}さんからの信頼を得る一番の近道です。' },
+    { when:function(p1,p2){ return isHigh(p2,'N'); }, priority:5,
+      title:'{name2}さんの{factor:N}が高く、先回りの報告で安心する',
+      detail:'不確実な状態に弱く、進捗が見えないと不安になって信用を下げやすいです。',
+      advice:'報連相を「多め」に。問題は早めに上げるほど、{name2}さんから信頼されます。' },
+    { when:function(p1,p2){ return isLow(p1,'A'); }, priority:5,
+      title:'{name1}さんの{factor:A}が低く、配慮不足が信頼を削る可能性がある',
+      detail:'率直さは長所ですが、言い方が強すぎると職場で信用を失いやすい傾向があります。',
+      advice:'意見を言う前に「伝え方」を一拍整える。それだけで{name2}さんからの受けが変わります。' },
+    { when:function(p1,p2){ return isHigh(p2,'A'); }, priority:4,
+      title:'{name2}さんの{factor:A}が高く、協力態度を信頼の基準にする',
+      detail:'チームへの貢献や他者への配慮を、信用の重要な要素と見る傾向があります。',
+      advice:'周囲を助ける姿勢や感謝の言葉を少し意識すると、{name2}さんの評価が上がります。' },
+    { when:function(p1,p2){ return isLow(p2,'O'); }, priority:4,
+      title:'{name2}さんの{factor:O}が低め、実績ある手法を好む',
+      detail:'目新しさより、確実性を重んじるタイプです。',
+      advice:'新しい提案より「前回うまくいったやり方」を軸に説明すると、説得力が増します。' },
+    { when:function(){ return true; }, priority:0,
+      title:'{name2}さんからの信頼は、仕事の確実さが土台になりそうです',
+      detail:'職場での信用は、継続的な結果と約束の履行で作られます。',
+      advice:'まず「言ったことを必ずやる」を積み重ねる。それが信頼への一番の近道です。' }
+  ],
+  'work-hard': [
+    { when:function(p1,p2){ return diff(p1,p2,'C') >= 2; }, priority:6,
+      title:'{factor:C}の差が大きく、段取りの基準が合わない',
+      detail:'片方は綿密に計画し、もう片方は柔軟に進める、というズレで連携が滞りやすいです。',
+      advice:'「ここまでの工程と期限」だけは共有の形に固定すると、作業が回りやすくなります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:5,
+      title:'連絡頻度（{factor:E}）が合わず、待ちが生まれる',
+      detail:'こまめにやり取りしたい人と、必要時のみの人で、確認のタイミングがずれやすいです。',
+      advice:'「返信は○時間以内」「確認は○時と○時」など、連絡ルールを決めると停滞が減ります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'O') >= 2; }, priority:5,
+      title:'やり方への好み（{factor:O}）が違い、方針が決まらない',
+      detail:'新しい手法と既存手法で意見が割れ、着手が遅れやすい組み合わせです。',
+      advice:'「検証期間を○日設ける」など、両者の良さを取り込む工程にすると動き出せます。' },
+    { when:function(p1,p2){ return isLow(p1,'C') && isLow(p2,'C'); }, priority:5,
+      title:'おふたりとも{factor:C}が低く、段取りと確認が甘くなる',
+      detail:'計画性が共に低めだと、締切直前のてんやわんやになりやすいです。',
+      advice:'中間の「進捗確認日」だけは外部（カレンダー等）で強制すると、最後の崩壊を防げます。' },
+    { when:function(p1,p2){ return isLow(p1,'A') && isLow(p2,'A'); }, priority:4,
+      title:'おふたりとも{factor:A}が低く、役割のすり合わせがない',
+      detail:'協調が低いと「それは君の担当？」が曖昧になり、作業が重複や抜けになります。',
+      advice:'「誰がどこまで」を一言で書いて共有する。それだけで手戻りが激減します。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上の大きな原因は見当たりませんでした',
+      detail:'作業が進まないのは、役割の曖昧さや業務量の影響も受けます。',
+      advice:'「次の1ステップ」を誰が・いつまでやるか、書き出して共有するのが一番効きます。' }
+  ],
+
+  /* ---- 友達 ---- */
+  'friend-close': [
+    { when:function(p1,p2){ return isHigh(p2,'E'); }, priority:6,
+      title:'{name2}さんの{factor:E}が高く、一緒に楽しむのが好き',
+      detail:'外出やイベントなど、賑やかに過ごすことで距離が縮まりやすいタイプです。',
+      advice:'一緒に遊びやイベントに誘うと、自然と打ち解けやすくなります。' },
+    { when:function(p1,p2){ return isLow(p2,'E'); }, priority:5,
+      title:'{name2}さんの{factor:E}が低め、少人数・深い話が好き',
+      detail:'大勢より1対1や少人数で、ゆっくり話すことを好むタイプです。',
+      advice:'大人数より、2人で会う機会を作ると本音の話ができるようになります。' },
+    { when:function(p1,p2){ return isHigh(p2,'O'); }, priority:5,
+      title:'{name2}さんの{factor:O}が高く、趣味や新しい話題が好き',
+      detail:'好奇心が旺盛で、新しい趣味や変わった話題を共有できる人に親近感を持ちます。',
+      advice:'趣味の話や、ちょっと変わった話題を振ると会話が弾みやすいです。' },
+    { when:function(p1,p2){ return isHigh(p2,'N'); }, priority:4,
+      title:'{name2}さんの{factor:N}が高く、安心できる距離感を好む',
+      detail:'傷つきやすい分、急に距離を詰めると引かれることがあるタイプです。',
+      advice:'最初は軽い話題から。少しずつ自己開示をして、安心感を育てるペースが合います。' },
+    { when:function(p1,p2){ return isHigh(p2,'A'); }, priority:4,
+      title:'{name2}さんの{factor:A}が高く、思いやりを大切にする',
+      detail:'相手の気持ちを気遣える人に安心し、親しくなりやすいタイプです。',
+      advice:'小さな気遣いや感謝を言葉にすると、{name2}さんとの信頼が深まります。' },
+    { when:function(){ return true; }, priority:0,
+      title:'{name2}さんとは、共通の話題から少しずつが良さそうです',
+      detail:'友達関係は、無理に距離を詰めず、興味の重なりで自然に育つものです。',
+      advice:'まずは共通の話題や趣味を見つけて、軽く続く会話を作るのがおすすめです。' }
+  ],
+  'friend-cool': [
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:6,
+      title:'社交のペース（{factor:E}）が合わなくなった可能性がある',
+      detail:'付き合い方の頻度が違うと、片方が「避けられた」と感じやすくなります。',
+      advice:'最近の距離は「嫌われた」ではなく「ペースの変化」の可能性が高いです。軽く声をかけてみましょう。' },
+    { when:function(p1,p2){ return isHigh(p2,'N') && diff(p1,p2,'N') >= 1; }, priority:5,
+      title:'{name2}さんの{factor:N}が高く、余裕がない時は引くタイプ',
+      detail:'不安や疲れがあると、自己防衛で距離を置きやすい傾向があります。',
+      advice:'「無理しなくていいよ」と余裕を持った接し方をすると、{name2}さんも戻りやすくなります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'A') >= 2; }, priority:5,
+      title:'{factor:A}の差で、配慮の行き違いが起きたかもしれない',
+      detail:'思いやりの表現が違うと、無意識の傷つきが距離を作ることがあります。',
+      advice:'「最近あまり会えてないけど元気？」と素直に聞くと、誤解が解けることが多いです。' },
+    { when:function(p1,p2){ return isLow(p1,'A'); }, priority:4,
+      title:'{name1}さんの{factor:A}が低く、言葉が刺さった可能性がある',
+      detail:'率直さは長所でも、友人には強く響くことがある傾向があります。',
+      advice:'最近のやり取りで「少し強かったかな」と思う点があれば、軽く謝ると関係が戻りやすいです。' },
+    { when:function(p1,p2){ return diff(p1,p2,'O') >= 2; }, priority:4,
+      title:'関心ごと（{factor:O}）が変わり、話題が合わなくなった',
+      detail:'興味の方向が違ってくると、自然と会話が減ることがあります。',
+      advice:'{name2}さんの今の関心事を聞いてみる。話題を合わせに行くのが一番の近道です。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上の大きな原因は見当たりませんでした',
+      detail:'距離は、お互いの忙しさやライフステージの変化の影響も受けます。',
+      advice:'まずは軽く連絡してみる。放置より、小さな再接続が関係を回復させます。' }
+  ],
+  'friend-fun': [
+    { when:function(p1,p2){ return diff(p1,p2,'E') <= 1 && isHigh(p1,'E'); }, priority:6,
+      title:'{factor:E}が近く、一緒にいて楽しいペースが合う',
+      detail:'活動量や社交の好みが似ていると、自然と盛り上がりやすい組み合わせです。',
+      advice:'このペースの合致は貴重です。一緒に出かける機会を増やすと、もっと楽しめます。' },
+    { when:function(p1,p2){ return diff(p1,p2,'O') <= 1 && isHigh(p1,'O'); }, priority:5,
+      title:'{factor:O}が近く、好奇心の方向が似ている',
+      detail:'新しいことへの興味が共鳴し、話題が尽きない組み合わせです。',
+      advice:'共通の趣味や新しい挑戦を一緒にすると、関係がさらに深まります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'A') <= 1 && isHigh(p1,'A'); }, priority:5,
+      title:'{factor:A}が近く、思いやりの波長が合う',
+      detail:'互いに気遣える関係は居心地が良く、安心して付き合える組み合わせです。',
+      advice:'この安心感を大切に。困ったときに頼り合える関係は、そう何度もできるものではありません。' },
+    { when:function(p1,p2){ return diff(p1,p2,'N') <= 1 && isLow(p1,'N'); }, priority:4,
+      title:'{factor:N}が低めで揃い、穏やかに過ごせる',
+      detail:'双方が感情の波が小さく、一緒にいて疲れにくい組み合わせです。',
+      advice:'穏やかな関係は長続きします。この安定感を大切にしていると、長く付き合えます。' },
+    { when:function(p1,p2){ return diff(p1,p2,'C') <= 1; }, priority:4,
+      title:'{factor:C}が近く、テンポや約束の感覚が合う',
+      detail:'計画性や時間感覚が似ていると、約束や段取りで摩擦が起きにくいです。',
+      advice:'気兼ねなく約束できる関係は貴重です。このリズムを活かして、定期的に会う習慣を作ると良いです。' },
+    { when:function(){ return true; }, priority:0,
+      title:'おふたりは、波長が合う良い組み合わせのようです',
+      detail:'相性の良さは、複数の因子のバランスで成り立っています。',
+      advice:'この関係を大切に。居心地の良い友情は、実はそう多くはできるものではありません。' }
+  ],
+  'friend-conf': [
+    { when:function(p1,p2){ return diff(p1,p2,'O') >= 2; }, priority:6,
+      title:'{factor:O}の差が大きく、興味や変化への姿勢が違う',
+      detail:'新しいこと好きと安定好きでは、話題や選ぶ遊びが割れやすいです。',
+      advice:'価値観の差は「合わない」ではなく「違うだけ」。お互いの好みを尊重し合えると、かえって新鮮な関係になります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'C') >= 2; }, priority:5,
+      title:'{factor:C}の差が大きく、時間や約束の感覚が違う',
+      detail:'几帳面さとルーズさの差は、約束事で摩擦になりやすいです。',
+      advice:'「会う時はこれくらいの時間感覚で」と、大事な約束だけ基準を合わせると摩擦が減ります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'N') >= 2; }, priority:5,
+      title:'{factor:N}の差が大きく、感情の受け止め方が違う',
+      detail:'感受性の差は、悩み相談などで温度差を生むことがあります。',
+      advice:'深い話は「この人はこう受け止める」と心得て、反応の差を個性として捉えると、すれ違いが減ります。' },
+    { when:function(p1,p2){ return diff(p1,p2,'A') >= 2; }, priority:4,
+      title:'{factor:A}の差が大きく、配慮の表現が違う',
+      detail:'協調性の差は、「冷たい」「過干渙」という誤解を生むことがあります。',
+      advice:'相手の配慮の表現方法を知る。形は違っても気持ちはある、と前提にすると腹が立ちにくいです。' },
+    { when:function(p1,p2){ return diff(p1,p2,'E') >= 2; }, priority:4,
+      title:'{factor:E}の差が大きく、付き合い方が違う',
+      detail:'外向的と内向的では、理想的な会う頻度や過ごし方が違います。',
+      advice:'無理に自分に合わせず、中間の付き合い方を見つけると、お互い無理がありません。' },
+    { when:function(){ return true; }, priority:0,
+      title:'スコア上の大きな価値観のズレは見つかりませんでした',
+      detail:'価値観の不一致を心配するほど、大きな差は見えません。',
+      advice:'違いは関係を壊すものではなく、個性です。気になる点は言葉にして確かめ合うのが一番です。' }
+  ]
+};
 
 function loadAllPersons() {
   var persons = [];
@@ -366,7 +779,41 @@ function goStep1() { selected = []; renderPersonGrid(); showStep(1); }
 function goStep2() {
   if (selected.length < 2) return;
   renderPairDisplay('pairDisplay2');
+  renderCatTabs();
+  renderThemeGrid();
   showStep(2);
+}
+function hexA(hex, a) {
+  var h = String(hex).replace('#', '');
+  var r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+}
+function renderCatTabs() {
+  var el = document.getElementById('catTabs');
+  el.innerHTML = CATEGORIES.map(function(c) {
+    var on = c.id === currentCat ? ' active' : '';
+    var style = on ? ' style="color:' + c.color + ';"' : '';
+    return '<button type="button" class="cat-tab' + on + '"' + style + ' onclick="selectCat(\'' + c.id + '\')">'
+      + c.icon + '<span>' + c.label + '</span></button>';
+  }).join('');
+}
+function selectCat(catId) {
+  currentCat = catId;
+  renderCatTabs();
+  renderThemeGrid();
+}
+function renderThemeGrid() {
+  var grid = document.getElementById('themeGrid');
+  var cat = CATEGORIES.filter(function(c) { return c.id === currentCat; })[0];
+  if (!cat) { grid.innerHTML = ''; return; }
+  var list = THEMES.filter(function(t) { return t.cat === currentCat; });
+  grid.innerHTML = list.map(function(t) {
+    return '<button type="button" class="situation-btn" onclick="goStep3(\'' + t.id + '\')">'
+      + '<div class="situation-icon" style="background:' + hexA(cat.color, 0.12) + ';color:' + cat.color + ';">'
+      + cat.icon + '</div>'
+      + '<div class="situation-label">' + t.label + '</div>'
+      + '</button>';
+  }).join('');
 }
 function goStep3(situation) {
   currentSituation = situation;
@@ -405,60 +852,19 @@ function renderAnalysis() {
   var el = document.getElementById('analysisResult');
   var p1 = allPersons[selected[0]], p2 = allPersons[selected[1]];
   var n1 = escHtml(p1.name || '名前なし'), n2 = escHtml(p2.name || '名前なし');
-  var points = [], advice = [], titleText = '';
-
-  if (currentSituation === 'like') {
-    titleText = n1 + ' が ' + n2 + ' に好かれるには';
-    if (isHigh(p2,'N')) { points.push({ p: n2+'さんは不安を感じやすく、安心感を求めています', d:'感情的に繊細なため、予測できない行動や曖昧な態度は不安を招きやすいです。' }); advice.push('予測可能な行動・細かい気遣いが信頼につながります。「また連絡する」と言ったら必ず連絡するなど、小さな約束を守ることが大切です。'); }
-    else if (isLow(p2,'N')) { points.push({ p: n2+'さんは感情より論理を重視する傾向があります', d:'感情的な訴えより、落ち着いた事実ベースの話し方が届きやすいです。' }); advice.push('感情的なアピールよりも、具体的な行動や事実で示す方が印象に残ります。'); }
-    if (isHigh(p2,'E')) { points.push({ p: n2+'さんは社交的で賑やかな場を楽しみます', d:'一緒に何かを体験することで距離が縮まりやすいタイプです。' }); advice.push('積極的に誘ったり、新しい体験を一緒にすることで自然と関係が深まります。'); }
-    else if (isLow(p2,'E')) { points.push({ p: n2+'さんは少人数・静かな環境で本音を話せます', d:'大勢の場では本来の自分を出しにくいタイプです。' }); advice.push('2人きりや小さな場を意識的に作ることで、本音を引き出しやすくなります。'); }
-    if (isHigh(p2,'A')) { points.push({ p: n2+'さんは相手の気持ちを大切にする繊細な人です', d:'話をしっかり聞いてくれる人、感謝を言葉にできる人に好感を持ちやすいです。' }); advice.push('話をよく聞いて感謝を言葉で伝えることが好感につながります。'); }
-    else if (isLow(p2,'A')) { points.push({ p: n2+'さんははっきりした意見を持つ人を好む傾向があります', d:'曖昧な態度や八方美人的な振る舞いより、自分の立場をはっきり示せる人に魅力を感じます。' }); advice.push('遠慮せずに自分の意見・好みをはっきり伝えましょう。媚びすぎない姿勢が好印象です。'); }
-    if (isHigh(p2,'C')) { points.push({ p: n2+'さんは約束・時間・ルールを大切にします', d:'ルーズな印象を与えると信頼を失いやすいタイプです。' }); advice.push('時間を守る・言ったことを実行するなど、信頼感を積み上げることが好感の土台になります。'); }
-    else if (isLow(p2,'C')) { points.push({ p: n2+'さんは自然体・気軽さを好みます', d:'堅苦しい雰囲気よりも、リラックスして過ごせる関係を心地よく感じます。' }); advice.push('完璧を目指さず、肩の力を抜いて気軽に接することで距離が縮まります。'); }
-    if (isHigh(p2,'O')) { points.push({ p: n2+'さんは新しいこと・知的な話題が好きです', d:'好奇心旺盛で、日常にない刺激や発見を共有できる人に魅力を感じます。' }); advice.push('面白い話題・ちょっと変わった体験を提案することで興味を引けます。'); }
-    else if (isLow(p2,'O')) { points.push({ p: n2+'さんは安定・慣れ親しんだことを好みます', d:'急な変化より、安心できる日常を大切にするタイプです。' }); advice.push('いつもの場所・いつもの流れで一緒に過ごすことで自然と親しくなれます。'); }
-
-  } else if (currentSituation === 'rejected') {
-    titleText = n1 + ' と ' + n2 + '、うまくいかなかった理由';
-    if (diff(p1,p2,'N') >= 2) { points.push({ p:'感情のペースが合いませんでした', d:'片方がクールに見え、もう片方が感情的に見えた可能性があります。感情の振れ幅が違うと、日常のやり取りにストレスが溜まりやすいです。' }); advice.push('感情のペースの違いは「冷たい」「重い」の誤解を生みます。お互いの感情スタイルを言葉で伝え合うことが大切でした。'); }
-    if (diff(p1,p2,'E') >= 2) { points.push({ p:'一緒にいたい頻度・社交への欲求が違いました', d:'「もっと一緒にいたい」「少し1人の時間がほしい」というすれ違いが起きやすい組み合わせです。' }); advice.push('外向性の差は「嫌いになった」ではなく「充電の仕方が違う」という問題です。'); }
-    if (diff(p1,p2,'A') >= 2) { points.push({ p:'主張と協調のバランスが合いませんでした', d:'どちらかが「自分ばかり合わせている」と感じていた可能性があります。' }); advice.push('どちらが折れるか、という構造になってしまうと関係は疲弊します。対等に意見を出せる雰囲気が必要でした。'); }
-    if (diff(p1,p2,'C') >= 2) { points.push({ p:'生活習慣・几帳面さの価値観がズレていました', d:'ルーズに見えた、または逆に窮屈に感じた可能性があります。' }); advice.push('価値観のズレは時間が経つほど表面化します。早い段階でお互いの「当たり前」を確認し合えたらよかったかもしれません。'); }
-    if (isLow(p1,'A') && isLow(p2,'A')) { points.push({ p:'お互いに自分の意見を曲げにくい組み合わせでした', d:'両者とも主張が強めで、折り合いをつけるのが難しい組み合わせです。' }); advice.push('どちらも「私が正しい」と感じやすい。小さなことでも意見を聞こうとする姿勢が鍵でした。'); }
-    if (isHigh(p1,'N') && isHigh(p2,'N')) { points.push({ p:'両者が感情的になりやすい組み合わせでした', d:'小さなことでも感情が揺れやすく、言葉が強くなりやすかった可能性があります。' }); advice.push('感情が高まったときに距離を置いて冷静になる習慣が、この組み合わせには特に重要でした。'); }
-    if (points.length === 0) { points.push({ p:'スコア上の大きなズレは見つかりませんでした', d:'相性の問題だけではなく、タイミングや環境の影響も大きかった可能性があります。' }); advice.push('ビッグファイブはあくまで性格傾向の参考です。自分の気持ちを大切にしてください。'); }
-
-  } else if (currentSituation === 'distance') {
-    titleText = n1 + ' と ' + n2 + '、距離が縮まらない理由';
-    if (isLow(p2,'E')) { points.push({ p: n2+'さんはもともと人との距離を大切にするタイプです', d:'外向性が低い人は少人数・静かな環境を好み、意図的にプライベート空間を守る傾向があります。' }); advice.push('この距離感は'+n2+'さんの特性であり、あなたへの拒否ではありません。焦らず少しずつ関係を深めましょう。'); }
-    if (diff(p1,p2,'E') >= 2) { points.push({ p:'社交のペースが違います', d:'外向性の差が大きいと、片方は「もっと一緒にいたい」、もう片方は「少し休みたい」と感じやすいです。' }); advice.push(n2+'さんに合ったペースで接すると、かえって距離が縮まりやすくなります。'); }
-    if (isHigh(p2,'N')) { points.push({ p: n2+'さんは不安から人を遠ざけることがあります', d:'感受性が高い人は、傷つかないよう自己防衛として距離を置くことがあります。' }); advice.push('安心できる存在であることを、言葉ではなく継続した行動で示すことが重要です。'); }
-    if (isHigh(p1,'E') && isLow(p2,'E')) { points.push({ p:'あなたの積極さが少し重く感じられているかもしれません', d:'外向型と内向型の組み合わせでは、外向型の「普通の熱量」が内向型には圧に感じられることがあります。' }); advice.push('アプローチを少し緩めると、かえって近づける場合があります。'); }
-    if (isLow(p1,'A')) { points.push({ p: n1+'の率直な言動が距離を作っている可能性があります', d:'協調性が低めだと、無意識に相手を傷つける言動が出やすいことがあります。' }); advice.push('相手の気持ちに少し配慮した言葉選びを意識すると、関係が変わることがあります。'); }
-    if (points.length === 0) { points.push({ p:'大きな特性のズレは見当たりませんでした', d:'距離感はお互いの忙しさや環境による場合もあります。' }); advice.push('まずは気軽に声をかけ続けることで、少しずつ関係が育っていく可能性があります。'); }
-
-  } else if (currentSituation === 'fight') {
-    titleText = n1 + ' と ' + n2 + '、ケンカが多い理由';
-    if (isLow(p1,'A') && isLow(p2,'A')) { points.push({ p:'お互いに主張が強く、譲り合いが少ない組み合わせです', d:'両者とも自分の意見を曲げにくいため、小さなことでもぶつかりやすいです。' }); advice.push('どちらかが先に聞く役に回ることで、ケンカの頻度が大幅に減ります。'); }
-    if (isHigh(p1,'N') && isHigh(p2,'N')) { points.push({ p:'両者が感情的になりやすいため、発火しやすい組み合わせです', d:'小さな言葉が大きく刺さったり、感情のスパイラルに入りやすいです。' }); advice.push('感情が高ぶっているときは判断を後回しにする習慣を。「今は話せない」と伝えて時間を置くことが有効です。'); }
-    if (diff(p1,p2,'C') >= 2) { points.push({ p:'几帳面さ・ルールへの価値観が違います', d:'「当然こうするべき」の基準が違うと、相手の行動が「非常識」に見えてしまいます。' }); advice.push('何が「当たり前」かを一度すり合わせてみましょう。悪意ではなく価値観の違いだと認識するだけでも摩擦が減ります。'); }
-    if (diff(p1,p2,'E') >= 2) { points.push({ p:'活動量・刺激への欲求が違います', d:'外向的な人は「もっと一緒に動きたい」、内向的な人は「少し休みたい」と感じるため、すれ違いが生まれます。' }); advice.push('「一緒にやること」「それぞれでやること」を分けて決めると摩擦が減ります。'); }
-    if ((isHigh(p1,'O') && isLow(p2,'O')) || (isLow(p1,'O') && isHigh(p2,'O'))) { points.push({ p:'変化好きと安定好きの組み合わせです', d:'新しいことへの好奇心と、慣れ親しんだことへの安心感が衝突しやすいです。' }); advice.push('変化を提案するときは「なぜ良いか」を丁寧に説明すると受け入れられやすくなります。'); }
-    if (points.length === 0) { points.push({ p:'スコア上での明らかな衝突要因は見つかりませんでした', d:'ケンカの原因は環境やストレスから来ている可能性もあります。' }); advice.push('お互いの「地雷」を言葉で共有し合う対話が、ケンカの予防に一番効果的です。'); }
-  }
-
-  points = points.slice(0,3); advice = advice.slice(0,3);
+  var ctx = buildCtx(p1, p2, n1, n2);
+  var theme = THEMES.filter(function(t) { return t.id === currentSituation; })[0] || null;
+  var titleText = buildTitle(theme, ctx);
+  var matched = evaluateRules(currentSituation, p1, p2, ctx, 4);
 
   var html = '<div style="font-size:14px;font-weight:700;margin-bottom:18px;line-height:1.5;">' + titleText + '</div>';
   html += '<div class="analysis-section"><div class="analysis-title">分析</div>';
-  points.forEach(function(pt) {
-    html += '<div class="analysis-card"><div class="analysis-point">- ' + pt.p + '</div><div class="analysis-detail">' + pt.d + '</div></div>';
+  matched.forEach(function(m) {
+    html += '<div class="analysis-card"><div class="analysis-point">- ' + m.title + '</div><div class="analysis-detail">' + m.detail + '</div></div>';
   });
   html += '</div>';
   html += '<div class="analysis-section"><div class="analysis-title">アドバイス</div>';
-  advice.forEach(function(a) { html += '<div class="advice-card"><div class="advice-text">' + a + '</div></div>'; });
+  matched.forEach(function(m) { html += '<div class="advice-card"><div class="advice-text">' + m.advice + '</div></div>'; });
   html += '</div>';
   el.innerHTML = html;
 }
