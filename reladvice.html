@@ -20,6 +20,9 @@
   --c-N: #14b8a6;
   --purple: #8b5cf6;
   --pink: #ec4899;
+  --bg: #0a0e27;
+  --text: #e2e8f0;
+  --dim: #94a3b8;
 }
 body {
   font-family: 'Noto Sans JP', sans-serif;
@@ -174,7 +177,7 @@ body {
 .cat-tab.active { background: rgba(236,72,153,0.12); border-color: var(--pink); color: var(--text); }
 </style>
 </head>
-<body>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="container">
 
   <div class="header">
