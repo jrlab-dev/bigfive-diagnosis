@@ -1485,6 +1485,20 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- ビッグファイブの歴史 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfive-rekishi.html</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
 
 
