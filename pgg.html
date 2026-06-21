@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>コイン増やせるかな？｜ビッグファイブ診断</title>
-<meta name="description" content="あなたはコインを増やせるか！？共同投資でコインを増やすゲーム。3枚投じて、あなたの協力スタイルを探ろう。">
+<meta name="description" content="あなたはコインを増やせるか！？共同投資でコインを増やす公共財ゲーム。3枚を投じて協力かフリーライドかを選ぶ、行動経済学の心理ゲーム。あなたの協力スタイルがわかり、ビッグファイブの協調性とも関連します。">
 <meta name="robots" content="noindex">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -842,7 +842,7 @@ body.theme-light .dg-text { color: #1e293b; }
     var selfAvatarHtml;
     if (myChar) {
       selfAvatarHtml = '<div class="lobby-player self joined">' +
-        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15);overflow:hidden"><img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
+        '<div class="lobby-avatar" style="border-color:var(--amber);background:rgba(245,158,11,0.15);overflow:hidden"><img src="' + myChar.img + '" alt="' + myChar.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + myChar.name + '</div></div>';
     } else {
       selfAvatarHtml = '<div class="lobby-player self joined">' +
@@ -855,7 +855,7 @@ body.theme-light .dg-text { color: #1e293b; }
     for (var i = 0; i < 2; i++) {
       var bot0 = state.bots[i];
       grid.innerHTML += '<div class="lobby-player joined">' +
-        '<div class="lobby-avatar" style="border-color:' + bot0.color + ';background:' + bot0.color + '22;overflow:hidden"><img src="' + bot0.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
+        '<div class="lobby-avatar" style="border-color:' + bot0.color + ';background:' + bot0.color + '22;overflow:hidden"><img src="' + bot0.img + '" alt="' + bot0.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + bot0.name + '</div></div>';
     }
 
@@ -869,7 +869,7 @@ body.theme-light .dg-text { color: #1e293b; }
       var el = $('lobbyBot2');
       var bot2 = state.bots[2];
       el.classList.add('joined');
-      el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot2.color + ';background:' + bot2.color + '22;overflow:hidden"><img src="' + bot2.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
+      el.innerHTML = '<div class="lobby-avatar" style="border-color:' + bot2.color + ';background:' + bot2.color + '22;overflow:hidden"><img src="' + bot2.img + '" alt="' + bot2.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>' +
         '<div class="lobby-name">' + bot2.name + '</div>';
     }, 2500));
 
@@ -899,7 +899,7 @@ body.theme-light .dg-text { color: #1e293b; }
       var botBal = state.botBalances[oi];
       playersHtml += '<div class="round-player">' +
         '<div class="round-player-img" style="border-color:' + ob.color + '">' +
-        '<img src="' + ob.img + '"></div>' +
+        '<img src="' + ob.img + '" alt="' + ob.name + '"></div>' +
         '<div class="round-player-name">' + ob.name + '</div>' +
         '<div class="round-player-coins">\u{1FA99} ' + botBal + '枚</div></div>';
     }
@@ -910,7 +910,7 @@ body.theme-light .dg-text { color: #1e293b; }
     var myImg = myChar ? myChar.img : null;
     var myName = myChar ? myChar.name : 'あなた';
     var myFaceHtml = myImg
-      ? '<div class="round-player-img self" style="border-color:var(--amber);background:rgba(245,158,11,0.12);width:40px;height:40px;overflow:hidden;flex-shrink:0"><img src="' + myImg + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>'
+      ? '<div class="round-player-img self" style="border-color:var(--amber);background:rgba(245,158,11,0.12);width:40px;height:40px;overflow:hidden;flex-shrink:0"><img src="' + myImg + '" alt="' + myName + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"></div>'
       : '<div style="font-size:24px;flex-shrink:0">\u{1FA99}</div>';
     $('roundMyCoins').innerHTML = myFaceHtml +
       '<div style="text-align:left"><div style="font-size:11px;color:var(--dim);font-weight:500">' + myName + '</div>' +
@@ -1029,7 +1029,7 @@ body.theme-light .dg-text { color: #1e293b; }
     var barsHtml = '';
     for (var j = 0; j < allContribs.length; j++) {
       var c = allContribs[j];
-      var imgHtml = c.img ? '<img src="' + c.img + '">' : '🪙';
+      var imgHtml = c.img ? '<img src="' + c.img + '" alt="' + c.name + '">' : '🪙';
       var totalHtml = n > 0 ? '<div class="rr-bar-total">累計 ' + c.total + '枚</div>' : '';
       var profit = perPlayer - c.amount;
       var profitClass = profit > 0 ? 'plus' : (profit < 0 ? 'minus' : 'zero');
@@ -1153,7 +1153,7 @@ body.theme-light .dg-text { color: #1e293b; }
     // 自分
     playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:6px;overflow:hidden;border:2px solid var(--amber);margin:0 auto 4px">';
     if (myChar) {
-      playersHtml += '<img src="' + myChar.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
+      playersHtml += '<img src="' + myChar.img + '" alt="' + myChar.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
     } else {
       playersHtml += '🪙';
     }
@@ -1162,7 +1162,7 @@ body.theme-light .dg-text { color: #1e293b; }
     for (var p = 0; p < state.bots.length; p++) {
       var bot = state.bots[p];
       playersHtml += '<div style="text-align:center"><div style="width:44px;height:44px;border-radius:6px;overflow:hidden;border:2px solid ' + bot.color + ';margin:0 auto 4px">';
-      playersHtml += '<img src="' + bot.img + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
+      playersHtml += '<img src="' + bot.img + '" alt="' + bot.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%">';
       playersHtml += '</div><div style="font-size:10px;color:var(--dim);font-weight:500">' + bot.name + '</div></div>';
     }
     playersHtml += '</div>';

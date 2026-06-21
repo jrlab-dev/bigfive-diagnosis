@@ -19,6 +19,11 @@ result*.json
 !robots.txt
 generate_log.txt
 
+## IndexNow（Bingへの高速インデックス通知用キーファイルはデプロイ必須）
+!85e72ff5ec834b8caf6c4c5cc73a8fe0.txt
+!_INDEXNOW_KEY.txt
+!indexnow_submit.py
+
 ## サイト不要ファイル
 ogp-generator.html
 card_template.html
