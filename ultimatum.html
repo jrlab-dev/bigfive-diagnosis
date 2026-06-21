@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>最後通牒ゲームの拒否ライン | ビッグファイブ診断</title>
-<meta name="description" content="不公平な提案をどこまで受け入れるか。最後通牒ゲームで拒否ラインを測定します。">
+<meta name="description" content="不公平な提案をどこまで受け入れるか。最後通牒ゲームであなたの拒否ラインを測定する行動経済学の心理ゲーム。感情と合理性の境界がわかり、ビッグファイブの協調性・神経症傾向との関係も見えてきます。">
 <link rel="stylesheet" href="behavior-game.css">
 </head>
 <body class="theme-light"><script>if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');</script>
@@ -14,7 +14,7 @@
   <div class="coin-display" id="coinDisplay">🪙 0枚</div>
 </header>
 <main class="wrap">
-  <section class="phase active" id="phaseEntry"><div class="hero"><div class="badge" id="gameBadge"></div><div class="game-icon" id="gameIcon"></div><h1 class="title" id="gameTitle"></h1><p class="lead" id="gameLead"></p><div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div><div class="entry-cost" id="entryCost"></div><div class="entry-note" id="entryNote"></div><button class="btn" id="startBtn" type="button">はじめる</button><div class="entry-lack" id="entryLack"></div></div></section>
+  <section class="phase active" id="phaseEntry"><div class="hero"><div class="badge" id="gameBadge"></div><div class="game-icon" id="gameIcon"></div><h1 class="title" id="gameTitle">最後通牒ゲームの拒否ライン</h1><p class="lead" id="gameLead"></p><div class="rules"><h2>これからやること</h2><ul id="ruleList"></ul></div><div class="entry-cost" id="entryCost"></div><div class="entry-note" id="entryNote"></div><button class="btn" id="startBtn" type="button">はじめる</button><div class="entry-lack" id="entryLack"></div></div></section>
   <section class="phase" id="phaseQuestion"><div class="panel"><div class="question-head"><span id="questionNo"></span><span>損してでも拒否するライン</span></div><div class="scenario" id="scenario"></div><div id="answerArea"></div><div class="btn-row"><button class="btn" id="submitBtn" type="button">結果を見る</button></div></div></section>
   <section class="phase" id="phaseResult"><div class="panel result-type"><div class="result-icon" id="resultIcon"></div><div class="result-name" id="resultName"></div><p class="result-summary" id="resultSummary"></p><div class="stat-grid" id="statGrid"></div><div class="analysis" id="analysis"></div><div class="btn-row"><button class="btn primary" onclick="location.href='diagnoses.html'">診断一覧へ</button><button class="btn secondary" onclick="location.href='mypage.html'">マイページ</button><button class="btn accent" id="replayBtn" type="button">もう一度プレイ</button></div></div></section>
 </main>
