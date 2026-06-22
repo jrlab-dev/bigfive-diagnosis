@@ -1502,6 +1502,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- 優柔不断・決断できない人の性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/yujufudan-kettan.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- 投資やギャンブルにハマる人の性格 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/toushi-gamble-seikaku.html</loc>
