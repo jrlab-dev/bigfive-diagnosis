@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- トップページ -->
@@ -1525,6 +1525,20 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 人見知り・あがり症 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitomishiri-seikaku.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- スマホ・SNS依存 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sns-izon-seikaku.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
     <lastmod>2026-05-30</lastmod>
@@ -1539,9 +1553,3 @@
     <priority>0.8</priority>
   </url>
 </urlset>
-
-
-
-
-
-
