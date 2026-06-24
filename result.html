@@ -1747,8 +1747,8 @@ function getRarity() {
     return ov.default;
   }
 
-  // 30問版・120問版はドンピシャ隠しキャラ判定
-  if (version !== '10') {
+  // 60問版・120問版のみドンピシャ隠しキャラ判定（30問版はsecret画像を表示しないため。album.js computeRarityForAlbum と同じ条件）
+  if (version === '60' || version === '120') {
     const hiddenChar = findHiddenCharacter();
     if (hiddenChar) {
       return hiddenChar.a === 1 ? 'r7' : 'r6';

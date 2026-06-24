@@ -1331,7 +1331,7 @@ body.theme-light .foot-note { color: var(--ink-3); }
     if (card.isHidden && card.hiddenId) {
       imgPath = 'https://bigfive.jr-genius.jp/ogp-image?char=' + card.hiddenId + cacheBust;
     } else if (card.code && card.gender) {
-      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity + cacheBust;
+      imgPath = 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.code + '&gender=' + card.gender + '&rarity=' + card.rarity + '&v=' + (card.version || '30') + cacheBust;
     }
     if (imgPath) {
       cardImg.src = imgPath;
