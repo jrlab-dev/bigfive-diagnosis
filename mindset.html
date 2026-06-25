@@ -302,7 +302,7 @@ function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
   if (!saved) return;
   try {
     const data = JSON.parse(saved);
-    if (data && data.current > 0) {
+    if (data && data.current > 0 && data.current < questions.length) {
       const resumeBtn = document.getElementById('resumeBtn');
       const resumeInfo = document.getElementById('resumeInfo');
       resumeBtn.style.display = 'block';
@@ -322,6 +322,7 @@ function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
 
 // ===== 保存済み結果があれば直接結果表示 =====
 (function() {
+  if (localStorage.getItem(PROGRESS_KEY)) return; // 回答途中経過がある時は再受験の再開を優先
   const stored = localStorage.getItem('mindset_result');
   if (!stored) return;
   try {
