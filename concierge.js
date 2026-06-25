@@ -533,6 +533,22 @@ const CONCIERGE_CONFIG = {
           message: '将来のために待てるタイプかも。時間割引ゲームで、今と未来の選び方を見てみませんか？'
         }
       ]
+    },
+    {
+      key: 'hexaco_result',
+      title: 'HEXACO性格診断',
+      catchcopy: 'ビッグ5にない「謙虚さ」を測る',
+      desc: '200問で6因子（正直さ-謙虚さ・情動性・外向性・協調性・誠実性・開放性）を分析。ビッグファイブでは見えない誠実さの次元がわかります。',
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
+      url: 'hexaco.html',
+      gate: 'hexaco',
+      bgColor: 'rgba(217,119,6,0.15)',
+      getResult: (d) => ({ name: d.hType || '完了', color: '#d97706' }),
+      triggers: [
+        { condition: (sc) => sc.A >= 4, priority: 4, message: '協調性が高いあなたに。HEXACOの「正直さ-謙虚さ」を測ると、ビッグファイブでは見えなかった誠実さの強みが浮かびます。' },
+        { condition: (sc) => sc.A <= 2, priority: 3, message: '自分の意見をしっかり持つあなた。その強さが「率直さ」なのか、HEXACOの誠実さの次元でさらに深く分析できます。' },
+        { condition: (sc) => sc.C >= 4, priority: 2, message: '真面目で掘り下げがいのあるあなた。ビッグファイブを補完する第6因子まで測る、一番深い自己分析です。' }
+      ]
     }
   ]
 };

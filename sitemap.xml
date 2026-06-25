@@ -129,6 +129,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- HEXACO性格診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/hexaco.html</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- 公共財ゲーム -->
   <url>
     <loc>https://bigfive.jr-genius.jp/pgg.html</loc>

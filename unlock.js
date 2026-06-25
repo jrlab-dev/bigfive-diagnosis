@@ -31,6 +31,7 @@ var UNLOCK_TABLE = [
   { cards: 77, id: 'bigfiveman',         label: 'ビッグファイブマン分析',   url: 'team.html' },
   { cards: 90, id: 'group',             label: 'グループ分けツール',       url: 'group.html' },
   { cards: 100, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
+  { cards: 200, id: 'hexaco',            label: 'HEXACO性格診断',         url: 'hexaco.html' },
 ];
 
 // 常に解放済みのID
