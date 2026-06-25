@@ -168,6 +168,8 @@
       <p style="margin-top:10px;">※ビッグファイブの<strong>上位互換ではなく、補完するモデル</strong>です。ビッグファイブ診断と組み合わせて、より立体的に自分を知れます。</p>
     </div>
     <button class="start-btn" id="startBtn">診断スタート</button>
+    <button class="start-btn" id="resumeBtn" style="display:none; background:linear-gradient(135deg,#d97706,#ec4899); margin-top:10px; font-size:15px;">▶ 途中から再開する</button>
+    <p class="resume-info" id="resumeInfo" style="display:none; font-size:12px; color:rgba(217,119,6,0.85); margin-top:6px;"></p>
     <p class="intro-note" id="introNote">200問・約15分・無料・登録不要</p>
   </div>
 
@@ -505,6 +507,36 @@ function getHType(hAvg) {
 let current = 0;
 const answers = new Array(QUESTIONS.length).fill(null);
 const STORAGE_KEY = 'hexaco_result';
+const PROGRESS_KEY = 'hexaco_progress';
+
+// 自動保存（途中経過）— 200問・約15分の回答消失防止。sdt/love/mindset等と同パターン
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current, answers: answers.slice() }));
+}
+function clearProgress() { localStorage.removeItem(PROGRESS_KEY); }
+
+(function checkResume() {
+  const saved = localStorage.getItem(PROGRESS_KEY);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    if (data && data.current > 0 && data.current < QUESTIONS.length) {
+      const resumeBtn = document.getElementById('resumeBtn');
+      const resumeInfo = document.getElementById('resumeInfo');
+      resumeBtn.style.display = 'block';
+      resumeInfo.style.display = 'block';
+      resumeInfo.textContent = `前回 Q${data.current + 1} まで回答済み（残り ${QUESTIONS.length - data.current} 問）`;
+      resumeBtn.addEventListener('click', () => {
+        current = data.current;
+        answers.splice(0, answers.length, ...data.answers.map(v => v === undefined ? null : v));
+        document.getElementById('introArea').style.display = 'none';
+        document.getElementById('progressArea').style.display = 'flex';
+        document.getElementById('questionArea').style.display = 'flex';
+        showQuestion();
+      });
+    }
+  } catch(e) { clearProgress(); }
+})();
 
 (function() {
   const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
@@ -554,7 +586,7 @@ function selectAnswer(val) {
   timer = setTimeout(() => {
     timer = null;
     document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
-    current++;
+    current++; saveProgress();
     if (current < QUESTIONS.length) showQuestion();
     else showLoading();
   }, 280);
@@ -659,6 +691,7 @@ function showResult(preScores) {
   renderCross(s);
 
   if (!preScores) {
+    clearProgress();
     const hexaData = {
       scores: { ...s.avgs },
       facets: { ...s.facets },
@@ -754,6 +787,7 @@ function renderCross(s) {
 
 document.getElementById('retryBtn').addEventListener('click', () => {
   localStorage.removeItem(STORAGE_KEY);
+  clearProgress();
   current = 0;
   answers.fill(null);
   document.getElementById('resultArea').classList.remove('active');
@@ -762,8 +796,9 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
-// 保存済み結果があれば再表示
+// 保存済み結果があれば再表示（※回答途中経過がある時は再受験の再開を優先）
 (function() {
+  if (localStorage.getItem(PROGRESS_KEY)) return;
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return;
   try {
