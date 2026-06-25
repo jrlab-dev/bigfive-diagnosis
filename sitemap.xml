@@ -1560,6 +1560,20 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 人を支配したがる人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shihai-seikaku.html</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 浪費・貯金できない人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/rohi-chokin-seikaku.html</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
     <lastmod>2026-05-30</lastmod>
