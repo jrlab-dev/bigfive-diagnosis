@@ -107,6 +107,8 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 .diag-card[data-fc="A"]:hover { border-color: rgba(244,114,182,0.5); background: rgba(244,114,182,0.06); }
 .diag-card[data-fc="O"]:hover { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.06); }
 .diag-card[data-fc="C"]:hover { border-color: rgba(59,130,246,0.5); background: rgba(59,130,246,0.06); }
+.diag-card[data-fc="H"] { border-color: rgba(217,119,6,0.25); }
+.diag-card[data-fc="H"]:hover { border-color: rgba(217,119,6,0.5); background: rgba(217,119,6,0.06); }
 </style>
 <link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="light-mode.css">
@@ -160,7 +162,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   </section>
 
   <!-- 自分の性格を診断 -->
-  <p class="section-label">自分の性格を分析する（11種類）</p>
+  <p class="section-label">自分の性格を分析する（12種類）</p>
   <div class="diag-grid" id="selfGrid"></div>
 
   <!-- 応用診断 -->
@@ -190,6 +192,16 @@ const DIAGNOSES = [
     url: 'quiz.html?v=10',
     questions: 10,
     minutes: 3,
+  },
+  {
+    id: 'hexaco', fc: 'H',
+    icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
+    name: 'HEXACO性格診断',
+    desc: 'ビッグファイブに第6因子「正直さ-謙虚さ」を加えた6因子モデル。200問で、ビッグファイブでは測れなかった誠実さの次元まで分析します。',
+    url: 'hexaco.html',
+    questions: 200,
+    minutes: 15,
+    gate: 'hexaco',
   },
   {
     id: 'attachment', fc: 'A',
@@ -451,6 +463,7 @@ function getDoneIds() {
     if (localStorage.getItem('eq_result')) done.add('eq');
     if (localStorage.getItem('impostor_result')) done.add('impostor');
     if (localStorage.getItem('dark_triad_result')) done.add('dark-triad');
+    if (localStorage.getItem('hexaco_result')) done.add('hexaco');
     if (localStorage.getItem('pgg_result')) done.add('pgg');
     if (localStorage.getItem('risk_result')) done.add('risk');
     if (localStorage.getItem('trust_result')) done.add('trust');
@@ -542,7 +555,7 @@ const selfGrid   = document.getElementById('selfGrid');
 const otherGrid  = document.getElementById('otherGrid');
 const careerGrid = document.getElementById('careerGrid');
 const gameGrid   = document.getElementById('gameGrid');
-const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor'];
+const SELF_IDS   = ['bigfive','hsp','attachment','love','mindset','dark-triad','schwartz','sdt','locus','eq','impostor','hexaco'];
 const CAREER_IDS = ['career','riasec','career-integration'];
 const GAME_IDS   = ['pgg','risk','trust','ultimatum','beauty','delay'];
 const sortedDiagnoses = [...DIAGNOSES].sort((a, b) => {
