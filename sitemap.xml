@@ -1596,6 +1596,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 変化が苦手・変化に弱い人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/henka-nigate-seikaku.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
     <lastmod>2026-05-30</lastmod>
