@@ -1603,6 +1603,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- ダメ男（暴力以外）に惹かれる女性 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/dame-otoko-hikareru-seikaku.html</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
     <lastmod>2026-05-30</lastmod>
