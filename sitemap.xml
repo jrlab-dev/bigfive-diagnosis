@@ -1624,6 +1624,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 負けず嫌い・勝ち負けにこだわる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/makezukirai-seikaku.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
     <lastmod>2026-05-30</lastmod>
@@ -1634,6 +1641,13 @@
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/music-seikaku.html</loc>
     <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 嘘つきな人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/usotsuki-tokuchou.html</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
