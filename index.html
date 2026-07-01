@@ -1550,16 +1550,47 @@
   function handleResize() { if (phase !== 'done') init(); }
   window.addEventListener('resize', handleResize);
 
-  // 初期化：ロゴ画像のロードを待つ + フェイルセーフ（PC・スマホ共通で糸アニメ実行）
-  const fallbackTimer = setTimeout(init, 3000);
-  if (logo.complete) {
-    clearTimeout(fallbackTimer);
-    setTimeout(init, 600);
+  // オープニング演出（糸アニメ）を一度見たら、同じ訪問中はスキップして即・完成状態を表示する。
+  // sessionStorage を使うので「同じ訪問中はスキップ／タブを閉じて再訪すればまた1回だけ再生」。
+  const INTRO_KEY = 'bigfive_intro_seen';
+  let introSeen = false;
+  try { introSeen = sessionStorage.getItem(INTRO_KEY) === '1'; } catch (e) {}
+
+  // 演出を飛ばして、糸アニメ完了後と同じ最終状態を一瞬で作る
+  function skipIntro() {
+    if (phase === 'done') return;
+    phase = 'done';                       // resize時に init() で再生し直さないためのガード
+    if (rafId) cancelAnimationFrame(rafId);
+    buildRevealText();
+    if (canvas) canvas.style.display = 'none';
+    logoStage.style.transition = 'none';
+    logoStage.style.opacity = '1';
+    logoStage.style.filter = 'blur(0px) brightness(1)';
+    logoStage.style.transform = 'scale(1)';
+    logo.style.opacity = '1';
+    logoParts.forEach(part => { part.style.opacity = '1'; part.style.clipPath = 'inset(0 0 0 0)'; });
+    allChars.forEach(c => c.el.classList.add('show'));
+    const btn = document.getElementById('heroStartBtn');
+    if (btn) btn.classList.add('shimmer');
+  }
+
+  if (introSeen) {
+    // このセッションで既に見たので演出をスキップ
+    skipIntro();
   } else {
-    logo.addEventListener('load', function() {
+    // 初回はフル演出。見たことを記録し、次回以降（同セッション内）はスキップ
+    try { sessionStorage.setItem(INTRO_KEY, '1'); } catch (e) {}
+    // 初期化：ロゴ画像のロードを待つ + フェイルセーフ（PC・スマホ共通で糸アニメ実行）
+    const fallbackTimer = setTimeout(init, 3000);
+    if (logo.complete) {
       clearTimeout(fallbackTimer);
       setTimeout(init, 600);
-    });
+    } else {
+      logo.addEventListener('load', function() {
+        clearTimeout(fallbackTimer);
+        setTimeout(init, 600);
+      });
+    }
   }
 })();
 </script>
