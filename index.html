@@ -284,6 +284,19 @@
   }
   @keyframes gradient-shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
+  /* H1「性格診断」だけ、常にゆらゆら波打たせる（文字ごとに時差＝波が横に伝わる）。
+     gradient-shift（色の流れ）に h1-wave（上下の揺れ）を重ねる。opacityは触らないので
+     モバイルの常時可視（LCP対策）はそのまま維持される。 */
+  .reveal-line--main .char {
+    animation: gradient-shift 4s ease-in-out infinite, h1-wave 2.6s ease-in-out infinite;
+  }
+  .reveal-line--main .char:nth-child(1) { animation-delay: 0s, 0s; }
+  .reveal-line--main .char:nth-child(2) { animation-delay: 0s, 0.13s; }
+  .reveal-line--main .char:nth-child(3) { animation-delay: 0s, 0.26s; }
+  .reveal-line--main .char:nth-child(4) { animation-delay: 0s, 0.39s; }
+  .reveal-line--main .char:nth-child(5) { animation-delay: 0s, 0.52s; }
+  @keyframes h1-wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
   /* Canvas */
   #heroCanvas {
     position: absolute;
@@ -658,14 +671,11 @@
     .reveal-text { margin-top: 60px; }
     .reveal-line--main .char,
     .reveal-line--sub .char { font-size: clamp(1.2rem, 5vw, 1.8rem); }
-    /* H1（性格診断）は最初から薄→濃フェードで常時可視にする（モバイルLCP/SEO対策）。
+    /* H1（性格診断）はモバイルで最初から可視にする（LCP/SEO対策）。
        JSの糸アニメ完了を待たず1フレーム目から可視＝クローラ/LCPに確実に読まれる。
+       常時ゆらゆら波打つアニメ（h1-wave）はメディアクエリ外で定義済み＝ここでは可視化のみ。
        サブ（本当の自分を知る＝.reveal-line--sub）は従来通り糸アニメ後に出す。 */
-    .reveal-line--main .char {
-      opacity: 1;
-      transform: translateY(0);
-      animation: h1-mobile-fade 0.4s ease both;
-    }
+    .reveal-line--main .char { opacity: 1; }
     .social-proof { padding: 40px 16px; }
     .proof-grid { grid-template-columns: 1fr; }
     .scroll-stage--stats { height: 120vh; }
@@ -675,12 +685,6 @@
     .scroll-stage--anohito { height: 150vh; }
     .scroll-stage--concierge { height: 130vh; }
     .cta-cards { grid-template-columns: 1fr; max-width: 300px; }
-  }
-
-  /* H1（性格診断）モバイル用フェード：薄(0.45)→濃(1.0)。定義はメディアクエリ外（仕様上の正しい位置） */
-  @keyframes h1-mobile-fade {
-    from { opacity: 0.45; }
-    to   { opacity: 1; }
   }
 
   /* デモモーダル */
