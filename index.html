@@ -658,6 +658,14 @@
     .reveal-text { margin-top: 60px; }
     .reveal-line--main .char,
     .reveal-line--sub .char { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    /* H1（性格診断）は最初から薄→濃フェードで常時可視にする（モバイルLCP/SEO対策）。
+       JSの糸アニメ完了を待たず1フレーム目から可視＝クローラ/LCPに確実に読まれる。
+       サブ（本当の自分を知る＝.reveal-line--sub）は従来通り糸アニメ後に出す。 */
+    .reveal-line--main .char {
+      opacity: 1;
+      transform: translateY(0);
+      animation: h1-mobile-fade 0.4s ease both;
+    }
     .social-proof { padding: 40px 16px; }
     .proof-grid { grid-template-columns: 1fr; }
     .scroll-stage--stats { height: 120vh; }
@@ -667,6 +675,12 @@
     .scroll-stage--anohito { height: 150vh; }
     .scroll-stage--concierge { height: 130vh; }
     .cta-cards { grid-template-columns: 1fr; max-width: 300px; }
+  }
+
+  /* H1（性格診断）モバイル用フェード：薄(0.45)→濃(1.0)。定義はメディアクエリ外（仕様上の正しい位置） */
+  @keyframes h1-mobile-fade {
+    from { opacity: 0.45; }
+    to   { opacity: 1; }
   }
 
   /* デモモーダル */
