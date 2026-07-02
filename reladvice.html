@@ -417,17 +417,44 @@ function renderAnalysis() {
   var ctx = buildCtx(p1, p2, n1, n2);
   var theme = THEMES.filter(function(t) { return t.id === currentSituation; })[0] || null;
   var titleText = buildTitle(theme, ctx);
-  var matched = evaluateRules(currentSituation, p1, p2, ctx, 4);
+  var res = analyzePair(currentSituation, p1, p2, ctx, 3);
 
-  var html = '<div style="font-size:14px;font-weight:700;margin-bottom:18px;line-height:1.5;">' + titleText + '</div>';
-  html += '<div class="analysis-section"><div class="analysis-title">分析</div>';
-  matched.forEach(function(m) {
-    html += '<div class="analysis-card"><div class="analysis-point">- ' + m.title + '</div><div class="analysis-detail">' + m.detail + '</div></div>';
+  var html = '<div style="font-size:14px;font-weight:700;margin-bottom:14px;line-height:1.5;">' + titleText + '</div>';
+
+  /* 1. 見立て（このペアの一番のカギ） */
+  var top = res.top;
+  var mitate;
+  if (top.diff >= 2) {
+    mitate = 'おふたりの間でいちばん効いているのは<b>「' + top.name + '」のズレ</b>です（' + n1 + 'さん ' + top.v1 + ' ／ ' + n2 + 'さん ' + top.v2 + '）。ここを押さえると、他の小さなすれ違いも読み解きやすくなります。';
+  } else {
+    mitate = 'おふたりは<b>「' + top.name + '」の感覚がよく似ています</b>（' + n1 + 'さん ' + top.v1 + ' ／ ' + n2 + 'さん ' + top.v2 + '）。この近さが、おふたりの関係を読み解く出発点になります。';
+  }
+  html += '<div class="analysis-section"><div class="analysis-title">見立て</div>';
+  html += '<div class="advice-card"><div class="advice-text">' + mitate + '</div></div></div>';
+
+  /* 2. なぜそうなっているか（実スコア付き） */
+  var cards = res.items.slice();
+  if (res.selfNote) cards.push(res.selfNote);
+  html += '<div class="analysis-section"><div class="analysis-title">なぜそうなっているか</div>';
+  cards.forEach(function(m) {
+    html += '<div class="analysis-card"><div class="analysis-point">' + m.title + '</div><div class="analysis-detail">' + m.detail + '</div>';
+    if (m.scoreline) html += '<div style="font-size:11px;color:var(--dim);margin-top:8px;opacity:0.85;">📊 ' + m.scoreline + '</div>';
+    html += '</div>';
   });
   html += '</div>';
-  html += '<div class="analysis-section"><div class="analysis-title">アドバイス</div>';
-  matched.forEach(function(m) { html += '<div class="advice-card"><div class="advice-text">' + m.advice + '</div></div>'; });
+
+  /* 3. 明日からできること */
+  html += '<div class="analysis-section"><div class="analysis-title">明日からできること</div>';
+  cards.forEach(function(m, i) {
+    html += '<div class="advice-card"><div class="advice-text"><b>' + (i + 1) + '.</b> ' + m.advice + '</div></div>';
+  });
   html += '</div>';
+
+  /* 4. それでも難しいときは */
+  html += '<div class="analysis-section"><div class="analysis-title">それでも難しいときは</div>';
+  html += '<div class="analysis-card"><div class="analysis-detail">この分析はビッグファイブ（性格傾向）にもとづく参考情報で、おふたりの関係を決めつけるものではありません。実際のやり取りの中の事情までは読み取れないので、もっと細かく相談したいときは、マイページの「AIに相談する用プロフィール」でおふたりの診断データをコピーして、AIに続きを相談できます。</div>';
+  html += '<a href="mypage.html#aiProfileSection" style="display:block;margin-top:12px;padding:11px;text-align:center;border:1.5px solid rgba(139,92,246,0.45);border-radius:10px;color:inherit;font-size:13px;font-weight:700;text-decoration:none;">AIにもっと詳しく相談する →</a></div></div>';
+
   el.innerHTML = html;
 }
 
