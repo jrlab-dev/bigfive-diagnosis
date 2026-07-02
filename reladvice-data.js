@@ -537,3 +537,8 @@ var PAIR_TYPES = {
   },
   balance: { name:'ちょうどいいふたり', copy:'どの因子も大きな偏りがない、めずらしくバランスの取れた組み合わせ。強い衝突要因が見当たりません。' }
 };
+
+/* ===== THEME_NOTES：テーマ専用部品（フェーズ4で量産・共通PAIR_NOTESより優先される） =====
+   追記方法: このファイルの末尾に THEME_NOTES['テーマID'] = { O:{...}, C:{...}, ... }; の形で1テーマずつ足す。
+   構造は PAIR_NOTES と同じ（因子O/C/E/A/N × 状態 hh/ll/p1hi/p2hi/mid、midは省略可）。 */
+var THEME_NOTES = {};

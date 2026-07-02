@@ -61,6 +61,15 @@ function pairState(p1, p2, key) {
   return 'mid';
 }
 
+/* 部品の取得：テーマ専用（THEME_NOTES）があれば優先、なければ共通（PAIR_NOTES） */
+function noteFor(themeId, key, st) {
+  if (typeof THEME_NOTES !== 'undefined' && THEME_NOTES[themeId] && THEME_NOTES[themeId][key] && THEME_NOTES[themeId][key][st]) {
+    return THEME_NOTES[themeId][key][st];
+  }
+  if (typeof PAIR_NOTES !== 'undefined' && PAIR_NOTES[key]) return PAIR_NOTES[key][st] || null;
+  return null;
+}
+
 function buildCtx(p1, p2, n1, n2) {
   var LVL = { high:'高め', mid:'ふつう', low:'低め' };
   var ctx = { name1: n1, name2: n2 };
@@ -139,7 +148,7 @@ function analyzePair(themeId, p1, p2, ctx, maxN) {
     var topKey = sal[0].key;
     var hasTop = picked.some(function(m) { return m.factors.indexOf(topKey) >= 0; });
     if (!hasTop) {
-      var topNote = PAIR_NOTES[topKey] && PAIR_NOTES[topKey][pairState(p1, p2, topKey)];
+      var topNote = noteFor(themeId, topKey, pairState(p1, p2, topKey));
       if (topNote) {
         picked.unshift({
           kind: 'pair', factors: [topKey],
@@ -159,7 +168,7 @@ function analyzePair(themeId, p1, p2, ctx, maxN) {
       var k = sal[s].key;
       var covered = picked.some(function(m) { return m.factors.indexOf(k) >= 0; });
       if (covered) continue;
-      var note = PAIR_NOTES[k] && PAIR_NOTES[k][pairState(p1, p2, k)];
+      var note = noteFor(themeId, k, pairState(p1, p2, k));
       if (!note) continue;
       picked.push({
         kind: 'pair', factors: [k],
