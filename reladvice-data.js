@@ -7,23 +7,27 @@ var CATEGORIES = [
     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' },
   { id:'work',   label:'仕事', color:'#3b82f6',
     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>' },
+  { id:'family', label:'家族', color:'#14b8a6',
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
   { id:'friend', label:'友達', color:'#f97316',
     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>' }
 ];
 
 var THEMES = [
-  { id:'like',         cat:'love',   label:'好かれたい',         sub:'{name1}さんが{name2}さんに好かれるには' },
-  { id:'rejected',     cat:'love',   label:'なぜ振られた？',     sub:'{name1}さんと{name2}さん、うまくいかなかった理由' },
-  { id:'distance',     cat:'love',   label:'なぜ距離がある？',   sub:'{name1}さんと{name2}さん、距離が縮まらない理由' },
-  { id:'fight',        cat:'love',   label:'ケンカが多い',       sub:'{name1}さんと{name2}さん、ケンカが多い理由' },
-  { id:'work-close',   cat:'work',   label:'仲良くなりたい',     sub:'{name1}さんが{name2}さんと打ち解けるには' },
-  { id:'work-fric',    cat:'work',   label:'意見がぶつかる',     sub:'{name1}さんと{name2}さん、意見がぶつかる原因' },
-  { id:'work-trust',   cat:'work',   label:'信頼されたい',       sub:'{name1}さんが{name2}さんから信頼を得るには' },
-  { id:'work-hard',    cat:'work',   label:'仕事が進まない',     sub:'{name1}さんと{name2}さん、連携が進まない理由' },
-  { id:'friend-close', cat:'friend', label:'仲良くなりたい',     sub:'{name1}さんが{name2}さんと仲良くなるには' },
-  { id:'friend-cool',  cat:'friend', label:'最近なんとなく',     sub:'{name1}さんと{name2}さん、最近距離がある理由' },
-  { id:'friend-fun',   cat:'friend', label:'一緒にいて楽しい',   sub:'{name1}さんと{name2}さん、相性が良い理由' },
-  { id:'friend-conf',  cat:'friend', label:'価値観が合うか不安', sub:'{name1}さんと{name2}さん、価値観が合うかのポイント' }
+  { id:'kimochi',       cat:'love',   label:'あの人の気持ちがわからない', sub:'{name2}さんの気持ちの出方を、性格から読み解く' },
+  { id:'like',          cat:'love',   label:'好かれたい・距離を縮めたい', sub:'{name1}さんが{name2}さんに好かれるには' },
+  { id:'distance',      cat:'love',   label:'連絡・会う頻度が合わない',   sub:'{name1}さんと{name2}さん、ペースが合わない理由' },
+  { id:'fight',         cat:'love',   label:'ケンカばかりで疲れた',       sub:'{name1}さんと{name2}さん、ケンカが多い理由' },
+  { id:'kachikan',      cat:'love',   label:'結婚・お金・価値観の不安',   sub:'{name1}さんと{name2}さん、価値観のポイント' },
+  { id:'work-boss',     cat:'work',   label:'上司・先輩が怖い・合わない', sub:'{name1}さんから見た{name2}さんとの付き合い方' },
+  { id:'work-fric',     cat:'work',   label:'同僚が苦手・ぎくしゃくする', sub:'{name1}さんと{name2}さん、ぎくしゃくする原因' },
+  { id:'work-kotowaru', cat:'work',   label:'断れない・押し付けられる',   sub:'{name2}さんへの上手な断り方' },
+  { id:'work-buka',     cat:'work',   label:'部下・後輩にどう伝える？',   sub:'{name2}さんに届く伝え方・任せ方' },
+  { id:'family-kodomo', cat:'family', label:'子供の性格がわからない',     sub:'{name2}さん（お子さん）への接し方' },
+  { id:'family-fufu',   cat:'family', label:'夫婦の会話がかみ合わない',   sub:'{name1}さんと{name2}さん、会話のすれ違いの理由' },
+  { id:'family-oya',    cat:'family', label:'親と合わない',               sub:'{name1}さんと{name2}さん（親）との距離の取り方' },
+  { id:'tsukare',       cat:'friend', label:'気を使いすぎて疲れる',       sub:'{name1}さんが{name2}さんに気疲れする理由' },
+  { id:'friend-cool',   cat:'friend', label:'距離ができた・疎遠になった', sub:'{name1}さんと{name2}さん、最近距離がある理由' }
 ];
 
 /* ===== ルール定義（テーマごとの条件 + テンプレート文章） =====
@@ -216,7 +220,7 @@ var RULES = {
       detail:'ぶつかりやすさは、現在の役割やプレッシャー環境の影響も受けます。',
       advice:'意見の違いを「人」ではなく「やり方の違い」として扱うと、関係は壊れにくくなります。' }
   ],
-  'work-trust': [
+  'work-boss': [
     { when:function(p1,p2){ return isHigh(p2,'C'); }, priority:6,
       title:'{name2}さんの{factor:C}が高く、期日と品質で人を測る',
       detail:'正確さと計画性を重んじるタイプで、ルーズさは即、信用低下につながります。',
@@ -348,7 +352,7 @@ var RULES = {
       detail:'相性の良さは、複数の因子のバランスで成り立っています。',
       advice:'この関係を大切に。居心地の良い友情は、実はそう多くはできるものではありません。' }
   ],
-  'friend-conf': [
+  kachikan: [
     { when:function(p1,p2){ return diff(p1,p2,'O') >= 2; }, priority:6,
       title:'{factor:O}の差が大きく、興味や変化への姿勢が違う',
       detail:'新しいこと好きと安定好きでは、話題や選ぶ遊びが割れやすいです。',
