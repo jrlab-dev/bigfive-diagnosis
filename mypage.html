@@ -608,6 +608,9 @@
   .ai-examples li::before {
     content: '→'; position: absolute; left: 0; color: var(--purple);
   }
+  .ai-examples li.ai-ex { cursor: pointer; transition: color .15s; }
+  .ai-examples li.ai-ex:hover { color: var(--text); text-decoration: underline; }
+  .ai-examples li.ai-ex.excopied { color: #10b981; text-decoration: none; }
 
   /* 端末引継ぎ */
   .sync-section {
@@ -1469,14 +1472,14 @@
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
       <div class="ai-examples">
-        <p class="ai-examples-title">使い方（ChatGPTやClaudeなどのAIに貼り付けて質問）</p>
+        <p class="ai-examples-title">質問例（タップすると、プロフィール＋質問がまとめてコピーされます）</p>
         <ul>
-          <li>この性格を踏まえて、仕事でのストレス対策をアドバイスしてください</li>
-          <li>この性格の人に合った恋愛のアドバイスをください</li>
-          <li>この性格の強みを活かせる仕事・職場を提案してください</li>
-          <li>この性格の傾向を踏まえて、人間関係で気をつけるべきことを教えてください</li>
+          <li class="ai-ex">この性格を踏まえて、仕事でのストレス対策をアドバイスしてください</li>
+          <li class="ai-ex">この性格の人に合った恋愛のアドバイスをください</li>
+          <li class="ai-ex">この性格の強みを活かせる仕事・職場を提案してください</li>
+          <li class="ai-ex">この性格の傾向を踏まえて、人間関係で気をつけるべきことを教えてください</li>
         </ul>
-        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6;">※ 心理テストを受けるほどAIに渡せる情報が増え、より精密なアドバイスがもらえます。</p>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6;">※ 心理テストを受けるほどAIに渡せる情報が増え、より精密なアドバイスがもらえます。<br>※ 深刻な悩み（心身の不調が続くなど）は、AIだけでなく専門機関・医療機関にも相談してください。</p>
       </div>
     </div>
   </div>
@@ -2721,16 +2724,25 @@ function renderAIProfile() {
   const schNames = { 'self-direction': '自己方向性', stimulation: '刺激追求', hedonism: '快楽主義', achievement: '達成', power: '権力', security: '安全', conformity: '同調', tradition: '伝統', benevolence: '仁愛', universalism: '普遍主義' };
   const sdtNames = { autonomy: '自律性（自分で決めたい）', competence: '有能感（上手にやりたい）', relatedness: '関係性（人と繋がりたい）' };
 
-  let lines = ['【私の性格プロフィール】'];
+  let lines = [
+    'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
+    '以下は私が性格診断サイトで受けた診断結果です。この内容を前提に、このあと私が書く質問や相談に答えてください。',
+    '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
+    '深刻な悩み（心身の不調が続くなど）だと感じたら、専門機関への相談も勧めてください。',
+    '',
+    '【私の性格プロフィール】'
+  ];
 
   // ビッグファイブ
   if (bf) {
     const s = bf.scores || {};
     const typeName = bf.typeName || '';
+    const bfLvl = v => { const n = parseInt(v, 10); return isNaN(n) ? '' : n >= 4 ? '（高め）' : n <= 2 ? '（低め）' : '（中間）'; };
+    const bfFmt = v => v ? `${v}/5${bfLvl(v)}` : '?';
     lines.push('■ ビッグファイブ性格診断');
     if (typeName) lines.push(`タイプ: ${typeName}（${bf.code}）`);
     else lines.push(`タイプコード: ${bf.code}`);
-    lines.push(`開放性: ${s.O || '?'} / 誠実性: ${s.C || '?'} / 外向性: ${s.E || '?'} / 協調性: ${s.A || '?'} / 神経症傾向: ${s.N || '?'}`);
+    lines.push(`開放性: ${bfFmt(s.O)} / 誠実性: ${bfFmt(s.C)} / 外向性: ${bfFmt(s.E)} / 協調性: ${bfFmt(s.A)} / 感受性（神経症傾向）: ${bfFmt(s.N)}`);
   }
 
   // HSP
@@ -2858,6 +2870,28 @@ function renderAIProfile() {
       setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
     });
   };
+
+  // 質問例タップで「プロフィール＋質問」をまとめてコピー（onclickで重複登録を防ぐ）
+  document.querySelectorAll('.ai-examples li.ai-ex').forEach(function(li) {
+    const q = li.textContent.trim();
+    li.onclick = function() {
+      if (li.classList.contains('excopied')) return;
+      const combined = textarea.value + '\n\n【相談したいこと】\n' + q;
+      const done = function() {
+        li.textContent = '✓ コピーしました！AIに貼り付けてください';
+        li.classList.add('excopied');
+        setTimeout(function() { li.textContent = q; li.classList.remove('excopied'); }, 1800);
+      };
+      navigator.clipboard.writeText(combined).then(done).catch(function() {
+        const orig = textarea.value;
+        textarea.value = combined;
+        textarea.select();
+        document.execCommand('copy');
+        textarea.value = orig;
+        done();
+      });
+    };
+  });
 }
 </script>
 <script src="image-resolver.js"></script>
