@@ -182,7 +182,8 @@ function analyzePair(themeId, p1, p2, ctx, maxN) {
 
   /* 3) アプローチ系テーマ: 自分側の一番の極端因子から一言（SELF_NOTES） */
   var selfNote = null;
-  var selfThemes = { like:1, 'work-close':1, 'work-trust':1, 'friend-close':1 };
+  /* 旧テーマID（work-close/work-trust/friend-close）と新テーマID（フェーズ4以降）の両方を含む */
+  var selfThemes = { like:1, kimochi:1, 'work-close':1, 'work-trust':1, 'work-boss':1, 'work-kotowaru':1, 'friend-close':1 };
   if (typeof SELF_NOTES !== 'undefined' && selfThemes[themeId]) {
     var best = null;
     FACTORS.forEach(function(f) {
