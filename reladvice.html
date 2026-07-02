@@ -431,8 +431,8 @@ function renderAnalysis() {
 
   var html = '<div style="font-size:14px;font-weight:700;margin-bottom:14px;line-height:1.5;">' + titleText + '</div>';
 
-  /* 0. ペア相性タイプカード */
-  var pt = pairType(p1, p2, ctx);
+  /* 0. ペア相性タイプカード（古いキャッシュのエンジンでも壊れないようガード） */
+  var pt = (typeof pairType === 'function') ? pairType(p1, p2, ctx) : null;
   if (pt) {
     html += '<div class="pair-type-card" style="border-top:3px solid ' + pt.color + ';">';
     html += '<div class="pair-type-label">おふたりのタイプ</div>';
