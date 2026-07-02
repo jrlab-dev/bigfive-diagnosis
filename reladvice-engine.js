@@ -197,6 +197,37 @@ function analyzePair(themeId, p1, p2, ctx, maxN) {
   return { items: picked, selfNote: selfNote, salience: sal, top: sal[0] };
 }
 
+/* ===== ペア相性タイプ判定（フェーズ3）：一番目立つ因子とその形で16タイプ =====
+   戻り値: { name, copy, roleLine, factorKey, factorName, color, state, v1, v2 } */
+function pairType(p1, p2, ctx) {
+  if (typeof PAIR_TYPES === 'undefined') return null;
+  var sal = salience(p1, p2);
+  var top = sal[0];
+  var f = null;
+  FACTORS.forEach(function(x) { if (x.key === top.key) f = x; });
+  var st = pairState(p1, p2, top.key);
+  var base = { factorKey: top.key, factorName: top.name, color: f ? f.color : '#8b5cf6', v1: top.v1, v2: top.v2 };
+
+  if (st === 'mid' || (st !== 'p1hi' && st !== 'p2hi' && st !== 'hh' && st !== 'll')) {
+    var b = PAIR_TYPES.balance;
+    return Object.assign(base, { name: b.name, copy: b.copy, roleLine: '', state: 'balance' });
+  }
+  var t;
+  if (st === 'p1hi' || st === 'p2hi') {
+    t = PAIR_TYPES[top.key] && PAIR_TYPES[top.key].gap;
+    if (!t) return null;
+    var hiName = st === 'p1hi' ? ctx.name1 : ctx.name2;
+    var loName = st === 'p1hi' ? ctx.name2 : ctx.name1;
+    return Object.assign(base, {
+      name: t.name, copy: t.copy, state: 'gap',
+      roleLine: hiName + 'さんが' + t.hiRole + '、' + loName + 'さんが' + t.loRole
+    });
+  }
+  t = PAIR_TYPES[top.key] && PAIR_TYPES[top.key][st];
+  if (!t) return null;
+  return Object.assign(base, { name: t.name, copy: t.copy, roleLine: '', state: st });
+}
+
 /* v1互換ラッパー（計測スクリプト等が使用） */
 function evaluateRules(themeId, p1, p2, ctx, maxN) {
   var r = analyzePair(themeId, p1, p2, ctx, maxN ? Math.min(maxN, 3) : 3);
