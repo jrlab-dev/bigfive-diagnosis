@@ -195,6 +195,55 @@ textarea { resize: vertical; min-height: 72px; }
 .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 
+/* ===== 自分史（振り返りQ&A） ===== */
+.lifehist-wrap { margin-top: 4px; }
+.lifehist-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  cursor: pointer; padding: 10px 12px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; font-size: 12px; color: var(--dim);
+  transition: border-color .18s, color .18s;
+}
+.lifehist-toggle:hover { border-color: var(--accent); color: var(--text); }
+.lifehist-arrow { transition: transform .2s; color: var(--accent); flex-shrink: 0; }
+.lifehist-arrow.open { transform: rotate(90deg); }
+.lifehist-panel { margin-top: 8px; }
+.lifehist-note {
+  font-size: 11px; color: var(--dim); line-height: 1.7;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 8px 10px; margin-bottom: 10px;
+}
+.lifehist-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.lifehist-tab {
+  font-size: 11px; padding: 5px 12px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--dim); cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.lifehist-tab.active { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 500; }
+.lifehist-tabpanel { display: none; }
+.lifehist-tabpanel.active { display: block; }
+.lifehist-cat { border: 1px solid var(--border2); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+.lifehist-cat-head {
+  padding: 9px 12px; font-size: 12px; font-weight: 700; color: var(--label);
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg3);
+}
+.lifehist-cat-arrow { transition: transform .2s; color: var(--dim); }
+.lifehist-cat-body { padding: 0 12px; max-height: 0; overflow: hidden; transition: max-height .2s ease; }
+.lifehist-cat-body.open { padding: 12px; max-height: 2000px; }
+.lifehist-q { margin-bottom: 14px; }
+.lifehist-q:last-child { margin-bottom: 0; }
+.lifehist-qtext { font-size: 12.5px; color: var(--text); margin-bottom: 4px; line-height: 1.6; }
+.lifehist-qnote { font-size: 10.5px; color: var(--dim2); margin-bottom: 6px; line-height: 1.5; }
+.lifehist-ans-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.lifehist-ans-btn {
+  font-size: 11px; padding: 5px 11px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg2);
+  color: var(--dim); cursor: pointer; font-family: inherit;
+}
+.lifehist-ans-btn.active { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 500; }
+.lifehist-detail { min-height: 56px; }
+
 /* ===== ビッグファイブ 数字のみ ===== */
 .bf-row {
   display: flex;
@@ -719,6 +768,17 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
         <label>生い立ち・家族・転機になった出来事</label>
         <textarea id="background" rows="4" placeholder="例：長野県の山間部で育つ。3人兄弟の長男。農家の家庭で自然の中で過ごした幼少期が今の価値観に大きく影響。"></textarea>
       </div>
+      <div class="row lifehist-wrap">
+        <div class="lifehist-toggle" onclick="toggleLifeHistoryPanel()">
+          <span>気になる項目から選んで振り返る（任意・答えたい分だけでOK）</span>
+          <span class="lifehist-arrow" id="lifehistArrow">▸</span>
+        </div>
+        <div class="lifehist-panel" id="lifehistPanel" style="display:none">
+          <p class="lifehist-note">全部答える必要はありません。気になるものだけで大丈夫です。つらい内容は無理に書かなくてOK。深刻な内容は、AIだけでなく専門機関・医療機関にもご相談ください。</p>
+          <div class="lifehist-tabs" id="lifehistTabs"></div>
+          <div id="lifehistTabPanels"></div>
+        </div>
+      </div>
       <div class="row">
         <label>対人スタイル・接し方のコツ（AIへの補足に有効）</label>
         <textarea id="style" rows="3" placeholder="例：結論から話してほしい。フィードバックは直接的に。長い説明より箇条書きが好き。"></textarea>
@@ -840,8 +900,190 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
 <script>
 const KEY = 'bigfive_selfprofile';
 
+// ===== 自分史（振り返りQ&A）データ定義 =====
+// 根拠：_private/性格形成に影響する人生の出来事_心理学データ.md（2026-07-04リサーチ）
+// エビデンスの強さで優先順位づけ。出生順序・きょうだいの人数・名前は根拠が弱いため候補に含めない。
+const LIFE_HISTORY_TABS = [
+  { id: 'events', label: '出来事', categories: [
+    { id: 'lh_childhood', label: '幼少期・家庭環境', questions: [
+      { id: 'childhood_ace', text: '小さい頃、つらい経験（虐待・ネグレクトなど）が続いた時期はありましたか', note: 'つらい内容は無理に書かなくて大丈夫です。深刻な内容は専門機関・医療機関にもご相談ください。' },
+      { id: 'childhood_parenting', text: '両親の育て方はどんな感じでしたか（厳しめ・おおらか・干渉が強い等）' },
+    ]},
+    { id: 'lh_school', label: '学校・思春期', questions: [
+      { id: 'school_bullying', text: 'いじめを受けた（または関わった）経験はありますか', note: 'つらい内容は無理に書かなくて大丈夫です。' },
+      { id: 'school_birthmonth', text: '学年の中で早生まれ（1〜3月生まれ）でしたか、遅生まれ（4月生まれ）でしたか' },
+    ]},
+    { id: 'lh_career', label: '仕事・キャリア', questions: [
+      { id: 'career_jobloss', text: '失業・雇用不安が続いた時期はありましたか' },
+      { id: 'career_firstjob', text: '初めての就職はどんな経験でしたか' },
+    ]},
+    { id: 'lh_loss', label: '喪失・病気', questions: [
+      { id: 'loss_bereavement', text: '近親者を亡くした経験はありますか', note: 'つらい内容は無理に書かなくて大丈夫です。' },
+      { id: 'loss_illness', text: '大きな病気・怪我をした時期はありますか' },
+    ]},
+    { id: 'lh_love', label: '恋愛・結婚', questions: [
+      { id: 'love_marriage', text: '結婚・離婚・大きな別れの経験はありますか' },
+    ]},
+    { id: 'lh_env', label: 'その他の環境変化', questions: [
+      { id: 'env_change', text: '引っ越し・移住・育児・介護など、大きな環境の変化はありましたか' },
+    ]},
+  ]},
+  { id: 'labels', label: 'レッテル・言われ続けた言葉', categories: [
+    { id: 'lh_labels', label: 'よく言われた言葉・役割', questions: [
+      { id: 'label_bloodtype', text: '小さい頃から「あなたは○型だから」と言われ続けたことはありますか' },
+      { id: 'label_role', text: '「長男/長女だから」「女の子だから」のように、役割を期待され続けたことはありますか' },
+      { id: 'label_sibling', text: 'きょうだいと比べて「正反対のタイプ」と言われて育ちましたか' },
+      { id: 'label_freeform', text: '昔からよく言われてきた「◯◯な子」という言葉はありますか' },
+    ]},
+  ]},
+  { id: 'era', label: '時代背景', categories: [
+    { id: 'lh_era', label: '育った時代・社会人になったタイミング', questions: [
+      { id: 'era_economy', text: '社会人になったタイミングは、どんな経済状況でしたか（就職氷河期・好景気など）' },
+    ]},
+  ]},
+];
+
+function renderLifeHistoryUI() {
+  const tabsEl = document.getElementById('lifehistTabs');
+  const panelsEl = document.getElementById('lifehistTabPanels');
+  if (!tabsEl || !panelsEl) return;
+  tabsEl.innerHTML = '';
+  panelsEl.innerHTML = '';
+  LIFE_HISTORY_TABS.forEach((tab, i) => {
+    const tabBtn = document.createElement('button');
+    tabBtn.type = 'button';
+    tabBtn.className = 'lifehist-tab' + (i === 0 ? ' active' : '');
+    tabBtn.textContent = tab.label;
+    tabBtn.id = 'lifehistTab_' + tab.id;
+    tabBtn.onclick = () => showLifeHistoryTab(tab.id);
+    tabsEl.appendChild(tabBtn);
+
+    const panel = document.createElement('div');
+    panel.className = 'lifehist-tabpanel' + (i === 0 ? ' active' : '');
+    panel.id = 'lifehistTabPanel_' + tab.id;
+
+    tab.categories.forEach(cat => {
+      const catEl = document.createElement('div');
+      catEl.className = 'lifehist-cat';
+
+      const headEl = document.createElement('div');
+      headEl.className = 'lifehist-cat-head';
+      headEl.innerHTML = '<span>' + escHtml(cat.label) + '</span><span class="lifehist-cat-arrow" id="lifehistCatArrow_' + cat.id + '">▸</span>';
+      headEl.onclick = () => toggleLifeHistoryCat(cat.id);
+
+      const bodyEl = document.createElement('div');
+      bodyEl.className = 'lifehist-cat-body';
+      bodyEl.id = 'lifehistCatBody_' + cat.id;
+
+      cat.questions.forEach(q => {
+        const qEl = document.createElement('div');
+        qEl.className = 'lifehist-q';
+        qEl.setAttribute('data-qid', q.id);
+        let html = '<p class="lifehist-qtext">' + escHtml(q.text) + '</p>';
+        if (q.note) html += '<p class="lifehist-qnote">' + escHtml(q.note) + '</p>';
+        html += '<div class="lifehist-ans-btns">' +
+          '<button type="button" class="lifehist-ans-btn" data-ans="yes" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'yes\')">はい・詳しく書く</button>' +
+          '<button type="button" class="lifehist-ans-btn" data-ans="no" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'no\')">いいえ</button>' +
+          '<button type="button" class="lifehist-ans-btn" data-ans="skip" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'skip\')">答えたくない</button>' +
+          '</div>' +
+          '<textarea class="lifehist-detail" id="lifehist_detail_' + q.id + '" style="display:none" placeholder="よければ、もう少し詳しく（無理に埋めなくてOK）"></textarea>';
+        qEl.innerHTML = html;
+        bodyEl.appendChild(qEl);
+      });
+
+      catEl.appendChild(headEl);
+      catEl.appendChild(bodyEl);
+      panel.appendChild(catEl);
+    });
+
+    panelsEl.appendChild(panel);
+  });
+}
+
+function showLifeHistoryTab(tabId) {
+  document.querySelectorAll('.lifehist-tab').forEach(b => b.classList.toggle('active', b.id === 'lifehistTab_' + tabId));
+  document.querySelectorAll('.lifehist-tabpanel').forEach(p => p.classList.toggle('active', p.id === 'lifehistTabPanel_' + tabId));
+}
+
+function toggleLifeHistoryCat(catId) {
+  const body = document.getElementById('lifehistCatBody_' + catId);
+  const arrow = document.getElementById('lifehistCatArrow_' + catId);
+  if (!body) return;
+  const opening = !body.classList.contains('open');
+  body.classList.toggle('open', opening);
+  if (arrow) arrow.classList.toggle('open', opening);
+}
+
+function toggleLifeHistoryPanel() {
+  const panel = document.getElementById('lifehistPanel');
+  const arrow = document.getElementById('lifehistArrow');
+  const isOpen = panel.style.display !== 'none';
+  panel.style.display = isOpen ? 'none' : '';
+  if (arrow) arrow.classList.toggle('open', !isOpen);
+}
+
+function setLifeHistoryAnswer(qid, ans) {
+  const qEl = document.querySelector('.lifehist-q[data-qid="' + qid + '"]');
+  if (!qEl) return;
+  qEl.setAttribute('data-answer', ans);
+  qEl.querySelectorAll('.lifehist-ans-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-ans') === ans));
+  const ta = document.getElementById('lifehist_detail_' + qid);
+  if (ta) ta.style.display = (ans === 'yes') ? '' : 'none';
+}
+
+function collectLifeHistory() {
+  const out = {};
+  document.querySelectorAll('.lifehist-q').forEach(qEl => {
+    const qid = qEl.getAttribute('data-qid');
+    const ans = qEl.getAttribute('data-answer') || '';
+    if (!ans) return;
+    const ta = document.getElementById('lifehist_detail_' + qid);
+    out[qid] = { answer: ans, detail: (ans === 'yes' && ta) ? ta.value.trim() : '' };
+  });
+  return out;
+}
+
+function restoreLifeHistory(lifeHistory) {
+  if (!lifeHistory) return;
+  Object.keys(lifeHistory).forEach(qid => {
+    const entry = lifeHistory[qid];
+    if (!entry || !entry.answer) return;
+    setLifeHistoryAnswer(qid, entry.answer);
+    if (entry.answer === 'yes' && entry.detail) {
+      const ta = document.getElementById('lifehist_detail_' + qid);
+      if (ta) ta.value = entry.detail;
+    }
+    if (entry.answer === 'yes') {
+      const qEl = document.querySelector('.lifehist-q[data-qid="' + qid + '"]');
+      const body = qEl && qEl.closest('.lifehist-cat-body');
+      if (body) {
+        body.classList.add('open');
+        const arrow = document.getElementById('lifehistCatArrow_' + body.id.replace('lifehistCatBody_', ''));
+        if (arrow) arrow.classList.add('open');
+      }
+    }
+  });
+}
+
+function buildLifeHistoryText(lifeHistory) {
+  if (!lifeHistory) return '';
+  const lines = [];
+  LIFE_HISTORY_TABS.forEach(tab => {
+    tab.categories.forEach(cat => {
+      cat.questions.forEach(q => {
+        const entry = lifeHistory[q.id];
+        if (entry && entry.answer === 'yes' && entry.detail) {
+          lines.push('・' + q.text + '\n　→ ' + entry.detail);
+        }
+      });
+    });
+  });
+  return lines.join('\n');
+}
+
 // ===== 初期化 =====
 window.addEventListener('DOMContentLoaded', () => {
+  renderLifeHistoryUI();
   loadAll();
   reloadBf();
   loadOtherDiagnostics();
@@ -1677,6 +1919,9 @@ function saveAll() {
   });
   data.toggleState = toggleState;
 
+  // 自分史（振り返りQ&A）
+  data.lifeHistory = collectLifeHistory();
+
   data.updatedAt = new Date().toISOString();
   localStorage.setItem(KEY, JSON.stringify(data));
   showLastSave(data.updatedAt);
@@ -1791,6 +2036,9 @@ function loadAll() {
       if (sec in d.toggleState) cb.checked = d.toggleState[sec];
     });
   }
+
+  // 自分史（振り返りQ&A）の復元
+  restoreLifeHistory(d.lifeHistory);
 }
 
 function showLastSave(iso) {
@@ -1882,12 +2130,14 @@ function buildFullText() {
     lines.push('');
   }
 
+  d.lifeHistoryText = buildLifeHistoryText(d.lifeHistory);
   const secs = [
     ['強み',           'strengths'],
     ['弱み・課題',     'weaknesses'],
     ['価値観',         'values'],
     ['志望動機の素材', 'motivation'],
     ['生い立ち・背景', 'background'],
+    ['自分史（振り返りメモ）', 'lifeHistoryText'],
     ['対人スタイル',   'style'],
     ['希望職種・条件', 'jobTarget'],
     ['長期目標',       'longGoal'],
@@ -2061,6 +2311,7 @@ function getIncludedSections() {
 function buildFilteredText() {
   const inc = getIncludedSections();
   const d = getDataObj();
+  d.lifeHistoryText = buildLifeHistoryText(d.lifeHistory);
   const lines = [];
   lines.push('=== 私のプロファイル ===','');
 
@@ -2151,6 +2402,7 @@ function buildFilteredText() {
     ['価値観',         'values',     'analysis'],
     ['志望動機の素材', 'motivation', 'analysis'],
     ['生い立ち・背景', 'background', 'bg'],
+    ['自分史（振り返りメモ）', 'lifeHistoryText', 'bg'],
     ['対人スタイル',   'style',      'bg'],
     ['希望職種・条件', 'jobTarget',  'goals'],
     ['長期目標',       'longGoal',   'goals'],
