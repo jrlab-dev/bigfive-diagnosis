@@ -245,3 +245,64 @@ body { padding-top: 52px !important; }
     setThemeImages(isLight);
   });
 })();
+
+// ===== 訪問時の自動バックアップ =====
+(function() {
+  // file:等（test_auto.js対策）では動かさない
+  if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+
+  var SYNC_ID_KEY = 'bigfive_sync_id';
+  var LAST_AUTO_KEY = 'bigfive_sync_last_auto';
+  var AUTO_BACKUP_URL = 'https://bigfive.jr-genius.jp/api/save';
+  var FIXED_KEYS = [
+    'attachment_result', 'hsp_result', 'locus_result', 'eq_result',
+    'impostor_result', 'sdt_result', 'schwartz_result', 'mindset_result',
+    'love_result', 'pgg_result', 'risk_result', 'honne_shindan_v1'
+  ];
+
+  function collectBackupData() {
+    var data = {};
+    FIXED_KEYS.forEach(function(k) {
+      var v = localStorage.getItem(k);
+      if (v) data[k] = v;
+    });
+    // bigfive_ で始まる残りのキーも収集（自動バックアップの記録用キーは除外）
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && key.indexOf('bigfive_') === 0 && key !== LAST_AUTO_KEY && !data[key]) {
+        data[key] = localStorage.getItem(key);
+      }
+    }
+    return data;
+  }
+
+  function autoBackup() {
+    try {
+      var syncId = localStorage.getItem(SYNC_ID_KEY);
+      if (!syncId) return; // IDを持つ人のみ対象（勝手に発行しない）
+
+      var lastAuto = parseInt(localStorage.getItem(LAST_AUTO_KEY), 10) || 0;
+      if (Date.now() - lastAuto < 24 * 60 * 60 * 1000) return; // 24時間以内はスキップ
+
+      var data = collectBackupData();
+      fetch(AUTO_BACKUP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: syncId, data: data })
+      }).then(function(res) {
+        return res.json();
+      }).then(function(json) {
+        if (json && json.ok) {
+          localStorage.setItem(LAST_AUTO_KEY, String(Date.now()));
+        }
+      }).catch(function() {
+        // 失敗時は無音（リトライ・通知なし）
+      });
+    } catch (e) {
+      // ページ表示に影響を与えない
+    }
+  }
+
+  // ページ表示をブロックしないよう遅延実行
+  setTimeout(autoBackup, 2500);
+})();

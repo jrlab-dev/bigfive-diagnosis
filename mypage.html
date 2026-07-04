@@ -700,6 +700,33 @@
   }
   .sync-btn.cancel:hover { background: rgba(255,255,255,0.1); }
 
+  /* 保存促しバナー */
+  .backup-prompt-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 12px;
+  }
+  .backup-prompt-icon { font-size: 22px; flex-shrink: 0; }
+  .backup-prompt-text { flex: 1; min-width: 0; }
+  .backup-prompt-title { font-size: 13px; font-weight: 700; color: #fbbf24; margin-bottom: 3px; }
+  .backup-prompt-desc { font-size: 12px; color: var(--dim); line-height: 1.5; }
+  .backup-prompt-btn {
+    flex-shrink: 0; padding: 9px 16px; border-radius: 8px;
+    background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.45);
+    color: #fef3c7; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    white-space: nowrap; transition: background 0.2s;
+  }
+  .backup-prompt-btn:hover { background: rgba(245,158,11,0.4); }
+  body.theme-light .backup-prompt-banner { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.35); }
+  body.theme-light .backup-prompt-title { color: #b45309; }
+  body.theme-light .backup-prompt-btn { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.4); color: #92400e; }
+  body.theme-light .backup-prompt-btn:hover { background: rgba(245,158,11,0.28); }
+
   /* クリアボタン */
   /* 削除トリガー行 */
   .delete-trigger-row {
@@ -1447,6 +1474,16 @@
     </a>
   </header>
 
+  <!-- 保存促しバナー -->
+  <div class="backup-prompt-banner" id="backupPromptBanner">
+    <div class="backup-prompt-icon">🛡️</div>
+    <div class="backup-prompt-text">
+      <div class="backup-prompt-title">集めたデータを守りましょう</div>
+      <div class="backup-prompt-desc">スマホの設定によっては、しばらく訪れないと保存データが消えることがあります。バックアップ（無料・登録不要）でデータを守れます。</div>
+    </div>
+    <button class="backup-prompt-btn" id="backupPromptBtn">バックアップする</button>
+  </div>
+
   <div class="tabs">
     <button class="tab active" data-tab="my">自分の結果</button>
     <button class="tab" data-tab="others">あの人の結果</button>
@@ -1509,23 +1546,23 @@
   </div>
 
   <!-- 端末引継ぎ -->
-  <div class="sync-section">
+  <div class="sync-section" id="syncSection">
     <div class="sync-title">
       <span class="icon-with-text">
         <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
           <line x1="12" y1="18" x2="12.01" y2="18"/>
         </svg>
-        端末引継ぎ
+        バックアップ・端末引継ぎ
       </span>
     </div>
-    <div class="sync-desc">IDを使って別のスマホ・PCにデータを引き継げます</div>
+    <div class="sync-desc">保存したデータはサーバーに90日間保管され、同期ID発行後はサイトを訪れるたびに自動で預け直されます（90日のカウントもリセット）。IDを使って別のスマホ・PCに引き継ぐこともできるので、発行されたIDはスマホのメモ帳などに控えておきましょう。</div>
     <button class="sync-btn save" id="syncSaveBtn">このデバイスのデータを保存する</button>
     <div class="sync-id-box" id="syncIdBox" style="display:none">
       <div class="sync-id-label">引継ぎID</div>
       <div class="sync-id-text" id="syncIdText"></div>
       <button class="sync-copy-btn" id="syncCopyBtn">コピー</button>
-      <div class="sync-id-note">このIDを別のデバイスで下の欄に入力してください（保存後10日で自動削除されます）</div>
+      <div class="sync-id-note">このIDを別のデバイスで下の欄に入力してください。このIDはスマホのメモ帳などに控えておいてください（機種変更やデータ消失時も、IDの入力だけで復元できます）。</div>
     </div>
     <div class="sync-divider">または</div>
     <div class="sync-input-row">
@@ -2395,6 +2432,7 @@ const SYNC_DATA_KEYS = [
   'schwartz_result', 'mindset_result', 'love_result',
   'pgg_result',
   'risk_result',
+  'honne_shindan_v1',
 ];
 
 function getSyncId() {
@@ -2421,6 +2459,28 @@ function collectLocalData() {
   }
   return data;
 }
+
+// ===== 保存促しバナー =====
+(function() {
+  const banner = document.getElementById('backupPromptBanner');
+  if (!banner) return;
+  if (localStorage.getItem(SYNC_ID_KEY)) return; // 同期ID発行済みなら表示しない
+
+  let albumCount = 0;
+  try { albumCount = JSON.parse(localStorage.getItem('bigfive_album') || '[]').length; } catch (e) {}
+  let otherCount = 0;
+  try { otherCount = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]').length; } catch (e) {}
+  if (albumCount < 10 && otherCount < 3) return;
+
+  banner.style.display = 'flex';
+  const btn = document.getElementById('backupPromptBtn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById('syncSection');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+})();
 
 function setStatus(msg, type) {
   const el = document.getElementById('syncStatus');
