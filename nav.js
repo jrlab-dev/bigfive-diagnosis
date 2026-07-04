@@ -257,7 +257,9 @@ body { padding-top: 52px !important; }
   var FIXED_KEYS = [
     'attachment_result', 'hsp_result', 'locus_result', 'eq_result',
     'impostor_result', 'sdt_result', 'schwartz_result', 'mindset_result',
-    'love_result', 'pgg_result', 'risk_result', 'honne_shindan_v1'
+    'love_result', 'pgg_result', 'risk_result', 'honne_shindan_v1',
+    'dark_triad_result', 'riasec_result', 'hexaco_result', 'delay_result',
+    'ultimatum_result', 'beauty_result', 'trust_result'
   ];
 
   function collectBackupData() {
@@ -266,10 +268,10 @@ body { padding-top: 52px !important; }
       var v = localStorage.getItem(k);
       if (v) data[k] = v;
     });
-    // bigfive_ で始まる残りのキーも収集（自動バックアップの記録用キーは除外）
+    // bigfive_ で始まる残りのキーも収集（同期ID・自動バックアップの記録用キーは除外）
     for (var i = 0; i < localStorage.length; i++) {
       var key = localStorage.key(i);
-      if (key && key.indexOf('bigfive_') === 0 && key !== LAST_AUTO_KEY && !data[key]) {
+      if (key && key.indexOf('bigfive_') === 0 && key !== LAST_AUTO_KEY && key !== SYNC_ID_KEY && !data[key]) {
         data[key] = localStorage.getItem(key);
       }
     }

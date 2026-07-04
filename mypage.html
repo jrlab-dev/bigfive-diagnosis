@@ -2423,6 +2423,8 @@ document.getElementById('deleteModalConfirm').addEventListener('click', () => {
 // ===== 端末引継ぎ =====
 const SYNC_ID_KEY = 'bigfive_sync_id';
 const SYNC_API = 'https://bigfive.jr-genius.jp/api';
+// 同期IDと自動バックアップ時刻はデバイス固有の管理情報のため、同期データには含めない
+const SYNC_EXCLUDE_KEYS = ['bigfive_sync_id', 'bigfive_sync_last_auto'];
 const SYNC_DATA_KEYS = [
   'bigfive_my_results', 'bigfive_my_name', 'bigfive_other_results',
   'bigfive_album', 'bigfive_album_meta',
@@ -2433,6 +2435,8 @@ const SYNC_DATA_KEYS = [
   'pgg_result',
   'risk_result',
   'honne_shindan_v1',
+  'dark_triad_result', 'riasec_result', 'hexaco_result', 'delay_result',
+  'ultimatum_result', 'beauty_result', 'trust_result',
 ];
 
 function getSyncId() {
@@ -2450,10 +2454,10 @@ function collectLocalData() {
     const v = localStorage.getItem(k);
     if (v) data[k] = v;
   });
-  // bigfive_ で始まる残りのキーも収集
+  // bigfive_ で始まる残りのキーも収集（同期ID・自動バックアップ時刻は除外）
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith('bigfive_') && !data[k]) {
+    if (k && k.startsWith('bigfive_') && !data[k] && !SYNC_EXCLUDE_KEYS.includes(k)) {
       data[k] = localStorage.getItem(k);
     }
   }
@@ -2532,7 +2536,10 @@ function hideSyncChoice() {
 
 function applySyncData(loadedData, mode) {
   if (mode === 'overwrite') {
-    Object.entries(loadedData).forEach(([k, v]) => localStorage.setItem(k, v));
+    Object.entries(loadedData).forEach(([k, v]) => {
+      if (SYNC_EXCLUDE_KEYS.includes(k)) return;
+      localStorage.setItem(k, v);
+    });
   } else {
     // 統合モード：配列データは結合して重複排除
     const ARRAY_KEYS = [
@@ -2545,6 +2552,7 @@ function applySyncData(loadedData, mode) {
       'bigfive_album': 8300,
     };
     Object.entries(loadedData).forEach(([k, v]) => {
+      if (SYNC_EXCLUDE_KEYS.includes(k)) return;
       if (ARRAY_KEYS.includes(k)) {
         try {
           const current = JSON.parse(localStorage.getItem(k) || '[]');

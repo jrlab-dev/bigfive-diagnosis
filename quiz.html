@@ -113,6 +113,7 @@
   }
   .answer-btn {
     flex: 1;
+    min-width: 0;
     padding: 14px 4px;
     font-family: inherit;
     font-size: 12px;
@@ -126,6 +127,8 @@
     min-height: 48px;
     display: flex; align-items: center; justify-content: center;
     text-align: center;
+    line-height: 1.3;
+    overflow-wrap: break-word;
   }
   @media (hover: hover) {
     .answer-btn:hover {
@@ -239,8 +242,12 @@
 
   @media (max-width: 400px) {
     .question-text { font-size: 16px; }
-    .answer-btn { font-size: 11px; padding: 12px 2px; }
-    .answers { gap: 6px; }
+    .answer-btn { font-size: 10px; padding: 10px 2px; }
+    .answers { gap: 6px !important; }
+  }
+  @media (max-width: 360px) {
+    .answer-btn { font-size: 9.5px; padding: 8px 1px; }
+    .answers { gap: 4px !important; }
   }
 </style>
 <link rel="stylesheet" href="common.css">
