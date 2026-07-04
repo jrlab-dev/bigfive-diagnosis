@@ -384,6 +384,20 @@ let current = 0;
 const answers = new Array(QUESTIONS.length).fill(null);
 const STORAGE_KEY = 'dark_triad_result';
 
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 // ===== 星背景 =====
 (function() {
   const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
@@ -544,7 +558,8 @@ function showResult(preScores) {
     </div>`;
 
   // ビッグファイブクロス分析
-  const bfResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  let bfResults = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfResults)) bfResults = [];
   const bfResult = bfResults.length > 0 ? bfResults[0] : null;
   const crossArea = document.getElementById('crossContent');
 

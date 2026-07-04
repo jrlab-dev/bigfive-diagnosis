@@ -1230,6 +1230,20 @@
 <script src="compat.js"></script>
 <script src="advice.js"></script>
 <script>
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 // ===== 特性情報 =====
 const traitInfo = {
   O: { name: '開放性',     desc: '好奇心・創造性・変化への柔軟さ', color: '#8b5cf6' },
@@ -2583,7 +2597,8 @@ if (otherCode && otherCode.length === 5) {
 
 // ===== あの人モード：自分との相性を表示 =====
 if (isOtherMode) {
-  const myResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  let myResults = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(myResults)) myResults = [];
   if (myResults.length > 0) {
     const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), myResults.length - 1);
     const myCode = myResults[activeIdx].code;
@@ -2812,7 +2827,8 @@ if (isOtherMode) {
 
   // すでに保存済みかチェック
   function checkAlreadySaved() {
-    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    let myResults = safeLoad(STORAGE_KEY_MY, []);
+    if (!Array.isArray(myResults)) myResults = [];
     const isSaved = myResults.some(r => r.code === currentResult.code && r.version === currentResult.version);
     if (isSaved) {
       saveBtn.textContent = '✓ 保存済み';
@@ -3000,7 +3016,8 @@ if (isOtherMode) {
     var saveAsOtherName = document.getElementById('saveAsOtherName');
     var saveAsOtherHint = document.getElementById('saveAsOtherHint');
 
-    var existingOthers = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+    var existingOthers = safeLoad('bigfive_other_results', []);
+    if (!Array.isArray(existingOthers)) existingOthers = [];
     var alreadySavedAsOther = existingOthers.some(function(r) {
       return r.code === code && r.source === 'shared';
     });
@@ -3018,7 +3035,8 @@ if (isOtherMode) {
         return;
       }
       saveAsOtherName.style.borderColor = '';
-      var others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+      var others = safeLoad('bigfive_other_results', []);
+      if (!Array.isArray(others)) others = [];
       var maxOthers = typeof getOtherLimit === 'function' ? getOtherLimit() : (localStorage.getItem('bigfive_others_limit_unlocked') ? 30 : 10);
       if (others.length >= maxOthers) {
         saveAsOtherHint.textContent = '保存上限（' + maxOthers + '件）に達しています。マイページで整理してください。';
@@ -3769,7 +3787,8 @@ if (isOtherMode) {
   if (!section) return;
 
   var name = personName;
-  var others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+  var others = safeLoad('bigfive_other_results', []);
+  if (!Array.isArray(others)) others = [];
   var sharedRecord = others.find(function(r) { return r.name === name && r.source === 'shared'; });
 
   // 現在のあの人スコア（URLから）

@@ -623,6 +623,20 @@ let current = 0;
 const answers = new Array(questions.length).fill(null);
 const PROGRESS_KEY = 'love_progress';
 
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 // ===== 途中保存 =====
 function saveProgress() {
   localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current, answers: answers.slice() }));
@@ -795,7 +809,8 @@ function showResult(preScores, preMainKey) {
 
   // ビッグファイブとの組み合わせ
   const crossArea = document.getElementById('crossText');
-  const bfResults = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  let bfResults = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfResults)) bfResults = [];
   const bfResult = bfResults.length > 0 ? bfResults[0] : null;
   if (bfResult && bfResult.scores) {
     const s = bfResult.scores;

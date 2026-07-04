@@ -429,6 +429,20 @@ var STORAGE_KEY='riasec_result';
 var PROGRESS_KEY='';
 var timer=null;
 
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 // ===== 質問配列構築 =====
 function buildQuestions(ver){
   var qs=[];
@@ -652,7 +666,8 @@ function showResult(preScores){
   html+='</div>';
 
   // Big Fiveクロス分析
-  var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
+  var bfList=safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfList)) bfList = [];
   var bfResult=bfList.length>0?bfList[0]:null;
   if(bfResult&&bfResult.scores){
     var bf=bfResult.scores;

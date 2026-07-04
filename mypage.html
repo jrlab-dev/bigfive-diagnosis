@@ -1672,11 +1672,26 @@ const MAX_MY = 5;
 const MAX_OTHERS = 50;
 const STORAGE_KEY_ACTIVE_MY = 'bigfive_active_my_index';
 
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 let currentTab = 'my';
 
 // 適用中インデックスの取得・設定
 function getActiveMyIndex() {
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  let results = safeLoad(STORAGE_KEY_MY, []);
+  if (!Array.isArray(results)) results = [];
   if (results.length === 0) return 0;
   const saved = parseInt(localStorage.getItem(STORAGE_KEY_ACTIVE_MY) || '0');
   return Math.min(saved, results.length - 1);
@@ -1740,7 +1755,8 @@ function saveMyDisplayName(value) {
 // 自分の結果レンダリング
 function renderMyResults() {
   const container = document.getElementById('myResults');
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  let results = safeLoad(STORAGE_KEY_MY, []);
+  if (!Array.isArray(results)) results = [];
 
   if (results.length === 0) {
     container.innerHTML = `
@@ -1823,8 +1839,10 @@ function toggleOtherCheck(index) {
 
 // トップページに表示するパートナーを設定
 function setPartner(index) {
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
-  const current = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
+  let results = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(results)) results = [];
+  let current = safeLoad('bigfive_selected_partner', null);
+  if (!(current && typeof current === 'object' && !Array.isArray(current))) current = null;
   // 同じ人を再タップで解除
   if (current && current.code === results[index].code && current.name === results[index].name) {
     localStorage.removeItem('bigfive_selected_partner');
@@ -1858,14 +1876,16 @@ function renderOtherCheckUI() {
 }
 
 function moveOtherResult(index, direction) {
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let results = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(results)) results = [];
   const nextIndex = index + direction;
   if (nextIndex < 0 || nextIndex >= results.length) return;
   reorderOtherResults(index, nextIndex);
 }
 
 function reorderOtherResults(fromIndex, toIndex) {
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let results = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(results)) results = [];
   if (fromIndex === toIndex) return;
   if (fromIndex < 0 || toIndex < 0 || fromIndex >= results.length || toIndex >= results.length) return;
 
@@ -1922,7 +1942,8 @@ function setupOtherReorder() {
 
 function renderOtherResults() {
   const container = document.getElementById('otherResults');
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let results = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(results)) results = [];
 
   if (results.length === 0) {
     container.innerHTML = `
@@ -1963,7 +1984,8 @@ function renderOtherResults() {
   if (!localStorage.getItem('bigfive_selected_partner')) {
     localStorage.setItem('bigfive_selected_partner', JSON.stringify(results[0]));
   }
-  const partnerData = JSON.parse(localStorage.getItem('bigfive_selected_partner') || 'null');
+  let partnerData = safeLoad('bigfive_selected_partner', null);
+  if (!(partnerData && typeof partnerData === 'object' && !Array.isArray(partnerData))) partnerData = null;
   container.innerHTML = otherCapHtml + addBtn + adviceBtn + actionBar + results.map((r, i) => {
     const scores = {
       O: parseInt(r.code[0]), C: parseInt(r.code[1]),
@@ -2019,7 +2041,8 @@ function renderOtherResults() {
 // 削除機能
 function deleteMyResult(index) {
   if (!confirm('この結果を削除しますか？')) return;
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  let results = safeLoad(STORAGE_KEY_MY, []);
+  if (!Array.isArray(results)) results = [];
   results.splice(index, 1);
   localStorage.setItem(STORAGE_KEY_MY, JSON.stringify(results));
   render();
@@ -2027,7 +2050,8 @@ function deleteMyResult(index) {
 
 function deleteOtherResult(index) {
   if (!confirm('この結果を削除しますか？')) return;
-  const results = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let results = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(results)) results = [];
   results.splice(index, 1);
   localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(results));
   render();
@@ -2039,7 +2063,8 @@ const RANK_COLORS = { S: '#fbbf24', A: '#a78bfa', B: '#60a5fa', C: '#94a3b8' };
 
 function renderTeamResults() {
   const container = document.getElementById('teamResults');
-  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+  let teams = safeLoad(STORAGE_KEY_TEAMS, []);
+  if (!Array.isArray(teams)) teams = [];
 
   if (teams.length === 0) {
     container.innerHTML = `
@@ -2079,7 +2104,8 @@ function renderTeamResults() {
 }
 
 function openTeamResult(index) {
-  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+  let teams = safeLoad(STORAGE_KEY_TEAMS, []);
+  if (!Array.isArray(teams)) teams = [];
   const t = teams[index];
   if (!t) return;
   const params = new URLSearchParams();
@@ -2095,7 +2121,8 @@ function openTeamResult(index) {
 
 function deleteTeamResult(index) {
   if (!confirm('この結果を削除しますか？')) return;
-  const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+  let teams = safeLoad(STORAGE_KEY_TEAMS, []);
+  if (!Array.isArray(teams)) teams = [];
   teams.splice(index, 1);
   localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
   renderTeamResults();
@@ -2703,7 +2730,9 @@ function render() {
 // ===== 総合レポートバナー =====
 function renderReportBanner() {
   const banner = document.getElementById('reportBanner');
-  const hasBf  = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]').length > 0;
+  let bfForBanner = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfForBanner)) bfForBanner = [];
+  const hasBf  = bfForBanner.length > 0;
   const tests = typeof CONCIERGE_CONFIG !== 'undefined' ? CONCIERGE_CONFIG.tests : [
     { key: 'attachment_result', name: '愛着スタイルチェック', url: 'attachment.html' },
     { key: 'sdt_result', name: '動機タイプ診断', url: 'sdt.html' },
@@ -2795,7 +2824,8 @@ function renderAIProfile() {
   const textarea = document.getElementById('aiProfileText');
 
   // ビッグファイブ
-  const bfList = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+  let bfList = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfList)) bfList = [];
   const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), bfList.length - 1);
   const bf = bfList.length > 0 ? bfList[activeIdx] : null;
 

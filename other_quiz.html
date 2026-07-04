@@ -1783,6 +1783,21 @@ const STORAGE_KEY_OTHERS = 'bigfive_other_results';
 const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
 const MAX_OTHERS_BASE = 10;
 const MAX_OTHERS_UNLOCKED = 30;
+
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
 // 開放状態に応じた上限を取得
 function getMaxOthers() {
   if (typeof getOtherLimit === 'function') {
@@ -1802,7 +1817,8 @@ function showOtherDeleteToast(maxOthers) {
 function saveOtherResultToList(result) {
   if (!result) return false;
 
-  const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let others = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(others)) others = [];
   const isDuplicate = others.some(r =>
     r.name === result.name && r.code === result.code
   );
@@ -1857,7 +1873,8 @@ function addOtherResultToAlbumAndUnlock(result) {
 function checkAlreadySaved() {
   if (!window.currentOtherResult) return;
 
-  const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+  let others = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(others)) others = [];
   const saveBtn = document.getElementById('saveBtn');
   if (!saveBtn) return;
 
