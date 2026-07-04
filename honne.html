@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本音のビッグファイブ｜盛れない性格診断</title>
+<meta name="description" content="あなたのビッグファイブ診断の結果と、実際の場面での“本音”のズレを見る、盛れない性格診断。誰にも見せず、採点もありません。">
+<style>
+  :root{
+    --bg:#fbf7f2; --card:#ffffff; --ink:#33302c; --sub:#8a827a;
+    --line:#ece5db; --accent:#e8916b; --accent2:#7fb0a6; --soft:#f4ede4;
+    --self:#e0a26a; --scene:#4f9d90;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:620px;margin:0 auto;padding:22px 18px 80px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;box-shadow:0 6px 24px rgba(140,110,80,.06)}
+  h1{font-size:1.42rem;letter-spacing:.02em;margin-bottom:6px}
+  .lead{color:var(--sub);font-size:.95rem}
+  .pill{display:inline-block;background:var(--soft);color:#a06a4a;font-size:.74rem;padding:3px 11px;border-radius:999px;margin-bottom:14px;font-weight:700}
+  .note{background:var(--soft);border-radius:14px;padding:14px 16px;margin:18px 0;font-size:.9rem;color:#6d635a}
+  .note b{color:#c0724a}
+  .btn{display:block;width:100%;border:none;background:var(--accent);color:#fff;font-size:1.02rem;font-weight:700;padding:15px;border-radius:14px;cursor:pointer;transition:.15s;margin-top:8px;text-align:center;text-decoration:none}
+  .btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+  .btn.ghost{background:#fff;color:var(--sub);border:1px solid var(--line);font-weight:600}
+  .prog{height:7px;background:var(--soft);border-radius:99px;overflow:hidden;margin-bottom:20px}
+  .prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0;transition:.35s}
+  .step-tag{font-size:.78rem;color:var(--sub);margin-bottom:8px;font-weight:700;letter-spacing:.04em}
+  .q{font-size:1.16rem;font-weight:700;margin-bottom:20px;line-height:1.55}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.6px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:11px;font-size:.98rem;color:var(--ink);cursor:pointer;transition:.13s}
+  .opt:hover{border-color:var(--accent);background:#fffaf5}
+  .scale{display:flex;gap:7px;margin-top:4px}
+  .scale button{flex:1;background:#fff;border:1.6px solid var(--line);border-radius:12px;padding:12px 4px;cursor:pointer;font-size:.82rem;color:var(--sub);transition:.13s;font-weight:600}
+  .scale button:hover{border-color:var(--accent);background:#fffaf5;color:var(--ink)}
+  .back{background:none;border:none;color:var(--sub);font-size:.86rem;cursor:pointer;margin-top:14px;text-decoration:underline}
+  .legend{display:flex;gap:16px;font-size:.8rem;color:var(--sub);margin:10px 0 4px}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .fac{margin:22px 0;padding-bottom:20px;border-bottom:1px dashed var(--line)}
+  .fac:last-child{border-bottom:none}
+  .fac h3{font-size:1.05rem;margin-bottom:2px}
+  .fac .cap{font-size:.8rem;color:var(--sub);margin-bottom:12px}
+  .bar{display:flex;align-items:center;gap:9px;margin:7px 0;font-size:.82rem}
+  .bar .lbl{width:132px;color:var(--sub);flex:none}
+  .bar .track{flex:1;height:14px;background:var(--soft);border-radius:99px;overflow:hidden;display:block}
+  .bar .fill{display:block;height:100%;border-radius:99px;transition:width .6s}
+  .bar .val{width:34px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700;flex:none}
+  .interp{background:var(--soft);border-radius:12px;padding:12px 14px;margin-top:11px;font-size:.9rem}
+  .interp .em{font-weight:700;color:#c0724a}
+  .empathy{font-size:.86rem;color:#5f8b81;margin-top:8px}
+  .summary{background:linear-gradient(135deg,#fff6ef,#f1f7f5);border:1px solid var(--line);border-radius:16px;padding:18px 18px;margin-top:8px;font-size:.96rem}
+  .hidden{display:none}
+  .foot{font-size:.76rem;color:var(--sub);text-align:center;margin-top:22px;line-height:1.6}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="intro" class="card">
+    <span class="pill">盛れない性格診断・ベータ</span>
+    <h1>本音のビッグファイブ</h1>
+    <p class="lead">あなたが受けた<b>ビッグファイブ診断（自己申告）</b>と、<br>実際の場面での<b>本音</b>。その<b>ズレ</b>をそっと映す鏡です。</p>
+    <div class="note">
+      この結果は <b>誰にも見せません</b>。<b>採点も、良い・悪いもありません</b>。<br>
+      だから、飾っても意味がないんです。<br>
+      今の“ありのまま”を選ぶほど、あなたに役立つ結果が返ってきます。
+    </div>
+    <p class="lead" style="font-size:.86rem">所要 約3分／場面の質問20問。答え終わると、あなたの診断結果と並べて比べます。</p>
+    <button class="btn" onclick="start()">はじめる</button>
+    <p class="foot">回答はこの端末の中だけで処理され、外部には送信されません。</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="card hidden">
+    <div class="prog"><i id="progbar"></i></div>
+    <div class="step-tag" id="stepTag"></div>
+    <div class="q" id="qText"></div>
+    <div id="opts"></div>
+    <button class="back hidden" id="backBtn" onclick="back()">← ひとつ戻る</button>
+  </section>
+
+  <!-- FALLBACK (診断データなし) -->
+  <section id="fallback" class="card hidden">
+    <span class="pill">あと少し</span>
+    <h1 style="font-size:1.2rem">診断の結果が見つかりませんでした</h1>
+    <p class="lead">この機能は、あなたの<b>ビッグファイブ診断の結果</b>と場面の本音を比べます。<br>まだ受けていない場合は、先に診断を受けると“本気の自己申告 vs 場面の本音”が見られます。</p>
+    <a class="btn" href="index.html">性格診断を受けにいく</a>
+    <button class="btn ghost" onclick="startSelf()">今は簡易版で試す（自分のイメージを5問で答える）</button>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="card hidden">
+    <span class="pill">結果</span>
+    <h1 style="font-size:1.24rem">診断の自分 と 場面の自分</h1>
+    <p class="lead" id="resLead" style="margin-bottom:6px">2本のバーの<b>ズレ</b>が、いちばんの見どころです。</p>
+    <div class="legend">
+      <span><i style="background:var(--self)"></i><span id="lgSelf">診断（自己申告）</span></span>
+      <span><i style="background:var(--scene)"></i>場面の本音</span>
+    </div>
+    <div id="summaryBox"></div>
+    <div id="facs"></div>
+    <button class="btn" onclick="location.reload()">もう一度やってみる</button>
+    <p class="foot">※これはエンタメ・自己理解のための診断です。正式な心理検査ではありません。<br>
+    どの結果にも良い・悪いはありません。ズレは“結論”ではなく“考えるきっかけ”です。</p>
+  </section>
+
+</div>
+
+<script>
+/* ===== 因子 ===== */
+const factors = [
+  {k:'E', name:'外向性', cap:'社交性・エネルギーの外向き度'},
+  {k:'A', name:'協調性', cap:'やさしさ・合わせる力'},
+  {k:'C', name:'誠実性', cap:'まじめさ・計画性'},
+  {k:'N', name:'情緒の揺れ', cap:'不安・気にしやすさ'},
+  {k:'O', name:'開放性', cap:'好奇心・新しいものへの開き'},
+];
+
+/* 場面20問（各因子4問／選択肢は 5・3・1 の値を直接持つ） */
+const scenarios = [
+  // 外向性
+  {f:'E', q:'金曜の夜21時。同僚から急に飲み会の誘い。知り合いは2人だけ。スマホを見た瞬間の本音は？',
+   o:[['「お、行こ」と即返信',5],['「うーん…」と迷って、行くか半々',3],['「今日は家がいい」とそっと既読スルー準備',1]]},
+  {f:'E', q:'初対面の人ばかりの集まり。1時間後のあなたは？',
+   o:[['何人かと連絡先を交換して盛り上がってる',5],['話しやすい1人を見つけて2人で話してる',3],['壁際で飲み物を3回おかわりしてる',1]]},
+  {f:'E', q:'週末、まる一日ひとりで誰とも話さなかった。その日の気分は？',
+   o:[['ちょっと寂しくて、誰かに連絡したくなった',5],['まあ、平気',3],['最高に充電できた',1]]},
+  {f:'E', q:'会議やグループのやりとりで、あなたは？',
+   o:[['思いついたら、わりとすぐ発言する方',5],['話を振られたら話す',3],['だいたい聞き役でいることが多い',1]]},
+  // 協調性
+  {f:'A', q:'カフェで、店員さんが明らかに注文を間違えた。あなたの反応に近いのは？',
+   o:[['「大丈夫ですよ」とそのまま受け取ることも多い',5],['小さい間違いなら流す、大きければ言う',3],['ちゃんと言って、直してもらう',1]]},
+  {f:'A', q:'友達が、明らかに間違った意見を熱く語っている。あなたは？',
+   o:[['まず「なるほどね」と受け止める',5],['やんわり、別の見方も出してみる',3],['「いや、それは違うと思う」と返す',1]]},
+  {f:'A', q:'頼まれごとが重なってパンク寸前。そこへ新しいお願いが来た。本音は？',
+   o:[['断れずに、結局引き受けてしまいがち',5],['迷いつつ、断ることもある',3],['「ごめん、今は無理」とわりとハッキリ断れる',1]]},
+  {f:'A', q:'誰かのミスで、あなたに迷惑がかかった。まず頭に浮かぶのは？',
+   o:[['「何か事情があったんだろうな」と考える',5],['モヤっとするけど、まあ流す',3],['「それは困る」とはっきり伝えたくなる',1]]},
+  // 誠実性
+  {f:'C', q:'旅行の前日。あなたのスマホの中身に近いのは？',
+   o:[['分単位のしおりが完成してる',5],['宿だけ取って、あとは現地でノリ',3],['宿もまだ。まあ何とかなる',1]]},
+  {f:'C', q:'「やろう」と始めた習慣（筋トレ・勉強など）、正直いま何割生きてる？',
+   o:[['だいたい続いてる',5],['数日〜2週間で自然消滅しがち',3],['始めた記憶はあるが、道具は押し入れ',1]]},
+  {f:'C', q:'今この瞬間、あなたの部屋の“見えてる範囲”は？',
+   o:[['急な来客でもOK',5],['30分あれば整う',3],['「そこは見ないで」ゾーンがある',1]]},
+  {f:'C', q:'面倒な作業と締め切り。あなたのいつものパターンは？',
+   o:[['早めにコツコツ片付けておく',5],['その時々でバラバラ',3],['たいてい締切ギリギリで一気に',1]]},
+  // 情緒の揺れ（神経症）
+  {f:'N', q:'友達に送ったLINE、3日既読スルー。あなたの頭の中の実況は？',
+   o:[['「なんか悪いこと言った…？」がぐるぐる',5],['少し気になるけど、数時間で忘れる',3],['「まあ忙しいんでしょ」でほぼ無',1]]},
+  {f:'N', q:'明日は大事な予定。布団に入った今のあなたは？',
+   o:[['何度も頭でシミュレーションして、目が冴える',5],['少し考え事するけど、寝られる',3],['だいたい、すぐ寝られる',1]]},
+  {f:'N', q:'予定が急に崩れた（電車遅延・ドタキャンなど）。最初にわいてくる感情は？',
+   o:[['モヤモヤ・ソワソワがしばらく続く',5],['一瞬イラっとするけど、すぐ戻る',3],['「しゃーない」とすぐ切り替え',1]]},
+  {f:'N', q:'言われた一言を、あとから思い出して…',
+   o:[['「あの時ああ言えば」と、けっこう引きずる',5],['たまに思い出す程度',3],['ほとんど引きずらない',1]]},
+  // 開放性（アイデア・美・経験の“顔”を散らす）
+  {f:'O', q:'新しいツール・ガジェット・アプリが出てきた。あなたは？',
+   o:[['気になって、すぐ試す/買う方',5],['評判を見てから',3],['今のやり方で困ってないし、いいや',1]]},
+  {f:'O', q:'答えの出ない話（「もし〜だったら」「なぜ〜なんだろう」）は？',
+   o:[['つい考え込んでしまって、楽しい',5],['たまに乗る',3],['具体的で役に立つ話の方がいい',1]]},
+  {f:'O', q:'美しいもの・デザイン・音楽・風景に、心が動くことは？',
+   o:[['しょっちゅうある',5],['たまにある',3],['あまりない方',1]]},
+  {f:'O', q:'旅行やお出かけ、どっちにワクワクする？',
+   o:[['初めての場所・やったことないこと',5],['どちらも',3],['慣れた、好きな場所でゆっくり',1]]},
+];
+
+/* 自己イメージ5問（フォールバック専用） */
+const selfItems = [
+  {k:'E', q:'私は社交的で、人といるとエネルギーが湧く方だ'},
+  {k:'A', q:'私は人にやさしく、思いやりを持って動ける方だ'},
+  {k:'C', q:'私は計画的で、やると決めたことは最後までやり遂げる方だ'},
+  {k:'N', q:'私は小さなことでも気に病みやすい方だ'},
+  {k:'O', q:'私は新しいことや珍しいものに惹かれる方だ'},
+];
+const scaleLabels = ['ぜんぜん','あまり','どちらとも','まあまあ','すごく'];
+
+/* 共感フィードバック（場面スコアの高/中/低別） */
+const empathy = {
+  E:{hi:'人といる時間がちゃんと力になるタイプ。その明るさ、まわりを助けてます。',
+     mid:'場面によって切り替えられる、バランス型。器用に立ち回れる人です。',
+     lo:'一人の時間で回復するタイプ。“静かに深く”は立派な才能です。'},
+  A:{hi:'人に合わせられる優しさ。ただ、たまには自分を優先しても大丈夫。',
+     mid:'受け止めつつ、言うべきは言える、しなやかなタイプ。',
+     lo:'自分の芯を持てるタイプ。ちゃんとNoが言えるのは強みです。'},
+  C:{hi:'コツコツ積み上げられる人。その安定感、信頼されてるはず。',
+     mid:'締めるとこは締める、ゆるめるとこはゆるめる現実派。',
+     lo:'“締切前に一気にやるタイプ”、実はけっこう多いんです。正直でいい。'},
+  N:{hi:'よく気づき、よく感じる人。繊細さは、優しさとセットの才能です。',
+     mid:'気にしすぎず、鈍すぎず。心の振れ幅を自分で戻せるタイプ。',
+     lo:'どっしり構えられる人。その落ち着き、まわりの安心になってます。'},
+  O:{hi:'新しいもの・アイデアにワクワクできる人。その好奇心が発想を生みます。',
+     mid:'冒険と安心を使い分けられる、ちょうどいいバランス。',
+     lo:'慣れた確かさを大事にできる人。ブレない土台になります。'},
+};
+
+/* ===== 進行（場面20問） ===== */
+let idx=0, ans={}, scenPct=null;
+const P=v=>Math.round((v-1)/4*100); // 1-5 → 0-100
+
+function start(){ idx=0; ans={}; show('quiz'); render(); }
+function show(id){ ['intro','quiz','fallback','result'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id)); window.scrollTo(0,0); }
+
+function render(){
+  document.getElementById('progbar').style.width=(idx/scenarios.length*100)+'%';
+  document.getElementById('backBtn').classList.toggle('hidden', idx===0);
+  const s=scenarios[idx];
+  document.getElementById('stepTag').textContent='場面での“本音”（'+(idx+1)+' / '+scenarios.length+'）';
+  document.getElementById('qText').textContent=s.q;
+  const opts=document.getElementById('opts'); opts.innerHTML='';
+  s.o.forEach(([txt,val])=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=txt;
+    b.onclick=()=>choose(idx,val);
+    opts.appendChild(b);
+  });
+}
+function choose(i,val){ ans['sc'+i]=val; idx++; if(idx>=scenarios.length){ finish(); } else { render(); } }
+function back(){ if(idx>0){ idx--; render(); } }
+
+/* 場面スコア（0-100） */
+function computeScene(){
+  const res={};
+  factors.forEach(f=>{
+    const sc=scenarios.map((s,i)=>s.f===f.k?ans['sc'+i]:null).filter(v=>v!=null);
+    const avg= sc.length? sc.reduce((a,b)=>a+b,0)/sc.length:3;
+    res[f.k]=P(avg);
+  });
+  return res;
+}
+
+/* 本家ビッグファイブ（0-100・selfprofileと同じ読み方） */
+function getBigFive(){
+  const keys=['bigfive_my_results','bigfive_my_results_v2','bigfive_my_results_v3'];
+  let scores=null;
+  for(const k of keys){ try{ const arr=JSON.parse(localStorage.getItem(k)||'[]'); if(arr.length){ scores=arr[arr.length-1].scores; break; } }catch(e){} }
+  if(!scores) return null;
+  const oval=scores.O!=null?scores.O:scores.o;
+  const isRaw=(oval>5);
+  const g=(U,l)=>{ const v=scores[U]!=null?scores[U]:(scores[l]!=null?scores[l]:3); return isRaw?Math.round(v):P(v); };
+  return {O:g('O','o'),C:g('C','c'),E:g('E','e'),A:g('A','a'),N:g('N','n'),_src:'diag'};
+}
+
+function finish(){
+  document.getElementById('progbar').style.width='100%';
+  scenPct=computeScene();
+  const bf=getBigFive();
+  if(!bf){ show('fallback'); return; }
+  renderResult(bf, scenPct, 'diag');
+}
+
+/* ===== フォールバック：自己イメージ5問 ===== */
+let selfIdx=0, selfAns={};
+function startSelf(){ selfIdx=0; selfAns={}; show('quiz'); renderSelf(); }
+function renderSelf(){
+  document.getElementById('progbar').style.width=(selfIdx/selfItems.length*100)+'%';
+  document.getElementById('backBtn').classList.add('hidden');
+  const it=selfItems[selfIdx];
+  document.getElementById('stepTag').textContent='簡易版：自分のイメージ（'+(selfIdx+1)+' / '+selfItems.length+'）';
+  document.getElementById('qText').textContent=it.q;
+  const opts=document.getElementById('opts'); opts.innerHTML='';
+  const wrap=document.createElement('div'); wrap.className='scale';
+  scaleLabels.forEach((lab,i)=>{
+    const b=document.createElement('button'); b.innerHTML=lab+'<br><small style="opacity:.6">'+(i+1)+'</small>';
+    b.onclick=()=>{ selfAns[it.k]=i+1; selfIdx++; if(selfIdx>=selfItems.length){ finishSelf(); } else { renderSelf(); } };
+    wrap.appendChild(b);
+  });
+  opts.appendChild(wrap);
+}
+function finishSelf(){
+  const bf={}; factors.forEach(f=>bf[f.k]=P(selfAns[f.k]||3)); bf._src='self';
+  renderResult(bf, scenPct, 'self');
+}
+
+/* ===== 判定 ===== */
+const TH=25; // 0-100スケールでの“はっきりズレ”の目安
+function band(v){ return v<=40?'lo':(v<=66?'mid':'hi'); }
+function interpret(k,self,scene){
+  const g=self-scene;
+  if(k==='N'){
+    if(g<=-TH) return '「あまり気にしない方」と出ているけど、場面ではけっこう気にしてるみたい。<span class="em">無理して平気なフリ</span>、してませんか？';
+    if(g>=TH)  return '結果ほどは、実は<span class="em">動じていない</span>かも。あなたは見た目より強い。';
+    return '自己申告と、実際の揺れが<span class="em">だいたい一致</span>。自分の心をよく分かってる。';
+  }
+  if(g>=TH) return '診断では高めだけど、実際の場面ではもう少し<span class="em">控えめ</span>。ここは“盛り”や“理想像”が出やすいところかも（悪いことじゃないです）。';
+  if(g<=-TH) return '診断より、場面ではむしろ<span class="em">強く出てる</span>。自分で思うより、ここは“できてる”のかも。';
+  return '診断と場面が<span class="em">だいたい一致</span>。自分をよく分かってるタイプ。';
+}
+
+function renderResult(bf, scen, src){
+  document.getElementById('lgSelf').textContent = src==='self' ? '自分のイメージ（簡易）' : '診断（自己申告）';
+  document.getElementById('resLead').innerHTML = src==='self'
+    ? '簡易版（自分のイメージ5問）と場面の本音を比べています。<b>ズレ</b>が見どころ。'
+    : 'あなたのビッグファイブ診断と、場面の本音を比べています。<b>ズレ</b>が見どころ。';
+
+  const gaps=factors.map(f=>({k:f.k,name:f.name,g:(bf[f.k]??50)-(scen[f.k]??50)}));
+  const notable=gaps.filter(x=>Math.abs(x.g)>=TH);
+  const infl=gaps.filter(x=>['E','A','C','O'].includes(x.k)&&x.g>=TH).map(x=>x.name);
+  let sum;
+  if(notable.length===0){
+    sum='診断の自己申告と、場面の本音が、ぜんぶ<b>よく一致</b>していました。<b>自分をよく分かっている</b>タイプ。ズレが小さいのは、それだけで大きな強みです。';
+  }else{
+    sum=notable.length+'つの項目で、はっきりした<b>ズレ</b>が出ました。そこが“自分でも気づいていない面”かもしれません。下でひとつずつ見てみてください。';
+    if(infl.length) sum+='<br>（とくに <b>'+infl.join('・')+'</b> は、少し高めに見積もっているのかも）';
+  }
+  document.getElementById('summaryBox').innerHTML='<div class="summary">'+sum+'</div>';
+
+  const box=document.getElementById('facs'); box.innerHTML='';
+  factors.forEach(f=>{
+    const self=bf[f.k]??50, scene=scen[f.k]??50;
+    const el=document.createElement('div'); el.className='fac';
+    el.innerHTML=
+      '<h3>'+f.name+'</h3><div class="cap">'+f.cap+'</div>'+
+      bar(src==='self'?'自分のイメージ':'診断の結果', self, 'var(--self)')+
+      bar('場面の本音', scene,'var(--scene)')+
+      '<div class="interp">'+interpret(f.k,self,scene)+'</div>'+
+      '<div class="empathy">🌱 '+empathy[f.k][band(scene)]+'</div>';
+    box.appendChild(el);
+  });
+  try{ localStorage.setItem('honne_shindan_v1', JSON.stringify({scen,bf,src,at:new Date().toISOString()})); }catch(e){}
+  show('result');
+}
+function bar(label,val,color){
+  const pct=Math.max(4,val);
+  return '<div class="bar"><span class="lbl">'+label+'</span>'+
+         '<span class="track"><span class="fill" style="width:'+pct+'%;background:'+color+'"></span></span>'+
+         '<span class="val">'+Math.round(val)+'</span></div>';
+}
+</script>
+</body>
+</html>
