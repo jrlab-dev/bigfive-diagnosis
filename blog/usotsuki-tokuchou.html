@@ -104,6 +104,10 @@
   .cta-sub-links { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--dim); }
   .cta-sub-links a { color: var(--accent); text-decoration: none; }
   .cta-sub-links a:hover { text-decoration: underline; }
+  .cta-buttons { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 4px; }
+  .cta-buttons .cta-btn { width: 100%; max-width: 440px; }
+  .cta-buttons .cta-btn + .cta-btn { background: transparent; color: var(--accent); border: 1px solid rgba(34,211,238,0.5); box-shadow: none; }
+  .cta-buttons .cta-btn + .cta-btn:hover { background: rgba(34,211,238,0.1); box-shadow: 0 0 20px rgba(34,211,238,0.2); transform: translateY(-2px); }
   .related-articles { margin: 40px 0 0; padding: 28px 0 0; border-top: 1px solid var(--border); }
   .related-articles h2 { font-size: clamp(16px, 2.5vw, 20px); font-weight: 700; margin-bottom: 16px; color: var(--text); }
   .related-articles h2::before { display: none; }
@@ -198,14 +202,14 @@
           </tr>
         </tbody>
       </table>
-      <p>身近に「どうしても嘘くさい」と感じる人がいるなら、その人の言葉を問い詰めるより、行動のパターンをこの三つの因子で眺める方が、見えるものが変わる。このサイトには、<strong>あの人を観察してダークトライアドを測る診断</strong>がある。自分が答えるのではなく、対象となる人の行動を設問に当てはめていく方式で、三因子のバランスとプロファイルが出る。直感を確信に変える、一つの手がかりになるはずだ。</p>
+      <p>身近に「どうしても嘘くさい」と感じる人がいるなら、言葉を問い詰めるより、その人の行動のパターンを三つの因子で眺める方が、見えるものが変わる。このサイトの<strong>あの人診断</strong>では、その人のビッグファイブを行動観察で測り、さらにダークトライアドも重ねて測れる。直感を確信に変える手がかりになるはずだ。</p>
     </section>
 
     <section id="sec3">
       <h2>一番よく嘘をつく人に共通する、低すぎる一本の軸</h2>
       <p>ダークトライアドは、操作という重い嘘を見抜くためのレンズとして強力だ。けれど、日常の嘘つきな人をもう少し広く捉えたいなら、もう一本の軸が要る。それが、HEXACO（ヘクサコ）という別の性格モデルが持つ「<strong>正直さ・謙虚さ</strong>」という因子だ。</p>
       <p>ビッグファイブにはなかったこの軸は、利益のために人を利用したり、ルールを曲げたり、自分を良く見せたりすることへの抵抗の強さを測る。この因子が低い人は、「自分を良く見せるため、事実より少し盛って伝える」「人をその気にさせるため、言葉巧みに誘導する」「自分の利益のために、人を利用する」といった設問に、比較的抵抗なく「はい」と答える。HEXACOの研究陣が繰り返し示してきたのは、この軸の低さが、日常の嘘やごまかしと、最も一貫して結びつくということだ。ダークトライアドのマキャベリズムとも重なるが、嘘つきな人を一本の線で捉えるなら、この軸が一番鋭い。</p>
-      <p>ここで、一つ重要な研究を置いておきたい。嘘の数え方を調べた研究で、「<strong>大多数の嘘は、ごく少数の人によってつかれている</strong>」ことが分かっている。Serota と Levine が2015年に報告し、日本でも追試で再現された知見だ。たくさんの人が、たまに小さな嘘をつく。一方で、嘘の大部分は、習慣的に嘘をつく少数の人に偏っている。嘘つきな人は、集团の中に均等に散らばっているわけではない。特定の人に偏在している。この事実は、「あの人が嘘くさいと感じるのは、気のせいではないかもしれない」という、小さな救いになる。</p>
+      <p>ここで、一つ重要な研究を置いておきたい。嘘の数え方を調べた研究で、「<strong>大多数の嘘は、ごく少数の人によってつかれている</strong>」ことが分かっている。Serota と Levine が2015年に報告し、日本でも追試で再現された知見だ。たくさんの人がたまに小さな嘘をつく一方で、嘘の大部分は習慣的に嘘をつく少数の人に偏る。嘘つきな人は集団に均等に散らばるわけではなく、特定の人に偏在する。この事実は、「あの人が嘘くさいと感じるのは、気のせいではないかもしれない」という小さな救いになる。</p>
       <div class="highlight-box">
         <p>二つのレンズを重ねて見えるのは、こういう像だ。<strong>正直さ・謙虚さが低く、同時にマキャベリズムが高い人</strong>。嘘を手段として使う抵抗が小さく、なおかつ相手を計算で動かす巧みさを持つ。この組み合わせが、前の節の「責任が転がる」「記憶が都合よく消える」「言い訳が即座に出る」というサインを、最もコンスタントに生み出す。嘘つきな人の特徴は、一つの性質の傾きではなく、この二つが重なった場所に現れる。</p>
       </div>
@@ -236,19 +240,17 @@
   </div>
 
   <section class="cta-box">
-    <h2>あの人のダークトライアドを、あなたの目で測る</h2>
-    <p>操作の嘘の中核はマキャベリズム。あの人の行動を観察して三因子を測る診断。</p>
+    <h2>嘘つきな人を、診断で解く</h2>
+    <p>最初に診断できるのはビッグファイブ10問。終わるとカードが1枚もらえて、あの人診断、そしてあの人のダークトライアドが順に解放されます。</p>
     <div class="cta-badges">
-      <span class="cta-badge">27問・約5分</span>
       <span class="cta-badge">完全無料</span>
       <span class="cta-badge">登録不要</span>
       <span class="cta-badge">科学的根拠あり</span>
     </div>
-    <a href="https://bigfive.jr-genius.jp/other_dark_triad.html" class="cta-btn">あの人のダークトライアドを診断する →</a>
-    <div class="cta-sub-links">
-      <span>※先に「あの人のビッグファイブ診断」で対象者を登録しておく必要があります。</span>
-      <span>自分の正直さ・謙虚さを測る → <a href="https://bigfive.jr-genius.jp/hexaco.html">HEXACO診断</a>／自分のダークトライアドを見る → <a href="https://bigfive.jr-genius.jp/dark-triad.html">ダークトライアド診断（自分版）</a></span>
-      <span>ビッグファイブの5因子を見る → <a href="https://bigfive.jr-genius.jp/">ビッグファイブ診断（10・30・120問）</a></span>
+    <div class="cta-buttons">
+      <a href="https://bigfive.jr-genius.jp/quiz.html?v=10" class="cta-btn">ビッグファイブ10問で診断する →</a>
+      <a href="https://bigfive.jr-genius.jp/other_quiz.html" class="cta-btn">あの人のビッグファイブを診断する →</a>
+      <a href="https://bigfive.jr-genius.jp/other_dark_triad.html" class="cta-btn">あの人のダークトライアドを診断する →</a>
     </div>
   </section>
 
