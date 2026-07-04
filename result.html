@@ -1139,6 +1139,26 @@
     </button>
   </div>
 
+  <!-- AI相談への導線（収益化フェーズ0） -->
+  <div style="margin: 16px auto 0; max-width: 480px; width: 100%;">
+    <a href="mypage.html#aiProfileSection" class="btn btn-primary" id="aiConsultBtn" style="display:block; width:100%; text-align:center; background: linear-gradient(135deg, #8b5cf6, #3b82f6);">
+      🤖 AIに相談する
+    </a>
+    <p style="font-size:12px; color:var(--dim); text-align:center; margin-top:8px;">あなたの性格データをコピーして、ChatGPTやClaudeに人間関係の相談ができます</p>
+  </div>
+  <script>(function(){
+    var COUNT_URL = 'https://bigfive.jr-genius.jp/count/hit?e=';
+    function sendCount(ev) {
+      try {
+        if (navigator.sendBeacon) { navigator.sendBeacon(COUNT_URL + ev); }
+        else if (window.fetch) { fetch(COUNT_URL + ev, { method: 'POST', keepalive: true }).catch(function(){}); }
+      } catch (e) {}
+    }
+    sendCount('result_view');
+    var aiBtn = document.getElementById('aiConsultBtn');
+    if (aiBtn) aiBtn.addEventListener('click', function(){ sendCount('result_ai_click'); });
+  })();</script>
+
   <!-- 図鑑に追加（共有リンクから来た場合に表示） -->
   <div id="addToZukanSection" style="display:none;">
     <div style="margin:20px auto 0;max-width:480px;width:100%;text-align:center;">
