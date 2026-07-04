@@ -55,6 +55,11 @@ body {
 .step-item.active .step-num,
 .step-item.done .step-num { background: var(--purple); border-color: var(--purple); color: #fff; }
 .step-line { flex: 1; height: 1px; background: rgba(139,92,246,0.2); margin: 0 6px; }
+@media (max-width: 420px) {
+  .step-item { font-size: 11px; gap: 4px; }
+  .step-line { margin: 0 4px; }
+  .step-num { width: 18px; height: 18px; font-size: 10px; }
+}
 
 .section-label { font-size: 12px; font-weight: 700; color: var(--dim); letter-spacing: 0.08em; margin-bottom: 12px; }
 

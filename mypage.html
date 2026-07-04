@@ -101,7 +101,11 @@
     gap: 8px;
     margin-bottom: 24px;
     border-bottom: 1px solid rgba(139,92,246,0.2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tab {
     padding: 12px 24px;
     background: none;
@@ -112,11 +116,17 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .tab:hover { color: var(--text); }
   .tab.active {
     color: var(--purple);
     border-bottom-color: var(--purple);
+  }
+  @media (max-width: 480px) {
+    .tabs { gap: 4px; }
+    .tab { padding: 10px 12px; font-size: 13px; }
   }
 
   /* 結果リスト */

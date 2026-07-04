@@ -27,6 +27,7 @@
       <a href="${basePath}diagnoses.html" data-page="diagnoses"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> 性格診断</a>
       <a href="${basePath}report.html" data-page="report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 総合レポート</a>
     </div>
+    <div class="nav-fade" id="navFade"></div>
   </div>
 </nav>`;
 
@@ -55,7 +56,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
 }
+.nav-fade {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
+  background: linear-gradient(to left, rgba(8,11,32,0.95), rgba(8,11,32,0));
+  pointer-events: none; opacity: 0; transition: opacity 0.25s;
+}
+#globalNav.nav-scroll-more .nav-fade { opacity: 1; }
 .nav-logo {
   font-size: 15px;
   font-weight: 900;
@@ -165,6 +173,22 @@ body { padding-top: 52px !important; }
   document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
 
   const nav = document.getElementById('globalNav');
+
+  // ナビ右端フェード：横スクロールできる残りがある間だけヒントを表示
+  function updateNavFade() {
+    var el = document.getElementById('navLinks');
+    var nav = document.getElementById('globalNav');
+    if (!el || !nav) return;
+    var more = el.scrollWidth - el.clientWidth > 4 &&
+               el.scrollLeft < el.scrollWidth - el.clientWidth - 4;
+    nav.classList.toggle('nav-scroll-more', more);
+  }
+  updateNavFade();
+  const navLinksEl = document.getElementById('navLinks');
+  if (navLinksEl) {
+    navLinksEl.addEventListener('scroll', updateNavFade, { passive: true });
+  }
+  window.addEventListener('resize', updateNavFade, { passive: true });
 
   // 現在ページをハイライト
   const path = location.pathname.split('/').pop() || 'index.html';
