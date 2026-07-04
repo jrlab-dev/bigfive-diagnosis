@@ -1469,8 +1469,20 @@
     <div class="ai-profile-card">
       <p class="section-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> AIに相談する用プロフィール</p>
       <p class="ai-profile-desc">あなたの性格データをワンクリックでコピー。ChatGPTやClaudeなどのAIに貼り付けて、あなたに合ったアドバイスがもらえます。</p>
+      <div style="border:1px solid rgba(139,92,246,0.35); border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <p style="font-size:12px; font-weight:700; color:#a78bfa; margin:0 0 8px;">使うと、こんな会話ができます（例）</p>
+        <p style="font-size:12px; color:var(--dim); margin:0 0 6px;">🙂 あなた：（プロフィールを貼り付けて）職場の人間関係について相談したいです</p>
+        <p style="font-size:12px; margin:0 0 6px; background:rgba(139,92,246,0.08); border-radius:8px; padding:8px 10px; line-height:1.7;">🤖 AI：診断結果を拝見しました。協調性が高く周りに気を配れる一方、感受性も高めなので、人間関係の疲れをためこみやすいようですね。まず教えてください——その悩みのお相手は、どんな関係の方ですか？（上司・同僚・友人など）</p>
+        <p style="font-size:11px; color:var(--dim); margin:0;">→ 答えるたびに、その内容に合わせた次の質問が続き、あなた専用のアドバイスに絞り込まれていきます。</p>
+      </div>
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
+      <div id="aiAfterLinks" style="display:none; text-align:center; font-size:13px; margin-top:10px; line-height:2;">
+        コピーできました。AIを開いて、貼り付けて送信してください：<br>
+        <a href="https://chatgpt.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">ChatGPTを開く ↗</a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Geminiを開く ↗</a>
+        <a href="https://claude.ai/new" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Claudeを開く ↗</a>
+      </div>
       <div class="ai-examples">
         <p class="ai-examples-title">質問例（タップすると、プロフィール＋質問がまとめてコピーされます）</p>
         <ul>
@@ -2736,6 +2748,7 @@ function renderAIProfile() {
     'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
     '以下は私が性格診断サイトで受けた診断結果です。この内容を前提に、このあと私が書く質問や相談に答えてください。',
     '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
+    '最初の返事では、私の性格の要点を短くまとめたうえで、相談を深めるための質問をしてください。質問は一度に1つだけ。私の答えの内容を踏まえて、次に聞くべき質問を選んでください（カウンセラーの問診のように）。',
     '深刻な悩み（心身の不調が続くなど）だと感じたら、専門機関への相談も勧めてください。',
     '',
     '【私の性格プロフィール】'
@@ -2867,15 +2880,18 @@ function renderAIProfile() {
   document.getElementById('aiCopyBtn').onclick = function() {
     const btn = this;
     sendCount('ai_profile_copy');
+    const showAiLinks = function() { const el = document.getElementById('aiAfterLinks'); if (el) el.style.display = 'block'; };
     navigator.clipboard.writeText(textarea.value).then(() => {
       btn.textContent = 'コピーしました ✓';
       btn.classList.add('copied');
+      showAiLinks();
       setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
     }).catch(() => {
       textarea.select();
       document.execCommand('copy');
       btn.textContent = 'コピーしました ✓';
       btn.classList.add('copied');
+      showAiLinks();
       setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
     });
   };
@@ -2890,6 +2906,8 @@ function renderAIProfile() {
       const done = function() {
         li.textContent = '✓ コピーしました！AIに貼り付けてください';
         li.classList.add('excopied');
+        const el = document.getElementById('aiAfterLinks');
+        if (el) el.style.display = 'block';
         setTimeout(function() { li.textContent = q; li.classList.remove('excopied'); }, 1800);
       };
       navigator.clipboard.writeText(combined).then(done).catch(function() {
