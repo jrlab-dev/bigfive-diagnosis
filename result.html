@@ -3038,7 +3038,7 @@ if (isOtherMode) {
       saveAsOtherName.style.borderColor = '';
       var others = safeLoad('bigfive_other_results', []);
       if (!Array.isArray(others)) others = [];
-      var maxOthers = typeof getOtherLimit === 'function' ? getOtherLimit() : (localStorage.getItem('bigfive_others_limit_unlocked') ? 30 : 10);
+      var maxOthers = typeof getOtherLimit === 'function' ? getOtherLimit() : 50;
       if (others.length >= maxOthers) {
         saveAsOtherHint.textContent = '保存上限（' + maxOthers + '件）に達しています。マイページで整理してください。';
         saveAsOtherHint.style.color = '#ef4444';

@@ -2266,7 +2266,7 @@ function renderBadges() {
     { name: '大コレクター',   icon: '📦', cond: 'カードを50枚集める',                 unlocked: cards.length >= 50 },
     { name: 'あの人分析家',   icon: '🔍', cond: 'あの人を初めて診断',                 unlocked: otherResults.length > 0 },
     { name: 'チームビルダー', icon: '👥', cond: 'チーム相性診断を実施',                unlocked: teamResults.length > 0 },
-    { name: '全診断制覇',     icon: '🏆', cond: '12種の診断をすべて受ける',            unlocked: stampComplete },
+    { name: '全診断制覇',     icon: '🏆', cond: STAMP_KEYS.length + '種の診断をすべて受ける', unlocked: stampComplete },
     { name: '3日連続',        icon: '🔥', cond: '3日連続でサイトを訪問',               unlocked: loginStreak >= 3 },
     { name: '7日連続',        icon: '🌊', cond: '7日連続でサイトを訪問',               unlocked: loginStreak >= 7 },
     { name: '30日連続',       icon: '👑', cond: '30日連続でサイトを訪問',              unlocked: loginStreak >= 30 },
@@ -2465,7 +2465,6 @@ const SYNC_EXCLUDE_KEYS = ['bigfive_sync_id', 'bigfive_sync_last_auto'];
 const SYNC_DATA_KEYS = [
   'bigfive_my_results', 'bigfive_my_name', 'bigfive_other_results',
   'bigfive_album', 'bigfive_album_meta',
-  'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
   'attachment_result', 'hsp_result', 'locus_result',
   'eq_result', 'impostor_result', 'sdt_result',
   'schwartz_result', 'mindset_result', 'love_result',
@@ -2581,7 +2580,7 @@ function applySyncData(loadedData, mode) {
     // 統合モード：配列データは結合して重複排除
     const ARRAY_KEYS = [
       'bigfive_my_results', 'bigfive_other_results',
-      'bigfive_album', 'bigfive_results_v10', 'bigfive_results_v30', 'bigfive_results_v120',
+      'bigfive_album',
     ];
     const LIMITS = {
       'bigfive_my_results': 5,

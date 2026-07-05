@@ -145,18 +145,22 @@ body { padding-top: 52px !important; }
   gap: 8px;
 }
 .footer-copy {
-  font-size: 11px;
+  font-size: 13px;
   color: #475569;
 }
 .footer-links {
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 6px 4px;
 }
 .footer-links a {
-  font-size: 11px;
+  font-size: 13px;
   color: #64748b;
   text-decoration: none;
   transition: color 0.2s;
+  padding: 8px 2px;
+  display: inline-block;
+  white-space: nowrap;
 }
 .footer-links a:hover { color: #94a3b8; }
 `;

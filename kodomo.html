@@ -1106,9 +1106,7 @@ function showResult(scOverride) {
 
 // ===== 保存 =====
 const STORAGE_KEY = 'bigfive_other_results';
-const STORAGE_KEY_OTHERS_UNLOCKED = 'bigfive_others_limit_unlocked';
 const MAX_OTHERS_BASE = 10;
-const MAX_OTHERS_UNLOCKED = 30;
 
 // 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
 function safeLoad(key, fallback) {
@@ -1126,10 +1124,7 @@ function safeLoad(key, fallback) {
 
 // 開放状態に応じた上限を取得
 function getMaxOthers() {
-  if (typeof getOtherLimit === 'function') {
-    return Math.max(MAX_OTHERS_BASE, getOtherLimit());
-  }
-  return localStorage.getItem(STORAGE_KEY_OTHERS_UNLOCKED) ? MAX_OTHERS_UNLOCKED : MAX_OTHERS_BASE;
+  return Math.max(MAX_OTHERS_BASE, typeof getOtherLimit === 'function' ? getOtherLimit() : 0);
 }
 
 function showOtherDeleteToast(maxOthers) {
