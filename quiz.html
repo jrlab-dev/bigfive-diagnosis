@@ -337,18 +337,18 @@ const questions10 = [
   { text: '人と話していると、自然と元気になる', factor: 'E', dir: '+' },
   { text: '一人でいる方が、大勢でいるより楽だ', factor: 'E', dir: '-' },
   { text: '困っている人を見ると、放っておけない', factor: 'A', dir: '+' },
-  { text: '自分の意見を曲げたくないと思うことが多い', factor: 'A', dir: '-' },
+  { text: '他人の悩みには、あまり興味が持てない方だ', factor: 'A', dir: '-' },
   { text: 'やると決めたことは最後までやり遂げる', factor: 'C', dir: '+' },
   { text: '物事を後回しにしてしまうことがよくある', factor: 'C', dir: '-' },
   { text: '些細なことでも心配してしまう方だ', factor: 'N', dir: '+' },
   { text: 'ストレスを感じても、わりと早く気持ちを切り替えられる', factor: 'N', dir: '-' },
-  { text: '新しい体験や知識を積極的に求める方だ', factor: 'O', dir: '+' },
+  { text: '新しいことを積極的に試してみる方だ', factor: 'O', dir: '+' },
   { text: '慣れたやり方の方が、新しいやり方より安心できる', factor: 'O', dir: '-' }
 ];
 
 const questions30 = [
   { text: '人と話していると自然とエネルギーが湧いてくる', factor: 'E', dir: '+' },
-  { text: '他の人の気持ちを察することが得意だ', factor: 'A', dir: '+' },
+  { text: '人の気持ちを考えて行動する方だ', factor: 'A', dir: '+' },
   { text: '仕事や課題を最後までやり遂げることができる', factor: 'C', dir: '+' },
   { text: '些細なことでも心配や不安を感じやすい', factor: 'N', dir: '+' },
   { text: '新しいアイデアを考えたり、想像することが好きだ', factor: 'O', dir: '+' },
@@ -356,14 +356,14 @@ const questions30 = [
   { text: '困っている人を見ると自然と手を差し伸べたくなる', factor: 'A', dir: '+' },
   { text: '計画を立ててから行動する習慣がある', factor: 'C', dir: '+' },
   { text: '気分が落ち込んだり沈んだりすることがよくある', factor: 'N', dir: '+' },
-  { text: '芸術・音楽・文学などに深く興味がある', factor: 'O', dir: '+' },
+  { text: '芸術や音楽には、あまり興味がない方だ', factor: 'O', dir: '-' },
   { text: 'にぎやかな場が好きで、パーティや集まりを楽しめる', factor: 'E', dir: '+' },
   { text: '争いごとは避け、話し合いで解決したいと思う', factor: 'A', dir: '+' },
   { text: '締め切りや約束は必ず守る', factor: 'C', dir: '+' },
   { text: '自分のことを批判されると強く傷ついてしまう', factor: 'N', dir: '+' },
-  { text: '未知の体験や旅行、新しい挑戦に積極的に取り組む', factor: 'O', dir: '+' },
+  { text: '未知のことに積極的に挑戦する方だ', factor: 'O', dir: '+' },
   { text: '一人でいる時間の方が、大勢でいるより楽だと感じる', factor: 'E', dir: '-' },
-  { text: '自分の利益を優先し、競争に勝つことにこだわる', factor: 'A', dir: '-' },
+  { text: '自分の利益を優先して動くことが多い', factor: 'A', dir: '-' },
   { text: '物事を先延ばしにしてしまうことが多い', factor: 'C', dir: '-' },
   { text: 'ストレスの多い状況でも落ち着いて対処できる', factor: 'N', dir: '-' },
   { text: '慣れたやり方の方が、新しいやり方より安心できる', factor: 'O', dir: '-' },
@@ -375,161 +375,161 @@ const questions30 = [
   { text: '人と長時間いると疲れてしまう', factor: 'E', dir: '-' },
   { text: '批判的な発言や嫌味を言ってしまうことがある', factor: 'A', dir: '-' },
   { text: '衝動的に行動してしまい、後悔することがある', factor: 'C', dir: '-' },
-  { text: '何か失敗したことをいつまでも引きずりやすい', factor: 'N', dir: '+' },
+  { text: '失敗しても、あまり引きずらずに立ち直れる方だ', factor: 'N', dir: '-' },
   { text: '複雑な問題でも、さまざまな視点で考えようとする', factor: 'O', dir: '+' }
 ];
 
 const questions120 = [
   // N1: 不安
-  { text: 'あれこれ心配しやすい方だ', factor: 'N', dir: '+' },
-  { text: '最悪の事態を想像してしまう', factor: 'N', dir: '+' },
-  { text: '多くのことが不安に感じる', factor: 'N', dir: '+' },
-  { text: 'ストレスを感じやすい', factor: 'N', dir: '+' },
+  { text: 'あれこれ心配しやすい方だ', factor: 'N', dir: '+', facet: 'N1' },
+  { text: '最悪の事態を想像してしまう', factor: 'N', dir: '+', facet: 'N1' },
+  { text: '多くのことが不安に感じる', factor: 'N', dir: '+', facet: 'N1' },
+  { text: 'ストレスを感じやすい', factor: 'N', dir: '+', facet: 'N1' },
   // N2: 怒り
-  { text: 'イライラしやすい', factor: 'N', dir: '+' },
-  { text: 'すぐに腹を立てる', factor: 'N', dir: '+' },
-  { text: 'カッとなることがよくある', factor: 'N', dir: '+' },
-  { text: 'なかなかイライラしない方だ', factor: 'N', dir: '-' },
+  { text: 'イライラしやすい', factor: 'N', dir: '+', facet: 'N2' },
+  { text: 'すぐに腹を立てる', factor: 'N', dir: '+', facet: 'N2' },
+  { text: 'カッとなることがよくある', factor: 'N', dir: '+', facet: 'N2' },
+  { text: 'なかなかイライラしない方だ', factor: 'N', dir: '-', facet: 'N2' },
   // N3: 抑うつ
-  { text: '気分が沈みやすい', factor: 'N', dir: '+' },
-  { text: '自分のことが嫌になることがある', factor: 'N', dir: '+' },
-  { text: 'ふさぎ込むことがよくある', factor: 'N', dir: '+' },
-  { text: '自分に自信を持っている', factor: 'N', dir: '-' },
+  { text: '気分が沈みやすい', factor: 'N', dir: '+', facet: 'N3' },
+  { text: '自分のことが嫌になることがある', factor: 'N', dir: '+', facet: 'N3' },
+  { text: 'ふさぎ込むことがよくある', factor: 'N', dir: '+', facet: 'N3' },
+  { text: '自分に自信を持っている', factor: 'N', dir: '-', facet: 'N3' },
   // N4: 自己意識
-  { text: '自分から人に話しかけるのは苦手だ', factor: 'N', dir: '+' },
-  { text: '人前で目立ちたくない', factor: 'N', dir: '+' },
-  { text: '親しい友人としかリラックスできない', factor: 'N', dir: '+' },
-  { text: '初対面の場でも気にしない方だ', factor: 'N', dir: '-' },
+  { text: '自分から人に話しかけるのは苦手だ', factor: 'N', dir: '+', facet: 'N4' },
+  { text: '人前で目立ちたくない', factor: 'N', dir: '+', facet: 'N4' },
+  { text: '親しい友人としかリラックスできない', factor: 'N', dir: '+', facet: 'N4' },
+  { text: '初対面の場でも気にしない方だ', factor: 'N', dir: '-', facet: 'N4' },
   // N5: 無抑制
-  { text: '一度やり始めると止まらないことがある', factor: 'N', dir: '+' },
-  { text: '食べ過ぎや飲み過ぎをしない方だ', factor: 'N', dir: '-' },
-  { text: '誘惑に負けにくい', factor: 'N', dir: '-' },
-  { text: '自分の欲求をコントロールできる', factor: 'N', dir: '-' },
+  { text: '一度やり始めると止まらないことがある', factor: 'N', dir: '+', facet: 'N5' },
+  { text: '食べ過ぎや飲み過ぎをしない方だ', factor: 'N', dir: '-', facet: 'N5' },
+  { text: '誘惑に負けにくい', factor: 'N', dir: '-', facet: 'N5' },
+  { text: '自分の欲求をコントロールできる', factor: 'N', dir: '-', facet: 'N5' },
   // N6: 脆弱性
-  { text: 'パニックになりやすい', factor: 'N', dir: '+' },
-  { text: '出来事に圧倒されやすい', factor: 'N', dir: '+' },
-  { text: '自分には対処できないと感じることがある', factor: 'N', dir: '+' },
-  { text: 'プレッシャーでも落ち着いていられる', factor: 'N', dir: '-' },
+  { text: 'パニックになりやすい', factor: 'N', dir: '+', facet: 'N6' },
+  { text: '出来事に圧倒されやすい', factor: 'N', dir: '+', facet: 'N6' },
+  { text: '自分には対処できないと感じることがある', factor: 'N', dir: '+', facet: 'N6' },
+  { text: 'プレッシャーでも落ち着いていられる', factor: 'N', dir: '-', facet: 'N6' },
   // E1: 友好性
-  { text: '友達ができやすい方だ', factor: 'E', dir: '+' },
-  { text: '人といると心地よい', factor: 'E', dir: '+' },
-  { text: '人との接触を避ける方だ', factor: 'E', dir: '-' },
-  { text: '他人との距離を置きがちだ', factor: 'E', dir: '-' },
+  { text: '友達ができやすい方だ', factor: 'E', dir: '+', facet: 'E1' },
+  { text: '人といると心地よい', factor: 'E', dir: '+', facet: 'E1' },
+  { text: '人との接触を避ける方だ', factor: 'E', dir: '-', facet: 'E1' },
+  { text: '他人との距離を置きがちだ', factor: 'E', dir: '-', facet: 'E1' },
   // E2: 群居性
-  { text: '大勢の集まりが好きだ', factor: 'E', dir: '+' },
-  { text: 'パーティーで色々な人と話す', factor: 'E', dir: '+' },
-  { text: '一人でいる方が好きだ', factor: 'E', dir: '-' },
-  { text: '人混みは苦手だ', factor: 'E', dir: '-' },
+  { text: '大勢の集まりが好きだ', factor: 'E', dir: '+', facet: 'E2' },
+  { text: 'パーティーで色々な人と話す', factor: 'E', dir: '+', facet: 'E2' },
+  { text: '一人でいる方が好きだ', factor: 'E', dir: '-', facet: 'E2' },
+  { text: '人混みは苦手だ', factor: 'E', dir: '-', facet: 'E2' },
   // E3: 主張性
-  { text: '自分からリードする方だ', factor: 'E', dir: '+' },
-  { text: '周りを引っ張っていける', factor: 'E', dir: '+' },
-  { text: '物事を自分で切り盛りする', factor: 'E', dir: '+' },
-  { text: '誰かに先導してもらうのを待つ', factor: 'E', dir: '-' },
+  { text: '自分からリードする方だ', factor: 'E', dir: '+', facet: 'E3' },
+  { text: '周りを引っ張っていける', factor: 'E', dir: '+', facet: 'E3' },
+  { text: '物事を自分で切り盛りする', factor: 'E', dir: '+', facet: 'E3' },
+  { text: '誰かに先導してもらうのを待つ', factor: 'E', dir: '-', facet: 'E3' },
   // E4: 活動性
-  { text: 'いつも忙しくしている', factor: 'E', dir: '+' },
-  { text: '常に何か動いている', factor: 'E', dir: '+' },
-  { text: '空き時間もたくさん活動する', factor: 'E', dir: '+' },
-  { text: 'ゆっくり過ごすのが好きだ', factor: 'E', dir: '-' },
+  { text: 'いつも忙しくしている', factor: 'E', dir: '+', facet: 'E4' },
+  { text: '常に何か動いている', factor: 'E', dir: '+', facet: 'E4' },
+  { text: '空き時間もたくさん活動する', factor: 'E', dir: '+', facet: 'E4' },
+  { text: 'ゆっくり過ごすのが好きだ', factor: 'E', dir: '-', facet: 'E4' },
   // E5: 刺激追求
-  { text: 'スリルや興奮が好きだ', factor: 'E', dir: '+' },
-  { text: '冒険を求める方だ', factor: 'E', dir: '+' },
-  { text: '無茶なことも楽しいと思う', factor: 'E', dir: '+' },
-  { text: '思い切り羽目を外すことがある', factor: 'E', dir: '+' },
+  { text: 'スリルや興奮が好きだ', factor: 'E', dir: '+', facet: 'E5' },
+  { text: '冒険を求める方だ', factor: 'E', dir: '+', facet: 'E5' },
+  { text: '無茶なことも楽しいと思う', factor: 'E', dir: '+', facet: 'E5' },
+  { text: '思い切り羽目を外すことがある', factor: 'E', dir: '+', facet: 'E5' },
   // E6: 陽気さ
-  { text: '周りを明るくする方だ', factor: 'E', dir: '+' },
-  { text: 'よく笑い、楽しく過ごす', factor: 'E', dir: '+' },
-  { text: '人生が好きだ', factor: 'E', dir: '+' },
-  { text: '物事の明るい面を見る方だ', factor: 'E', dir: '+' },
+  { text: '周りを明るくする方だ', factor: 'E', dir: '+', facet: 'E6' },
+  { text: 'よく笑い、楽しく過ごす', factor: 'E', dir: '+', facet: 'E6' },
+  { text: '人生が好きだ', factor: 'E', dir: '+', facet: 'E6' },
+  { text: '物事の明るい面を見る方だ', factor: 'E', dir: '+', facet: 'E6' },
   // O1: 想像力
-  { text: '想像力が豊かだ', factor: 'O', dir: '+' },
-  { text: '空想にふけりのが好きだ', factor: 'O', dir: '+' },
-  { text: '白昼夢を見るのが好きだ', factor: 'O', dir: '+' },
-  { text: '考え事に没頭することがある', factor: 'O', dir: '+' },
+  { text: '想像力が豊かだ', factor: 'O', dir: '+', facet: 'O1' },
+  { text: '空想にふけりのが好きだ', factor: 'O', dir: '+', facet: 'O1' },
+  { text: '白昼夢を見るのが好きだ', factor: 'O', dir: '+', facet: 'O1' },
+  { text: '考え事に没頭することがある', factor: 'O', dir: '+', facet: 'O1' },
   // O2: 芸術的興味
-  { text: '芸術の価値を信じている', factor: 'O', dir: '+' },
-  { text: '他の人が気づかない美しさを見つける', factor: 'O', dir: '+' },
-  { text: '詩には興味がない', factor: 'O', dir: '-' },
-  { text: '美術館に行くのは好きではない', factor: 'O', dir: '-' },
+  { text: '芸術の価値を信じている', factor: 'O', dir: '+', facet: 'O2' },
+  { text: '他の人が気づかない美しさを見つける', factor: 'O', dir: '+', facet: 'O2' },
+  { text: '詩には興味がない', factor: 'O', dir: '-', facet: 'O2' },
+  { text: '美術館に行くのは好きではない', factor: 'O', dir: '-', facet: 'O2' },
   // O3: 感情性
-  { text: '感情を強く感じる方だ', factor: 'O', dir: '+' },
-  { text: '他人の気持ちに共感しやすい', factor: 'O', dir: '+' },
-  { text: '自分の感情の変化に気づきにくい', factor: 'O', dir: '-' },
-  { text: '感情的になる人が理解できない', factor: 'O', dir: '-' },
+  { text: '感情を強く感じる方だ', factor: 'O', dir: '+', facet: 'O3' },
+  { text: '他人の気持ちに共感しやすい', factor: 'O', dir: '+', facet: 'O3' },
+  { text: '自分の感情の変化に気づきにくい', factor: 'O', dir: '-', facet: 'O3' },
+  { text: '感情的になる人が理解できない', factor: 'O', dir: '-', facet: 'O3' },
   // O4: 冒険性
-  { text: 'いつもと同じより変化が欲しい', factor: 'O', dir: '+' },
-  { text: '知っているものを好む方だ', factor: 'O', dir: '-' },
-  { text: '変化は苦手だ', factor: 'O', dir: '-' },
-  { text: '昔からのやり方にこだわる', factor: 'O', dir: '-' },
+  { text: 'いつもと同じより変化が欲しい', factor: 'O', dir: '+', facet: 'O4' },
+  { text: '知っているものを好む方だ', factor: 'O', dir: '-', facet: 'O4' },
+  { text: '変化は苦手だ', factor: 'O', dir: '-', facet: 'O4' },
+  { text: '昔からのやり方にこだわる', factor: 'O', dir: '-', facet: 'O4' },
   // O5: 知性
-  { text: '難しい本を読むのが好きだ', factor: 'O', dir: '+' },
-  { text: '哲学的な議論は避ける方だ', factor: 'O', dir: '-' },
-  { text: '抽象的な考えを理解するのが苦手だ', factor: 'O', dir: '-' },
-  { text: '理論的な話題には興味がない', factor: 'O', dir: '-' },
+  { text: '難しい本を読むのが好きだ', factor: 'O', dir: '+', facet: 'O5' },
+  { text: '哲学的な議論は避ける方だ', factor: 'O', dir: '-', facet: 'O5' },
+  { text: '抽象的な考えを理解するのが苦手だ', factor: 'O', dir: '-', facet: 'O5' },
+  { text: '理論的な話題には興味がない', factor: 'O', dir: '-', facet: 'O5' },
   // O6: 自由主義
-  { text: '自由な考え方に惹かれる', factor: 'O', dir: '+' },
-  { text: '絶対的な正しさはないと思う', factor: 'O', dir: '+' },
-  { text: '保守的な考え方をする方だ', factor: 'O', dir: '-' },
-  { text: 'ルールは厳しく守るべきだと思う', factor: 'O', dir: '-' },
+  { text: '自由な考え方に惹かれる', factor: 'O', dir: '+', facet: 'O6' },
+  { text: '絶対的な正しさはないと思う', factor: 'O', dir: '+', facet: 'O6' },
+  { text: '伝統や慣習は、できるだけ守っていくべきだと思う', factor: 'O', dir: '-', facet: 'O6' },
+  { text: 'ルールは厳しく守るべきだと思う', factor: 'O', dir: '-', facet: 'O6' },
   // A1: 信頼
-  { text: '他人を信頼できる', factor: 'A', dir: '+' },
-  { text: '人は良い意図を持っていると思う', factor: 'A', dir: '+' },
-  { text: '人の言うことを信じる方だ', factor: 'A', dir: '+' },
-  { text: '人は信用できないと思う', factor: 'A', dir: '-' },
+  { text: '他人を信頼できる', factor: 'A', dir: '+', facet: 'A1' },
+  { text: '人は良い意図を持っていると思う', factor: 'A', dir: '+', facet: 'A1' },
+  { text: '人の言うことを信じる方だ', factor: 'A', dir: '+', facet: 'A1' },
+  { text: '人は信用できないと思う', factor: 'A', dir: '-', facet: 'A1' },
   // A2: 道徳性
-  { text: '自分のために人を利用することがある', factor: 'A', dir: '-' },
-  { text: '出世のために不正をすることもある', factor: 'A', dir: '-' },
-  { text: '他人の弱みに付け込むことがある', factor: 'A', dir: '-' },
-  { text: '他人の計画を邪魔することがある', factor: 'A', dir: '-' },
+  { text: '自分のために人を利用することがある', factor: 'A', dir: '-', facet: 'A2' },
+  { text: '出世のために不正をすることもある', factor: 'A', dir: '-', facet: 'A2' },
+  { text: '他人の弱みに付け込むことがある', factor: 'A', dir: '-', facet: 'A2' },
+  { text: '他人の計画を邪魔することがある', factor: 'A', dir: '-', facet: 'A2' },
   // A3: 利他性
-  { text: '他人を気にかける方だ', factor: 'A', dir: '+' },
-  { text: '人を助けるのが好きだ', factor: 'A', dir: '+' },
-  { text: '他人の気持ちはどうでもいいと思う', factor: 'A', dir: '-' },
-  { text: '他人のために時間を割かない', factor: 'A', dir: '-' },
+  { text: '他人を気にかける方だ', factor: 'A', dir: '+', facet: 'A3' },
+  { text: '人を助けるのが好きだ', factor: 'A', dir: '+', facet: 'A3' },
+  { text: '他人の気持ちはどうでもいいと思う', factor: 'A', dir: '-', facet: 'A3' },
+  { text: '他人のために時間を割かない', factor: 'A', dir: '-', facet: 'A3' },
   // A4: 協調性
-  { text: '言い合いになるのも楽しいと思う', factor: 'A', dir: '-' },
-  { text: '人に怒鳴りつけることがある', factor: 'A', dir: '-' },
-  { text: '人を侮辱することがある', factor: 'A', dir: '-' },
-  { text: '仕返しをすることがある', factor: 'A', dir: '-' },
+  { text: '言い合いになるのも楽しいと思う', factor: 'A', dir: '-', facet: 'A4' },
+  { text: '人に怒鳴りつけることがある', factor: 'A', dir: '-', facet: 'A4' },
+  { text: '人を侮辱することがある', factor: 'A', dir: '-', facet: 'A4' },
+  { text: '仕返しをすることがある', factor: 'A', dir: '-', facet: 'A4' },
   // A5: 謙虚さ
-  { text: '自分は他人より優れていると思う', factor: 'A', dir: '-' },
-  { text: '自分のことを高く評価している', factor: 'A', dir: '-' },
-  { text: '自分に自信過剰なところがある', factor: 'A', dir: '-' },
-  { text: '自分の良いところを自慢することがある', factor: 'A', dir: '-' },
+  { text: '自分は他人より優れていると思う', factor: 'A', dir: '-', facet: 'A5' },
+  { text: '自分のことを高く評価している', factor: 'A', dir: '-', facet: 'A5' },
+  { text: '自分に自信過剰なところがある', factor: 'A', dir: '-', facet: 'A5' },
+  { text: '自分の良いところを自慢することがある', factor: 'A', dir: '-', facet: 'A5' },
   // A6: 共感性
-  { text: '困っている人に同情する', factor: 'A', dir: '+' },
-  { text: '自分より恵まれていない人を気の毒に思う', factor: 'A', dir: '+' },
-  { text: '他人の問題には興味がない', factor: 'A', dir: '-' },
-  { text: '困っている人のことは考えないようにする', factor: 'A', dir: '-' },
+  { text: '困っている人に同情する', factor: 'A', dir: '+', facet: 'A6' },
+  { text: '自分より恵まれていない人を気の毒に思う', factor: 'A', dir: '+', facet: 'A6' },
+  { text: '他人の問題には興味がない', factor: 'A', dir: '-', facet: 'A6' },
+  { text: '困っている人のことは考えないようにする', factor: 'A', dir: '-', facet: 'A6' },
   // C1: 有能性
-  { text: '任務をちゃんとやり遂げる', factor: 'C', dir: '+' },
-  { text: 'やることは最高の結果を出す', factor: 'C', dir: '+' },
-  { text: '物事をスムーズにこなせる', factor: 'C', dir: '+' },
-  { text: '効率よく物事を進めるのが得意だ', factor: 'C', dir: '+' },
+  { text: '任務をちゃんとやり遂げる', factor: 'C', dir: '+', facet: 'C1' },
+  { text: 'やることは最高の結果を出す', factor: 'C', dir: '+', facet: 'C1' },
+  { text: '物事をスムーズにこなせる', factor: 'C', dir: '+', facet: 'C1' },
+  { text: '効率よく物事を進めるのが得意だ', factor: 'C', dir: '+', facet: 'C1' },
   // C2: 秩序性
-  { text: '片付けるのが好きだ', factor: 'C', dir: '+' },
-  { text: '物を元の場所に戻し忘れることがある', factor: 'C', dir: '-' },
-  { text: '部屋を散らかしがちだ', factor: 'C', dir: '-' },
-  { text: '持ち物を適当に置いてしまう', factor: 'C', dir: '-' },
+  { text: '片付けるのが好きだ', factor: 'C', dir: '+', facet: 'C2' },
+  { text: '物を元の場所に戻し忘れることがある', factor: 'C', dir: '-', facet: 'C2' },
+  { text: '部屋を散らかしがちだ', factor: 'C', dir: '-', facet: 'C2' },
+  { text: '持ち物を適当に置いてしまう', factor: 'C', dir: '-', facet: 'C2' },
   // C3: 義務感
-  { text: '約束は必ず守る', factor: 'C', dir: '+' },
-  { text: '嘘はつかない', factor: 'C', dir: '+' },
-  { text: 'ルールを破ることがある', factor: 'C', dir: '-' },
-  { text: '約束を破ることがある', factor: 'C', dir: '-' },
+  { text: '約束は必ず守る', factor: 'C', dir: '+', facet: 'C3' },
+  { text: '嘘はつかない', factor: 'C', dir: '+', facet: 'C3' },
+  { text: 'ルールを破ることがある', factor: 'C', dir: '-', facet: 'C3' },
+  { text: '約束を破ることがある', factor: 'C', dir: '-', facet: 'C3' },
   // C4: 達成努力
-  { text: '期待以上のことをやり遂げる', factor: 'C', dir: '+' },
-  { text: '努力を惜しまない', factor: 'C', dir: '+' },
-  { text: '仕事や勉強にあまり時間をかけない', factor: 'C', dir: '-' },
-  { text: '最低限のことしかやらないことがある', factor: 'C', dir: '-' },
+  { text: '期待以上のことをやり遂げる', factor: 'C', dir: '+', facet: 'C4' },
+  { text: '努力を惜しまない', factor: 'C', dir: '+', facet: 'C4' },
+  { text: '仕事や勉強にあまり時間をかけない', factor: 'C', dir: '-', facet: 'C4' },
+  { text: '最低限のことしかやらないことがある', factor: 'C', dir: '-', facet: 'C4' },
   // C5: 自己規律
-  { text: 'いつも準備は万全だ', factor: 'C', dir: '+' },
-  { text: '計画を実行に移せる', factor: 'C', dir: '+' },
-  { text: '無駄な時間を過ごしてしまう', factor: 'C', dir: '-' },
-  { text: '作業に取り掛かるのが遅い', factor: 'C', dir: '-' },
+  { text: 'いつも準備は万全だ', factor: 'C', dir: '+', facet: 'C5' },
+  { text: '計画を実行に移せる', factor: 'C', dir: '+', facet: 'C5' },
+  { text: '無駄な時間を過ごしてしまう', factor: 'C', dir: '-', facet: 'C5' },
+  { text: '作業に取り掛かるのが遅い', factor: 'C', dir: '-', facet: 'C5' },
   // C6: 慎重さ
-  { text: '考えずに行動してしまうことがある', factor: 'C', dir: '-' },
-  { text: '衝動的に決断してしまう', factor: 'C', dir: '-' },
-  { text: '何事も急いで飛び込む方だ', factor: 'C', dir: '-' },
-  { text: '考えずに動いてしまうことがある', factor: 'C', dir: '-' }
+  { text: '考えずに行動してしまうことがある', factor: 'C', dir: '-', facet: 'C6' },
+  { text: '衝動的に決断してしまう', factor: 'C', dir: '-', facet: 'C6' },
+  { text: '何事も急いで飛び込む方だ', factor: 'C', dir: '-', facet: 'C6' },
+  { text: 'その場の思いつきで動くことが多い', factor: 'C', dir: '-', facet: 'C6' }
 ];
 
 // ===== 状態管理 =====
@@ -646,7 +646,7 @@ function calcScore() {
     for (const [f, [i1, i2]] of Object.entries(factors)) {
       const a1 = answers[i1], a2 = answers[i2];
       const q2 = questions[i2];
-      const v1 = a1;
+      const v1 = questions[i1].dir === '-' ? (6 - a1) : a1;
       const v2 = q2.dir === '-' ? (6 - a2) : a2;
       const avg = (v1 + v2) / 2;
       scores[f] = avg <= 2.4 ? 1 : avg <= 3.5 ? 3 : 5;
@@ -668,17 +668,18 @@ function calcScore() {
       // 24問×5段階=合計24〜120、平均ベースで30問版と同じ閾値
       scores[f] = sum <= 44 ? 1 : sum <= 64 ? 2 : sum <= 92 ? 3 : sum <= 112 ? 4 : 5;
     }
-    // ファセットスコア（30ファセット、各4問）
-    const facetScores = [];
-    for (let f = 0; f < 30; f++) {
-      const start = f * 4;
-      let sum = 0;
-      for (let q = start; q < start + 4; q++) {
-        const val = questions[q].dir === '-' ? (6 - answers[q]) : answers[q];
-        sum += val;
-      }
-      facetScores.push(sum <= 8 ? 1 : sum <= 11 ? 2 : sum <= 14 ? 3 : sum <= 17 ? 4 : 5);
-    }
+    // ファセットスコア（30ファセット、各4問、q.facetをキーに集計）
+    const facetOrder = ['N1','N2','N3','N4','N5','N6','E1','E2','E3','E4','E5','E6','O1','O2','O3','O4','O5','O6','A1','A2','A3','A4','A5','A6','C1','C2','C3','C4','C5','C6'];
+    const facetMap = {};
+    questions.forEach((q, i) => {
+      const val = q.dir === '-' ? (6 - answers[i]) : answers[i];
+      if (!facetMap[q.facet]) facetMap[q.facet] = [];
+      facetMap[q.facet].push(val);
+    });
+    const facetScores = facetOrder.map(fk => {
+      const sum = facetMap[fk].reduce((a, b) => a + b, 0);
+      return sum <= 8 ? 1 : sum <= 11 ? 2 : sum <= 14 ? 3 : sum <= 17 ? 4 : 5;
+    });
     return {
       O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
       code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`,
