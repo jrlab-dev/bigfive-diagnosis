@@ -1638,6 +1638,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 察してちゃん（言わずに察してほしい心理） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sasshite-chan.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- 褒められたい・認められたい（承認欲求） -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/homaretai-seikaku.html</loc>
