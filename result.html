@@ -1170,6 +1170,16 @@
     sendCount('result_view');
     var aiBtn = document.getElementById('aiConsultBtn');
     if (aiBtn) aiBtn.addEventListener('click', function(){ sendCount('result_ai_click'); });
+    // シェア操作の計測（2026-07-10）
+    function bindCount(id, ev) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function(){ sendCount(ev); });
+    }
+    bindCount('shareImgSave', 'share_img_save');
+    bindCount('shareTwitter', 'share_x');
+    bindCount('shareFacebook', 'share_facebook');
+    bindCount('shareLine', 'share_line');
+    bindCount('shareCopy', 'share_copy');
   })();</script>
 
   <!-- 図鑑に追加（共有リンクから来た場合に表示） -->
