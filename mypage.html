@@ -2369,10 +2369,15 @@ function renderAlbum() {
 
     if (filled) {
       var card = orderedCards[i - 1];
-      var imgPath = AlbumUtils.getCardImagePath(card);
+      // 結果ページと同じ優先順位（secret→only→marume243）で候補を取得し、onerrorで順送り
+      var imgCandidates = (typeof AlbumUtils !== 'undefined' && AlbumUtils.getCardImageCandidates)
+        ? AlbumUtils.getCardImageCandidates(card)
+        : [AlbumUtils.getCardImagePath(card)];
+      var imgPath = imgCandidates[0];
+      var imgRest = imgCandidates.slice(1).join('|');
       var r = card.rarity || 'common';
       html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="' + cls + ' rarity-' + r + '">';
-      html += '<img src="' + imgPath + '" alt="' + (card.typeName || card.code) + '" loading="lazy">';
+      html += '<img src="' + imgPath + '" data-rest="' + imgRest + '" alt="' + (card.typeName || card.code) + '" loading="lazy" onerror="if(this.dataset.rest){var a=this.dataset.rest.split(\'|\');this.src=a.shift();this.dataset.rest=a.join(\'|\')}else{this.style.display=\'none\'}">';
       html += '<div class="coll-num">' + i + '</div>';
       if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + '解放済</div>';
       html += '</a>';

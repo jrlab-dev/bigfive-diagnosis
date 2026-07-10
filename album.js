@@ -271,18 +271,23 @@
 
   // --- 画像パス取得 ---
 
-  function getCardImagePath(card) {
-    // ImageResolver を優先使用（secret → only → marume243 の3ステップ検索）
-    if (typeof ImageResolver !== 'undefined') {
-      var resolved = ImageResolver.getDisplayImage(card.code, card.gender, card.version);
-      if (resolved) return resolved;
+  /**
+   * カード画像の候補パス一覧（優先順位付き）を返す。
+   * result.html / card-collection.html と同じ ImageResolver.getCandidates()
+   * チェーン（secret→only→marume243）を使い、onerror順送りで一致させる。
+   */
+  function getCardImageCandidates(card) {
+    // ImageResolver を優先使用（secret → only → marume243 の3ステップ検索・全候補）
+    if (typeof ImageResolver !== 'undefined' && ImageResolver.getCandidates) {
+      var candidates = ImageResolver.getCandidates(card.code, card.gender, card.version || '10');
+      return candidates.map(function(c) { return c.path; });
     }
-    // 旧フォールバック: CharacterRegistry
+    // 旧フォールバック: CharacterRegistry → hidden → 丸め（1パスのみ）
     if (typeof CharacterRegistry !== 'undefined') {
       var registryPath = CharacterRegistry.getDisplayImage(card.code, card.gender, card.version);
-      if (registryPath) return registryPath;
+      if (registryPath) return [registryPath];
     }
-    if (card.isHidden && card.hiddenImgPath) return card.hiddenImgPath;
+    if (card.isHidden && card.hiddenImgPath) return [card.hiddenImgPath];
     if (card.isHidden && card.hiddenId) {
       var hc = null;
       if (typeof HIDDEN_CHARACTERS !== 'undefined') {
@@ -291,14 +296,18 @@
       if (hc) {
         // secret にコードベースのパスを返す
         var code5 = '' + hc.o + hc.c + hc.e + hc.a + hc.n;
-        return 'images/characters/secret/' + card.gender + '/' + code5 + '.webp';
+        return ['images/characters/secret/' + card.gender + '/' + code5 + '.webp'];
       }
     }
     // 1/3/5丸めで marume243 フォールバック
     var code = card.code;
     var imgCode = toScale(+code[0]).toString() + toScale(+code[1]).toString() +
       toScale(+code[2]).toString() + toScale(+code[3]).toString() + toScale(+code[4]).toString();
-    return 'images/characters/marume243/' + card.gender + '/' + imgCode + '.webp';
+    return ['images/characters/marume243/' + card.gender + '/' + imgCode + '.webp'];
+  }
+
+  function getCardImagePath(card) {
+    return getCardImageCandidates(card)[0];
   }
 
   // --- グローバル公開 ---
@@ -310,6 +319,7 @@
     getAlbumMeta: getAlbumMeta,
     checkMilestones: checkMilestones,
     getCardImagePath: getCardImagePath,
+    getCardImageCandidates: getCardImageCandidates,
     MAX_CARDS: MAX_CARDS,
     RARITY_RANK: RARITY_RANK,
     STORAGE_KEY: STORAGE_KEY,

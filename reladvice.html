@@ -236,6 +236,7 @@ body {
   </div>
 
 </div>
+<script src="image-resolver.js"></script>
 <script src="reladvice-engine.js"></script>
 <script src="reladvice-data.js"></script>
 <script>
@@ -275,22 +276,18 @@ var selected = [];
 var currentSituation = '';
 
 
-function getImgPath(p) {
+// 結果ページ（result.html）と同じ優先順位（secret→only→marume243）で候補を取得
+function getImgCandidates(p) {
   var code = p.code || '33333';
   var gender = p.gender || 'F';
   var version = p.version || '10';
-  if (typeof ImageResolver !== 'undefined') {
-    return ImageResolver.getDisplayImage(code, gender, version);
+  if (typeof ImageResolver !== 'undefined' && ImageResolver.getCandidates) {
+    return ImageResolver.getCandidates(code, gender, version).map(function(c) { return c.path; });
   }
-  return 'images/characters/marume243/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
+  return ['images/characters/marume243/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp'];
 }
-function getImgFallback(p) {
-  var code = p.code || '33333';
-  var gender = p.gender || 'F';
-  if (typeof ImageResolver !== 'undefined') {
-    return ImageResolver.getFallbackImage(code, gender);
-  }
-  return 'images/characters/marume243/' + (gender === 'M' ? 'M' : 'F') + '/' + toImgCode(code) + '.webp';
+function getImgPath(p) {
+  return getImgCandidates(p)[0];
 }
 
 function avatarImg(p, size) {
@@ -298,10 +295,11 @@ function avatarImg(p, size) {
   var r = Math.round(s * 0.167) + 'px';
   var g = p.gender || '';
   if (p.code && (g === 'M' || g === 'F')) {
-    var src = getImgPath(p);
-    var fb = getImgFallback(p);
-    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="' + src + '" data-fb="' + fb + '"'
-      + ' onerror="if(!this.dataset.t){this.dataset.t=\'1\';this.src=this.dataset.fb}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">'
+    var candidates = getImgCandidates(p);
+    var src = candidates[0];
+    var rest = candidates.slice(1).join('|');
+    return '<img style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';object-fit:cover;flex-shrink:0;" src="' + src + '" data-rest="' + rest + '"'
+      + ' onerror="if(this.dataset.rest){var a=this.dataset.rest.split(\'|\');this.src=a.shift();this.dataset.rest=a.join(\'|\')}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">'
       + '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';display:none;">' + PERSON_SVG + '</div>';
   }
   return '<div class="person-avatar-placeholder" style="width:' + s + 'px;height:' + s + 'px;border-radius:' + r + ';">' + PERSON_SVG + '</div>';
@@ -417,9 +415,11 @@ function renderPairDisplay(elId) {
 function pairMini(p) {
   var g = p.gender || '', av = '';
   if (p.code && (g === 'M' || g === 'F')) {
-    var src = getImgPath(p);
-    av = '<img class="pair-avatar" src="' + src + '"'
-       + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" alt="">'
+    var candidates = getImgCandidates(p);
+    var src = candidates[0];
+    var rest = candidates.slice(1).join('|');
+    av = '<img class="pair-avatar" src="' + src + '" data-rest="' + rest + '"'
+       + ' onerror="if(this.dataset.rest){var a=this.dataset.rest.split(\'|\');this.src=a.shift();this.dataset.rest=a.join(\'|\')}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';}" alt="">'
        + '<div class="pair-avatar-placeholder" style="display:none;">' + PERSON_SVG + '</div>';
   } else { av = '<div class="pair-avatar-placeholder">' + PERSON_SVG + '</div>'; }
   return '<div class="pair-person">' + av + '<div class="pair-name">' + escHtml(p.name || '名前なし') + '</div></div>';
@@ -566,7 +566,6 @@ function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 allPersons = loadAllPersons();
 renderPersonGrid();
 </script>
-<script src="image-resolver.js"></script>
 <script src="hidden_characters.js"></script>
 <script src="character-registry.js"></script>
 <script src="nav.js"></script>
