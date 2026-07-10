@@ -260,9 +260,16 @@
       object-fit: contain;
       display: block;
       background: #0f172a;
-      transform: scale(1.17);
     }
-    .zukan-card.unowned img { filter: brightness(0.05); }
+    .zukan-card.unowned img { filter: brightness(0.05); transform: scale(1.17); }
+    .zukan-card .card-emoji {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+    }
     .zukan-card .card-label {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -445,6 +452,7 @@
   'use strict';
 
   var currentFilter = 'code';
+  var RARITY_EMOJI = { r0:'\u{1F0CF}', r1:'✨', r2:'\u{1F49A}', r3:'\u{1F499}', r4:'\u{1F49C}', r5:'⭐', r6:'\u{1F308}', r7:'\u{1F480}' };
   var typeCards = [];        // 486枚（243タイプ×M/F）
   var ownedTypeMap = {};     // key: toScaleCode+gender → 代表所持カード{code,gender,version,rarity}
   var chartState = {};       // key: code → {M:bool, F:bool}
@@ -695,7 +703,13 @@
   }
 
   // ---- カード一覧 ----
-  function typeImagePath(card) {
+  // 取得済み＝R2の焼き済みカード1枚絵（ワーカー経由・CDNキャッシュあり）
+  function cardImageUrl(link) {
+    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + link.code +
+      '&gender=' + link.gender + '&rarity=' + link.rarity + '&v=' + (link.version || '30');
+  }
+  // 未取得＝キャラ画像シルエット（git内資産・ワーカーへのリクエストゼロ）
+  function silhouetteImagePath(card) {
     return 'images/characters/marume243/' + card.gender + '/' + card.ts + '.webp';
   }
   function setFilter(f) {
@@ -743,7 +757,19 @@
       el.setAttribute('data-ts', card.ts);
 
       var img = document.createElement('img');
-      img.src = typeImagePath(card);
+      if (card.owned && card.link) {
+        img.src = cardImageUrl(card.link);
+        img.onerror = function() {
+          // R2に画像が無い変則カード（旧バグ期間のr0等）→絵文字フォールバック
+          img.style.display = 'none';
+          var em = document.createElement('div');
+          em.className = 'card-emoji';
+          em.textContent = RARITY_EMOJI[card.rarity] || '\u{1F0CF}';
+          el.insertBefore(em, label);
+        };
+      } else {
+        img.src = silhouetteImagePath(card);
+      }
       img.loading = 'lazy';
       img.alt = '';
 
