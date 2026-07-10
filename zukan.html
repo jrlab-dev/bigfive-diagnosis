@@ -263,6 +263,7 @@
       background: #0f172a;
     }
     .zukan-card.unowned img { filter: brightness(0.05); transform: scale(1.17); }
+    .zukan-card.owned img { transform: scale(1.16); }
     .zukan-card .card-emoji {
       width: 100%;
       height: 100%;
@@ -356,12 +357,6 @@
       font-size: 0.85rem; font-weight: 700; color: #94a3b8; letter-spacing: .06em;
       margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
     }
-    .unlock-all-banner {
-      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(236,72,153,0.15));
-      border: 1px solid rgba(139,92,246,0.4);
-      border-radius: 14px; padding: 18px 16px; text-align: center; margin-bottom: 16px;
-    }
-    .unlock-all-banner p { font-size: 0.85rem; color: #cbd5e1; margin: 6px 0 0; line-height: 1.6; }
     .umap-row {
       display: flex; align-items: center; gap: 10px; padding: 9px 12px;
       border-radius: 10px; margin-bottom: 6px; border: 1px solid #1e3a2f; background: rgba(16,185,129,0.06);
@@ -370,6 +365,11 @@
     .umap-name { flex: 1; font-size: 0.8rem; color: #cbd5e1; }
     .umap-status { font-size: 0.72rem; font-weight: 700; color: #10b981; white-space: nowrap; }
     .umap-link { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; flex: 1; }
+    .umap-row.locked {
+      border: 1px solid #334155; background: rgba(51,65,85,0.15);
+    }
+    .umap-row.locked .umap-count,
+    .umap-row.locked .umap-status { color: #94a3b8; }
 
     .back-link {
       display: block; text-align: center; padding: 12px; color: #64748b;
@@ -454,6 +454,7 @@
 </div>
 <div class="count-label" id="countLabel"></div>
 
+<div class="zukan-pager" id="zukanPagerTop"></div>
 <div class="card-grid" id="cardGrid"></div>
 <div class="zukan-pager" id="zukanPager"></div>
 
@@ -461,11 +462,7 @@
 <div class="card-grid" id="hiddenGrid"></div>
 
 <div class="unlock-map-section">
-  <div class="unlock-all-banner">
-    <strong style="font-size:1rem;background:linear-gradient(135deg,#a78bfa,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">全機能解放達成！</strong>
-    <p>100枚以上のカードを集め、すべての機能が解放されています。</p>
-  </div>
-  <div class="unlock-map-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> 解放済み機能一覧</div>
+  <div class="unlock-map-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> 🔒 これから解放される機能</div>
   <div id="unlockMapList"></div>
 </div>
 
@@ -883,9 +880,13 @@
     renderPager(currentPage, totalPages);
   }
 
-  // ---- ページャー ----
+  // ---- ページャー（上下2つの同じ内容を描画） ----
   function renderPager(page, totalPages) {
-    var pager = document.getElementById('zukanPager');
+    renderPagerInto('zukanPagerTop', page, totalPages, false);
+    renderPagerInto('zukanPager', page, totalPages, true);
+  }
+  function renderPagerInto(containerId, page, totalPages, scrollOnNav) {
+    var pager = document.getElementById(containerId);
     if (!pager) return;
     if (totalPages <= 1) {
       pager.style.display = 'none';
@@ -894,21 +895,23 @@
     }
     pager.style.display = '';
     pager.innerHTML =
-      '<button type="button" class="pager-btn" id="pagerFirst"' + (page<=1?' disabled':'') + '>«</button>' +
-      '<button type="button" class="pager-btn" id="pagerPrev"' + (page<=1?' disabled':'') + '>前へ</button>' +
+      '<button type="button" class="pager-btn" data-nav="first"' + (page<=1?' disabled':'') + '>«</button>' +
+      '<button type="button" class="pager-btn" data-nav="prev"' + (page<=1?' disabled':'') + '>前へ</button>' +
       '<span class="pager-info">' + page + ' / ' + totalPages + '</span>' +
-      '<button type="button" class="pager-btn" id="pagerNext"' + (page>=totalPages?' disabled':'') + '>次へ</button>' +
-      '<button type="button" class="pager-btn" id="pagerLast"' + (page>=totalPages?' disabled':'') + '>»</button>';
-    document.getElementById('pagerFirst').onclick = function(){ goToPage(1); };
-    document.getElementById('pagerPrev').onclick = function(){ goToPage(currentPage - 1); };
-    document.getElementById('pagerNext').onclick = function(){ goToPage(currentPage + 1); };
-    document.getElementById('pagerLast').onclick = function(){ goToPage(totalPages); };
+      '<button type="button" class="pager-btn" data-nav="next"' + (page>=totalPages?' disabled':'') + '>次へ</button>' +
+      '<button type="button" class="pager-btn" data-nav="last"' + (page>=totalPages?' disabled':'') + '>»</button>';
+    pager.querySelector('[data-nav="first"]').onclick = function(){ goToPage(1, scrollOnNav); };
+    pager.querySelector('[data-nav="prev"]').onclick = function(){ goToPage(currentPage - 1, scrollOnNav); };
+    pager.querySelector('[data-nav="next"]').onclick = function(){ goToPage(currentPage + 1, scrollOnNav); };
+    pager.querySelector('[data-nav="last"]').onclick = function(){ goToPage(totalPages, scrollOnNav); };
   }
-  function goToPage(p) {
+  function goToPage(p, scroll) {
     currentPage = p;
     renderList();
-    var heading = document.querySelector('.list-heading');
-    if (heading) heading.scrollIntoView({ behavior:'smooth', block:'start' });
+    if (scroll) {
+      var heading = document.querySelector('.list-heading');
+      if (heading) heading.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
   }
 
   function renderHidden() {
@@ -965,24 +968,31 @@
   init();
 })();
 
-// ===== 解放済み機能一覧 =====
+// ===== これから解放される機能（未解放のみ） =====
 (function() {
   if (typeof UNLOCK_TABLE === 'undefined') return;
-  var features = UNLOCK_TABLE.filter(function(e) {
-    return e.url && e.id !== 'zukan_s3' && e.id !== 'zukan_s2';
-  });
+  var section = document.querySelector('.unlock-map-section');
+  if (!section) return;
+  var locked = [];
+  var count = 0;
+  try {
+    if (!isLegacyUser()) {
+      count = getCardCount();
+      locked = UNLOCK_TABLE.filter(function(e) {
+        return e.url && e.id !== 'zukan_s3' && e.id !== 'zukan_s2' && count < e.cards;
+      }).sort(function(a,b){ return a.cards - b.cards; });
+    }
+  } catch(e) {}
+  if (!locked.length) { section.style.display = 'none'; return; }
   var html = '';
-  features.forEach(function(f) {
-    html += '<div class="umap-row">'
-      + '<a class="umap-link" href="' + f.url + '">'
+  locked.forEach(function(f) {
+    html += '<div class="umap-row locked umap-locked">'
       + '<div class="umap-count">' + f.cards + '枚</div>'
       + '<div class="umap-name">' + f.label + '</div>'
-      + '</a>'
-      + '<div class="umap-status">解放済み</div>'
+      + '<div class="umap-status">あと' + (f.cards - count) + '枚</div>'
       + '</div>';
   });
-  var el = document.getElementById('unlockMapList');
-  if (el) el.innerHTML = html;
+  document.getElementById('unlockMapList').innerHTML = html;
 })();
 </script>
 
