@@ -123,7 +123,7 @@ body { padding-top: 52px !important; }
     <div class="footer-links">
       <a href="${basePath}blog/">ブログ</a>
       <a href="${basePath}legal.html">プライバシーポリシー・利用規約</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSerzLle9YKVqQD6vaS3YlLsBHETnYRcXfukzgdJ5Rs_2HFaVg/viewform" target="_blank" rel="noopener">お問い合わせ</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせ</a>
     </div>
   </div>
 </footer>`;
