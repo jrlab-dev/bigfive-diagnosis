@@ -407,6 +407,10 @@
     display: flex; gap: 10px; justify-content: center;
     flex-wrap: wrap;
   }
+  .share-preview { margin: 4px auto 16px; max-width: 480px; }
+  .share-preview img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); }
+  .share-preview-note { font-size: 12px; color: var(--dim); text-align: center; margin: 6px 0 10px; }
+  .share-preview .share-btn { margin: 0 auto; display: flex; }
   .share-btn {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 10px 20px;
@@ -1109,6 +1113,14 @@
   <div class="share-section">
     <p class="share-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> 結果をシェア</p>
     <p class="share-subtitle">あなたのシェアが、相手のコレクションを増やします</p>
+    <div class="share-preview" id="sharePreview" style="display:none;">
+      <img id="sharePreviewImg" alt="シェア画像プレビュー" loading="lazy" decoding="async" width="1200" height="630">
+      <p class="share-preview-note">シェアするとこの画像が表示されます</p>
+      <button class="share-btn copy" id="shareImgSave">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        画像を保存
+      </button>
+    </div>
     <div class="share-buttons">
       <a href="#" class="share-btn twitter" id="shareTwitter" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -2786,6 +2798,47 @@ if (isOtherMode) {
       }, 3000);
     });
   }
+
+  // シェア画像プレビュー＋保存（head内OGP画像と同一ロジックでURL組み立て）
+  (function(){
+    var p = new URLSearchParams(location.search);
+    var code = p.get('code') || p.get('type'), g = p.get('gender') || 'F';
+    var c = p.get('char');
+    var src = '';
+    if (c) { src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + encodeURIComponent(c) + '&type=share'; }
+    else if (code) { src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(code) + '&gender=' + g + '&type=share'; }
+    if (!src) return; // パラメータなし＝プレビュー非表示のまま
+    var box = document.getElementById('sharePreview');
+    var img = document.getElementById('sharePreviewImg');
+    var btn = document.getElementById('shareImgSave');
+    if (!box || !img || !btn) return;
+    img.src = src;
+    img.onerror = function(){ box.style.display = 'none'; };
+    box.style.display = '';
+    btn.addEventListener('click', function(){
+      var original = btn.innerHTML;
+      btn.disabled = true;
+      fetch(src).then(function(r){
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.blob();
+      }).then(function(blob){
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'bigfive_' + (c || code + '_' + g) + '.webp';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 10000);
+        btn.innerHTML = '保存しました ✓';
+        setTimeout(function(){ btn.innerHTML = original; btn.disabled = false; }, 2000);
+      }).catch(function(){
+        // フォールバック：新しいタブで開く（スマホは長押し保存できる）
+        window.open(src, '_blank', 'noopener');
+        btn.innerHTML = original;
+        btn.disabled = false;
+      });
+    });
+  })();
 })();
 
 // ===== 結果保存機能（LocalStorage） =====
