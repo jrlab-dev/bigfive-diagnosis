@@ -21,7 +21,7 @@
   "@type": "CollectionPage",
   "name": "キャラクター図鑑【公式】",
   "url": "https://bigfive.jr-genius.jp/zukan.html",
-  "description": "ビッグファイブ診断の全8,298枚のキャラクターカード図鑑。3125種類の性格タイプと隠しキャラクターをコンプリート。",
+  "description": "ビッグファイブ診断の全6,766枚のキャラクターカード図鑑。3125種類の性格タイプと隠しキャラクターをコンプリート。",
   "isPartOf": {
     "@type": "WebSite",
     "name": "ビッグファイブで本当の自分を知る【公式】",
@@ -187,6 +187,7 @@
       color: #e2e8f0;
       font-weight: 800;
       padding: 30px 16px 2px;
+      scroll-margin-top: 64px;
     }
     .list-heading .hl {
       background: linear-gradient(135deg, #a78bfa, #ec4899);
@@ -303,6 +304,35 @@
       box-shadow: 0 0 10px rgba(124,58,237,0.7), inset 0 0 12px rgba(0,0,0,0.8);
     }
 
+    /* ===== ページャー ===== */
+    .zukan-pager {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 16px 4px;
+    }
+    .zukan-pager .pager-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #334155;
+      background: rgba(30,41,59,0.6);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .zukan-pager .pager-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .zukan-pager .pager-info {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
     .section-title {
       text-align: center;
       font-size: 0.9rem;
@@ -413,19 +443,19 @@
   </div>
 </div>
 
-<!-- ③ カード一覧（主役・486枚） -->
+<!-- ③ カード一覧（全カード・ページ式） -->
 <div class="list-heading">カード<span class="hl">一覧</span></div>
 <p style="font-size:11px;color:#a78bfa;text-align:center;margin:2px 0 0;">友達に結果をシェアしてもらうと、自分の図鑑が埋まるよ！</p>
 
 <div class="filter-tabs">
   <button class="filter-tab active" data-filter="code">コード順</button>
   <button class="filter-tab" data-filter="owned">持っているもの</button>
-  <button class="filter-tab" data-filter="unowned">未取得</button>
   <button class="filter-tab" data-filter="rarity">レア度順</button>
 </div>
 <div class="count-label" id="countLabel"></div>
 
 <div class="card-grid" id="cardGrid"></div>
+<div class="zukan-pager" id="zukanPager"></div>
 
 <div class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-3px;margin-right:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>隠しキャラクター</div>
 <div class="card-grid" id="hiddenGrid"></div>
@@ -453,9 +483,13 @@
 
   var currentFilter = 'code';
   var RARITY_EMOJI = { r0:'\u{1F0CF}', r1:'✨', r2:'\u{1F49A}', r3:'\u{1F499}', r4:'\u{1F49C}', r5:'⭐', r6:'\u{1F308}', r7:'\u{1F480}' };
-  var typeCards = [];        // 486枚（243タイプ×M/F）
-  var ownedTypeMap = {};     // key: toScaleCode+gender → 代表所持カード{code,gender,version,rarity}
-  var chartState = {};       // key: code → {M:bool, F:bool}
+  var RARITY_ORDER = {r7:0,r6:1,r5:2,r4:3,r3:4,r2:5,r1:6,r0:7};
+  var PAGE_SIZE = 120;
+  var currentPage = 1;
+  var BASE_TOTAL = 6250 + 486; // 通常6,250枚＋ノーマル台紙486枚
+  var extraCount = 0;         // 変則カード数（動的）
+  var allCards = [];          // 約6,736枚（＋変則）の全カード
+  var chartState = {};        // key: code → {M:bool, F:bool}
 
   function toScale(v) { return v <= 2 ? 1 : v >= 4 ? 5 : 3; }
   function toScaleCode(code) {
@@ -468,7 +502,10 @@
     var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
 
     var RANK = (typeof AlbumUtils !== 'undefined' && AlbumUtils.RARITY_RANK) ? AlbumUtils.RARITY_RANK : {};
-    // 全3125コードのチャート発見状態＋タイプ別の代表所持カード
+
+    // 所持カードのマップ化＋チャート発見状態の記録
+    // key＝code + '_' + gender + '_' + (version==='10' ? 'r0' : 'normal')
+    var ownedMap = {};
     albumCards.forEach(function(c) {
       if (c.isHidden) return;
       if (!c.code || c.code.length !== 5 || !c.gender) return;
@@ -476,38 +513,78 @@
       if (!chartState[c.code]) chartState[c.code] = { M:false, F:false };
       if (c.gender === 'M') chartState[c.code].M = true;
       if (c.gender === 'F') chartState[c.code].F = true;
-      // タイプ（丸め243単位）の代表カード＝最高レア度を保持
-      var ts = toScaleCode(c.code);
-      var tkey = ts + '_' + c.gender;
-      var cur = ownedTypeMap[tkey];
+
+      var slot = (c.version === '10') ? 'r0' : 'normal';
+      var key = c.code + '_' + c.gender + '_' + slot;
+      var cur = ownedMap[key];
       var rank = RANK[c.rarity] || 0;
       if (!cur || rank > (RANK[cur.rarity] || 0)) {
-        ownedTypeMap[tkey] = { code: c.code, gender: c.gender, version: c.version || '30', rarity: c.rarity };
+        ownedMap[key] = { code: c.code, gender: c.gender, version: c.version || '30', rarity: c.rarity, slot: slot };
       }
     });
 
-    // 486枚のタイプカードを生成（コード順・男女）
-    typeCards = [];
+    var consumed = {};
+    allCards = [];
+
+    // 1) 通常カード 6,250枚：コード11111〜55555（現行チャートと同じ5重ループ順）×M→F
+    for (var o=1;o<=5;o++)
+    for (var c=1;c<=5;c++)
+    for (var e=1;e<=5;e++)
+    for (var a=1;a<=5;a++)
+    for (var n=1;n<=5;n++) {
+      var code = '' + o + c + e + a + n;
+      ['M','F'].forEach(function(gender) {
+        var key = code + '_' + gender + '_normal';
+        var owned = ownedMap[key];
+        if (owned) consumed[key] = true;
+        allCards.push({
+          code: code,
+          gender: gender,
+          kind: 'normal',
+          owned: !!owned,
+          rarity: owned ? owned.rarity : computeRarity(code, gender),
+          link: owned ? owned : null
+        });
+      });
+    }
+
+    // 2) ノーマル台紙（r0） 486枚：{1,3,5}^5＝243コード×M→F
     var s = [1,3,5];
     for (var oi=0;oi<3;oi++)
     for (var ci=0;ci<3;ci++)
     for (var ei=0;ei<3;ei++)
     for (var ai=0;ai<3;ai++)
     for (var ni=0;ni<3;ni++) {
-      var ts = '' + s[oi] + s[ci] + s[ei] + s[ai] + s[ni];
+      var code2 = '' + s[oi] + s[ci] + s[ei] + s[ai] + s[ni];
       ['M','F'].forEach(function(gender) {
-        var tkey = ts + '_' + gender;
-        var owned = ownedTypeMap[tkey];
-        typeCards.push({
-          ts: ts,
+        var key = code2 + '_' + gender + '_r0';
+        var owned = ownedMap[key];
+        if (owned) consumed[key] = true;
+        allCards.push({
+          code: code2,
           gender: gender,
+          kind: 'r0',
           owned: !!owned,
-          // 所持なら実カードのレア度、未所持は丸めコードの基準レア度
-          rarity: owned ? owned.rarity : (typeof computeRarity === 'function' ? computeRarity(ts, gender) : 'r1'),
+          rarity: owned ? owned.rarity : 'r0',
           link: owned ? owned : null
         });
       });
     }
+
+    // 3) 変則カード（動的）：どこにもマッチしなかった所持カード（旧バグ期間のr0等）
+    Object.keys(ownedMap).forEach(function(key) {
+      if (consumed[key]) return;
+      var owned = ownedMap[key];
+      allCards.push({
+        code: owned.code,
+        gender: owned.gender,
+        kind: 'extra',
+        owned: true,
+        rarity: owned.rarity,
+        link: owned
+      });
+    });
+    extraCount = allCards.length - BASE_TOTAL;
   }
 
   // ---- 称号 ----
@@ -590,31 +667,34 @@
         else if (st.F)    { fill = '#f43f5e'; op = 0.95; r = 2.3; }
       }
       if (code === '33333') { r = Math.max(r, 3.2); }
-      var ts = toScaleCode(code);
       parts.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r+
-        '" fill="'+fill+'" fill-opacity="'+op+'" data-ts="'+ts+'"/>');
+        '" fill="'+fill+'" fill-opacity="'+op+'" data-code="'+code+'"/>');
     }
     var svg = document.getElementById('chartSvg');
     svg.innerHTML = parts.join('');
 
-    // マスをタップ → 該当タイプのカードへスクロール
+    // マスをタップ → 該当コードのカードへスクロール
     svg.addEventListener('click', function(ev){
       var t = ev.target;
-      if (t && t.tagName === 'circle' && t.getAttribute('data-ts')) {
-        scrollToType(t.getAttribute('data-ts'));
+      if (t && t.tagName === 'circle' && t.getAttribute('data-code')) {
+        scrollToCode(t.getAttribute('data-code'));
       }
     });
 
     setupZoom();
   }
 
-  function scrollToType(ts) {
-    // まず該当タイプが今のフィルタで表示されているか確認、なければコード順に戻す
-    var el = document.querySelector('.zukan-card[data-ts="'+ts+'"]');
-    if (!el) {
-      setFilter('code');
-      el = document.querySelector('.zukan-card[data-ts="'+ts+'"]');
+  function scrollToCode(code) {
+    // コード順フィルタに戻し、そのコードのMセルが載るページを表示してからスクロール
+    setFilter('code');
+    var idx = -1;
+    for (var i=0;i<allCards.length;i++) {
+      if (allCards[i].code === code && allCards[i].gender === 'M' && allCards[i].kind === 'normal') { idx = i; break; }
     }
+    if (idx === -1) return;
+    currentPage = Math.floor(idx / PAGE_SIZE) + 1;
+    renderList();
+    var el = document.querySelector('.zukan-card[data-code="'+code+'"][data-gender="M"][data-kind="normal"]');
     if (!el) return;
     el.scrollIntoView({ behavior:'smooth', block:'center' });
     document.querySelectorAll('.zukan-card.flash').forEach(function(x){ x.classList.remove('flash'); });
@@ -708,43 +788,57 @@
     return 'https://bigfive.jr-genius.jp/ogp-image?code=' + link.code +
       '&gender=' + link.gender + '&rarity=' + link.rarity + '&v=' + (link.version || '30');
   }
-  // 未取得＝キャラ画像シルエット（git内資産・ワーカーへのリクエストゼロ）
+  // 未取得＝キャラ画像シルエット（git内資産・ワーカーへのリクエストゼロ／丸め＝toScaleCode）
   function silhouetteImagePath(card) {
-    return 'images/characters/marume243/' + card.gender + '/' + card.ts + '.webp';
+    return 'images/characters/marume243/' + card.gender + '/' + toScaleCode(card.code) + '.webp';
   }
   function setFilter(f) {
     currentFilter = f;
+    currentPage = 1; // フィルタ変更時はページ1に戻る
     document.querySelectorAll('.filter-tab').forEach(function(b){
       b.classList.toggle('active', b.dataset.filter === f);
     });
     renderList();
   }
-  function renderList() {
-    var RARITY_ORDER = {r7:0,r6:1,r5:2,r4:3,r3:4,r2:5,r1:6,r0:7};
-    var list = typeCards.slice();
+  function getFilteredList() {
     if (currentFilter === 'owned') {
-      list = list.filter(function(c){ return c.owned; });
-    } else if (currentFilter === 'unowned') {
-      list = list.filter(function(c){ return !c.owned; });
-    } else if (currentFilter === 'rarity') {
+      return allCards.filter(function(c){ return c.owned; });
+    }
+    if (currentFilter === 'rarity') {
+      var list = allCards.slice();
       list.sort(function(a,b){
         var d = (RARITY_ORDER[a.rarity]||9) - (RARITY_ORDER[b.rarity]||9);
-        return d !== 0 ? d : (a.ts+a.gender < b.ts+b.gender ? -1 : 1);
+        if (d !== 0) return d;
+        var ak = a.code+a.gender, bk = b.code+b.gender;
+        return ak < bk ? -1 : (ak > bk ? 1 : 0);
       });
+      return list;
     }
+    return allCards; // 'code'＝上記配列順そのまま
+  }
+  function renderList() {
+    var list = getFilteredList();
+    var totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    var startIdx = (currentPage - 1) * PAGE_SIZE;
+    var pageItems = list.slice(startIdx, startIdx + PAGE_SIZE);
 
-    var ownedTotal = typeCards.filter(function(c){ return c.owned; }).length;
+    var ownedTotal = allCards.filter(function(c){ return c.owned; }).length;
+    var totalDisplay = BASE_TOTAL + extraCount;
+    var breakdown = '3,125コード×男女＋ノーマル台紙486' + (extraCount > 0 ? '＋変則' + extraCount : '');
     document.getElementById('countLabel').textContent =
-      '全486枚（243タイプ×男女）／ 発見 ' + ownedTotal + '枚';
+      '全' + totalDisplay.toLocaleString() + '枚（' + breakdown + '）／ 発見 ' + ownedTotal + '枚 ／ ' + currentPage + ' / ' + totalPages + 'ページ';
 
     var grid = document.getElementById('cardGrid');
     grid.innerHTML = '';
-    if (list.length === 0) {
+    if (pageItems.length === 0) {
       grid.innerHTML = '<div class="empty-state">該当するカードはありません<br>診断を受けてカードをゲットしよう！</div>';
+      renderPager(currentPage, totalPages);
       return;
     }
     var frag = document.createDocumentFragment();
-    list.forEach(function(card) {
+    pageItems.forEach(function(card) {
       var el;
       if (card.owned && card.link) {
         el = document.createElement('a');
@@ -754,7 +848,9 @@
         el = document.createElement('div');
         el.className = 'zukan-card unowned';
       }
-      el.setAttribute('data-ts', card.ts);
+      el.setAttribute('data-code', card.code);
+      el.setAttribute('data-gender', card.gender);
+      el.setAttribute('data-kind', card.kind);
 
       var img = document.createElement('img');
       if (card.owned && card.link) {
@@ -776,7 +872,7 @@
       var label = document.createElement('div');
       label.className = 'card-label';
       label.textContent = card.owned
-        ? card.ts + (card.gender === 'M' ? ' ♂' : ' ♀')
+        ? card.code + (card.gender === 'M' ? ' ♂' : ' ♀')
         : '???';
 
       el.appendChild(img);
@@ -784,6 +880,35 @@
       frag.appendChild(el);
     });
     grid.appendChild(frag);
+    renderPager(currentPage, totalPages);
+  }
+
+  // ---- ページャー ----
+  function renderPager(page, totalPages) {
+    var pager = document.getElementById('zukanPager');
+    if (!pager) return;
+    if (totalPages <= 1) {
+      pager.style.display = 'none';
+      pager.innerHTML = '';
+      return;
+    }
+    pager.style.display = '';
+    pager.innerHTML =
+      '<button type="button" class="pager-btn" id="pagerFirst"' + (page<=1?' disabled':'') + '>«</button>' +
+      '<button type="button" class="pager-btn" id="pagerPrev"' + (page<=1?' disabled':'') + '>前へ</button>' +
+      '<span class="pager-info">' + page + ' / ' + totalPages + '</span>' +
+      '<button type="button" class="pager-btn" id="pagerNext"' + (page>=totalPages?' disabled':'') + '>次へ</button>' +
+      '<button type="button" class="pager-btn" id="pagerLast"' + (page>=totalPages?' disabled':'') + '>»</button>';
+    document.getElementById('pagerFirst').onclick = function(){ goToPage(1); };
+    document.getElementById('pagerPrev').onclick = function(){ goToPage(currentPage - 1); };
+    document.getElementById('pagerNext').onclick = function(){ goToPage(currentPage + 1); };
+    document.getElementById('pagerLast').onclick = function(){ goToPage(totalPages); };
+  }
+  function goToPage(p) {
+    currentPage = p;
+    renderList();
+    var heading = document.querySelector('.list-heading');
+    if (heading) heading.scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
   function renderHidden() {
