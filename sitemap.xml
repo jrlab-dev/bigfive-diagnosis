@@ -1726,4 +1726,12 @@
     <lastmod>2026-07-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url></urlset>
+  </url>
+  <!-- 空気が読めない人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kuuki-yomenai.html</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
