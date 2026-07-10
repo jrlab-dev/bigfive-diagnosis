@@ -1652,6 +1652,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 性格診断の種類まとめ（目的別の選び方） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-shindan-shurui.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- かまってちゃん（注目欲求） -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/kamatte-chan.html</loc>
