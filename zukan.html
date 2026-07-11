@@ -493,6 +493,13 @@
     return [0,1,2,3,4].map(function(i){ return toScale(+code[i]); }).join('');
   }
 
+  // レア度は保存値を信じず、コード（と種別）から計算し直す（旧表記commonデータ対策）
+  function deriveRarity(code, gender, kind) {
+    if (kind === 'r0') return 'r0';
+    var r = (typeof computeRarity === 'function') ? computeRarity(code, gender) : 'r1';
+    return r === 'secret' ? 'r7' : r;
+  }
+
   // ---- データ構築 ----
   function build() {
     if (typeof AlbumUtils !== 'undefined') AlbumUtils.migrateExistingResults();
@@ -539,7 +546,7 @@
           gender: gender,
           kind: 'normal',
           owned: !!owned,
-          rarity: owned ? owned.rarity : computeRarity(code, gender),
+          rarity: deriveRarity(code, gender, 'normal'),
           link: owned ? owned : null
         });
       });
@@ -562,7 +569,7 @@
           gender: gender,
           kind: 'r0',
           owned: !!owned,
-          rarity: owned ? owned.rarity : 'r0',
+          rarity: deriveRarity(code2, gender, 'r0'),
           link: owned ? owned : null
         });
       });
@@ -577,7 +584,8 @@
         gender: owned.gender,
         kind: 'extra',
         owned: true,
-        rarity: owned.rarity,
+        // version=10ならr0扱いで計算（保存値は使わない）
+        rarity: deriveRarity(owned.code, owned.gender, owned.version === '10' ? 'r0' : 'normal'),
         link: owned
       });
     });
@@ -781,9 +789,10 @@
 
   // ---- カード一覧 ----
   // 取得済み＝R2の焼き済みカード1枚絵（ワーカー経由・CDNキャッシュあり）
-  function cardImageUrl(link) {
-    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + link.code +
-      '&gender=' + link.gender + '&rarity=' + link.rarity + '&v=' + (link.version || '30');
+  // rarityは保存値（link.rarity）でなくセルの計算値（card.rarity）を使う
+  function cardImageUrl(card) {
+    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.link.code +
+      '&gender=' + card.link.gender + '&rarity=' + card.rarity + '&v=' + (card.link.version || '30');
   }
   // 未取得＝キャラ画像シルエット（git内資産・ワーカーへのリクエストゼロ／丸め＝toScaleCode）
   function silhouetteImagePath(card) {
@@ -804,7 +813,10 @@
     if (currentFilter === 'rarity') {
       var list = allCards.slice();
       list.sort(function(a,b){
-        var d = (RARITY_ORDER[a.rarity]||9) - (RARITY_ORDER[b.rarity]||9);
+        // r7の順位値0がfalsyで||9に化けないよう、inで存在判定する
+        var ra = (a.rarity in RARITY_ORDER) ? RARITY_ORDER[a.rarity] : 9;
+        var rb = (b.rarity in RARITY_ORDER) ? RARITY_ORDER[b.rarity] : 9;
+        var d = ra - rb;
         if (d !== 0) return d;
         var ak = a.code+a.gender, bk = b.code+b.gender;
         return ak < bk ? -1 : (ak > bk ? 1 : 0);
@@ -851,7 +863,7 @@
 
       var img = document.createElement('img');
       if (card.owned && card.link) {
-        img.src = cardImageUrl(card.link);
+        img.src = cardImageUrl(card);
         img.onerror = function() {
           // R2に画像が無い変則カード（旧バグ期間のr0等）→絵文字フォールバック
           img.style.display = 'none';
