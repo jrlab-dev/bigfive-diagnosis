@@ -2999,6 +2999,27 @@ function renderAIProfile() {
     } catch(e) {}
   }
 
+  // 未受診の診断リスト（AIが相談の流れで必要なときだけ勧められるように）
+  const untaken = [];
+  if (!bf) untaken.push('ビッグファイブ性格診断: 性格の全体像（5つの因子）が分かる');
+  if (!hasHSP) untaken.push('HSP感受性チェック: 刺激への敏感さ・疲れやすさが分かる');
+  if (!hasAtt) untaken.push('愛着スタイル診断: 人との距離のとり方・関係の築き方のクセが分かる');
+  if (!hasLove) untaken.push('恋愛スタイル診断: 恋愛での愛し方のタイプが分かる');
+  if (!hasMind) untaken.push('マインドセット診断: 能力や性格は変えられると考えているかが分かる');
+  if (!hasSch) untaken.push('価値観診断: 人生で大切にしている価値観の上位が分かる');
+  if (!hasSDT) untaken.push('動機タイプ診断: やる気の源泉（自分で決めたい・上達したい・人と繋がりたい）が分かる');
+  if (!hasLocus) untaken.push('統制の所在診断: 物事の結果を自分の力と捉えるか、運や環境と捉えるかが分かる');
+  if (!hasEQ) untaken.push('感情知能(EQ)診断: 感情の扱い方の得意・不得意が分かる');
+  if (!hasImpostor) untaken.push('インポスター症候群チェック: 「本当の自分は実力不足」と感じてしまう傾向が分かる');
+  if (!hasPGG) untaken.push('コインゲーム: 人と協力するときの行動タイプが分かる');
+  if (!hasRisk) untaken.push('リスク選好ゲーム: リスクへの向き合い方が分かる');
+  if (untaken.length > 0) {
+    lines.push('');
+    lines.push('【このサイトにあって、私がまだ受けていない診断】');
+    untaken.forEach(function(t) { lines.push('・' + t); });
+    lines.push('相談の流れで本当に役立ちそうなときだけ、この中から1つ勧めてください。必要がなければ勧めないでください。勧めるのは会話全体で1〜2回までにしてください。診断はすべて無料で、サイト（https://bigfive.jr-genius.jp）のマイページから受けられます。');
+  }
+
   textarea.value = lines.join('\n');
 
   // コピー機能（onclickで重複登録を防ぐ）
