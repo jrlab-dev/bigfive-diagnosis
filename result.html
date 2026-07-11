@@ -24,7 +24,7 @@
   var v=p.get('v')||'10';
   var src;
   if(c){src='https://bigfive.jr-genius.jp/ogp-image?char='+encodeURIComponent(c)+'&type=share';}
-  else if(code){src='https://bigfive.jr-genius.jp/ogp-image?code='+encodeURIComponent(code)+'&gender='+g+'&type=share'+(v==='10'?'&rarity=r0':'');}
+  else if(code){src='https://bigfive.jr-genius.jp/ogp-image?code='+encodeURIComponent(code)+'&gender='+g+'&type=share'+(v==='10'?'&rarity=r0':'')+(v==='30'?'&v=30':'');}
   if(src){
     var m=document.createElement('meta');m.setAttribute('property','og:image');m.setAttribute('content',src);document.head.appendChild(m);
     var m2=document.createElement('meta');m2.setAttribute('name','twitter:image');m2.setAttribute('content',src);document.head.appendChild(m2);
@@ -2817,7 +2817,7 @@ if (isOtherMode) {
     var c = p.get('char');
     var src = '';
     if (c) { src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + encodeURIComponent(c) + '&type=share'; }
-    else if (code) { src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(code) + '&gender=' + g + '&type=share' + (version === '10' ? '&rarity=r0' : ''); }
+    else if (code) { src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(code) + '&gender=' + g + '&type=share' + (version === '10' ? '&rarity=r0' : '') + (version === '30' ? '&v=30' : ''); }
     if (!src) return; // パラメータなし＝プレビュー非表示のまま
     var box = document.getElementById('sharePreview');
     var img = document.getElementById('sharePreviewImg');
