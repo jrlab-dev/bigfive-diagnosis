@@ -1734,6 +1734,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- プライドが高い人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/pride-takai.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- 頑固な人 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/ganko-hito.html</loc>
