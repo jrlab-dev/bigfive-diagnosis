@@ -3109,8 +3109,14 @@ if (isOtherMode) {
       if (!Array.isArray(others)) others = [];
       var maxOthers = typeof getOtherLimit === 'function' ? getOtherLimit() : 50;
       if (others.length >= maxOthers) {
-        saveAsOtherHint.textContent = '保存上限（' + maxOthers + '件）に達しています。マイページで整理してください。';
-        saveAsOtherHint.style.color = '#ef4444';
+        if (maxOthers === 0) {
+          // カード0枚＝機能が未解放。初見の人に「上限に達した」は意味不明なので、解放手順を案内する
+          saveAsOtherHint.textContent = 'まず上の「図鑑に追加する」ボタンを押すと、あの人として保存できるようになります。';
+          saveAsOtherHint.style.color = '#a78bfa';
+        } else {
+          saveAsOtherHint.textContent = '保存上限（' + maxOthers + '件）に達しています。マイページで整理してください。';
+          saveAsOtherHint.style.color = '#ef4444';
+        }
         return;
       }
       others.unshift({
