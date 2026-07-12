@@ -93,7 +93,9 @@ function getOtherLimit() {
   if (count >= 40) return 40;
   if (count >= 30) return 30;
   if (count >= 1)  return 20;
-  return 0;
+  // カード0枚でも基本10件（シェアで初めて来た人がすぐ保存できる＝通常運営。
+  // こども診断・あの人診断側のMath.max(10,...)下駄と同じ値）
+  return 10;
 }
 
 // ゲート表示（ロックされたページ用）
