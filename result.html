@@ -2724,35 +2724,41 @@ if (isOtherMode) {
 
 // ===== SNSシェア機能 =====
 (function() {
-  var currentUrl = window.location.href;
-  // シェアURLにfrom=shareを付加（共有リンク経由と判定するため）
-  if (currentUrl.indexOf('from=') === -1) {
-    currentUrl += (currentUrl.indexOf('?') === -1 ? '?' : '&') + 'from=share';
-  }
+  // X等のクローラーはJSを実行しないため、result.html直リンクではOGP画像が出ない。
+  // ワーカーの /share ページ（静的OGPタグ入り・人は結果ページへ即転送）を経由してシェアする
   const typeName = document.getElementById('typeName').textContent;
-  const typeCode = document.getElementById('typeCode').textContent;
+  const shareParams = new URLSearchParams();
+  ['code', 'type', 'gender', 'v', 'char', 'facets', 'name', 'rel'].forEach(function(k) {
+    const val = params.get(k);
+    if (val) shareParams.set(k, val);
+  });
+  if (!shareParams.has('code') && !shareParams.has('type') && !shareParams.has('char')) {
+    shareParams.set('code', typeCode);
+  }
+  shareParams.set('n', typeName);
+  const shareUrl = 'https://bigfive.jr-genius.jp/share?' + shareParams.toString();
 
   // シェア用テキスト生成
-  const shareText = `【ビッグファイブ診断結果】\n私のタイプは「${typeName}」\n${typeCode}\n\nあなたの性格も診断してみよう！\n`;
+  const shareText = `私の性格タイプは「${typeName}」でした🧬\n画像の「あるある」、当たってる…？\n\n#性格診断 #ビッグファイブ\n`;
 
   // Twitter/X
   const shareTwitter = document.getElementById('shareTwitter');
   if (shareTwitter) {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     shareTwitter.href = twitterUrl;
   }
 
   // Facebook
   const shareFacebook = document.getElementById('shareFacebook');
   if (shareFacebook) {
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
     shareFacebook.href = facebookUrl;
   }
 
   // LINE
   const shareLine = document.getElementById('shareLine');
   if (shareLine) {
-    const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`;
+    const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
     shareLine.href = lineUrl;
   }
 
@@ -2762,7 +2768,7 @@ if (isOtherMode) {
   if (shareCopy) {
     shareCopy.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText(currentUrl);
+        await navigator.clipboard.writeText(shareUrl);
         copyToast.classList.add('show');
         setTimeout(() => {
           copyToast.classList.remove('show');
@@ -2770,7 +2776,7 @@ if (isOtherMode) {
       } catch (err) {
         // フォールバック（古いブラウザ対応）
         const input = document.createElement('input');
-        input.value = currentUrl;
+        input.value = shareUrl;
         document.body.appendChild(input);
         input.select();
         document.execCommand('copy');
