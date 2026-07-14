@@ -595,6 +595,9 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   } catch(e) { localStorage.removeItem(STORAGE_KEY); }
 })();
 </script>
+<script>
+(function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=attachment_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
+</script>
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
 </body>
