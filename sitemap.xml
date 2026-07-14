@@ -1767,4 +1767,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 診断結果に振り回される人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-furimawasareru.html</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
