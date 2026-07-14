@@ -716,6 +716,14 @@ function showResult() {
   }, 1500);
 
   function goToResult(gender) {
+    // 診断完了の計測（バージョン別・新規完走のみ。マイページ再閲覧・シェア閲覧は含まない）
+    try {
+      if (localStorage.getItem('dev_nocount') !== '1') {
+        var __qc = 'https://bigfive.jr-genius.jp/count/hit?e=quiz_complete_' + version;
+        if (navigator.sendBeacon) navigator.sendBeacon(__qc);
+        else if (window.fetch) fetch(__qc, { method: 'POST', keepalive: true }).catch(function(){});
+      }
+    } catch (e) {}
     const ref = params.get('ref') || '';
     const otherCode = params.get('other_code') || '';
     const otherName = params.get('other_name') || '';
