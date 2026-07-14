@@ -1387,6 +1387,14 @@ function calcCompat(other, my, weights) {
 
 // ===== 結果表示 =====
 function showResult() {
+  // あの人診断完了の計測（2026-07-13追加・result.htmlのresult_viewと同じ送信パターン・dev_nocountで検品時オフ）
+  try {
+    if (localStorage.getItem('dev_nocount') !== '1') {
+      var __ou = 'https://bigfive.jr-genius.jp/count/hit?e=other_result_view';
+      if (navigator.sendBeacon) navigator.sendBeacon(__ou);
+      else if (window.fetch) fetch(__ou, { method: 'POST', keepalive: true }).catch(function(){});
+    }
+  } catch (e) {}
   document.getElementById('badge120').style.display = 'none';
   if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('other');
   const sc = calcScores();
