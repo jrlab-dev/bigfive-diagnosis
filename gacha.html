@@ -1412,12 +1412,21 @@ body.theme-light .foot-note { color: var(--ink-3); }
 
       result.classList.add('show');
 
-      // 機能解放バナー（UNLOCK_TABLEのラインをまたいだ時だけ表示・カードの新規性とは無関係）
+      // 機能解放バナー＋機能解放ライン通過の計測（2026-07-15新設：常連が機能解放を深掘りしている
+      // エンゲージメント指標として意図的に残す・ユーザー判断。旧gacha_unlockはこれと新規カード率が
+      // 混同されていたため、新規カード率はisNewへ分離し、こちらは別名の専用イベントにした）
       if (typeof getNewUnlocks === 'function' && typeof oldCount === 'number') {
         var newCount = getCardCount();
         var unlocked = getNewUnlocks(oldCount, newCount);
         if (unlocked.length > 0) {
           setTimeout(function() { if (window.showUnlockBanners) showUnlockBanners(unlocked); }, 1200);
+          try {
+            if (localStorage.getItem('dev_nocount') !== '1') {
+              var __gfu = 'https://bigfive.jr-genius.jp/count/hit?e=gacha_feature_unlock';
+              if (navigator.sendBeacon) navigator.sendBeacon(__gfu);
+              else if (window.fetch) fetch(__gfu, { method: 'POST', keepalive: true }).catch(function(){});
+            }
+          } catch (e) {}
         }
       }
       // 新規カード獲得の計測（2026-07-15修正：旧実装はUNLOCK_TABLEのライン通過で判定していたため
