@@ -547,6 +547,7 @@ function renderAnalysis() {
   if (aiBtn) {
     aiBtn.addEventListener('click', function() {
       sendCount('reladvice_ai_copy');
+      sendCount('reladvice_ai_copy_' + currentSituation);
       copyText(aiPrompt, function(ok) {
         if (ok) {
           aiBtn.textContent = '✓ コピーしました';
@@ -559,6 +560,7 @@ function renderAnalysis() {
     });
   }
   sendCount('reladvice_view');
+  sendCount('reladvice_view_' + currentSituation);
 }
 
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
