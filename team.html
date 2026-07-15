@@ -2115,5 +2115,8 @@ if (viewTeamData && allMembers.length >= 2) {
 <script src="compat.js"></script>
 <script src="nav.js"></script>
 <script src="unlock.js"></script>
+<script>
+(function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=team_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
+</script>
 </body>
 </html>
