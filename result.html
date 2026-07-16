@@ -982,6 +982,13 @@
   <!-- 性格説明カード -->
   <div class="desc-card" id="descCard"></div>
 
+  <!-- AI相談への導線・上部（2026-07-16 露出強化。共有リンク経由では非表示） -->
+  <div id="aiConsultTop" style="margin:16px auto 0; max-width:480px; width:100%; padding:16px; border-radius:14px; background:linear-gradient(135deg, rgba(139,92,246,0.14), rgba(59,130,246,0.14)); border:1px solid rgba(139,92,246,0.45);">
+    <p style="margin:0 0 6px; font-size:15px; font-weight:700; text-align:center;">🤖 この結果、AIに深掘りしてもらえます</p>
+    <p style="margin:0 0 12px; font-size:12.5px; color:var(--dim); text-align:center; line-height:1.6;">性格データをコピーして、ChatGPTやClaudeに貼るだけ。あなた専用のアドバイスがもらえます（無料）</p>
+    <a href="mypage.html#aiProfileSection" class="btn btn-primary" id="aiConsultBtnTop" style="display:block; width:100%; text-align:center; background:linear-gradient(135deg, #8b5cf6, #3b82f6);">AIに相談してみる（無料）</a>
+  </div>
+
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
   <div class="compatibility-card" id="compatibilityCard" style="display:none;">
     <p class="compatibility-title">
@@ -1155,9 +1162,9 @@
   <!-- AI相談への導線（収益化フェーズ0） -->
   <div style="margin: 16px auto 0; max-width: 480px; width: 100%;">
     <a href="mypage.html#aiProfileSection" class="btn btn-primary" id="aiConsultBtn" style="display:block; width:100%; text-align:center; background: linear-gradient(135deg, #8b5cf6, #3b82f6);">
-      🔍 この結果をもっと詳しく
+      🤖 AIに相談してみる（無料）
     </a>
-    <p style="font-size:12px; color:var(--dim); text-align:center; margin-top:8px;">あなたの結果をもとに、さらに深い分析・相談ができます（無料）</p>
+    <p style="font-size:12px; color:var(--dim); text-align:center; margin-top:8px;">性格データをコピーしてChatGPTやClaudeに貼るだけ。あなた専用のアドバイスがもらえます</p>
   </div>
   <script>(function(){
     var COUNT_URL = 'https://bigfive.jr-genius.jp/count/hit?e=';
@@ -1171,6 +1178,9 @@
     sendCount('result_view');
     var aiBtn = document.getElementById('aiConsultBtn');
     if (aiBtn) aiBtn.addEventListener('click', function(){ sendCount('result_ai_click'); });
+    // 上部ボタン（2026-07-16）：従来の合算に加え、位置別の内訳も送る
+    var aiBtnTop = document.getElementById('aiConsultBtnTop');
+    if (aiBtnTop) aiBtnTop.addEventListener('click', function(){ sendCount('result_ai_click'); sendCount('result_ai_click_top'); });
     // シェア操作の計測（2026-07-10）
     function bindCount(id, ev) {
       var el = document.getElementById(id);
@@ -3026,6 +3036,10 @@ if (isOtherMode) {
     var retryBtn = document.getElementById('retryBtn');
     if (saveBtn) saveBtn.style.display = 'none';
     if (retryBtn) retryBtn.style.display = 'none';
+
+    // 上部AI相談カードも非表示（他人の結果に対する相談誘導になるため）
+    var aiTop = document.getElementById('aiConsultTop');
+    if (aiTop) aiTop.style.display = 'none';
 
     var btn = document.getElementById('addToZukanBtn');
     var hint = document.getElementById('addToZukanHint');
