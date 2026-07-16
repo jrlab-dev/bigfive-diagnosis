@@ -1176,6 +1176,15 @@
       } catch (e) {}
     }
     sendCount('result_view');
+    // 新規/リピーターの内訳（2026-07-16）：この端末での初回かどうかの目安。
+    // 過去の利用痕跡（保存結果・図鑑）がある端末は印がなくてもリピーター扱い（既存利用者を新規と誤計上しないため）
+    try {
+      var isReturn = localStorage.getItem('bigfive_seen') === '1'
+        || !!localStorage.getItem('bigfive_my_results')
+        || !!localStorage.getItem('bigfive_album');
+      sendCount(isReturn ? 'result_view_return' : 'result_view_new');
+      localStorage.setItem('bigfive_seen', '1');
+    } catch (e) {}
     var aiBtn = document.getElementById('aiConsultBtn');
     if (aiBtn) aiBtn.addEventListener('click', function(){ sendCount('result_ai_click'); });
     // 上部ボタン（2026-07-16）：従来の合算に加え、位置別の内訳も送る
