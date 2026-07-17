@@ -1774,14 +1774,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- ?????????????? -->
+  <!-- 診断結果を見せたくない人の心理 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-misetakunai.html</loc>
     <lastmod>2026-07-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- ????????????? -->
+  <!-- 診断結果を比べて落ち込む人の心理 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-kurabete-ochikomu.html</loc>
     <lastmod>2026-07-17</lastmod>
