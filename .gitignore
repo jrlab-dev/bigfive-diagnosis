@@ -8,6 +8,7 @@
 ## 非公開フォルダ
 _private/
 plans/
+_一時/
 
 ## 開発用スクリプト
 generate_*.py

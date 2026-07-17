@@ -1095,6 +1095,31 @@ body.theme-light .blog-link-text {
   color: var(--text) !important;
 }
 
+/* 統合レポートカード */
+body.theme-light .report-card {
+  background: oklch(1.0 0.0 0 / 0.78) !important;
+  border-color: var(--card-border) !important;
+}
+body.theme-light .report-card-title {
+  color: var(--text) !important;
+}
+body.theme-light .report-card-note {
+  color: var(--dim) !important;
+}
+body.theme-light .report-factor-row {
+  border-bottom-color: oklch(0.88 0.03 270 / 0.4) !important;
+}
+body.theme-light .report-level-chip {
+  background: oklch(0.58 0.22 285 / 0.1) !important;
+  color: oklch(0.42 0.22 285) !important;
+}
+body.theme-light .report-factor-arrow {
+  color: var(--dim) !important;
+}
+body.theme-light .report-factor-text {
+  color: var(--text) !important;
+}
+
 /* 弱点セクション */
 body.theme-light .btn-weakness {
   background: oklch(0.95 0.01 270) !important;
