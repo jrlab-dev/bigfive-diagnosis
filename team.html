@@ -8,15 +8,15 @@
   <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>チーム相性診断 — ビッグファイブで本当の自分を知る【公式】</title>
-<meta name="description" content="ビッグファイブ診断のチーム相性分析。最大8人まで無料で診断できます。保存した結果からメンバーを選んで、チーム全体の相性・5因子のバランス・最適ペアを判定。職場やサークルの人間関係の把握に役立ちます。">
+<meta name="description" content="ビッグファイブ診断のチーム相性分析。最大8人まで無料で診断できます。保存した結果からメンバーを選んで、チーム全体の相性・メンバー全員の役割カード・最適ペアを判定。職場やサークルの人間関係の把握に役立ちます。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
 <meta property="og:title" content="チーム相性診断 — ビッグファイブで本当の自分を知る【公式】">
-<meta property="og:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。保存した結果からメンバーを選んでチーム全体の相性・因子分析・最適ペアを判定。">
+<meta property="og:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。メンバーを選んでチーム全体の相性・全員の役割カード・最適ペアを判定。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/team.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="チーム相性診断 — ビッグファイブで本当の自分を知る【公式】">
-<meta name="twitter:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。保存した結果からメンバーを選んでチーム全体の相性・因子分析・最適ペアを判定。">
+<meta name="twitter:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。メンバーを選んでチーム全体の相性・全員の役割カード・最適ペアを判定。">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -293,6 +293,34 @@
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* チーム機能バランス */
+  .balance-wrap { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(139,92,246,0.15); }
+  .balance-title { font-size: 12px; color: var(--dim); margin-bottom: 8px; font-weight: 700; }
+  .balance-lamps { display: flex; gap: 6px; }
+  .balance-lamp { flex: 1; text-align: center; padding: 8px 2px; border-radius: 10px; background: rgba(139,92,246,0.08); font-size: 11px; }
+  .balance-lamp .bl-emoji { font-size: 16px; display: block; }
+  .balance-lamp .bl-label { display: block; color: var(--text); font-weight: 700; margin: 2px 0; font-size: 11px; }
+  .balance-lamp .bl-state { display: block; font-size: 10px; font-weight: 700; }
+  .balance-lamp.on .bl-state { color: #34d399; }
+  .balance-lamp.half .bl-state { color: #fbbf24; }
+  .balance-lamp.off { opacity: .55; }
+  .balance-lamp.off .bl-state { color: var(--dim); }
+  .balance-note { font-size: 10px; color: var(--dim); margin-top: 6px; }
+  .team-disclaimer { font-size: 10px; color: var(--dim); margin-top: 10px; text-align: center; }
+
+  /* 役割カード */
+  .roles-note { font-size: 11px; color: var(--dim); margin: -4px 0 12px; line-height: 1.6; }
+  .role-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .role-icon { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: rgba(139,92,246,0.15); flex-shrink: 0; }
+  .role-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .role-name { font-size: 15px; font-weight: 900; margin-top: 2px; }
+  .role-catch { font-size: 11px; color: var(--dim); font-weight: 400; margin-left: 6px; }
+
+  /* 足りない機能の処方箋 */
+  .rx-list { margin-top: 10px; }
+  .rx-item { font-size: 12px; color: var(--dim); line-height: 1.7; padding: 10px 12px; background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; margin-top: 8px; }
+  .rx-item b { color: var(--text); }
 
   /* チームスコアカード */
   .team-card {
@@ -945,7 +973,7 @@
   </header>
 
   <div class="intro">
-    <p>保存した診断結果からメンバーを選んで（2〜8人）<br>チーム全体の相性を診断します</p>
+    <p>保存した診断結果からメンバーを選んで（2〜8人）<br>チームの相性と、一人ひとりの「チームでの役割」を診断します</p>
     <p style="margin-top:10px;font-size:13px;color:var(--dim)">大人数をグループに分けたい場合は <a href="group.html" style="color:var(--purple);text-decoration:none;font-weight:700">グループ分けツール →</a></p>
   </div>
 
@@ -1350,45 +1378,48 @@ function calcTeamScore(members) {
     max[f] = Math.max(...members.map(m => m.scores[f]));
   });
 
-  // チームスコア計算
-  let raw = 50;
+  // ===== チームスコア（2026-07-18改訂：機能カバー＋ペア相性＋微調整の3層式） =====
+  // 配分はB案（科学やや重め・準也さん裁定7/18）：そろい方 約43／ペア相性（研究相関ベース）約42／補正 約15
+  let raw = 8;
 
-  // ポジティブ要因
-  raw += avg.C * 7;       // C高＝実行力プラス
-  raw += avg.A * 7;       // A高＝協調性プラス
-  raw += variance.O * 1.5; // O分散＝多様性プラス（控えめ）
+  // 【土台】5つのチーム機能のそろい方（発想=O/段取り=C/熱量=E/調整=A/危機察知=N）
+  // 誰かが4以上でフルカバー(7点)・最高が3で半カバー(3点)。
+  // 小さいチームに5機能全部は要求しない：2人=上位3機能・3人=上位4機能・4人以上=5機能で満点
+  const coverage = {};
+  factors.forEach(f => {
+    coverage[f] = max[f] >= 4 ? 2 : max[f] === 3 ? 1 : 0;
+  });
+  const topK = n === 2 ? 3 : n === 3 ? 4 : 5;
+  const fPts = factors.map(f => coverage[f] === 2 ? 7 : coverage[f] === 1 ? 3 : 0)
+    .sort((a, b) => b - a).slice(0, topK);
+  const fullCount = fPts.filter(p => p === 7).length;
+  raw += fPts.reduce((s, p) => s + p, 0) / topK * 5;
+  if (fullCount === topK) raw += 4; // 機能そろい踏みボーナス
 
-  // ネガティブ要因
-  raw -= variance.C * 3;  // C分散＝生活スタイル不一致マイナス
-  raw -= avg.N * 7;       // N高＝ストレスリスクマイナス
-
-  // 「高すぎる」ペナルティ
-  if (avg.A >= 4.5) raw -= 5;  // A高すぎ＝グループシンクリスク
-  if (avg.C >= 4.5) raw -= 3;  // C高すぎ＝柔軟性不足リスク
-
-  // 多様性ボーナス（3人以上の場合）
-  if (n >= 3) {
-    const totalVariance = variance.O + variance.E + variance.A;
-    raw += Math.min(totalVariance * 0.5, 4);
+  // 【中心】全ペア相性の平均（研究相関ベース・細かい点差を生む層・compat.js流用）
+  let pairSum = 0, pairCount = 0;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    pairSum += calcPairCompatibility(members[i].code, members[j].code);
+    pairCount++;
   }
+  const pairAvg = pairCount ? pairSum / pairCount : 0;
+  raw += Math.max(-14, Math.min(40, 20 + (pairAvg - 55) * 0.75));
 
-  // 大人数ペナルティ（5人超：コミュニケーション経路が n*(n-1)/2 通りに急増するため）
-  // 5人=10通りを基準に、超過した経路数×1.2点を減算（最大22点）
-  if (n > 5) {
+  // 【微調整】
+  const totalVar = factors.reduce((s, f) => s + variance[f], 0);
+  raw += Math.min(totalVar * 0.9, 5);            // 多様性ボーナス
+  if (n >= 3 && totalVar < 0.5) raw -= 12;       // 似た者チーム（視点の重なり・ペア層が同質を高評価する分の相殺）
+  if (min.A <= 1) raw -= 4;                      // 協調性が極端に低いメンバーの影響（Barrick et al. 1998系）
+  if (avg.A >= 4.5) raw -= 3;                    // A高すぎ＝グループシンクリスク
+  if (n > 5) {                                   // 大人数：会話経路が n*(n-1)/2 通りに急増
     const extraPaths = (n * (n - 1) / 2) - 10;
-    raw -= Math.min(extraPaths * 1.2, 22);
-  }
-
-  // 2人チームはペア相性を重視
-  if (n === 2) {
-    const pairScore = calcPairCompatibility(members[0].code, members[1].code);
-    raw = raw * 0.4 + pairScore * 0.6;
+    raw -= Math.min(extraPaths * 0.8, 15);
   }
 
   // 正規化 0〜100
   const score = Math.max(0, Math.min(100, Math.round(raw)));
 
-  return { score, avg, variance, min, max };
+  return { score, avg, variance, min, max, coverage, topK, fullCount, pairAvg };
 }
 
 // ===== ペア相性計算 =====
@@ -1399,6 +1430,118 @@ function calcPairCompatibility(code1, code2) {
     { O: o1, C: c1, E: e1, A: a1, N: n1 },
     { O: o2, C: c2, E: e2, A: a2, N: n2 }
   ));
+}
+
+// ===== チーム役割（2026-07-18新設：5因子×高低の10種＋バランサー・全部ポジティブ） =====
+const TEAM_ROLES = {
+  'O+': { name: 'アイデア役', emoji: '💡', catch: '新しい風を吹き込む人',
+    desc: 'チームが同じやり方に固まりそうなとき、別の角度から案を出せます。企画・改善・ブレストの起点です。',
+    tip: '思いつきに聞こえても頭ごなしに否定せず、まず「面白いね、どう実現する？」まで聞くと本領を発揮します。' },
+  'O-': { name: '現実チェック役', emoji: '🧭', catch: '地に足の番人',
+    desc: '実績のあるやり方・確実な手順を大事にします。アイデア倒れや暴走を防ぐ最後の砦です。',
+    tip: '新しい提案を通したいときは、過去の実例や確かな根拠を添えて話すと協力を得やすいです。' },
+  'C+': { name: '段取り役', emoji: '📋', catch: '計画と締切の番人',
+    desc: '期限・手順・抜け漏れを自然に管理できます。この人がいるだけでチームの実行力が上がります。',
+    tip: '急な予定変更が続くと消耗します。変更は早めに・理由つきで伝えるのがコツです。' },
+  'C-': { name: '柔軟対応役', emoji: '🌊', catch: '臨機応変の達人',
+    desc: '想定外の事態や急な変更に強く、計画が崩れた場面でもチームを止めません。',
+    tip: '細かい手順で縛るより、ゴールと期限だけ渡して任せると力を発揮します。' },
+  'E+': { name: '盛り上げ役', emoji: '🔥', catch: '場の熱量スイッチ',
+    desc: '会話の口火を切り、チームの空気を温めます。発表や交渉など「チームの顔」にも向いています。',
+    tip: '反応が薄いと調子が出ないタイプ。相づちやリアクションを返すだけで力が引き出せます。' },
+  'E-': { name: '集中職人役', emoji: '🔬', catch: '静かな推進力',
+    desc: '一人で深く集中して質の高い仕事を仕上げます。数少ない発言に本質が詰まっていることが多い人です。',
+    tip: '発言が少なくても不満とは限りません。「どう思う？」と名指しで振ると良い意見が出てきます。' },
+  'A+': { name: '調整役', emoji: '🕊️', catch: 'チームの潤滑油',
+    desc: '対立の間に立ち、みんなの意見を汲んで場を収められます。チームの居心地はこの人が作っています。',
+    tip: '不満を飲み込みがちなので、「あなた自身はどうしたい？」とときどき聞いてあげてください。' },
+  'A-': { name: 'ご意見番', emoji: '⚖️', catch: '忖度しないブレーキ',
+    desc: '空気に流されず、おかしいことをおかしいと言えます。全員賛成のときの見落としを防ぐ貴重な存在です。',
+    tip: '厳しい指摘は攻撃ではなく品質チェック。内容だけ受け取ると、チームの精度が上がります。' },
+  'N+': { name: 'センサー役', emoji: '📡', catch: 'リスクの早期警報',
+    desc: '小さな異変・空気の変化・危ういサインに誰より早く気づきます。この人の「なんか気になる」はチームの保険です。',
+    tip: '心配ごとを口にしたら「考えすぎ」と流さず、一度具体的に検討を。安心できる場ほど力を発揮します。' },
+  'N-': { name: '安定役', emoji: '🗿', catch: '動じない岩',
+    desc: 'トラブルや修羅場でも淡々と対処できます。チームが浮き足立ったときの心の支えです。',
+    tip: '平気そうに見えても負荷はかかっています。「大丈夫？」の一声は無駄になりません。' },
+  'BAL': { name: 'バランサー', emoji: '🎯', catch: 'チームの重心',
+    desc: 'チームの平均に近い万能型。どの役割も部分的に補える調整弁で、みんなの共通言語になれます。',
+    tip: '目立ちにくいですが、この人の「普通の感覚」はチームの物差し。迷ったら意見を聞いてみてください。' },
+};
+
+// 足りない機能の処方箋
+const FUNCTION_RX = {
+  O: '新しい案が出にくい組成です。会議の最初に「あえて突飛な案を出す時間」を作る、外部の事例を持ち込む係を決める、などで補えます。',
+  C: '締切と手順の管理が抜けやすい組成です。人の頑張りではなく、共有カレンダーやリマインダーなど道具に任せるのが近道です。',
+  E: '静かなチームです。発表や交渉の場面では、その場の勢いより資料の完成度で勝負する作戦が向いています。',
+  A: '率直な意見がぶつかりやすい組成です。「批判は案に向ける・人には向けない」など、話し合いのルールを最初に決めておくと安心です。',
+  N: '楽観に傾きやすい組成です。公開前・提出前のチェックリストなど、機械的な見直しの仕組みを一つ入れておくと強くなります。',
+};
+
+const FUNCTION_INFO = {
+  O: { label: '発想', emoji: '💡' },
+  C: { label: '段取り', emoji: '📋' },
+  E: { label: '熱量', emoji: '🔥' },
+  A: { label: '調整', emoji: '🕊️' },
+  N: { label: '見張り', emoji: '📡' },
+};
+
+// ===== 役割割り当て（チーム内の相対比較・個性の強い人から確定・重複はなるべく回避） =====
+function assignRoles(members, avg) {
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  const candsOf = (m, base) => factors.map(f => {
+    const diff = m.scores[f] - (base ? base[f] : 3);
+    return { key: f + (diff >= 0 ? '+' : '-'), abs: Math.abs(diff) };
+  }).sort((a, b) => b.abs - a.abs);
+
+  const prepared = members.map(m => ({ m, cands: candsOf(m, avg) }));
+  // 全員がチーム平均に近い（似た者チーム）→ 絶対値（標準の3）基準に切り替え
+  const isFlat = prepared.every(p => p.cands[0].abs < 0.5);
+  if (isFlat) prepared.forEach(p => { p.cands = candsOf(p.m, null); });
+
+  const taken = new Set();
+  const roleOf = {};
+  prepared.slice().sort((a, b) => b.cands[0].abs - a.cands[0].abs).forEach(p => {
+    const meaningful = p.cands.filter(c => c.abs >= 0.3);
+    if (meaningful.length === 0) { roleOf[p.m.id] = 'BAL'; return; }
+    const free = meaningful.find(c => !taken.has(c.key));
+    const pick = free || meaningful[0];
+    roleOf[p.m.id] = pick.key;
+    taken.add(pick.key);
+  });
+  return { roleOf, isFlat };
+}
+
+// ===== 役割カードHTML生成 =====
+function genRoleCardsHtml(members, avg) {
+  const { roleOf, isFlat } = assignRoles(members, avg);
+  const cards = members.map(m => {
+    const role = TEAM_ROLES[roleOf[m.id]];
+    return `
+      <div class="position-member">
+        <div class="role-head">
+          <div class="role-icon"><img src="images/characters/marume243/${m.gender}/${toImgCode(m.code)}.webp" alt="" onerror="this.style.display='none'"></div>
+          <div>
+            <div class="position-name">${m.name}</div>
+            <div class="role-name">${role.emoji} ${role.name}<span class="role-catch">${role.catch}</span></div>
+          </div>
+        </div>
+        <div class="position-advice">${role.desc}</div>
+        <div class="position-tip-area"><div class="position-tip">🤝 この人への接し方：${role.tip}</div></div>
+      </div>
+    `;
+  }).join('');
+  const flatNote = isFlat
+    ? `<p class="roles-note" style="margin-top:10px;">このチームは全員の性格が似ています（似た者チーム）。居心地は良い反面、視点が重なりやすいので、外の意見を聞く機会を意識的に作るのがおすすめです。</p>`
+    : '';
+  return `
+    <div class="position-card">
+      <p class="position-title">🧩 このチームでの役割</p>
+      <p class="roles-note">チーム内の相対的な比較で決まります。同じ人でも、チームが変われば役割も変わります。性格に優劣はありません。</p>
+      ${cards}
+      ${flatNote}
+    </div>
+  `;
 }
 
 // ===== 因子コメント生成 =====
@@ -1444,37 +1587,39 @@ function genFactorComments(avg, variance) {
 }
 
 // ===== 総合コメント生成 =====
-function genSummary(score, avg, variance, bestPair, worstPair, n) {
+function genSummary(score, avg, variance, bestPair, worstPair, n, coverage) {
   let rank, rankClass, summaryText;
 
   if (score >= 80) {
     rank = 'S'; rankClass = 'rank-s';
-    summaryText = '非常に高いチーム相性です。メンバーの強みがうまく補完し合っており、協力して成果を出せる理想的な組成です。';
+    summaryText = '役割と相性がそろった、非常にバランスの良いチームです。互いの違いがそのまま強みとして働く理想的な組成です。';
   } else if (score >= 60) {
     rank = 'A'; rankClass = 'rank-a';
-    summaryText = '良好なチーム相性です。お互いの違いを活かしながら、効果的に連携できるチームです。';
+    summaryText = '良好なチームバランスです。それぞれの役割の違いを意識して使い分ければ、さらに力を発揮できます。';
   } else if (score >= 40) {
     rank = 'B'; rankClass = 'rank-b';
-    summaryText = '普通のチーム相性です。工夫次第で良いチームになります。いくつか注意点を意識しましょう。';
+    summaryText = '伸びしろのあるチームです。足りない機能を道具やルールで補えば、十分に戦えます。';
   } else {
     rank = 'C'; rankClass = 'rank-c';
-    summaryText = '挑戦的なチーム相性です。個性の違いが大きい分、衝突リスクもありますが、工夫次第で強力なチームになります。';
+    summaryText = '個性の振れ幅が大きいチームです。かみ合うまで摩擦も起きやすい分、役割分担がはまったときの突破力があります。';
   }
 
-  // 強み
+  // 強み（そろっているチーム機能から）
+  const strengthLabels = {
+    O: '発想力（新しい案が出せる）', C: '段取り力（計画と実行）', E: '発信力（場の熱量と対外の顔）',
+    A: '調整力（チームの和）', N: '危機察知力（見落としに早く気づく）'
+  };
   const strengths = [];
-  if (avg.C >= 3.5) strengths.push('計画性と実行力');
-  if (avg.A >= 3.5) strengths.push('チームの和と協力関係');
-  if (variance.O >= 0.8) strengths.push('多様な視点からの創造性');
-  if (avg.N <= 2.5) strengths.push('精神的な安定性');
+  ['O', 'C', 'E', 'A', 'N'].forEach(f => {
+    if (coverage && coverage[f] === 2) strengths.push(strengthLabels[f]);
+  });
 
   // 注意点
   const cautions = [];
-  if (variance.C >= 1.0) cautions.push('生活リズムや計画性の違い');
-  if (avg.N >= 3.5) cautions.push('ストレスによる感情的な対立');
-  if (avg.A <= 2.5) cautions.push('意見の衝突と意思決定の遅れ');
-  if (avg.A >= 4.5) cautions.push('反対意見が出にくい傾向');
-  if (avg.C <= 2.5) cautions.push('段取りや計画の不在');
+  if (variance.C >= 1.0) cautions.push('生活リズムや計画性の違い（締切の認識合わせを）');
+  if (avg.A <= 2.5) cautions.push('率直な意見がぶつかりやすい（話し合いのルールを最初に）');
+  if (avg.A >= 4.5) cautions.push('反対意見が出にくい傾向（あえての反論役を）');
+  if (avg.N >= 3.5) cautions.push('疲れやストレスがたまりやすい（定期的な振り返り・休憩ルールを）');
   if (n >= 6) cautions.push(`人数が多い（${n}人）ためコミュニケーションコスト増加`);
 
   return { rank, rankClass, summaryText, strengths, cautions };
@@ -1483,7 +1628,7 @@ function genSummary(score, avg, variance, bestPair, worstPair, n) {
 // ===== 結果描画 =====
 function renderResults() {
   const selected = allMembers.filter(m => selectedIds.has(m.id));
-  const { score, avg, variance, min, max } = calcTeamScore(selected);
+  const { score, avg, variance, min, max, coverage, topK } = calcTeamScore(selected);
   const comments = genFactorComments(avg, variance);
 
   // 全ペア計算
@@ -1497,7 +1642,7 @@ function renderResults() {
     }
   }
 
-  const summary = genSummary(score, avg, variance, bestPair, worstPair, selected.length);
+  const summary = genSummary(score, avg, variance, bestPair, worstPair, selected.length, coverage);
 
   const teamName = document.getElementById('teamNameInput').value.trim();
   const container = document.getElementById('resultSection');
@@ -1510,10 +1655,10 @@ function renderResults() {
     if (worstPair && scoreDiff >= 15) {
       worstSectionHtml = `
         <div class="pair-section">
-          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 注意が必要なペア</p>
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 翻訳が必要なペア</p>
           <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
           <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
-          <p class="pair-comment">この2人の相性スコアがチーム内で最も低いです。コミュニケーション方法を工夫し、互いの違いを理解することがチーム改善のポイントです。</p>
+          <p class="pair-comment">チーム内でものの見方が最も違う2人です。悪い組み合わせではなく、言い方の「翻訳」が要るだけ。上の役割カードの「接し方」をお互いに読むところから始めるのがおすすめです。</p>
         </div>
       `;
     } else {
@@ -1536,6 +1681,24 @@ function renderResults() {
       </div>
     `;
   }
+
+  // チーム機能バランス（ランプ表示）
+  const lampsHtml = ['O','C','E','A','N'].map(f => {
+    const st = coverage[f] === 2 ? 'on' : coverage[f] === 1 ? 'half' : 'off';
+    const stText = coverage[f] === 2 ? 'そろってる' : coverage[f] === 1 ? 'ほどほど' : '不在';
+    return `<div class="balance-lamp ${st}"><span class="bl-emoji">${FUNCTION_INFO[f].emoji}</span><span class="bl-label">${FUNCTION_INFO[f].label}</span><span class="bl-state">${stText}</span></div>`;
+  }).join('');
+  const balanceNote = topK < 5
+    ? `<p class="balance-note">※ ${selected.length}人チームなので、5つの機能のうち得意な${topK}つがそろえば満点として採点しています。</p>`
+    : '';
+
+  // 足りない機能の処方箋
+  const uncovered = ['O','C','E','A','N'].filter(f => coverage[f] === 0);
+  const rxHtml = uncovered.length > 0 ? `
+    <div class="rx-list">
+      ${uncovered.map(f => `<div class="rx-item"><b>${FUNCTION_INFO[f].emoji} ${FUNCTION_INFO[f].label}が不在：</b>${FUNCTION_RX[f]}</div>`).join('')}
+    </div>
+  ` : '';
 
   // 強み・注意点
   let strengthsHtml = '';
@@ -1583,7 +1746,16 @@ function renderResults() {
           `;
         }).join('')}
       </div>
+      <div class="balance-wrap">
+        <p class="balance-title">チーム機能のそろい方</p>
+        <div class="balance-lamps">${lampsHtml}</div>
+        ${balanceNote}
+      </div>
+      <p class="team-disclaimer">※ ビッグファイブに基づく整理です。性格に優劣はなく、「そろい方」を見ています。</p>
     </div>
+
+    <!-- チームでの役割 -->
+    ${genRoleCardsHtml(selected, avg)}
 
     <!-- 因子コメント -->
     <div class="factor-comments">
@@ -1605,6 +1777,7 @@ function renderResults() {
       <p class="summary-text">${summary.summaryText}</p>
       ${strengthsHtml}
       ${cautionsHtml}
+      ${rxHtml}
     </div>
 
     <!-- ポジションアドバイス -->
@@ -1661,7 +1834,7 @@ function renderResults() {
     if (!bfmActive) {
       const bonus = calcEqDtBonus(bfmData);
       const newScore = Math.max(0, Math.min(100, score + bonus));
-      const newSummary = genSummary(newScore, avg, variance, bestPair, worstPair, selected.length);
+      const newSummary = genSummary(newScore, avg, variance, bestPair, worstPair, selected.length, coverage);
       animateScoreValue(score, newScore);
       updateRankDisplay(newSummary.rank, newSummary.rankClass);
       const warnings = genPairWarnings(bfmData);
@@ -2090,6 +2263,13 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
 
 // ===== イベント =====
 document.getElementById('analyzeBtn').addEventListener('click', () => {
+  try {
+    if (localStorage.getItem('dev_nocount') !== '1') {
+      var u = 'https://bigfive.jr-genius.jp/count/hit?e=team_analyze';
+      if (navigator.sendBeacon) navigator.sendBeacon(u);
+      else if (window.fetch) fetch(u, { method: 'POST', keepalive: true }).catch(function(){});
+    }
+  } catch(e) {}
   renderResults();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
