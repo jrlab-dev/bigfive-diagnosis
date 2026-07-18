@@ -1802,4 +1802,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 感情の起伏が激しい人へ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kanjo-kifuku-hageshii.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
