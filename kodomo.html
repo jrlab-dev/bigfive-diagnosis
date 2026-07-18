@@ -490,6 +490,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 
 <script src="image-resolver.js"></script>
 <script src="hidden_characters.js"></script>
+<script src="rarity.js"></script>
 <script src="album.js"></script>
 <script src="unlock.js"></script>
 <script src="unlock-banner.js"></script>
@@ -884,7 +885,7 @@ function showResult(scOverride) {
   const charImg = document.getElementById('charImg');
   function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
   const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
-  charImg.src = `images/characters/${childGender}/${imgCode}.webp`;
+  charImg.src = `images/characters/marume243/${childGender}/${imgCode}.webp`;
   charImg.onerror = () => { charArea.style.display = 'none'; };
   charImg.onload = () => { charArea.style.display = 'flex'; };
   document.getElementById('charLabel').textContent = `${childName}の推定キャラクター`;

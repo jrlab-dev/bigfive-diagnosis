@@ -56,8 +56,8 @@
     // 10問版：r0固定
     if (version === '10') return 'r0';
 
-    // オリジナルアニメキャラ上書き
-    var ov = ANIME_RARITY_OVERRIDE[code];
+    // オリジナルアニメキャラ上書き（rarity.js未読込のページでも落ちないようガード）
+    var ov = (typeof ANIME_RARITY_OVERRIDE !== 'undefined') ? ANIME_RARITY_OVERRIDE[code] : null;
     if (ov) {
       if (gender && ov[gender]) return ov[gender];
       return ov.default;

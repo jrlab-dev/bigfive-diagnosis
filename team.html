@@ -1035,6 +1035,7 @@ function formatDate(isoString) {
 // ===== URLの共有データを解析 =====
 let sharedMember = null;
 let viewTeamData = null;
+let pickTarget = null;
 (function parseShareParam() {
   try {
     // マイページから保存済みチームを表示
@@ -1061,6 +1062,11 @@ let viewTeamData = null;
         };
       }
       return;
+    }
+    // あの人診断の結果画面から来た場合（2026-07-19追加）：?pick=コード&pn=名前
+    const pickRaw = new URLSearchParams(location.search).get('pick');
+    if (pickRaw && /^[1-5]{5}$/.test(pickRaw)) {
+      pickTarget = { code: pickRaw, name: new URLSearchParams(location.search).get('pn') || '' };
     }
     // 共有リンクからのメンバー
     const raw = new URLSearchParams(location.search).get('share');
@@ -1172,6 +1178,28 @@ function renderMembers() {
     selectedIds.add('shared_0');
     const firstMy = allMembers.find(m => m.type === 'my');
     if (firstMy) selectedIds.add(firstMy.id);
+  }
+
+  // あの人診断から来た場合、その人＋自分を初回だけ自動選択（2026-07-19追加）
+  if (pickTarget && selectedIds.size === 0) {
+    const cand = allMembers.find(m => m.type === 'other' && m.code === pickTarget.code && (!pickTarget.name || m.name === pickTarget.name))
+      || allMembers.find(m => m.type === 'other' && m.code === pickTarget.code);
+    if (cand) {
+      selectedIds.add(cand.id);
+      const firstMy = allMembers.find(m => m.type === 'my');
+      if (firstMy) selectedIds.add(firstMy.id);
+      if (!document.getElementById('pickBanner')) {
+        const b = document.createElement('div');
+        b.id = 'pickBanner';
+        b.className = 'shared-banner';
+        const msg = firstMy
+          ? `<strong>${cand.name}</strong>さんとあなたを選択済みです。<br>下の「チーム相性を診断する」を押すと役割カードが出ます。`
+          : `<strong>${cand.name}</strong>さんを選択済みです。<br>もう1人メンバーを選ぶと診断できます。`;
+        b.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${msg}`;
+        intro.after(b);
+      }
+    }
+    pickTarget = null;
   }
 
   container.innerHTML = allMembers.map(m => {

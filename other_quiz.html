@@ -710,6 +710,7 @@
   <div class="traits-card" id="traitsCard"></div>
   <div class="compat-card" id="compatCard"></div>
   <div class="advice-card" id="adviceCard" style="display:none;"></div>
+  <div class="compat-prompt" id="teamPromptCard" style="display:none;"></div>
   <div class="desc-card" id="descCard"></div>
   <div id="facetCardWrap" style="display:none;width:100%;">
     <button class="facet-toggle-btn" id="facetToggleBtn">
@@ -1399,6 +1400,7 @@ function showResult() {
     }
   } catch (e) {}
   document.getElementById('badge120').style.display = 'none';
+  document.getElementById('teamPromptCard').style.display = 'none';
   if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('other');
   const sc = calcScores();
   const cfg = relConfig[personRel];
@@ -1409,7 +1411,7 @@ function showResult() {
   const charLabel = document.getElementById('charNameLabel');
   function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
   const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
-  charImg.src = `images/characters/${personGender}/${imgCode}.webp`;
+  charImg.src = `images/characters/marume243/${personGender}/${imgCode}.webp`;
   charImg.onerror = () => { charArea.style.display = 'none'; };
   charImg.onload = () => { charArea.style.display = 'flex'; };
   charLabel.textContent = `${personName}の推定キャラクター`;
@@ -1667,6 +1669,33 @@ function showResult() {
     addOtherResultToAlbumAndUnlock(window.currentOtherResult);
   }
   deleteDraft();
+
+  // チーム相性（役割カード）への導線（2026-07-19追加・自分の結果がある場合のみ表示）
+  const teamPrompt = document.getElementById('teamPromptCard');
+  if (myScores && window.currentOtherResult) {
+    const tr = window.currentOtherResult;
+    // チーム相性が未解放（カード6枚未満）の人には正直に解放条件を添える
+    const teamUnlocked = (typeof isUnlocked !== 'function') || isUnlocked('team');
+    const cardsNow = (typeof getCardCount === 'function') ? getCardCount() : 0;
+    const sub = teamUnlocked
+      ? `2人のチーム相性スコアと、それぞれの<strong>役割カード</strong>が見られます`
+      : `2人のチーム相性スコアと役割カードが見られる機能です<br>（カード<strong>6枚</strong>で解放・いま${cardsNow}枚）`;
+    const btnLabel = teamUnlocked ? 'チーム相性と役割カードを見る →' : 'チーム相性診断を見に行く →';
+    teamPrompt.style.display = 'block';
+    teamPrompt.innerHTML = `
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${personName}さんとチームを組むと？</p>
+      <p class="compat-prompt-sub">${sub}</p>
+      <a href="team.html?pick=${tr.code}&pn=${encodeURIComponent(tr.name)}" class="compat-prompt-btn" id="teamPromptBtn">${btnLabel}</a>`;
+    document.getElementById('teamPromptBtn').addEventListener('click', () => {
+      try {
+        if (localStorage.getItem('dev_nocount') !== '1') {
+          const u = 'https://bigfive.jr-genius.jp/count/hit?e=other_team_click';
+          if (navigator.sendBeacon) navigator.sendBeacon(u);
+          else if (window.fetch) fetch(u, { method: 'POST', keepalive: true }).catch(function(){});
+        }
+      } catch (e) {}
+    });
+  }
 
   // 保存済みチェック
   checkAlreadySaved();
@@ -1966,6 +1995,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 </script>
 <script src="image-resolver.js"></script>
 <script src="hidden_characters.js"></script>
+<script src="rarity.js"></script>
 <script src="album.js"></script>
 <script src="compat.js"></script>
 <script src="advice.js"></script>
