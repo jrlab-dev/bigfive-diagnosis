@@ -1809,4 +1809,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 口が軽い人の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kuchi-karui.html</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
