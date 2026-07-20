@@ -1824,4 +1824,12 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- すぐ泣いてしまう大人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sugu-naku.html</loc>
+  <lastmod>2026-07-21</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
