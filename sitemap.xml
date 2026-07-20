@@ -1816,4 +1816,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+<!-- ドタキャンする人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/dotakyan-hito.html</loc>
+  <lastmod>2026-07-21</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
