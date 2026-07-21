@@ -1864,4 +1864,12 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- あの人の本音がわからない -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/ano-hito-honne-yomitai.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
