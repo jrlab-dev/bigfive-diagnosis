@@ -1840,4 +1840,28 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- メンタルが弱い・打たれ弱い人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mental-yowai.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 逃げ癖がある人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/nige-guse.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- お節介な人・世話を焼きすぎる人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sewayaki-osekkai.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
