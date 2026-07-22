@@ -1880,4 +1880,12 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- 人の目が気になる性格 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-no-me-kininaru.html</loc>
+  <lastmod>2026-07-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
