@@ -142,6 +142,11 @@ function renderGate(featureId) {
     backLink: '#64748b'
   };
 
+  var teamNote = '';
+  if (featureId === 'team') {
+    teamNote = '<p style="color:' + c.text + ';font-size:0.8rem;margin:0 0 20px 0;line-height:1.6;background:' + c.boxBg + ';border:1px solid ' + c.boxBorder + ';border-radius:10px;padding:12px 14px;text-align:left;">💡 あの人診断をすると、カードが増えるうえに、そのまま「チーム相性診断」のメンバーとしても使えるようになります。</p>';
+  }
+
   document.body.style.overflow = 'hidden';
   var gate = document.createElement('div');
   gate.id = 'unlock-gate';
@@ -157,10 +162,12 @@ function renderGate(featureId) {
     + '<div style="border-top:1px solid ' + c.boxBorder + ';padding-top:12px;">'
     + '<p style="color:' + c.sub + ';font-size:0.8rem;margin:0 0 6px 0;font-weight:bold;">カードの増やし方</p>'
     + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 4px 0;line-height:1.6;">・ビッグファイブ診断を受ける（自分・あの人どちらでも）</p>'
+    + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 4px 0;line-height:1.6;">・ガチャ（gacha.html）には最初から使えるコインが3枚あります。回すだけでカードが増えます</p>'
     + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 8px 0;line-height:1.6;">・友達から診断結果をシェアしてもらう</p>'
-    + '<p style="color:' + c.muted + ';font-size:0.75rem;margin:0;line-height:1.6;opacity:0.8;">※ カードは8,000種類以上。同じカードが出た場合のみ追加されません</p>'
+    + '<p style="color:' + c.muted + ';font-size:0.75rem;margin:0;line-height:1.6;opacity:0.8;">※ カードは6,766種類以上。同じカードが出た場合のみ追加されません</p>'
     + '</div>'
     + '</div>'
+    + teamNote
     + '<div style="margin-bottom:16px;">'
     + '<div style="background:' + c.barBg + ';border-radius:999px;height:8px;width:100%;">'
     + '<div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:' + pct + '%;"></div>'
