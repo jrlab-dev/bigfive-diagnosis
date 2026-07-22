@@ -1872,4 +1872,12 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- めんどくさがりを直したい -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mendokusagari.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
