@@ -164,7 +164,7 @@ function renderGate(featureId) {
     + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 4px 0;line-height:1.6;">・ビッグファイブ診断を受ける（自分・あの人どちらでも）</p>'
     + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 4px 0;line-height:1.6;">・ガチャ（gacha.html）には最初から使えるコインが3枚あります。回すだけでカードが増えます</p>'
     + '<p style="color:' + c.muted + ';font-size:0.8rem;margin:0 0 8px 0;line-height:1.6;">・友達から診断結果をシェアしてもらう</p>'
-    + '<p style="color:' + c.muted + ';font-size:0.75rem;margin:0;line-height:1.6;opacity:0.8;">※ カードは8,000種類以上。同じカードが出た場合のみ追加されません</p>'
+    + '<p style="color:' + c.muted + ';font-size:0.75rem;margin:0;line-height:1.6;opacity:0.8;">※ カードは6,766種類以上。同じカードが出た場合のみ追加されません</p>'
     + '</div>'
     + '</div>'
     + teamNote
