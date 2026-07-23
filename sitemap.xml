@@ -1896,4 +1896,20 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<!-- 人と比べてしまって疲れる心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hikaku-shite-shimau.html</loc>
+  <lastmod>2026-07-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 自己肯定感が低い人の特徴と原因 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/jiko-koteikan-hikui.html</loc>
+  <lastmod>2026-07-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
