@@ -1920,4 +1920,18 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+<!-- ビッグファイブ診断結果の見方 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/bigfive-kekka-mikata.html</loc>
+  <lastmod>2026-07-26</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<!-- HSS型HSPとは -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hss-gata-hsp.html</loc>
+  <lastmod>2026-07-26</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
