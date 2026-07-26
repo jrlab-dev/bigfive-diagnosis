@@ -621,6 +621,32 @@
     background: linear-gradient(135deg, var(--purple), var(--pink));
   }
 
+  /* よくある質問（2026-07-26追加）
+     狙い＝「無料」の情報が head のtitle/descriptionだけで本文に無く、
+     「ビッグファイブ診断 無料」が13.9位に沈んでいたため本文に持たせる */
+  .faq-home { max-width: 760px; margin: 0 auto; padding: 0 20px 72px; }
+  .faq-home-list { display: grid; gap: 14px; }
+  .faq-home-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 20px 22px; backdrop-filter: blur(8px);
+  }
+  .faq-home-q {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    margin: 0 0 10px; line-height: 1.6;
+  }
+  .faq-home-a {
+    font-size: 13.5px; color: var(--dim); line-height: 1.85; margin: 0;
+  }
+  .faq-home-a strong { color: var(--text); font-weight: 700; }
+  .faq-home-more { text-align: center; margin: 22px 0 0; font-size: 13px; }
+  .faq-home-more a { color: var(--purple); text-decoration: none; }
+  .faq-home-more a:hover { text-decoration: underline; }
+  @media(max-width:600px){
+    .faq-home { padding: 0 16px 56px; }
+    .faq-home-item { padding: 18px; }
+    .faq-home-q { font-size: 14.5px; }
+  }
+
   @media(max-width:600px){
     .features { padding: 0 16px 60px }
     .feature-cards { grid-template-columns: 1fr 1fr; gap: 12px }
@@ -1023,6 +1049,61 @@
       </section>
   </div>
   </div>
+
+  <!-- よくある質問（2026-07-26追加・faq.htmlとは質問文を変えて重複を避けている） -->
+  <section class="faq-home">
+    <h2 class="proof-label">よくある質問</h2>
+    <div class="faq-home-list">
+      <div class="faq-home-item">
+        <h3 class="faq-home-q">ビッグファイブ診断は本当に無料で使えますか？</h3>
+        <p class="faq-home-a"><strong>完全無料です。</strong>10問版・30問版・120問版のすべての診断、あの人の性格診断、チーム相性診断、キャラクター図鑑まで、料金は一切かかりません。途中で有料プランに切り替わることも、追加料金が発生することもありません。</p>
+      </div>
+      <div class="faq-home-item">
+        <h3 class="faq-home-q">会員登録やログインは必要ですか？</h3>
+        <p class="faq-home-a"><strong>登録もログインも不要です。</strong>メールアドレスの入力やアプリのインストールも要りません。このページで質問に答えるだけで、すぐに結果が出ます。診断結果はお使いの端末の中だけに保存されるので、こちらに個人情報が届くことはありません。</p>
+      </div>
+      <div class="faq-home-item">
+        <h3 class="faq-home-q">無料の診断と、お金を払う性格検査では何が違いますか？</h3>
+        <p class="faq-home-a">有料の性格検査は、心理職による解釈や結果の証明書が付くため数千円かかります。当サイトは同じビッグファイブ（5因子）理論にもとづいて傾向を測る<strong>自己理解のための無料ツール</strong>です。医療の判断や採用選考の材料には使えませんが、120問版では5つの因子をさらに30の側面まで分けて読めるようにしています。</p>
+      </div>
+    </div>
+    <p class="faq-home-more"><a href="faq.html">ほかの質問も見る（診断の精度・MBTIとの違い・プライバシーなど）</a></p>
+  </section>
+
+  <!-- 上のよくある質問の構造化データ（検索結果にQ&Aが展開される可能性・2026-07-26追加）
+       ※faq.htmlにも別のFAQPageがあるが、質問文・回答が異なるため重複ではない -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ビッグファイブ診断は本当に無料で使えますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "完全無料です。10問版・30問版・120問版のすべての診断、あの人の性格診断、チーム相性診断、キャラクター図鑑まで、料金は一切かかりません。途中で有料プランに切り替わることも、追加料金が発生することもありません。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "会員登録やログインは必要ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "登録もログインも不要です。メールアドレスの入力やアプリのインストールも要りません。このページで質問に答えるだけで、すぐに結果が出ます。診断結果はお使いの端末の中だけに保存されるので、こちらに個人情報が届くことはありません。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "無料の診断と、お金を払う性格検査では何が違いますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "有料の性格検査は、心理職による解釈や結果の証明書が付くため数千円かかります。当サイトは同じビッグファイブ（5因子）理論にもとづいて傾向を測る自己理解のための無料ツールです。医療の判断や採用選考の材料には使えませんが、120問版では5つの因子をさらに30の側面まで分けて読めるようにしています。"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- あの人分析 デモモーダル -->
   <div class="demo-overlay" id="demoOverlay">
