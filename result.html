@@ -111,9 +111,49 @@
     perspective: 1000px;
     perspective-origin: 50% 50%;
   }
+  /* 傾き担当（外）— JSが毎フレーム rotateX/rotateY を書き込む */
+  .card-tilt {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  /* 回転担当（内）— 傾きと同じ要素に混ぜると崩れるので役割を分ける。
+     角度はJSが毎コマ書き込む（光の演出を角度に連動させるため transition は使わない） */
+  .card-flip {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+  }
+  /* 回転中に面を横切る光（回転角に合わせてJSが位置と強さを動かす）
+     ※これが無いと「光が何も反応しない固い板」に見える */
+  .spin-glare {
+    position: absolute; inset: -15% -25%;
+    z-index: 20; pointer-events: none; opacity: 0;
+    transform: translateX(-40%);
+    mix-blend-mode: screen;
+    /* 幅を広げると「面全体が白く霞む」だけになるので、細い帯にする */
+    background: linear-gradient(100deg,
+      transparent 44%,
+      rgba(255,255,255,0.05) 47%,
+      rgba(255,246,224,0.38) 49.2%,
+      rgba(255,255,255,0.92) 50%,
+      rgba(255,246,224,0.38) 50.8%,
+      rgba(255,255,255,0.05) 53%,
+      transparent 56%);
+  }
+  /* カード裏面（ガチャの裏面画像を流用・画像はJSが先読み後にセット） */
+  .card-back {
+    position: absolute; inset: 0;
+    border-radius: 8px; overflow: hidden;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    background: #0a0a0a center/cover no-repeat;
+    border: 2px solid rgba(124,58,237,0.5);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
   .card {
     position: relative; width: 100%; height: 100%;
     border-radius: 8px; overflow: hidden;
+    backface-visibility: hidden;
     display: flex; flex-direction: column; align-items: center;
     padding: 24px 20px 20px;
     box-shadow:
@@ -979,6 +1019,9 @@
 
   <!-- キャラクターカード -->
   <div class="card-wrapper">
+   <!-- 傾き（外）と回転（内）は別の要素が担当する。同じ要素にまとめると崩れる -->
+   <div class="card-tilt" id="cardTilt">
+    <div class="card-flip" id="cardFlip">
     <div class="card" id="card">
       <div class="card-bg"></div>
       <div class="stars" id="cardStars"></div>
@@ -989,6 +1032,7 @@
       <div class="shimmer"></div>
       <div class="glow"></div>
       <div class="edge-light" id="edgeLight"></div>
+      <div class="spin-glare" id="spinGlareFront"></div>
 
       <h1 class="type-name" id="typeName">読み込み中...</h1>
       <div class="type-code" id="typeCode"></div>
@@ -1002,6 +1046,11 @@
         <img class="char-img" id="charImg" src="" alt="キャラクター">
       </div>
     </div>
+    <div class="card-back" id="cardBack" aria-hidden="true">
+      <div class="spin-glare" id="spinGlareBack"></div>
+    </div>
+    </div><!-- /.card-flip -->
+   </div><!-- /.card-tilt -->
   </div>
 
   <!-- 特性詳細カード -->
@@ -3340,29 +3389,63 @@ if (isOtherMode) {
   }, { passive: false });
   wrapper.addEventListener('touchend', () => { isInteracting = false; tRx = 0; tRy = 0; });
 
-  (function animTilt() {
-    const targetRx = isInteracting ? tRx : hasGyroTilt ? gyroTRx : tRx;
-    const targetRy = isInteracting ? tRy : hasGyroTilt ? gyroTRy : tRy;
-    cRx = lerp(cRx, targetRx, lerpSpeed);
-    cRy = lerp(cRy, targetRy, lerpSpeed);
-    card.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
+  // 傾きは .card-tilt に書き込む（回転は .card-flip が担当・混ぜると崩れる）
+  const tiltEl = document.getElementById('cardTilt') || card;
+  const flipEl = document.getElementById('cardFlip');
 
-    // --- 1. エッジハイライト（マウス位置に光の反射）---
+  (function animTilt() {
+    // 回転中はマウス／ジャイロ入力を無視し、わずかに上向きを保つ。
+    // 完全な真横を通ると厚みのない紙が一瞬消えて安っぽく見えるため
+    const sp = window.cardSpinState;
+    const flipping = flipEl && flipEl.classList.contains('flipping');
+    // 揺れに入ったら上下も逆位相で振る（行き過ぎでは下、跳ね返りでは上を向く）。
+    // 跳ね返り側は振れ幅が小さいので係数を上げて、はっきり上を向かせる
+    const wob      = sp && sp.wobble ? sp.wobbleDeg : null;
+    const flipRx   = wob === null ? -7 : (wob > 0 ? -wob * 0.85 : -wob * 2.1);
+    const targetRx = flipping ? flipRx : (isInteracting ? tRx : hasGyroTilt ? gyroTRx : tRx);
+    const targetRy = flipping ?  0 : (isInteracting ? tRy : hasGyroTilt ? gyroTRy : tRy);
+    cRx = lerp(cRx, targetRx, flipping ? 0.18 : lerpSpeed);
+    cRy = lerp(cRy, targetRy, flipping ? 0.18 : lerpSpeed);
+    tiltEl.style.transform = `rotateX(${cRx.toFixed(2)}deg) rotateY(${cRy.toFixed(2)}deg)`;
+
+    // 回転中は「面の見かけの向き」を光の計算に流す。
+    // ここを止めると光が何も反応せず、固い板が回っているだけに見える
+    let lightRy = cRy, spinLocal = -1;
+    if (sp && sp.active) {
+      // 360度を超えた揺れ（376度など）も0〜16度として扱う。
+      // ここを切り捨てると揺れている間だけ光が反応しなくなる
+      const m = ((sp.angle % 360) + 360) % 360;
+      if (m <= 90 || m >= 270) {
+        const app = m <= 90 ? m : m - 360;               // 表が見えている角度（-90〜90）
+        spinLocal = (app + 90) / 180;                    // 反射位置（真横0 → 正面0.5 → 真横1）
+        lightRy   = Math.max(-18, Math.min(18, app));    // マウスで傾けた時と同じ感度にする
+      } else {
+        lightRy = 0;                                     // 裏が見えている区間
+      }
+    }
+
+    // --- 1. エッジハイライト（マウス位置／回転角に光の反射）---
+    // 回転中もマウスで傾けた時とまったく同じ式・同じ感度で動かす。
+    // ここを別計算にすると、揺れている時だけ反射が鈍く見える
     if (edgeLight) {
-      const lx = ((-cRy / 18 + 1) / 2 * 100).toFixed(1);
-      const ly = ((-cRx / 12 + 1) / 2 * 100).toFixed(1);
-      edgeLight.style.setProperty('--ex', lx + '%');
-      edgeLight.style.setProperty('--ey', ly + '%');
-      const totalTilt = Math.abs(cRx) + Math.abs(cRy);
-      edgeLight.style.opacity = totalTilt > 0.8 ? '1' : '0';
+      if (sp && sp.active && spinLocal < 0) {
+        edgeLight.style.opacity = '0';                      // 裏が見えている区間
+      } else {
+        const lx = ((-lightRy / 18 + 1) / 2 * 100).toFixed(1);
+        const ly = (sp && sp.active) ? '34.0' : ((-cRx / 12 + 1) / 2 * 100).toFixed(1);
+        edgeLight.style.setProperty('--ex', lx + '%');
+        edgeLight.style.setProperty('--ey', ly + '%');
+        const total = Math.abs(cRx) + Math.abs(lightRy);
+        edgeLight.style.opacity = total > 0.8 ? '1' : '0';
+      }
     }
 
     // --- 2. グラデーション枠線（傾き方向に光の反射）---
     // 手前側を明るく、奥側を暗く
     const topI    = Math.max(0, -cRx / 12);
     const botI    = Math.max(0,  cRx / 12);
-    const leftI   = Math.max(0,  cRy / 18);
-    const rightI  = Math.max(0, -cRy / 18);
+    const leftI   = Math.max(0,  lightRy / 18);
+    const rightI  = Math.max(0, -lightRy / 18);
     const tB = (0.08 + topI   * 0.32).toFixed(3);
     const bB = (0.08 + botI   * 0.32).toFixed(3);
     const lB = (0.08 + leftI  * 0.32).toFixed(3);
@@ -3373,23 +3456,177 @@ if (isOtherMode) {
     card.style.borderRightColor  = `rgba(255,255,255,${rB})`;
 
     // --- 3. 厚み表現（手前側の枠を太く）---
-    const thick = (2 + (Math.abs(cRx) + Math.abs(cRy)) / 30 * 2.5).toFixed(1);
-    const thin  = Math.max(0.5, 2 - (Math.abs(cRx) + Math.abs(cRy)) / 30 * 1).toFixed(1);
+    const thick = (2 + (Math.abs(cRx) + Math.abs(lightRy)) / 30 * 3.2).toFixed(1);
+    const thin  = Math.max(0.5, 2 - (Math.abs(cRx) + Math.abs(lightRy)) / 30 * 1).toFixed(1);
     card.style.borderTopWidth    = cRx < -0.5 ? thick + 'px' : cRx > 0.5 ? thin + 'px' : '2px';
     card.style.borderBottomWidth = cRx >  0.5 ? thick + 'px' : cRx < -0.5 ? thin + 'px' : '2px';
-    card.style.borderLeftWidth   = cRy >  0.5 ? thick + 'px' : cRy < -0.5 ? thin + 'px' : '2px';
-    card.style.borderRightWidth  = cRy < -0.5 ? thick + 'px' : cRy > 0.5 ? thin + 'px' : '2px';
+    card.style.borderLeftWidth   = lightRy >  0.5 ? thick + 'px' : lightRy < -0.5 ? thin + 'px' : '2px';
+    card.style.borderRightWidth  = lightRy < -0.5 ? thick + 'px' : lightRy > 0.5 ? thin + 'px' : '2px';
 
     // --- キャラクターの影を傾きに連動（立体感演出）---
-    const sx = (cRy * 1.2).toFixed(1);
-    const sy = (cRy * 0.3 + cRx * 0.5 + 8).toFixed(1);
-    const blur = (12 + Math.abs(cRy) * 0.8 + Math.abs(cRx) * 0.5).toFixed(1);
+    const sx = (lightRy * 1.4).toFixed(1);
+    const sy = (lightRy * 0.3 + cRx * 0.5 + 8).toFixed(1);
+    const blur = (12 + Math.abs(lightRy) * 0.9 + Math.abs(cRx) * 0.5).toFixed(1);
     const shadowFilter = `drop-shadow(${sx}px ${sy}px ${blur}px rgba(0,0,0,1))`;
     const charImg = document.getElementById('charImg');
     if (charImg) charImg.style.filter = shadowFilter;
 
     requestAnimationFrame(animTilt);
   })();
+})();
+</script>
+
+<!-- ===== カード1回転（裏面を見せて表に戻る・2026-07-26） ===== -->
+<script>
+(function() {
+  const flip = document.getElementById('cardFlip');
+  const back = document.getElementById('cardBack');
+  if (!flip || !back) return;
+
+  const glareF   = document.getElementById('spinGlareFront');
+  const glareB   = document.getElementById('spinGlareBack');
+  const BACK_SRC = 'images/gacha/card-back.webp';
+  const SPIN_MS  = 1250;   // 終盤の減速と2回の揺れを見せるため少し長め
+  let spinning = false, ready = false;
+
+  // 傾きループ側がこれを読み、枠の光り方・反射・影を回転角に連動させる
+  const state = window.cardSpinState = { active: false, angle: 0 };
+
+  // 回り方（弾いたカードの手応え）
+  //   前半：勢いよく回り、終盤にぐっと減速して行き過ぎた位置まで到達
+  //   後半：そこから逆側へ振れ、もう一度小さく振れて正面に収まる（2回揺れる）
+  const PHASE = 0.52;   // ここまでが本回転、これ以降が揺れ
+  const OVER  = 16;     // 行き過ぎる角度
+  function spinAngle(t) {
+    if (t < PHASE) {
+      const u = t / PHASE;
+      return (360 + OVER) * (1 - Math.pow(1 - u, 2.6));
+    }
+    const u = (t - PHASE) / (1 - PHASE);
+    return 360 + OVER * Math.exp(-2.6 * u) * Math.cos(u * 2 * Math.PI * 1.25);
+  }
+
+  // 面を横切る光。localは0→1で左から右へ走り、面の傾きが最大のとき最も強い
+  function drawGlare(el, local) {
+    if (!el) return;
+    if (local < 0) { el.style.opacity = '0'; return; }
+    el.style.opacity   = (0.10 + 0.90 * Math.sin(local * Math.PI)).toFixed(3);
+    el.style.transform = `translateX(${(-40 + 80 * local).toFixed(1)}%)`;   // 面の左外→右外へ抜ける
+  }
+
+  function spin(dir) {
+    if (!ready || spinning) return;
+    const d = dir === -1 ? -1 : 1;             // 払った向きに回す
+    spinning = true;
+    state.active = true;
+    flip.classList.add('flipping');
+    [glareF, glareB].forEach(function(el) { if (el) el.style.transition = 'none'; });
+    const t0  = performance.now();
+    const dur = window.cardSpinMs || SPIN_MS;   // 速さの調整用（未指定なら既定値）
+
+    (function step(now) {
+      let t = (now - t0) / dur;
+      if (t > 1) t = 1;
+      const a = spinAngle(t) * d;
+      state.angle     = a;
+      state.wobble    = t >= PHASE;             // 揺れの段階に入ったか（上下の振りに使う）
+      state.wobbleDeg = t >= PHASE ? (a - 360 * d) * d : 0;   // 向きに関係なく＋が行き過ぎ側
+      flip.style.transform = `rotateY(${a.toFixed(2)}deg)`;
+
+      // 表が見えるのは0〜90度と270〜360度、裏が見えるのは90〜270度。
+      // 表側は「真横→正面→真横」を1本の動きとして通す（360度で光が瞬間移動しないように）
+      const m = ((a % 360) + 360) % 360;
+      if (m > 90 && m < 270) {
+        drawGlare(glareB, (m - 90) / 180);
+        drawGlare(glareF, -1);
+      } else {
+        drawGlare(glareF, ((m <= 90 ? m : m - 360) + 90) / 180);
+        drawGlare(glareB, -1);
+      }
+
+      if (t < 1) { requestAnimationFrame(step); return; }
+
+      // 変形を残さず元に戻す（残すと立体レイヤーが残り続ける）
+      flip.style.transform = '';
+      flip.classList.remove('flipping');
+      state.active = false; state.angle = 0; state.wobble = false; state.wobbleDeg = 0;
+      // 光は急に消さず余韻を残して引く（突然消えると不自然）
+      [glareF, glareB].forEach(function(el) {
+        if (!el) return;
+        el.style.transition = 'opacity 0.32s ease-out';
+        el.style.opacity = '0';
+      });
+      spinning = false;
+    })(performance.now());
+  }
+  window.cardSpin = spin;
+
+  // ===== 勢いよく払ったら回す（ゆっくり傾ける操作では反応させない）=====
+  // 1回きりの速い動きで判定すると「ちょっと触っただけ」で回ってしまうため、
+  // 直近0.11秒の軌跡をまとめて見て、はっきり払った時だけ回す
+  const FLICK_SPEED = 3.0;    // 窓内の平均の速さ（px/ミリ秒）。window.cardFlickSpeedで調整可
+  const FLICK_DIST  = 110;    // 窓内で横にこれだけ動いた時だけ（カード幅の約1/4）
+  const WINDOW_MS   = 110;    // 見る時間の幅
+  let hist = [];
+
+  function feed(x, y) {
+    const now = performance.now();
+    hist.push({ x: x, y: y, t: now });
+    while (hist.length > 1 && now - hist[0].t > WINDOW_MS) hist.shift();
+    if (hist.length < 3) return;                       // 点が少ない＝単発の飛びは無視
+    const a = hist[0], b = hist[hist.length - 1];
+    const dt = b.t - a.t, dx = b.x - a.x, dy = b.y - a.y;
+    if (dt < 25) return;                               // 窓が短すぎる時は信用しない
+    if (Math.abs(dx) < FLICK_DIST) return;             // 横に大きく動いていない
+    if (Math.abs(dx) < Math.abs(dy) * 1.8) return;     // 横方向がはっきり優位でない
+    if (Math.abs(dx) / dt < (window.cardFlickSpeed || FLICK_SPEED)) return;
+    hist = [];                                         // 連発しないよう履歴を切る
+    spin(dx > 0 ? 1 : -1);
+  }
+
+  const wrap = document.querySelector('.card-wrapper');
+  if (wrap) {
+    wrap.addEventListener('mousemove', function(e) { feed(e.clientX, e.clientY); });
+    wrap.addEventListener('mouseleave', function() { hist = []; });
+    wrap.addEventListener('touchmove', function(e) {
+      if (e.touches[0]) feed(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    wrap.addEventListener('touchend', function() { hist = []; });
+  }
+
+  // ===== 初回だけ自動で回す（同じ結果を見返すたびに回るとうるさい）=====
+  const SEEN_KEY = 'bigfive_card_spun';
+  const q = new URLSearchParams(location.search);
+  const seenId = (q.get('code') || q.get('type') || '33333') + (q.get('name') ? '_' + q.get('name') : '');
+
+  function spunBefore(id) {
+    try {
+      const list = JSON.parse(localStorage.getItem(SEEN_KEY) || '[]');
+      return Array.isArray(list) && list.indexOf(id) >= 0;
+    } catch (_) { return false; }
+  }
+  function markSpun(id) {
+    try {
+      const list = JSON.parse(localStorage.getItem(SEEN_KEY) || '[]');
+      if (list.indexOf(id) < 0) {
+        list.push(id);
+        while (list.length > 60) list.shift();   // 溜まりすぎないように古いものを捨てる
+        localStorage.setItem(SEEN_KEY, JSON.stringify(list));
+      }
+    } catch (_) {}
+  }
+
+  // 裏面画像を先読みしてから回す（読み込み前に回すと裏が真っ黒に見える）
+  const pre = new Image();
+  pre.onload = function() {
+    back.style.backgroundImage = `url("${BACK_SRC}")`;
+    ready = true;
+    if (!spunBefore(seenId)) {
+      markSpun(seenId);
+      setTimeout(function() { spin(1); }, 300);   // 表を一瞬見せてから回す
+    }
+  };
+  pre.src = BACK_SRC;
 })();
 </script>
 
@@ -3433,6 +3670,27 @@ if (isOtherMode) {
     gyroX = (Math.max(-45, Math.min(45, e.gamma)) + 45) / 90;
     gyroY = (Math.max(-30, Math.min(30, e.beta || 0)) + 30) / 60;
   }, { passive: true });
+
+  // 回転中はキラキラ層の光源もカードの角度で動かす。
+  // この層は「マウスが乗っている間だけ」動く作りなので、回転中は静止して反射感が消える
+  let spinPrev = null;
+  (function syncSpinLight() {
+    const sp = window.cardSpinState;
+    if (sp && sp.active) {
+      if (!spinPrev) spinPrev = { hovered: hovered, mx: mx, my: my };
+      const m = ((sp.angle % 360) + 360) % 360;
+      const app = m <= 90 ? m : (m >= 270 ? m - 360 : null);   // 表が見えている角度
+      if (app !== null) {
+        hovered = true;
+        mx = Math.max(0, Math.min(1, 0.5 + app / 36));         // ±18度でカードの端に届く
+        my = 0.34;
+      }
+    } else if (spinPrev) {
+      hovered = spinPrev.hovered; mx = spinPrev.mx; my = spinPrev.my;
+      spinPrev = null;
+    }
+    requestAnimationFrame(syncSpinLight);
+  })();
 
   // レアリティを取得
   let rarity = 'r0';
