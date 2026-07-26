@@ -1069,6 +1069,18 @@
     <a href="mypage.html#aiProfileSection" class="btn btn-primary" id="aiConsultBtnTop" style="display:block; width:100%; text-align:center; background:linear-gradient(135deg, #8b5cf6, #3b82f6);">AIに相談してみる（無料）</a>
   </div>
 
+  <!-- カード集めの導線（2026-07-26追加）
+       結果ページから図鑑にもガチャにも行けなかったため新設。
+       カードは診断のたびに増える（この直後のaddToAlbumで追加済み）ので、それを伝える役割も持つ -->
+  <div id="collectBox" style="margin:16px auto 0; max-width:480px; width:100%; padding:16px; border-radius:14px; background:linear-gradient(135deg, rgba(251,191,36,0.12), rgba(139,92,246,0.12)); border:1px solid rgba(251,191,36,0.42);">
+    <p style="margin:0 0 6px; font-size:15px; font-weight:700; text-align:center;">🎴 このカードは図鑑に保存されました</p>
+    <p style="margin:0 0 12px; font-size:12.5px; color:var(--dim); text-align:center; line-height:1.6;">診断するたびにカードが増えます（全3,125種類）。集めると新しい診断が開きます</p>
+    <div style="display:flex; gap:10px;">
+      <a href="zukan.html" style="flex:1; display:block; text-align:center; padding:12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); color:var(--text);">図鑑を見る</a>
+      <a href="gacha.html" style="flex:1; display:block; text-align:center; padding:12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#3a2e1e !important;">🪙 ガチャを引く</a>
+    </div>
+  </div>
+
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
   <div class="compatibility-card" id="compatibilityCard" style="display:none;">
     <p class="compatibility-title">

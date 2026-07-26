@@ -60,6 +60,27 @@
     }
 
     /* ===== 称号バー ===== */
+    /* カードを増やす導線（2026-07-26追加）
+       図鑑はカードを集める場所なのに、ガチャ・診断への入口が無かったため */
+    .collect-nav {
+      max-width: 560px; margin: 10px auto 0; padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(139,92,246,0.10));
+      border: 1px solid rgba(251,191,36,0.38);
+    }
+    .collect-nav-text { margin: 0 0 10px; font-size: 12.5px; line-height: 1.7; text-align: center; }
+    .collect-nav-btns { display: flex; gap: 10px; }
+    .collect-nav-btn {
+      flex: 1; text-align: center; padding: 11px; border-radius: 10px;
+      text-decoration: none; font-weight: 700; font-size: 13.5px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.26);
+      color: inherit;
+    }
+    .collect-nav-btn.primary {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      /* light-mode.cssが!importantで文字色を上書きするため、こちらも!importantで指定する */
+      color: #3a2e1e !important; border-color: transparent;
+    }
     .title-bar {
       max-width: 560px;
       margin: 10px auto 0;
@@ -421,6 +442,15 @@
   </div>
   <div class="title-gauge-bg"><div class="title-gauge-fill" id="titleGauge"></div></div>
   <div class="title-next" id="titleNext"></div>
+</div>
+
+<!-- カードを増やす導線（2026-07-26追加） -->
+<div class="collect-nav">
+  <p class="collect-nav-text">カードは<b>診断するたびに増えます</b>。ガチャでも集められます（🪙コインはミニゲームで貯まります）</p>
+  <div class="collect-nav-btns">
+    <a href="gacha.html" class="collect-nav-btn primary">🪙 ガチャを引く</a>
+    <a href="diagnoses.html" class="collect-nav-btn">診断を選ぶ</a>
+  </div>
 </div>
 
 <!-- ② コンプリートチャート -->
