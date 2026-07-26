@@ -1322,6 +1322,8 @@
   </div>
 
   <div class="copy-toast" id="copyToast">クリップボードにコピーしました！</div>
+  <!-- 初回ボーナスコインの通知（2026-07-26追加・copy-toastのアニメーションを流用） -->
+  <div class="copy-toast" id="coinBonusToast" style="background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#3a2e1e !important;"></div>
   <div class="copy-toast" id="zukanToast" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6);bottom:120px;display:none;"></div>
   <div class="copy-toast" id="deleteToast" style="background:rgba(245,158,11,0.9);bottom:120px;"></div>
 
@@ -3688,6 +3690,50 @@ if (isOtherMode) {
     }
   };
   pre.src = BACK_SRC;
+})();
+</script>
+
+<!-- ===== 初回ボーナスコイン（2026-07-26追加）=====
+     本命診断（10問/30問/120問）とあの人診断の「初めての完走」でコインを渡す。
+     枚数はガチャのコストに合わせている（ノーマル1・レア3・スーパー5）。
+     ★2回目以降は渡さないので、10問版を連投して稼ぐことはできない。
+     行動経済系6診断（beauty/trust/delay/pgg/risk/ultimatum）は従来どおり
+     「初回2枚・2回目以降は参加費3枚>報酬2枚」で別途もらえる。 -->
+<script>
+(function() {
+  const KEY    = 'bigfive_coin_bonus';
+  const AMOUNT = { '10': 1, '30': 3, '120': 5, 'other': 2 };
+  const LABEL  = { '10': '10問版', '30': '30問版', '120': '120問版', 'other': 'あの人診断' };
+
+  function grant() {
+    if (!window.GachaUtils || typeof GachaUtils.addCoins !== 'function') return;
+
+    const q  = new URLSearchParams(location.search);
+    const id = q.get('name') ? 'other' : (q.get('v') || '10');
+    const amount = AMOUNT[id];
+    if (!amount) return;
+
+    let got = {};
+    try { got = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { got = {}; }
+    if (got[id]) return;                       // すでに受け取っている＝渡さない
+
+    got[id] = true;
+    try { localStorage.setItem(KEY, JSON.stringify(got)); } catch (_) { return; }
+    GachaUtils.addCoins(amount);
+
+    const el = document.getElementById('coinBonusToast');
+    if (!el) return;
+    el.innerHTML = '🪙 ' + LABEL[id] + 'の初回ボーナス <b>' + amount + '枚</b>！ガチャで使えます';
+    setTimeout(function() {                    // カードの回転が終わってから出す
+      el.classList.add('show');
+      setTimeout(function() { el.classList.remove('show'); }, 4200);
+    }, 1700);
+  }
+
+  // gacha-utils.jsはこのスクリプトより後ろ（4340行付近）で読み込まれるため、
+  // 即時実行するとwindow.GachaUtilsがまだ存在しない。DOM構築の完了を待つ
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', grant);
+  else grant();
 })();
 </script>
 
