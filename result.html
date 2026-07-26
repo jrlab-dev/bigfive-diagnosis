@@ -2210,6 +2210,55 @@ document.getElementById('descCard').innerHTML = `
   });
 })();
 
+// ===== 第3段階：あなたひとりのための1本（3,125通り・2026-07-26追加） =====
+// 120問版 … 全文を出す
+// 30問版  … 冒頭の1段落だけ見せて切る（120問版への入口）
+// 10問版  … 出さない
+//
+// 本文はR2倉庫にあり、ogp-workerの /api/essay が「うちのサイトから来たか」を見てから返す。
+// GitHubに置くと bigfive.jr-genius.jp/essays/35122.json で誰でも開けてしまい、
+// コードが5桁×各1〜5の規則的な並びなので機械なら3,125本を数分で全部持っていける。
+// 全文を出すか冒頭だけかの振り分けもワーカー側。ここは v を渡すだけでよい。
+(function() {
+  if (isOtherMode || isChildMode || isSharedView) return;
+  if (version === '10') return;
+  const card = document.getElementById('integratedReportCard');
+  if (!card) return;
+
+  const 全文モード = version === '120';
+
+  fetch('/api/essay?code=' + typeCode + '&v=' + version)
+    .then(r => (r.ok ? r.json() : null))
+    .then(d => {
+      if (!d) return;
+
+      const 本文 = 全文モード
+        ? (d.body || []).map(p => `<p class="report-factor-text" style="margin-bottom:13px;">${p}</p>`).join('')
+        : `<p class="report-factor-text" style="margin-bottom:13px;">${d.teaser || ''}</p>`;
+      if (!本文) return;
+
+      const 続き = 全文モード ? '' : `
+        <div style="margin-top:16px; padding:15px 16px; border-radius:10px;
+                    background:rgba(139,92,246,0.10); border:1px solid rgba(139,92,246,0.28);">
+          <p class="report-factor-text" style="margin:0 0 10px;">
+            この続きは、120問版だけに出ます。5つの数字がすべて一致する人のために書いた、あなたひとりのための文章です。
+          </p>
+          <a href="quiz.html?v=120"
+             style="color:var(--purple); font-weight:700; text-decoration:underline;">120問版を受ける →</a>
+        </div>`;
+
+      const box = document.createElement('div');
+      box.innerHTML = `
+        <p class="report-card-title" style="margin-top:20px;">✍️ あなたひとりのための1本</p>
+        <p class="report-card-note">3,125通りのうち、5つの数字がぴったり同じ人にだけ出る文章です</p>
+        <div class="report-factor-row" style="border-bottom:none;">
+          <div class="report-factor-body open" style="padding-top:12px;">${本文}${続き}</div>
+        </div>`;
+      card.appendChild(box);
+    })
+    .catch(() => {});
+})();
+
 // ===== ブログリンクカード =====
 (function() {
   if (isSavedView || isSharedView || isOtherMode) return;
