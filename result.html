@@ -2273,49 +2273,71 @@ document.getElementById('descCard').innerHTML = `
     .catch(() => {});
 })();
 
-// ===== ブログリンクカード =====
+// ===== ブログリンクカード（対応表は /blog-recommend.json ・2026-07-29に外部化） =====
+// 記事を増やすときは blog-recommend.json に1行足すだけでよい（このファイルは触らない）。
+// groups の上から順に1本ずつ選ぶ。同じグループ内では「条件に入れた因子が3からどれだけ離れているか」
+// の合計が大きいものを優先する（＝その人の特徴が強く出ている記事ほど上に来る）。
 (function() {
   if (isSavedView || isSharedView || isOtherMode) return;
   const blogCard = document.getElementById('blogLinksCard');
-  const articles = [];
+  if (!blogCard) return;
 
-  // ダイエット記事レコメンド（優先度順）
-  const dietRecs = [
-    { cond: sc.C <= 2, url: '/blog/diet-conscientiousness-low.html', title: '三日坊主の人がダイエットを続けるには、意志力より先にやることがある' },
-    { cond: sc.N >= 4, url: '/blog/diet-neuroticism-high.html', title: '優しい人が太りやすい理由と、それを変える方法' },
-    { cond: sc.A >= 4, url: '/blog/diet-agreeableness-high.html', title: '空気を読む人が太りやすい本当の理由　断らない人のためのダイエット設計' },
-    { cond: sc.C >= 4, url: '/blog/diet-conscientiousness-high.html', title: '真面目な人ほどダイエットで詰まる理由' },
-    { cond: sc.E <= 2, url: '/blog/diet-extraversion-low.html', title: '内向的な人のダイエットが続かないのは、環境が間違っているからだ' },
-    { cond: sc.E >= 4, url: '/blog/diet-extraversion-high.html', title: '一人でやるから続かない　外向的な人のダイエット設計' },
-    { cond: sc.N <= 2, url: '/blog/diet-neuroticism-low.html', title: 'メンタルが安定している人がダイエットで陥る、意外な落とし穴' },
-    { cond: sc.O >= 4, url: '/blog/diet-openness-high.html', title: '飽き性の人のダイエットが続かない本当の理由' },
-    { cond: sc.O <= 2, url: '/blog/diet-openness-low.html', title: '同じことを続けられる人が、ダイエットで一番やってはいけないこと' },
-    { cond: sc.A <= 2, url: '/blog/diet-agreeableness-low.html', title: '自分流を曲げない人のダイエット　競争心を正しく使う方法' }
-  ];
-  const matchedDiet = dietRecs.find(r => r.cond);
-  if (matchedDiet) articles.push({ url: matchedDiet.url, title: matchedDiet.title });
-
-  // 高A×高N の自分モード：既存記事を1件追加（合計最大2件）
-  if (!isOtherMode && sc.A >= 4 && sc.N >= 4 && articles.length < 2) {
-    articles.push({
-      url: '/blog/kiwo-tsukaisu.html',
-      title: '気を使いすぎて疲れる人が知るべき、自分の性格の正体'
-    });
+  function countHit(ev) {
+    try { if (localStorage.getItem('dev_nocount') === '1') return; } catch (e) {}
+    try {
+      var u = 'https://bigfive.jr-genius.jp/count/hit?e=' + ev;
+      if (navigator.sendBeacon) { navigator.sendBeacon(u); }
+      else if (window.fetch) { fetch(u, { method: 'POST', keepalive: true }).catch(function(){}); }
+    } catch (e) {}
   }
 
-  if (articles.length > 0) {
-    blogCard.style.display = 'block';
-    blogCard.innerHTML = `
+  const matches = (cond) => (cond || []).every(x => {
+    const v = sc[x.f];
+    if (typeof v !== 'number') return false;
+    if (x.min != null && v < x.min) return false;
+    if (x.max != null && v > x.max) return false;
+    return true;
+  });
+  const weight = (cond) => (cond || []).reduce((s, x) => s + Math.abs((sc[x.f] || 3) - 3), 0);
+
+  fetch('/blog-recommend.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('load')))
+    .then(data => {
+      // 同点（特徴の強さが並んだ）ときの選び方。単純に先頭を取ると、並び順の都合で
+      // いつも同じ因子（感受性）ばかりになってしまうため、診断結果から作った値で散らす。
+      // 同じ人には毎回同じ記事が出る（ランダムではない）。
+      const seed = (sc.O || 3) * 10007 + (sc.C || 3) * 1009 + (sc.E || 3) * 101 + (sc.A || 3) * 11 + (sc.N || 3);
+      const picked = [];
+      (data.groups || []).forEach((g, gi) => {
+        const cands = (g.items || [])
+          .map((it, i) => ({ it: it, i: i, w: weight(it.cond) }))
+          .filter(o => matches(o.it.cond))
+          .filter(o => !picked.some(p => p.url === o.it.url));
+        if (!cands.length) return;
+        cands.sort((a, b) => (b.w - a.w) || (a.i - b.i));
+        const top = cands.filter(o => o.w === cands[0].w);
+        const chosen = top[(seed + gi * 7) % top.length];
+        picked.push({ url: chosen.it.url, title: chosen.it.title });
+      });
+      const list = picked.slice(0, data.maxItems || 4);
+      if (!list.length) return;
+      blogCard.style.display = 'block';
+      blogCard.innerHTML = `
       <p class="blog-links-title">あなたにおすすめの記事</p>
       <div class="blog-links-list">
-        ${articles.map((a, i) => `
-          <a href="${a.url}" class="blog-link-item">
+        ${list.map((a, i) => `
+          <a href="${a.url}?from=rec" class="blog-link-item">
             <span class="blog-link-num">0${i + 1}</span>
             <span class="blog-link-text">${a.title}</span>
           </a>
         `).join('')}
       </div>`;
-  }
+      // どの記事が読まれているか分からない状態だったため、クリック計測を追加（2026-07-29）
+      blogCard.querySelectorAll('.blog-link-item').forEach(a => {
+        a.addEventListener('click', function(){ countHit('blog_link_click'); });
+      });
+    })
+    .catch(() => {});
 })();
 
 // ===== 弱点カード =====
