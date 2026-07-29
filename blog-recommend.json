@@ -76,6 +76,7 @@
         { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/diet-extraversion-high.html", "title": "一人でやるから続かない　外向的な人のダイエット設計" },
         { "cond": [{ "f": "N", "max": 2 }], "url": "/blog/diet-neuroticism-low.html", "title": "メンタルが安定している人がダイエットで陥る、意外な落とし穴" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/manga-character-bigfive.html", "title": "漫画・アニメのキャラクター設定にビッグファイブを使う" },
+        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/shumi-ga-nai.html", "title": "趣味がない・何をやっても楽しくない人へ" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/diet-openness-high.html", "title": "飽き性の人のダイエットが続かない本当の理由" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/diet-openness-low.html", "title": "同じことを続けられる人が、ダイエットで一番やってはいけないこと" },
         { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/diet-agreeableness-low.html", "title": "自分流を曲げない人のダイエット　競争心を正しく使う方法" },
