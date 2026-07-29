@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/trpg-character-make.html">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRPGのキャラメイクに性格値を入れる｜「結局いつもの自分になる」を直す方法｜ビッグファイブ診断</title>
+<meta name="description" content="TRPGでキャラを演じ分けられない、どのPCも結局自分になる。原因は演技力ではなく、キャラシートに性格の数字がないからです。能力値と別に性格値を5本持つキャラメイク法と、GM向けのNPCの作り分けを解説します。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="TRPGのキャラメイクに性格値を入れる">
+<meta property="og:description" content="STRやDEXは数字で持つのに、性格は「陽気」の一言。だから毎回いつもの自分になる。性格も5本の数字で持てばいい。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/trpg-character-make.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/trpg-character-make.webp">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TRPGのキャラメイクに性格値を入れる">
+<meta name="twitter:description" content="「結局いつもの自分になる」のは演技力の問題ではない。能力値と別に性格値を5本持つと、PCは演じ分けられる。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "TRPGのキャラメイクに性格値を入れる｜「結局いつもの自分になる」を直す方法",
+  "description": "TRPGのPCを演じ分けるために、能力値とは別に性格をビッグファイブの5因子スコアで持つ方法。場面別の行動判断・GM向けのNPC量産・悪役NPCの設計までを解説する。",
+  "url": "https://bigfive.jr-genius.jp/blog/trpg-character-make.html",
+  "image": "https://bigfive.jr-genius.jp/images/blog/trpg-character-make.webp",
+  "datePublished": "2026-08-02",
+  "dateModified": "2026-08-02",
+  "inLanguage": "ja",
+  "isPartOf": { "@type": "WebSite", "name": "ビッグファイブで本当の自分を知る【公式】", "url": "https://bigfive.jr-genius.jp/" },
+  "about": [
+    { "@type": "Thing", "name": "TRPG" },
+    { "@type": "Thing", "name": "キャラメイク" },
+    { "@type": "Thing", "name": "ロールプレイ" },
+    { "@type": "Thing", "name": "ビッグファイブ" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "ブログ", "item": "https://bigfive.jr-genius.jp/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "TRPGのキャラメイクに性格値を入れる", "item": "https://bigfive.jr-genius.jp/blog/trpg-character-make.html" }
+  ]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0a0e27;--bg2:#0f1535;--text:#e2e8f0;--dim:#94a3b8;--accent:#22d3ee;--border:rgba(34,211,238,.15)}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.85;min-height:100vh}
+  .bg-nebula{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(34,211,238,.05),transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(139,92,246,.05),transparent 70%)}
+  .site-header{position:sticky;top:0;z-index:10;background:rgba(10,14,39,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;gap:16px;align-items:center}
+  .back-link,.footer-link{color:var(--dim);text-decoration:none;font-size:13px}.back-link:hover,.footer-link:hover{color:var(--accent)}
+  .header-title{font-size:13px;color:var(--dim);font-weight:500}.main-wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:48px 24px 80px}
+  .hero-img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;max-width:720px;border-radius:12px;margin-bottom:36px;display:block}.article-header{margin-bottom:46px}
+  .article-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}.tag{display:inline-block;padding:3px 12px;border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--accent);background:rgba(34,211,238,.05)}
+  .article-title{font-size:clamp(23px,4vw,33px);font-weight:900;line-height:1.4;margin-bottom:16px}.article-title span{color:var(--accent)}
+  .article-lead{font-size:16px;color:var(--dim);border-left:3px solid var(--accent);padding-left:16px}.article-meta{margin-top:20px;font-size:12px;color:var(--dim)}
+  .toc,.cta-box,.related-articles{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin:44px 0}.toc-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;margin-bottom:14px}
+  .toc ol{list-style:none;counter-reset:toc}.toc li{counter-increment:toc;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:10px}.toc li:last-child{border-bottom:none}.toc li::before{content:counter(toc,decimal-leading-zero);font-size:11px;color:var(--accent);font-weight:700}
+  .toc a,.related-articles a{color:var(--dim);text-decoration:none}.toc a:hover,.related-articles a:hover{color:var(--accent)}
+  section{margin-bottom:48px}.article-body h2,.cta-box h2,.related-articles h2{font-size:22px;line-height:1.5;margin-bottom:18px}.article-body h3{font-size:17px;line-height:1.6;margin:28px 0 12px;color:var(--accent)}.article-body p,.cta-box p{margin-bottom:18px;color:var(--text)}strong{color:#fff;font-weight:700}.big-text{margin:30px 0;padding:26px;border-left:4px solid var(--accent);background:rgba(34,211,238,.06);font-size:20px;font-weight:800;line-height:1.7}.big-text span{color:var(--accent)}
+  .highlight-box{margin:28px 0;padding:22px 24px;background:rgba(34,211,238,.05);border:1px solid var(--border);border-radius:12px}.highlight-box p{margin-bottom:12px}.highlight-box p:last-child{margin-bottom:0}
+  .data-table{width:100%;border-collapse:collapse;margin:28px 0;font-size:14px}.data-table th{background:rgba(34,211,238,.1);color:var(--text);font-weight:700;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}.data-table td{padding:10px 14px;border-bottom:1px solid rgba(148,163,184,.18);color:var(--text);vertical-align:top}.data-table tr:last-child td{border-bottom:none}.data-table td:first-child{white-space:nowrap}
+  .table-scroll{overflow-x:auto}
+  .cta-badges{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.cta-badge{font-size:12px;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:4px 10px}.cta-btn{display:inline-block;background:var(--accent);color:#06111f;text-decoration:none;font-weight:800;border-radius:999px;padding:12px 22px}.cta-sub-link{font-size:13px;color:var(--dim);margin-top:14px}.related-articles ul{padding-left:20px}.related-articles li{margin-bottom:8px}.article-footer{text-align:center;margin-top:44px}
+  @media(max-width:640px){.main-wrap{padding:32px 18px 64px}.site-header{padding:12px 16px}.toc,.cta-box,.related-articles{padding:20px}.big-text{font-size:18px;padding:20px}.data-table{font-size:13px}.data-table th,.data-table td{padding:8px 10px}}
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+<header class="site-header">
+  <a href="index.html" class="back-link">← ブログ一覧</a>
+  <span class="header-title">ビッグファイブ診断</span>
+</header>
+<main class="main-wrap">
+<article>
+  <img src="../images/blog/trpg-character-make.webp" alt="TRPGのキャラメイクで性格を数値化する方法を解説する水彩風の画像" class="hero-img" width="1536" height="864" loading="eager">
+  <header class="article-header">
+    <div class="article-tags">
+      <span class="tag">TRPG</span>
+      <span class="tag">キャラメイク</span>
+      <span class="tag">創作</span>
+      <span class="tag">ビッグファイブ</span>
+    </div>
+    <h1 class="article-title">TRPGのキャラメイクに「性格値」を入れる<br><span>結局いつもの自分になる、を直す方法</span></h1>
+    <p class="article-lead">セッションが盛り上がってくると、気づいてしまう。無口な傭兵のはずのPCが、いつもの自分の口調で軽口を叩いている。前の卓の陽気な商人と、今回の皮肉屋の魔術師が、ほぼ同じ人格になっている。演じ分けたい気持ちはあるのに、ダイスを振って会話が始まると、出てくるのは毎回「自分」だ。これは演技力の問題ではない。キャラシートの構造の問題だ。</p>
+    <p class="article-meta">公開：2026年8月2日 ｜ ビッグファイブ診断 編集部</p>
+  </header>
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sec1">能力値は数字なのに、性格は形容詞のまま</a></li>
+      <li><a href="#sec2">能力値と別に、性格値を5本持つ</a></li>
+      <li><a href="#sec3">演じ分けは「自分から1個だけ変える」で足りる</a></li>
+      <li><a href="#sec4">場面ごとに、どの数字が口を開くか</a></li>
+      <li><a href="#sec5">GM向け——NPCは数字を3つ振るだけで別人になる</a></li>
+      <li><a href="#sec6">悪役NPCには別の物差しを重ねる</a></li>
+      <li><a href="#sec7">数字を裏切る1回が、そのPCの見せ場になる</a></li>
+    </ol>
+  </nav>
+  <div class="article-body">
+    <section id="sec1">
+      <h2>能力値は数字なのに、性格は形容詞のまま</h2>
+      <p>キャラシートを思い出してほしい。筋力・敏捷・知力といった能力値は、どのシステムでも数字で管理する。数字だから、「この筋力なら扉は蹴破れない」と誰でも同じ判断ができる。</p>
+      <p>ところが性格の欄はどうか。「陽気」「無口」「皮肉屋」。形容詞が1語か2語書いてあるだけだ。形容詞は解釈の幅が広すぎる。「陽気」が、初対面の相手にも軽口を叩く陽気なのか、仲間内でだけ饒舌になる陽気なのかは、書いた瞬間の気分で決まる。だからセッション中に迷った瞬間、<strong>解釈の空白を埋めるのは自分の素の性格</strong>になる。毎回いつもの自分になるのは、そういう仕組みだ。</p>
+      <p>能力値で起きないブレが性格でだけ起きるのは、性格だけ数字を持っていないからにすぎない。なら、性格にも数字を持たせればいい。</p>
+    </section>
+    <section id="sec2">
+      <h2>能力値と別に、性格値を5本持つ</h2>
+      <p>性格心理学には、人の性格を5つの因子で表すビッグファイブというモデルがある。開放性（新しさへの反応）、誠実性（計画性・自己管理）、外向性（人と刺激への向かい方）、協調性（他人への合わせ方）、感受性（不安の感じやすさ。神経症傾向とも呼ぶ）。学術的には各因子を細かく測るが、卓で使うなら<strong>それぞれ1〜5の5段階</strong>で十分だ。</p>
+      <p>キャラシートの能力値の横に、この5本を書き足す。たとえば「無口な傭兵」なら、開放性2・誠実性4・外向性1・協調性2・感受性2。「人当たりのいい商人」なら、開放性3・誠実性3・外向性5・協調性4・感受性3。同じ「よく喋るキャラ」でも、外向性5・協調性1なら自分の話ばかりする山師になり、外向性5・協調性5なら場を回す世話役になる。<strong>形容詞1語では区別できなかった人格が、数字5本なら分かれる</strong>。</p>
+      <p>迷ったときの効き目が大きい。交渉の場面で「このPCならどう返すか」と手が止まったら、数字を見る。協調性2なら値引きには応じない。感受性5なら即決を避けて一晩考える。<strong>性格値は演技の台本ではなく、迷ったときに戻る判断基準</strong>だ。能力値が判定の基準であるのと同じ意味で。</p>
+    </section>
+    <section id="sec3">
+      <h2>演じ分けは「自分から1個だけ変える」で足りる</h2>
+      <p>ここでよくある失敗が、自分と正反対のPCをいきなり作ることだ。5因子全部を自分から離すと、判断のたびに5回変換が要る。会話のテンポには間に合わず、結局素に戻る。全部変えようとするから、全部戻るのだ。</p>
+      <div class="big-text">演じ分けの最小単位は、<br><span>自分の性格から因子1個だけ動かすこと</span>。</div>
+      <p>まず自分のビッグファイブを知っておく。そして次のPCは、<strong>自分のスコアのうち1因子か2因子だけを反転させて作る</strong>。普段協調性が高い人なら、協調性1のPCを作ってみる。残り4本は自分のままでいい。判断の変換が1か所で済むから、会話の速度でも維持できる。しかも残りが素の自分だから、演じているうちに人格が崩壊しない。</p>
+      <p>これを卓ごとに変える因子を替えてやっていくと、演じ分けの幅が1因子ずつ増えていく。「いつもの自分になる」問題は、演技力を鍛えるより、変える量を1個に絞る方が早く解決する。</p>
+    </section>
+    <section id="sec4">
+      <h2>場面ごとに、どの数字が口を開くか</h2>
+      <p>性格値のもう一つの使い方は、<strong>場面ごとに誰が前に出るかを決める</strong>ことだ。因子ごとに、反応が割れる場面はだいたい決まっている。</p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr><th>場面</th><th>効く因子</th><th>高いPCの動き</th><th>低いPCの動き</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>未知の遺物・怪しい儀式</td><td>開放性</td><td>触りたがる・調べたがる</td><td>触らない・持ち帰らない</td></tr>
+          <tr><td>探索計画・装備の割り振り</td><td>誠実性</td><td>地図を描き、順路を決める</td><td>とりあえず開けてから考える</td></tr>
+          <tr><td>酒場での情報収集</td><td>外向性</td><td>自分から話しかける</td><td>隅で聞き耳を立てる</td></tr>
+          <tr><td>報酬の分配・降伏した敵</td><td>協調性</td><td>譲る・見逃す</td><td>取り分を主張する・容赦しない</td></tr>
+          <tr><td>撤退判断・罠の気配</td><td>感受性</td><td>危険を先に察知して止める</td><td>気にせず先頭を歩く</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>この表をパーティ全員の性格値と重ねると、場面ごとに<strong>誰が最初に口を開くべきか</strong>が見えてくる。全員が横並びで黙る時間が減り、「このPCはこういう奴だから」という納得のある行動が増える。ロールプレイが苦手な人ほど、この「出番の地図」の効果は大きいと思う。自由に演じろと言われるより、自分の数字が呼ばれた場面で数字どおりに動く方が、ずっと入りやすい。</p>
+    </section>
+    <section id="sec5">
+      <h2>GM向け——NPCは数字を3つ振るだけで別人になる</h2>
+      <p>この方法は、GMの側でもっと効く。セッション中、PCが想定外の相手に話しかけるのはいつものことだ。宿屋の主人、門番、通りすがりの行商人。準備していないNPCを即興で演じるとき、全員が「GMの素の性格」で喋り出す——PCと同じ問題が、GMには毎セッション起きている。</p>
+      <p>対処は簡単で、<strong>その場でダイスを3回振って、外向性・協調性・感受性に割り当てる</strong>。会話への出方はこの3本でほぼ決まるからだ。外向性5・協調性1の門番は、大声で絡んでくるが融通は利かない。外向性1・感受性5の宿屋の主人は、口数少なく怯えながら鍵を渡す。数字が3つあるだけで、即興のNPCに一貫した人格が宿り、しかも次のセッションで再登場させても同じ人物として演じ直せる。数字をメモしておくだけでいい。</p>
+      <p>重要なNPCなら5本すべて決めておく。パーティの性格値と見比べれば、<strong>どのPCと衝突し、どのPCと馬が合うかが先に読める</strong>。物語の火種を仕込む場所が、シナリオを書く前に見えるということだ。</p>
+    </section>
+    <section id="sec6">
+      <h2>悪役NPCには別の物差しを重ねる</h2>
+      <p>ボス格の敵役だけは、ビッグファイブ5本では足りない。協調性を1にしただけの悪役は「感じの悪い人」止まりで、プレイヤーの本気の敵意を引き出せない。</p>
+      <p>ここで使えるのが、ダークトライアドという別の物差しだ。自己愛（自分を大きく見せたい）、マキャベリズム（人を手段として使う）、サイコパシー傾向（相手の痛みに動じない）の3つ。ビッグファイブとは独立した軸なので、重ねると悪役が立体になる。自己愛型のボスは計画が崩れると取り乱し、最後に醜態を晒す。マキャベリズム型は捕らえられても取引を持ちかけてくる。<strong>どの軸が高い悪役かで、クライマックスの崩れ方まで変わる</strong>。</p>
+      <p>そしてコツを一つ。強い悪役には<strong>高い誠実性</strong>を与えることだ。約束を守り、部下を統率し、計画を完遂する人物が、人を駒として使う。この組み合わせが、プレイヤーの背筋を冷やす。詳しくは<a href="dark-triad-toha.html">ダークトライアドの解説記事</a>と、<a href="manga-character-bigfive.html">漫画のキャラクター設定の記事</a>に書いた。理屈は物語でも卓でも同じだ。</p>
+    </section>
+    <section id="sec7">
+      <h2>数字を裏切る1回が、そのPCの見せ場になる</h2>
+      <p>最後に、数字で作ったキャラを人間にする仕上げの話。<strong>性格値どおりに動き続けるPCは、いつか作業になる</strong>。人間は自分の性格から外れた行動を、たまに取るからだ。</p>
+      <p>だから、キャンペーンの中で1回だけ、数字を裏切る場面を自分に許しておく。協調性1の傭兵が、報酬を放棄してでも子どもを助ける。感受性5の臆病な学者が、その夜だけ先頭に立つ。普段が数字どおりに一貫しているからこそ、その1回が卓の記憶に残る場面になる。ブレとの違いは、<strong>外すことを自分で選んでいるかどうか</strong>だけだ。性格値は、キャラを縛る鎖ではなく、どこで鎖を外すかを自分で決めるための道具だと思っている。</p>
+      <div class="highlight-box">
+        <p><strong>次の卓までにやるなら。</strong>今使っているPCに5本の数字を振ってみてほしい。これまでの行動から逆算すれば5分で終わる。決められない因子が残ったら、そこがまだ人格の固まっていない部分——つまり、次のセッションで試せる伸びしろだ。</p>
+      </div>
+    </section>
+  </div>
+  <section class="cta-box">
+    <h2>PCの性格値を診断で出してみる</h2>
+    <p>「あの人診断」は実在の相手の行動からビッグファイブのスコアを予測する診断ですが、架空の人物にもそのまま使えます。自分のPCの行動を思い浮かべて答えれば、5本の性格値が出ます。キャラシートに書き写しておけば、卓の途中で迷っても戻る場所ができます。</p>
+    <div class="cta-badges">
+      <span class="cta-badge">約5分</span>
+      <span class="cta-badge">無料</span>
+      <span class="cta-badge">登録不要</span>
+      <span class="cta-badge">科学的根拠あり</span>
+    </div>
+    <a href="../other_quiz.html" class="cta-btn">あの人診断でPCの性格値を出す →</a>
+    <p class="cta-sub-link">演じ分けの基準点になる自分自身のスコアは <a href="../index.html">ビッグファイブ診断</a> でどうぞ。</p>
+  </section>
+  <section class="related-articles">
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="manga-character-bigfive.html">漫画・アニメのキャラクター設定にビッグファイブを使う</a></li>
+      <li><a href="dark-triad-toha.html">ダークトライアドとは　「扱いにくい自分」を科学で見る3因子の正体</a></li>
+      <li><a href="ano-hito-yosoku-aishindan.html">あの人の性格（ビッグファイブスコア）を自分で予測する方法</a></li>
+      <li><a href="bigfive-facet-toha.html">ビッグファイブのファセットとは　30の側面で性格の解像度を上げる</a></li>
+      <li><a href="shumi-seikaku-type-guide.html">性格タイプ別・向いている趣味の見つけ方</a></li>
+    </ul>
+  </section>
+</article>
+<footer class="article-footer">
+  <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+</footer>
+</main>
+</body>
+</html>
