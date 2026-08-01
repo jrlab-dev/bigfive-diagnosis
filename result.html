@@ -845,7 +845,11 @@
     border-radius: 999px; padding: 3px 14px; margin-bottom: 12px;
   }
   .paid-modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-  .paid-modal-text { font-size: 13px; color: var(--dim); line-height: 1.85; margin-bottom: 18px; }
+  .paid-modal-text { font-size: 13px; color: var(--dim); line-height: 1.85; margin-bottom: 18px; word-break: auto-phrase; }
+  /* 「ありがとう／ございます」のように語の途中で折り返すのを防ぐ（2026-08-01 準也さん指摘）。
+     本文を文節ごとの<span>に分け、inline-blockの塊にして「入らなければ塊ごと次の行へ」落とす。
+     word-break:auto-phrase は対応ブラウザ（Chromium系）だけの保険で、spanのほうが本体（Safariでも効く） */
+  .paid-modal-text span { display: inline-block; }
   .paid-modal-open {
     display: block; width: 100%; padding: 14px;
     font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
@@ -1283,8 +1287,8 @@
       <p class="paid-modal-title">30項目の詳細レポート</p>
       <p class="paid-modal-price">¥980 <small>買い切り</small></p>
       <p class="paid-modal-text">
-        30の項目それぞれに、あなたの点数に合わせた解説がつきます。<br>
-        全部で約1万2千字、あなた専用のレポートです。
+        <span>30の項目それぞれに、</span><span>あなたの点数に合わせた</span><span>解説がつきます。</span><br>
+        <span>全部で約1万2千字、</span><span>あなた専用のレポートです。</span>
       </p>
       <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
       <!-- サンプル＝見本の30桁（準也さん裁定7/31「見せないと買う人はいない」）。
@@ -1297,10 +1301,10 @@
       <span class="paid-modal-badge">公開記念</span>
       <p class="paid-modal-title">ありがとうございます 🎉</p>
       <p class="paid-modal-text">
-        このレポートを手に取っていただき、ありがとうございます。<br>
-        公開記念につき、<b>今回は無料でお渡しします</b>。お支払いは不要です。<br>
-        30項目すべて、あなたの点数に合わせて書いた解説です。<br>
-        どうぞゆっくりお読みください。
+        <span>このレポートを手に取っていただき、</span><span>ありがとうございます。</span><br>
+        <span>公開記念につき、</span><span><b>今回は無料でお渡しします</b>。</span><span>お支払いは不要です。</span><br>
+        <span>30項目すべて、</span><span>あなたの点数に合わせて</span><span>書いた解説です。</span><br>
+        <span>どうぞゆっくりお読みください。</span>
       </p>
       <a class="paid-modal-open" id="paidModalOpen" href="#">レポートを開く（無料）</a>
       <button class="paid-modal-close" id="paidModalClose2">とじる</button>
