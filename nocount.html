@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 検索結果にもAIにも出さない（関係者だけが使う設定ページ） -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>計測オフ設定（関係者用）</title>
+<!--
+  このページには計測の送信コードを一切置かないこと（カウンターへの送信は禁止）。
+  置くと「オフにしに来た1回」が数えられてしまい、目的を果たさない。
+  nav.js も読み込まない（余計なものを増やさないため）。
+  2026-08-01 新設：それまでは開発者コンソールで localStorage を直接書く必要があり、
+  準也さんが自分でテストするたびにClaudeが手作業でカウンターを引き算していた。
+-->
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: #f8fafc; color: #1e293b; line-height: 1.8;
+    display: flex; justify-content: center;
+  }
+  .wrap { width: 100%; max-width: 520px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { font-size: 13px; color: #64748b; margin: 0 0 24px; }
+  .status {
+    border-radius: 14px; padding: 22px 20px; text-align: center;
+    margin-bottom: 20px; border: 2px solid transparent;
+  }
+  .status.off { background: #ecfdf5; border-color: #10b981; }
+  .status.on  { background: #fff7ed; border-color: #f97316; }
+  .status-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .status.off .status-label { color: #059669; }
+  .status.on  .status-label { color: #ea580c; }
+  .status-main { font-size: 18px; font-weight: 700; }
+  .status-note { font-size: 13px; color: #475569; margin-top: 8px; }
+  button {
+    display: block; width: 100%; padding: 15px;
+    font-family: inherit; font-size: 15px; font-weight: 700;
+    border: none; border-radius: 12px; cursor: pointer; margin-bottom: 10px;
+  }
+  .btn-off { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+  .btn-on  { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+  .note {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 18px; font-size: 13px; color: #475569; margin-top: 20px;
+  }
+  .note b { color: #1e293b; }
+  .note ul { margin: 8px 0 0; padding-left: 20px; }
+  .note li { margin-bottom: 6px; }
+  .back { display: block; text-align: center; margin-top: 20px; font-size: 13px; color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>計測オフ設定</h1>
+  <p class="sub">この端末での操作を、サイトの集計に入れないようにします（関係者用）</p>
+
+  <div class="status" id="status">
+    <div class="status-label" id="statusLabel">確認中</div>
+    <div class="status-main" id="statusMain">…</div>
+    <div class="status-note" id="statusNote"></div>
+  </div>
+
+  <button class="btn-off" id="btnOff">この端末で計測をオフにする</button>
+  <button class="btn-on" id="btnOn">オフを解除する（通常に戻す）</button>
+
+  <div class="note">
+    <b>知っておいていただきたいこと</b>
+    <ul>
+      <li>この設定は<b>いま開いているブラウザにだけ</b>保存されます。スマホでもテストするなら、<b>スマホでもこのページを開いて</b>ボタンを押してください。</li>
+      <li>ブラウザの履歴やサイトデータを消すと、この設定も一緒に消えます。そのときはまたこのページを開いてください。</li>
+      <li>オフの間も、サイトの動きは普段どおりです。集計に数えられなくなるだけです。</li>
+      <li>このページ自体は何も数えていないので、何度開いても集計は汚れません。</li>
+    </ul>
+  </div>
+
+  <a class="back" href="index.html">← サイトにもどる</a>
+</div>
+
+<script>
+(function () {
+  var KEY = 'dev_nocount';
+  var box = document.getElementById('status');
+  var label = document.getElementById('statusLabel');
+  var main = document.getElementById('statusMain');
+  var note = document.getElementById('statusNote');
+
+  function read() {
+    try { return localStorage.getItem(KEY) === '1'; } catch (e) { return null; }
+  }
+
+  function draw(justChanged) {
+    var off = read();
+    if (off === null) {  // localStorageが使えない（プライベートモード等）
+      box.className = 'status on';
+      label.textContent = '設定できません';
+      main.textContent = 'このブラウザでは保存できません';
+      note.textContent = 'シークレットモードや、サイトデータをブロックする設定になっている可能性があります。通常のウィンドウで開いてください。';
+      return;
+    }
+    box.className = 'status ' + (off ? 'off' : 'on');
+    label.textContent = off ? '計測オフ' : '計測オン';
+    main.textContent = off ? 'この端末の操作は数えられません' : 'この端末の操作は数えられます';
+    note.textContent = justChanged
+      ? '設定を切り替えました。'
+      : (off ? '安心してサイトを触っていただけます。' : 'テストするなら下のボタンでオフにしてください。');
+  }
+
+  document.getElementById('btnOff').addEventListener('click', function () {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    draw(true);
+  });
+  document.getElementById('btnOn').addEventListener('click', function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    draw(true);
+  });
+
+  // URLに ?set=1 を付けて開くと、ボタンを押さなくてもその場でオフになる（?set=0 で解除）。
+  // 準也さんに渡すのはこの形のURL1本だけで済ませるため
+  var v = new URLSearchParams(location.search).get('set');
+  if (v === '1') { try { localStorage.setItem(KEY, '1'); } catch (e) {} draw(true); }
+  else if (v === '0') { try { localStorage.removeItem(KEY); } catch (e) {} draw(true); }
+  else { draw(false); }
+})();
+</script>
+</body>
+</html>
