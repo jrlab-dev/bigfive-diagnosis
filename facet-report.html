@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<title>30項目の詳細レポート — ビッグファイブで本当の自分を知る</title>
+<meta name="description" content="120問版の診断結果から、30の下位項目それぞれについて詳しく解説するレポートです。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  :root { --purple: #8b5cf6; --pink: #ec4899; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Noto Sans JP', system-ui, sans-serif;
+    line-height: 1.8; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 56px 16px 80px;
+  }
+
+  /* ===== サイト共通のカード（result.html と同じ定義を使う） ===== */
+  .report-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px; padding: 22px 24px;
+    margin-bottom: 20px; backdrop-filter: blur(8px);
+    width: 100%; max-width: 480px;
+  }
+  .report-card-title { font-size: 15px; font-weight: 700; text-align: center; margin-bottom: 6px; color: var(--text); }
+  .report-card-note { font-size: 12px; color: var(--dim); text-align: center; margin-bottom: 10px; }
+  .report-factor-text { font-size: 13.5px; line-height: 1.9; color: var(--text); }
+
+  /* ===== スコアのバー（result.html と同じ定義を使う） ===== */
+  .facet-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  .facet-name { font-size: 12px; color: #94a3b8; width: 72px; flex-shrink: 0; }
+  .facet-bar-bg { flex: 1; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+  .facet-bar { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .facet-score { font-size: 11px; color: var(--dim); width: 16px; text-align: center; font-weight: 600; }
+
+  /* ===== このページ専用 ===== */
+  .fr-head { width: 100%; max-width: 480px; text-align: center; margin-bottom: 18px; }
+  .fr-head h1 { font-size: 19px; font-weight: 900; letter-spacing: .02em; }
+  .fr-head p { font-size: 12px; color: var(--dim); margin-top: 6px; }
+
+  .fr-cover { display: flex; gap: 12px; flex-wrap: wrap; }
+  .fr-cover-col { flex: 1 1 190px; }
+  .fr-cover-col h3 { font-size: 12px; color: var(--dim); font-weight: 500; margin-bottom: 6px; }
+  .fr-cover-list { display: flex; flex-direction: column; gap: 5px; }
+  .fr-cover-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .fr-cover-item b { font-weight: 700; }
+  .fr-chip {
+    font-size: 11px; font-weight: 700; color: #fff;
+    border-radius: 999px; padding: 1px 9px; margin-left: auto;
+  }
+
+  /* ===== 5因子の五角形（2026-07-31追加・準也さん提案） =====
+     30項目マップの前に「まず全体像」を置く。無料側の結果ページには五角形が無いので重複しない。 */
+  .fr-penta { display: flex; justify-content: center; margin: 4px 0 2px; }
+  .fr-penta svg { width: 100%; max-width: 280px; height: auto; }
+  .fr-penta-grid { fill: none; stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+  .fr-penta-axis { stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+  .fr-penta-area { fill: rgba(139,92,246,0.28); stroke: #8b5cf6; stroke-width: 2; stroke-linejoin: round; }
+  .fr-penta-dot { fill: #8b5cf6; }
+  .fr-penta-caption { font-size: 11.5px; color: var(--dim); line-height: 1.8; margin: 8px 0 14px; }
+  /* 五角形の下に置く「中身」＝性格ごとに6本の棒（2026-08-01・準也さん案） */
+  .fr-fbars-group { margin-bottom: 14px; }
+  .fr-fbars-group:last-child { margin-bottom: 0; }
+  .fr-fbars-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-size: 12.5px; font-weight: 700; margin: 0 0 4px;
+    padding-bottom: 3px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .fr-fbars-avg { font-size: 11px; font-weight: 500; color: var(--dim); }
+  body.theme-light .fr-penta-caption,
+  body.theme-light .fr-fbars-avg { color: #64748b; }
+  body.theme-light .fr-fbars-head { border-bottom-color: rgba(0,0,0,0.08); }
+  .fr-penta-label { font-size: 11px; font-weight: 700; }
+  .fr-penta-val { font-size: 10.5px; }
+  body.theme-light .fr-penta-grid,
+  body.theme-light .fr-penta-axis { stroke: rgba(0,0,0,0.13); }
+
+  /* ===== 五角形の下に置く「中身」＝性格ごとに6本、まん中3を基準にした横棒 =====
+     準也さん案（8/1）「五角形のパラメーターの表示の後ろに棒グラフを6本並べる」＋
+     「3基準でプラスとマイナスの横棒バー」。左＝控えめ／右＝強い で、凸凹が一目で分かる形。 */
+  .fr-fbars-legend {
+    display: flex; justify-content: space-between;
+    font-size: 10.5px; color: var(--dim); margin: 0 0 8px; padding: 0 26px 0 66px;
+  }
+  .fr-fbars-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+  .fr-fbars-name {
+    width: 62px; flex-shrink: 0; font-size: 11.5px; color: var(--dim);
+    text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .fr-fbars-track {
+    position: relative; flex: 1; height: 14px; border-radius: 3px;
+    background: rgba(255,255,255,0.045);
+  }
+  .fr-fbars-center {
+    position: absolute; left: 50%; top: -1px; bottom: -1px; width: 1px;
+    background: rgba(255,255,255,0.3); transform: translateX(-0.5px);
+  }
+  .fr-fbars-bar { position: absolute; top: 2px; bottom: 2px; border-radius: 2px; }
+  .fr-fbars-dot {
+    position: absolute; top: 50%; left: 50%; width: 5px; height: 5px;
+    border-radius: 50%; transform: translate(-50%,-50%);
+  }
+  .fr-fbars-score { width: 14px; flex-shrink: 0; font-size: 11px; color: var(--dim); text-align: center; }
+  body.theme-light .fr-fbars-track { background: rgba(0,0,0,0.05); }
+  body.theme-light .fr-fbars-center { background: rgba(0,0,0,0.22); }
+  body.theme-light .fr-fbars-legend,
+  body.theme-light .fr-fbars-name,
+  body.theme-light .fr-fbars-score { color: #64748b; }
+
+  .fr-guide dt { font-size: 13px; font-weight: 700; margin-top: 12px; }
+  .fr-guide dd { font-size: 12.5px; color: var(--dim); line-height: 1.85; }
+  .fr-scale { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .fr-scale span {
+    font-size: 11px; color: var(--dim);
+    border: 1px solid rgba(139,92,246,0.25); border-radius: 8px; padding: 3px 8px;
+  }
+
+  .fr-factor-title {
+    font-size: 14px; font-weight: 700; margin: 0 0 4px;
+    padding-left: 10px; border-left: 4px solid var(--purple);
+  }
+  .fr-facet { border-top: 1px solid rgba(255,255,255,0.07); padding: 14px 0 2px; }
+  .fr-facet:first-of-type { border-top: none; }
+  .fr-facet-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .fr-facet-name { font-size: 14.5px; font-weight: 700; }
+  .fr-facet-desc { font-size: 11.5px; color: var(--dim); }
+  .fr-facet-score {
+    margin-left: auto; font-size: 12px; font-weight: 700;
+    color: #fff; border-radius: 999px; padding: 1px 10px;
+  }
+
+  .fr-gap {
+    margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+    background: rgba(139,92,246,0.10); border: 1px solid rgba(139,92,246,0.28);
+    font-size: 12.5px; line-height: 1.85;
+  }
+  .fr-gap b { color: var(--purple); }
+
+  /* 凸凹の図（同じ因子の中でどれだけ開いているか） */
+  .fr-gapfig { margin: 0 0 10px; }
+  .fr-gapfig-row { display: flex; align-items: center; gap: 7px; }
+  .fr-gapfig-label {
+    width: 58px; flex-shrink: 0; font-size: 10.5px; color: var(--dim);
+    text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .fr-gapfig-label.right { text-align: left; }
+  .fr-gapfig-track {
+    position: relative; flex: 1; height: 16px;
+    background: rgba(255,255,255,0.06); border-radius: 3px;
+  }
+  .fr-gapfig-fill { position: absolute; top: 6px; height: 4px; border-radius: 2px; opacity: .5; }
+  .fr-gapfig-pt {
+    position: absolute; top: 50%; transform: translate(-50%,-50%);
+    width: 16px; height: 16px; border-radius: 50%;
+    color: #fff; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fr-gapfig-cap { font-size: 10.5px; color: var(--dim); text-align: center; margin: 5px 0 0; }
+  body.theme-light .fr-gapfig-track { background: rgba(0,0,0,0.06); }
+  body.theme-light .fr-gapfig-label,
+  body.theme-light .fr-gapfig-cap { color: #64748b; }
+
+  .fr-top3 { display: flex; flex-direction: column; gap: 12px; }
+  .fr-top3-item { display: flex; gap: 12px; align-items: flex-start; }
+  .fr-top3-rank {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fr-top3-body { font-size: 13px; line-height: 1.8; }
+
+  .fr-back {
+    display: inline-block; margin-top: 4px;
+    color: var(--purple); font-size: 13px; font-weight: 700; text-decoration: none;
+  }
+  .fr-msg { font-size: 13.5px; color: var(--dim); text-align: center; padding: 30px 0; }
+
+  /* ライトモード（既存クラスは light-mode.css が面倒を見る。ここは追加分だけ） */
+  body.theme-light .fr-head p,
+  body.theme-light .fr-cover-col h3,
+  body.theme-light .fr-facet-desc,
+  body.theme-light .fr-guide dd,
+  body.theme-light .fr-scale span,
+  body.theme-light .fr-msg { color: #64748b; }
+  body.theme-light .fr-facet { border-top-color: rgba(0,0,0,0.08); }
+  body.theme-light .fr-gap { background: rgba(139,92,246,0.07); border-color: rgba(139,92,246,0.22); }
+
+  @media (max-width: 420px) {
+    body { padding: 48px 12px 60px; }
+    .report-card { padding: 18px 16px; }
+    .facet-name { width: 64px; }
+  }
+</style>
+</head>
+<body class="theme-light">
+
+<div class="fr-head">
+  <h1>30項目の詳細レポート</h1>
+  <p>120問版の答えから、5つの性格それぞれを6つに分けて読み解いたものです</p>
+</div>
+
+<div id="frBody" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
+
+<script>
+// ===== 30項目の定義（result.html:2512 の facetMeta と完全一致させる。名前を勝手に変えない） =====
+// facets（30桁）の並び： N0-5・E6-11・O12-17・A18-23・C24-29
+var FACET_META = [
+  { key:'N1', name:'不安',       factor:'N', desc:'心配事や不安を感じやすいか' },
+  { key:'N2', name:'怒り',       factor:'N', desc:'イライラや怒りを感じやすいか' },
+  { key:'N3', name:'抑うつ',     factor:'N', desc:'気分が落ち込みやすいか' },
+  { key:'N4', name:'自己意識',   factor:'N', desc:'他人の目を気にするか' },
+  { key:'N5', name:'無抑制',     factor:'N', desc:'衝動的に行動してしまうか' },
+  { key:'N6', name:'脆弱性',     factor:'N', desc:'ストレスに圧倒されやすいか' },
+  { key:'E1', name:'友好性',     factor:'E', desc:'友人を作りやすいか' },
+  { key:'E2', name:'群居性',     factor:'E', desc:'大勢の中にいるのが好きか' },
+  { key:'E3', name:'主張性',     factor:'E', desc:'自分からリードするか' },
+  { key:'E4', name:'活動性',     factor:'E', desc:'常に活動的で忙しいか' },
+  { key:'E5', name:'刺激追求',   factor:'E', desc:'スリルや興奮を求めるか' },
+  { key:'E6', name:'陽気さ',     factor:'E', desc:'明るく楽観的か' },
+  { key:'O1', name:'想像力',     factor:'O', desc:'想像力や空想を楽しむか' },
+  { key:'O2', name:'芸術的興味', factor:'O', desc:'芸術や美に感応するか' },
+  { key:'O3', name:'感情性',     factor:'O', desc:'感情を深く感じるか' },
+  { key:'O4', name:'冒険性',     factor:'O', desc:'新しい体験を好むか' },
+  { key:'O5', name:'知性',       factor:'O', desc:'知的な探求を好むか' },
+  { key:'O6', name:'自由主義',   factor:'O', desc:'既存の価値観を問い直すか' },
+  { key:'A1', name:'信頼',       factor:'A', desc:'他人を信用できるか' },
+  { key:'A2', name:'道徳性',     factor:'A', desc:'他者を利用しないか' },
+  { key:'A3', name:'利他性',     factor:'A', desc:'他者を助けたいと思うか' },
+  { key:'A4', name:'協調性',     factor:'A', desc:'争いを避けるか' },
+  { key:'A5', name:'謙虚さ',     factor:'A', desc:'自分を控えめにするか' },
+  { key:'A6', name:'共感性',     factor:'A', desc:'他人の悲しみに寄り添うか' },
+  { key:'C1', name:'有能性',     factor:'C', desc:'効率よく物事をこなせるか' },
+  { key:'C2', name:'秩序性',     factor:'C', desc:'整理整頓が好きか' },
+  { key:'C3', name:'義務感',     factor:'C', desc:'約束やルールを守るか' },
+  { key:'C4', name:'達成努力',   factor:'C', desc:'期待以上の努力をするか' },
+  { key:'C5', name:'自己規律',   factor:'C', desc:'計画を実行に移せるか' },
+  { key:'C6', name:'慎重さ',     factor:'C', desc:'考慮してから行動するか' }
+];
+var FACTOR = {
+  O: { name:'開放性',   color:'#8b5cf6', sub:'新しいものへの開かれ方' },
+  C: { name:'誠実性',   color:'#3b82f6', sub:'物事の進め方・律し方' },
+  E: { name:'外向性',   color:'#f59e0b', sub:'人やできごとへの向かい方' },
+  A: { name:'協調性',   color:'#10b981', sub:'人との関わり方' },
+  N: { name:'感受性',   color:'#ef4444', sub:'感情の動きやすさ' }
+};
+var DISPLAY_ORDER = ['O','C','E','A','N'];   // 表示順（設計書§1）
+
+var params    = new URLSearchParams(location.search);
+var facets    = params.get('facets') || '';
+var typeCode  = params.get('code') || '';
+var gender    = params.get('gender') || '';
+var isSample  = params.get('sample') === '1';   // 見本の点数で見るサンプル閲覧（案内1枚目から）
+var box       = document.getElementById('frBody');
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function msg(t){ box.innerHTML = '<p class="fr-msg">' + esc(t) + '</p>' +
+  '<p style="text-align:center"><a class="fr-back" href="quiz.html?v=120">120問版を受ける →</a></p>'; }
+
+if (!/^[1-5]{30}$/.test(facets)) {
+  msg('このレポートは、120問版を受けた方の結果から作られます。');
+} else {
+  var scores = {};
+  FACET_META.forEach(function(m, i){ scores[m.key] = parseInt(facets[i], 10); });
+
+  // 本文の取り寄せ。本番はワーカー越し（R2倉庫にある・設計書§2.5）。
+  // ローカル確認のときだけ、同じ場所に置いた _facet-texts-local.json を読む（gitには入れない）。
+  var isLocal = location.protocol === 'file:' ||
+                location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  var url = isLocal ? '_facet-texts-local.json' : ('/api/facet?facets=' + facets);
+
+  fetch(url)
+    .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(data){ render(data); })
+    .catch(function(){ msg('レポートを読み込めませんでした。時間をおいて、もう一度お試しください。'); });
+}
+
+function render(data){
+  var html = '';
+
+  // ---- サンプル閲覧の断り ----
+  if (isSample) {
+    html += '<div class="report-card" style="border-color:rgba(236,72,153,0.45);">' +
+      '<p class="report-card-note" style="margin:0;">これは<b>見本の点数</b>で作ったサンプルです。' +
+      'あなた自身のレポートは、120問版の診断結果ページから開けます。</p></div>';
+  }
+
+  // ---- 表紙：強く出ている5つ／控えめな5つ ----
+  var ranked = FACET_META.slice().sort(function(a,b){ return scores[b.key] - scores[a.key]; });
+  var tops = ranked.filter(function(m){ return scores[m.key] >= 4; }).slice(0,5);
+  var lows = ranked.slice().reverse().filter(function(m){ return scores[m.key] <= 2; }).slice(0,5);
+  function coverList(list, empty){
+    if (!list.length) return '<p class="fr-facet-desc">' + empty + '</p>';
+    return '<div class="fr-cover-list">' + list.map(function(m){
+      return '<div class="fr-cover-item"><b>' + esc(m.name) + '</b>' +
+             '<span class="fr-facet-desc">' + esc(FACTOR[m.factor].name) + '</span>' +
+             '<span class="fr-chip" style="background:' + FACTOR[m.factor].color + '">' +
+             scores[m.key] + '</span></div>';
+    }).join('') + '</div>';
+  }
+  // ---- 5因子の五角形（全体像）----
+  // ⚠ 値は必ず「30項目の平均」から出す（code の5桁は使わない）。
+  //   このレポートは30項目が主役なので、下の30項目マップと必ず一致していないと
+  //   「五角形は全部ふつうなのに、30項目マップでは感受性が高い」という矛盾が起きる。
+  //   （2026-07-31に検証で実際に発生。code=33333 と facets がずれていたため）
+  function factorScore(f) {
+    var list = FACET_META.filter(function(m){ return m.factor === f; });
+    var sum = list.reduce(function(a, m){ return a + scores[m.key]; }, 0);
+    return Math.round(sum / list.length * 10) / 10;   // 小数第1位まで（例 4.3）
+  }
+  // その因子の6項目が「どこからどこまで散らばっているか」（平均だけだと中身の違いが消えるため）
+  function factorRange(f) {
+    var vs = FACET_META.filter(function(m){ return m.factor === f; })
+                       .map(function(m){ return scores[m.key]; });
+    return { min: Math.min.apply(null, vs), max: Math.max.apply(null, vs) };
+  }
+  var pentaHtml = (function(){
+    var CX = 150, CY = 140, R = 92;           // 中心と半径
+    var order = DISPLAY_ORDER;                 // O→C→E→A→N（表示順と合わせる）
+    var pt = function(i, r){                   // i番目の軸の、中心からrの位置
+      var ang = -Math.PI / 2 + i * 2 * Math.PI / 5;
+      return [CX + Math.cos(ang) * r, CY + Math.sin(ang) * r];
+    };
+    var poly = function(r){
+      return order.map(function(_, i){ return pt(i, r).map(function(n){ return n.toFixed(1); }).join(','); }).join(' ');
+    };
+    var s = '<svg viewBox="0 0 300 285" role="img" aria-label="5つの性格の五角形">';
+    // 目盛りの五角形（1〜5）
+    [0.2, 0.4, 0.6, 0.8, 1].forEach(function(k){
+      s += '<polygon class="fr-penta-grid" points="' + poly(R * k) + '"></polygon>';
+    });
+    // 軸
+    order.forEach(function(_, i){
+      var p = pt(i, R);
+      s += '<line class="fr-penta-axis" x1="' + CX + '" y1="' + CY +
+           '" x2="' + p[0].toFixed(1) + '" y2="' + p[1].toFixed(1) + '"></line>';
+    });
+    // 値の面（1→中心寄り、5→外周）
+    // ⚠ 帯（6項目の幅）は重ねない（2026-08-01・準也さん判断）。
+    //   1枚の図に2つの情報を重ねると読みにくいので、中身は下の棒グラフで見せる
+    var rad = function(v){ var r = R * (v - 1) / 4; return r < R * 0.06 ? R * 0.06 : r; };
+    var vals = order.map(function(f){ return factorScore(f); });
+    var area = order.map(function(_, i){
+      return pt(i, rad(vals[i])).map(function(n){ return n.toFixed(1); }).join(',');
+    }).join(' ');
+    s += '<polygon class="fr-penta-area" points="' + area + '"></polygon>';
+    // 頂点の丸とラベル
+    order.forEach(function(f, i){
+      var p = pt(i, rad(vals[i])), lp = pt(i, R + 30);
+      s += '<circle class="fr-penta-dot" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.5"></circle>';
+      var anchor = Math.abs(lp[0] - CX) < 6 ? 'middle' : (lp[0] > CX ? 'start' : 'end');
+      var dx = anchor === 'middle' ? 0 : (anchor === 'start' ? -6 : 6);
+      s += '<text class="fr-penta-label" x="' + (lp[0] + dx).toFixed(1) + '" y="' + lp[1].toFixed(1) +
+           '" text-anchor="' + anchor + '" fill="' + FACTOR[f].color + '">' + esc(FACTOR[f].name) + '</text>';
+      s += '<text class="fr-penta-val" x="' + (lp[0] + dx).toFixed(1) + '" y="' + (lp[1] + 14).toFixed(1) +
+           '" text-anchor="' + anchor + '" fill="' + FACTOR[f].color + '" opacity=".8">' + vals[i] + '</text>';
+    });
+    s += '</svg>';
+
+    // 図の下：性格ごとに6本の棒（＝中身）。いちばん幅が広い性格を一言で指す
+    var widest = order.map(function(f){
+      var r = factorRange(f);
+      return { f: f, w: r.max - r.min };
+    }).sort(function(a, b){ return b.w - a.w; })[0];
+    var spreadLine = widest.w >= 2
+      ? '中でも<b>' + esc(FACTOR[widest.f].name) + '</b>は、6項目が' + widest.w +
+        '段階ぶん開いています。ひとことで言い表せないのは、この差があるからです。'
+      : 'どの性格も、6項目が近い値でまとまっています。';
+
+    // 性格ごとに6本。まん中（3）を基準に、左＝控えめ／右＝強い で伸ばす
+    var barsHtml = '<div class="fr-fbars">' +
+      '<div class="fr-fbars-legend"><span>← 控えめ</span><span>ふつう</span><span>強い →</span></div>';
+    order.forEach(function(f){
+      var info = FACTOR[f];
+      barsHtml += '<div class="fr-fbars-group">' +
+        '<p class="fr-fbars-head"><span style="color:' + info.color + '">' + esc(info.name) +
+        '</span><span class="fr-fbars-avg">平均 ' + factorScore(f) + '</span></p>';
+      FACET_META.filter(function(m){ return m.factor === f; }).forEach(function(m){
+        var sc = scores[m.key], off = sc - 3, bar;
+        if (off === 0) {
+          bar = '<span class="fr-fbars-dot" style="background:' + info.color + '"></span>';
+        } else if (off > 0) {
+          bar = '<span class="fr-fbars-bar" style="left:50%;width:' + (off * 25) +
+                '%;background:' + info.color + '"></span>';
+        } else {
+          bar = '<span class="fr-fbars-bar" style="left:' + (50 + off * 25) + '%;width:' +
+                (-off * 25) + '%;background:' + info.color + ';opacity:.55"></span>';
+        }
+        barsHtml += '<div class="fr-fbars-row">' +
+          '<span class="fr-fbars-name">' + esc(m.name) + '</span>' +
+          '<div class="fr-fbars-track"><span class="fr-fbars-center"></span>' + bar + '</div>' +
+          '<span class="fr-fbars-score">' + sc + '</span></div>';
+      });
+      barsHtml += '</div>';
+    });
+    barsHtml += '</div>';
+
+    return '<div class="fr-penta">' + s + '</div>' +
+      '<p class="fr-penta-caption">この5つは、それぞれ6つの項目でできています。' +
+      'その中身が下の棒グラフで、<b>まん中の線が「ふつう（3）」</b>。線から離れているほど、' +
+      'その項目があなたらしさとして強く出ています。' + spreadLine +
+      '<br>※ 感受性は「感じやすさ」です。外側にあるほど良い・悪いという意味ではありません。</p>' +
+      barsHtml;
+  })();
+
+  // 凸凹の大きさ（3からどれだけ離れているかの合計）で、その人の「際立ち方」を一言添える
+  var spread = FACET_META.reduce(function(a, m){ return a + Math.abs(scores[m.key] - 3); }, 0);
+  var spreadWord = spread >= 40 ? 'あなたは、項目ごとの差がはっきり出ているタイプです。'
+                 : spread >= 20 ? 'あなたは、強い項目と控えめな項目がほどよく分かれています。'
+                 : 'あなたは、どの項目もまん中寄りで、極端に偏らないタイプです。';
+
+  // 表紙：五角形（全体像）→ その下に性格ごとの6本の棒（中身）→ 強い5つ・控えめな5つ
+  // ※ 以前あった「30項目マップ（左右に伸ばす図）」は、棒グラフと内容が重複するため外した
+  //   （2026-08-01・準也さん案「五角形の後ろに棒グラフを6本並べる」に一本化）
+  html += '<div class="report-card">' +
+    '<p class="report-card-title">まず、5つの性格の全体像</p>' +
+    '<p class="report-card-note">外側にいくほど、その性格が強く出ています（6項目の平均）</p>' +
+    pentaHtml +
+    '<p class="fr-penta-caption" style="margin:12px 0 0;">' + spreadWord + '</p>' +
+    '<div class="fr-cover" style="margin-top:14px;border-top:1px solid rgba(255,255,255,0.07);padding-top:14px;">' +
+      '<div class="fr-cover-col"><h3>強く出ている項目</h3>' + coverList(tops, '4以上の項目はありません') + '</div>' +
+      '<div class="fr-cover-col"><h3>控えめな項目</h3>' + coverList(lows, '2以下の項目はありません') + '</div>' +
+    '</div></div>';
+
+  // ---- 読み方ガイド ----
+  html += '<div class="report-card fr-guide">' +
+    '<p class="report-card-title">このレポートの読み方</p>' +
+    '<p class="report-card-note">同じ性格でも、中身は人によって違います</p>' +
+    '<p class="report-factor-text">たとえば同じ「外向性が高い人」でも、大勢の集まりが好きな人と、少人数で深く話すのが好きな人がいます。' +
+    '5つの性格それぞれを6つの項目に分けると、その違いが見えてきます。</p>' +
+    '<div class="fr-scale">' +
+      '<span>1 かなり弱い</span><span>2 やや弱い</span><span>3 ふつう</span>' +
+      '<span>4 高め</span><span>5 かなり強い</span>' +
+    '</div>' +
+    '<p class="fr-facet-desc" style="margin-top:10px">' +
+    'どの数字にも良い悪いはありません。強いところにも弱いところにも、それぞれの持ち味があります。</p>' +
+    '</div>';
+
+  // ---- 因子ごと（表示順 O→C→E→A→N） ----
+  DISPLAY_ORDER.forEach(function(f){
+    var info = FACTOR[f];
+    var list = FACET_META.filter(function(m){ return m.factor === f; });
+
+    html += '<div class="report-card">' +
+      '<p class="fr-factor-title" style="border-color:' + info.color + '">' +
+      esc(info.name) + '（' + f + '）</p>' +
+      '<p class="fr-facet-desc" style="margin-bottom:12px">' + esc(info.sub) + '</p>';
+
+    // バー一覧（この因子の6項目を俯瞰）
+    html += '<div style="margin-bottom:14px">' + list.map(function(m){
+      var s = scores[m.key];
+      return '<div class="facet-row">' +
+        '<span class="facet-name">' + esc(m.name) + '</span>' +
+        '<div class="facet-bar-bg"><div class="facet-bar" style="width:' + (s*20) +
+          '%;background:' + info.color + ';opacity:.75"></div></div>' +
+        '<span class="facet-score">' + s + '</span></div>';
+    }).join('') + '</div>';
+
+    // 本文
+    list.forEach(function(m){
+      var s = scores[m.key];
+      var body = (data[m.key] || {})[String(s)] || '';
+      html += '<div class="fr-facet">' +
+        '<div class="fr-facet-head">' +
+          '<span class="fr-facet-name">' + esc(m.name) + '</span>' +
+          '<span class="fr-facet-desc">' + esc(m.desc) + '</span>' +
+          '<span class="fr-facet-score" style="background:' + info.color + '">' + s + '</span>' +
+        '</div>' +
+        (body ? '<p class="report-factor-text">' + esc(body) + '</p>'
+              : '<p class="fr-facet-desc">（この項目の解説は準備中です）</p>') +
+        '</div>';
+    });
+
+    // 凸凹ハイライト（同じ因子の中で差が2以上あるとき・設計書§1）＋図（2026-07-31追加）
+    var hi = list.slice().sort(function(a,b){ return scores[b.key] - scores[a.key]; })[0];
+    var lo = list.slice().sort(function(a,b){ return scores[a.key] - scores[b.key]; })[0];
+    var diff = scores[hi.key] - scores[lo.key];
+    if (diff >= 2) {
+      // 開きを目で見せる（左＝低い項目、右＝高い項目。間の距離が「その人の中の開き」）
+      var gapFig =
+        '<div class="fr-gapfig">' +
+          '<div class="fr-gapfig-row">' +
+            '<span class="fr-gapfig-label">' + esc(lo.name) + '</span>' +
+            '<div class="fr-gapfig-track">' +
+              '<span class="fr-gapfig-fill" style="left:' + ((scores[lo.key]-1)/4*100) +
+                '%;width:' + (diff/4*100) + '%;background:' + info.color + '"></span>' +
+              '<span class="fr-gapfig-pt" style="left:' + ((scores[lo.key]-1)/4*100) +
+                '%;background:' + info.color + ';opacity:.55">' + scores[lo.key] + '</span>' +
+              '<span class="fr-gapfig-pt" style="left:' + ((scores[hi.key]-1)/4*100) +
+                '%;background:' + info.color + '">' + scores[hi.key] + '</span>' +
+            '</div>' +
+            '<span class="fr-gapfig-label right">' + esc(hi.name) + '</span>' +
+          '</div>' +
+          '<p class="fr-gapfig-cap">同じ' + esc(info.name) + 'の中で、' + diff + '段階ぶん開いています</p>' +
+        '</div>';
+      html += '<div class="fr-gap">' + gapFig +
+        '同じ' + esc(info.name) + 'でも、あなたの中では' +
+        '<b>' + esc(hi.name) + '</b>が' + scores[hi.key] + '、' +
+        '<b>' + esc(lo.name) + '</b>が' + scores[lo.key] + 'と開いています。' +
+        esc(info.name) + 'をひとことで言い表せないのは、この差があるからです。' +
+        '「' + esc(hi.name) + 'は強いけれど' + esc(lo.name) + 'はそうでもない」——' +
+        'これがあなたの' + esc(info.name) + 'の形です。</div>';
+    }
+    html += '</div>';
+  });
+
+  // ---- まとめ：いちばんあなたらしい3つ（3から離れている順） ----
+  var far = FACET_META.slice().sort(function(a,b){
+    var da = Math.abs(scores[a.key] - 3), db = Math.abs(scores[b.key] - 3);
+    if (db !== da) return db - da;
+    return scores[b.key] - scores[a.key];
+  }).slice(0,3);
+  html += '<div class="report-card">' +
+    '<p class="report-card-title">30項目の中で、いちばんあなたらしい3つ</p>' +
+    '<p class="report-card-note">まん中（3）からいちばん離れている項目です</p>' +
+    '<div class="fr-top3">' + far.map(function(m, i){
+      var s = scores[m.key];
+      var dir = s >= 4 ? '強く出ています' : (s <= 2 ? '控えめです' : 'まん中あたりです');
+      return '<div class="fr-top3-item"><div class="fr-top3-rank">' + (i+1) + '</div>' +
+        '<div class="fr-top3-body"><b>' + esc(m.name) + '</b>' +
+        '<span class="fr-facet-desc">（' + esc(FACTOR[m.factor].name) + '）</span><br>' +
+        esc(m.desc) + '——ここが <b>' + s + '</b>。30項目の中でも、' + dir + '。</div></div>';
+    }).join('') + '</div></div>';
+
+  if (isSample) {
+    html += '<p style="text-align:center"><a class="fr-back" href="quiz.html?v=120">' +
+      '120問版を受けて、自分のレポートを作る →</a></p>';
+  } else {
+    html += '<p style="text-align:center"><a class="fr-back" href="result.html?v=120' +
+      (typeCode ? '&code=' + encodeURIComponent(typeCode) : '') +
+      (gender ? '&gender=' + encodeURIComponent(gender) : '') +
+      (facets ? '&facets=' + encodeURIComponent(facets) : '') +
+      '">← 診断結果に戻る</a></p>';
+  }
+
+  box.innerHTML = html;
+
+  // ---- 計測（1端末1回だけ・設計書§3。dev_nocount=1 のときは数えない） ----
+  // サンプル閲覧は paid_report_view に混ぜない（レポート到達数が水増しされるため別イベント）
+  try {
+    var evName = isSample ? 'paid_sample_view' : 'paid_report_view';
+    if (localStorage.getItem('dev_nocount') !== '1' &&
+        !localStorage.getItem('counted_' + evName)) {
+      localStorage.setItem('counted_' + evName, '1');
+      fetch('/count/hit?e=' + evName, { method: 'POST', keepalive: true }).catch(function(){});
+    }
+  } catch (e) {}
+}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

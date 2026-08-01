@@ -779,6 +779,93 @@
     border-color: rgba(255,255,255,0.15);
     color: #94a3b8;
   }
+
+  /* ===== 30項目の完全レポート（120問版のみ・2026-07-30追加） ===== */
+  .paid-section {
+    width: 100%; max-width: 480px; margin-bottom: 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .btn-paid {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px 22px;
+    font-family: inherit; font-size: 15px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none; border-radius: 14px; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(139,92,246,0.35);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .btn-paid:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(139,92,246,0.45); }
+  .btn-paid .price {
+    font-size: 13px; font-weight: 700;
+    background: rgba(255,255,255,0.22); border-radius: 999px; padding: 2px 12px;
+  }
+  .paid-note { font-size: 12px; color: var(--dim); text-align: center; line-height: 1.7; }
+
+  /* 試し読みカード（2026-07-31・素人にも中身が想像できる入口にする） */
+  .paid-teaser { display: none; flex-direction: column; gap: 10px; }
+  .paid-teaser.show { display: flex; }
+  .paid-teaser-title { font-size: 15px; font-weight: 700; text-align: center; color: var(--text); }
+  .paid-teaser-sub { font-size: 12px; color: var(--dim); text-align: center; line-height: 1.7; }
+  .paid-teaser-quote {
+    position: relative; border-radius: 10px; padding: 12px 14px 6px;
+    background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.15);
+  }
+  .paid-teaser-facet { font-size: 11px; font-weight: 700; color: var(--purple); }
+  .paid-teaser-text {
+    font-size: 13px; line-height: 1.9; color: var(--text);
+    margin: 4px 0 0; max-height: 76px; overflow: hidden;
+  }
+  .paid-teaser-fade {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 36px;
+    background: linear-gradient(rgba(26,10,62,0), rgba(26,10,62,0.92));
+    border-radius: 0 0 10px 10px;
+  }
+  body.theme-light .paid-teaser-sub { color: #64748b; }
+  body.theme-light .paid-teaser-fade {
+    background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.95));
+  }
+  .paid-modal-price { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+  .paid-modal-price small { font-size: 12px; color: var(--dim); font-weight: 500; }
+  body.theme-light .paid-modal-price { color: #1e293b; }
+
+  .paid-modal {
+    position: fixed; inset: 0; z-index: 10000; display: none;
+    align-items: center; justify-content: center; padding: 20px;
+    background: rgba(3,5,20,0.72); backdrop-filter: blur(6px);
+  }
+  .paid-modal.open { display: flex; }
+  .paid-modal-inner {
+    width: 100%; max-width: 360px; text-align: center;
+    background: rgba(26,10,62,0.96); border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 18px; padding: 26px 24px;
+  }
+  .paid-modal-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border-radius: 999px; padding: 3px 14px; margin-bottom: 12px;
+  }
+  .paid-modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .paid-modal-text { font-size: 13px; color: var(--dim); line-height: 1.85; margin-bottom: 18px; }
+  .paid-modal-open {
+    display: block; width: 100%; padding: 14px;
+    font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none; border-radius: 12px; cursor: pointer; text-decoration: none;
+  }
+  .paid-modal-close {
+    margin-top: 12px; font-size: 12px; color: var(--dim);
+    background: none; border: none; cursor: pointer; font-family: inherit;
+  }
+  .paid-sample-link {
+    display: block; margin-top: 12px; font-size: 12px;
+    color: var(--purple); text-decoration: underline;
+  }
+  body.theme-light .paid-note,
+  body.theme-light .paid-modal-text,
+  body.theme-light .paid-modal-close { color: #64748b; }
+  body.theme-light .paid-modal-inner { background: #fff; border-color: rgba(139,92,246,0.28); }
+  body.theme-light .paid-modal-title { color: #1e293b; }
+
   .facet-card {
     width: 100%;
     background: rgba(20,10,50,0.4);
@@ -1165,6 +1252,58 @@
       </p>
       <p class="facet-card-note">各因子は6つの下位尺度（ファセット）で構成されています。因子スコアが同じでも、内訳が違うことがあります。</p>
       <div id="facetContent"></div>
+    </div>
+  </div>
+
+  <!-- 30項目の詳細レポート：試し読みカード（120問版のみ・2026-07-31改稿）
+       ⚠ 結果ページには金額を出さない（準也さん裁定 7/30「結果ページに値段が出ているのは抵抗がある」）。
+       ⚠ 「無料」と明かすのは購入操作のあと（準也さん裁定 7/31）。先に無料と言うと
+         「タダなら読む」しか測れず、支払い意思が分からない。
+       流れ＝試し読み「続きを全部読む」→ 案内1枚目「¥980・購入にすすむ」→ 2枚目「お支払い不要・開く」 -->
+  <div class="report-card paid-teaser" id="paidTeaser">
+    <p class="paid-teaser-title">あなたの性格を、30項目でくわしく</p>
+    <p class="paid-teaser-sub">外向性など5つの性格を、それぞれ6つに分けた30項目で解説します</p>
+    <div class="paid-teaser-quote" id="paidTeaserQuote" style="display:none;">
+      <span class="paid-teaser-facet" id="paidTeaserFacet"></span>
+      <p class="paid-teaser-text" id="paidTeaserText"></p>
+      <div class="paid-teaser-fade"></div>
+    </div>
+    <button class="btn-paid" id="paidBtn">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      続きを全部読む
+    </button>
+    <p class="paid-note">30項目すべての解説・約1万2千字</p>
+  </div>
+
+  <!-- 案内モーダル（1枚目＝値段と購入。2枚目＝ここで初めて無料と明かす） -->
+  <div class="paid-modal" id="paidModal">
+    <div class="paid-modal-inner" id="paidModalStep1">
+      <p class="paid-modal-title">30項目の詳細レポート</p>
+      <p class="paid-modal-price">¥980 <small>買い切り</small></p>
+      <p class="paid-modal-text">
+        30の項目それぞれに、あなたの点数に合わせた解説がつきます。<br>
+        全部で約1万2千字、あなた専用のレポートです。
+      </p>
+      <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
+      <!-- サンプル＝見本の30桁（準也さん裁定7/31「見せないと買う人はいない」）。
+           1〜5の極端な点数を含まない組み合わせにして、尖った本文は晒さない -->
+      <a class="paid-sample-link" id="paidSampleLink" target="_blank" rel="noopener"
+         href="facet-report.html?facets=323423432434443243344324234323&sample=1">サンプルを見る（見本の点数で全文）</a>
+      <button class="paid-modal-close" id="paidModalClose1">とじる</button>
+    </div>
+    <div class="paid-modal-inner" id="paidModalStep2" style="display:none;">
+      <span class="paid-modal-badge">公開記念</span>
+      <p class="paid-modal-title">ありがとうございます 🎉</p>
+      <p class="paid-modal-text">
+        このレポートを手に取っていただき、ありがとうございます。<br>
+        公開記念につき、<b>今回は無料でお渡しします</b>。お支払いは不要です。<br>
+        30項目すべて、あなたの点数に合わせて書いた解説です。<br>
+        どうぞゆっくりお読みください。
+      </p>
+      <a class="paid-modal-open" id="paidModalOpen" href="#">レポートを開く（無料）</a>
+      <button class="paid-modal-close" id="paidModalClose2">とじる</button>
     </div>
   </div>
 
@@ -2580,6 +2719,106 @@ if (version === '10') {
     if (isOpen) {
       setTimeout(function() { card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
     }
+  });
+})();
+
+// ===== 30項目の詳細レポート（¥980予定・いまは無料／2026-07-31改稿） =====
+// ⚠ 結果ページには金額を出さない（準也さん裁定 7/30）。
+// ⚠ 「無料」と明かすのは購入操作のあと（準也さん裁定 7/31）。先に無料と言うと
+//    「タダなら読む」しか測れない。順番＝
+//    試し読みカード「続きを全部読む」→ 案内1枚目「¥980・購入にすすむ」→ 2枚目「お支払い不要・開く」
+// 計測（すべて1端末1回・result_viewの見返し膨張を繰り返さない。dev_nocount=1で停止）：
+//   paid_btn_click  … 「続きを全部読む」（興味。まだ値段を見ていない）
+//   paid_buy_click  … 「購入にすすむ」（★支払い意思の本体。¥980を見て押した）
+//   paid_free_open  … 無料と知ったあと「レポートを開く」
+//   paid_report_view … facet-report.html 表示（あちら側で計測）
+//   ★主指標＝paid_buy_click ÷ paid_btn_click（値段を見て進んだ割合）。
+//   差分（btn_click − buy_click）＝ 値段を見て引き返した人。お金は1円も動かない。
+// ⚠ 検証するときは先に localStorage.setItem('dev_nocount','1') を実行すること。
+(function() {
+  if (version !== '120' || !facetsParam || !/^[1-5]{30}$/.test(facetsParam)) return;
+  if (isOtherMode || isChildMode || isSharedView) return;
+
+  var teaser  = document.getElementById('paidTeaser');
+  var btn     = document.getElementById('paidBtn');
+  var modal   = document.getElementById('paidModal');
+  var step1   = document.getElementById('paidModalStep1');
+  var step2   = document.getElementById('paidModalStep2');
+  var buyBtn  = document.getElementById('paidBuyBtn');
+  var openBtn = document.getElementById('paidModalOpen');
+  if (!teaser || !btn || !modal || !step1 || !step2 || !buyBtn || !openBtn) return;
+
+  function count(name) {
+    try {
+      if (localStorage.getItem('dev_nocount') === '1') return;
+      if (localStorage.getItem('counted_' + name) === '1') return;
+      localStorage.setItem('counted_' + name, '1');
+      fetch('/count/hit?e=' + name, { method: 'POST', keepalive: true }).catch(function(){});
+    } catch (e) {}
+  }
+
+  var reportUrl = 'facet-report.html?facets=' + facetsParam +
+                  '&code=' + encodeURIComponent(typeCode) +
+                  (gender ? '&gender=' + encodeURIComponent(gender) : '');
+  openBtn.href = reportUrl;
+
+  teaser.classList.add('show');
+
+  // ---- 試し読み：いちばん特徴的な項目（3から最も離れた項目・同点なら高い方）の書き出しを見せる ----
+  // 本文はワーカー越し（本番）。ローカル確認時は _facet-texts-local.json（gitには入れない）
+  var TEASER_KEYS = ['N1','N2','N3','N4','N5','N6','E1','E2','E3','E4','E5','E6',
+                     'O1','O2','O3','O4','O5','O6','A1','A2','A3','A4','A5','A6',
+                     'C1','C2','C3','C4','C5','C6'];
+  var TEASER_NAMES = ['不安','怒り','抑うつ','自己意識','無抑制','脆弱性',
+                      '友好性','群居性','主張性','活動性','刺激追求','陽気さ',
+                      '想像力','芸術的興味','感情性','冒険性','知性','自由主義',
+                      '信頼','道徳性','利他性','協調性','謙虚さ','共感性',
+                      '有能性','秩序性','義務感','達成努力','自己規律','慎重さ'];
+  var bestI = 0, bestD = -1, bestS = -1;
+  for (var i = 0; i < 30; i++) {
+    var sc = parseInt(facetsParam[i], 10);
+    var d = Math.abs(sc - 3);
+    if (d > bestD || (d === bestD && sc > bestS)) { bestD = d; bestS = sc; bestI = i; }
+  }
+  var teaserLocal = location.protocol === 'file:' ||
+                    location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  fetch(teaserLocal ? '_facet-texts-local.json' : ('/api/facet?facets=' + facetsParam))
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if (!data) return;
+      var body = data[TEASER_KEYS[bestI]] && data[TEASER_KEYS[bestI]][facetsParam[bestI]];
+      if (!body) return;
+      document.getElementById('paidTeaserFacet').textContent =
+        '「' + TEASER_NAMES[bestI] + '」の解説の書き出し';
+      // 冒頭だけ渡す。あふれた分はCSSのぼかしで「続きがある」見た目になる
+      document.getElementById('paidTeaserText').textContent = body.slice(0, 140);
+      document.getElementById('paidTeaserQuote').style.display = 'block';
+    })
+    .catch(function(){});   // 取れなくてもカード自体は出す（試し読み無しで動く）
+
+  // ---- 案内モーダル（1枚目→2枚目） ----
+  btn.addEventListener('click', function() {
+    count('paid_btn_click');
+    // すでに「購入にすすむ」まで進んだ端末には、2枚目（無料案内）から見せる
+    var seen = false;
+    try { seen = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
+    step1.style.display = seen ? 'none' : 'block';
+    step2.style.display = seen ? 'block' : 'none';
+    modal.classList.add('open');
+  });
+  buyBtn.addEventListener('click', function() {
+    count('paid_buy_click');
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+  });
+  openBtn.addEventListener('click', function() {
+    count('paid_free_open');
+  });
+  function closeModal() { modal.classList.remove('open'); }
+  document.getElementById('paidModalClose1').addEventListener('click', closeModal);
+  document.getElementById('paidModalClose2').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();   // 外側を押しても閉じる
   });
 })();
 

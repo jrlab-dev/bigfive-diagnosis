@@ -18,6 +18,14 @@ _一時/
 #   （変換スクリプトの出力先が誤ってここを指していた事故を受けて追加）
 essays/
 
+## ファセット詳細レポート150本のJSON（絶対にgitへ入れない・2026-07-30追加）
+#   エッセイと同じ理由。こちらは**¥980の有料商品の本体**なので、なおさら置けない。
+#   置き場所はR2倉庫（bigfive-ogp の facets/facet-texts.json）。ワーカーの /api/facet が
+#   「うちのサイトの画面から来たか」を見てから、その人の30本だけを返す（設計書§2.5）。
+#   `_facet-texts-local.json` はローカルで見た目を確認するときだけ置く作業用のコピー。
+facet-texts.json
+_facet-texts-local.json
+
 ## 開発用スクリプト
 generate_*.py
 test_*.py

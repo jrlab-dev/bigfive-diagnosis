@@ -2889,6 +2889,19 @@ function renderAIProfile() {
     if (typeName) lines.push(`タイプ: ${typeName}（${bf.code}）`);
     else lines.push(`タイプコード: ${bf.code}`);
     lines.push(`開放性: ${bfFmt(s.O)} / 誠実性: ${bfFmt(s.C)} / 外向性: ${bfFmt(s.E)} / 協調性: ${bfFmt(s.A)} / 感受性（神経症傾向）: ${bfFmt(s.N)}`);
+    // 120問版なら下位30項目の数値も渡す（2026-07-31追加）。AIは数値から自力で解釈できるので
+    // 散文は渡さない（渡すべきは数値だけ・約300字の追加で済む）
+    if (bf.facets) {
+      const fx = bf.facets;
+      const fRow = (label, keys, names) =>
+        `${label}: ` + keys.map((k, i) => `${names[i]}${fx[k] || '?'}`).join(' ');
+      lines.push('下位30項目（各1〜5・数字が大きいほどその傾向が強い）:');
+      lines.push(fRow('開放性', ['O1','O2','O3','O4','O5','O6'], ['想像力','芸術的興味','感情性','冒険性','知性','自由主義']));
+      lines.push(fRow('誠実性', ['C1','C2','C3','C4','C5','C6'], ['有能性','秩序性','義務感','達成努力','自己規律','慎重さ']));
+      lines.push(fRow('外向性', ['E1','E2','E3','E4','E5','E6'], ['友好性','群居性','主張性','活動性','刺激追求','陽気さ']));
+      lines.push(fRow('協調性', ['A1','A2','A3','A4','A5','A6'], ['信頼','道徳性','利他性','協調性','謙虚さ','共感性']));
+      lines.push(fRow('感受性', ['N1','N2','N3','N4','N5','N6'], ['不安','怒り','抑うつ','自己意識','無抑制','脆弱性']));
+    }
   }
 
   // HSP

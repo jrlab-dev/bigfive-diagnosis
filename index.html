@@ -259,7 +259,7 @@
     border: 1px solid rgba(255,255,255,0.2);
   }
 
-  /* リビールテキスト */
+    /* リビールテキスト */
   .reveal-text {
     display: flex; flex-direction: column;
     align-items: center; gap: 4px;
@@ -844,7 +844,8 @@
       <img id="heroLogo" src="images/bigfive-diagnosis-logo.webp" alt="ビッグファイブ診断 公式ロゴ">
     </div>
     <h2 class="hero-subtitle">ビッグファイブ診断</h2>
-    <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='quiz.html?v=10'">診断をはじめる</button>
+    <!-- 2026-08-01：以前はこのボタンが10問版に直行していた。問題数を選べる中継ページへ変更 -->
+    <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='start.html'">診断をはじめる</button>
     <div class="reveal-text" id="revealText">
       <h1 class="reveal-line reveal-line--main">
         <span class="char">性</span><span class="char">格</span><span class="char">診</span><span class="char">断</span>
@@ -962,14 +963,14 @@
         <div class="cta-card cta-card--30">
           <span class="cta-card-num">30問</span>
           <span class="cta-card-time">約5分</span>
-          <p class="cta-card-desc">下位特性（ファセット）まで分析<br>より精密なキャラクター</p>
+          <p class="cta-card-desc">組み合わせ10通りの解説つき<br>レア度のあるカード・隠れキャラ</p>
           <span class="cta-card-badge">精度UP</span>
           <a href="quiz.html?v=30" class="shimmer-btn cta-card-btn" data-done-key="bigfive_v30">本格診断（30問）</a>
         </div>
         <div class="cta-card cta-card--120">
           <span class="cta-card-num">120問</span>
           <span class="cta-card-time">約15分</span>
-          <p class="cta-card-desc">学術研究と同じ手法<br>最高精度の包括分析</p>
+          <p class="cta-card-desc">国際標準の30項目まで分析<br>あなただけの文章が全文読める</p>
           <span class="cta-card-badge">最高精度</span>
           <a href="quiz.html?v=120" class="shimmer-btn cta-card-btn" data-done-key="bigfive_v120">徹底分析（120問）</a>
         </div>

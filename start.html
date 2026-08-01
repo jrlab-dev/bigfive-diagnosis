@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>診断の長さを選ぶ｜ビッグファイブ性格診断</title>
+<meta name="description" content="ビッグファイブ性格診断の問題数を選びます。120問（国際標準の30項目まで分析・途中保存あり）／30問／10問。完全無料・登録不要。">
+<!-- 選択肢だけの中継ページのため検索結果には出さない（リンクはたどらせる） -->
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/start.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e27;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  body.theme-light { background: #fff; color: #111; }
+
+  /* 共通ナビ（nav.js）は position:static でこの上に積まれるため、
+     ここで改めてナビ高さぶんを空ける必要はない（空けると二重になり、
+     iPhone SE で3枚が一画面に収まらなくなる。2026-08-01に実測して修正） */
+  .start-wrap {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 14px 18px 48px;
+  }
+  .start-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    margin: 0 0 14px;
+    text-align: center;
+  }
+
+  /* 選択カード（index.html の選択パネルと同じ見た目） */
+  .vp-list { display: flex; flex-direction: column; gap: 8px; }
+  .vp-card {
+    display: block;
+    padding: 13px 16px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .vp-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .vp-card--rec {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none;
+    color: #fff;
+  }
+  body.theme-light .vp-card {
+    background: rgba(255,255,255,0.94);
+    border: 1px solid rgba(0,0,0,0.1);
+    color: #111;
+  }
+  body.theme-light .vp-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.13); }
+  body.theme-light .vp-card--rec {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border: none;
+    color: #fff;
+  }
+  .vp-badge {
+    display: inline-block;
+    padding: 2px 10px 3px;
+    border-radius: 999px;
+    background: #fff;
+    color: #8b5cf6;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .vp-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .vp-num   { font-size: 20px; font-weight: 800; }
+  .vp-time  { font-size: 12px; opacity: 0.72; }
+  .vp-title { font-size: 13px; font-weight: 700; opacity: 0.94; }
+  .vp-desc  { font-size: 12.5px; line-height: 1.66; opacity: 0.9; margin: 0; }
+  .vp-strong { font-weight: 700; opacity: 1; }
+
+  .start-note {
+    font-size: 12px;
+    color: var(--dim);
+    text-align: center;
+    margin: 11px 0 0;
+  }
+  body.theme-light .start-note { color: #5b6270; }
+  .start-back {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--dim);
+    text-decoration: none;
+  }
+  .start-back:hover { text-decoration: underline; }
+  body.theme-light .start-back { color: #5b6270; }
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+
+<main class="start-wrap">
+  <h1 class="start-title">どこまで知りたいですか</h1>
+
+  <div class="vp-list">
+    <a href="quiz.html?v=120" class="vp-card vp-card--rec">
+      <span class="vp-badge">おすすめ</span>
+      <span class="vp-head"><span class="vp-num">120問</span><span class="vp-time">約15分</span><span class="vp-title">本気で分析する</span></span>
+      <p class="vp-desc">世界の心理学研究と同じ30項目まで分析。あなただけに書かれた文章が全文読めます。<span class="vp-strong">途中でやめても、続きから再開できます。</span></p>
+    </a>
+    <a href="quiz.html?v=30" class="vp-card">
+      <span class="vp-head"><span class="vp-num">30問</span><span class="vp-time">約5分</span><span class="vp-title">ちゃんと知る</span></span>
+      <p class="vp-desc">5因子の組み合わせ10通りの解説が読めます。カードにレア度がつき、隠れキャラも登場。</p>
+    </a>
+    <a href="quiz.html?v=10" class="vp-card">
+      <span class="vp-head"><span class="vp-num">10問</span><span class="vp-time">約2分</span><span class="vp-title">まず試す</span></span>
+      <p class="vp-desc">どんな結果が出るか見てみたい人へ。2分で自分のタイプが分かります。</p>
+    </a>
+  </div>
+
+  <p class="start-note">どれも完全無料・登録不要です</p>
+  <a href="index.html" class="start-back">← トップにもどる</a>
+</main>
+
+<script src="nav.js" defer></script>
+</body>
+</html>
