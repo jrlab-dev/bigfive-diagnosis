@@ -724,6 +724,28 @@ function showResult() {
         else if (window.fetch) fetch(__qc, { method: 'POST', keepalive: true }).catch(function(){});
       }
     } catch (e) {}
+    /* 匿名の回答データを蓄積する（2026-08-01・準也さん決定 2026-07-29）
+     * 送るのは「何問版・5因子スコア・30項目スコア・生の回答・性別・スマホかPCか」だけ。
+     * 名前もメールも端末を見分ける印も送らない（サーバー側にその列自体が無い）。
+     * dev_nocount=1 の端末は送らない（計測と同じ扱い）。回答に空きがあるときも送らない。 */
+    try {
+      var __allAnswered = answers.length > 0 && answers.every(function (a) { return a >= 1 && a <= 5; });
+      if (localStorage.getItem('dev_nocount') !== '1' && __allAnswered) {
+        fetch('https://bigfive.jr-genius.jp/count/anon', {
+          method: 'POST',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            v: version,
+            code: result.code,
+            facets: result.facets || null,
+            gender: gender,
+            answers: answers.join(''),
+            device: /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd'
+          })
+        }).catch(function () {});
+      }
+    } catch (e) {}
     const ref = params.get('ref') || '';
     const otherCode = params.get('other_code') || '';
     const otherName = params.get('other_name') || '';
