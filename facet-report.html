@@ -338,6 +338,11 @@ if (!/^[1-5]{30}$/.test(facets)) {
   var valData = null;
   try { valData = JSON.parse(localStorage.getItem('schwartz_result')); } catch (e) {}
   var valKey = valData && valData.top3 && valData.top3[0] ? String(valData.top3[0]) : '';
+  // 第6弾：HEXACO（Hの生値・4.0以上=高／2.5未満=低）
+  var hexData = null;
+  try { hexData = JSON.parse(localStorage.getItem('hexaco_result')); } catch (e) {}
+  var hexRaw = hexData && hexData.scores && typeof hexData.scores.H === 'number' ? hexData.scores.H : null;
+  var hexLv = hexRaw === null ? '' : (hexRaw >= 4.0 ? 'high' : (hexRaw < 2.5 ? 'low' : ''));
 
   var url = isLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facets +
@@ -352,7 +357,8 @@ if (!/^[1-5]{30}$/.test(facets)) {
                        (mindKey ? '&mind=' + mindKey : '') +
                        (sdtKey ? '&sdtk=' + sdtKey : '') +
                        (loveKey ? '&lovek=' + loveKey : '') +
-                       (valKey ? '&val=' + encodeURIComponent(valKey) : ''));
+                       (valKey ? '&val=' + encodeURIComponent(valKey) : '') +
+                       (hexRaw !== null ? '&hexh=' + hexRaw : ''));
 
   // ワーカーと同じ該当判定（ローカル確認用。本番はワーカーが選んで _cross で返す）
   function matchCross(cross){
@@ -373,6 +379,7 @@ if (!/^[1-5]{30}$/.test(facets)) {
       if (p.sdtk && p.sdtk !== sdtKey) return false;
       if (p.lovek && p.lovek !== loveKey) return false;
       if (p.val && p.val !== valKey) return false;
+      if (p.hexh && p.hexh !== hexLv) return false;
       if (p.facet) {
         var idx = -1;
         for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
@@ -400,6 +407,7 @@ if (!/^[1-5]{30}$/.test(facets)) {
     if (sdtKey) pushIntro('sdt', 'sdt');
     if (loveKey) pushIntro('love', 'love');
     if (valKey) pushIntro('values', 'values');
+    if (hexLv) pushIntro('hexaco', 'hexaco');
     return { intros: intros, parts: hit };
   }
 
@@ -685,10 +693,11 @@ function render(data){
     { taken: mindTaken, name: 'マインドセット', label: 'マインドセット診断', href: 'mindset.html' },
     { taken: !!sdtKey, name: '動機（SDT）', label: '動機づけ診断', href: 'sdt.html' },
     { taken: !!loveKey, name: '恋愛スタイル', label: '恋愛スタイル診断', href: 'love.html' },
-    { taken: !!valKey, name: '価値観', label: '価値観診断', href: 'schwartz.html' }
+    { taken: !!valKey, name: '価値観', label: '価値観診断', href: 'schwartz.html' },
+    { taken: hexRaw !== null, name: 'HEXACO', label: 'HEXACO診断（200問）', href: 'hexaco.html' }
   ];
   var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
-                locusKey || mindKey || sdtKey || loveKey || valKey;
+                locusKey || mindKey || sdtKey || loveKey || valKey || hexLv;
   html += '<div class="report-card">' +
     '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>';
   if (!anyTest) {
@@ -759,6 +768,9 @@ function render(data){
         headBits.push('恋愛' + (LOVE_JA[p.lovek] || p.lovek)); testCnt++; }
       if (p.val) { matBits.push('最上位の価値観＝「' + (VAL_JA[p.val] || p.val) + '」');
         headBits.push('価値観「' + (VAL_JA[p.val] || p.val) + '」'); testCnt++; }
+      if (p.hexh) { matBits.push('HEXACO正直さ-謙虚さ＝' + (hexRaw !== null ? hexRaw.toFixed(1) : '') +
+          '（' + (p.hexh === 'high' ? '高め' : '低め') + '）');
+        headBits.push('正直さ-謙虚さ' + (p.hexh === 'high' ? '高め' : '低め')); testCnt++; }
       var mat = '材料：' + matBits.join(' × ');
       var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
         '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);

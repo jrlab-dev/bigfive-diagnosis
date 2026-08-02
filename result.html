@@ -2840,6 +2840,10 @@ if (version === '10') {
     var vr = JSON.parse(localStorage.getItem('schwartz_result'));
     if (vr && vr.top3 && vr.top3[0]) teaserExtra += '&val=' + encodeURIComponent(vr.top3[0]);
   } catch (e) {}
+  try {
+    var hx = JSON.parse(localStorage.getItem('hexaco_result'));
+    if (hx && hx.scores && typeof hx.scores.H === 'number') teaserExtra += '&hexh=' + hx.scores.H;
+  } catch (e) {}
   fetch(teaserLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facetsParam +
                        (teaserAtt ? '&att=' + teaserAtt : '') +

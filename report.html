@@ -544,7 +544,7 @@ body {
 </div>
 
 <script src="image-resolver.js"></script>
-<script src="cross-att-texts.js?v=5"></script>
+<script src="cross-att-texts.js?v=6"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -1063,8 +1063,11 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
   // 愛着・HSP × 性格／恋愛／動機（2026-08-02刷新・第2弾でHSP追加・データ＝cross-att-texts.js）
   // 旧・愛着系7本とHSP系4本のベタ書きはデータ側に吸収した。表示ルール（裁定済み）＝該当候補を
   // 採点順に並べ上位2本だけ出す（出し惜しみ＝有料への期待）。0本なら受けたテストの総論を1本出す。
+  let hexH = null;
+  try { const hx = JSON.parse(localStorage.getItem('hexaco_result')); if (hx && hx.scores) hexH = hx.scores.H; } catch (e) {}
+  const hexLv = typeof hexH === 'number' ? (hexH >= 4.0 ? 'high' : (hexH < 2.5 ? 'low' : '')) : '';
   if ((attachKey || hspTotal !== null || impostorSev || eqLevel || eqWeakest ||
-       locusType || mindset || sdt || love) && window.CROSS_ATT) {
+       locusType || mindset || sdt || love || hexLv) && window.CROSS_ATT) {
     const hspLv = hspTotal === null ? '' : (hspTotal >= 34 ? 'high' : (hspTotal <= 19 ? 'low' : ''));
     const lv = { O, C, E, A, N };
     const cand = [];
@@ -1096,6 +1099,9 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
     if (locusType && mindset) (CROSS_ATT.lm || []).forEach(p => {
       if (p.locus === locusType && p.mind === mindset) cand.push(p);
     });
+    if (hexLv) (CROSS_ATT.hexcuts || []).forEach(p => {
+      if (p.hexh === hexLv && lv[p.factor] === p.dir) cand.push(p);
+    });
     (CROSS_ATT.psy || []).forEach(p => {
       if (p.type !== attachKey) return;
       if ((p.kind === 'love' && love === p.key) || (p.kind === 'sdt' && sdt === p.key) ||
@@ -1113,7 +1119,8 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
                  (locusType && CROSS_ATT.locus_soron) ||
                  (mindset && CROSS_ATT.mind_soron) ||
                  (sdt && CROSS_ATT.sdt_soron) ||
-                 (love && CROSS_ATT.love_soron) || null;
+                 (love && CROSS_ATT.love_soron) ||
+                 (hexLv && CROSS_ATT.hex_soron) || null;
       if (so) parts.push(so.replace(/\n\n/g, '<br><br>'));
     }
   }
