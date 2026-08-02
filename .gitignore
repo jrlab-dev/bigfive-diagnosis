@@ -75,3 +75,7 @@ capture_cards.js
 【引き継ぎ・現在地】.md
 character-registry.html
 character_registry.json
+
+# クロス分析（愛着×30項目）の課金本文も同じ扱い（R2の facets/cross-texts.json が本体・2026-08-02）
+cross-texts.json
+_cross-texts-local.json

@@ -184,6 +184,19 @@
   }
   .fr-msg { font-size: 13.5px; color: var(--dim); text-align: center; padding: 30px 0; }
 
+  /* クロス分析章（愛着×30項目・2026-08-02） */
+  .fr-cross-meta {
+    display: flex; flex-direction: column; gap: 2px;
+    background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 8px; padding: 8px 10px; margin: 0 0 8px;
+    font-size: 10.5px; color: var(--dim); line-height: 1.6;
+  }
+  .fr-cross-fold { border-top: 1px solid rgba(255,255,255,0.07); padding: 12px 0 4px; margin-top: 4px; }
+  .fr-cross-fold summary {
+    cursor: pointer; font-size: 13.5px; font-weight: 700; color: var(--purple);
+    list-style-position: inside; margin-bottom: 8px;
+  }
+
   /* ライトモード（既存クラスは light-mode.css が面倒を見る。ここは追加分だけ） */
   body.theme-light .fr-head p,
   body.theme-light .fr-cover-col h3,
@@ -193,6 +206,8 @@
   body.theme-light .fr-msg { color: #64748b; }
   body.theme-light .fr-facet { border-top-color: rgba(0,0,0,0.08); }
   body.theme-light .fr-gap { background: rgba(139,92,246,0.07); border-color: rgba(139,92,246,0.22); }
+  body.theme-light .fr-cross-meta { background: rgba(139,92,246,0.06); color: #64748b; }
+  body.theme-light .fr-cross-fold { border-top-color: rgba(0,0,0,0.08); }
 
   @media (max-width: 420px) {
     body { padding: 48px 12px 60px; }
@@ -277,10 +292,41 @@ if (!/^[1-5]{30}$/.test(facets)) {
   // ローカル確認のときだけ、同じ場所に置いた _facet-texts-local.json を読む（gitには入れない）。
   var isLocal = location.protocol === 'file:' ||
                 location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-  var url = isLocal ? '_facet-texts-local.json' : ('/api/facet?facets=' + facets);
+
+  // 愛着診断の結果（同じ端末のlocalStorage）。あればクロス分析章の材料になる（2026-08-02追加）
+  var attData = null;
+  try { attData = JSON.parse(localStorage.getItem('attachment_result')); } catch (e) {}
+  var attKey = attData && ['secure','anxious','avoidant','fearful'].indexOf(attData.typeKey) >= 0
+             ? attData.typeKey : '';
+
+  var url = isLocal ? '_facet-texts-local.json'
+                    : ('/api/facet?facets=' + facets + (attKey ? '&att=' + attKey : ''));
 
   fetch(url)
     .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(data){
+      // ローカル確認時：ワーカーの代わりに、こちらで該当パーツを選ぶ（本番はワーカーが選んで _cross で返す）
+      if (isLocal && attKey) {
+        return fetch('_cross-texts-local.json')
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(cross){
+            if (cross) {
+              var hit = (cross.parts || []).filter(function(p){
+                if (p.type !== attKey) return false;
+                var idx = -1;
+                for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
+                if (idx < 0) return false;
+                var s = parseInt(facets[idx], 10);
+                return p.dir === 'high' ? s >= 4 : s <= 2;
+              }).sort(function(a, b){ return b.total - a.total; });
+              data._cross = { intro: (cross.intro || {})[attKey] || '', parts: hit };
+            }
+            return data;
+          })
+          .catch(function(){ return data; });
+      }
+      return data;
+    })
     .then(function(data){ render(data); })
     .catch(function(){ msg('レポートを読み込めませんでした。時間をおいて、もう一度お試しください。'); });
 }
@@ -513,6 +559,61 @@ function render(data){
     }
     html += '</div>';
   });
+
+  // ---- クロス分析章：愛着スタイル×30項目（2026-08-02・正本＝plans/【設計】クロス分析第1弾） ----
+  // 表示ルール（裁定済み）：該当パーツは全部出す・得点順・上位2本は開いた状態・3本目以降は折りたたみ
+  var ATT_JA = { secure: '安定型', anxious: '不安型', avoidant: '回避型', fearful: '恐れ型' };
+  var CROSS_NOTE = {
+    2: '根拠：この組み合わせは、愛着理論×ビッグファイブの相関研究（複数研究のまとめ）で方向が確認されています',
+    1: '根拠：理論的に整合する組み合わせです（項目単位の研究は発展途上）'
+  };
+  function crossParas(t){
+    return String(t).split('\n\n').map(function(p){
+      return '<p class="report-factor-text">' + esc(p) + '</p>';
+    }).join('');
+  }
+  html += '<div class="report-card">' +
+    '<p class="report-card-title">クロス分析：愛着スタイル × あなたの30項目</p>';
+  if (!attKey) {
+    html += '<p class="report-card-note">別の心理学テストと重ねて読む、このレポートだけの章です</p>' +
+      '<p class="report-factor-text">無料の<b>愛着スタイル診断</b>（12問・約2分）をこの端末で受けると、' +
+      'その結果とあなたの30項目の点数を重ねた、あなた専用のクロス分析がここに追加されます。</p>' +
+      '<p style="text-align:center;margin:10px 0 4px;"><a class="fr-back" href="attachment.html">愛着スタイル診断を受ける →</a></p>';
+  } else if (!data._cross) {
+    html += '<p class="report-card-note">別の心理学テストと重ねて読む、このレポートだけの章です</p>' +
+      '<p class="fr-facet-desc">クロス分析を読み込めませんでした。時間をおいて、もう一度お試しください。</p>';
+  } else {
+    var cx = data._cross;
+    html += '<p class="report-card-note">「' + ATT_JA[attKey] + '」のあなたの傾向と、30項目の点数が交差する場所だけを書いた分析です</p>' +
+      '<p class="fr-facet-desc" style="margin-bottom:12px">この章は、国際標準の30の下位尺度（IPIP-NEO-120と同じ構成）と、' +
+      '愛着理論の2軸（不安・回避）の測定結果を重ねています。</p>';
+    if (cx.intro) html += crossParas(cx.intro);
+    cx.parts.forEach(function(p, i){
+      var meta = null;
+      for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) meta = FACET_META[j];
+      var fname = meta ? meta.name : p.facet;
+      var mat = '材料：あなたの「' + fname + '」＝' + scores[p.facet] + '点 × 愛着診断「' + ATT_JA[attKey] + '」' +
+        (attData && attData.anxiety ? '（不安軸' + attData.anxiety + '・回避軸' + attData.avoidance + '）' : '');
+      var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
+        '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);
+      var head = '「' + fname + '」が' + (p.dir === 'high' ? '高い' : '低い') + 'あなたの' + ATT_JA[attKey];
+      if (i < 2) {
+        html += '<div class="fr-facet"><div class="fr-facet-head">' +
+          '<span class="fr-facet-name">' + esc(head) + '</span>' +
+          (meta ? '<span class="fr-facet-score" style="background:' + FACTOR[meta.factor].color + '">' +
+            scores[p.facet] + '</span>' : '') +
+          '</div>' + inner + '</div>';
+      } else {
+        html += '<details class="fr-cross-fold"><summary>' + esc(head) + '</summary>' + inner + '</details>';
+      }
+    });
+    if (!cx.parts.length) {
+      html += '<p class="fr-facet-desc" style="margin-top:10px">30項目の点数がまん中寄りのため、今回は追加の各論はありません。' +
+        'あなたの場合は上の総論が中心になります。</p>';
+    }
+    html += '<p class="fr-facet-desc" style="margin-top:12px">HSPなど、ほかの心理学診断とのクロス分析も、この章に順次追加していきます。</p>';
+  }
+  html += '</div>';
 
   // ---- まとめ：いちばんあなたらしい3つ（3から離れている順） ----
   var far = FACET_META.slice().sort(function(a,b){
