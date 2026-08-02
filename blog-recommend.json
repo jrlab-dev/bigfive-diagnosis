@@ -1,6 +1,6 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-08-02",
+  "_updated": "2026-08-03",
   "maxItems": 4,
   "groups": [
     {
@@ -61,6 +61,8 @@
         { "cond": [{ "f": "C", "max": 2 }], "url": "/blog/love-conscientiousness-low.html", "title": "「なんでいつも忘れるの」　ルーズな人が詰められる本当の理由" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/love-openness-high.html", "title": "飽きっぽい人の恋愛　好奇心が愛情を食べてしまう理由" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/love-openness-low.html", "title": "いつもの場所で、いつもの話をする　保守的な人の恋愛" },
+        { "cond": [{ "f": "N", "min": 4 }, { "f": "A", "min": 4 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
+        { "cond": [{ "f": "N", "min": 5 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
         { "cond": [], "url": "/blog/bigfive-love-compatibility.html", "title": "性格と恋愛相性の科学　5因子で見るカップルの傾向" }
       ]
     },
