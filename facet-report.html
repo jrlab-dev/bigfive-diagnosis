@@ -319,6 +319,25 @@ if (!/^[1-5]{30}$/.test(facets)) {
   var dtS = dtData && dtData.scores ? dtData.scores : null;
   function dtLv(v){ return (typeof v === 'number') ? (v >= 60 ? 'high' : (v < 40 ? 'low' : '')) : ''; }
   var narcLv = dtS ? dtLv(dtS.nPct) : '', machLv = dtS ? dtLv(dtS.mPct) : '', psyLv = dtS ? dtLv(dtS.pPct) : '';
+  // 第5弾：統制・マインドセット・SDT・恋愛・価値観（2026-08-03）
+  var locusData = null;
+  try { locusData = JSON.parse(localStorage.getItem('locus_result')); } catch (e) {}
+  var locusKey = locusData && ['internal','external'].indexOf(locusData.type) >= 0 ? locusData.type : '';
+  var locusTaken = !!(locusData && locusData.type);
+  var mindData = null;
+  try { mindData = JSON.parse(localStorage.getItem('mindset_result')); } catch (e) {}
+  var mindKey = mindData && ['growth','fixed'].indexOf(mindData.type) >= 0 ? mindData.type : '';
+  var mindTaken = !!(mindData && mindData.type);
+  var sdtData = null;
+  try { sdtData = JSON.parse(localStorage.getItem('sdt_result')); } catch (e) {}
+  var sdtKey = sdtData && ['autonomy','competence','relatedness'].indexOf(sdtData.strongest) >= 0 ? sdtData.strongest : '';
+  var loveData = null;
+  try { loveData = JSON.parse(localStorage.getItem('love_result')); } catch (e) {}
+  var loveKey = loveData && ['eros','ludus','storge','pragma','mania','agape'].indexOf(loveData.mainStyle) >= 0
+              ? loveData.mainStyle : '';
+  var valData = null;
+  try { valData = JSON.parse(localStorage.getItem('schwartz_result')); } catch (e) {}
+  var valKey = valData && valData.top3 && valData.top3[0] ? String(valData.top3[0]) : '';
 
   var url = isLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facets +
@@ -328,12 +347,18 @@ if (!/^[1-5]{30}$/.test(facets)) {
                        (impDom ? '&impdom=' + impDom : '') +
                        (eqLv ? '&eq=' + eqLv : '') +
                        (eqWk ? '&eqw=' + eqWk : '') +
-                       (dtS ? '&dtn=' + dtS.nPct + '&dtm=' + dtS.mPct + '&dtp=' + dtS.pPct : ''));
+                       (dtS ? '&dtn=' + dtS.nPct + '&dtm=' + dtS.mPct + '&dtp=' + dtS.pPct : '') +
+                       (locusKey ? '&locus=' + locusKey : '') +
+                       (mindKey ? '&mind=' + mindKey : '') +
+                       (sdtKey ? '&sdtk=' + sdtKey : '') +
+                       (loveKey ? '&lovek=' + loveKey : '') +
+                       (valKey ? '&val=' + encodeURIComponent(valKey) : ''));
 
   // ワーカーと同じ該当判定（ローカル確認用。本番はワーカーが選んで _cross で返す）
   function matchCross(cross){
     var hit = (cross.parts || []).filter(function(p){
-      if (!p.type && !p.hsp && !p.imp && !p.impdom && !p.eq && !p.eqw && !p.narc && !p.mach && !p.psy) return false;
+      if (!p.type && !p.hsp && !p.imp && !p.impdom && !p.eq && !p.eqw && !p.narc && !p.mach && !p.psy &&
+          !p.locus && !p.mind && !p.sdtk && !p.lovek && !p.val) return false;
       if (p.type && p.type !== attKey) return false;
       if (p.hsp && p.hsp !== hspLv) return false;
       if (p.imp && p.imp !== impSev) return false;
@@ -343,6 +368,11 @@ if (!/^[1-5]{30}$/.test(facets)) {
       if (p.narc && p.narc !== narcLv) return false;
       if (p.mach && p.mach !== machLv) return false;
       if (p.psy && p.psy !== psyLv) return false;
+      if (p.locus && p.locus !== locusKey) return false;
+      if (p.mind && p.mind !== mindKey) return false;
+      if (p.sdtk && p.sdtk !== sdtKey) return false;
+      if (p.lovek && p.lovek !== loveKey) return false;
+      if (p.val && p.val !== valKey) return false;
       if (p.facet) {
         var idx = -1;
         for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
@@ -365,13 +395,19 @@ if (!/^[1-5]{30}$/.test(facets)) {
     if (impSev === 'high') pushIntro('imp_high', 'imp');
     if (eqLv || eqWk) pushIntro('eq', 'eq');
     if (dtS) pushIntro('dark', 'dark');
+    if (locusKey) pushIntro('locus', 'locus');
+    if (mindKey) pushIntro('mind', 'mind');
+    if (sdtKey) pushIntro('sdt', 'sdt');
+    if (loveKey) pushIntro('love', 'love');
+    if (valKey) pushIntro('values', 'values');
     return { intros: intros, parts: hit };
   }
 
   fetch(url)
     .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data){
-      if (isLocal && (attKey || hspLv)) {
+      if (isLocal && (attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
+                      locusKey || mindKey || sdtKey || loveKey || valKey)) {
         return fetch('_cross-texts-local.json')
           .then(function(r){ return r.ok ? r.json() : null; })
           .then(function(cross){
@@ -633,14 +669,26 @@ function render(data){
   var EQ_JA = { very_high: 'EQかなり高め', high: 'EQ高め', average: 'EQ平均的', growth: 'EQ成長段階' };
   var EQW_JA = { awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル' };
   // 受けた/未受診テストの一覧（誘導と見出しに使う）
+  var LOCUS_JA = { internal: '自分次第型', external: '環境重視型' };
+  var MIND_JA = { growth: '成長マインドセット', fixed: '固定マインドセット' };
+  var SDT_JA = { autonomy: '自律が燃料', competence: '上達が燃料', relatedness: 'つながりが燃料' };
+  var LOVE_JA = { eros: '情熱型', ludus: '遊び型', storge: '友情型', pragma: '現実型', mania: '執着型', agape: '献身型' };
+  var VAL_JA = { achievement: '達成', security: '安全', 'self-direction': '自律', stimulation: '刺激', hedonism: '快楽',
+                 power: '権力', benevolence: '思いやり', universalism: '公正', conformity: '協調', tradition: '伝統' };
   var CROSS_TESTS = [
     { taken: !!attKey, name: attKey ? '愛着スタイル（' + ATT_JA[attKey] + '）' : '愛着スタイル', label: '愛着スタイル診断（12問）', href: 'attachment.html' },
     { taken: hspTotal !== null, name: 'HSP', label: 'HSP診断', href: 'hsp.html' },
     { taken: !!(impData && impData.severityLevel), name: 'インポスター', label: 'インポスター診断', href: 'impostor.html' },
     { taken: !!(eqData && (eqLv || eqWk)), name: 'EQ', label: 'EQ診断', href: 'eq.html' },
-    { taken: !!dtS, name: 'ダークトライアド', label: 'ダークトライアド診断', href: 'dark-triad.html' }
+    { taken: !!dtS, name: 'ダークトライアド', label: 'ダークトライアド診断', href: 'dark-triad.html' },
+    { taken: locusTaken, name: '統制の所在', label: '統制の所在診断', href: 'locus.html' },
+    { taken: mindTaken, name: 'マインドセット', label: 'マインドセット診断', href: 'mindset.html' },
+    { taken: !!sdtKey, name: '動機（SDT）', label: '動機づけ診断', href: 'sdt.html' },
+    { taken: !!loveKey, name: '恋愛スタイル', label: '恋愛スタイル診断', href: 'love.html' },
+    { taken: !!valKey, name: '価値観', label: '価値観診断', href: 'schwartz.html' }
   ];
-  var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS;
+  var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
+                locusKey || mindKey || sdtKey || loveKey || valKey;
   html += '<div class="report-card">' +
     '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>';
   if (!anyTest) {
@@ -701,6 +749,16 @@ function render(data){
         headBits.push('マキャベリズム' + (p.mach === 'high' ? '高め' : '低め')); testCnt++; }
       if (p.psy) { matBits.push('サイコパシー傾向＝' + (dtS ? dtS.pPct + '%' : '') + '（' + (p.psy === 'high' ? '高め' : '低め') + '）');
         headBits.push('サイコパシー傾向' + (p.psy === 'high' ? '高め' : '低め')); testCnt++; }
+      if (p.locus) { matBits.push('統制の所在＝「' + (LOCUS_JA[p.locus] || p.locus) + '」');
+        headBits.push(LOCUS_JA[p.locus] || p.locus); testCnt++; }
+      if (p.mind) { matBits.push('マインドセット＝「' + (MIND_JA[p.mind] || p.mind) + '」');
+        headBits.push(MIND_JA[p.mind] || p.mind); testCnt++; }
+      if (p.sdtk) { matBits.push('動機タイプ＝「' + (SDT_JA[p.sdtk] || p.sdtk) + '」');
+        headBits.push(SDT_JA[p.sdtk] || p.sdtk); testCnt++; }
+      if (p.lovek) { matBits.push('恋愛スタイル＝「' + (LOVE_JA[p.lovek] || p.lovek) + '」');
+        headBits.push('恋愛' + (LOVE_JA[p.lovek] || p.lovek)); testCnt++; }
+      if (p.val) { matBits.push('最上位の価値観＝「' + (VAL_JA[p.val] || p.val) + '」');
+        headBits.push('価値観「' + (VAL_JA[p.val] || p.val) + '」'); testCnt++; }
       var mat = '材料：' + matBits.join(' × ');
       var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
         '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);

@@ -1056,45 +1056,15 @@ function getDarkTriadInsight(O, C, E, A, N, dt) {
 function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom) {
   const parts = [];
 
-  // 恋愛 × ビッグファイブ（#1 #2 #3）
-  if (love === 'mania' && N === 'high') {
-    parts.push('「あの人は今どこで何をしているんだろう」と、頭から離れない時間が長くなることはありませんか。<br><br>実はこれ、もともと感情のアンテナが敏感なところに、相手のことを深く愛しすぎる恋愛スタイルが重なって起きています。好きな気持ちが大きいほど、不安も大きくなる。それはあなたが中途半端に好きでないからです。深く愛せる人は、深く不安になれる人でもある。<br><br>感情の波に飲まれているとき、「これは愛情の深さが形を変えたもの」と知っているだけで、少し楽になれます。');
-  }
-  if (love === 'agape' && A === 'high') {
-    parts.push('気づいたらいつも自分を一番後回しにして、「自分のことは後でいい」と思っていることはありませんか。<br><br>実はこれ、人を思いやる力が強すぎるところに、相手を尽くす恋愛スタイルが重なって起きています。相手が喜ぶ顔を見て動ける人は、本当に少ない。それは美しい力です。でも、与え続けるだけでは消耗します。<br><br>「ありがとう」と言われたとき、素直に受け取ってみてください。受け取ることも、関係を育てる大切な行為です。');
-  }
-  if (love === 'pragma' && C === 'high') {
-    parts.push('「この人と長くやっていけるか」を、感情より先に考えてしまうことはありませんか。<br><br>それは、真面目に物事を進める性格が恋愛にも表れているからです。慎重に選び、誠実に向き合う。それはとても信頼される生き方です。ただ、頭で考えすぎて「今この瞬間の気持ち」を後回しにしていないか、たまに確認してみてください。<br><br>長続きする関係は、計画だけでなく感情の交流からも育ちます。');
-  }
-
-  // 動機 × ビッグファイブ（#4 #5 #6）
-  if (sdt === 'autonomy' && E === 'low') {
-    parts.push('一人で黙々と進めることに、静かな充実感を覚える人です。自分の内側からくる動機で動ける人は、外からの圧力に左右されない強さを持っています。一人の時間を大切にする姿は、孤独に見えることもある。でもそれは弱さではなく、あなたが集中できている証拠です。<br><br>そのペースで、進んでいい。');
-  }
-  if (sdt === 'competence' && C === 'high') {
-    parts.push('目標を決めてコツコツ積み上げていくことに、静かな喜びを感じる人です。「上手になりたい」という動機が、真面目に取り組む性格と噛み合っているからです。「できるようになった」という実感が、次の一歩のエネルギーになる。その積み上げが誠実さと組み合わさると、周囲から見て「あの人はやると言ったら必ずやる」という信頼になっていきます。<br><br>その信頼、あなた自身はちゃんと受け取れていますか。');
-  }
-  if (sdt === 'relatedness' && A === 'high') {
-    parts.push('「この人たちのために頑張りたい」と思えると、不思議なほど力が出る人です。人とのつながりを何より大切にする性格と、人を動機の中心にする傾向が噛み合っているからです。一人では動けなくても、誰かのためなら動ける。その力は本物です。<br><br>ただ、職場や仲間の雰囲気があなたのパフォーマンスに直接響くので、環境選びはあなたにとって特に大切です。');
-  }
-
-  // マインドセット × 開放性（#7 #8）
-  if (mindset === 'growth' && O === 'high') {
-    parts.push('好奇心旺盛な性格に「成長できる」という信念が組み合わさると、学ぶこと自体が純粋に楽しくなります。「知らないことを知った瞬間」や「できなかったことができた瞬間」が、何よりの報酬になる。<br><br>ただ、興味が広がりすぎて「どれも中途半端」になりやすい側面もあります。何に一番エネルギーを注ぐか、時々立ち止まって確認することが、深みにつながります。');
-  }
-  if (mindset === 'fixed' && C === 'high') {
-    parts.push('真面目さゆえに「失敗＝自分の限界の証拠」と見てしまう固定マインドセットと、誠実に取り組む性格が重なると、やる前から諦めるパターンが生まれます。真面目で誠実なあなたは、得意なことは誰よりも丁寧にやりきれます。でもその誠実さが「失敗したくない」という壁にもなってしまうことがある。<br><br>うまくいかなかったとき、それは「向いていない証拠」ではなく「まだ途中」のサインです。');
-  }
-  if (mindset === 'fixed' && O === 'high') {
-    parts.push('気になることはたくさんある。本も動画も積みあがっていく。なのに「自分がやる」となると、どこかで止まる。これは好奇心が本物である一方で、「自分にはできないかもしれない」という恐れが動き出す手前でブレーキをかけているからです。才能の問題ではなく、「失敗＝自分の限界の証拠」と見てしまう見方の問題です。<br><br>消費するだけでなく、1%でもやってみる。それが、好奇心を力に変える最初の一歩です。');
-  }
+  // 恋愛×BF・SDT×BF・マインドセット×BF（2026-08-03第5弾で新パーツに吸収＝cross-att-texts.js。旧ベタ書き9本はここから削除）
 
   // HSP × ビッグファイブ（2026-08-02第2弾で新パーツに吸収＝cross-att-texts.js のhspcuts。旧4本はここから削除）
 
   // 愛着・HSP × 性格／恋愛／動機（2026-08-02刷新・第2弾でHSP追加・データ＝cross-att-texts.js）
   // 旧・愛着系7本とHSP系4本のベタ書きはデータ側に吸収した。表示ルール（裁定済み）＝該当候補を
   // 採点順に並べ上位2本だけ出す（出し惜しみ＝有料への期待）。0本なら受けたテストの総論を1本出す。
-  if ((attachKey || hspTotal !== null || impostorSev || eqLevel || eqWeakest) && window.CROSS_ATT) {
+  if ((attachKey || hspTotal !== null || impostorSev || eqLevel || eqWeakest ||
+       locusType || mindset || sdt || love) && window.CROSS_ATT) {
     const hspLv = hspTotal === null ? '' : (hspTotal >= 34 ? 'high' : (hspTotal <= 19 ? 'low' : ''));
     const lv = { O, C, E, A, N };
     const cand = [];
@@ -1110,6 +1080,22 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
     (CROSS_ATT.eqcuts || []).forEach(p => {
       if (((p.eq && p.eq === eqLevel) || (p.eqw && p.eqw === eqWeakest)) && lv[p.factor] === p.dir) cand.push(p);
     });
+    // 第5弾：統制・マインドセット・SDT・恋愛（2026-08-03）
+    if (locusType) (CROSS_ATT.locuscuts || []).forEach(p => {
+      if (p.locus === locusType && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (mindset) (CROSS_ATT.mindcuts || []).forEach(p => {
+      if (p.mind === mindset && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (sdt) (CROSS_ATT.sdtcuts || []).forEach(p => {
+      if (p.sdtk === sdt && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (love) (CROSS_ATT.lovecuts || []).forEach(p => {
+      if (p.lovek === love && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (locusType && mindset) (CROSS_ATT.lm || []).forEach(p => {
+      if (p.locus === locusType && p.mind === mindset) cand.push(p);
+    });
     (CROSS_ATT.psy || []).forEach(p => {
       if (p.type !== attachKey) return;
       if ((p.kind === 'love' && love === p.key) || (p.kind === 'sdt' && sdt === p.key) ||
@@ -1123,27 +1109,16 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
       const so = (attachKey && CROSS_ATT.soron && CROSS_ATT.soron[attachKey]) ||
                  (hspLv && CROSS_ATT.hsp_soron && CROSS_ATT.hsp_soron[hspLv]) ||
                  (impostorSev === 'high' && CROSS_ATT.imp_soron) ||
-                 ((eqLevel || eqWeakest) && CROSS_ATT.eq_soron) || null;
+                 ((eqLevel || eqWeakest) && CROSS_ATT.eq_soron) ||
+                 (locusType && CROSS_ATT.locus_soron) ||
+                 (mindset && CROSS_ATT.mind_soron) ||
+                 (sdt && CROSS_ATT.sdt_soron) ||
+                 (love && CROSS_ATT.love_soron) || null;
       if (so) parts.push(so.replace(/\n\n/g, '<br><br>'));
     }
   }
 
-  // 統制の所在 × ビッグファイブ（#16 #17 #18）
-  if (locusType === 'external' && N === 'high') {
-    parts.push('「頑張っても、どうせ変わらない」とあきらめた瞬間はありませんか。そしてその後、不安だけが残る、という経験。<br><br>実はこれ、「結果は自分の外にある」という感覚と、もともとの不安の感じやすさが重なって起きています。自分で変えられる範囲が小さく見えているとき、不安はもっと大きく感じます。でも、変えられない部分と変えられる部分は、思っているより分かれています。<br><br>今日一つだけ「自分が決めたこと」を実行してみてください。その小さな積み重ねが、感覚を変えていきます。');
-  }
-  if (locusType === 'internal' && C === 'high') {
-    parts.push('うまくいかないとき、まず「自分の何がいけなかったか」を考えますか。<br><br>実はこれ、「自分次第で変えられる」という信念と、真面目に取り組む性格が重なっているからです。自分で動かせるという信念と、誠実に取り組む力は、あなたの大きな強みです。でもその組み合わせは、うまくいかなかったとき「すべて自分のせい」にしてしまう方向にも働きます。<br><br>自分でコントロールできない部分まで抱え込まなくていい。');
-  }
-  if (locusType === 'internal' && E === 'low') {
-    parts.push('「人にどう思われるか」より「自分がどう思うか」を優先していませんか。外の評価に左右されず、自分のペースで着実に積み上げるのは、静かだけれどとても強い生き方です。<br><br>ただ、客観的な視点を取り入れることで、その強さはさらに研ぎ澄まされます。');
-  }
-  if (locusType === 'internal' && N === 'high') {
-    parts.push('うまくいかないとき、まず「自分に何か足りなかったのか」と考えが向いてしまうことはありませんか。<br><br>それは「自分次第で変えられる」という信念と、不安の感じやすさが重なっているからです。自分でなんとかできると信じているから、うまくいかないときほど自分を責める矢が増えます。その誠実さと責任感は本物の力です。ただ、世界はあなたひとりの努力だけで動いているわけではない。<br><br>自分でコントロールできない部分まで背負わなくていいです。全力で動いた事実は、結果が何であれ、あなたのものです。');
-  }
-  if (C === 'high' && locusType === 'external') {
-    parts.push('一生懸命やっているのに、「どうせ自分じゃ変えられない」「環境や運が違えば」と思ったことはありませんか。<br><br>その原因は、真面目に努力し続ける性格と「結果は自分の外にある」という感覚が矛盾していることにあります。頑張っても手応えがない徒労感が積み重なります。その疲れは、サボったからではなく、方向が定まらないまま全力で走り続けてきたからです。<br><br>自分の努力が届く範囲は、思っているより広い。まずその感覚を、小さな成功体験で確認してみてください。');
-  }
+  // 統制の所在×BF（2026-08-03第5弾で新パーツに吸収＝cross-att-texts.js。旧ベタ書き5本はここから削除）
 
   // EQ×BF・インポスター×BF（2026-08-02第3弾で新パーツに吸収＝cross-att-texts.js。旧ベタ書き13本はここから削除）
 

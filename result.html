@@ -2820,6 +2820,26 @@ if (version === '10') {
       teaserExtra += '&dtn=' + dr.scores.nPct + '&dtm=' + dr.scores.mPct + '&dtp=' + dr.scores.pPct;
     }
   } catch (e) {}
+  try {
+    var lr = JSON.parse(localStorage.getItem('locus_result'));
+    if (lr && ['internal','external'].indexOf(lr.type) >= 0) teaserExtra += '&locus=' + lr.type;
+  } catch (e) {}
+  try {
+    var mr2 = JSON.parse(localStorage.getItem('mindset_result'));
+    if (mr2 && ['growth','fixed'].indexOf(mr2.type) >= 0) teaserExtra += '&mind=' + mr2.type;
+  } catch (e) {}
+  try {
+    var sr = JSON.parse(localStorage.getItem('sdt_result'));
+    if (sr && sr.strongest) teaserExtra += '&sdtk=' + sr.strongest;
+  } catch (e) {}
+  try {
+    var lvr = JSON.parse(localStorage.getItem('love_result'));
+    if (lvr && lvr.mainStyle) teaserExtra += '&lovek=' + lvr.mainStyle;
+  } catch (e) {}
+  try {
+    var vr = JSON.parse(localStorage.getItem('schwartz_result'));
+    if (vr && vr.top3 && vr.top3[0]) teaserExtra += '&val=' + encodeURIComponent(vr.top3[0]);
+  } catch (e) {}
   fetch(teaserLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facetsParam +
                        (teaserAtt ? '&att=' + teaserAtt : '') +
