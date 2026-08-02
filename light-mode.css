@@ -2402,3 +2402,13 @@ body.theme-light .cat-tab.active {
   border-color: var(--pink) !important;
   color: var(--text) !important;
 }
+
+/* ===== 悩みから引く索引への入口（2026-08-03・diagnoses.html / blog/index.html 共通） ===== */
+body.theme-light .kotoba-entry {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  border-left-color: var(--purple) !important;
+}
+body.theme-light .kotoba-entry-label { color: var(--purple) !important; }
+body.theme-light .kotoba-entry-main { color: var(--text) !important; }
+body.theme-light .kotoba-entry-sub { color: var(--dim) !important; }

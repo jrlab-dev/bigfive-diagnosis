@@ -281,6 +281,14 @@
     <priority>0.5</priority>
   </url>
 
+  <!-- 悩みから引く心理学のことば（日常心理学辞典 段B） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/kotoba.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <!-- よくある質問 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/faq.html</loc>

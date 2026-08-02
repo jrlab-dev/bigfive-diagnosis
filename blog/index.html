@@ -181,6 +181,22 @@
     margin-top: 24px;
     margin-bottom: 4px;
   }
+
+  /* 悩みから引く索引への入口（2026-08-03） */
+  .kotoba-entry {
+    display: block; text-decoration: none;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 14px; padding: 16px 18px; margin-bottom: 20px;
+    transition: border-color .2s, transform .2s;
+  }
+  .kotoba-entry:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .kotoba-entry-label {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .18em;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .kotoba-entry-main { display: block; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .kotoba-entry-sub { display: block; font-size: 12.5px; color: var(--dim); line-height: 1.8; }
 </style>
 <link rel="stylesheet" href="../light-mode.css">
 <script src="../nav.js" defer></script>
@@ -195,6 +211,14 @@
     <h1 class="page-title">性格と行動の話</h1>
     <p class="page-desc">ビッグファイブ心理学をベースに、日常の行動・習慣・人間関係を読み解く記事を書いています。</p>
   </header>
+
+  <!-- 悩みから引く索引への入口（2026-08-03・日常心理学辞典 段B）
+       ⚠ #cardGrid の中に入れるとタブJSに隠されて見えなくなる。必ずタブより上に置く -->
+  <a class="kotoba-entry" href="../kotoba.html">
+    <span class="kotoba-entry-label">INDEX</span>
+    <span class="kotoba-entry-main">悩みから引く心理学のことば</span>
+    <span class="kotoba-entry-sub">「断れない」「夜にひとり反省会」——よくある45の悩みに、心理学がつけてきた名前と出典をまとめた索引です。</span>
+  </a>
 
   <nav class="tab-nav" id="tabNav">
     <button class="tab-btn active" data-tab="latest">新着<span class="tab-count" id="latestCount"></span></button>
