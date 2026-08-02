@@ -998,6 +998,18 @@ function getDarkTriadInsight(O, C, E, A, N, dt) {
   const highN = nPct >= 60, highM = mPct >= 60, highP = pPct >= 60;
   const lowAll = nPct < 40 && mPct < 40 && pPct < 40;
 
+  // 2026-08-02第4弾：新パーツ（cross-att-texts.jsのdtcuts・採点上位2本）があればそちらを使う。
+  // 下の旧ベタ書きは、データ未配備時の後方互換の保険として残す
+  if (window.CROSS_ATT && CROSS_ATT.dtcuts && CROSS_ATT.dtcuts.length) {
+    const lvv = { O, C, E, A, N };
+    const dlv = (v) => (v >= 60 ? 'high' : (v < 40 ? 'low' : ''));
+    const mine = { narc: dlv(nPct), mach: dlv(mPct), psy: dlv(pPct) };
+    const cand = CROSS_ATT.dtcuts.filter(p => mine[p.dt] === p.lvl && lvv[p.factor] === p.dir)
+      .sort((a, b) => b.total - a.total).slice(0, 2);
+    if (cand.length) return cand.map(p => p.body.replace(/\n\n/g, '<br><br>')).join('<br><br>');
+    if (CROSS_ATT.dt_soron) return CROSS_ATT.dt_soron.replace(/\n\n/g, '<br><br>');
+  }
+
   // すべて低い × 協調性高い
   if (lowAll && A === 'high') {
     return '自己顕示欲・操作性・共感の薄さがすべて低水準で、協調性が高い——このプロフィールは、裏表のなさと誠実さが行動全体に一貫している状態です。損得ではなく、本当に人のことを思って動ける数少ないタイプ。ただ、他者に対して誠実であるほど、自分自身への要求が厳しくなりがちです。<br><br>人に優しくできる力を、自分にも向けてみてください。';
@@ -1077,38 +1089,42 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
     parts.push('気になることはたくさんある。本も動画も積みあがっていく。なのに「自分がやる」となると、どこかで止まる。これは好奇心が本物である一方で、「自分にはできないかもしれない」という恐れが動き出す手前でブレーキをかけているからです。才能の問題ではなく、「失敗＝自分の限界の証拠」と見てしまう見方の問題です。<br><br>消費するだけでなく、1%でもやってみる。それが、好奇心を力に変える最初の一歩です。');
   }
 
-  // HSP × ビッグファイブ（#9 #10 #11）
-  if (hspTotal !== null) {
-    if (hspTotal >= 34 && N === 'high') {
-      parts.push('他の人が何ともなさそうにしていることが、あなたにはひどく消耗する。これはHSPとしての敏感なアンテナと、もともとの不安の感じやすさが重なっているからです。感受性のアンテナが人より何倍も敏感で、外からの刺激をそのまま全部受け取ってしまう。繊細であることは欠点ではなく、普通の人が気づかないことに気づける力です。不安や心配のアンテナも同様に鋭い。それは脅威を早く察知するための、あなた固有のセンサーです。<br><br>ただ、同じ24時間を生きていても、あなたの「消耗速度」は他の人より速い。休むことは怠けではなく、あなたには必須のメンテナンスです。罪悪感なく休んでいい。');
-    } else if (hspTotal >= 34 && O === 'high') {
-      parts.push('音楽、景色、言葉。人より深く「刺さる」ものがある。これはHSPの感受性と好奇心が交差して生まれる、あなた固有の感覚です。他の人が気づかない美しさや意味を発見できるのは、この二つが同時に働いているから。<br><br>その独自の視点を、もっと信頼していいです。');
-    } else if (hspTotal <= 19 && N === 'low') {
-      parts.push('周りがざわついていても、自分はわりと冷静でいられる。それは刺激に揺さぶられにくい特性と、感情的な安定感が両立しているからです。プレッシャーのかかる場面で、最も力を発揮するタイプです。<br><br>ただ、感受性が高い人の「見えない消耗」には気づきにくい面があります。周りの人が何を感じているかを、意識的に想像する習慣が、関係をさらに豊かにします。');
-    } else if (hspTotal >= 34 && E === 'high') {
-      parts.push('みんなと話しているときは本当に楽しいのに、帰ってきたら動けない。これは外向性とHSPという全く別の性質が同時に働いているからです。人と話してエネルギーをもらいながらも、その場の感情や空気を誰よりも深く受け取るから、帰ったあとの疲労感が人一倍大きい。弱いのではなく、処理している情報量が違うんです。<br><br>「楽しかったのにぐったりしている自分」を責めなくていいです。それはあなたが敏感で、深く関われる人間だという証拠です。');
-    }
-  }
+  // HSP × ビッグファイブ（2026-08-02第2弾で新パーツに吸収＝cross-att-texts.js のhspcuts。旧4本はここから削除）
 
-  // 愛着スタイル × 性格／恋愛／動機（2026-08-02刷新・データ＝cross-att-texts.js・正本＝plans/【設計】クロス分析第1弾）
-  // 旧・愛着系のベタ書き7本はデータ側に吸収した。表示ルール（裁定済み）＝該当候補を採点順に並べ
-  // 上位2本だけ出す（出し惜しみ＝有料への期待）。1本も該当しなければタイプの総論を1本出す。
-  if (attachKey && window.CROSS_ATT) {
+  // 愛着・HSP × 性格／恋愛／動機（2026-08-02刷新・第2弾でHSP追加・データ＝cross-att-texts.js）
+  // 旧・愛着系7本とHSP系4本のベタ書きはデータ側に吸収した。表示ルール（裁定済み）＝該当候補を
+  // 採点順に並べ上位2本だけ出す（出し惜しみ＝有料への期待）。0本なら受けたテストの総論を1本出す。
+  if ((attachKey || hspTotal !== null || impostorSev || eqLevel || eqWeakest) && window.CROSS_ATT) {
+    const hspLv = hspTotal === null ? '' : (hspTotal >= 34 ? 'high' : (hspTotal <= 19 ? 'low' : ''));
     const lv = { O, C, E, A, N };
     const cand = [];
-    (CROSS_ATT.cuts || []).forEach(p => {
+    if (attachKey) (CROSS_ATT.cuts || []).forEach(p => {
       if (p.type === attachKey && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (hspLv) (CROSS_ATT.hspcuts || []).forEach(p => {
+      if (p.hsp === hspLv && lv[p.factor] === p.dir) cand.push(p);
+    });
+    if (impostorSev) (CROSS_ATT.impcuts || []).forEach(p => {
+      if (p.imp === impostorSev && lv[p.factor] === p.dir) cand.push(p);
+    });
+    (CROSS_ATT.eqcuts || []).forEach(p => {
+      if (((p.eq && p.eq === eqLevel) || (p.eqw && p.eqw === eqWeakest)) && lv[p.factor] === p.dir) cand.push(p);
     });
     (CROSS_ATT.psy || []).forEach(p => {
       if (p.type !== attachKey) return;
-      if ((p.kind === 'love' && love === p.key) || (p.kind === 'sdt' && sdt === p.key)) cand.push(p);
+      if ((p.kind === 'love' && love === p.key) || (p.kind === 'sdt' && sdt === p.key) ||
+          (p.kind === 'hsp' && hspLv && hspLv === p.key)) cand.push(p);
     });
     cand.sort((a, b) => b.total - a.total);
     const picked = cand.slice(0, 2);
     if (picked.length) {
       picked.forEach(p => parts.push(p.body.replace(/\n\n/g, '<br><br>')));
-    } else if (CROSS_ATT.soron && CROSS_ATT.soron[attachKey]) {
-      parts.push(CROSS_ATT.soron[attachKey].replace(/\n\n/g, '<br><br>'));
+    } else {
+      const so = (attachKey && CROSS_ATT.soron && CROSS_ATT.soron[attachKey]) ||
+                 (hspLv && CROSS_ATT.hsp_soron && CROSS_ATT.hsp_soron[hspLv]) ||
+                 (impostorSev === 'high' && CROSS_ATT.imp_soron) ||
+                 ((eqLevel || eqWeakest) && CROSS_ATT.eq_soron) || null;
+      if (so) parts.push(so.replace(/\n\n/g, '<br><br>'));
     }
   }
 
@@ -1129,48 +1145,7 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
     parts.push('一生懸命やっているのに、「どうせ自分じゃ変えられない」「環境や運が違えば」と思ったことはありませんか。<br><br>その原因は、真面目に努力し続ける性格と「結果は自分の外にある」という感覚が矛盾していることにあります。頑張っても手応えがない徒労感が積み重なります。その疲れは、サボったからではなく、方向が定まらないまま全力で走り続けてきたからです。<br><br>自分の努力が届く範囲は、思っているより広い。まずその感覚を、小さな成功体験で確認してみてください。');
   }
 
-  // EQ × ビッグファイブ（#19 #20 #21 #22 #23）
-  if (eqLevel === 'growth' && N === 'high') {
-    parts.push('感情のアンテナが敏感なことがEQの成長段階と重なっている状態です。嬉しいも悲しいも、人より大きく感じる。感情を深く体験することはEQを育てる素地になります。感情がよく動くということは、感情のアンテナが敏感だということ。<br><br>あとは「今感じていることを言葉にする」練習を重ねるだけで、その感受性は強みに変わっていきます。');
-  }
-  if (eqLevel && ['very_high', 'high'].includes(eqLevel) && A === 'high') {
-    parts.push('「この人は今こう感じているんだな」と、言葉にならない気持ちが分かる。相手の感情を読み取り、思いやりを行動に移せる力は、本当に少ない人しか持っていません。これは高いEQと思いやりの性格が揃っているからです。ただ、読み取りすぎて自分が疲れることもある。<br><br>「空気を読む」と「自分を消す」は違います。あなた自身の気持ちも、同じくらい大切にしてください。');
-  }
-  if (eqLevel === 'growth' && locusType === 'external') {
-    parts.push('「結果は自分の外にある」という感覚が、感情を扱う力の成長を邪魔している状態です。人間関係がうまくいかないと「どうせ変わらない」とあきらめがちですが、EQは生まれつきの才能ではなく、訓練で伸びる力です。「変えられない」と思っているうちは変わりませんが、「まだ練習中」と捉え直した瞬間から、少しずつ動き始めます。');
-  }
-  if (eqWeakest === 'empathy' && A === 'low') {
-    parts.push('「なんであの人はあんな反応をするんだろう」と、他人の感情が読みにくいと感じる。これは協調性が低めで、相手の立場に立つ練習がまだ足りていないサインです。相手の気持ちを想像する力を伸ばすことが、人間関係の質を変える一番の近道です。「この人は今どう感じているか」を、1日3回だけ意識的に考えてみる。それだけで、見える景色が変わってきます。');
-  }
-  if (eqWeakest === 'regulation' && N === 'high') {
-    parts.push('感情を強く感じる感受性と、それを扱う力のバランスがまだ取れていない状態です。感じる力は強いのに、それを扱う力がまだ追いついていない。感情が溢れ出た後に後悔が来るのは、感受性に扱い方がまだ追いついていないだけ。<br><br>「感情が出そうになったら、まず一呼吸」。たったそれだけが、最初の一歩になります。');
-  }
-  if (eqWeakest === 'empathy' && sdt === 'relatedness') {
-    parts.push('人とのつながりを求める動機が強い一方で、相手の気持ちを想像するアンテナがまだ育ちきっていない状態です。人と仲良くしたい気持ちは誰より強いのに、なぜかすれ違う、空回りする。人が好きでつながりを大切にする気持ちは本物です。これは悪意でも冷たさでもない。アンテナの感度の問題です。<br><br>「この人は今どんな気持ちだろう」と意識的に一歩踏み込むだけで、あなたの「人好き」という力が、相手にも伝わるようになります。');
-  }
-  if (A === 'high' && eqWeakest === 'regulation') {
-    parts.push('人を大切にする心が強すぎて言えないことが積み重なり、感情のコントロールの限界を超えてしまった状態です。普段は我慢できるのに、あるとき急に感情が溢れてしまう。それが限界を超えたとき、ふだんの「優しいあなた」とはギャップのある形で出てしまうことがある。自分が嫌いになる必要はない。それだけ長く、我慢してきたということです。<br><br>ため込みすぎる前に、小さく出す場所を持つ。それがあなたを守る習慣になります。');
-  }
-
-  // インポスター症候群 × ビッグファイブ（#24 #25 #26 #27 #28）
-  if (impostorSev === 'high' && C === 'high') {
-    parts.push('真面目さゆえに基準が高すぎるところにインポスター体験が重なると、「頑張っているのに常に不足感がある」という状態が続きます。他の人が「よかった」と言ってくれても、自分の中ではまだ足りない気がする。それは基準が高すぎるからです。<br><br>あなたの基準の高さは、本物の力の証明です。でも、その基準を少しだけ「自分を許すライン」まで下ろすことが、長く走り続けるための条件です。ずっと全力疾走しなくていい。');
-  }
-  if (impostorSev === 'high' && N === 'high') {
-    parts.push('もともと不安を感じやすい性格にインポスター体験が重なると、うまくいっているほど「いつかバレるかもしれない」という感覚が強くなります。周りが評価してくれても、「たまたまだった」「自分の実力じゃない」と思ってしまう。それだけあなたが真剣に向き合っている証拠です。手を抜いている人は、バレることを怖がりません。<br><br>もう少しだけ、自分の成果を自分のものにしてあげてください。');
-  }
-  if (impostorDom === 'perfectionist' && C === 'high') {
-    parts.push('「まだ完成じゃない」「もう少し磨いてから」と、出すのが遅くなる。これは、真面目さが完璧主義のインポスター体験と結びついて、100%でないと自分を認められない基準ができているからです。でもその基準が、あなた自身の成果を正しく評価する邪魔をしている。<br><br>70%で出す勇気が、100%の努力と同じくらい価値を持つことがあります。');
-  }
-  if (impostorDom === 'soloist' && E === 'low') {
-    parts.push('一人で集中できる性格に「人に頼ったら負け」というインポスター体験が重なると、何でも自分で抱え込むパターンが生まれます。一人で集中できる力は本物の強みです。でも「人に頼ったら負け」という感覚が、必要な助けを遠ざけてしまうことがある。<br><br>力を借りることは、弱さではありません。自分の力を最大化するための、賢い選択です。');
-  }
-  if (impostorSev === 'high' && locusType === 'internal') {
-    parts.push('頑張って結果が出たとき、「たまたまだった」「自分の実力じゃない」と思ってしまう。この矛盾は、「自分次第で変えられる」という信念と、自分の実力を信じられない感覚が同時に存在しているからです。この矛盾は、あなたが自分に高い基準を持ち続けてきた証拠です。<br><br>一度だけ、逆の問いをしてみてください。「もし本当に実力がなかったら、この結果は出せたか？」その結果は、あなたのものです。');
-  }
-  if (impostorDom === 'superhero' && A === 'high') {
-    parts.push('人を思いやる性格に「全力で頑張らないと認めてもらえない」というインポスター体験が重なると、気づいたら予定が埋まっている状態になります。思いやりが強いからこそ、誰かの期待に応えようとする。それは本当に美しい力です。でも、その力を自分に向けてあげることも必要です。<br><br>あなたが疲れ果てたとき、一番困るのは周りです。休むことは、周りへの最大の貢献でもあります。');
-  }
+  // EQ×BF・インポスター×BF（2026-08-02第3弾で新パーツに吸収＝cross-att-texts.js。旧ベタ書き13本はここから削除）
 
   if (parts.length === 0) {
     return '<a href="attachment.html" style="color:var(--purple);font-weight:700;">愛着スタイル</a>・<a href="sdt.html" style="color:var(--purple);font-weight:700;">SDT（動機）</a>・<a href="hsp.html" style="color:var(--purple);font-weight:700;">HSP</a>・<a href="eq.html" style="color:var(--purple);font-weight:700;">EQ</a>などのサブ診断を受けると、複数テストを組み合わせた詳細な分析がここに表示されます。';

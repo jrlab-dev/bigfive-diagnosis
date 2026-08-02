@@ -293,34 +293,89 @@ if (!/^[1-5]{30}$/.test(facets)) {
   var isLocal = location.protocol === 'file:' ||
                 location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
-  // 愛着診断の結果（同じ端末のlocalStorage）。あればクロス分析章の材料になる（2026-08-02追加）
+  // 愛着・HSPの結果（同じ端末のlocalStorage）。あればクロス分析章の材料になる（2026-08-02追加・第2弾でHSP拡張）
   var attData = null;
   try { attData = JSON.parse(localStorage.getItem('attachment_result')); } catch (e) {}
   var attKey = attData && ['secure','anxious','avoidant','fearful'].indexOf(attData.typeKey) >= 0
              ? attData.typeKey : '';
+  var hspTotal = null;
+  try {
+    var hspData = JSON.parse(localStorage.getItem('hsp_result'));
+    if (hspData && hspData.scores && typeof hspData.scores.total === 'number') hspTotal = hspData.scores.total;
+  } catch (e) {}
+  var hspLv = hspTotal === null ? '' : (hspTotal >= 34 ? 'high' : (hspTotal <= 19 ? 'low' : ''));
+  // 第3弾：インポスター・EQ／第4弾：ダークトライアド（しきい値はワーカーと同一）
+  var impData = null;
+  try { impData = JSON.parse(localStorage.getItem('impostor_result')); } catch (e) {}
+  var impSev = impData && ['high','moderate','low'].indexOf(impData.severityLevel) >= 0 ? impData.severityLevel : '';
+  var impDom = impData && ['perfectionist','superhero','naturalGenius','soloist','expert'].indexOf(impData.dominantType) >= 0
+             ? impData.dominantType : '';
+  var eqData = null;
+  try { eqData = JSON.parse(localStorage.getItem('eq_result')); } catch (e) {}
+  var eqLv = eqData && ['very_high','high','average','growth'].indexOf(eqData.level) >= 0 ? eqData.level : '';
+  var eqWk = eqData && ['awareness','regulation','motivation','empathy','social'].indexOf(eqData.weakest) >= 0 ? eqData.weakest : '';
+  var dtData = null;
+  try { dtData = JSON.parse(localStorage.getItem('dark_triad_result')); } catch (e) {}
+  var dtS = dtData && dtData.scores ? dtData.scores : null;
+  function dtLv(v){ return (typeof v === 'number') ? (v >= 60 ? 'high' : (v < 40 ? 'low' : '')) : ''; }
+  var narcLv = dtS ? dtLv(dtS.nPct) : '', machLv = dtS ? dtLv(dtS.mPct) : '', psyLv = dtS ? dtLv(dtS.pPct) : '';
 
   var url = isLocal ? '_facet-texts-local.json'
-                    : ('/api/facet?facets=' + facets + (attKey ? '&att=' + attKey : ''));
+                    : ('/api/facet?facets=' + facets +
+                       (attKey ? '&att=' + attKey : '') +
+                       (hspTotal !== null ? '&hsp=' + hspTotal : '') +
+                       (impSev ? '&imp=' + impSev : '') +
+                       (impDom ? '&impdom=' + impDom : '') +
+                       (eqLv ? '&eq=' + eqLv : '') +
+                       (eqWk ? '&eqw=' + eqWk : '') +
+                       (dtS ? '&dtn=' + dtS.nPct + '&dtm=' + dtS.mPct + '&dtp=' + dtS.pPct : ''));
+
+  // ワーカーと同じ該当判定（ローカル確認用。本番はワーカーが選んで _cross で返す）
+  function matchCross(cross){
+    var hit = (cross.parts || []).filter(function(p){
+      if (!p.type && !p.hsp && !p.imp && !p.impdom && !p.eq && !p.eqw && !p.narc && !p.mach && !p.psy) return false;
+      if (p.type && p.type !== attKey) return false;
+      if (p.hsp && p.hsp !== hspLv) return false;
+      if (p.imp && p.imp !== impSev) return false;
+      if (p.impdom && p.impdom !== impDom) return false;
+      if (p.eq && p.eq !== eqLv) return false;
+      if (p.eqw && p.eqw !== eqWk) return false;
+      if (p.narc && p.narc !== narcLv) return false;
+      if (p.mach && p.mach !== machLv) return false;
+      if (p.psy && p.psy !== psyLv) return false;
+      if (p.facet) {
+        var idx = -1;
+        for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
+        if (idx < 0) return false;
+        var s = parseInt(facets[idx], 10);
+        return p.dir === 'high' ? s >= 4 : s <= 2;
+      }
+      return true;
+    });
+    var drop = {};
+    hit.forEach(function(p){ (p.supersedes || []).forEach(function(id){ drop[id] = 1; }); });
+    hit = hit.filter(function(p){ return !drop[p.id]; })
+             .sort(function(a, b){ return b.total - a.total; });
+    var intros = [];
+    function pushIntro(key, test){
+      if ((cross.intro || {})[key]) intros.push({ test: test, body: cross.intro[key] });
+    }
+    if (attKey) pushIntro(attKey, 'att');
+    if (hspLv) pushIntro('hsp_' + hspLv, 'hsp');
+    if (impSev === 'high') pushIntro('imp_high', 'imp');
+    if (eqLv || eqWk) pushIntro('eq', 'eq');
+    if (dtS) pushIntro('dark', 'dark');
+    return { intros: intros, parts: hit };
+  }
 
   fetch(url)
     .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data){
-      // ローカル確認時：ワーカーの代わりに、こちらで該当パーツを選ぶ（本番はワーカーが選んで _cross で返す）
-      if (isLocal && attKey) {
+      if (isLocal && (attKey || hspLv)) {
         return fetch('_cross-texts-local.json')
           .then(function(r){ return r.ok ? r.json() : null; })
           .then(function(cross){
-            if (cross) {
-              var hit = (cross.parts || []).filter(function(p){
-                if (p.type !== attKey) return false;
-                var idx = -1;
-                for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
-                if (idx < 0) return false;
-                var s = parseInt(facets[idx], 10);
-                return p.dir === 'high' ? s >= 4 : s <= 2;
-              }).sort(function(a, b){ return b.total - a.total; });
-              data._cross = { intro: (cross.intro || {})[attKey] || '', parts: hit };
-            }
+            if (cross) data._cross = matchCross(cross);
             return data;
           })
           .catch(function(){ return data; });
@@ -572,31 +627,85 @@ function render(data){
       return '<p class="report-factor-text">' + esc(p) + '</p>';
     }).join('');
   }
+  var HSP_JA = { high: 'HSP高め', low: 'HSP低め' };
+  var IMPDOM_JA = { perfectionist: '完璧主義型', superhero: 'スーパーヒーロー型', naturalGenius: '天才型',
+                    soloist: '単独行動型', expert: '専門家型' };
+  var EQ_JA = { very_high: 'EQかなり高め', high: 'EQ高め', average: 'EQ平均的', growth: 'EQ成長段階' };
+  var EQW_JA = { awareness: '自己認識', regulation: '自己管理', motivation: '動機', empathy: '共感', social: '社会的スキル' };
+  // 受けた/未受診テストの一覧（誘導と見出しに使う）
+  var CROSS_TESTS = [
+    { taken: !!attKey, name: attKey ? '愛着スタイル（' + ATT_JA[attKey] + '）' : '愛着スタイル', label: '愛着スタイル診断（12問）', href: 'attachment.html' },
+    { taken: hspTotal !== null, name: 'HSP', label: 'HSP診断', href: 'hsp.html' },
+    { taken: !!(impData && impData.severityLevel), name: 'インポスター', label: 'インポスター診断', href: 'impostor.html' },
+    { taken: !!(eqData && (eqLv || eqWk)), name: 'EQ', label: 'EQ診断', href: 'eq.html' },
+    { taken: !!dtS, name: 'ダークトライアド', label: 'ダークトライアド診断', href: 'dark-triad.html' }
+  ];
+  var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS;
   html += '<div class="report-card">' +
-    '<p class="report-card-title">クロス分析：愛着スタイル × あなたの30項目</p>';
-  if (!attKey) {
+    '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>';
+  if (!anyTest) {
     html += '<p class="report-card-note">別の心理学テストと重ねて読む、このレポートだけの章です</p>' +
-      '<p class="report-factor-text">無料の<b>愛着スタイル診断</b>（12問・約2分）をこの端末で受けると、' +
-      'その結果とあなたの30項目の点数を重ねた、あなた専用のクロス分析がここに追加されます。</p>' +
-      '<p style="text-align:center;margin:10px 0 4px;"><a class="fr-back" href="attachment.html">愛着スタイル診断を受ける →</a></p>';
+      '<p class="report-factor-text">無料の<b>愛着スタイル診断</b>（12問・約2分）やHSP・インポスター・EQ・ダークトライアドの各診断を' +
+      'この端末で受けると、その結果とあなたの30項目の点数を重ねた、あなた専用のクロス分析がここに追加されます。</p>' +
+      '<p style="text-align:center;margin:10px 0 4px;"><a class="fr-back" href="attachment.html">愛着スタイル診断を受ける →</a>' +
+      '　<a class="fr-back" href="hsp.html">HSP診断を受ける →</a></p>';
   } else if (!data._cross) {
     html += '<p class="report-card-note">別の心理学テストと重ねて読む、このレポートだけの章です</p>' +
       '<p class="fr-facet-desc">クロス分析を読み込めませんでした。時間をおいて、もう一度お試しください。</p>';
   } else {
     var cx = data._cross;
-    html += '<p class="report-card-note">「' + ATT_JA[attKey] + '」のあなたの傾向と、30項目の点数が交差する場所だけを書いた分析です</p>' +
-      '<p class="fr-facet-desc" style="margin-bottom:12px">この章は、国際標準の30の下位尺度（IPIP-NEO-120と同じ構成）と、' +
-      '愛着理論の2軸（不安・回避）の測定結果を重ねています。</p>';
-    if (cx.intro) html += crossParas(cx.intro);
+    var takenNames = [];
+    CROSS_TESTS.forEach(function(t){ if (t.taken) takenNames.push(t.name); });
+    html += '<p class="report-card-note">' + takenNames.join('・') + ' の結果と、30項目の点数が交差する場所だけを書いた、あなた専用の分析です</p>' +
+      '<p class="fr-facet-desc" style="margin-bottom:12px">この章は、国際標準の30の下位尺度（IPIP-NEO-120と同じ構成）に、' +
+      'あなたが受けた各心理学診断の測定結果を重ねています。</p>';
+    var introList = cx.intros || (cx.intro ? [{ test: 'att', body: cx.intro }] : []);
+    introList.forEach(function(it, k){
+      if (k > 0) html += '<div style="height:10px"></div>';
+      html += crossParas(it.body);
+    });
     cx.parts.forEach(function(p, i){
       var meta = null;
       for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) meta = FACET_META[j];
-      var fname = meta ? meta.name : p.facet;
-      var mat = '材料：あなたの「' + fname + '」＝' + scores[p.facet] + '点 × 愛着診断「' + ATT_JA[attKey] + '」' +
-        (attData && attData.anxiety ? '（不安軸' + attData.anxiety + '・回避軸' + attData.avoidance + '）' : '');
+      var fname = meta ? meta.name : (p.facet || '');
+      var matBits = [], headBits = [], testCnt = 0;
+      if (p.facet) {
+        matBits.push('あなたの「' + fname + '」＝' + scores[p.facet] + '点');
+        headBits.push('「' + fname + '」が' + (p.dir === 'high' ? '高い' : '低い'));
+        testCnt++;
+      }
+      if (p.type) {
+        matBits.push('愛着診断「' + ATT_JA[p.type] + '」' +
+          (attData && attData.anxiety ? '（不安軸' + attData.anxiety + '・回避軸' + attData.avoidance + '）' : ''));
+        headBits.push(ATT_JA[p.type]); testCnt++;
+      }
+      if (p.hsp) {
+        matBits.push('HSP診断＝' + hspTotal + '点（' + (p.hsp === 'high' ? '高め' : '低め') + '）');
+        headBits.push(HSP_JA[p.hsp]); testCnt++;
+      }
+      if (p.imp || p.impdom) {
+        if (p.imp) matBits.push('インポスター診断＝' + (p.imp === 'high' ? '強め' : p.imp));
+        if (p.impdom) matBits.push('インポスター優位タイプ「' + (IMPDOM_JA[p.impdom] || p.impdom) + '」');
+        headBits.push(p.impdom ? 'インポスター' + (IMPDOM_JA[p.impdom] || '') : 'インポスター強め');
+        testCnt++;
+      }
+      if (p.eq || p.eqw) {
+        if (p.eq) matBits.push('EQ診断＝' + (EQ_JA[p.eq] || p.eq));
+        if (p.eqw) matBits.push('EQの伸びどころ＝' + (EQW_JA[p.eqw] || p.eqw));
+        headBits.push(p.eq ? (EQ_JA[p.eq] || 'EQ') : 'EQ伸びどころ「' + (EQW_JA[p.eqw] || '') + '」');
+        testCnt++;
+      }
+      if (p.narc) { matBits.push('ナルシシズム＝' + (dtS ? dtS.nPct + '%' : '') + '（' + (p.narc === 'high' ? '高め' : '低め') + '）');
+        headBits.push('ナルシシズム' + (p.narc === 'high' ? '高め' : '低め')); testCnt++; }
+      if (p.mach) { matBits.push('マキャベリズム＝' + (dtS ? dtS.mPct + '%' : '') + '（' + (p.mach === 'high' ? '高め' : '低め') + '）');
+        headBits.push('マキャベリズム' + (p.mach === 'high' ? '高め' : '低め')); testCnt++; }
+      if (p.psy) { matBits.push('サイコパシー傾向＝' + (dtS ? dtS.pPct + '%' : '') + '（' + (p.psy === 'high' ? '高め' : '低め') + '）');
+        headBits.push('サイコパシー傾向' + (p.psy === 'high' ? '高め' : '低め')); testCnt++; }
+      var mat = '材料：' + matBits.join(' × ');
       var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
         '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);
-      var head = '「' + fname + '」が' + (p.dir === 'high' ? '高い' : '低い') + 'あなたの' + ATT_JA[attKey];
+      var head = p.title ? p.title : headBits.join(' × ');
+      if (testCnt >= 3) head = '★3テスト一致：' + head;
       if (i < 2) {
         html += '<div class="fr-facet"><div class="fr-facet-head">' +
           '<span class="fr-facet-name">' + esc(head) + '</span>' +
@@ -611,7 +720,16 @@ function render(data){
       html += '<p class="fr-facet-desc" style="margin-top:10px">30項目の点数がまん中寄りのため、今回は追加の各論はありません。' +
         'あなたの場合は上の総論が中心になります。</p>';
     }
-    html += '<p class="fr-facet-desc" style="margin-top:12px">HSPなど、ほかの心理学診断とのクロス分析も、この章に順次追加していきます。</p>';
+    var invite = [];
+    CROSS_TESTS.forEach(function(t){
+      if (!t.taken) invite.push('<a class="fr-back" href="' + t.href + '">' + t.label + ' →</a>');
+    });
+    if (invite.length) {
+      html += '<p class="fr-facet-desc" style="margin-top:12px">ほかの心理学診断を受けると、この章の交差点が増えます（3つ揃うと「★3テスト一致」の分析も出ます）：<br>' +
+        invite.join('　') + '</p>';
+    } else {
+      html += '<p class="fr-facet-desc" style="margin-top:12px">あなたは対応する診断をすべて受けています。新しいテストとのクロス分析も、この章に順次追加していきます。</p>';
+    }
   }
   html += '</div>';
 

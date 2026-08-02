@@ -1284,7 +1284,7 @@
       </svg>
       続きを全部読む
     </button>
-    <p class="paid-note">30項目すべての解説（約1万2千字）＋愛着スタイルとのクロス分析</p>
+    <p class="paid-note">30項目すべての解説（約1万2千字）＋心理学診断とのクロス分析</p>
   </div>
 
   <!-- 案内モーダル（1枚目＝値段と購入。2枚目＝ここで初めて無料と明かす） -->
@@ -1295,7 +1295,7 @@
       <p class="paid-modal-text">
         <span>30の項目それぞれに、</span><span>あなたの点数に合わせた</span><span>解説がつきます。</span><br>
         <span>全部で約1万2千字、</span><span>あなた専用のレポートです。</span><br>
-        <span>愛着スタイル診断を受けた方には、</span><span>クロス分析の章もつきます。</span>
+        <span>愛着スタイルやHSPなどの</span><span>心理学診断を受けた方には、</span><span>クロス分析の章もつきます。</span>
       </p>
       <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
       <!-- サンプル＝見本の30桁（準也さん裁定7/31「見せないと買う人はいない」）。
@@ -2793,14 +2793,37 @@ if (version === '10') {
   }
   var teaserLocal = location.protocol === 'file:' ||
                     location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-  // 愛着診断済みなら att を付けて、クロス分析の試し読みも取り寄せる（2026-08-02）
+  // 愛着・HSP診断済みなら att / hsp を付けて、クロス分析の試し読みも取り寄せる（2026-08-02・第2弾でHSP追加）
   var teaserAtt = '';
   try {
     var ar = JSON.parse(localStorage.getItem('attachment_result'));
     if (ar && ['secure','anxious','avoidant','fearful'].indexOf(ar.typeKey) >= 0) teaserAtt = ar.typeKey;
   } catch (e) {}
+  var teaserHsp = null;
+  try {
+    var hr = JSON.parse(localStorage.getItem('hsp_result'));
+    if (hr && hr.scores && typeof hr.scores.total === 'number') teaserHsp = hr.scores.total;
+  } catch (e) {}
+  var teaserExtra = '';
+  try {
+    var ir = JSON.parse(localStorage.getItem('impostor_result'));
+    if (ir && ir.severityLevel) teaserExtra += '&imp=' + ir.severityLevel +
+      (ir.dominantType ? '&impdom=' + ir.dominantType : '');
+  } catch (e) {}
+  try {
+    var er = JSON.parse(localStorage.getItem('eq_result'));
+    if (er && er.level) teaserExtra += '&eq=' + er.level + (er.weakest ? '&eqw=' + er.weakest : '');
+  } catch (e) {}
+  try {
+    var dr = JSON.parse(localStorage.getItem('dark_triad_result'));
+    if (dr && dr.scores && typeof dr.scores.nPct === 'number') {
+      teaserExtra += '&dtn=' + dr.scores.nPct + '&dtm=' + dr.scores.mPct + '&dtp=' + dr.scores.pPct;
+    }
+  } catch (e) {}
   fetch(teaserLocal ? '_facet-texts-local.json'
-                    : ('/api/facet?facets=' + facetsParam + (teaserAtt ? '&att=' + teaserAtt : '')))
+                    : ('/api/facet?facets=' + facetsParam +
+                       (teaserAtt ? '&att=' + teaserAtt : '') +
+                       (teaserHsp !== null ? '&hsp=' + teaserHsp : '') + teaserExtra))
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if (!data) return;
@@ -2816,7 +2839,7 @@ if (version === '10') {
       var cx = data._cross;
       if (cx && cx.parts && cx.parts.length) {
         document.getElementById('paidTeaserCrossHead').textContent =
-          'クロス分析「愛着スタイル×30項目」の書き出し';
+          'クロス分析（心理学テスト×30項目）の書き出し';
         document.getElementById('paidTeaserCrossText').textContent = cx.parts[0].body.slice(0, 140);
         document.getElementById('paidTeaserCross').style.display = 'block';
       }
