@@ -343,6 +343,11 @@ if (!/^[1-5]{30}$/.test(facets)) {
   try { hexData = JSON.parse(localStorage.getItem('hexaco_result')); } catch (e) {}
   var hexRaw = hexData && hexData.scores && typeof hexData.scores.H === 'number' ? hexData.scores.H : null;
   var hexLv = hexRaw === null ? '' : (hexRaw >= 4.0 ? 'high' : (hexRaw < 2.5 ? 'low' : ''));
+  // 第7弾：RIASECトップタイプ（ホランドコード先頭1文字）
+  var riData = null;
+  try { riData = JSON.parse(localStorage.getItem('riasec_result')); } catch (e) {}
+  var riTop = riData && riData.scores && riData.scores.code ? String(riData.scores.code).charAt(0) : '';
+  if ('RIASEC'.indexOf(riTop) < 0) riTop = '';
 
   var url = isLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facets +
@@ -358,13 +363,14 @@ if (!/^[1-5]{30}$/.test(facets)) {
                        (sdtKey ? '&sdtk=' + sdtKey : '') +
                        (loveKey ? '&lovek=' + loveKey : '') +
                        (valKey ? '&val=' + encodeURIComponent(valKey) : '') +
-                       (hexRaw !== null ? '&hexh=' + hexRaw : ''));
+                       (hexRaw !== null ? '&hexh=' + hexRaw : '') +
+                       (riTop ? '&ri=' + riTop : ''));
 
   // ワーカーと同じ該当判定（ローカル確認用。本番はワーカーが選んで _cross で返す）
   function matchCross(cross){
     var hit = (cross.parts || []).filter(function(p){
       if (!p.type && !p.hsp && !p.imp && !p.impdom && !p.eq && !p.eqw && !p.narc && !p.mach && !p.psy &&
-          !p.locus && !p.mind && !p.sdtk && !p.lovek && !p.val) return false;
+          !p.locus && !p.mind && !p.sdtk && !p.lovek && !p.val && !p.hexh && !p.ri) return false;
       if (p.type && p.type !== attKey) return false;
       if (p.hsp && p.hsp !== hspLv) return false;
       if (p.imp && p.imp !== impSev) return false;
@@ -380,6 +386,7 @@ if (!/^[1-5]{30}$/.test(facets)) {
       if (p.lovek && p.lovek !== loveKey) return false;
       if (p.val && p.val !== valKey) return false;
       if (p.hexh && p.hexh !== hexLv) return false;
+      if (p.ri && p.ri !== riTop) return false;
       if (p.facet) {
         var idx = -1;
         for (var j = 0; j < FACET_META.length; j++) if (FACET_META[j].key === p.facet) idx = j;
@@ -408,6 +415,7 @@ if (!/^[1-5]{30}$/.test(facets)) {
     if (loveKey) pushIntro('love', 'love');
     if (valKey) pushIntro('values', 'values');
     if (hexLv) pushIntro('hexaco', 'hexaco');
+    if (riTop) pushIntro('riasec', 'riasec');
     return { intros: intros, parts: hit };
   }
 
@@ -415,7 +423,7 @@ if (!/^[1-5]{30}$/.test(facets)) {
     .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data){
       if (isLocal && (attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
-                      locusKey || mindKey || sdtKey || loveKey || valKey)) {
+                      locusKey || mindKey || sdtKey || loveKey || valKey || hexLv || riTop)) {
         return fetch('_cross-texts-local.json')
           .then(function(r){ return r.ok ? r.json() : null; })
           .then(function(cross){
@@ -672,6 +680,7 @@ function render(data){
     }).join('');
   }
   var HSP_JA = { high: 'HSP高め', low: 'HSP低め' };
+  var RI_JA = { R: '現実型', I: '研究型', A: '芸術型', S: '社会型', E: '企業型', C: '慣習型' };
   var IMPDOM_JA = { perfectionist: '完璧主義型', superhero: 'スーパーヒーロー型', naturalGenius: '天才型',
                     soloist: '単独行動型', expert: '専門家型' };
   var EQ_JA = { very_high: 'EQかなり高め', high: 'EQ高め', average: 'EQ平均的', growth: 'EQ成長段階' };
@@ -694,10 +703,11 @@ function render(data){
     { taken: !!sdtKey, name: '動機（SDT）', label: '動機づけ診断', href: 'sdt.html' },
     { taken: !!loveKey, name: '恋愛スタイル', label: '恋愛スタイル診断', href: 'love.html' },
     { taken: !!valKey, name: '価値観', label: '価値観診断', href: 'schwartz.html' },
-    { taken: hexRaw !== null, name: 'HEXACO', label: 'HEXACO診断（200問）', href: 'hexaco.html' }
+    { taken: hexRaw !== null, name: 'HEXACO', label: 'HEXACO診断（200問）', href: 'hexaco.html' },
+    { taken: !!riTop, name: 'RIASEC職業興味', label: 'RIASEC職業興味診断', href: 'riasec.html' }
   ];
   var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
-                locusKey || mindKey || sdtKey || loveKey || valKey || hexLv;
+                locusKey || mindKey || sdtKey || loveKey || valKey || hexLv || riTop;
   html += '<div class="report-card">' +
     '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>';
   if (!anyTest) {
@@ -771,6 +781,9 @@ function render(data){
       if (p.hexh) { matBits.push('HEXACO正直さ-謙虚さ＝' + (hexRaw !== null ? hexRaw.toFixed(1) : '') +
           '（' + (p.hexh === 'high' ? '高め' : '低め') + '）');
         headBits.push('正直さ-謙虚さ' + (p.hexh === 'high' ? '高め' : '低め')); testCnt++; }
+      if (p.ri) { matBits.push('RIASEC職業興味＝トップ「' + (RI_JA[p.ri] || p.ri) + '」' +
+          (riData && riData.scores && riData.scores.code ? '（コード' + riData.scores.code + '）' : ''));
+        headBits.push('職業興味「' + (RI_JA[p.ri] || p.ri) + '」'); testCnt++; }
       var mat = '材料：' + matBits.join(' × ');
       var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
         '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);

@@ -544,7 +544,7 @@ body {
 </div>
 
 <script src="image-resolver.js"></script>
-<script src="cross-att-texts.js?v=6"></script>
+<script src="cross-att-texts.js?v=7"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -1066,8 +1066,12 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
   let hexH = null;
   try { const hx = JSON.parse(localStorage.getItem('hexaco_result')); if (hx && hx.scores) hexH = hx.scores.H; } catch (e) {}
   const hexLv = typeof hexH === 'number' ? (hexH >= 4.0 ? 'high' : (hexH < 2.5 ? 'low' : '')) : '';
+  let riTop = '';
+  try { const rr = JSON.parse(localStorage.getItem('riasec_result'));
+    const rt = rr && rr.scores && rr.scores.code ? String(rr.scores.code).charAt(0) : '';
+    if ('RIASEC'.indexOf(rt) >= 0) riTop = rt; } catch (e) {}
   if ((attachKey || hspTotal !== null || impostorSev || eqLevel || eqWeakest ||
-       locusType || mindset || sdt || love || hexLv) && window.CROSS_ATT) {
+       locusType || mindset || sdt || love || hexLv || riTop) && window.CROSS_ATT) {
     const hspLv = hspTotal === null ? '' : (hspTotal >= 34 ? 'high' : (hspTotal <= 19 ? 'low' : ''));
     const lv = { O, C, E, A, N };
     const cand = [];
@@ -1102,6 +1106,9 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
     if (hexLv) (CROSS_ATT.hexcuts || []).forEach(p => {
       if (p.hexh === hexLv && lv[p.factor] === p.dir) cand.push(p);
     });
+    if (riTop) (CROSS_ATT.ricuts || []).forEach(p => {
+      if (p.ri === riTop && lv[p.factor] === p.dir) cand.push(p);
+    });
     (CROSS_ATT.psy || []).forEach(p => {
       if (p.type !== attachKey) return;
       if ((p.kind === 'love' && love === p.key) || (p.kind === 'sdt' && sdt === p.key) ||
@@ -1120,7 +1127,8 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
                  (mindset && CROSS_ATT.mind_soron) ||
                  (sdt && CROSS_ATT.sdt_soron) ||
                  (love && CROSS_ATT.love_soron) ||
-                 (hexLv && CROSS_ATT.hex_soron) || null;
+                 (hexLv && CROSS_ATT.hex_soron) ||
+                 (riTop && CROSS_ATT.ri_soron) || null;
       if (so) parts.push(so.replace(/\n\n/g, '<br><br>'));
     }
   }

@@ -2844,6 +2844,11 @@ if (version === '10') {
     var hx = JSON.parse(localStorage.getItem('hexaco_result'));
     if (hx && hx.scores && typeof hx.scores.H === 'number') teaserExtra += '&hexh=' + hx.scores.H;
   } catch (e) {}
+  try {
+    var rr = JSON.parse(localStorage.getItem('riasec_result'));
+    var rt = rr && rr.scores && rr.scores.code ? String(rr.scores.code).charAt(0) : '';
+    if ('RIASEC'.indexOf(rt) >= 0) teaserExtra += '&ri=' + rt;
+  } catch (e) {}
   fetch(teaserLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facetsParam +
                        (teaserAtt ? '&att=' + teaserAtt : '') +
