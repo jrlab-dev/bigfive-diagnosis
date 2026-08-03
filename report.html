@@ -882,6 +882,10 @@ function buildAnalysis(data) {
   const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
   if (crossText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> 複数テストが示すあなたの傾向', text: crossText });
 
+  // ── 2.5 クロス分析を育てる（2026-08-03 気づかせ計画柱②・図鑑化）──
+  const zukanText = buildCrossZukan(data, { O, C, E, A, N });
+  if (zukanText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> クロス分析を育てる', text: zukanText });
+
   // ── 3. 価値観との一致・不一致 ──
   if (topValue) {
     const valueText = getValueInsight(O, C, E, A, N, topValue);
@@ -1051,6 +1055,76 @@ function getDarkTriadInsight(O, C, E, A, N, dt) {
   }
 
   return null;
+}
+
+// クロス分析の図鑑ブロック（2026-08-03柱②）：受診の進捗＋次のおすすめ＋増える材料の数
+// 「最大◯本」＝その診断の無料クロス文のうち、この人のビッグファイブと組める本数の最大値
+// （結果がどう出るか未受診では分からないため、結果の出方ごとに数えて一番多い値を出す）
+function buildCrossZukan(data, lv) {
+  if (!window.CROSS_ATT) return null;
+  const CA = window.CROSS_ATT;
+  const fm = (arr, f) => (arr || []).filter(c => lv[c.factor] === c.dir && (!f || f(c)));
+  const maxBy = (arr, keyFn) => {
+    const m = {};
+    (arr || []).forEach(c => { const k = keyFn(c); m[k] = (m[k] || 0) + 1; });
+    return Object.keys(m).length ? Math.max.apply(null, Object.values(m)) : 0;
+  };
+  let hexTaken = false, riTaken = false;
+  try { const h = JSON.parse(localStorage.getItem('hexaco_result')); hexTaken = !!(h && h.scores); } catch (e) {}
+  try { const r = JSON.parse(localStorage.getItem('riasec_result')); riTaken = !!(r && r.scores && r.scores.code); } catch (e) {}
+  const TESTS = [
+    { label: '愛着スタイル診断', url: 'attachment.html', taken: !!data.attachment,
+      max: maxBy(fm(CA.cuts), c => c.type) },
+    { label: 'HSP診断', url: 'hsp.html', taken: !!data.hsp,
+      max: maxBy(fm(CA.hspcuts), c => c.hsp) },
+    { label: 'インポスター症候群診断', url: 'impostor.html', taken: !!data.impostor,
+      max: fm(CA.impcuts).length },
+    { label: 'EQ診断', url: 'eq.html', taken: !!data.eq,
+      max: maxBy(fm(CA.eqcuts), c => c.eq) },
+    { label: 'ダークトライアド診断', url: 'dark-triad.html', taken: !!(data.darkTriad && data.darkTriad.scores),
+      max: ['narc', 'mach', 'psy'].reduce((s, t) => {
+        const mine = fm(CA.dtcuts, c => c.dt === t);
+        return s + maxBy(mine, c => c.lvl);
+      }, 0) },
+    { label: '統制の所在診断', url: 'locus.html', taken: !!data.locus,
+      max: maxBy(fm(CA.locuscuts), c => c.locus) },
+    { label: 'マインドセット診断', url: 'mindset.html', taken: !!data.mindset,
+      max: maxBy(fm(CA.mindcuts), c => c.mind) },
+    { label: '動機タイプ診断', url: 'sdt.html', taken: !!data.sdt,
+      max: maxBy(fm(CA.sdtcuts), c => c.sdtk) },
+    { label: '恋愛スタイル診断', url: 'love.html', taken: !!data.love,
+      max: maxBy(fm(CA.lovecuts), c => c.lovek) },
+    { label: '価値観診断', url: 'schwartz.html', taken: !!data.schwartz, max: 0 },
+    { label: 'HEXACO診断', url: 'hexaco.html', taken: hexTaken,
+      max: maxBy(fm(CA.hexcuts), c => c.hexh) },
+    { label: 'RIASEC職業興味診断', url: 'riasec.html', taken: riTaken,
+      max: maxBy(fm(CA.ricuts), c => c.ri) }
+  ];
+  const done = TESTS.filter(t => t.taken).length;
+  const pct = Math.round(done / TESTS.length * 100);
+  let html = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+    '<div style="flex:1;height:8px;background:rgba(139,92,246,0.15);border-radius:99px;overflow:hidden;">' +
+    '<div style="width:' + pct + '%;height:100%;background:linear-gradient(90deg,#8b5cf6,#ec4899);border-radius:99px;"></div></div>' +
+    '<b style="white-space:nowrap;">' + done + ' / ' + TESTS.length + ' 診断</b></div>';
+  if (done >= TESTS.length) {
+    html += '全12診断を制覇しています。あなたの総合レポートは、このサイトで読める最も厚い状態です。新しいクロス分析が追加されたら、ここに自動で反映されます。';
+    return html;
+  }
+  const cand = TESTS.filter(t => !t.taken).sort((a, b) => b.max - a.max);
+  const best = cand[0];
+  html += '受けた診断が増えるほど、上のクロス分析は育ちます。';
+  if (best && best.max > 0) {
+    html += '<div style="margin-top:10px;padding:12px 14px;border:1px solid rgba(139,92,246,0.35);border-radius:12px;background:rgba(139,92,246,0.08);">' +
+      '次のおすすめ：<b>' + best.label + '</b><br>' +
+      '<span style="font-size:0.9em;opacity:0.85;">あなたのビッグファイブと組める書き下ろしが、最大' + best.max + '本待っています</span><br>' +
+      '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">受けてみる →</a></div>';
+    if (cand.length > 1) html += '<div style="margin-top:8px;font-size:0.86em;opacity:0.75;">ほか未受診：' +
+      cand.slice(1).map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
+  } else if (best) {
+    html += '<div style="margin-top:8px;font-size:0.9em;">未受診：' +
+      cand.map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
+  }
+  return html;
 }
 
 function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom) {
