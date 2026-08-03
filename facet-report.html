@@ -834,6 +834,23 @@ function render(data){
         esc(m.desc) + '——ここが <b>' + s + '</b>。30項目の中でも、' + dir + '。</div></div>';
     }).join('') + '</div></div>';
 
+  // ---- AI持ち出し（2026-08-03 気づかせ計画柱③・課金＝説明文まで全部渡す）----
+  // 準也さん裁定：無料は数字とプロンプトのみ／このレポートを開いた人（課金導線通過者）だけ全文を持ち出せる
+  if (!isSample) {
+    html += '<div class="report-card" style="border:1px solid rgba(139,92,246,0.4)">' +
+      '<p class="report-card-title">専用AIカウンセラー <span style="font-size:0.72em;background:rgba(139,92,246,0.25);' +
+      'padding:2px 10px;border-radius:999px;vertical-align:middle">30項目詳細レポートの特典</span></p>' +
+      '<p class="report-card-note">このレポートの全文（30項目の解説＋クロス分析＝約1.5万字）を、AIに渡せる形でコピーします。' +
+      '貼り付けた先のAIは、この分析を土台にあなたの相談に乗る——専用カウンセラーになります。</p>' +
+      '<p class="report-card-note" style="margin-top:6px">使い方：<b>①</b> 下のボタンで全文をコピー → ' +
+      '<b>②</b> ChatGPTやClaudeのチャット欄に貼り付け → <b>③</b> 続けて相談したいことを書く</p>' +
+      '<p style="text-align:center;margin:12px 0 4px">' +
+      '<button id="frAiCopy" style="background:#8b5cf6;color:#fff;border:none;padding:12px 22px;border-radius:12px;' +
+      'font-weight:700;font-size:0.95rem;cursor:pointer">全文をコピーして、AIに連れて行く</button></p>' +
+      '<p id="frAiCopyDone" class="fr-facet-desc" style="text-align:center;display:none">' +
+      'コピーしました。AIのチャット欄に貼り付けて、そのあとに相談したいことを書いてください。</p></div>';
+  }
+
   if (isSample) {
     html += '<p style="text-align:center"><a class="fr-back" href="quiz.html?v=120">' +
       '120問版を受けて、自分のレポートを作る →</a></p>';
@@ -846,6 +863,65 @@ function render(data){
   }
 
   box.innerHTML = html;
+
+  // AI持ち出しボタンの動作（全文整形→クリップボード）
+  var aiBtn = document.getElementById('frAiCopy');
+  if (aiBtn) aiBtn.addEventListener('click', function(){
+    var t = buildAiFullText(data);
+    function done(){
+      var d = document.getElementById('frAiCopyDone');
+      if (d) d.style.display = 'block';
+      aiBtn.textContent = 'コピーしました ✓';
+      try {
+        if (localStorage.getItem('dev_nocount') !== '1' && !localStorage.getItem('counted_paid_ai_copy')) {
+          localStorage.setItem('counted_paid_ai_copy', '1');
+          fetch('/count/hit?e=paid_ai_copy', { method: 'POST', keepalive: true }).catch(function(){});
+        }
+      } catch (e) {}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(done).catch(function(){ fallbackCopy(t); done(); });
+    } else { fallbackCopy(t); done(); }
+  });
+  function fallbackCopy(t){
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+  }
+  function buildAiFullText(data){
+    var L = [
+      'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
+      '以下は、私が性格診断サイトで受けた120問版ビッグファイブ診断の「30項目 詳細レポート」の全文です。',
+      '私の30項目の点数と、その解説、そして他の心理学テストとの掛け合わせ分析（クロス分析）が含まれています。',
+      'この分析を土台に、このあと私が書く質問や相談に答えてください。分析の読み上げや要約はしないでください（私はすでに読んでいます）。',
+      '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
+      '最初の返事では、この分析から読み取れる「私の日常で起きていそうな場面」を1つ仮説として言い当てて、合っているか私に聞いてください。',
+      '質問は一度に1つだけ。箇条書きは使わず、カウンセラーが話すような自然な文章で。深刻な悩みだと感じたら専門機関への相談も勧めてください。',
+      '',
+      '【30項目の点数と解説（各1〜5点）】'
+    ];
+    FACET_META.forEach(function(m){
+      var s = scores[m.key];
+      var body = (data[m.key] || {})[String(s)] || '';
+      L.push('■ ' + m.name + '（' + FACTOR[m.factor].name + '）: ' + s + '点');
+      if (body) L.push(body);
+    });
+    var cx = data._cross;
+    if (cx && ((cx.parts && cx.parts.length) || (cx.intros && cx.intros.length))) {
+      L.push('');
+      L.push('【クロス分析（他の心理学テストとの掛け合わせ）】');
+      (cx.intros || []).forEach(function(it){ L.push(it.body); L.push(''); });
+      (cx.parts || []).forEach(function(p){
+        L.push('■ ' + (p.title ? p.title : 'クロス分析'));
+        L.push(p.body);
+        L.push('');
+      });
+    }
+    L.push('【分析はここまで】このあとに、私の相談を書きます。');
+    return L.join('\n');
+  }
 
   // ---- 計測（1端末1回だけ・設計書§3。dev_nocount=1 のときは数えない） ----
   // サンプル閲覧は paid_report_view に混ぜない（レポート到達数が水増しされるため別イベント）

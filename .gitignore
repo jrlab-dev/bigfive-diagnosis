@@ -34,6 +34,7 @@ test_*.py
 result*.json
 *.txt
 !robots.txt
+!llms.txt
 generate_log.txt
 
 ## IndexNow（Bingへの高速インデックス通知用キーファイルはデプロイ必須）

@@ -1124,6 +1124,17 @@ function buildCrossZukan(data, lv) {
     html += '<div style="margin-top:8px;font-size:0.9em;">未受診：' +
       cand.map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
   }
+  // AI相談の2枚カード（2026-08-03柱③・準也さん案＝名前で分けて値段はタグ）
+  html += '<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(139,92,246,0.2);">' +
+    '<div style="font-weight:700;margin-bottom:8px;">この結果を持って、AIに相談する</div>' +
+    '<div style="border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 14px;margin-bottom:8px;">' +
+      '<b>🗒 AI相談プロフィール</b> <span style="font-size:0.76em;background:rgba(16,185,129,0.18);color:#10b981;padding:2px 10px;border-radius:999px;">無料</span><br>' +
+      '<span style="font-size:0.88em;opacity:0.85;">診断の点数をコピーしてAIに渡す。AIがあなたの数字を前提に相談に乗ります。' +
+      '→ <a href="mypage.html#aiProfileSection" style="color:#a78bfa;">マイページでコピーする</a></span></div>' +
+    '<div style="border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 14px;">' +
+      '<b>🤝 専用AIカウンセラー</b> <span style="font-size:0.76em;background:rgba(139,92,246,0.22);color:#a78bfa;padding:2px 10px;border-radius:999px;">30項目詳細レポートの特典</span><br>' +
+      '<span style="font-size:0.88em;opacity:0.85;">点数に加えて、解説とクロス分析の全文（約1.5万字）を渡す。AIがこのサイトの分析を土台に相談に乗る——深さが別物になります。' +
+      '（120問版の結果ページから）</span></div></div>';
   return html;
 }
 
