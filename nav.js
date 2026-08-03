@@ -22,7 +22,7 @@
   <div class="nav-inner">
     <a href="${basePath}index.html" class="nav-logo"><img src="${basePath}images/ロゴ.webp" alt="V BiG" width="64" height="64" style="height:28px;width:auto;"></a>
     <div class="nav-links" id="navLinks">
-      <a href="${basePath}index.html" data-page="index"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> ホーム</a>
+      <a href="${basePath}index.html" data-page="index" aria-label="ホーム"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>
       <a href="${basePath}mypage.html" data-page="mypage"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> マイページ</a>
       <a href="${basePath}diagnoses.html" data-page="diagnoses"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> 性格診断</a>
       <a href="${basePath}report.html" data-page="report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 総合レポート</a>
@@ -105,6 +105,15 @@
   background: rgba(139, 92, 246, 0.22);
   color: #c4b5fd;
   font-weight: 600;
+}
+/* スマホ幅：詰めて「総合レポート」までスライドなしで見せる（2026-08-03準也さん指示） */
+@media (max-width: 460px) {
+  .nav-inner { padding: 0 12px; gap: 8px; }
+  .nav-links a { padding: 6px 8px; font-size: 12px; }
+}
+/* さらに狭い幅：ホームはロゴが兼ねる（アイコンも隠す） */
+@media (max-width: 412px) {
+  .nav-links a[data-page="index"] { display: none; }
 }
 /* ページ上部の余白（navの高さ分） */
 body { padding-top: 52px !important; }
