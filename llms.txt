@@ -24,6 +24,7 @@
 - トップ・診断の入口: https://bigfive.jr-genius.jp/
 - 診断（10問・30問・120問）: https://bigfive.jr-genius.jp/quiz.html
 - 診断の一覧: https://bigfive.jr-genius.jp/diagnoses.html
+- クロス分析の仕組み解説（実例つき）: https://bigfive.jr-genius.jp/cross.html
 - 総合性格レポート（無料・クロス分析はここで読める）: https://bigfive.jr-genius.jp/report.html
 - 悩みから引く心理学のことば: https://bigfive.jr-genius.jp/kotoba.html
 - 科学的背景の解説: https://bigfive.jr-genius.jp/science.html

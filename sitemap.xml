@@ -288,6 +288,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <!-- クロス分析の仕組み紹介（気づかせ計画・2026-08-03） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/cross.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 
   <!-- よくある質問 -->
   <url>
