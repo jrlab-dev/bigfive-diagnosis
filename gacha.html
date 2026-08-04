@@ -1508,7 +1508,11 @@ body.theme-light .foot-note { color: var(--ink-3); }
     resetCarddas();
   });
 
-  var dbg = new URLSearchParams(location.search).get('coins');
+  // 開発用のコイン設定（?coins=）。2026-08-04から手元での検証中だけ有効にした。
+  // それまでは本番でも効いてしまい、URLを付けるだけで誰でもコインを無限に持てた。
+  // ⚠️localStorage の dev_nocount では判定しない（nocount.html は誰でも開けるので抜け道になる）
+  var __isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  var dbg = __isLocal ? new URLSearchParams(location.search).get('coins') : null;
   if (dbg) { localStorage.setItem('bigfive_coins', dbg); location.search = ''; }
 
   updateCoinDisplay();
