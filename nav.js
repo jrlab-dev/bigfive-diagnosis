@@ -8,6 +8,9 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-9DSFS2TYHG');
+  // 他のページ・他のJSからも出来事を送れるように公開する（2026-08-04）
+  // ねらい＝カウンター（KVの書き込み1,000回/日が上限）を使わずに計測を増やす
+  window.gtag = gtag;
 })();
 
 // ===== グローバルナビゲーション =====

@@ -492,6 +492,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
 <script src="hidden_characters.js"></script>
 <script src="rarity.js"></script>
 <script src="album.js"></script>
+<script src="gacha-utils.js"></script>
 <script src="unlock.js"></script>
 <script src="unlock-banner.js"></script>
 <script>
@@ -1096,6 +1097,8 @@ function showResult(scOverride) {
   if (!scOverride) {
     saveChildResultToList(window.currentChildResult);
     addChildResultToAlbumAndUnlock(window.currentChildResult);
+    // 初回だけコイン1枚（共有リンクから開いた人＝scOverrideありには配らない）
+    if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('kodomo');
   }
   checkAlreadySaved();
 

@@ -302,6 +302,8 @@ function interpret(k,self,scene){
 }
 
 function renderResult(bf, scen, src){
+  // 初回だけコイン1枚（20問を答え終わった人にだけ届く位置）
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('honne');
   document.getElementById('lgSelf').textContent = src==='self' ? '自分のイメージ（簡易）' : '診断（自己申告）';
   document.getElementById('resLead').innerHTML = src==='self'
     ? '簡易版（自分のイメージ5問）と場面の本音を比べています。<b>ズレ</b>が見どころ。'
@@ -361,6 +363,7 @@ function bar(label,val,color){
          '<span class="val">'+Math.round(val)+'</span></div>';
 }
 </script>
+<script src="gacha-utils.js"></script>
 <script src="nav.js"></script>
 </body>
 </html>

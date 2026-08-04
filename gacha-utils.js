@@ -152,6 +152,11 @@
   var DIAG_BONUS_KEY = 'bigfive_diag_bonus';
 
   function grantDiagnosisBonus(diagId) {
+    // 【計測】どの診断が結果まで到達したかをGA4へ送る（2026-08-04）
+    // ここは全診断の結果表示で必ず通る一本道。GA4なので自前カウンター（KV書き込み1,000回/日）を使わない。
+    // 初回判定より前に置く＝2回目以降も数える（＝のべ到達回数）
+    try { if (window.gtag) gtag('event', 'diag_result', { diagnosis: diagId }); } catch (e) {}
+
     try {
       var list = JSON.parse(localStorage.getItem(DIAG_BONUS_KEY) || '[]');
       if (list.indexOf(diagId) >= 0) return false;
