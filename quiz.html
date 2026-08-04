@@ -542,9 +542,14 @@ const answers = new Array(total).fill(null);
 
 // ===== 途中保存（localStorage）=====
 const SAVE_KEY = `bigfive_progress_v${version}`;
+// 所要時間の計測（2026-08-04）。最初の回答から完了までの秒数を匿名データに添える。
+// ねらい＝「120問を3分で終えた」ような読んでいない回答を、分析のときに機械で外せるようにする。
+// 途中でやめて翌日続けた人は大きな値になるが、判定に使うのは「短すぎる」側なので問題ない。
+let startedAt = 0;
 function saveProgress() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ current, answers }));
+    if (!startedAt) startedAt = Date.now();
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ current, answers, startedAt }));
   } catch(e) {}
 }
 function clearProgress() {
@@ -741,7 +746,9 @@ function showResult() {
             facets: result.facets || null,
             gender: gender,
             answers: answers.join(''),
-            device: /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd'
+            device: /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd',
+            // 最初の回答から完了までの秒数（2026-08-04追加・読んでいない回答をあとで外すため）
+            dur: startedAt ? Math.round((Date.now() - startedAt) / 1000) : null
           })
         }).catch(function () {});
       }
@@ -807,12 +814,14 @@ function showResult() {
   document.getElementById('resumeContinue').addEventListener('click', () => {
     current = saved.current;
     saved.answers.forEach((v, i) => { answers[i] = v; });
+    startedAt = saved.startedAt || 0;   // 続きから再開した人も、最初に答えた時刻から数える
     banner.classList.remove('visible');
     render();
   });
 
   document.getElementById('resumeRestart').addEventListener('click', () => {
     clearProgress();
+    startedAt = 0;                      // 最初からやり直すなら計測もやり直す
     banner.classList.remove('visible');
     render();
   });
