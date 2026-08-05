@@ -65,6 +65,25 @@
   .start-btn:hover { transform: translateY(-2px); }
   .intro-note { font-size: 12px; color: var(--dim); }
 
+  /* 解放を祝う表示（カード200枚に到達した人にだけ出す・2026-08-05） */
+  .unlock-celebrate { display: none; width: 100%; max-width: 380px; background: linear-gradient(135deg, rgba(217,119,6,0.14), rgba(236,72,153,0.10)); border: 1px solid rgba(217,119,6,0.35); border-radius: 14px; padding: 14px 16px; text-align: center; }
+  .unlock-celebrate.show { display: block; }
+  .uc-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--accent); }
+  .uc-main { font-size: 17px; font-weight: 900; color: var(--text); margin-top: 4px; line-height: 1.4; }
+  .uc-main strong { color: var(--accent); font-size: 22px; }
+  .uc-sub { font-size: 12px; color: var(--dim); margin-top: 5px; line-height: 1.6; }
+  /* 文節ごとに inline-block にして「開け／ます」のような途中改行を防ぐ */
+  .uc-sub span { display: inline-block; }
+
+  /* 途中でやめられることを最初から伝える（2026-08-05） */
+  .intro-resume-hint { font-size: 12.5px; color: var(--dim); line-height: 1.7; max-width: 380px; padding: 9px 13px; background: rgba(217,119,6,0.06); border: 1px solid rgba(217,119,6,0.16); border-radius: 10px; text-align: center; }
+  .intro-resume-hint strong { color: var(--text); font-weight: 700; }
+
+  /* common.css の .intro は縦中央寄せ（justify-content:center）。
+     お祝い表示と再開案内を足して中身が増えたぶん、中央寄せのままだと
+     上端が固定ナビ（高さ52px）の下に潜って文字が重なる。このページだけ上詰めにする。 */
+  .intro { justify-content: flex-start; }
+
   .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), #8b5cf6); transition: width .4s ease; }
 
   .question-num { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 12px; }
@@ -160,6 +179,13 @@
 <div class="quiz-container">
 
   <div class="intro" id="introArea">
+
+    <div class="unlock-celebrate" id="unlockCelebrate">
+      <span class="uc-badge">🎉 解放しました</span>
+      <p class="uc-main">カード<strong id="ucCount">200</strong>枚達成</p>
+      <p class="uc-sub"><span>いちばん奥にある診断です。</span><span>ここまで来た人だけが開けます</span></p>
+    </div>
+
     <span class="intro-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15 8.5 22 9.3l-5 4.8L18.2 21 12 17.5 5.8 21 7 14.1l-5-4.8L9 8.5z"/></svg> HEXACO・6因子モデル</span>
     <h1>ビッグファイブにはない<span>「正直さ・謙虚さ」</span>まで測る</h1>
     <p class="intro-sub">HEXACOは、ビッグファイブに第6因子「Honesty-Humility（正直さ-謙虚さ）」を加えた6因子モデル。ビッグファイブで測りきれなかった誠実さの次元まで分析します。</p>
@@ -167,6 +193,7 @@
       <p><strong>答え方：</strong>日頃の自分にどのくらい当てはまるかを直感で選んでください。「正しい答え」はありません。今の自分に一番近いものを選ぶのがコツです。</p>
       <p style="margin-top:10px;">※ビッグファイブの<strong>上位互換ではなく、補完するモデル</strong>です。ビッグファイブ診断と組み合わせて、より立体的に自分を知れます。</p>
     </div>
+    <p class="intro-resume-hint">答えは1問ごとに自動で保存されます。<strong>途中でやめても、次に開いたとき続きから再開できます。</strong></p>
     <button class="start-btn" id="startBtn">診断スタート</button>
     <button class="start-btn" id="resumeBtn" style="display:none; background:linear-gradient(135deg,#d97706,#ec4899); margin-top:10px; font-size:15px;">▶ 途中から再開する</button>
     <p class="resume-info" id="resumeInfo" style="display:none; font-size:12px; color:rgba(217,119,6,0.85); margin-top:6px;"></p>
@@ -836,6 +863,24 @@ document.getElementById('retryBtn').addEventListener('click', () => {
 </script>
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js"></script>
+<script>
+// 解放を祝う表示（2026-08-05）
+// カード枚数が解放ライン（200枚）に届いている人にだけ出す。
+// レガシー解放（2026-05-21以前からの利用者は枚数に関係なく全機能が開く）の人には出さない
+// ＝実際には到達していないため。unlock.js の後に置くこと（getCardCount を使う）。
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    var el = document.getElementById('unlockCelebrate');
+    if (!el || typeof getCardCount !== 'function' || typeof getRequiredCards !== 'function') return;
+    var n = getCardCount();
+    var need = getRequiredCards('hexaco');
+    if (need > 0 && n >= need) {
+      document.getElementById('ucCount').textContent = n;
+      el.classList.add('show');
+    }
+  } catch (e) {}
+});
+</script>
 <script>
 (function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=hexaco_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
 </script>
