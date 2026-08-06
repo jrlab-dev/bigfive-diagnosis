@@ -1259,6 +1259,25 @@
     </div>
   </div>
 
+  <!-- 30項目レポートの「予告」：10問・30問版の人だけに出す（2026-08-07新設）
+       目的＝120問完走者そのものを増やすこと。既に完走した人にボタンを押させる施策ではない。
+       ⚠ paid_btn_click は主指標(buy_click÷btn_click)の【分母】なので、
+          「押しやすくして分母を増やす」施策は測定を壊す（準也さん指摘 8/7）。
+          この予告は120問完走という関門を必ず通るため分母の質が薄まらない。
+       ⚠ 金額は出さない（準也さん裁定 7/30）。「無料」とも書かない（同 7/31）。
+       判断の全記録＝_private/マーケティング/計画/【検証】10倍計画を破棄した経緯と本当の急所_2026-08-07.md §6 -->
+  <div class="report-card paid-teaser" id="paidPreTeaser">
+    <p class="paid-teaser-title">あなたの性格を、30項目でくわしく</p>
+    <p class="paid-teaser-sub">外向性など5つの性格を、それぞれ6つに分けた30項目で解説します</p>
+    <button class="btn-paid" id="paidPreBtn">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      120問版を受ける
+    </button>
+    <p class="paid-note">30項目すべての解説（約1万2千字）は、120問版だけに出ます</p>
+  </div>
+
   <!-- 30項目の詳細レポート：試し読みカード（120問版のみ・2026-07-31改稿）
        ⚠ 結果ページには金額を出さない（準也さん裁定 7/30「結果ページに値段が出ているのは抵抗がある」）。
        ⚠ 「無料」と明かすのは購入操作のあと（準也さん裁定 7/31）。先に無料と言うと
@@ -2730,6 +2749,44 @@ if (version === '10') {
     if (isOpen) {
       setTimeout(function() { card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
     }
+  });
+})();
+
+// ===== 30項目レポートの「予告」（10問・30問版のみ／2026-08-07新設） =====
+// 目的＝120問を完走する人そのものを増やすこと。既に完走した人に押させる施策ではない。
+// ⚠ paid_btn_click は主指標(buy_click ÷ btn_click)の【分母】。押しやすくして分母だけ
+//    増やすと主指標が下がり「売れない」と誤判定する（準也さん指摘 8/7）。この予告は
+//    120問完走という関門を必ず通るので分母の質が薄まらない。
+// ⚠ 金額は出さない（裁定 7/30）／「無料」とも書かない（裁定 7/31）。
+// 計測（1端末1回・dev_nocount=1で停止）：
+//   paid_pre_view  … 予告を見た（10問・30問の完走者）
+//   paid_pre_click … 「120問版を受ける」を押した
+// 判断の全記録＝_private/マーケティング/計画/【検証】10倍計画を破棄した経緯と本当の急所_2026-08-07.md §6
+(function() {
+  if (version !== '10' && version !== '30') return;
+  if (isOtherMode || isChildMode || isSharedView) return;
+
+  var pre = document.getElementById('paidPreTeaser');
+  var btn = document.getElementById('paidPreBtn');
+  if (!pre || !btn) return;
+
+  function count(name) {
+    try {
+      if (localStorage.getItem('dev_nocount') === '1') return;
+      if (localStorage.getItem('counted_' + name) === '1') return;
+      localStorage.setItem('counted_' + name, '1');
+      fetch('/count/hit?e=' + name, { method: 'POST', keepalive: true }).catch(function(){});
+    } catch (e) {}
+  }
+
+  // .paid-teaser は CSS で display:none。既存の paidTeaser と同じく show クラスで出す
+  // （style.display='' では CSS 側の none が残り、見えないまま計測だけ飛ぶ。8/7に実測で発覚）
+  pre.classList.add('show');
+  count('paid_pre_view');
+
+  btn.addEventListener('click', function() {
+    count('paid_pre_click');
+    location.href = 'quiz.html?v=120';
   });
 })();
 

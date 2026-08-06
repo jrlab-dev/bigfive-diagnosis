@@ -587,7 +587,11 @@
         <span class="cta-badge">登録不要</span>
         <span class="cta-badge">30ファセット測定</span>
       </div>
-      <a href="https://bigfive.jr-genius.jp/" class="cta-btn">無料でビッグファイブ診断を受ける →</a>
+      <!-- 2026-08-07 修正：見出し・本文は「120問版で30ファセットを測る」なのに、ボタンがトップ（＝10問版）
+           へ飛んでいた。ファセットを検索して来た人＝商品を探している人なので120問版へ直接つなぐ。
+           ?from=blog_facet はGA4のランディングURLで流入を切り分けるための印（既存の ?from=manga_* と同じ作法）。
+           判断の記録＝_private/マーケティング/計画/【検証】10倍計画を破棄した経緯と本当の急所_2026-08-07.md §6 -->
+      <a href="../quiz.html?v=120&amp;from=blog_facet" class="cta-btn">120問版を受ける →</a>
       <p class="cta-sub-link">まずは手軽に <a href="https://bigfive.jr-genius.jp/">10問版から</a></p>
     </section>
 
