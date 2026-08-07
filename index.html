@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブで本当の自分を知る【無料】">
 <meta property="og:title" content="性格診断｜ビッグファイブで本当の自分を知る【無料】">
-<meta property="og:description" content="無料・登録不要。たった10問・2分でわかるビッグファイブ性格診断。心理学で最も信頼性の高い性格検査。他人の性格も診断できる。チーム相性・キャリア診断も全て無料で使い放題。">
+<meta property="og:description" content="心理学で最も信頼されるビッグファイブ理論で、あなたの性格を5つの因子・30項目から分析。10問2分の簡易版から120問の本格版まで無料・登録不要。愛着スタイルやHSPなど12種類の心理診断と重ねて読む「クロス分析」、身近な人の性格を推測する「あの人診断」も使えます。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/">
 <!-- X(Twitter)のリンクカードはWebPを表示しない。ogp-imageワーカーはWebPを返すため、
      トップページのOGPだけ静的なJPEGを指定する（2026-07-26。シェア機能の仕組みは変更なし） -->
@@ -25,7 +25,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="性格診断｜ビッグファイブで本当の自分を知る【無料】">
-<meta name="twitter:description" content="無料・登録不要。たった10問・2分でわかるビッグファイブ性格診断。心理学で最も信頼性の高い性格検査。他人の性格も診断できる。チーム相性・キャリア診断も全て無料で使い放題。">
+<meta name="twitter:description" content="心理学で最も信頼されるビッグファイブ理論で、あなたの性格を5つの因子・30項目から分析。10問2分の簡易版から120問の本格版まで無料・登録不要。愛着スタイルやHSPなど12種類の心理診断と重ねて読む「クロス分析」、身近な人の性格を推測する「あの人診断」も使えます。">
 <meta name="twitter:image" content="https://bigfive.jr-genius.jp/images/ogp-top.jpg">
 
 <!-- 構造化データ（JSON-LD） -->
@@ -325,6 +325,14 @@
   .shimmer-btn:hover::after { left: 125%; }
 
   /* 数字セクション */
+  /* サイトの説明文（2026-08-08新設）
+     ★役目＝Googleが検索結果に出す説明文を、ここから抜粋させる。
+     これまで本文の冒頭がナビゲーションと数字の羅列だけで、「このサイトが何か」を
+     普通の文章で書いた箇所が1つも無かったため、Googleは適当な場所を拾っていた
+     （8/6にスニペットを目視して確認済み。meta descriptionは採用されていない）。 */
+  .site-lead { max-width: 760px; margin: 0 auto; padding: 0 24px 46px; }
+  .site-lead p { font-size: 15px; line-height: 2.1; color: var(--text); opacity: .82; margin: 0; }
+  .site-lead strong { opacity: 1; font-weight: 600; }
   .stats-section { max-width: 760px; margin: 0 auto; padding: 0 24px 60px; text-align: center; }
   .stats-label {
     font-size: 11px; font-weight: 700; color: var(--cyan); letter-spacing: .25em; margin-bottom: 40px;
@@ -854,6 +862,16 @@
         <span class="char">本</span><span class="char">当</span><span class="char">の</span><span class="char">自</span><span class="char">分</span><span class="char">を</span><span class="char">知</span><span class="char">る</span>
       </div>
     </div>
+  </section>
+
+  <!-- サイトの説明文（2026-08-08新設・検索結果に出す文章の供給源）
+       ★書く順番が大事：Googleは150文字前後で切るので、
+         ①検索した人が求めているもの（何の診断か・無料か・問題数）を先に
+         ②うちにしかない武器（12診断のクロス分析・あの人診断）を後に置いてある。
+         前半だけ抜粋されても意味が通り、全部読まれれば独自性が伝わる形。
+       ⚠️題名（title）と meta description は8/22の判定まで触らない（別途試験中）。 -->
+  <section class="site-lead">
+    <p><strong>ビッグファイブ性格診断</strong>は、心理学で最も信頼されている性格理論をもとに、あなたの性格を5つの因子と30の項目から分析する無料の診断です。10問2分の簡易版から120問の本格版まで、登録なしで受けられます。さらに、愛着スタイル・HSP・HEXACOなど<strong>12種類の心理診断と組み合わせて読み解く「クロス分析」</strong>や、<strong>身近な人の性格を推測する「あの人診断」</strong>も無料で使えます。</p>
   </section>
 
   <!-- 数字セクション -->
