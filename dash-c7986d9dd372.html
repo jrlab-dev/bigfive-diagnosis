@@ -234,7 +234,9 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
 /* ============================================================
    3. 描画
    ============================================================ */
-var STATE = { dates:[], counters:{}, series:{}, chartKey:'__quiz_all' };
+// 最初に出すグラフは result_view（7月からの過去データがそろっている唯一の系列。
+// __quiz_all は8/1以降しか無く、開いた瞬間に棒が数本しか出ず「壊れている」ように見える）
+var STATE = { dates:[], counters:{}, series:{}, chartKey:'result_view' };
 
 function buildFunnel(f){
   var vals = f.steps.map(function(s){ return sumLast(STATE.series[s.key] || [], 7); });
@@ -384,6 +386,9 @@ function render(){
   h += '<h2>1日ごとの動き</h2>';
   h += buildChart();
   h += '<h2>主な数字（直近7日の合計）</h2>';
+  h += '<div class="note" style="margin:-3px 0 9px">※「前の7日は記録なし」が並んでいるのは、'
+     + '7月まで手で書き写していた5項目しか過去のデータが無いためです。'
+     + '毎日の自動記録が動き出したので、<b>来週からは全部の項目で前の週と比べられます</b>。</div>';
   h += buildTiles();
 
   h += '<details><summary>すべてのカウンターを見る（累計）</summary><div class="card" style="overflow-x:auto">'
