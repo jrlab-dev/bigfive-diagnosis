@@ -508,10 +508,12 @@ function render(){
    4. 読み込み
    ============================================================ */
 /* 毎朝の自動レポートを読み込む（2026-08-07追加）
-   毎朝6時にクラウドのClaudeが数字を分析して dash-report.json を書き換える。
+   毎朝6時にクラウドのClaudeが数字を分析し、POST /count/report で保存する。ここはその読み出し。
+   ★Gitでなくデータベースに置く理由＝クラウド側のGitHub書き込み権限が確認できなかったこと、
+     および毎日コミットが増えると手元のGit操作（rebase）が要るため。
    ★まだ無い日・読めない日は黙って何も出さない（画面を壊さない）。 */
 function loadReport(){
-  fetch('dash-report.json?t=' + new Date().getTime(), {cache:'no-store'})
+  fetch('/count/report', {cache:'no-store'})
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(rep){
       if (!rep || !rep.headline) return;
