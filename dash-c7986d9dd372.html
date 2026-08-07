@@ -62,6 +62,14 @@
   .tile .d{font-size:12.5px;font-weight:700;margin-top:1px;}
   .up{color:var(--good)} .down{color:var(--bad)} .flat{color:var(--sub)}
 
+  /* 毎朝の自動レポート */
+  .report{background:#fffdf6;border:2px solid #e3c86b;border-radius:12px;padding:15px 16px;margin:0 0 14px;}
+  .rtitle{font-size:12.5px;color:#8a6d1f;font-weight:700;margin-bottom:4px;}
+  .rhead{font-size:16.5px;font-weight:700;line-height:1.55;margin-bottom:8px;}
+  .report p{margin:7px 0;font-size:15px;}
+  .rwatch{margin-top:11px;padding-top:10px;border-top:1px dashed #e3c86b;font-size:14.5px;}
+  .rwatch ul{margin:5px 0 0;padding-left:20px;} .rwatch li{margin:3px 0;}
+
   .note{font-size:12.5px;color:var(--sub);}
   .err{background:#fdecea;border:1px solid #f3b7b1;color:#8a231b;border-radius:10px;padding:14px;}
   details{margin-top:9px;} summary{cursor:pointer;font-size:13px;color:var(--sub);}
@@ -74,6 +82,7 @@
 <div class="wrap">
   <h1>計測ダッシュボード</h1>
   <p class="stamp" id="stamp">読み込み中…</p>
+  <div id="report"></div>
   <div id="app"><div class="card">数字を取ってきています…</div></div>
 </div>
 
@@ -498,7 +507,30 @@ function render(){
 /* ============================================================
    4. 読み込み
    ============================================================ */
+/* 毎朝の自動レポートを読み込む（2026-08-07追加）
+   毎朝6時にクラウドのClaudeが数字を分析して dash-report.json を書き換える。
+   ★まだ無い日・読めない日は黙って何も出さない（画面を壊さない）。 */
+function loadReport(){
+  fetch('dash-report.json?t=' + new Date().getTime(), {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rep){
+      if (!rep || !rep.headline) return;
+      var h = '<div class="report"><div class="rtitle">今朝の報告　'
+            + esc(rep.date || '') + '</div>'
+            + '<div class="rhead">' + esc(rep.headline) + '</div>';
+      (rep.body || []).forEach(function(p){ h += '<p>' + esc(p) + '</p>'; });
+      if (rep.watch && rep.watch.length){
+        h += '<div class="rwatch"><b>次に見るところ</b><ul>';
+        rep.watch.forEach(function(w){ h += '<li>' + esc(w) + '</li>'; });
+        h += '</ul></div>';
+      }
+      document.getElementById('report').innerHTML = h + '</div>';
+    })
+    .catch(function(){ /* 無くても平常運転 */ });
+}
+
 function boot(){
+  loadReport();
   fetch(API_DAILY, {cache:'no-store'})
     .then(function(r){ if(!r.ok) throw new Error('daily ' + r.status); return r.json(); })
     .then(function(d){
