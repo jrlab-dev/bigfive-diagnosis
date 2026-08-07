@@ -1,0 +1,70 @@
+# 毎日の計測スナップショット（2026-08-07新設）
+#
+# 何をしているか：
+#   毎朝5時（日本時間）に、サイトの計測カウンター79項目の「その時点の累計」を
+#   データベースに書き留める。ダッシュボード（dash-*.html）はこの記録の差を取って
+#   「1日ごとの増え方」を出している。
+#
+# ★これを止めてはいけない理由：
+#   カウンターは累計しか持たないので、記録を1日でも取り逃すと、その日の数字は永久に戻らない。
+#
+# なぜCloudflare側のCron Triggersでなくここでやるのか：
+#   本来はCloudflare Workersの定時実行で行う設計だったが、wranglerのOAuthトークンが古く、
+#   triggersの登録APIが403で通らない（2026-08-07・詳細は _private/counter-worker/wrangler.toml のコメント）。
+#   トークンの作り直しにはブラウザでのログインが必要で、リモート作業では実行できないため、
+#   同じことをGitHubの定時実行で行っている。将来wrangler loginをやり直せたら、
+#   Cloudflare側に戻してここは止めてよい（両方動いても、その日の記録が既にあればスキップされるので二重にならない）。
+#
+# 鍵を使っていない理由：
+#   叩いている /count/snapshot-daily は「その日の記録が既にあれば何もしない」入口。
+#   誰が何度叩いても1日1回しか書かないので、鍵なしでも実害がない。
+#   （鍵をGitHub Secretsに登録するにはブラウザ操作が要り、そこで詰むため避けた）
+
+name: 毎日の計測スナップショット
+
+on:
+  schedule:
+    # UTC 20:00 ＝ 日本時間の翌朝 5:00
+    # ⚠️GitHubの定時実行は混雑時に数分〜数十分遅れることがある。記録の用途では問題ない。
+    - cron: '0 20 * * *'
+  workflow_dispatch:   # GitHubの画面から手動でも実行できるようにしておく
+
+# 同時に2つ動かないようにする（遅延で重なったとき用）
+concurrency:
+  group: daily-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: カウンターを記録する
+        run: |
+          echo "記録を依頼します..."
+          RES=$(curl -s --max-time 60 -X POST "https://bigfive.jr-genius.jp/count/snapshot-daily")
+          echo "応答: $RES"
+          if echo "$RES" | grep -q '"skipped":true'; then
+            echo "✅ 今日はすでに記録済みでした（重複実行なので何もしていません）"
+            exit 0
+          fi
+          if echo "$RES" | grep -q '"ok":true'; then
+            echo "✅ 記録しました"
+            exit 0
+          fi
+          echo "❌ 記録に失敗しました"
+          exit 1
+
+      - name: 記録できたか確かめる
+        run: |
+          # 実際にデータベースに入ったかを、読み出しAPIで裏取りする（自己申告を信じない）
+          TODAY=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          DATES=$(curl -s --max-time 60 "https://bigfive.jr-genius.jp/count/daily?days=2")
+          echo "$DATES" | head -c 300
+          echo ""
+          if echo "$DATES" | grep -q "$TODAY"; then
+            echo "✅ $TODAY の記録がデータベースにあることを確認しました"
+          else
+            echo "❌ $TODAY の記録が見つかりません"
+            exit 1
+          fi
