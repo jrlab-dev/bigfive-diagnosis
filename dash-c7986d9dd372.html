@@ -138,6 +138,76 @@ var FUNNELS = [
 ];
 
 /* ============================================================
+   1-2. カウンター名の日本語表記（2026-08-07追加）
+   英語のままだと何の数字か分からないので、全項目に日本語名をつけ、種類ごとにまとめて出す。
+   ============================================================ */
+var LABELS = {
+  'quiz_complete_10':'10問版をやり終えた', 'quiz_complete_30':'30問版をやり終えた',
+  'quiz_complete_120':'120問版をやり終えた',
+  'result_view':'結果ページを見た（のべ）', 'result_view_new':'　└ はじめての人',
+  'result_view_return':'　└ 戻ってきた常連', 'result_ai_click':'結果ページのAI相談ボタン',
+  'result_ai_click_top':'　└ うち上部のボタン', 'ai_profile_copy':'AIプロフィールをコピーした',
+  'blog_link_click':'おすすめ記事へのクリック',
+  'paid_btn_click':'試し読み「続きを全部読む」', 'paid_buy_click':'¥980を見て購入に進んだ',
+  'paid_free_open':'無料と知ってレポートを開いた', 'paid_report_view':'30項目レポートを表示した',
+  'paid_sample_view':'見本を見た', 'paid_ai_copy':'レポート全文をAIに持ち出した',
+  'cross_teaser_view':'クロス分析の予告カードが出た', 'cross_teaser_click':'クロス分析の予告カードを押した',
+  'gacha_view':'カードのページを開いた', 'gacha_pull':'ガチャを引いた',
+  'gacha_unlock':'新しいカードが出た', 'gacha_feature_unlock':'新しい機能が解放された',
+  'gacha_pull_normal':'　└ ノーマル（8/4で計測終了）', 'gacha_pull_rare':'　└ レア（8/4で計測終了）',
+  'gacha_pull_super':'　└ スーパー（8/4で計測終了）',
+  'gacha_unlock_normal':'　└ 新カード ノーマル（8/4で計測終了）',
+  'gacha_unlock_rare':'　└ 新カード レア（8/4で計測終了）',
+  'gacha_unlock_super':'　└ 新カード スーパー（8/4で計測終了）',
+  'report_view':'総合レポートを見た', 'career_view':'キャリア適性診断',
+  'attachment_view':'愛着スタイル診断', 'team_view':'チーム相性診断を開いた',
+  'team_analyze':'チーム相性を診断した', 'group_view':'グループ分けツール',
+  'hexaco_view':'HEXACO診断', 'eq_view':'「あの人」のEQ診断',
+  'dark_triad_view':'「あの人」のダークトライアド診断',
+  'kotoba_view':'ことば辞典を見た', 'kotoba_test_click':'ことば辞典から診断へ進んだ',
+  'other_result_view':'あの人診断の結果（のべ）', 'other_result_view_30':'　└ 簡易版',
+  'other_result_view_60':'　└ 詳細版', 'other_result_view_120':'　└ 詳細版2',
+  'other_team_click':'あの人診断 → チーム相性へ',
+  'share_img_save':'画像を保存した', 'share_x':'Xでシェア', 'share_line':'LINEでシェア',
+  'share_copy':'URLをコピー', 'share_facebook':'Facebookでシェア',
+  'reladvice_view':'相性アドバイスを見た（のべ）', 'reladvice_ai_copy':'相性アドバイスをAIにコピー',
+};
+// 相性アドバイスのテーマ別（表示とAIコピーで28項目）
+var RELADVICE = {
+  'kimochi':'気持ちが分からない', 'like':'好きな人', 'distance':'距離感', 'fight':'けんか',
+  'kachikan':'価値観', 'work-boss':'職場・上司', 'work-fric':'職場・人間関係',
+  'work-kotowaru':'職場・断れない', 'work-buka':'職場・部下', 'family-kodomo':'家族・子ども',
+  'family-fufu':'家族・夫婦', 'family-oya':'家族・親', 'tsukare':'人といると疲れる',
+  'friend-cool':'友だちと冷めた'
+};
+Object.keys(RELADVICE).forEach(function(k){
+  LABELS['reladvice_view_' + k]    = '　└ ' + RELADVICE[k];
+  LABELS['reladvice_ai_copy_' + k] = '　└ ' + RELADVICE[k] + '（AIコピー）';
+});
+
+// 一覧の並び順（この順に、見出しをつけて表示する）
+var GROUPS = [
+  {title:'① 診断をやり終えた人', keys:['quiz_complete_10','quiz_complete_30','quiz_complete_120']},
+  {title:'② 結果ページ', keys:['result_view','result_view_new','result_view_return',
+                               'result_ai_click','result_ai_click_top','ai_profile_copy','blog_link_click']},
+  {title:'③ 有料レポート（30項目）', keys:['paid_btn_click','paid_buy_click','paid_free_open',
+                                          'paid_report_view','paid_sample_view','paid_ai_copy']},
+  {title:'④ クロス分析への案内', keys:['cross_teaser_view','cross_teaser_click']},
+  {title:'⑤ カード・ガチャ', keys:['gacha_view','gacha_pull','gacha_unlock','gacha_feature_unlock',
+                                   'gacha_pull_normal','gacha_pull_rare','gacha_pull_super',
+                                   'gacha_unlock_normal','gacha_unlock_rare','gacha_unlock_super']},
+  {title:'⑥ ほかの診断・機能', keys:['report_view','career_view','attachment_view','team_view',
+                                     'team_analyze','group_view','hexaco_view','eq_view',
+                                     'dark_triad_view','kotoba_view','kotoba_test_click']},
+  {title:'⑦ あの人診断', keys:['other_result_view','other_result_view_30','other_result_view_60',
+                               'other_result_view_120','other_team_click']},
+  {title:'⑧ シェア', keys:['share_img_save','share_x','share_line','share_copy','share_facebook']},
+  {title:'⑨ 相性アドバイス', keys:['reladvice_view','reladvice_ai_copy'].concat(
+      Object.keys(RELADVICE).map(function(k){ return 'reladvice_view_' + k; }),
+      Object.keys(RELADVICE).map(function(k){ return 'reladvice_ai_copy_' + k; }))},
+];
+
+/* ============================================================
    2. 計算のしかた
    ------------------------------------------------------------
    カウンターは累計なので、隣り合う記録日の差＝その期間の実績。
@@ -391,17 +461,31 @@ function render(){
      + '毎日の自動記録が動き出したので、<b>来週からは全部の項目で前の週と比べられます</b>。</div>';
   h += buildTiles();
 
-  h += '<details><summary>すべてのカウンターを見る（累計）</summary><div class="card" style="overflow-x:auto">'
-     + '<table><tr><th>項目</th><th>今の累計</th><th>直近7日</th></tr>';
-  var names = Object.keys(STATE.counters).sort();
-  names.forEach(function(nm){
+  // 1行ぶんの中身を作る（日本語名・累計・直近7日）
+  function rowOf(nm){
     var arr = STATE.counters[nm] || [];
     var lastVal = null;
     for (var i = arr.length - 1; i >= 0; i--){ if (arr[i] !== null && arr[i] !== undefined){ lastVal = arr[i]; break; } }
     var s7 = sumLast(STATE.series[nm] || [], 7);
-    h += '<tr><td>' + esc(nm) + '</td><td>' + (lastVal === null ? '—' : lastVal.toLocaleString()) + '</td><td>'
-       + fmt(s7) + '</td></tr>';
+    return '<tr><td>' + esc(LABELS[nm] || nm) + '</td><td>'
+         + (lastVal === null ? '—' : lastVal.toLocaleString()) + '</td><td>' + fmt(s7) + '</td></tr>';
+  }
+
+  h += '<details><summary>すべての数字を見る（79項目）</summary><div class="card" style="overflow-x:auto">'
+     + '<table><tr><th>項目</th><th>今までの合計</th><th>直近7日</th></tr>';
+  var shown = {};
+  GROUPS.forEach(function(g){
+    var rows = g.keys.filter(function(k){ return STATE.counters[k]; });
+    if (!rows.length) return;
+    h += '<tr><th colspan="3" style="background:#e6ecf3;text-align:left">' + esc(g.title) + '</th></tr>';
+    rows.forEach(function(nm){ shown[nm] = 1; h += rowOf(nm); });
   });
+  // 分類に入れ忘れたものがあれば最後に出す（項目が増えたときに落ちないように）
+  var rest = Object.keys(STATE.counters).filter(function(k){ return !shown[k]; }).sort();
+  if (rest.length){
+    h += '<tr><th colspan="3" style="background:#e6ecf3;text-align:left">その他</th></tr>';
+    rest.forEach(function(nm){ h += rowOf(nm); });
+  }
   h += '</table></div></details>';
 
   document.getElementById('app').innerHTML = h;
