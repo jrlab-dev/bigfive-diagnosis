@@ -215,6 +215,10 @@
 
   /* ヒーロー内ボタン */
   .hero-start-btn {
+    /* 2026-08-08：<button onclick> から <a href> に変更したため、リンクの既定スタイルを打ち消す。
+       理由＝Googleはonclickを辿れず、start.html が「どこからもリンクされていない孤立ページ」
+       になっていた（Search Consoleで「参照元ページ 検出されませんでした」と実測）。 */
+    display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
     flex-shrink: 0; /* ウィンドウ高が低いときに潰れて文字が切れるのを防ぐ */
     padding: 15px 54px;
     background: #111;
@@ -853,7 +857,7 @@
     </div>
     <h2 class="hero-subtitle">ビッグファイブ診断</h2>
     <!-- 2026-08-01：以前はこのボタンが10問版に直行していた。問題数を選べる中継ページへ変更 -->
-    <button id="heroStartBtn" class="hero-start-btn" onclick="location.href='start.html'">診断をはじめる</button>
+    <a id="heroStartBtn" class="hero-start-btn" href="start.html">診断をはじめる</a>
     <div class="reveal-text" id="revealText">
       <h1 class="reveal-line reveal-line--main">
         <span class="char">性</span><span class="char">格</span><span class="char">診</span><span class="char">断</span>
