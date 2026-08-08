@@ -2933,8 +2933,11 @@ if (version === '10') {
     .catch(function(){});   // 取れなくてもカード自体は出す（試し読み無しで動く）
 
   // ---- 案内モーダル（1枚目→2枚目） ----
+  // ¥980の画面を開いた時刻。閉じるまでの秒数で「即座に拒否」と「悩んだ末の断念」を分ける（2026-08-09）
+  var paidOpenedAt = 0;
   btn.addEventListener('click', function() {
     count('paid_btn_click');
+    paidOpenedAt = Date.now();
     // すでに「購入にすすむ」まで進んだ端末には、2枚目（無料案内）から見せる
     var seen = false;
     try { seen = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
@@ -2950,11 +2953,23 @@ if (version === '10') {
   openBtn.addEventListener('click', function() {
     count('paid_free_open');
   });
-  function closeModal() { modal.classList.remove('open'); }
+  function closeModal() {
+    modal.classList.remove('open');
+    // 開いてから閉じるまでの秒数を3段階で記録（2026-08-09）。買わなかった理由の切り分けに使う
+    if (paidOpenedAt) {
+      var sec = (Date.now() - paidOpenedAt) / 1000;
+      count(sec < 3 ? 'paid_close_fast' : (sec < 15 ? 'paid_close_mid' : 'paid_close_slow'));
+      paidOpenedAt = 0;
+    }
+  }
   document.getElementById('paidModalClose1').addEventListener('click', closeModal);
   document.getElementById('paidModalClose2').addEventListener('click', closeModal);
   modal.addEventListener('click', function(e) {
     if (e.target === modal) closeModal();   // 外側を押しても閉じる
+  });
+  // ×を押さずにタブを閉じる・戻るで離れた場合も記録する（sendBeaconなので離脱時でも届く・2026-08-09）
+  window.addEventListener('pagehide', function() {
+    if (paidOpenedAt && modal.classList.contains('open')) closeModal();
   });
 })();
 
