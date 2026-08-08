@@ -748,7 +748,14 @@ function showResult() {
             answers: answers.join(''),
             device: /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd',
             // 最初の回答から完了までの秒数（2026-08-04追加・読んでいない回答をあとで外すため）
-            dur: startedAt ? Math.round((Date.now() - startedAt) / 1000) : null
+            dur: startedAt ? Math.round((Date.now() - startedAt) / 1000) : null,
+            /* 今持っているカードの枚数（2026-08-08追加）
+             * 目的＝カード集め・機能解放が120問完走（＝課金の分母）を育てているかを見る。
+             * 個人を特定する値ではない。読めなければ null を送る（送信自体は止めない）。 */
+            cards: (function () {
+              try { return JSON.parse(localStorage.getItem('bigfive_album') || '[]').length; }
+              catch (e) { return null; }
+            })()
           })
         }).catch(function () {});
       }
