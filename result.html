@@ -2957,7 +2957,13 @@ if (version === '10') {
   btn.addEventListener('click', function() {
     count('paid_btn_click');
     paidOpenedAt = Date.now();
-    // すでに「購入にすすむ」まで進んだ端末には、2枚目（無料案内）から見せる
+    // すでに「購入にすすむ」まで進んだ端末には、2枚目（無料案内）から見せる。
+    // ★2026-08-09 準也さん裁定＝この挙動は仕様。有料化を本格化しても直さない。
+    //   「一度でも買う気を示してくれた人は、ずっと無料でよい。まだ何もない時期に
+    //    触ってくれた最初の人たちは貴重な財産でありファン。このサイトは
+    //    “いろんな心理学の組み合わせで結果を育てていく”のがコンセプトなので、
+    //    その人たちに使い続けてもらうこと自体に価値がある」
+    //   ⚠️将来これを「支払わずに無料で読めてしまうバグ」と判断して直さないこと。
     var seen = false;
     try { seen = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
     step1.style.display = seen ? 'none' : 'block';
