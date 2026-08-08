@@ -864,6 +864,18 @@
     display: block; margin-top: 12px; font-size: 12px;
     color: var(--purple); text-decoration: underline;
   }
+  /* 2026-08-09：¥980を断った人が何も持たずに帰らないための無料の出口。
+     ¥980より小さく・仕切り線の下に置いて、主導線（購入にすすむ）を弱めない */
+  .paid-modal-alt {
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid rgba(139,92,246,0.22);
+    font-size: 12px; color: var(--dim); line-height: 1.7;
+  }
+  .paid-modal-alt a {
+    display: inline-block; margin-top: 6px;
+    color: var(--cyan); text-decoration: underline; font-weight: 700;
+  }
+  body.theme-light .paid-modal-alt { color: #64748b; border-top-color: rgba(139,92,246,0.2); }
   body.theme-light .paid-note,
   body.theme-light .paid-modal-text,
   body.theme-light .paid-modal-close { color: #64748b; }
@@ -1321,6 +1333,13 @@
            1〜5の極端な点数を含まない組み合わせにして、尖った本文は晒さない -->
       <a class="paid-sample-link" id="paidSampleLink" target="_blank" rel="noopener"
          href="facet-report.html?facets=323423432434443243344324234323&sample=1">サンプルを見る（見本の点数で全文）</a>
+      <!-- 2026-08-09：¥980を見て閉じた人が、何も持たずに帰らないための無料の出口。
+           ここまで33人到達して購入0だが、その30人はサイトから何も得ずに離脱している。
+           ★¥980より小さく・下に置く（同じ大きさで並べると全員が無料を押して有料テストが壊れる） -->
+      <p class="paid-modal-alt">
+        無料で読めるものもあります。<br>
+        <a id="paidAltFree" href="report.html">これまでの診断をまとめた総合レポートを見る（無料）</a>
+      </p>
       <button class="paid-modal-close" id="paidModalClose1">とじる</button>
     </div>
     <div class="paid-modal-inner" id="paidModalStep2" style="display:none;">
@@ -2953,6 +2972,10 @@ if (version === '10') {
   openBtn.addEventListener('click', function() {
     count('paid_free_open');
   });
+  // ¥980を断って無料の総合レポートへ流れた人（2026-08-09）。
+  // 「拒否して離脱」と「拒否したが無料は見た」を区別する。後から期間比較もできる
+  var altFree = document.getElementById('paidAltFree');
+  if (altFree) altFree.addEventListener('click', function() { count('paid_alt_free_click'); });
   function closeModal() {
     modal.classList.remove('open');
     // 開いてから閉じるまでの秒数を3段階で記録（2026-08-09）。買わなかった理由の切り分けに使う
