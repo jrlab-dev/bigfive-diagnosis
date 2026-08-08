@@ -66,6 +66,16 @@
   <button class="btn-off" id="btnOff">この端末で計測をオフにする</button>
   <button class="btn-on" id="btnOn">オフを解除する（通常に戻す）</button>
 
+  <!-- 2026-08-09追加：一度押したボタンは「もう押した」と記録され、¥980の案内などが
+       二度と出なくなる（例＝「購入にすすむ」を押すと次からは無料案内から始まる）。
+       準也さんが確認しようとして「出てこない」となったため、戻せる手段をここに置く。 -->
+  <h2 style="font-size:15px;margin:26px 0 4px;">はじめて見る人の状態に戻す</h2>
+  <p style="font-size:13px;color:#64748b;margin:0 0 12px;">
+    ¥980の案内など、<b>一度押すと次から出なくなる画面</b>をもう一度確認したいときに使います。
+  </p>
+  <button class="btn-on" id="btnReset">押した記録を消して、はじめての状態に戻す</button>
+  <div id="resetMsg" style="display:none;font-size:13px;color:#059669;background:#ecfdf5;border:1px solid #10b981;border-radius:10px;padding:12px 14px;margin-bottom:10px;"></div>
+
   <div class="note">
     <b>知っておいていただきたいこと</b>
     <ul>
@@ -73,6 +83,7 @@
       <li>ブラウザの履歴やサイトデータを消すと、この設定も一緒に消えます。そのときはまたこのページを開いてください。</li>
       <li>オフの間も、サイトの動きは普段どおりです。集計に数えられなくなるだけです。</li>
       <li>このページ自体は何も数えていないので、何度開いても集計は汚れません。</li>
+      <li><b>「はじめての状態に戻す」を使うときは、先に計測をオフにしてください。</b>戻したあとに触ると、その操作が改めて数えられてしまいます。</li>
     </ul>
   </div>
 
@@ -115,6 +126,26 @@
   document.getElementById('btnOn').addEventListener('click', function () {
     try { localStorage.removeItem(KEY); } catch (e) {}
     draw(true);
+  });
+
+  // 「押した記録（counted_*）」を全部消して、はじめて訪れた人と同じ状態に戻す（2026-08-09追加）。
+  // ¥980の案内は「購入にすすむ」を一度押すと次から無料案内に直行する作りのため、
+  // 確認しようとしても出てこなくなる。その戻し方がこれまで無かった
+  document.getElementById('btnReset').addEventListener('click', function () {
+    var removed = 0;
+    try {
+      var keys = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('counted_') === 0) keys.push(k);
+      }
+      for (var j = 0; j < keys.length; j++) { localStorage.removeItem(keys[j]); removed++; }
+    } catch (e) {}
+    var msg = document.getElementById('resetMsg');
+    msg.style.display = 'block';
+    msg.textContent = removed
+      ? removed + '件の記録を消しました。¥980の案内など、はじめて見る画面がまた出るようになります。'
+      : '消す記録はありませんでした（すでにはじめての状態です）。';
   });
 
   // URLに ?set=1 を付けて開くと、ボタンを押さなくてもその場でオフになる（?set=0 で解除）。
