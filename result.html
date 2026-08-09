@@ -3015,7 +3015,15 @@ if (version === '10') {
     // 開いてから閉じるまでの秒数を3段階で記録（2026-08-09）。買わなかった理由の切り分けに使う
     if (paidOpenedAt) {
       var sec = (Date.now() - paidOpenedAt) / 1000;
-      count(sec < 3 ? 'paid_close_fast' : (sec < 15 ? 'paid_close_mid' : 'paid_close_slow'));
+      // 区切りの根拠（2026-08-10に実測して決め直した／それ以前の3秒・15秒は根拠なしの決め打ちだった）
+      //   案内1枚目は205文字。読み切るのに20.5秒（速い流し読み）〜25.6秒（ふつう）かかる。
+      //   一方 ¥980 は案内が開いた瞬間に画面中央に見える（スマホ390pxで上から240px・スクロール不要）。
+      //   3秒 ＝値段は認識できるが本文は絶対に読めない時間
+      //   21秒＝どんなに速く読んでも読み切れない下限（＝準也さん裁定 2026-08-10）
+      count(sec < 3 ? 'paid_close_fast' : (sec < 21 ? 'paid_close_mid' : 'paid_close_slow'));
+      // ★秒数そのものもGA4へ送る。3段階の区切りは後から変えられない（カウンターは累計しか持たない）が、
+      //   生の秒数が残っていれば何秒で切り直しても分析できる
+      try { if (window.gtag) gtag('event', 'paid_close', { seconds: Math.round(sec * 10) / 10 }); } catch (e) {}
       // 即閉じ（＝値段を見て3秒未満で閉じた）端末に印を残す（2026-08-10追加）。
       // 次にこの結果ページへ戻ってきたら revisit_after_close を数える＝「幻滅して離れたのか」を率で見るため
       if (sec < 3) { try { localStorage.setItem('paid_closed_fast', '1'); } catch (e) {} }
