@@ -5,13 +5,19 @@ var UNLOCK_DEPLOY_DATE = '2026-05-20T15:00:00.000Z';
 
 var UNLOCK_TABLE = [
   { cards:  1, id: 'love',               label: '恋愛スタイル診断',       url: 'love.html' },
+  // 2026-08-09：総合レポートを8枚→1枚へ（診断を1回受ければ開く）。
+  // 理由＝①中身は全部無料コンテンツで、隠す理由が無かった ②「¥980を断った人の出口」として
+  // result.htmlから案内している先が、カード8枚未満の人には鍵付きの扉になっていた
+  // ③クロス分析は「他の診断を受けた人にしか書けない」ので、カード枚数で隠す必要が無い
+  // （未受診の人には「サブ診断を受けるとここに表示されます」という案内文が元から出る作り）
+  // loveの後に置いているのは、解放バナーを「恋愛スタイル→総合レポート」の順に出すため
+  { cards:  1, id: 'report',             label: '総合レポート',          url: 'report.html' },
   { cards:  2, id: 'other',              label: 'あの人診断',            url: 'other_quiz.html' },
   { cards:  3, id: 'career',             label: 'キャリア適性診断',      url: 'career.html' },
   { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
   { cards:  5, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
   { cards:  6, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
   { cards: 70, id: 'other-detailed2',   label: 'あの人診断 120問相当精密版', url: 'other_quiz.html' },
-  { cards:  8, id: 'report',             label: '総合レポート',          url: 'report.html' },
   { cards: 10, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
   { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
   { cards: 18, id: 'schwartz',           label: '価値観診断',            url: 'schwartz.html' },
