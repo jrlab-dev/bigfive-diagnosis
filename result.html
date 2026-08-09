@@ -1465,6 +1465,16 @@
       sendCount(isReturn ? 'result_view_return' : 'result_view_new');
       localStorage.setItem('bigfive_seen', '1');
     } catch (e) {}
+    // ¥980を3秒未満で閉じた人が、そのあと結果ページへ戻ってきたか（2026-08-10追加）
+    // 目的＝「有料が出たことに幻滅して離れていないか」を1つの数字で見る
+    // 判定＝revisit_after_close ÷ paid_close_fast。⚠️時間が経つほど率は上がるので必ず期間を切って読む
+    try {
+      if (localStorage.getItem('paid_closed_fast') === '1'
+          && localStorage.getItem('counted_revisit_after_close') !== '1') {
+        localStorage.setItem('counted_revisit_after_close', '1');
+        sendCount('revisit_after_close');
+      }
+    } catch (e) {}
     var aiBtn = document.getElementById('aiConsultBtn');
     if (aiBtn) aiBtn.addEventListener('click', function(){ sendCount('result_ai_click'); });
     // 上部ボタン（2026-07-16）：従来の合算に加え、位置別の内訳も送る
@@ -2790,6 +2800,15 @@ if (version === '10') {
   if (!pre || !btn) return;
 
   function count(name) {
+    // GA4にも送る（2026-08-10追加）。カウンター（KV）は累計しか持てないので
+    // 「同じ人が2回目も即閉じしたか」「そのあと戻ってきたか」が追えない。ユーザー単位で見られるGA4に流す。
+    // ⚠️ここは1端末1回の制限をかけない／dev_nocountでも止めない（GA4は止めない＝2026-08-01裁定）
+    // ⚠️GA4本体（nav.js）はページ末尾で読み込まれる。ページ表示と同時に鳴る計測（paid_pre_view）は
+    // この時点でまだ gtag が無いので、無ければ3秒後に1回だけ送り直す
+    try {
+      if (window.gtag) gtag('event', name);
+      else setTimeout(function () { try { if (window.gtag) gtag('event', name); } catch (e) {} }, 3000);
+    } catch (e) {}
     try {
       if (localStorage.getItem('dev_nocount') === '1') return;
       if (localStorage.getItem('counted_' + name) === '1') return;
@@ -2836,6 +2855,15 @@ if (version === '10') {
   if (!teaser || !btn || !modal || !step1 || !step2 || !buyBtn || !openBtn) return;
 
   function count(name) {
+    // GA4にも送る（2026-08-10追加）。カウンター（KV）は累計しか持てないので
+    // 「同じ人が2回目も即閉じしたか」「そのあと戻ってきたか」が追えない。ユーザー単位で見られるGA4に流す。
+    // ⚠️ここは1端末1回の制限をかけない／dev_nocountでも止めない（GA4は止めない＝2026-08-01裁定）
+    // ⚠️GA4本体（nav.js）はページ末尾で読み込まれる。ページ表示と同時に鳴る計測（paid_pre_view）は
+    // この時点でまだ gtag が無いので、無ければ3秒後に1回だけ送り直す
+    try {
+      if (window.gtag) gtag('event', name);
+      else setTimeout(function () { try { if (window.gtag) gtag('event', name); } catch (e) {} }, 3000);
+    } catch (e) {}
     try {
       if (localStorage.getItem('dev_nocount') === '1') return;
       if (localStorage.getItem('counted_' + name) === '1') return;
@@ -2988,6 +3016,9 @@ if (version === '10') {
     if (paidOpenedAt) {
       var sec = (Date.now() - paidOpenedAt) / 1000;
       count(sec < 3 ? 'paid_close_fast' : (sec < 15 ? 'paid_close_mid' : 'paid_close_slow'));
+      // 即閉じ（＝値段を見て3秒未満で閉じた）端末に印を残す（2026-08-10追加）。
+      // 次にこの結果ページへ戻ってきたら revisit_after_close を数える＝「幻滅して離れたのか」を率で見るため
+      if (sec < 3) { try { localStorage.setItem('paid_closed_fast', '1'); } catch (e) {} }
       paidOpenedAt = 0;
     }
   }
