@@ -262,6 +262,10 @@ var GROUPS = [
 function dayGap(a, b){
   return Math.round((Date.parse(b+'T00:00:00Z') - Date.parse(a+'T00:00:00Z')) / 86400000);
 }
+// 日本時間の今日（端末の時計が日本以外に設定されていても日本の日付になる）
+function jstToday(){
+  return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
 
 function dailySeries(dates, values){
   var out = new Array(dates.length).fill(null);
@@ -522,6 +526,37 @@ function buildTiles(){
   return h + '</div>';
 }
 
+/* ★2026-08-14追加：まる1日ぶんの実績を1行で出す
+   毎朝6時にクラウドのClaudeが分析文を書く仕組みは動かない（クラウド側が
+   bigfive.jr-genius.jp への通信を許可されておらず、数字を取りに行った時点で403で弾かれる。
+   2026-08-07に4回試して4回とも同じ・8/08に停止）。
+   その代わり、この画面を開いた時点で「前の日に何があったか」が必ず1行で分かるようにする。
+   ★日付は必ず添える＝記録が飛んだ日があると「きのう」とは限らないため。 */
+var DAY_KEYS = [
+  {key:'__quiz_all',        label:'診断の完走', unit:'人'},
+  {key:'quiz_complete_120', label:'120問',     unit:'人'},
+  {key:'result_view',       label:'結果ページ', unit:'回'},
+  {key:'paid_btn_click',    label:'¥980の画面', unit:'人'}
+];
+
+function yesterdayLine(){
+  var dates = STATE.dates;
+  if (dates.length < 2) return '';
+  var day = dates[dates.length - 2];   // 最後の記録の1つ前＝「まる1日ぶん」が取れる区間の始まり
+  var parts = [], est = false, any = false;
+  DAY_KEYS.forEach(function(k){
+    var s = STATE.series[k.key] || [];
+    var v = s[s.length - 1];
+    if (!v) return;
+    any = true;
+    if (v.est) est = true;
+    parts.push(esc(k.label) + fmt(v.v) + k.unit);
+  });
+  if (!any) return '';
+  return '<b>' + day.slice(5).replace('-', '/') + ' の1日</b>＝' + parts.join('・')
+       + (est ? '<span class="note">（記録が飛んだ期間の推定を含みます）</span>' : '') + '。<br>';
+}
+
 function buildSummary(){
   var quiz = STATE.series['__quiz_all'] || [];
   var last = null;
@@ -544,6 +579,7 @@ function buildSummary(){
   });
 
   var h = '<div class="summary">';
+  h += yesterdayLine();
   h += 'この7日間で <b>診断を最後までやった人が' + fmt(cur7) + '人</b>';
   if (cur7 !== null && prev7 !== null){
     var diff = cur7 - prev7;
@@ -684,7 +720,12 @@ function loadReport(){
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(rep){
       if (!rep || !rep.headline) return;
-      var h = '<div class="report"><div class="rtitle">今朝の報告　'
+      /* ★いつ書いた文章かをはっきりさせる（2026-08-14追加）
+         毎朝の自動作成は止まっているので、放っておくと何日も前の文章が
+         「今朝の報告」という見出しで出続ける＝古い話を今日の話と読んでしまう。 */
+      var age = rep.date ? dayGap(rep.date, jstToday()) : null;
+      var title = (age === null || age <= 0) ? '今朝の報告' : age + '日前に書いた報告';
+      var h = '<div class="report"><div class="rtitle">' + esc(title) + '　'
             + esc(rep.date || '') + '</div>'
             + '<div class="rhead">' + esc(rep.headline) + '</div>';
       (rep.body || []).forEach(function(p){ h += '<p>' + esc(p) + '</p>'; });
@@ -692,6 +733,12 @@ function loadReport(){
         h += '<div class="rwatch"><b>次に見るところ</b><ul>';
         rep.watch.forEach(function(w){ h += '<li>' + esc(w) + '</li>'; });
         h += '</ul></div>';
+      }
+      if (age !== null && age >= 1){
+        h += '<div class="rwatch" style="color:#8a6d1f">この文章は<b>' + esc(rep.date) + 'に書いたもの</b>で、'
+           + '今日のものではありません（毎朝の自動作成は止めてあります）。'
+           + '<b>下の数字はすべて今日の最新です。</b>新しい読み解きが必要なときは、'
+           + 'いつでも私に「数字を見て」と言ってください。</div>';
       }
       document.getElementById('report').innerHTML = h + '</div>';
     })
