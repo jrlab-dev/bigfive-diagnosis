@@ -107,17 +107,41 @@ var CHART_ITEMS = [
   {key:'ai_profile_copy',   label:'AIコピー'}
 ];
 
-// 数字タイル（直近7日平均と、その前7日平均を比べる）
+// 数字タイル（直近7日と、その前7日を比べる）
+// ★2026-08-14に8項目→24項目へ拡張（準也さん「ダッシュボードで見れる数字が少ない」）。
+//   unit＝'人'は1端末1回しか数えないもの／'回'は見返しも数えるもの。混ぜて「人」と書くと嘘になる。
 var TILES = [
-  {key:'__quiz_all',           label:'診断を最後までやった人'},
-  {key:'quiz_complete_120',    label:'120問をやり切った人'},
-  {key:'result_view',          label:'結果ページの閲覧'},
-  {key:'report_view',          label:'総合レポートを見た人'},
-  {key:'gacha_feature_unlock', label:'機能が解放された回数'},
-  {key:'paid_btn_click',       label:'¥980の画面まで来た人'},
-  {key:'paid_buy_click',       label:'購入に進んだ人'},
-  {key:'ai_profile_copy',      label:'AIプロフィールのコピー'}
+  {key:'__quiz_all',           label:'診断を最後までやった人',       unit:'人'},
+  {key:'quiz_complete_120',    label:'120問をやり切った人',          unit:'人'},
+  {key:'quiz_complete_30',     label:'30問版をやり切った人',         unit:'人'},
+  {key:'quiz_complete_10',     label:'10問版をやり切った人',         unit:'人'},
+  {key:'result_view',          label:'結果ページの閲覧',             unit:'回'},
+  {key:'result_view_new',      label:'　└ はじめての人',             unit:'人'},
+  {key:'result_view_return',   label:'　└ 戻ってきた常連',           unit:'回'},
+  {key:'report_view',          label:'総合レポートを見た',           unit:'回'},
+  {key:'paid_btn_click',       label:'¥980の画面まで来た人',         unit:'人'},
+  {key:'paid_buy_click',       label:'購入に進んだ人',               unit:'人'},
+  {key:'paid_close_fast',      label:'3秒未満で閉じた人（高いと判断）', unit:'人'},
+  {key:'revisit_after_close',  label:'即閉じ後に戻ってきた人',       unit:'人'},
+  {key:'cross_teaser_click',   label:'クロス分析の予告を押した人',   unit:'人'},
+  {key:'ai_profile_copy',      label:'AIプロフィールのコピー',       unit:'回'},
+  {key:'gacha_view',           label:'カードのページを開いた',       unit:'回'},
+  {key:'gacha_pull',           label:'ガチャを引いた',               unit:'回'},
+  {key:'gacha_feature_unlock', label:'機能が解放された回数',         unit:'回'},
+  {key:'team_analyze',         label:'チーム相性を診断した',         unit:'回'},
+  {key:'career_view',          label:'キャリア適性診断',             unit:'回'},
+  {key:'attachment_view',      label:'愛着スタイル診断',             unit:'回'},
+  {key:'reladvice_view',       label:'相性アドバイスを見た',         unit:'回'},
+  {key:'other_result_view',    label:'あの人診断の結果',             unit:'回'},
+  {key:'blog_link_click',      label:'おすすめ記事へのクリック',     unit:'回'},
+  {key:'kotoba_view',          label:'ことば辞典を見た',             unit:'回'}
 ];
+
+// 一番上の「一言まとめ」で伸び・落ちを探す対象。
+// ★タイル全部を対象にしない＝件数の小さい項目は率が跳ねて、毎日そればかりが「1位」になるため
+//   （例：1→3で+200%）。判定は昔からの主要8項目に限る。
+var SUMMARY_KEYS = ['__quiz_all','quiz_complete_120','result_view','report_view',
+                    'gacha_feature_unlock','paid_btn_click','paid_buy_click','ai_profile_copy'];
 
 // 漏斗2本
 var FUNNELS = [
@@ -326,7 +350,51 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
    ============================================================ */
 // 最初に出すグラフは result_view（7月からの過去データがそろっている唯一の系列。
 // __quiz_all は8/1以降しか無く、開いた瞬間に棒が数本しか出ず「壊れている」ように見える）
-var STATE = { dates:[], counters:{}, series:{}, chartKey:'result_view' };
+// stats＝今この瞬間の累計（/count/stats）。日別記録は毎朝5時なので、これが無いと
+// 「昨日の朝までの数字」しか見られない＝今日ぶんが丸ごと見えなかった（2026-08-14に追加）
+var STATE = { dates:[], counters:{}, series:{}, chartKey:'result_view', stats:null, statsAt:null };
+
+// その項目の日本語名（合成指標の __quiz_all も引けるようにする）
+function labelOf(key){
+  if (key === '__quiz_all') return '診断の完走（10問＋30問＋120問）';
+  return LABELS[key] || key;
+}
+// 一言まとめ用の呼び名。タイルに書いてある名前（例「¥980の画面まで来た人」）を優先する。
+// 一覧表の名前は仕組みに寄せてあり（例「試し読み『続きを全部読む』」）、まとめ文には向かない
+function shortLabelOf(key){
+  for (var i = 0; i < TILES.length; i++){
+    if (TILES[i].key === key) return TILES[i].label.replace(/^　└ /, '');
+  }
+  return labelOf(key);
+}
+// 最後のスナップショット（＝いちばん新しい記録日）の累計値
+function lastSnap(nm){
+  var arr = STATE.counters[nm] || [];
+  for (var i = arr.length - 1; i >= 0; i--){
+    if (arr[i] !== null && arr[i] !== undefined) return arr[i];
+  }
+  return null;
+}
+// 今この瞬間の累計（statsが取れていないときは null）
+function nowTotal(nm){
+  if (!STATE.stats) return null;
+  if (nm === '__quiz_all'){
+    var a = STATE.stats['quiz_complete_10'], b = STATE.stats['quiz_complete_30'], c = STATE.stats['quiz_complete_120'];
+    if (a == null || b == null || c == null) return null;
+    return a + b + c;
+  }
+  return STATE.stats[nm] === undefined ? null : STATE.stats[nm];
+}
+// 最後の記録から今までに増えた数（リセット等で負になったら無効＝表示しない）
+function sinceSnap(nm){
+  var now = nowTotal(nm), snap = (nm === '__quiz_all')
+    ? (function(){ var a=lastSnap('quiz_complete_10'), b=lastSnap('quiz_complete_30'), c=lastSnap('quiz_complete_120');
+                   return (a==null||b==null||c==null) ? null : a+b+c; })()
+    : lastSnap(nm);
+  if (now === null || snap === null) return null;
+  var d = now - snap;
+  return d < 0 ? null : d;
+}
 
 function buildFunnel(f){
   var vals = f.steps.map(function(s){ return sumLast(STATE.series[s.key] || [], 7); });
@@ -402,7 +470,29 @@ function buildChart(){
   });
   tabs += '</div>';
 
-  return '<div class="card">' + tabs + svg
+  /* ★2026-08-14追加：ボタンは7つしか置けないので、残り全部はプルダウンから選ぶ。
+     ボタンを80個並べても選べないが、「グラフで見られるのが7項目だけ」では数字が足りない。 */
+  var inTabs = {};
+  CHART_ITEMS.forEach(function(it){ inTabs[it.key] = 1; });
+  var sel = '<div style="margin:-4px 0 9px"><span class="note">ほかの数字をグラフで見る：</span> '
+          + '<select id="chartSel" style="font-family:inherit;font-size:13px;padding:3px 5px;max-width:100%">'
+          + '<option value="">選んでください</option>';
+  GROUPS.forEach(function(g){
+    var ks = g.keys.filter(function(k){ return STATE.counters[k] && !inTabs[k]; });
+    if (!ks.length) return;
+    sel += '<optgroup label="' + esc(g.title) + '">';
+    ks.forEach(function(k){
+      sel += '<option value="' + esc(k) + '"' + (k === STATE.chartKey ? ' selected' : '') + '>'
+           + esc(labelOf(k).replace(/^　└ /, '')) + '</option>';
+    });
+    sel += '</optgroup>';
+  });
+  sel += '</select></div>';
+
+  var head = '<div style="font-weight:700;margin-bottom:3px">'
+           + esc(labelOf(STATE.chartKey).replace(/^　└ /, '')) + '（1日ごと・直近' + n + '日）</div>';
+
+  return '<div class="card">' + tabs + sel + head + svg
        + '<div class="legend"><i style="background:#2b5fa8"></i>その日に記録した実測　'
        + '<i style="background:#a8c4e6"></i>記録が飛んだ期間を日数で割った推定　'
        + '<i style="background:#e3e8ee"></i>データなし</div></div>';
@@ -426,7 +516,7 @@ function buildTiles(){
       line = '<div class="d ' + cls + '">' + mark + fmt(Math.abs(df)) + '　前の7日と比べて</div>';
     }
     h += '<div class="tile"><div class="t">' + esc(t.label) + '</div>'
-       + '<div class="v">' + fmt(cur) + '<span class="u"> 人／7日</span></div>'
+       + '<div class="v">' + fmt(cur) + '<span class="u"> ' + (t.unit || '人') + '／7日</span></div>'
        + line + '</div>';
   });
   return h + '</div>';
@@ -440,16 +530,16 @@ function buildSummary(){
 
   // いちばん伸びた／落ちた指標を探す（前の7日に記録が無いものは比較しない）
   var bestName = null, bestRate = 0, worstName = null, worstRate = 0;
-  TILES.forEach(function(t){
-    var s = STATE.series[t.key] || [];
+  SUMMARY_KEYS.forEach(function(key){
+    var s = STATE.series[key] || [];
     var c = sumLast(s, 7), p = sumPrev(s, 7);
     if (c === null || p === null || p < 3) return;
     if (c > p){
       var r = (c - p) / p;
-      if (r > bestRate){ bestRate = r; bestName = t.label; }
+      if (r > bestRate){ bestRate = r; bestName = shortLabelOf(key); }
     } else if (c < p){
       var r2 = (p - c) / p;
-      if (r2 > worstRate){ worstRate = r2; worstName = t.label; }
+      if (r2 > worstRate){ worstRate = r2; worstName = shortLabelOf(key); }
     }
   });
 
@@ -468,42 +558,97 @@ function buildSummary(){
   return h;
 }
 
+/* ★2026-08-14追加：最後の記録から今までに増えた数
+   日ごとの記録は毎朝5時なので、それ以降に起きたことは、この画面のどこにも出ていなかった。
+   /count/stats（今この瞬間の累計）と、最後の記録の差を出せば「今どうなっているか」が見える。 */
+var NOW_KEYS = ['__quiz_all','quiz_complete_120','result_view','report_view',
+                'paid_btn_click','paid_buy_click','gacha_feature_unlock','ai_profile_copy'];
+
+function buildNow(){
+  if (!STATE.stats || !STATE.dates.length) return '';
+  var lastDate = STATE.dates[STATE.dates.length - 1];
+  var hours = (STATE.statsAt - Date.parse(lastDate + 'T05:00:00+09:00')) / 3600000;
+  var span = (hours <= 0 || isNaN(hours)) ? ''
+           : (hours < 48 ? Math.max(1, Math.round(hours)) + '時間で'
+                         : Math.round(hours / 24) + '日で');
+
+  var h = '<div class="card"><div style="font-weight:700;margin-bottom:2px">'
+        + 'サイトが始まってからの合計（今この瞬間）</div>'
+        + '<div class="note" style="margin-bottom:9px">日ごとの記録は毎朝5時なので、'
+        + '下のグラフや「直近7日」には<b>' + lastDate + ' の朝5時より後のぶんが入っていません</b>。'
+        + 'この段だけが今この瞬間の数字です（小さい字＝朝5時の記録のあと' + span + '増えた数）。</div>'
+        + '<div class="tiles">';
+  NOW_KEYS.forEach(function(k){
+    var inc = sinceSnap(k), total = nowTotal(k);
+    // ★1行に収める（タイルの幅は140px。2行に折り返すと数字より説明が目立って読みにくい）
+    var d = (inc === null) ? '<div class="d flat">—</div>'
+          : (inc > 0 ? '<div class="d up">▲ +' + inc.toLocaleString() + '</div>'
+                     : '<div class="d flat">まだ動きなし</div>');
+    h += '<div class="tile"><div class="t">' + esc(labelOf(k)) + '</div>'
+       + '<div class="v">' + (total === null ? '—' : total.toLocaleString()) + '</div>'
+       + d + '</div>';
+  });
+  return h + '</div></div>';
+}
+
 function render(){
   var h = '';
   h += buildSummary();
+  h += '<h2>今この瞬間の数字</h2>';
+  h += buildNow();
   h += '<h2>どこで人が落ちているか</h2>';
   FUNNELS.forEach(function(f){ h += buildFunnel(f); });
   h += '<h2>1日ごとの動き</h2>';
   h += buildChart();
   h += '<h2>主な数字（直近7日の合計）</h2>';
-  h += '<div class="note" style="margin:-3px 0 9px">※「前の7日は記録なし」が並んでいるのは、'
-     + '7月まで手で書き写していた5項目しか過去のデータが無いためです。'
-     + '毎日の自動記録が動き出したので、<b>来週からは全部の項目で前の週と比べられます</b>。</div>';
+  h += '<div class="note" style="margin:-3px 0 9px">※ ここに出るのは'
+     + '<b>' + STATE.dates[STATE.dates.length-1] + ' の朝5時まで</b>の数字です'
+     + '（それより後のぶんは上の「今この瞬間の数字」で見てください）。'
+     + '「前の7日は記録なし」と出る項目は、そのカウンター自体を作ったのが最近で、'
+     + '比べる相手のデータがまだ無いものです。</div>';
   h += buildTiles();
 
-  // 1行ぶんの中身を作る（日本語名・累計・直近7日）
+  /* 1行ぶんの中身（日本語名・今の累計・記録後の増分・直近7日・その前の7日）
+     ★2026-08-14に列を2本増やした。今までは「昨日の朝までの累計」と「直近7日」の2つしか無く、
+       今日ぶんも、先週との比較も、この表からは読めなかった。 */
+  var lastDate = STATE.dates.length ? STATE.dates[STATE.dates.length - 1] : '';
+  var sinceHead = lastDate ? lastDate.slice(5).replace('-', '/') + '朝〜今' : '記録後';
+
   function rowOf(nm){
-    var arr = STATE.counters[nm] || [];
-    var lastVal = null;
-    for (var i = arr.length - 1; i >= 0; i--){ if (arr[i] !== null && arr[i] !== undefined){ lastVal = arr[i]; break; } }
+    var total = nowTotal(nm);
+    if (total === null) total = lastSnap(nm);   // 今の累計が取れない項目は最後の記録で代用
+    var inc = sinceSnap(nm);
     var s7 = sumLast(STATE.series[nm] || [], 7);
-    return '<tr><td>' + esc(LABELS[nm] || nm) + '</td><td>'
-         + (lastVal === null ? '—' : lastVal.toLocaleString()) + '</td><td>' + fmt(s7) + '</td></tr>';
+    var p7 = sumPrev(STATE.series[nm] || [], 7);
+    return '<tr><td>' + esc(LABELS[nm] || nm) + '</td>'
+         + '<td>' + (total === null ? '—' : total.toLocaleString()) + '</td>'
+         + '<td>' + (inc === null ? '—' : (inc > 0 ? '+' + inc.toLocaleString() : '0')) + '</td>'
+         + '<td>' + fmt(s7) + '</td>'
+         + '<td>' + fmt(p7) + '</td></tr>';
   }
 
-  h += '<details><summary>すべての数字を見る（79項目）</summary><div class="card" style="overflow-x:auto">'
-     + '<table><tr><th>項目</th><th>今までの合計</th><th>直近7日</th></tr>';
+  // 表に出す項目＝日別記録にあるもの ＋ 今の累計にしか無いもの（新設カウンターも必ず出る）
+  var allKeys = {};
+  Object.keys(STATE.counters).forEach(function(k){ allKeys[k] = 1; });
+  if (STATE.stats) Object.keys(STATE.stats).forEach(function(k){ allKeys[k] = 1; });
+  var nItems = Object.keys(allKeys).length;
+
+  // ★既定で開く。閉じていると、この画面で見える数字が8個しか無いように見える
+  h += '<details open><summary>すべての数字を見る（' + nItems + '項目）</summary>'
+     + '<div class="card" style="overflow-x:auto">'
+     + '<table><tr><th>項目</th><th>今の累計</th><th>' + esc(sinceHead) + '</th>'
+     + '<th>直近7日</th><th>その前の7日</th></tr>';
   var shown = {};
   GROUPS.forEach(function(g){
-    var rows = g.keys.filter(function(k){ return STATE.counters[k]; });
+    var rows = g.keys.filter(function(k){ return allKeys[k]; });
     if (!rows.length) return;
-    h += '<tr><th colspan="3" style="background:#e6ecf3;text-align:left">' + esc(g.title) + '</th></tr>';
+    h += '<tr><th colspan="5" style="background:#e6ecf3;text-align:left">' + esc(g.title) + '</th></tr>';
     rows.forEach(function(nm){ shown[nm] = 1; h += rowOf(nm); });
   });
   // 分類に入れ忘れたものがあれば最後に出す（項目が増えたときに落ちないように）
-  var rest = Object.keys(STATE.counters).filter(function(k){ return !shown[k]; }).sort();
+  var rest = Object.keys(allKeys).filter(function(k){ return !shown[k]; }).sort();
   if (rest.length){
-    h += '<tr><th colspan="3" style="background:#e6ecf3;text-align:left">その他</th></tr>';
+    h += '<tr><th colspan="5" style="background:#e6ecf3;text-align:left">その他（分類していない項目）</th></tr>';
     rest.forEach(function(nm){ h += rowOf(nm); });
   }
   h += '</table></div></details>';
@@ -513,6 +658,17 @@ function render(){
   Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(b){
     b.addEventListener('click', function(){ STATE.chartKey = b.getAttribute('data-k'); render(); });
   });
+  var selEl = document.getElementById('chartSel');
+  if (selEl){
+    selEl.addEventListener('change', function(){
+      if (!selEl.value) return;
+      STATE.chartKey = selEl.value;
+      render();
+      // 選び直したグラフが画面に入るように、位置を合わせる
+      var el = document.getElementById('chartSel');
+      if (el && el.scrollIntoView) el.scrollIntoView({block:'center'});
+    });
+  }
 }
 
 /* ============================================================
@@ -542,8 +698,18 @@ function loadReport(){
     .catch(function(){ /* 無くても平常運転 */ });
 }
 
-function boot(){
-  loadReport();
+/* 今この瞬間の累計を取る（2026-08-14追加）
+   ★取れなくても画面は壊さない＝その場合は今までどおり「最後の記録まで」の表示になる。 */
+function loadStats(){
+  return fetch(API_STATS, {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(s){
+      if (s && typeof s === 'object'){ STATE.stats = s; STATE.statsAt = Date.now(); }
+    })
+    .catch(function(){ /* 無くても平常運転 */ });
+}
+
+function loadDaily(){
   fetch(API_DAILY, {cache:'no-store'})
     .then(function(r){ if(!r.ok) throw new Error('daily ' + r.status); return r.json(); })
     .then(function(d){
@@ -580,9 +746,14 @@ function boot(){
       });
 
       var lastDate = STATE.dates[STATE.dates.length - 1];
-      document.getElementById('stamp').textContent =
-        '最新の記録：' + lastDate + '（毎朝5時に自動記録）　／　データ期間：'
-        + STATE.dates[0] + ' 〜 ' + lastDate + '（' + STATE.dates.length + '日分）';
+      var stamp = '最新の記録：' + lastDate + '（毎朝5時に自動記録）　／　データ期間：'
+                + STATE.dates[0] + ' 〜 ' + lastDate + '（' + STATE.dates.length + '日分）';
+      if (STATE.statsAt){
+        var t = new Date(STATE.statsAt);
+        stamp += '　／　今の累計：' + (t.getMonth()+1) + '/' + t.getDate() + ' '
+               + t.getHours() + ':' + ('0' + t.getMinutes()).slice(-2) + ' 時点';
+      }
+      document.getElementById('stamp').textContent = stamp;
       render();
     })
     .catch(function(e){
@@ -590,6 +761,12 @@ function boot(){
         '<div class="err">数字を取ってこられませんでした（' + esc(e.message) + '）。'
         + '時間をおいて開き直してください。</div>';
     });
+}
+
+function boot(){
+  loadReport();
+  // 今の累計を先に取ってから日別を読む（順番が逆だと、今日ぶんの列が空のまま描画される）
+  loadStats().then(loadDaily);
 }
 boot();
 })();
