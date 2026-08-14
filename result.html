@@ -2520,6 +2520,10 @@ document.getElementById('descCard').innerHTML = `
       const list = picked.slice(0, data.maxItems || 4);
       if (!list.length) return;
       blogCard.style.display = 'block';
+      // 2026-08-15追加：表示回数。クリックだけ数えていたので「何人に見えているのか」が分からず、
+      // 反応率を出せなかった（分母に、このカードが出ていない結果ページまで混ざっていた）。
+      // ★クリック（blog_link_click）と同じ「毎回数える」方式にそろえる＝そのまま割ってよい。
+      countHit('blog_link_view');
       blogCard.innerHTML = `
       <p class="blog-links-title">あなたにおすすめの記事</p>
       <div class="blog-links-list">

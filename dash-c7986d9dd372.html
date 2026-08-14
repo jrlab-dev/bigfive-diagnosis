@@ -133,6 +133,7 @@ var TILES = [
   {key:'attachment_view',      label:'愛着スタイル診断',             unit:'回'},
   {key:'reladvice_view',       label:'相性アドバイスを見た',         unit:'回'},
   {key:'other_result_view',    label:'あの人診断の結果',             unit:'回'},
+  {key:'blog_link_view',       label:'おすすめ記事が出た',           unit:'回'},
   {key:'blog_link_click',      label:'おすすめ記事へのクリック',     unit:'回'},
   {key:'kotoba_view',          label:'ことば辞典を見た',             unit:'回'}
 ];
@@ -180,7 +181,7 @@ var LABELS = {
   'result_view':'結果ページを見た（のべ）', 'result_view_new':'　└ はじめての人',
   'result_view_return':'　└ 戻ってきた常連', 'result_ai_click':'結果ページのAI相談ボタン',
   'result_ai_click_top':'　└ うち上部のボタン', 'ai_profile_copy':'AIプロフィールをコピーした',
-  'blog_link_click':'おすすめ記事へのクリック',
+  'blog_link_view':'おすすめ記事が出た（のべ）', 'blog_link_click':'　└ そこからクリック',
   'paid_btn_click':'試し読み「続きを全部読む」', 'paid_buy_click':'¥980を見て購入に進んだ',
   'paid_free_open':'無料と知ってレポートを開いた', 'paid_report_view':'30項目レポートを表示した',
   'paid_sample_view':'見本を見た', 'paid_ai_copy':'レポート全文をAIに持ち出した',
@@ -231,7 +232,8 @@ Object.keys(RELADVICE).forEach(function(k){
 var GROUPS = [
   {title:'① 診断をやり終えた人', keys:['quiz_complete_10','quiz_complete_30','quiz_complete_120']},
   {title:'② 結果ページ', keys:['result_view','result_view_new','result_view_return',
-                               'result_ai_click','result_ai_click_top','ai_profile_copy','blog_link_click']},
+                               'result_ai_click','result_ai_click_top','ai_profile_copy',
+                               'blog_link_view','blog_link_click']},
   {title:'③ 有料レポート（30項目）', keys:['paid_btn_click','paid_buy_click','paid_free_open',
                                           'paid_report_view','paid_sample_view','paid_ai_copy',
                                           'paid_close_fast','paid_close_mid','paid_close_slow',
