@@ -65,6 +65,7 @@
         { "cond": [{ "f": "E", "min": 4 }, { "f": "A", "max": 3 }], "url": "/blog/jibun-no-hanashi-bakari.html", "title": "自分の話ばかりする人の心理" },
         { "cond": [{ "f": "N", "min": 4 }, { "f": "A", "min": 4 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
         { "cond": [{ "f": "N", "min": 5 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
+        { "cond": [{ "f": "N", "min": 4 }, { "f": "C", "min": 4 }], "url": "/blog/moto-koibito-hikizuru.html", "title": "元恋人を引きずってしまう心理　「忘れられない」の正体" },
         { "cond": [], "url": "/blog/bigfive-love-compatibility.html", "title": "性格と恋愛相性の科学　5因子で見るカップルの傾向" }
       ]
     },
