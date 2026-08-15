@@ -1367,6 +1367,39 @@
   <!-- ブログリンクカード（高A×高N の自分モードのみ） -->
   <div class="blog-links-card" id="blogLinksCard" style="display:none;"></div>
 
+  <!-- 年代の調査（2026-08-15設計・8/16実装・準也さん承認）
+       ★置き場所＝課金導線（試し読みカード／続きを全部読む）よりずっと下。
+         ここまで来る人は既に導線を通過しているので、8/22の課金判定に影響しない。
+         （上位◯%の表示は結果の一部として上部に出るため、そちらは判定後に入れる）
+       ★「あなたの年代の位置を出します」とは書かない（準也さん案）。
+         言うと「いつ出るのか」という負債が残る。30人溜まったら黙って足せばよい。
+       ★「答えない」ボタンは作らない。押されるだけで、押さない人と結果は同じ。
+         「（任意）」の3文字のほうが強く効く。 -->
+  <div id="ageAskCard" style="display:none; margin:24px auto 0; max-width:480px; width:100%;">
+    <div style="background:rgba(255,255,255,.03); border:1px solid var(--border,rgba(148,163,184,.2)); border-radius:16px; padding:20px;">
+      <p style="font-size:14px; font-weight:700; margin:0 0 6px;">調査にご協力ください<span style="font-size:12px; font-weight:400; color:var(--dim);">（任意）</span></p>
+      <p style="font-size:12px; color:var(--dim); margin:0 0 14px; line-height:1.7;">
+        あなたの年代を選んでください。性格の傾向を年代別に分析するための統計に使わせていただきます。
+      </p>
+      <div id="ageBtns" style="display:flex; flex-wrap:wrap; gap:8px;">
+        <button type="button" class="age-btn" data-age="10s">10代</button>
+        <button type="button" class="age-btn" data-age="20s">20代</button>
+        <button type="button" class="age-btn" data-age="30s">30代</button>
+        <button type="button" class="age-btn" data-age="40s">40代</button>
+        <button type="button" class="age-btn" data-age="50s">50代〜</button>
+      </div>
+      <p id="ageThanks" style="display:none; font-size:13px; color:var(--accent,#22d3ee); margin:12px 0 0;">ご協力ありがとうございます。</p>
+      <p style="font-size:11px; color:var(--dim); margin:12px 0 0;">※個人を特定する情報は保存しません。</p>
+    </div>
+  </div>
+  <style>
+    .age-btn{flex:1 1 28%;min-width:84px;padding:10px 8px;border-radius:999px;cursor:pointer;
+      background:rgba(255,255,255,.04);border:1px solid var(--border,rgba(148,163,184,.25));
+      color:var(--text,#e2e8f0);font-size:14px;font-family:inherit}
+    .age-btn:hover{border-color:var(--accent,#22d3ee)}
+    .age-btn:disabled{opacity:.35;cursor:default}
+  </style>
+
   <!-- 心理コンシェルジュ：あなたへのおすすめ -->
   <div id="conciergeSection" style="display:none; margin:24px auto 0; max-width:480px; width:100%;">
     <div style="background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(236,72,153,0.06)); border:1px solid rgba(139,92,246,0.2); border-radius:16px; padding:24px 20px;">
@@ -3042,6 +3075,58 @@ if (version === '10') {
   // ×を押さずにタブを閉じる・戻るで離れた場合も記録する（sendBeaconなので離脱時でも届く・2026-08-09）
   window.addEventListener('pagehide', function() {
     if (paidOpenedAt && modal.classList.contains('open')) closeModal();
+  });
+})();
+
+/* ===== 年代の調査（2026-08-16・準也さん承認） =====
+ * ★出さない条件（準也さん指摘 2026-08-16）＝**一度でも答えた人には二度と出さない**。
+ *   結果ページは1日51人が見返している（result_view_return）。毎回聞かれたら邪魔なだけで、
+ *   同じ人の年代は1回分かれば足りる。
+ * ★保存版・シェア版・あの人診断のときも出さない（他人の結果を見ている画面で年齢を聞くのは変）。
+ * ★押しても表示は増えない。「年代別の位置を出します」とは書いていないので約束もしていない。
+ *   30人溜まったら黙って足す（設計＝plans/【設計】上位パーセント表示と年代収集_2026-08-15.md）。 */
+(function () {
+  if (isSavedView || isSharedView || isOtherMode) return;
+  var SENT = 'bigfive_age_sent';
+  try { if (localStorage.getItem(SENT)) return; } catch (e) { return; }   // もう答えた人には出さない
+
+  var card = document.getElementById('ageAskCard');
+  if (!card) return;
+  var bf = '' + sc.O + sc.C + sc.E + sc.A + sc.N;
+  if (!/^[1-5]{5}$/.test(bf)) return;                                     // 点数が揃っていなければ出さない
+
+  card.style.display = 'block';
+
+  card.querySelectorAll('.age-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var age = b.getAttribute('data-age');
+      card.querySelectorAll('.age-btn').forEach(function (x) { x.disabled = true; });
+      b.style.borderColor = 'var(--accent,#22d3ee)';
+      var thanks = document.getElementById('ageThanks');
+      if (thanks) thanks.style.display = 'block';
+      try { localStorage.setItem(SENT, age); } catch (e) {}
+
+      try {
+        if (localStorage.getItem('dev_nocount') === '1') return;
+        /* ★30項目のスコア（120問版のみ・30桁）も一緒に送る。
+         * ⚠️5因子の1〜5だけでは真ん中の幅が広すぎて分布が作れない（2026-08-15に確認済み）。
+         *   30項目なら因子ごと6項目＝6〜30点の粒度になり、5段階の6倍細かい。
+         *   結果ページは素点（24〜120）を持っていないので、これが手に入る最も細かいデータ。 */
+        var fac = (typeof facetsParam !== 'undefined' && facetsParam && /^[1-5]{30}$/.test(facetsParam))
+          ? facetsParam : null;
+        fetch('https://bigfive.jr-genius.jp/count/age', {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bf: bf,
+            bfv: (typeof version !== 'undefined' && version) ? String(version) : null,
+            facets: fac,
+            age: age,
+            device: /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd'
+          })
+        }).catch(function () {});
+      } catch (e) {}
+    });
   });
 })();
 
