@@ -348,3 +348,64 @@ body { padding-top: 52px !important; }
   // ページ表示をブロックしないよう遅延実行
   setTimeout(autoBackup, 2500);
 })();
+
+/* ===== 掛け合わせデータの送信（2026-08-15新設・準也さん指示） =====
+ *
+ * 何のためか＝「ビッグファイブ×他の心理学診断」を同じ人から取ったデータは国内にほぼ無い。
+ *   例＝「外向性が低い人は愛着スタイルのどの型が多いか」。ここが唯一、大手に勝てる場所。
+ *   ⚠️データは始めた日からしか貯まらない（過去に遡れない）ので、思い立った日に入れる。
+ *
+ * 送るもの＝ビッグファイブの5桁コード＋どの診断か＋その結果だけ。
+ *   名前・メール・端末を見分ける印は送らない（受け取る側にも列が無い）。
+ * 1診断につき1回だけ送る（送った診断名を端末に控える）。同じ診断をやり直しても2件目は送らない。
+ * 画面には何も出さない・体験は一切変わらない。 */
+(function () {
+  'use strict';
+  var SENT_KEY = 'bigfive_cross_sent';
+  var TESTS = ['attachment', 'eq', 'darkTriad', 'locus', 'mindset', 'hsp', 'sdt',
+               'love', 'schwartz', 'hexaco', 'riasec', 'impostor',
+               'pgg', 'risk', 'trust', 'delay', 'ultimatum', 'beauty'];
+
+  function send() {
+    try {
+      if (localStorage.getItem('dev_nocount') === '1') return;
+
+      var list = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]');
+      if (!Array.isArray(list) || !list.length) return;
+      var idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0', 10) || 0, list.length - 1);
+      var me = list[idx];
+      if (!me || !me.scores) return;
+
+      var s = me.scores;
+      var bf = '' + s.O + s.C + s.E + s.A + s.N;
+      if (!/^[1-5]{5}$/.test(bf)) return;
+
+      var sent = [];
+      try { sent = JSON.parse(localStorage.getItem(SENT_KEY) || '[]'); } catch (e) {}
+      if (!Array.isArray(sent)) sent = [];
+
+      var device = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'm' : 'd';
+      var bfv = me.version ? String(me.version) : null;
+
+      TESTS.forEach(function (t) {
+        if (sent.indexOf(t) !== -1) return;      // もう送った診断は飛ばす
+        var r = me[t];
+        if (!r) return;                           // まだ受けていない診断は飛ばす
+        fetch('https://bigfive.jr-genius.jp/count/cross', {
+          method: 'POST',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bf: bf, bfv: bfv, test: t, result: r, device: device })
+        }).catch(function () {});
+        sent.push(t);
+      });
+
+      localStorage.setItem(SENT_KEY, JSON.stringify(sent));
+    } catch (e) {
+      // ページ表示に影響を与えない
+    }
+  }
+
+  // 表示をブロックしないよう遅延実行
+  setTimeout(send, 3000);
+})();
