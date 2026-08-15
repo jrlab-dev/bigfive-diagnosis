@@ -733,9 +733,21 @@ function showResult() {
      * 送るのは「何問版・5因子スコア・30項目スコア・生の回答・性別・スマホかPCか」だけ。
      * 名前もメールも端末を見分ける印も送らない（サーバー側にその列自体が無い）。
      * dev_nocount=1 の端末は送らない（計測と同じ扱い）。回答に空きがあるときも送らない。 */
+    /* ★2026-08-15・準也さん指示「1人1個のみ・問題数が多いほうを優先」
+     * このサイトは遊びの機能（カード・ガチャ）があるため、同じ人が何度も受ける。
+     * そのまま貯めると同じ人が何度も数えられ、分布が歪む。
+     * サーバー側には端末を見分ける印が無い（列そのものを作っていない）ので、端末側で止める。
+     *   仕組み＝「これまでに送った中で一番多い問題数」を覚えておき、
+     *           それより多い版を受けたときだけ送る。
+     *   結果＝10問→30問→120問と進んだ人は各1件。同じ版をやり直しても2件目は入らない。
+     * ⚠️公開用の集計は120問版だけを使う（＝1人1件になる）。10問・30問は運用の分析用。
+     * ⚠️別の端末で受けた場合や、ブラウザのデータを消した場合は分けられない（技術上の限界）。 */
     try {
       var __allAnswered = answers.length > 0 && answers.every(function (a) { return a >= 1 && a <= 5; });
-      if (localStorage.getItem('dev_nocount') !== '1' && __allAnswered) {
+      var __sentMax = 0;
+      try { __sentMax = parseInt(localStorage.getItem('bigfive_anon_sent') || '0', 10) || 0; } catch (e) {}
+      var __thisVer = parseInt(version, 10) || 0;
+      if (localStorage.getItem('dev_nocount') !== '1' && __allAnswered && __thisVer > __sentMax) {
         fetch('https://bigfive.jr-genius.jp/count/anon', {
           method: 'POST',
           keepalive: true,
@@ -758,6 +770,8 @@ function showResult() {
             })()
           })
         }).catch(function () {});
+        // 送れた版を控える（次に受けたとき、これより多い問題数のときだけ送る）
+        try { localStorage.setItem('bigfive_anon_sent', String(__thisVer)); } catch (e) {}
       }
     } catch (e) {}
     const ref = params.get('ref') || '';
