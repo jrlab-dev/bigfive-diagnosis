@@ -1,6 +1,6 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-08-16",
+  "_updated": "2026-08-17",
   "maxItems": 4,
   "groups": [
     {
@@ -83,6 +83,8 @@
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/manga-character-bigfive.html", "title": "漫画・アニメのキャラクター設定にビッグファイブを使う" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/trpg-character-make.html", "title": "TRPGのキャラメイクに「性格値」を入れる" },
         { "cond": [{ "f": "O", "min": 4 }, { "f": "C", "max": 2 }], "url": "/blog/sousaku-kansei-dekinai.html", "title": "創作が完成しない人の心理" },
+        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
+        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/shumi-ga-nai.html", "title": "趣味がない・何をやっても楽しくない人へ" },
         { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/hitori-shumi-minna-shumi.html", "title": "一人が楽しい趣味・人といるのが楽しい趣味" },
         { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/hitori-shumi-minna-shumi.html", "title": "一人が楽しい趣味・人といるのが楽しい趣味" },
