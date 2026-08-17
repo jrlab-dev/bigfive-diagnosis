@@ -41,3 +41,30 @@
 /* --- 結果ベース --- */
 .result { display: none; flex-direction: column; align-items: center; gap: 24px; padding-bottom: 60px; }
 .result.active { display: flex; }
+
+/* ===== 診断ページの解説セクション（AI検索・SEO向け／2026-08-17新設） ===== */
+/* box-sizing を明示する（ページによって既定が違い、左右の余白ぶん横にはみ出すため） */
+.test-about, .test-about * { box-sizing: border-box; }
+.test-about { width: 100%; max-width: 780px; margin: 56px auto 48px; padding: 0 18px; position: relative; z-index: 1; color: var(--text); font-size: 15px; line-height: 1.9; text-align: left; }
+.test-about h2 { font-size: 20px; margin: 36px 0 10px; padding-left: 12px; border-left: 5px solid var(--accent, #3878d8); font-weight: 700; }
+.test-about h3 { font-size: 16px; margin: 24px 0 6px; font-weight: 700; }
+.test-about p { margin: 10px 0; }
+.test-about ul, .test-about ol { margin: 10px 0; padding-left: 22px; }
+.test-about li { margin: 6px 0; }
+.test-about table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+.test-about th, .test-about td { border: 1px solid rgba(148,163,184,0.28); padding: 8px 10px; text-align: left; vertical-align: top; }
+.test-about th { background: rgba(148,163,184,0.12); font-weight: 600; white-space: nowrap; }
+.test-about td:first-child { white-space: nowrap; }
+/* 列の多い表は、スマホで横スクロールさせる（画面からはみ出させない） */
+.test-about .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; }
+.test-about .table-wrap table { margin: 0; min-width: 620px; }
+.test-about .table-wrap td:first-child { white-space: normal; min-width: 9em; }
+.test-about .about-box { background: rgba(56,120,216,0.08); border: 1px solid rgba(56,120,216,0.25); border-radius: 12px; padding: 14px 16px; margin: 16px 0; }
+.test-about .refs { font-size: 13px; color: var(--dim); }
+.test-about .refs li { margin: 8px 0; }
+.test-about .refs a { color: var(--dim); }
+.test-about .updated { font-size: 12.5px; color: var(--dim); margin-top: 28px; }
+.test-about .related { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.test-about .related a { display: inline-block; padding: 8px 14px; border-radius: 99px; border: 1px solid rgba(148,163,184,0.35); color: var(--text); text-decoration: none; font-size: 14px; }
+.test-about .related a:hover { border-color: var(--accent, #3878d8); }
+@media (max-width: 600px) { .test-about { font-size: 14.5px; margin-top: 40px; } .test-about table { font-size: 13px; } .test-about h2 { font-size: 18px; } }

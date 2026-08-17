@@ -2412,3 +2412,9 @@ body.theme-light .kotoba-entry {
 body.theme-light .kotoba-entry-label { color: var(--purple) !important; }
 body.theme-light .kotoba-entry-main { color: var(--text) !important; }
 body.theme-light .kotoba-entry-sub { color: var(--dim) !important; }
+
+/* ===== 診断ページの解説セクション（ライトモード／2026-08-17新設） ===== */
+body.theme-light .test-about th { background: oklch(0.94 0.01 270); }
+body.theme-light .test-about th, body.theme-light .test-about td { border-color: oklch(0.86 0.02 270); }
+body.theme-light .test-about .about-box { background: oklch(0.965 0.02 250); border-color: oklch(0.85 0.045 250); }
+body.theme-light .test-about .related a { border-color: oklch(0.85 0.02 270); }

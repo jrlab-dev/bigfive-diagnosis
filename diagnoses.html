@@ -217,7 +217,7 @@ const DIAGNOSES = [
     id: 'bigfive',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
     name: 'ビッグファイブ性格診断',
-    desc: '心理学で最も信頼性が高い5因子モデル。開放性・誠実性・外向性・協調性・感受性のバランスから3125タイプを判定。',
+    desc: '心理学で最も信頼性が高い5因子モデル。開放性・誠実性・外向性・協調性・神経症傾向のバランスから3125タイプを判定。',
     url: 'quiz.html?v=10',
     questions: 10,
     minutes: 3,
@@ -226,7 +226,7 @@ const DIAGNOSES = [
     id: 'hexaco', fc: 'H',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
     name: 'HEXACO性格診断',
-    desc: 'ビッグファイブに第6因子「正直さ-謙虚さ」を加えた6因子モデル。200問で、ビッグファイブでは測れなかった誠実さの次元まで分析します。',
+    desc: 'ビッグファイブに第6因子「正直さ-謙虚さ」を加えた6因子モデル。200問で、ビッグファイブにはなかった正直さ-謙虚さの次元まで分析します。',
     url: 'hexaco.html',
     questions: 200,
     minutes: 15,
@@ -286,7 +286,7 @@ const DIAGNOSES = [
     id: 'hsp', fc: 'N',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>',
     name: 'HSP 感受性チェック',
-    desc: 'あなたの感じ方の深さを分析。EOE（感覚過敏）・AES（美的感受性）・LST（低感覚耐性）の3因子で特徴がわかる。',
+    desc: 'あなたの感じ方の深さを分析。EOE（易興奮性）・AES（美的感受性）・LST（低感覚閾値）の3因子で特徴がわかる。',
     url: 'hsp.html',
     questions: 12,
     minutes: 3,
@@ -336,7 +336,7 @@ const DIAGNOSES = [
     id: 'other-eq', fc: 'A',
     icon: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>',
     name: 'あの人のEQ診断',
-    desc: '20問の行動観察で自己認識・自己管理・動機・共感・社会的スキルの5因子を分析。Golemanモデル準拠。相手の感情知能のパターンと関係への活かし方がわかる。',
+    desc: '22問の行動観察で自己認識・自己管理・動機・共感・社会的スキルの5因子を分析。Golemanモデル準拠。相手の感情知能のパターンと関係への活かし方がわかる。',
     url: 'other_eq.html',
     questions: 20,
     minutes: 5,
@@ -349,7 +349,7 @@ const DIAGNOSES = [
     desc: '情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせも。',
     url: 'love.html',
     questions: 12,
-    minutes: 3,
+    minutes: 4,
     recommend: { factor: 'E', score: 5, reason: '社交的なあなたに。恋愛での自分らしさを発見できます。' },
   },
   {
@@ -378,7 +378,7 @@ const DIAGNOSES = [
     desc: 'パートナー・友人・家族など「あの人」の性格をビッグファイブで診断。診断後はチーム相性分析にも使えます。',
     url: 'other_quiz.html',
     questions: 10,
-    minutes: 3,
+    minutes: 5,
   },
   {
     id: 'career',
@@ -666,6 +666,116 @@ window._showLockedToast = function(remaining) {
   setTimeout(function() { toast.classList.remove('show'); }, 6000);
 };
 </script>
+<section class="test-about">
+  <h2>このページにある診断について</h2>
+  <p>ここでは<strong>26種類</strong>の心理学診断を、すべて<strong>無料・登録不要</strong>で受けられます。中心にあるのは、心理学で最も研究の蓄積が厚い性格モデル「<strong>ビッグファイブ</strong>（5因子モデル）」です。他の診断は、そこに別の角度を足すものだと考えてください。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>まず受けるのは<strong>ビッグファイブ性格診断</strong>。ここが土台になります</li>
+      <li>他の診断は<strong>受けるほど「掛け合わせ」の解説が増え</strong>、総合レポートが厚くなります</li>
+      <li>回答は<strong>お使いの端末の中だけ</strong>に保存され、名前やメールは一切集めていません</li>
+    </ul>
+  </div>
+
+  <h2>診断の一覧</h2>
+  <p>「受けられる条件」の欄にカード枚数が書かれているものは、診断を受けて集まるカードが一定数たまると開きます。ビッグファイブ診断を受ければカードが増えるので、まずはそこからどうぞ。</p>
+
+  <h3>自分の性格を知る（12種類）</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
+    <tr><td><a href="quiz.html">ビッグファイブ性格診断</a></td><td>心理学で最も信頼性が高い5因子モデル。開放性・誠実性・外向性・協調性・神経症傾向のバランスから3125タイプを判定。</td><td>10問</td><td>約3分</td><td>5因子モデル（Costa &amp; McCrae, 1992／項目はIPIP-NEO）</td><td>だれでも</td></tr>
+    <tr><td><a href="hexaco.html">HEXACO性格診断</a></td><td>ビッグファイブに第6因子「正直さ-謙虚さ」を加えた6因子モデル。200問で、ビッグファイブにはなかった正直さ-謙虚さの次元まで分析します。</td><td>200問</td><td>約15分</td><td>HEXACOモデル（Ashton &amp; Lee, 2007）</td><td>カード200枚</td></tr>
+    <tr><td><a href="attachment.html">愛着スタイル チェック</a></td><td>大切な人との関わり方のパターンを分析。安心型・不安型・回避型・恐れ型の4スタイルから自分の傾向がわかる。</td><td>12問</td><td>約3分</td><td>成人愛着理論（Hazan &amp; Shaver, 1987）</td><td>カード10枚</td></tr>
+    <tr><td><a href="sdt.html">動機タイプ診断</a></td><td>Deci &amp; Ryanの自己決定理論による21問診断。自律性・有能感・関係性の3欲求から「何があなたを動かすか」を科学的に分析。</td><td>21問</td><td>約5分</td><td>自己決定理論（Deci &amp; Ryan, 1985）</td><td>カード45枚</td></tr>
+    <tr><td><a href="schwartz.html">価値観タイプ診断</a></td><td>シュワーツの価値理論（80カ国で検証）に基づく21問診断。安全・達成・普遍主義など10カテゴリであなたの核心的な価値観を分析。</td><td>21問</td><td>約5分</td><td>基本的価値理論（Schwartz, 1992）</td><td>カード18枚</td></tr>
+    <tr><td><a href="locus.html">統制の所在チェック</a></td><td>Rotterの心理学理論に基づく15問診断。内的統制・他者支配・偶然の3因子から「自分のコントロール感」を科学的に分析。</td><td>15問</td><td>約4分</td><td>統制の所在（Rotter, 1966）</td><td>カード40枚</td></tr>
+    <tr><td><a href="eq.html">感情知能（EQ）チェック</a></td><td>GolemanのEQモデルに基づく20問診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で感情知能を分析。</td><td>20問</td><td>約5分</td><td>感情知能（Salovey &amp; Mayer, 1990）</td><td>カード25枚</td></tr>
+    <tr><td><a href="hsp.html">HSP 感受性チェック</a></td><td>あなたの感じ方の深さを分析。EOE（易興奮性）・AES（美的感受性）・LST（低感覚閾値）の3因子で特徴がわかる。</td><td>12問</td><td>約3分</td><td>感覚処理感受性（Aron &amp; Aron, 1997）</td><td>だれでも</td></tr>
+    <tr><td><a href="mindset.html">マインドセット診断</a></td><td>ドゥエック博士の理論に基づく診断。「成長型」か「固定型」かを8問で分析。才能観・努力観があなたの行動にどう影響するかがわかる。</td><td>8問</td><td>約2分</td><td>知能観・マインドセット（Dweck, 2006）</td><td>カード14枚</td></tr>
+    <tr><td><a href="dark-triad.html">ダークトライアド診断</a></td><td>Jones &amp; Paulhus（2014）のSD3を参考にした17問診断。ナルシシズム・マキャベリズム・サイコパシーの3因子であなたのダークサイドを分析。</td><td>17問</td><td>約4分</td><td>ダークトライアド（Paulhus &amp; Williams, 2002）</td><td>カード50枚</td></tr>
+    <tr><td><a href="love.html">恋愛スタイル診断</a></td><td>情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせも。</td><td>24問</td><td>約4分</td><td>恋愛の色彩理論（Lee, 1977／尺度はHendrick &amp; Hendrick, 1986）</td><td>カード1枚</td></tr>
+    <tr><td><a href="impostor.html">インポスター症候群チェック</a></td><td>Clanceの心理学研究に基づく15問診断。重症度と5つのタイプから「自分は偽物ではないか」という感覚を分析。</td><td>15問</td><td>約4分</td><td>インポスター現象（Clance &amp; Imes, 1978）</td><td>カード4枚</td></tr>
+  </table>
+  </div>
+
+  <h3>身近な人・子どもについて知る（5種類）</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
+    <tr><td><a href="other_quiz.html">あの人を診断する</a></td><td>パートナー・友人・家族など「あの人」の性格をビッグファイブで診断。診断後はチーム相性分析にも使えます。</td><td>30問</td><td>約5分</td><td>他者評定（informant report）の研究</td><td>カード2枚</td></tr>
+    <tr><td><a href="other_dark_triad.html">あの人のダークトライアド診断</a></td><td>27問の行動観察でナルシシズム・マキャベリズム・サイコパシーを分析。恋人・職場・友人など関係別の専用質問で相手のダークサイドを科学的に読み解く。</td><td>27問</td><td>約6分</td><td>他者評定＋ダークトライアド</td><td>カード55枚</td></tr>
+    <tr><td><a href="other_attachment.html">あの人の愛着スタイル診断</a></td><td>20問の行動観察で不安軸・回避軸の2軸から愛着スタイル（安定型・不安型・回避型・恐れ型）を分析。恋人・片思い・職場など関係に合わせた専用質問。</td><td>20問</td><td>約5分</td><td>他者評定＋成人愛着理論</td><td>カード60枚</td></tr>
+    <tr><td><a href="other_eq.html">あの人のEQ診断</a></td><td>22問の行動観察で自己認識・自己管理・動機・共感・社会的スキルの5因子を分析。Golemanモデル準拠。相手の感情知能のパターンと関係への活かし方がわかる。</td><td>22問</td><td>約5分</td><td>他者評定＋感情知能</td><td>カード65枚</td></tr>
+    <tr><td><a href="kodomo.html">お子さんの性格診断</a></td><td>4〜9歳の子どもを持つ保護者向け。30問の観察ベース診断でお子さんの強み・楽しみやすい遊び・将来の夢へのヒントがわかる。</td><td>30問</td><td>約6分</td><td>子どもの性格特性研究（Shiner &amp; Caspi, 2003 ほか）</td><td>だれでも</td></tr>
+  </table>
+  </div>
+
+  <h3>仕事・キャリアについて知る（3種類）</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
+    <tr><td><a href="career.html">キャリア適性診断</a></td><td>ビッグファイブの結果をもとに18業界・26職種への適性を分析。科学的根拠に基づくキャリアマッチング。無料。</td><td>結果を使う</td><td>—</td><td>5因子と職務成績のメタ分析（Barrick &amp; Mount, 1991 ほか）</td><td>カード3枚</td></tr>
+    <tr><td><a href="riasec.html">RIASEC職業興味診断</a></td><td>Hollandの理論に基づく職業興味検査。60問（約5分）または291問（約20分）で6タイプからあなたの職業適性パターンを導きます。</td><td>60問</td><td>約5分</td><td>職業選択理論・RIASEC（Holland, 1997）</td><td>カード30枚</td></tr>
+    <tr><td><a href="career-integration.html">キャリア統合分析</a></td><td>ビッグファイブ適性×RIASEC興味の2軸を統合。性格的適性と職業興味の両面から最適なキャリアを分析。両方の結果が必要です。</td><td>結果を使う</td><td>—</td><td>性格・興味・価値観の統合</td><td>カード35枚</td></tr>
+  </table>
+  </div>
+
+  <h3>行動から測る（ミニゲーム）（6種類）</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
+    <tr><td><a href="pgg.html">コイン増やせるかな？（公共財ゲーム）</a></td><td>あなたはコインを増やせるか！？共同投資でコインを増やすゲーム。実は行動経済学の実験です。</td><td>3問</td><td>約3分</td><td>公共財ゲーム（実験経済学）</td><td>だれでも</td></tr>
+    <tr><td><a href="risk.html">リスク選好ゲーム</a></td><td>安全策か、それともハイリスク？10回の選択であなたのリスク許容度を測定。行動経済学のホルト・ローリー法。</td><td>10問</td><td>約3分</td><td>リスク選好の測定（Holt &amp; Laury, 2002）</td><td>だれでも</td></tr>
+    <tr><td><a href="trust.html">信頼ゲームの返報率</a></td><td>相手から信頼されて増えたコインを、どれくらい返すか。返報性・公平性・協力関係への反応を測定します。</td><td>1問</td><td>約2分</td><td>信頼ゲーム（Berg, Dickhaut &amp; McCabe, 1995）</td><td>だれでも</td></tr>
+    <tr><td><a href="ultimatum.html">最後通牒ゲームの拒否ライン</a></td><td>不公平な提案をどこまで受け入れるか。損をしてでも拒否するラインから、公平性への感度を測定します。</td><td>1問</td><td>約2分</td><td>最後通牒ゲーム（Güth, Schmittberger &amp; Schwarze, 1982）</td><td>だれでも</td></tr>
+    <tr><td><a href="beauty.html">ビューティーコンテストゲーム</a></td><td>みんなの平均値の3分の2を予測する読み合いゲーム。他者視点・戦略性・読みの深さを測定します。</td><td>1問</td><td>約2分</td><td>美人投票ゲーム（Keynes, 1936／Nagel, 1995）</td><td>だれでも</td></tr>
+    <tr><td><a href="delay.html">時間割引ゲーム</a></td><td>今すぐ小さな報酬か、後で大きな報酬か。将来志向・待てる力・衝動性をゲーム形式で測定します。</td><td>7問</td><td>約2分</td><td>時間割引の測定（Frederick, Loewenstein &amp; O’Donoghue, 2002）</td><td>だれでも</td></tr>
+  </table>
+  </div>
+
+  <h2>どれから受けたらいいですか</h2>
+  <ul>
+    <li><strong>はじめての方</strong> → ビッグファイブ性格診断（10問・約3分）。時間があれば120問版で30の下位項目まで測れます</li>
+    <li><strong>人間関係で悩んでいる</strong> → 愛着スタイル、感情知能（EQ）</li>
+    <li><strong>仕事・進路で迷っている</strong> → キャリア適性診断、RIASEC職業興味診断</li>
+    <li><strong>身近な人が気になる</strong> → あの人を診断する（推測なので、本人の実際の性格とは違うことがあります）</li>
+    <li><strong>気軽に試したい</strong> → 行動から測るミニゲーム（1問・2分から）</li>
+  </ul>
+
+  <h2>科学的な裏づけの強さは、診断ごとに違います</h2>
+  <p>同じ「診断」でも、研究の積み重ねには差があります。このサイトでは、その差を隠さずに書いています。</p>
+  <div class="table-wrap"><table>
+    <tr><th>強さ</th><th>あてはまる診断</th><th>状況</th></tr>
+    <tr><td>厚い</td><td>ビッグファイブ、HEXACO、価値観、RIASEC、統制の所在</td><td>数十年にわたる検証と、多数の国での再現がある（統制の所在は、1つの軸で測れるかという議論が続いている）</td></tr>
+    <tr><td>ふつう</td><td>愛着スタイル、動機タイプ、ダークトライアド、マインドセット</td><td>研究は多いが、測り方や解釈に議論が残っている</td></tr>
+    <tr><td>限定的</td><td>HSP、EQ（自己申告式）、インポスター症候群</td><td>概念そのものへの批判がある。参考として読むもの。ただしHSP（感覚処理感受性）には専用の研究の積み重ねもあり、批判と蓄積の両方がある</td></tr>
+  </table></div>
+  <p>詳しい根拠は<a href="science.html">科学的背景の解説</a>にまとめています。</p>
+
+  <h2>よくある質問</h2>
+  <h3>お金はかかりますか</h3>
+  <p>ここにある診断はすべて無料です。有料なのは「30の下位項目を1項目ずつ解説する詳細レポート（買い切り）」だけで、診断そのものは無料のまま受けられます。</p>
+  <h3>登録やログインは必要ですか</h3>
+  <p>必要ありません。結果はお使いのブラウザの中に保存されます。名前・メールアドレス・電話番号を入力する欄は、そもそもありません。</p>
+  <h3>結果は当たりますか</h3>
+  <p>性格診断は「当たる・外れる」ではなく、<strong>同じ人が受ければ何度でも近い結果になるか（信頼性）</strong>と、<strong>その結果が実際の行動と結びつくか（妥当性）</strong>で評価します。ビッグファイブはこの2つの検証が最も進んでいるモデルです。逆に、誰にでも当てはまる曖昧な文章を読ませて「当たっている」と感じさせる手法（バーナム効果）には注意してください。</p>
+  <h3>診断を組み合わせると何が変わりますか</h3>
+  <p>たとえば「神経症傾向が高い」だけでは、慎重なのか不安が強いのかが分かれません。そこに愛着スタイルや統制の所在を重ねると、同じ点数でも意味が変わってきます。この掛け合わせの解説は、受けた診断の数だけ<a href="report.html">総合レポート</a>に増えていきます。仕組みは<a href="cross.html">こちら</a>に書いています。</p>
+
+  <h3>関連するページ</h3>
+  <ul class="related">
+    <li><a href="quiz.html">ビッグファイブ性格診断を受ける</a></li>
+    <li><a href="science.html">科学的背景</a></li>
+    <li><a href="cross.html">掛け合わせ分析の仕組み</a></li>
+    <li><a href="kotoba.html">悩みから引く心理学のことば</a></li>
+    <li><a href="blog/index.html">心理学ブログ</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+
 <script src="nav.js"></script>
 </body>
 </html>
