@@ -214,6 +214,17 @@
     .report-card { padding: 18px 16px; }
     .facet-name { width: 64px; }
   }
+  .ai-mode-choice { margin: 10px 0 4px; }
+  .ai-mode-btns { display: flex; flex-direction: column; gap: 6px; }
+  .ai-mode-btn {
+    width: 100%; text-align: left; padding: 11px 14px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 10px; color: inherit; opacity: .75; font-size: 13px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: all .15s;
+  }
+  .ai-mode-btn::before { content: "○ "; }
+  .ai-mode-btn.on { background: rgba(139,92,246,0.18); border-color: #8b5cf6; opacity: 1; }
+  .ai-mode-btn.on::before { content: "● "; }
 </style>
 </head>
 <body class="theme-light">
@@ -844,6 +855,15 @@ function render(data){
       '貼り付けた先のAIは、この分析を土台にあなたの相談に乗る——専用カウンセラーになります。</p>' +
       '<p class="report-card-note" style="margin-top:6px">使い方：<b>①</b> 下のボタンで全文をコピー → ' +
       '<b>②</b> ChatGPTやClaudeのチャット欄に貼り付け → <b>③</b> 続けて相談したいことを書く</p>' +
+      '<div class="ai-mode-choice" id="frAiMode">' +
+      '<p class="report-card-note" style="font-weight:700;margin-bottom:6px">AIにどう相談したいですか</p>' +
+      '<div class="ai-mode-btns">' +
+      '<button type="button" class="ai-mode-btn" data-mode="listen">まず聞いてほしい</button>' +
+      '<button type="button" class="ai-mode-btn on" data-mode="both">聞いたうえで、考えも聞きたい（おすすめ）</button>' +
+      '<button type="button" class="ai-mode-btn" data-mode="answer">答えがほしい</button>' +
+      '</div>' +
+      '<p class="report-card-note" style="margin-top:6px">会話の途中でも「聞くだけでいい」「答えがほしい」と言えば切り替わります。</p>' +
+      '</div>' +
       '<p style="text-align:center;margin:12px 0 4px">' +
       '<button id="frAiCopy" style="background:#8b5cf6;color:#fff;border:none;padding:12px 22px;border-radius:12px;' +
       'font-weight:700;font-size:0.95rem;cursor:pointer">全文をコピーして、AIに連れて行く</button></p>' +
@@ -864,10 +884,33 @@ function render(data){
 
   box.innerHTML = html;
 
+  // 相談のしかた3択（2026-08-18・マイページと設定を共有）
+  var frAiMode = 'both';
+  try { frAiMode = localStorage.getItem('bigfive_ai_mode') || 'both'; } catch (e) {}
+  if (['listen','both','answer'].indexOf(frAiMode) < 0) frAiMode = 'both';
+  function frPaintAiMode(){
+    var bs = document.querySelectorAll('#frAiMode .ai-mode-btn');
+    for (var i = 0; i < bs.length; i++) {
+      if (bs[i].getAttribute('data-mode') === frAiMode) bs[i].classList.add('on');
+      else bs[i].classList.remove('on');
+    }
+  }
+  (function(){
+    var bs = document.querySelectorAll('#frAiMode .ai-mode-btn');
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].onclick = function(){
+        frAiMode = this.getAttribute('data-mode');
+        try { localStorage.setItem('bigfive_ai_mode', frAiMode); } catch (e) {}
+        frPaintAiMode();
+      };
+    }
+    frPaintAiMode();
+  })();
+
   // AI持ち出しボタンの動作（全文整形→クリップボード）
   var aiBtn = document.getElementById('frAiCopy');
   if (aiBtn) aiBtn.addEventListener('click', function(){
-    var t = buildAiFullText(data);
+    var t = buildAiFullText(data, frAiMode);
     function done(){
       var d = document.getElementById('frAiCopyDone');
       if (d) d.style.display = 'block';
@@ -890,18 +933,36 @@ function render(data){
     try { document.execCommand('copy'); } catch (e) {}
     ta.remove();
   }
-  function buildAiFullText(data){
-    var L = [
-      'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
-      '以下は、私が性格診断サイトで受けた120問版ビッグファイブ診断の「30項目 詳細レポート」の全文です。',
-      '私の30項目の点数と、その解説、そして他の心理学テストとの掛け合わせ分析（クロス分析）が含まれています。',
-      'この分析を土台に、このあと私が書く質問や相談に答えてください。分析の読み上げや要約はしないでください（私はすでに読んでいます）。',
-      '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
-      '最初の返事では、この分析から読み取れる「私の日常で起きていそうな場面」を1つ仮説として言い当てて、合っているか私に聞いてください。',
-      '質問は一度に1つだけ。箇条書きは使わず、カウンセラーが話すような自然な文章で。深刻な悩みだと感じたら専門機関への相談も勧めてください。',
-      '',
-      '【30項目の点数と解説（各1〜5点）】'
-    ];
+  // 型を細かく指定すると毎回同じ返事になりループするため、禁止3つだけ残して自由に会話させる（2026-08-18）
+  var FR_AI_HEAD = [
+    'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
+    '以下は、私が性格診断サイトで受けた120問版ビッグファイブ診断の「30項目 詳細レポート」の全文です。',
+    '私の30項目の点数と、その解説、そして他の心理学テストとの掛け合わせ分析（クロス分析）が含まれています。',
+    'この分析を土台に、このあと私が書く質問や相談に答えてください。',
+    '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
+    '',
+    '最初の返事では、この分析から読み取れる「私の日常で起きていそうな場面」を1つ、仮説として言い当てて、合っているか私に聞いてください。分析の読み上げや要約はしないでください（私はすでに読んでいます）。',
+    ''
+  ];
+  var FR_AI_MODE_LINE = {
+    listen: '私は今、答えより話を聞いてほしい気分です。アドバイスは私が求めたときだけにしてください。',
+    both: '聞くだけで終わらせず、あなたの考えも聞かせてください。',
+    answer: '私は答えがほしいタイプなので、結論を先延ばしにはしないでください。'
+  };
+  var FR_AI_TAIL = [
+    '・一度出した提案は二度出さない（同じ話に戻さない）',
+    '・私の答えで返事が変わらない質問はしない',
+    '・毎回を質問で終わらせない。話が尽きたら区切ってよい',
+    '',
+    '箇条書きは使わず、話し言葉で。深刻な悩み（心身の不調が続くなど）だと感じたら、専門機関への相談も勧めてください。',
+    '',
+    '【30項目の点数と解説（各1〜5点）】'
+  ];
+  function buildAiFullText(data, mode){
+    var line = FR_AI_MODE_LINE[mode] || FR_AI_MODE_LINE.both;
+    var L = FR_AI_HEAD.concat(
+      ['そのあとは決まった型を使わず、ふつうの会話として自然に話してください。' + line + '守ってほしいのは次の3つだけです。'],
+      FR_AI_TAIL);
     FACET_META.forEach(function(m){
       var s = scores[m.key];
       var body = (data[m.key] || {})[String(s)] || '';

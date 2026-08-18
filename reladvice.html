@@ -190,6 +190,17 @@ body {
 .cat-tab:hover { border-color: rgba(139,92,246,0.45); color: var(--text); }
 .cat-tab svg { width: 14px; height: 14px; flex-shrink: 0; }
 .cat-tab.active { background: rgba(236,72,153,0.12); border-color: var(--pink); color: var(--text); }
+  .ai-mode-choice { margin: 10px 0 4px; }
+  .ai-mode-btns { display: flex; flex-direction: column; gap: 6px; }
+  .ai-mode-btn {
+    width: 100%; text-align: left; padding: 11px 14px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 10px; color: inherit; opacity: .75; font-size: 13px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: all .15s;
+  }
+  .ai-mode-btn::before { content: "○ "; }
+  .ai-mode-btn.on { background: rgba(139,92,246,0.18); border-color: #8b5cf6; opacity: 1; }
+  .ai-mode-btn.on::before { content: "● "; }
 </style>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
@@ -448,17 +459,21 @@ function copyText(text, done) {
     navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ legacyCopy(text, done); });
   } else { legacyCopy(text, done); }
 }
-function buildAIPrompt(p1, p2, n1, n2, theme, titleText, pt, cards) {
+function buildAIPrompt(p1, p2, n1, n2, theme, titleText, pt, cards, mode) {
   var L = [];
   L.push('あなたはビッグファイブ（性格心理学）にくわしい、やさしい相談相手です。以下の2人の診断データとサイトの分析をふまえて相談に乗ってください。');
   L.push('');
-  L.push('回答のしかた（必ず守ってください）：');
-  L.push('・免責や注意書きを回答の冒頭に置かない。必要なら回答の最後に短く一行だけ');
-  L.push('・箇条書きの羅列にしない。友人に話すような自然な話し言葉で書く');
-  L.push('・最初の一文は、相談者の気持ちに寄り添うひとことから始める');
-  L.push('・長くしすぎない（目安400〜600字）。専門用語を使わない');
-  L.push('・決めつけず、考えの整理を手伝う聞き役に徹する');
-  L.push('・下の【相談したいこと】が空欄のままなら、アドバイスの前に、状況を知るための質問を2〜3個だけ返す');
+  // 型を細かく指定すると毎回同じ返事になりループするため、禁止3つだけ残して自由に会話させる（2026-08-18）
+  var relLine = (mode === 'listen') ? '相談者は今、答えより話を聞いてほしい気分です。アドバイスは求められたときだけにしてください。'
+              : (mode === 'answer') ? '相談者は答えがほしいタイプです。結論を先延ばしにしないでください。'
+              : '聞くだけで終わらせず、あなたの考えも聞かせてください。';
+  L.push('決まった型を使わず、ふつうの会話として自然に話してください。' + relLine + '守ってほしいのは次の3つだけです。');
+  L.push('・一度出した提案は二度出さない（同じ話に戻さない）');
+  L.push('・相談者の答えで返事が変わらない質問はしない');
+  L.push('・毎回を質問で終わらせない。話が尽きたら区切ってよい');
+  L.push('');
+  L.push('免責や注意書きは冒頭に置かず、必要なら最後に短く一行だけ。箇条書きの羅列にせず、友人に話すような話し言葉で。長くしすぎない（目安400〜600字）。専門用語は使わない。');
+  L.push('下の【相談したいこと】が空欄のままなら、上の分析から起こりやすい場面を思い浮かべて、そこから話しはじめてください。');
   L.push('');
   L.push('【相談テーマ】' + (theme ? theme.label : '') + '（' + titleText + '）');
   function scoreLine(name, p) {
@@ -472,7 +487,7 @@ function buildAIPrompt(p1, p2, n1, n2, theme, titleText, pt, cards) {
   cards.forEach(function(m) { L.push('・' + m.title); });
   L.push('');
   L.push('【相談したいこと】');
-  L.push('（ここに具体的な状況・聞きたいことを書き足すと、ぐっと具体的な返事になります。空欄のままでもOK＝AIが質問から始めてくれます）');
+  L.push('（ここに具体的な状況・聞きたいことを書き足すと、ぐっと具体的な返事になります。空欄のままでもOK＝AIのほうから水を向けてくれます）');
   L.push('');
   L.push('※相談者へ：心や体の安全にかかわる深刻な悩みの場合は、AIだけに頼らず専門の相談窓口も利用してください。');
   return L.join('\n');
@@ -531,6 +546,7 @@ function renderAnalysis() {
   /* 4. AI相談への誘い（AI相談連携・フェーズ5／2026-07-04ワクワク文面化） */
   html += '<div class="analysis-section"><div class="analysis-title">ここから先は、おふたり専用の相談で</div>';
   html += '<div class="analysis-card"><div class="analysis-detail">ここまでは性格データから見えた「傾向」の分析です。実際の出来事——あの日の一言、返ってこない連絡——まで話せば、アドバイスは一気に<b>あなたたち専用</b>になります。下のボタンで<b>おふたりのデータと分析結果</b>をコピーして、AIに続きを相談してみてください。AIが話を聞きながら、この続きを一緒に考えてくれます。</div>';
+  html += '<div class="ai-mode-choice" id="relAiMode"><div style="font-size:12px;font-weight:700;margin-bottom:6px;">AIにどう相談したいですか</div><div class="ai-mode-btns">' + '<button type="button" class="ai-mode-btn" data-mode="listen">まず聞いてほしい</button>' + '<button type="button" class="ai-mode-btn on" data-mode="both">聞いたうえで、考えも聞きたい（おすすめ）</button>' + '<button type="button" class="ai-mode-btn" data-mode="answer">答えがほしい</button>' + '</div></div>';
   html += '<button id="relAiCopyBtn" style="display:block;width:100%;margin-top:12px;padding:12px;text-align:center;border:1.5px solid rgba(139,92,246,0.45);border-radius:10px;color:inherit;background:rgba(139,92,246,0.12);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🤖 この続きをAIに相談する（無料）</button>';
   html += '<div id="relAiAfter" style="display:none;margin-top:10px;font-size:12px;line-height:1.8;text-align:center;">コピーしました。開いて貼り付けてください → <a href="https://chatgpt.com/" target="_blank" rel="noopener" style="color:inherit;font-weight:700;">ChatGPT ↗</a>　<a href="https://gemini.google.com/" target="_blank" rel="noopener" style="color:inherit;font-weight:700;">Gemini ↗</a>　<a href="https://claude.ai/new" target="_blank" rel="noopener" style="color:inherit;font-weight:700;">Claude ↗</a></div>';
   html += '<div style="margin-top:10px;font-size:11px;text-align:center;"><a href="mypage.html#aiProfileSection" style="color:var(--dim);">自分ひとり分のAI相談用プロフィールはマイページへ →</a></div>';
@@ -542,12 +558,32 @@ function renderAnalysis() {
   el.innerHTML = html;
 
   /* AI相談ボタン：プロンプトのコピー＋計測（送るのはイベント名だけ） */
-  var aiPrompt = buildAIPrompt(p1, p2, n1, n2, theme, titleText, pt, cards);
+  var relAiMode = 'both';
+  try { relAiMode = localStorage.getItem('bigfive_ai_mode') || 'both'; } catch (e) {}
+  if (['listen','both','answer'].indexOf(relAiMode) < 0) relAiMode = 'both';
+  (function(){
+    var bs = document.querySelectorAll('#relAiMode .ai-mode-btn');
+    function paint(){
+      for (var i = 0; i < bs.length; i++) {
+        if (bs[i].getAttribute('data-mode') === relAiMode) bs[i].classList.add('on');
+        else bs[i].classList.remove('on');
+      }
+    }
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].onclick = function(){
+        relAiMode = this.getAttribute('data-mode');
+        try { localStorage.setItem('bigfive_ai_mode', relAiMode); } catch (e) {}
+        paint();
+      };
+    }
+    paint();
+  })();
   var aiBtn = document.getElementById('relAiCopyBtn');
   if (aiBtn) {
     aiBtn.addEventListener('click', function() {
       sendCount('reladvice_ai_copy');
       sendCount('reladvice_ai_copy_' + currentSituation);
+      var aiPrompt = buildAIPrompt(p1, p2, n1, n2, theme, titleText, pt, cards, relAiMode);
       copyText(aiPrompt, function(ok) {
         if (ok) {
           aiBtn.textContent = '✓ コピーしました';

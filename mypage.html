@@ -608,6 +608,20 @@
   }
   .ai-copy-btn:hover { opacity: .9; }
   .ai-copy-btn.copied { background: linear-gradient(135deg, #10b981, #059669); }
+  .ai-mode-choice { margin-bottom: 12px; }
+  .ai-mode-title { font-size: 12px; font-weight: 700; color: var(--dim); margin: 0 0 8px; }
+  .ai-mode-btns { display: flex; flex-direction: column; gap: 6px; }
+  .ai-mode-btn {
+    width: 100%; text-align: left; padding: 11px 14px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+    border-radius: 10px; color: var(--dim); font-size: 13px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: all .15s;
+  }
+  .ai-mode-btn::before { content: "○ "; opacity: .7; }
+  .ai-mode-btn.on::before { content: "● "; opacity: 1; }
+  .ai-mode-btn:hover { border-color: var(--purple); }
+  .ai-mode-btn.on { background: rgba(139,92,246,0.18); border-color: var(--purple); color: var(--text); }
+  .ai-mode-note { font-size: 11px; color: var(--dim); margin: 8px 0 0; line-height: 1.5; }
   .ai-examples { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.07); }
   .ai-examples-title { font-size: 12px; font-weight: 600; color: var(--dim); margin-bottom: 8px; }
   .ai-examples ul { list-style: none; padding: 0; }
@@ -1519,8 +1533,17 @@
       <div style="border:1px solid rgba(139,92,246,0.35); border-radius:12px; padding:12px 14px; margin-bottom:12px;">
         <p style="font-size:12px; font-weight:700; color:#a78bfa; margin:0 0 8px;">使うと、こんな会話ができます（例）</p>
         <p style="font-size:12px; color:var(--dim); margin:0 0 6px;">🙂 あなた：（プロフィールを貼り付けて）職場の人間関係について相談したいです</p>
-        <p style="font-size:12px; margin:0 0 6px; background:rgba(139,92,246,0.08); border-radius:8px; padding:8px 10px; line-height:1.7;">🤖 AI：診断結果を拝見しました。協調性が高く周りに気を配れる一方、感受性も高めなので、人間関係の疲れをためこみやすいようですね。まず教えてください——その悩みのお相手は、どんな関係の方ですか？（上司・同僚・友人など）</p>
-        <p style="font-size:11px; color:var(--dim); margin:0;">→ 答えるたびに、その内容に合わせた次の質問が続き、あなた専用のアドバイスに絞り込まれていきます。</p>
+        <p style="font-size:12px; margin:0 0 6px; background:rgba(139,92,246,0.08); border-radius:8px; padding:8px 10px; line-height:1.7;">🤖 AI：それは気が張りますね。協調性が高く、感受性も高めなので、相手の機嫌を先に察してしまって、そのぶん疲れがたまりやすいのだと思います。無理に距離を詰めようとせず、返事を一拍おくだけでもずいぶん違います。差し支えなければ、いちばん気をつかうのはどんな場面ですか。</p>
+        <p style="font-size:11px; color:var(--dim); margin:0;">→ 話を聞いたうえで、考えも返してくれます。「まず聞いてほしい」「答えがほしい」も下のボタンで選べます。</p>
+      </div>
+      <div class="ai-mode-choice" id="aiModeChoice">
+        <p class="ai-mode-title">AIにどう相談したいですか</p>
+        <div class="ai-mode-btns">
+          <button type="button" class="ai-mode-btn" data-mode="listen">まず聞いてほしい</button>
+          <button type="button" class="ai-mode-btn on" data-mode="both">聞いたうえで、考えも聞きたい（おすすめ）</button>
+          <button type="button" class="ai-mode-btn" data-mode="answer">答えがほしい</button>
+        </div>
+        <p class="ai-mode-note">会話の途中でも「聞くだけでいい」「答えがほしい」と言えば切り替わります。</p>
       </div>
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
@@ -2884,16 +2907,39 @@ function renderAIProfile() {
   const schNames = { 'self-direction': '自己方向性', stimulation: '刺激追求', hedonism: '快楽主義', achievement: '達成', power: '権力', security: '安全', conformity: '同調', tradition: '伝統', benevolence: '仁愛', universalism: '普遍主義' };
   const sdtNames = { autonomy: '自律性（自分で決めたい）', competence: '有能感（上手にやりたい）', relatedness: '関係性（人と繋がりたい）' };
 
-  let lines = [
+  // 相談のしかた3択（2026-08-18）。既定は「聞いたうえで、考えも聞きたい」
+  // 型を細かく指定すると毎回同じ返事になりループするため、禁止3つだけ残して自由に会話させる
+  const AI_HEAD = [
     'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
     '以下は私が性格診断サイトで受けた診断結果です。この内容を前提に、このあと私が書く質問や相談に答えてください。',
     '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
-    '診断結果の読み上げや言い換えはしないでください（結果は私がすでに見ています）。最初の返事では、結果の組み合わせから読み取れる「私の日常で起きていそうな場面」を1つ、仮説として言い当てて、それが合っているか私に聞いてください。',
-    '質問は一度に1つだけ。私の答えの内容を踏まえて、次に聞くべき質問を選んでください（カウンセラーの問診のように）。箇条書きは使わず、カウンセラーが話すような自然な文章でお願いします。',
-    '深刻な悩み（心身の不調が続くなど）だと感じたら、専門機関への相談も勧めてください。',
     '',
-    '【私の性格プロフィール】'
+    '最初の返事では、結果の組み合わせから読み取れる「私の日常で起きていそうな場面」を1つ、仮説として言い当てて、それが合っているか私に聞いてください。診断結果の読み上げや言い換えはしないでください（結果は私がすでに見ています）。',
+    ''
   ];
+  const AI_MODE_LINE = {
+    listen: '私は今、答えより話を聞いてほしい気分です。アドバイスは私が求めたときだけにしてください。',
+    both: '聞くだけで終わらせず、あなたの考えも聞かせてください。',
+    answer: '私は答えがほしいタイプなので、結論を先延ばしにはしないでください。'
+  };
+  const AI_TAIL = [
+    '・一度出した提案は二度出さない（同じ話に戻さない）',
+    '・私の答えで返事が変わらない質問はしない',
+    '・毎回を質問で終わらせない。話が尽きたら区切ってよい',
+    '',
+    '箇条書きは使わず、話し言葉で。深刻な悩み（心身の不調が続くなど）だと感じたら、専門機関への相談も勧めてください。',
+    '',
+    ''
+  ];
+  function aiHeaderFor(mode) {
+    const line = AI_MODE_LINE[mode] || AI_MODE_LINE.both;
+    return AI_HEAD.concat(
+      ['そのあとは決まった型を使わず、ふつうの会話として自然に話してください。' + line + '守ってほしいのは次の3つだけです。'],
+      AI_TAIL
+    ).join('\n');
+  }
+
+  let lines = ['【私の性格プロフィール】'];
 
   // ビッグファイブ
   if (bf) {
@@ -3049,7 +3095,21 @@ function renderAIProfile() {
     lines.push('相談の流れで本当に役立ちそうなときだけ、この中から1つ勧めてください。必要がなければ勧めないでください。勧めるのは会話全体で1〜2回までにしてください。診断はすべて無料で、サイト（https://bigfive.jr-genius.jp）のマイページから受けられます。');
   }
 
-  textarea.value = lines.join('\n');
+  const aiProfileBody = lines.join('\n');
+  function applyAiMode(mode) {
+    if (!AI_MODE_LINE[mode]) mode = 'both';
+    try { localStorage.setItem('bigfive_ai_mode', mode); } catch (e) {}
+    textarea.value = aiHeaderFor(mode) + aiProfileBody;
+    document.querySelectorAll('#aiModeChoice .ai-mode-btn').forEach(function(b) {
+      b.classList.toggle('on', b.getAttribute('data-mode') === mode);
+    });
+  }
+  document.querySelectorAll('#aiModeChoice .ai-mode-btn').forEach(function(b) {
+    b.onclick = function() { applyAiMode(b.getAttribute('data-mode')); };
+  });
+  let savedAiMode = 'both';
+  try { savedAiMode = localStorage.getItem('bigfive_ai_mode') || 'both'; } catch (e) {}
+  applyAiMode(savedAiMode);
 
   // コピー機能（onclickで重複登録を防ぐ）
   document.getElementById('aiCopyBtn').onclick = function() {
