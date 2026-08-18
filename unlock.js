@@ -35,6 +35,7 @@ var UNLOCK_TABLE = [
   { cards: 60, id: 'other-attachment',   label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
   { cards: 65, id: 'other-eq',           label: 'あの人のEQ診断',          url: 'other_eq.html' },
   { cards: 77, id: 'bigfiveman',         label: 'ビッグファイブマン分析',   url: 'team.html' },
+  { cards: 80, id: 'other_limit_100',    label: 'あの人保存100件に拡張',   url: null },
   { cards: 90, id: 'group',             label: 'グループ分けツール',       url: 'group.html' },
   { cards: 100, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
   { cards: 200, id: 'hexaco',            label: 'HEXACO性格診断',         url: 'hexaco.html' },
@@ -93,8 +94,11 @@ function getRequiredCards(featureId) {
 }
 
 function getOtherLimit() {
-  if (isLegacyUser()) return 50;
+  if (isLegacyUser()) return 100;
   var count = getCardCount();
+  // 2026-08-19追加：上限50人に張り付いた利用者が実在したため、80枚で100人まで広げる
+  //   （80枚は既存の解放ライン77・90と被らない値。詳細は_private/【引き継ぎ】履歴.md）
+  if (count >= 80) return 100;
   if (count >= 50) return 50;
   if (count >= 40) return 40;
   if (count >= 30) return 30;
