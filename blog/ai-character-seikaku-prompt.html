@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/blog/ai-character-seikaku-prompt.html">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIにキャラの性格を指定する方法｜「優しい少女」で毎回同じ人格になる理由｜ビッグファイブ診断</title>
+<meta name="description" content="AIにキャラクターを書かせても、喋り方がみんな同じになる。形容詞ではなくビッグファイブのスコアと行動例で渡すとキャラに芯が通る。コピペできる性格指定のひな型つき。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ビッグファイブで本当の自分を知る【公式】">
+<meta property="og:title" content="AIにキャラの性格を指定する方法">
+<meta property="og:description" content="「優しい少女」を渡すと平均的な人格しか返ってこない。5因子のスコアと行動例で渡すと変わる。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/blog/ai-character-seikaku-prompt.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/images/blog/ai-character-seikaku-prompt.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIにキャラの性格を指定する方法">
+<meta name="twitter:description" content="形容詞で渡すと毎回同じ人格が返ってくる。5因子のスコアで渡すと、AIは研究知識ごと引き出してくる。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/images/blog/ai-character-seikaku-prompt.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AIにキャラの性格を指定する方法｜「優しい少女」だと毎回同じ人格が返ってくる",
+  "description": "AIにキャラクターの性格を渡すとき、形容詞ではなくビッグファイブのスコアと行動例で指定する方法を解説する。",
+  "url": "https://bigfive.jr-genius.jp/blog/ai-character-seikaku-prompt.html",
+  "image": "https://bigfive.jr-genius.jp/images/blog/ai-character-seikaku-prompt.webp",
+  "datePublished": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "inLanguage": "ja",
+  "isPartOf": { "@type": "WebSite", "name": "ビッグファイブで本当の自分を知る【公式】", "url": "https://bigfive.jr-genius.jp/" },
+  "about": [
+    { "@type": "Thing", "name": "AI" },
+    { "@type": "Thing", "name": "キャラクター" },
+    { "@type": "Thing", "name": "創作" },
+    { "@type": "Thing", "name": "ビッグファイブ" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "ブログ", "item": "https://bigfive.jr-genius.jp/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "AIにキャラの性格を指定する方法", "item": "https://bigfive.jr-genius.jp/blog/ai-character-seikaku-prompt.html" }
+  ]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0a0e27;--bg2:#0f1535;--text:#e2e8f0;--dim:#94a3b8;--accent:#22d3ee;--border:rgba(34,211,238,.15)}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.85;min-height:100vh}
+  .bg-nebula{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(34,211,238,.05),transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(139,92,246,.05),transparent 70%)}
+  .site-header{position:sticky;top:0;z-index:10;background:rgba(10,14,39,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;gap:16px;align-items:center}
+  .back-link,.footer-link{color:var(--dim);text-decoration:none;font-size:13px}.back-link:hover,.footer-link:hover{color:var(--accent)}
+  .header-title{font-size:13px;color:var(--dim);font-weight:500}.main-wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:48px 24px 80px}
+  .hero-img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;max-width:720px;border-radius:12px;margin-bottom:36px;display:block}.article-header{margin-bottom:46px}
+  .article-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}.tag{display:inline-block;padding:3px 12px;border:1px solid var(--border);border-radius:999px;font-size:12px;color:var(--accent);background:rgba(34,211,238,.05)}
+  .article-title{font-size:clamp(23px,4vw,33px);font-weight:900;line-height:1.4;margin-bottom:16px}.article-title span{color:var(--accent)}
+  .article-lead{font-size:16px;color:var(--dim);border-left:3px solid var(--accent);padding-left:16px}.article-meta{margin-top:20px;font-size:12px;color:var(--dim)}
+  .toc,.cta-box,.related-articles{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin:44px 0}.toc-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;margin-bottom:14px}
+  .toc ol{list-style:none;counter-reset:toc}.toc li{counter-increment:toc;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:10px}.toc li:last-child{border-bottom:none}.toc li::before{content:counter(toc,decimal-leading-zero);font-size:11px;color:var(--accent);font-weight:700}
+  .toc a,.related-articles a{color:var(--dim);text-decoration:none}.toc a:hover,.related-articles a:hover{color:var(--accent)}
+  section{margin-bottom:48px}.article-body h2,.cta-box h2,.related-articles h2{font-size:22px;line-height:1.5;margin-bottom:18px}.article-body h3{font-size:17px;line-height:1.6;margin:28px 0 12px;color:var(--accent)}.article-body p,.cta-box p{margin-bottom:18px;color:var(--text)}strong{color:#fff;font-weight:700}.big-text{margin:30px 0;padding:26px;border-left:4px solid var(--accent);background:rgba(34,211,238,.06);font-size:20px;font-weight:800;line-height:1.7}.big-text span{color:var(--accent)}
+  .article-body p a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .highlight-box{margin:28px 0;padding:22px 24px;background:rgba(34,211,238,.05);border:1px solid var(--border);border-radius:12px}.highlight-box p{margin-bottom:12px}.highlight-box p:last-child{margin-bottom:0}
+  .prompt-box{margin:28px 0;padding:22px 24px;background:rgba(10,14,39,.55);border:1px dashed var(--border);border-radius:12px;font-size:14px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
+  .data-table{width:100%;border-collapse:collapse;margin:28px 0;font-size:14px}.data-table th{background:rgba(34,211,238,.1);color:var(--text);font-weight:700;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}.data-table td{padding:10px 14px;border-bottom:1px solid rgba(148,163,184,.18);color:var(--text);vertical-align:top}.data-table tr:last-child td{border-bottom:none}
+  .table-scroll{overflow-x:auto}.source-list{font-size:13px;color:var(--dim);padding-left:20px}.source-list li{margin-bottom:8px}.source-list a{color:var(--accent);text-decoration:none}
+  .cta-badges{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.cta-badge{font-size:12px;color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:4px 10px}.cta-btn{display:inline-block;background:var(--accent);color:#06111f;text-decoration:none;font-weight:800;border-radius:999px;padding:12px 22px}.cta-sub-link{font-size:13px;color:var(--dim);margin-top:14px}.related-articles ul{padding-left:20px}.related-articles li{margin-bottom:8px}.article-footer{text-align:center;margin-top:44px}
+  @media(max-width:640px){.main-wrap{padding:32px 18px 64px}.site-header{padding:12px 16px}.toc,.cta-box,.related-articles{padding:20px}.big-text{font-size:18px;padding:20px}.data-table{font-size:13px}.data-table th,.data-table td{padding:8px 10px}}
+</style>
+<link rel="stylesheet" href="../light-mode.css">
+<script src="../nav.js" defer></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-nebula"></div>
+<header class="site-header">
+  <a href="index.html" class="back-link">← ブログ一覧</a>
+  <span class="header-title">ビッグファイブ診断</span>
+</header>
+<main class="main-wrap">
+<article>
+  <img src="../images/blog/ai-character-seikaku-prompt.webp" alt="キャラクター設定カードと会話ウィンドウを描いた水彩風の画像" class="hero-img" width="1536" height="864" loading="eager">
+  <header class="article-header">
+    <div class="article-tags">
+      <span class="tag">AI</span>
+      <span class="tag">創作</span>
+      <span class="tag">ビッグファイブ</span>
+    </div>
+    <h1 class="article-title">AIにキャラの性格を指定する方法<br><span>「優しい少女」だと、毎回同じ人格が返ってくる</span></h1>
+    <p class="article-lead">AIに小説のセリフを書かせたり、キャラとの会話を楽しんだりするとき、名前と見た目を指定しても、返ってくる人格は毎回ほぼ同じになる。書き方が悪いのではない。性格の渡し方に、もう一段があるだけだ。</p>
+    <p class="article-meta">公開：2026年8月19日 ｜ ビッグファイブ診断 編集部</p>
+  </header>
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sec1">三人のキャラに、同じ台詞が返ってくる</a></li>
+      <li><a href="#sec2">「優しい」には、何通りもある</a></li>
+      <li><a href="#sec3">5本の数字で渡すと、AIは研究ごと引き出してくる</a></li>
+      <li><a href="#sec4">ひな型——この順番で渡す</a></li>
+      <li><a href="#sec5">数字だけだと人形になる。だから行動例を添える</a></li>
+      <li><a href="#sec6">会話が長くなったら、冒頭へ置き直す</a></li>
+    </ol>
+  </nav>
+  <div class="article-body">
+    <section id="sec1">
+      <h2>三人のキャラに、同じ台詞が返ってくる</h2>
+      <p>AIでキャラを動かしたことのある人なら、一度はぶつかっているはずだ。物語の場面を三人の会話で書かせたら、誰が話しているのか分からない。名前も、見た目も、口調のメモまで渡したのに、返ってきた台詞はどれも「〜だね」「〜だと思う」。テンプレートに名前を差し込んでいるだけのような、平坦なやり取りになる。</p>
+      <p>これはAIの調子が悪いわけでも、自分の指示が雑なわけでもない。渡した指定の中身が、AIにとって区別のつかないものだからだ。<strong>「優しい少女」という指定には、受け手の数だけ解釈がある。</strong>AIはその中から、いちばん普通の解釈——たぶん多くの人が思い浮かべる平均の像——を選ぶ。だからどのキャラも「だいたいの優しい子」になって、並べると区別がつかなくなる。</p>
+      <p>個性のある人格を返してもらうには、平均にならない渡し方が要る。</p>
+    </section>
+    <section id="sec2">
+      <h2>「優しい」には、何通りもある</h2>
+      <p>まず、形容詞がどこまで曖昧なのかを、優しさを例に確認してみる。</p>
+      <p>控えめで、いつもそばで体調を気にかけてくれる優しさがある。声をかけること自体が好きで、放っておけず世話を焼いて回る優しさがある。口は悪くて態度はぶっきらぼうなのに、困っていると黙って手を貸している優しさもある。どれも本物の優しさで、人はこれらを区別して生きている。けれど「優しい」の一言で渡すと、この区別がぜんぶ消える。</p>
+      <p>しかも、喋り方というのは表面にすぎない。文章の言い回し——一人称、語尾、語彙の選び方——が、性格の個人差を安定して反映するという研究がある（Pennebaker &amp; King, 1999）。口調はその場の服装のようなもので、その下にある本体から湧いてくる。口調の指定だけでキャラを作るのは、湧き出る泉を置かないで水路だけ設計するのに似ている。長い会話の途中で口調が崩れるのは、支える本体が渡されていないからだ。</p>
+      <p>では、その本体を渡すための物差しは何か。ここで使うのがビッグファイブだ。</p>
+    </section>
+    <section id="sec3">
+      <h2>5本の数字で渡すと、AIは研究ごと引き出してくる</h2>
+      <p>ビッグファイブは、性格を開放性・誠実性・外向性・協調性・神経症性の5つの因子のスコアで表す、心理学の標準的な枠組みだ。さきほどの三つの優しさも、この物差しに乗せると別の人格として分かれる。</p>
+      <div class="table-scroll">
+        <table class="data-table">
+          <tr><th>同じ「優しい」でも</th><th>因子の組み合わせ（例）</th><th>外に出てくる形</th></tr>
+          <tr><td>控えめに気にかける</td><td>外向性2・協調性5・神経症性4</td><td>静かに寄り添う</td></tr>
+          <tr><td>世話を焼いて回る</td><td>外向性4・協調性5・神経症性2</td><td>先に声をかける</td></tr>
+          <tr><td>口は悪いが助ける</td><td>協調性2・誠実性5</td><td>態度で示す</td></tr>
+        </table>
+      </div>
+      <p>AIに対してこの書き方が強いのは、AIが学習の中でビッグファイブを大量に読んでいるからだ。「協調性が高く、外向性が低い」と渡すと、AIは単なるラベルを受け取るのではなく、その組み合わせについて書かれた研究知識ごと引き出してくる。新しいものへの好み、締切への向き合い、批判の受け取り方。形容詞では呼べない領域まで、指定が届くようになる。</p>
+      <p>実際に、対話するAIシステムに特定の性格を持たせて、あとから実際の性格検査で測って確かめた研究もある（Lo ら, 2025）。設定した通りの性格として測定できた、という結果で、AIへの性格指定は「だいたい通じる」ことが確かめられている。 <a href="chatgpt-seikaku-data.html">自分自身の性格データをAIに渡して相談に使う話は別の記事</a>に書いたが、仕組みは同じで、渡す相手が自分か、架空のキャラかの違いだけだ。</p>
+      <div class="big-text">キャラの名前と見た目は「誰か」を決める。<br><span>5本の数字は「どんな人か」を決める。</span></div>
+    </section>
+    <section id="sec4">
+      <h2>ひな型——この順番で渡す</h2>
+      <p>理屈はここまでだ。実際にコピペして使える形にすると、次の順番で組む。立場、スコア、行動例、そして口調。口調を最後に置くのがコツで、本体を渡してから表面を渡す。逆にすると、中身のない定型文だけが先に走る。</p>
+      <div class="prompt-box">【キャラクター設定】
+・立場：街の小さな診療所の研修医。主人公の幼なじみ。
+・性格（ビッグファイブ。各1〜5点）：
+　開放性3 ／ 誠実性4 ／ 外向性2 ／ 協調性5 ／ 神経症性4
+・行動例：
+　・初対面の人には、自己紹介より先に体調を気にかける
+　・締切が迫ると表向きは平然としているが、前日に一人で仕上げてしまう
+　・批判されるとその場では受け流し、家に帰ってから一人で反芻する
+・口調：語尾はやわらかい。命令形はほぼ使わない。一人称は「私」。</div>
+      <p>スコアの数字は1〜5でも0〜100でもいい。大事なのは、5本を<strong>まとめて</strong>渡すことだ。1本だけ「協調性5」と渡しても、残りの4本はAIが勝手に平均を埋める。平均が埋まったぶん、キャラは「だいたいの優しい子」に戻っていく。</p>
+      <p>行動例は、このキャラを知っている人の目撃記録みたいなものを3つ書く。多い必要はない。場面が違う3つ——初対面・追い込まれたとき・批判されたとき——があると、AIは初見の場面でも自分で判断してその人らしい反応を組み立てる。</p>
+    </section>
+    <section id="sec5">
+      <h2>数字だけだと人形になる。だから行動例を添える</h2>
+      <p>ひとつ、期待の調整をしておきたい。スコアは、機械の制御盤ではない。</p>
+      <p>AIエージェントにビッグファイブのスコアを与えて行動がどう変わるかを調べた研究では、性格の指定は行動を決めるスイッチではなく、<strong>行動の傾き</strong>として働くことが確かめられている（Sakai ら, 2026）。協調性を高めれば協力的な方向へ傾く、という効き方だ。この「傾き」という性質は、創作にとっても都合がいい。数字どおりにしか動かないキャラは記号であって、人物ではない。傾くからこそ、場面ごとに揺らぎを持った反応が返ってくる。</p>
+      <p>そして、スコアが方向を示すなら、行動例は着地点を固定する。上のひな型で行動例を消して渡してみると分かる。同じスコアなのに、場面の捉え方が毎回ゆれる。行動例のあるなしで、初回から安定するか、三往復目でようやく落ち着くかが変わってくる。スコアと行動例は、どちらか片方では弱く、両方で初めて一人前だ。</p>
+      <p>なお、キャラ同士の組み合わせや、因子のかぶりを避けてキャラを作り分ける話は、<a href="manga-character-bigfive.html">漫画・アニメのキャラ設定にビッグファイブを使う記事</a>で詳しく扱っている。あちらはAIに渡す前に、手でスコア表を設計する段階の話だ。</p>
+    </section>
+    <section id="sec6">
+      <h2>会話が長くなったら、冒頭へ置き直す</h2>
+      <p>長い対話では、最初に渡した設定がどんどん遠ざかっていく。会話が進むにつれキャラの喋り方がゆるんでくるのは、多くの場合これが原因だ。対処は単純で、キャラがぶれたと感じたらひな型をもう一度貼る。使っているAIに固定の指示を置く欄（システム側の設定）があれば、そこに置いてしまうのがいちばん確実だ。置き直した途端にキャラが戻るのは、指定がちゃんと効いている証拠でもある。</p>
+      <p>もうひとつ、複数のキャラを作るときの作法がある。因子をずらす、だ。全員が協調性5の優しいキャラでは、会話が回らない。誰かは外向性を上げ、誰かは誠実性を下す。かけ離れた2本を持つ者同士を並べると、対立も協力も勝手に生まれる。このあたりの設計も、先の漫画の記事で扱っている。</p>
+      <p>そして、最初の1体の作り方でいちばん楽なのは、自分を雛形にすることだ。自分の5本のスコアを測って、1本だけ反転させる。根拠のない空想の人格より、実在の数字を反転した人格のほうが、なぜか説得力を持つ。<a href="trpg-character-make.html">TRPGのキャラメイクで同じ技法を解説した記事</a>があるので、こちらも参照してほしい。</p>
+      <div class="highlight-box">
+        <p><strong>キャラが立たないのは、描写の力量の問題ではないことが多い。</strong>渡し方が「形容詞」か「スコア＋行動例」かの違いで、返ってくる人格の解像度が変わる。</p>
+        <p>最初の一歩としては、ひな型の行を自分のキャラに差し替えるだけで十分だ。</p>
+      </div>
+    </section>
+    <section>
+      <h2>参考にした考え方</h2>
+      <ul class="source-list">
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/10626371/" target="_blank" rel="noopener">Pennebaker JW, King LA. (1999) Linguistic styles: language use as an individual difference（PubMed）</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/40379754/" target="_blank" rel="noopener">Lo C-H, et al. (2025) LLM-based robot personality simulation and cognitive system（PubMed）</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/42230954/" target="_blank" rel="noopener">Sakai T, et al. (2026) Effects of personality steering on cooperative behavior in large language model agents（PubMed）</a></li>
+      </ul>
+    </section>
+  </div>
+  <section class="cta-box">
+    <h2>キャラの土台に、自分の5本の数字を使う</h2>
+    <p>最初のキャラクターは、自分自身を測ったスコアから作るのがいちばん早いです。1本反転で別人格、2本反転で別人物。数字の根拠があるぶん、空想で作るより説得力のあるキャラが立ちます。</p>
+    <div class="cta-badges">
+      <span class="cta-badge">約5分〜</span>
+      <span class="cta-badge">無料</span>
+      <span class="cta-badge">登録不要</span>
+      <span class="cta-badge">科学的根拠あり</span>
+    </div>
+    <a href="https://bigfive.jr-genius.jp/" class="cta-btn">ビッグファイブ診断を受ける →</a>
+    <p class="cta-sub-link">問題数は10問・30問・120問から選べます。まずは軽く、でも大丈夫です。</p>
+  </section>
+  <section class="related-articles">
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="manga-character-bigfive.html">漫画・アニメのキャラ設定にビッグファイブを使う</a></li>
+      <li><a href="trpg-character-make.html">TRPGのキャラメイクとロールプレイに使う性格設計</a></li>
+      <li><a href="sousaku-kansei-dekinai.html">創作が完成しない人の心理</a></li>
+      <li><a href="chatgpt-seikaku-data.html">ChatGPTに相談したことがある人へ——返ってくる答えが変わる方法</a></li>
+      <li><a href="bigfive-facet-toha.html">ビッグファイブのファセットとは——30の下位尺度の話（指定をさらに細かくするときはこちら）</a></li>
+    </ul>
+  </section>
+</article>
+<footer class="article-footer">
+  <a href="../index.html" class="footer-link">← ビッグファイブ診断トップへ</a>
+</footer>
+</main>
+</body>
+</html>

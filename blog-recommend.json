@@ -83,6 +83,7 @@
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/manga-character-bigfive.html", "title": "漫画・アニメのキャラクター設定にビッグファイブを使う" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/trpg-character-make.html", "title": "TRPGのキャラメイクに「性格値」を入れる" },
         { "cond": [{ "f": "O", "min": 4 }, { "f": "C", "max": 2 }], "url": "/blog/sousaku-kansei-dekinai.html", "title": "創作が完成しない人の心理" },
+        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/ai-character-seikaku-prompt.html", "title": "AIにキャラの性格を指定する方法" },
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
         { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/shumi-ga-nai.html", "title": "趣味がない・何をやっても楽しくない人へ" },
