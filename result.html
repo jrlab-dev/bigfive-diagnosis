@@ -824,9 +824,21 @@
   body.theme-light .paid-teaser-fade {
     background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.95));
   }
-  .paid-modal-price { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+  /* 2026-08-18：値段は本文とサンプルの下へ移した（先に中身を読ませる）。
+     仕切り線を上に置いて「ここから先はお金の話」と区切る */
+  .paid-modal-price {
+    font-size: 26px; font-weight: 900; color: var(--text);
+    margin: 18px 0 12px; padding-top: 16px;
+    border-top: 1px solid rgba(139,92,246,0.22);
+  }
   .paid-modal-price small { font-size: 12px; color: var(--dim); font-weight: 500; }
-  body.theme-light .paid-modal-price { color: #1e293b; }
+  body.theme-light .paid-modal-price { color: #1e293b; border-top-color: rgba(139,92,246,0.2); }
+  /* その人自身の項目名を出す一行（2026-08-18） */
+  .paid-modal-mine {
+    font-size: 12.5px; color: var(--cyan); line-height: 1.7;
+    margin: -8px 0 4px; word-break: auto-phrase;
+  }
+  body.theme-light .paid-modal-mine { color: #0369a1; }
 
   .paid-modal {
     position: fixed; inset: 0; z-index: 10000; display: none;
@@ -838,6 +850,8 @@
     width: 100%; max-width: 360px; text-align: center;
     background: rgba(26,10,62,0.96); border: 1px solid rgba(139,92,246,0.35);
     border-radius: 18px; padding: 26px 24px;
+    /* 2026-08-18：中身が縦に伸びたので、小さい端末でもはみ出さないようにする */
+    max-height: calc(100vh - 40px); overflow-y: auto;
   }
   .paid-modal-badge {
     display: inline-block; font-size: 11px; font-weight: 700; color: #fff;
@@ -1287,7 +1301,7 @@
       </svg>
       120問版を受ける
     </button>
-    <p class="paid-note">30項目すべての解説（約1万2千字）は、120問版だけに出ます</p>
+    <p class="paid-note">30項目すべての解説（約1万字）は、120問版だけに出ます</p>
   </div>
 
   <!-- 30項目の詳細レポート：試し読みカード（120問版のみ・2026-07-31改稿）
@@ -1315,24 +1329,35 @@
       </svg>
       続きを全部読む
     </button>
-    <p class="paid-note">30項目すべての解説（約1万2千字）＋心理学診断とのクロス分析</p>
+    <p class="paid-note">30項目すべての解説（約1万字）＋心理学診断とのクロス分析</p>
   </div>
 
   <!-- 案内モーダル（1枚目＝値段と購入。2枚目＝ここで初めて無料と明かす） -->
   <div class="paid-modal" id="paidModal">
+    <!-- 2026-08-18 改稿：値段を先頭から下げ、先に「何が手に入るか」を読ませる形にした。
+         ⚠️改稿前は「開いた瞬間に¥980が画面中央」で、到達60人中23人（38%）が3秒未満で離脱していた
+           ＝測れていたのは支払い意思ではなく「値段への反射」だった（2026-08-18の分析）。
+         ★カウンターの定義は一切変えていない（準也さん裁定 2026-08-18「今までの蓄積を断絶するのはダメ」）＝
+           paid_btn_click（分母）＝案内を開いた／paid_buy_click（分子）＝¥980を見て「購入にすすむ」を押した。
+           ボタンの文言も、値段を見てから押す流れもそのまま。だから8/1からの60件と同じものを数え続ける。
+         ★効果の見方＝paid_close_fast ÷ paid_btn_click（改稿前は38%）の低下。変更日は計測ノイズ記録に記載。 -->
     <div class="paid-modal-inner" id="paidModalStep1">
-      <p class="paid-modal-title">30項目の詳細レポート</p>
-      <p class="paid-modal-price">¥980 <small>買い切り</small></p>
+      <p class="paid-modal-title">いま見えているのは、5つだけです</p>
       <p class="paid-modal-text">
-        <span>30の項目それぞれに、</span><span>あなたの点数に合わせた</span><span>解説がつきます。</span><br>
-        <span>全部で約1万2千字、</span><span>あなた専用のレポートです。</span><br>
-        <span>愛着スタイルやHSPなどの</span><span>心理学診断を受けた方には、</span><span>クロス分析の章もつきます。</span>
+        <span>120問版は、</span><span>5つの性格の内側にある</span><span><b>30の項目</b>まで</span><span>測っています。</span><br>
+        <span>詳細レポートは、</span><span>その30項目ぜんぶに、</span><span>あなたの点数に合わせて</span><span>書いた解説です。</span><span>全部で約1万字。</span><br>
+        <span>愛着スタイルやHSPなどを</span><span>受けた方には、</span><span>かけ合わせの章も</span><span>つきます。</span>
       </p>
-      <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
+      <!-- その人自身の項目名を出す（試し読みが取れたときだけ・2026-08-18追加）。
+           汎用の説明で終わらせず「自分の話だ」と分かるようにする。中身は実物と同じ判定を使う -->
+      <p class="paid-modal-mine" id="paidModalMine" style="display:none;"></p>
       <!-- サンプル＝見本の30桁（準也さん裁定7/31「見せないと買う人はいない」）。
-           1〜5の極端な点数を含まない組み合わせにして、尖った本文は晒さない -->
+           1〜5の極端な点数を含まない組み合わせにして、尖った本文は晒さない。
+           ★2026-08-18に値段より前へ移動＝「中身を見てから決められる」と先に伝えるため -->
       <a class="paid-sample-link" id="paidSampleLink" target="_blank" rel="noopener"
-         href="facet-report.html?facets=323423432434443243344324234323&sample=1">サンプルを見る（見本の点数で全文）</a>
+         href="facet-report.html?facets=323423432434443243344324234323&sample=1">中身を見てから決められます（見本の点数で全文）</a>
+      <p class="paid-modal-price">¥980 <small>買い切り・追加料金なし</small></p>
+      <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
       <!-- 2026-08-09：¥980を見て閉じた人が、何も持たずに帰らないための無料の出口。
            ここまで33人到達して購入0だが、その30人はサイトから何も得ずに離脱している。
            ★¥980より小さく・下に置く（同じ大きさで並べると全員が無料を押して有料テストが壊れる） -->
@@ -3004,6 +3029,14 @@ if (version === '10') {
         // 冒頭だけ渡す。あふれた分はCSSのぼかしで「続きがある」見た目になる
         document.getElementById('paidTeaserText').textContent = body.slice(0, 140);
         document.getElementById('paidTeaserQuote').style.display = 'block';
+        // 案内モーダルにも、その人自身の項目名を出す（2026-08-18）。
+        // 試し読みと同じ判定（bestI＝いちばん特徴が出ている項目）を使うので中身は一致する
+        var mineEl = document.getElementById('paidModalMine');
+        if (mineEl) {
+          mineEl.textContent =
+            'あなたの場合、いちばん特徴が出ていたのは「' + TEASER_NAMES[bestI] + '」でした。';
+          mineEl.style.display = 'block';
+        }
       }
       // クロス分析章の試し読み（採点最上位の1本の書き出し・ワーカーが選んで返す）
       var cx = data._cross;
