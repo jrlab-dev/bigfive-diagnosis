@@ -3273,6 +3273,25 @@ function getHiddenCharImg(scores, gender) {
 // 初期表示（全スクリプト読み込み後に実行）
 render();
 
+// URLの #album などで、そのタブを開いた状態で来られるようにする（2026-08-19）
+//   きっかけ＝コレクションガイドの「マイページで進行状況を見る」を押しても
+//   進行状況（コレクションタブの中にある）が開かず、何も起きないように見えていた
+(function() {
+  var want = (location.hash || '').replace('#', '');
+  var TABS = ['my', 'others', 'tests', 'team', 'album'];
+  if (TABS.indexOf(want) < 0) return;
+  var btn = document.querySelector('.tab[data-tab="' + want + '"]');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  currentTab = want;
+  render();
+  setTimeout(function() {
+    var tabs = document.querySelector('.tabs') || btn;
+    tabs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+})();
+
 // result.htmlの「AIに相談する」導線から来た場合、AI相談セクションへスクロール
 if (location.hash === '#aiProfileSection') {
   const aiAnchor = document.getElementById('aiProfileSection');
