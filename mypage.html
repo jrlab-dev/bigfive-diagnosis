@@ -564,6 +564,18 @@
   }
   .report-missing-note a { color: var(--purple); font-weight: 600; text-decoration: none; }
 
+  /* コレクター順位バナー（.report-bannerと同じ土台・色は既存のものだけ使う・2026-08-19） */
+  .collector-rank-value {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.3;
+    margin: 2px 0 4px;
+    background: linear-gradient(135deg, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   /* 設定行 */
   .setting-row {
     display: flex; justify-content: space-between; align-items: center;
@@ -2353,6 +2365,96 @@ function renderBadges() {
   return html;
 }
 
+// ===== コレクター順位（2026-08-19追加）=====
+// GET /api/rank?id=<同期ID> の listed/rank/cards/above/min_cards を見せて「次に集める理由」を作る。
+// ★total（載っている人数）だけは絶対に表示しない（参加者が少ない現状が分かってしまうため・準也さん指示 2026-08-19）
+const RANK_API_URL = 'https://bigfive.jr-genius.jp/api/rank';
+const RANK_BANNER_SHELL = '<div class="report-banner" id="collectorRankBanner"></div>';
+let _rankJson = null;   // APIの返り値（1回のページ表示で1回だけ取りに行く）
+let _rankDone = false;
+
+// 未保存の人に順位を見せるのは、この順位までに入れる人だけ（それ以下は数字を出さない）
+const RANK_TEASE_MAX = 5;
+
+function renderCollectorRank(json) {
+  const el = document.getElementById('collectorRankBanner');
+  if (!el) return;
+  const title = '<div class="report-banner-title">コレクター順位</div>';
+  const note = '<div class="report-missing-note">※バックアップを保存した人だけの順位です</div>';
+  // 開発用端末（dev_norank）。bigfive_ を付けないキー名＝引継ぎで他の端末に渡さない意図
+  if (localStorage.getItem('dev_norank') === '1') {
+    el.innerHTML = title + '<div class="report-banner-sub">この端末はランキングに入りません（開発用）</div>';
+    return;
+  }
+  // 一度もバックアップしていない人
+  if (!localStorage.getItem(SYNC_ID_KEY)) {
+    // ★上位に入れる人にだけ、具体的な順位を見せる（2026-08-19）。
+    //   下位まで数字を出すと「25枚で12位」のように参加者の少なさが伝わってしまうため。
+    const teaseOk = json && json.would_rank && json.would_rank <= RANK_TEASE_MAX;
+    const teaseSub = teaseOk
+      ? 'いま保存すると<span class="collector-rank-value">' + json.would_rank + '位</span>に入ります'
+      : 'バックアップを保存すると、順位が出ます';
+    el.innerHTML = title
+      + '<div class="report-banner-sub">' + teaseSub + '</div>'
+      + '<button type="button" class="report-btn" id="rankGoBackupBtn">バックアップの場所へ</button>';
+    const goBtn = document.getElementById('rankGoBackupBtn');
+    if (goBtn) goBtn.onclick = function() {
+      const target = document.getElementById('syncSection');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    return;
+  }
+  if (!json) {
+    el.innerHTML = title + '<div class="report-banner-sub">…</div>';
+    return;
+  }
+  if (json.listed) {
+    const sub = (json.rank === 1 || json.above == null)
+      ? 'いまトップです'
+      : '1つ上の人は' + json.above + '枚（あと' + Math.max(0, json.above - json.cards) + '枚）';
+    el.innerHTML = title
+      + '<div class="collector-rank-value">' + json.rank + '位</div>'
+      + '<div class="report-banner-sub">' + sub + '</div>'
+      + note;
+  } else {
+    const minCards = json.min_cards || 20;
+    const remain = Math.max(0, minCards - (json.cards || 0));
+    el.innerHTML = title
+      + '<div class="report-banner-sub">あと' + remain + '枚でランキングに参加できます（' + minCards + '枚から）</div>'
+      + note;
+  }
+}
+
+function loadCollectorRank() {
+  renderCollectorRank(_rankJson);
+  if (_rankDone) return;
+  if (localStorage.getItem('dev_norank') === '1') return;
+  const syncId = localStorage.getItem(SYNC_ID_KEY);
+  if (!syncId) {
+    // まだ保存していない人には「いま保存すると何位か」だけ聞く（IDは送らない＝個人のデータは渡さない）
+    const myCards = (typeof getCardCount === 'function') ? getCardCount() : 0;
+    if (myCards < 20) return;   // 20枚未満は聞くだけ無駄（そもそも載れない）
+    _rankDone = true;
+    fetch(RANK_API_URL + '?cards=' + encodeURIComponent(myCards))
+      .then(function(res) { return res.json(); })
+      .then(function(j) { _rankJson = j; renderCollectorRank(j); })
+      .catch(function() { /* 取れなくても、いまの文言のままで困らない */ });
+    return;
+  }
+  _rankDone = true;
+  fetch(RANK_API_URL + '?id=' + encodeURIComponent(syncId))
+    .then(function(res) { return res.json(); })
+    .then(function(json) {
+      _rankJson = json;
+      renderCollectorRank(json);
+    })
+    .catch(function() {
+      // 順位はおまけなので、取れなくてもエラーで体験を邪魔しない（バナーごと隠す）
+      const el = document.getElementById('collectorRankBanner');
+      if (el) el.style.display = 'none';
+    });
+}
+
 // ===== コレクション =====
 function renderAlbum() {
   const container = document.getElementById('albumContent');
@@ -2374,7 +2476,8 @@ function renderAlbum() {
   const cols = isMobile ? 3 : 4;
 
   if (count === 0) {
-    container.innerHTML = '<div class="album-empty-msg">診断を実行するとカードがコレクションに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！<br><br>友達に結果をシェアしてもらうとコレクションが埋まります！</div>' + renderBadges();
+    container.innerHTML = RANK_BANNER_SHELL + '<div class="album-empty-msg">診断を実行するとカードがコレクションに追加されます。<br>自分の診断や「あの人を分析する」でカードを集めましょう！<br><br>友達に結果をシェアしてもらうとコレクションが埋まります！</div>' + renderBadges();
+    loadCollectorRank();
     return;
   }
 
@@ -2386,7 +2489,7 @@ function renderAlbum() {
     });
   }
 
-  let html = '';
+  let html = RANK_BANNER_SHELL;  // コレクター順位は進行バーより前（いちばん上）に置く
 
   // ヘッダー
   html += '<div class="album-header">';
@@ -2496,6 +2599,7 @@ function renderAlbum() {
 
   html += renderBadges();
   container.innerHTML = html;
+  loadCollectorRank();
 }
 
 
@@ -2659,10 +2763,13 @@ document.getElementById('syncSaveBtn').addEventListener('click', async () => {
   try {
     const id = getSyncId();
     const data = collectLocalData();
+    // 開発用端末（dev_norank）のときは、ランキングに載せない印を一緒に送る（2026-08-19）
+    const payload = { user_id: id, data };
+    if (localStorage.getItem('dev_norank') === '1') payload.norank = true;
     const res = await fetch(`${SYNC_API}/save`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: id, data }),
+      body: JSON.stringify(payload),
     });
     const json = await res.json();
     if (!json.ok) throw new Error(json.error || 'エラー');

@@ -66,6 +66,22 @@
   <button class="btn-off" id="btnOff">この端末で計測をオフにする</button>
   <button class="btn-on" id="btnOn">オフを解除する（通常に戻す）</button>
 
+  <!-- 2026-08-19追加：マイページの「コレクター順位」（ランキング）からも外す。
+       計測オフ（dev_nocount）とは別の印（dev_norank）。bigfive_ を付けないキー名なのは、
+       引継ぎバックアップで意図せず他の端末に移らないようにするため。 -->
+  <h2 style="font-size:15px;margin:26px 0 4px;">ランキングからも外す</h2>
+  <p style="font-size:13px;color:#64748b;margin:0 0 12px;">
+    マイページの「コレクター順位」の対象からも、この端末を外します（開発・テスト用）。
+  </p>
+
+  <div class="status" id="rankStatus">
+    <div class="status-label" id="rankStatusLabel">確認中</div>
+    <div class="status-main" id="rankStatusMain">…</div>
+    <div class="status-note" id="rankStatusNote"></div>
+  </div>
+
+  <button class="btn-off" id="rankToggleBtn">この端末をランキングから外す</button>
+
   <!-- 2026-08-09追加：一度押したボタンは「もう押した」と記録され、¥980の案内などが
        二度と出なくなる（例＝「購入にすすむ」を押すと次からは無料案内から始まる）。
        準也さんが確認しようとして「出てこない」となったため、戻せる手段をここに置く。 -->
@@ -80,6 +96,7 @@
     <b>知っておいていただきたいこと</b>
     <ul>
       <li>この設定は<b>いま開いているブラウザにだけ</b>保存されます。スマホでもテストするなら、<b>スマホでもこのページを開いて</b>ボタンを押してください。</li>
+      <li>「ランキングからも外す」の印も同じで、<b>このブラウザにだけ</b>保存されます（引継ぎバックアップで他の端末に移ることはありません）。</li>
       <li>ブラウザの履歴やサイトデータを消すと、この設定も一緒に消えます。そのときはまたこのページを開いてください。</li>
       <li>オフの間も、サイトの動きは普段どおりです。集計に数えられなくなるだけです。</li>
       <li>このページ自体は何も数えていないので、何度開いても集計は汚れません。</li>
@@ -127,6 +144,49 @@
     try { localStorage.removeItem(KEY); } catch (e) {}
     draw(true);
   });
+
+  // ===== ランキング除外（dev_norank・2026-08-19追加）=====
+  // 計測オフ（dev_nocount）とは別の印。ボタン1つでトグル（押す→立つ、もう一度押す→消える）
+  var RANK_KEY = 'dev_norank';
+  var rBox = document.getElementById('rankStatus');
+  var rLabel = document.getElementById('rankStatusLabel');
+  var rMain = document.getElementById('rankStatusMain');
+  var rNote = document.getElementById('rankStatusNote');
+  var rankBtn = document.getElementById('rankToggleBtn');
+
+  function readRank() {
+    try { return localStorage.getItem(RANK_KEY) === '1'; } catch (e) { return null; }
+  }
+
+  function drawRank() {
+    var excluded = readRank();
+    if (excluded === null) {  // localStorageが使えない（プライベートモード等）
+      rBox.className = 'status on';
+      rLabel.textContent = '設定できません';
+      rMain.textContent = 'このブラウザでは保存できません';
+      rNote.textContent = 'シークレットモードや、サイトデータをブロックする設定になっている可能性があります。';
+      rankBtn.style.display = 'none';
+      return;
+    }
+    rBox.className = 'status ' + (excluded ? 'off' : 'on');
+    rLabel.textContent = excluded ? 'ランキング外' : 'ランキング掲載中';
+    rMain.textContent = excluded ? 'この端末はランキングに入りません' : 'この端末はランキングに入ります';
+    rNote.textContent = excluded
+      ? 'マイページの「コレクター順位」に開発用の表示が出ます。'
+      : '20枚以上集めてバックアップを保存すると、コレクター順位に載ります。';
+    rankBtn.className = excluded ? 'btn-on' : 'btn-off';
+    rankBtn.textContent = excluded ? 'ランキングに戻す（通常に戻す）' : 'この端末をランキングから外す';
+  }
+
+  rankBtn.addEventListener('click', function () {
+    try {
+      if (readRank()) localStorage.removeItem(RANK_KEY);
+      else localStorage.setItem(RANK_KEY, '1');
+    } catch (e) {}
+    drawRank();
+  });
+
+  drawRank();
 
   // 「押した記録（counted_*）」を全部消して、はじめて訪れた人と同じ状態に戻す（2026-08-09追加）。
   // ¥980の案内は「購入にすすむ」を一度押すと次から無料案内に直行する作りのため、

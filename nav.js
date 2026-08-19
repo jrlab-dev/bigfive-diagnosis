@@ -327,10 +327,14 @@ body { padding-top: 52px !important; }
       if (Date.now() - lastAuto < 24 * 60 * 60 * 1000) return; // 24時間以内はスキップ
 
       var data = collectBackupData();
+      // 開発用端末（dev_norank）のときは、ランキングに載せない印を一緒に送る（2026-08-19）
+      // ※dev_norank は bigfive_ を付けないキー名＝引継ぎデータとして他端末に渡さない意図
+      var payload = { user_id: syncId, data: data };
+      if (localStorage.getItem('dev_norank') === '1') payload.norank = true;
       fetch(AUTO_BACKUP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: syncId, data: data })
+        body: JSON.stringify(payload)
       }).then(function(res) {
         return res.json();
       }).then(function(json) {
