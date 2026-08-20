@@ -575,6 +575,30 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  /* 「集めたぶんがまだ順位に入っていない」お知らせ（2026-08-21） */
+  .rank-sync-note {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .rank-sync-msg {
+    font-size: 12.5px;
+    color: var(--dim);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .rank-sync-msg b { color: var(--purple); }
+  /* 差が無いときの「最新にする」＝押せるが目立たせない */
+  .report-btn.quiet {
+    padding: 8px 18px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: transparent;
+    color: var(--purple);
+    border: 1px solid rgba(139,92,246,0.45);
+  }
 
   /* 設定行 */
   .setting-row {
@@ -2376,11 +2400,58 @@ let _rankDone = false;
 // 未保存の人に順位を見せるのは、この順位までに入れる人だけ（それ以下は数字を出さない）
 const RANK_TEASE_MAX = 5;
 
+// 手元のカード枚数。unlock.js の getCardCount と同じ数え方（bigfive_albumの要素数＝サーバー側の
+// json_array_length と一致）。読み込み順に左右されないよう、ここでは自前で数える（2026-08-21）
+function myAlbumCount() {
+  try { return JSON.parse(localStorage.getItem('bigfive_album') || '[]').length; } catch (e) { return 0; }
+}
+
+let _rankSyncing = false;   // 二重送信よけ
+let _rankSyncMsg = '';      // 反映のあとに出す1行（描き直しても消えないよう覚えておく）
+
+// ★順位は「最後に保存したときの枚数」で決まる（2026-08-21追加）。
+//   保存し直さないと、集めたぶんが順位に入らない＝「あと3枚」を集めたのに順位が動かない、が起きる。
+//   ここで保存し直し → 順位を取り直し → その場で新しい順位を見せる。
+async function runRankSync(isAuto) {
+  if (_rankSyncing) return;
+  const syncId = localStorage.getItem(SYNC_ID_KEY);
+  if (!syncId) return;                                    // 保存したことがない人に勝手に送らない
+  if (localStorage.getItem('dev_norank') === '1') return;  // 開発用端末は触らない
+  _rankSyncing = true;
+  const btn = document.getElementById('rankSyncBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '反映中…'; }
+  const before = (_rankJson && _rankJson.listed) ? _rankJson.rank : null;
+  try {
+    await saveToCloud();
+    const res = await fetch(RANK_API_URL + '?id=' + encodeURIComponent(syncId));
+    const j = await res.json();
+    _rankJson = j;
+    const after = j.listed ? j.rank : null;
+    if (before && after && after < before)      _rankSyncMsg = '反映しました：<b>' + before + '位 → ' + after + '位</b>';
+    else if (!before && after)                  _rankSyncMsg = '反映しました：<b>' + after + '位</b>で参加しています';
+    else                                        _rankSyncMsg = '最新の枚数にしました';
+    // ⚠️計測はGA4だけに送る（カウンターのKV無料枠を使わないため・2026-08-04の方針どおり）
+    try {
+      if (window.gtag) gtag('event', 'rank_sync', {
+        mode: isAuto ? 'auto' : 'manual', before: before || 0, after: after || 0,
+      });
+    } catch (e) {}
+    renderCollectorRank(j);
+  } catch (e) {
+    _rankSyncMsg = '';
+    if (btn) { btn.disabled = false; btn.textContent = 'ランキングに反映する'; }
+    // 自動のときは黙って諦める（ボタンは残るので手で押せる）
+  } finally {
+    _rankSyncing = false;
+  }
+}
+
 function renderCollectorRank(json) {
   const el = document.getElementById('collectorRankBanner');
   if (!el) return;
   const title = '<div class="report-banner-title">コレクター順位</div>';
   const note = '<div class="report-missing-note">※バックアップを保存した人だけの順位です</div>';
+  const msg = _rankSyncMsg ? '<div class="rank-sync-msg">' + _rankSyncMsg + '</div>' : '';
   // 開発用端末（dev_norank）。bigfive_ を付けないキー名＝引継ぎで他の端末に渡さない意図
   if (localStorage.getItem('dev_norank') === '1') {
     el.innerHTML = title + '<div class="report-banner-sub">この端末はランキングに入りません（開発用）</div>';
@@ -2408,21 +2479,43 @@ function renderCollectorRank(json) {
     el.innerHTML = title + '<div class="report-banner-sub">…</div>';
     return;
   }
+  // 手元の枚数と、サーバーに入っている枚数（＝順位の元）の差。
+  // 差があるかぎり「集めたのに順位が動かない」が起きるので、その場で送り直せるようにする。
+  const mine = myAlbumCount();
+  const saved = json.cards || 0;
+  const behind = mine - saved;
+  const syncBtn = behind > 0
+    ? '<button type="button" class="report-btn" id="rankSyncBtn">ランキングに反映する</button>'
+    : '<button type="button" class="report-btn quiet" id="rankSyncBtn">最新にする</button>';
+
   if (json.listed) {
+    // 「あと何枚」は手元の枚数で数える（古い保存の値で数えると、実際より遠く見える）
     const sub = (json.rank === 1 || json.above == null)
       ? 'いまトップです'
-      : '1つ上の人は' + json.above + '枚（あと' + Math.max(0, json.above - json.cards) + '枚）';
+      : '1つ上の人は' + json.above + '枚（あと' + Math.max(0, json.above - mine) + '枚）';
+    const behindNote = behind > 0
+      ? '<div class="rank-sync-note">集めた' + behind + '枚が、まだ順位に入っていません<br>（順位は' + saved + '枚のときのままです）</div>'
+      : '';
     el.innerHTML = title
       + '<div class="collector-rank-value">' + json.rank + '位</div>'
       + '<div class="report-banner-sub">' + sub + '</div>'
-      + note;
+      + behindNote + syncBtn + msg + note;
   } else {
     const minCards = json.min_cards || 20;
-    const remain = Math.max(0, minCards - (json.cards || 0));
-    el.innerHTML = title
-      + '<div class="report-banner-sub">あと' + remain + '枚でランキングに参加できます（' + minCards + '枚から）</div>'
-      + note;
+    if (behind > 0 && mine >= minCards) {
+      // 手元はもう条件を満たしているのに、保存が古いせいで載っていない人
+      el.innerHTML = title
+        + '<div class="rank-sync-note">いま' + mine + '枚。反映すればランキングに入れます</div>'
+        + syncBtn + msg + note;
+    } else {
+      const remain = Math.max(0, minCards - mine);   // ★手元の枚数で数える
+      el.innerHTML = title
+        + '<div class="report-banner-sub">あと' + remain + '枚でランキングに参加できます（' + minCards + '枚から）</div>'
+        + (behind > 0 ? syncBtn : '') + msg + note;
+    }
   }
+  const syncEl = document.getElementById('rankSyncBtn');
+  if (syncEl) syncEl.onclick = function() { runRankSync(false); };
 }
 
 function loadCollectorRank() {
@@ -2432,7 +2525,7 @@ function loadCollectorRank() {
   const syncId = localStorage.getItem(SYNC_ID_KEY);
   if (!syncId) {
     // まだ保存していない人には「いま保存すると何位か」だけ聞く（IDは送らない＝個人のデータは渡さない）
-    const myCards = (typeof getCardCount === 'function') ? getCardCount() : 0;
+    const myCards = myAlbumCount();
     if (myCards < 20) return;   // 20枚未満は聞くだけ無駄（そもそも載れない）
     _rankDone = true;
     fetch(RANK_API_URL + '?cards=' + encodeURIComponent(myCards))
@@ -2447,6 +2540,9 @@ function loadCollectorRank() {
     .then(function(json) {
       _rankJson = json;
       renderCollectorRank(json);
+      // ★一度でも保存したことがある人は、集めたぶんを黙って反映する（本人は何もしなくていい・2026-08-21）。
+      //   保存を選んだ人だけが対象。差が無いときは通信しない。
+      if (myAlbumCount() > (json.cards || 0)) runRankSync(true);
     })
     .catch(function() {
       // 順位はおまけなので、取れなくてもエラーで体験を邪魔しない（バナーごと隠す）
@@ -2674,6 +2770,25 @@ function collectLocalData() {
   return data;
 }
 
+// クラウドへ保存する共通処理（2026-08-21に切り出し）。
+// 呼び出し元＝①バックアップ欄の「このデバイスのデータを保存する」②コレクター順位の反映（手動・自動）
+// ⚠️getSyncId() はIDが無ければ発行する。順位側からは「IDがある人」だけ呼ぶこと（勝手に発行しない）
+async function saveToCloud() {
+  const id = getSyncId();
+  const data = collectLocalData();
+  // 開発用端末（dev_norank）のときは、ランキングに載せない印を一緒に送る（2026-08-19）
+  const payload = { user_id: id, data };
+  if (localStorage.getItem('dev_norank') === '1') payload.norank = true;
+  const res = await fetch(`${SYNC_API}/save`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'エラー');
+  return id;
+}
+
 // ===== 保存促しバナー =====
 (function() {
   const banner = document.getElementById('backupPromptBanner');
@@ -2761,23 +2876,15 @@ document.getElementById('syncSaveBtn').addEventListener('click', async () => {
   btn.textContent = '保存中...';
   setStatus('', '');
   try {
-    const id = getSyncId();
-    const data = collectLocalData();
-    // 開発用端末（dev_norank）のときは、ランキングに載せない印を一緒に送る（2026-08-19）
-    const payload = { user_id: id, data };
-    if (localStorage.getItem('dev_norank') === '1') payload.norank = true;
-    const res = await fetch(`${SYNC_API}/save`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error || 'エラー');
+    const id = await saveToCloud();
     document.getElementById('syncIdText').textContent = id;
     document.getElementById('syncIdBox').style.display = 'block';
     updateSyncMailLink();
     fetchShortKey(id); // 短い番号は非同期で取得（失敗しても保存成功の表示は邪魔しない）
     setStatus('保存しました！', 'ok');
+    // 保存したら順位も取り直す（バナーが古い枚数のまま残らないように・2026-08-21）
+    _rankDone = false;
+    loadCollectorRank();
   } catch (e) {
     setStatus('保存に失敗しました: ' + e.message, 'err');
   } finally {
