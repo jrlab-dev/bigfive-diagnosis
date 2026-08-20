@@ -1,6 +1,6 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-08-17",
+  "_updated": "2026-08-21",
   "maxItems": 4,
   "groups": [
     {
@@ -94,6 +94,8 @@
         { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/diet-openness-high.html", "title": "飽き性の人のダイエットが続かない本当の理由" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/diet-openness-low.html", "title": "同じことを続けられる人が、ダイエットで一番やってはいけないこと" },
         { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/diet-agreeableness-low.html", "title": "自分流を曲げない人のダイエット　競争心を正しく使う方法" },
+        { "cond": [{ "f": "E", "max": 2 }, { "f": "O", "max": 2 }], "url": "/blog/indoor-outdoor-seikaku.html", "title": "インドア派・アウトドア派でわかる性格" },
+        { "cond": [{ "f": "O", "min": 4 }, { "f": "E", "min": 4 }], "url": "/blog/indoor-outdoor-seikaku.html", "title": "インドア派・アウトドア派でわかる性格" },
         { "cond": [], "url": "/blog/kyodai-seikaku-chigau.html", "title": "兄弟で性格が違うのはなぜ？" },
         { "cond": [], "url": "/blog/shumi-seikaku-type-guide.html", "title": "性格タイプ別・向いている趣味の見つけ方" },
         { "cond": [], "url": "/blog/shigoto-muki-fumuki.html", "title": "あなたに向いている仕事・向いていない仕事" }
