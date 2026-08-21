@@ -107,8 +107,9 @@ function calcScore(version, answers, questions) {
       const q2 = questions[i2];
       const v1 = a1;
       const v2 = q2.dir === '-' ? (6 - a2) : a2;
+      // quiz.html の toLevel3 と同じ＝平均2.5未満→1／3.5未満→3／それ以上→5（2026-08-21統一）
       const avg = (v1 + v2) / 2;
-      scores[f] = avg <= 2.4 ? 1 : avg <= 3.5 ? 3 : 5;
+      scores[f] = avg < 2.5 ? 1 : avg < 3.5 ? 3 : 5;
     }
     return { O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
              code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}` };

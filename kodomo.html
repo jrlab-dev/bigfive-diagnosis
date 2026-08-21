@@ -862,6 +862,18 @@ document.getElementById('quizBackBtn').addEventListener('click', () => {
 });
 
 // ===== スコア計算 =====
+
+/* 1問あたりの平均から1・3・5の3段階に丸める（2026-08-21・quiz.html と同じ方式に統一）
+ * 境目 2.5/3.5 は、5段階に切ってから marume243 の丸め規則(1,2→1／3→3／4,5→5)を
+ * 当てるのと完全に同じ位置。
+ * ⚠️旧版は 1問あたり 1.67/3.33（0点を起点に3等分）だった。最低点は0ではなく1なので、
+ *   ほぼ全問を最低評価にしないと「1」にならない状態だった。6問なら「1」の上限が10→14に変わる。
+ *   経緯＝_private/plans/【要調査】スコアの5段階の切り方_2026-08-21.md */
+function toLevel3(sum, n) {
+  const v = sum / n;
+  return v < 2.5 ? 1 : v < 3.5 ? 3 : 5;
+}
+
 function calcScores() {
   const fm = { E:[], A:[], C:[], N:[], O:[] };
   activeQuestions.forEach((q, i) => {
@@ -871,8 +883,7 @@ function calcScores() {
   });
   const sc = {};
   for (const [f, vals] of Object.entries(fm)) {
-    const sum = vals.reduce((a, b) => a + b, 0);
-    sc[f] = sum <= 10 ? 1 : sum <= 20 ? 3 : 5;
+    sc[f] = toLevel3(vals.reduce((a, b) => a + b, 0), vals.length);
   }
   return sc;
 }
