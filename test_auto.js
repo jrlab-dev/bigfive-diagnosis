@@ -121,11 +121,9 @@ function calcScore(version, answers, questions) {
     const scores = {};
     for (const [f, vals] of Object.entries(factorMap)) {
       const sum = vals.reduce((a, b) => a + b, 0);
-      if (version === '120') {
-        scores[f] = sum <= 44 ? 1 : sum <= 64 ? 2 : sum <= 92 ? 3 : sum <= 112 ? 4 : 5;
-      } else {
-        scores[f] = sum <= 11 ? 1 : sum <= 16 ? 2 : sum <= 23 ? 3 : sum <= 28 ? 4 : 5;
-      }
+      // quiz.html の toLevel と同じ＝1問あたりの平均を四捨五入（2026-08-21統一）
+      const v = sum / vals.length;
+      scores[f] = v < 1.5 ? 1 : v < 2.5 ? 2 : v < 3.5 ? 3 : v < 4.5 ? 4 : 5;
     }
     return { O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
              code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}` };
@@ -324,8 +322,10 @@ function buildAnswers120(targetScores) {
   const factorIndices = { N: [], E: [], O: [], A: [], C: [] };
   questions120.forEach((q, i) => factorIndices[q.factor].push(i));
 
+  // 各段階の上限（2026-08-21の是正後＝1問あたりの平均を四捨五入する区切り）
+  //   1: 24〜35 ／ 2: 36〜59 ／ 3: 60〜83 ／ 4: 84〜107 ／ 5: 108〜120
   const thresholds120 = [
-    [44, 1], [64, 2], [92, 3], [112, 4], [Infinity, 5]
+    [35, 1], [59, 2], [83, 3], [107, 4], [Infinity, 5]
   ];
 
   for (const [factor, target] of Object.entries(targetScores)) {

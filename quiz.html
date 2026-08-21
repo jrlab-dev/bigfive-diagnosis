@@ -642,6 +642,22 @@ backBtn.addEventListener('click', () => {
   if (current > 0) { current--; render(); }
 });
 
+/* 素点を1〜5の段階に直す（2026-08-21・全診断で共通の方式に統一）
+ *
+ * 1問あたりの平均を四捨五入する＝回答の意味とそのまま対応する。
+ *   例）平均3.5以上4.5未満＝おおむね「あてはまる(4)」と答えた人 → 4
+ * hexaco.html と同じ方式。問数が変わっても壊れない。
+ *
+ * ⚠️旧版の区切り（120問版 44/64/92/112・30問版 11/16/23/28）は、素点の幅を
+ *   20/40/70/90%の位置で切ったものだった。これは「人の何%か（パーセンタイル）」で
+ *   切るつもりの数字を「点数の幅の何%か」に当てはめた取り違えで、その結果
+ *   「5」は24問中17問以上を最高評価にしないと届かない位置にあった。
+ *   経緯＝_private/plans/【要調査】スコアの5段階の切り方_2026-08-21.md */
+function toLevel(sum, n) {
+  const v = sum / n;
+  return v < 1.5 ? 1 : v < 2.5 ? 2 : v < 3.5 ? 3 : v < 4.5 ? 4 : 5;
+}
+
 // ===== スコア計算 =====
 function calcScore() {
   if (version === '10') {
@@ -661,7 +677,7 @@ function calcScore() {
       code: `${scores.O}${scores.C}${scores.E}${scores.A}${scores.N}`
     };
   } else if (version === '120') {
-    // 120問版：各因子24問、合計→5段階（30問版と比例的な閾値）
+    // 120問版：各因子24問、合計→5段階（1問あたりの平均を四捨五入＝36/60/84/108が切れ目）
     const factorMap = { E: [], A: [], C: [], N: [], O: [] };
     questions.forEach((q, i) => {
       const val = q.dir === '-' ? (6 - answers[i]) : answers[i];
@@ -670,8 +686,7 @@ function calcScore() {
     const scores = {};
     for (const [f, vals] of Object.entries(factorMap)) {
       const sum = vals.reduce((a, b) => a + b, 0);
-      // 24問×5段階=合計24〜120、平均ベースで30問版と同じ閾値
-      scores[f] = sum <= 44 ? 1 : sum <= 64 ? 2 : sum <= 92 ? 3 : sum <= 112 ? 4 : 5;
+      scores[f] = toLevel(sum, vals.length);
     }
     // ファセットスコア（30ファセット、各4問、q.facetをキーに集計）
     const facetOrder = ['N1','N2','N3','N4','N5','N6','E1','E2','E3','E4','E5','E6','O1','O2','O3','O4','O5','O6','A1','A2','A3','A4','A5','A6','C1','C2','C3','C4','C5','C6'];
@@ -683,7 +698,7 @@ function calcScore() {
     });
     const facetScores = facetOrder.map(fk => {
       const sum = facetMap[fk].reduce((a, b) => a + b, 0);
-      return sum <= 8 ? 1 : sum <= 11 ? 2 : sum <= 14 ? 3 : sum <= 17 ? 4 : 5;
+      return toLevel(sum, facetMap[fk].length);
     });
     return {
       O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
@@ -691,7 +706,7 @@ function calcScore() {
       facets: facetScores.join('')
     };
   } else {
-    // 30問版：各因子6問、合計→5段階
+    // 30問版：各因子6問、合計→5段階（1問あたりの平均を四捨五入＝9/15/21/27が切れ目）
     const factorMap = { E: [], A: [], C: [], N: [], O: [] };
     questions.forEach((q, i) => {
       const val = q.dir === '-' ? (6 - answers[i]) : answers[i];
@@ -700,7 +715,7 @@ function calcScore() {
     const scores = {};
     for (const [f, vals] of Object.entries(factorMap)) {
       const sum = vals.reduce((a, b) => a + b, 0);
-      scores[f] = sum <= 11 ? 1 : sum <= 16 ? 2 : sum <= 23 ? 3 : sum <= 28 ? 4 : 5;
+      scores[f] = toLevel(sum, vals.length);
     }
     return {
       O: scores.O, C: scores.C, E: scores.E, A: scores.A, N: scores.N,
