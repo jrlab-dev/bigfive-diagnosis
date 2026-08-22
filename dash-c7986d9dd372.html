@@ -360,6 +360,27 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
 // 「昨日の朝までの数字」しか見られない＝今日ぶんが丸ごと見えなかった（2026-08-14に追加）
 var STATE = { dates:[], counters:{}, series:{}, chartKey:'result_view', stats:null, statsAt:null };
 
+/* ★2026-08-22：result_view の送信を止めたので、ここで作り直す（準也さん判断）
+ * 何をしたか＝結果ページは1回の表示につき result_view と result_view_new/return の
+ *   両方を書いていた（＝二重書き込み）。保管場所（KV）の書き込み枠が1日1,000回に対し
+ *   8/18に804回まで達したため、重複していた result_view の送信だけを止めた。
+ * なぜ数字が失われないか＝result_view ＝ new + return が実測で成立していた
+ *   （14日間で11日が完全一致・残り3日も1件差）。だから足せば元に戻る。
+ * RV_OFFSET＝new/return を数え始めたのは2026-07-16で、result_view はそれ以前から
+ *   動いていた。その差分（8/22時点で603）を足すと累計もつながる。
+ * RV_FREEZE より前の日は、実測の result_view をそのまま使う（過去は一切いじらない）。
+ * ⚠️この2つの定数は動かさないこと。動かすと過去のグラフが上下にずれる。 */
+var RV_OFFSET = 603;
+var RV_FREEZE = '2026-08-22';
+function restoreResultView(){
+  var nw = STATE.counters['result_view_new'], rt = STATE.counters['result_view_return'];
+  var rv = STATE.counters['result_view'];
+  if (!nw || !rt || !rv) return;
+  STATE.dates.forEach(function(d, i){
+    if (d > RV_FREEZE && nw[i] != null && rt[i] != null) rv[i] = RV_OFFSET + nw[i] + rt[i];
+  });
+}
+
 // その項目の日本語名（合成指標の __quiz_all も引けるようにする）
 function labelOf(key){
   if (key === '__quiz_all') return '診断の完走（10問＋30問＋120問）';
@@ -753,7 +774,13 @@ function loadStats(){
   return fetch(API_STATS, {cache:'no-store'})
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(s){
-      if (s && typeof s === 'object'){ STATE.stats = s; STATE.statsAt = Date.now(); }
+      if (s && typeof s === 'object'){
+        // ★2026-08-22：result_view は送信を止めたので、今の累計も new+return から作り直す
+        if (s['result_view_new'] != null && s['result_view_return'] != null){
+          s['result_view'] = RV_OFFSET + s['result_view_new'] + s['result_view_return'];
+        }
+        STATE.stats = s; STATE.statsAt = Date.now();
+      }
     })
     .catch(function(){ /* 無くても平常運転 */ });
 }
@@ -785,6 +812,7 @@ function loadDaily(){
         STATE.counters = nc;
         STATE.dates = filled;
       }
+      restoreResultView();   // ★2026-08-22：止めた result_view を new+return から作り直す
       // 使う指標ぶんの日別データを先に作っておく
       var keys = {};
       CHART_ITEMS.concat(TILES).forEach(function(t){ keys[t.key] = 1; });
