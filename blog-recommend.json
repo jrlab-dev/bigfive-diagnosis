@@ -1,6 +1,6 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-08-21",
+  "_updated": "2026-08-22",
   "maxItems": 4,
   "groups": [
     {
@@ -31,6 +31,7 @@
         { "cond": [{ "f": "C", "max": 2 }, { "f": "O", "min": 4 }], "url": "/blog/akippoi-seikaku.html", "title": "何をやっても続かない・落ち着かない人の正体" },
         { "cond": [{ "f": "C", "max": 2 }, { "f": "N", "min": 4 }], "url": "/blog/nige-guse.html", "title": "逃げ癖がある人の心理" },
         { "cond": [{ "f": "A", "min": 4 }, { "f": "E", "min": 4 }], "url": "/blog/happo-bijin.html", "title": "八方美人な人の心理" },
+        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/warukunai-noni-ayamaru.html", "title": "悪くないのに謝ってしまう人" },
         { "cond": [{ "f": "A", "max": 2 }, { "f": "O", "max": 2 }], "url": "/blog/ganko-hito.html", "title": "「頑固な人」の心理　なぜ人の意見を聞き入れられないのか" },
         { "cond": [{ "f": "E", "min": 4 }, { "f": "N", "min": 4 }], "url": "/blog/homaretai-seikaku.html", "title": "褒められたい・認められたい欲が強いのは性格？" },
         { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/hitori-hanseikai.html", "title": "夜の「ひとり反省会」がやめられない" },
