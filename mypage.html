@@ -644,6 +644,16 @@
   }
   .ai-copy-btn:hover { opacity: .9; }
   .ai-copy-btn.copied { background: linear-gradient(135deg, #10b981, #059669); }
+  /* 2026-08-23：指示文なしの出口。★3択の列には並べない（4択にすると迷って手が止まる）。
+     用途が違う人だけが見つければいい小さな出口なので、主ボタンより弱く見せる */
+  .ai-raw-copy {
+    display: block; width: 100%; margin-top: 8px; padding: 7px 4px;
+    background: none; border: none; color: var(--dim);
+    font-size: 12px; font-family: inherit; text-decoration: underline;
+    text-underline-offset: 3px; cursor: pointer; transition: color .2s;
+  }
+  .ai-raw-copy:hover { color: var(--purple); }
+  .ai-raw-copy.copied { color: #10b981; text-decoration: none; }
   .ai-mode-choice { margin-bottom: 12px; }
   .ai-mode-title { font-size: 12px; font-weight: 700; color: var(--dim); margin: 0 0 8px; }
   .ai-mode-btns { display: flex; flex-direction: column; gap: 6px; }
@@ -1596,6 +1606,9 @@
       </div>
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
+      <!-- 2026-08-23：指示文を一切つけない出口（準也さん発案）。相談用の指示が邪魔になる使い方
+           （AIのメモリに入れておく・自己分析・キャラ設定など）と、指示文の賞味期限への備え -->
+      <button type="button" class="ai-raw-copy" id="aiRawCopyBtn">指示なしで、データだけコピー</button>
       <div id="aiAfterLinks" style="display:none; text-align:center; font-size:13px; margin-top:10px; line-height:2;">
         コピーできました。AIを開いて、貼り付けて送信してください：<br>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Geminiを開く ↗</a>
@@ -3367,6 +3380,11 @@ function renderAIProfile() {
     } catch(e) {}
   }
 
+  // 2026-08-23：ここまでが「診断データそのもの」。この時点で確保しておく。
+  // 下の未受診リストは「相談の流れで勧めてください」という指示を含むので、
+  // 指示なしコピー（ai_profile_copy_raw）には入れない＝「何もついていない」を守る。
+  const aiProfileData = lines.join('\n');
+
   // 未受診の診断リスト（AIが相談の流れで必要なときだけ勧められるように）
   const untaken = [];
   if (!bf) untaken.push('ビッグファイブ性格診断: 性格の全体像（5つの因子）が分かる');
@@ -3421,6 +3439,42 @@ function renderAIProfile() {
       btn.classList.add('copied');
       showAiLinks();
       setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
+    });
+  };
+
+  // 指示文を一切つけず、診断データだけをコピーする出口（2026-08-23・準也さん発案）
+  // ★カウンターは合算(ai_profile_copy)にも足す＝8/1からの蓄積を切らさない
+  //   （8/18の準也さん裁定「今までの蓄積を断絶してしまうのはダメ」と同じ扱い）。
+  //   内訳は ai_profile_copy_raw で見る（result_ai_click / result_ai_click_top と同じ方式）
+  const rawBtn = document.getElementById('aiRawCopyBtn');
+  if (rawBtn) rawBtn.onclick = function() {
+    if (rawBtn.classList.contains('copied')) return;
+    sendCount('ai_profile_copy');
+    sendCount('ai_profile_copy_raw');
+    const done = function() {
+      rawBtn.textContent = 'コピーしました ✓（指示なし）';
+      rawBtn.classList.add('copied');
+      const el = document.getElementById('aiAfterLinks');
+      if (el) el.style.display = 'block';
+      setTimeout(function() {
+        rawBtn.textContent = '指示なしで、データだけコピー';
+        rawBtn.classList.remove('copied');
+      }, 2000);
+    };
+    navigator.clipboard.writeText(aiProfileData).then(done).catch(function() {
+      // clipboard APIが使えない端末用。表示中のtextareaは指示文つきなので、
+      // 一時的な入れ物を作ってそちらをコピーする（画面の中身は変えない）
+      const tmp = document.createElement('textarea');
+      tmp.value = aiProfileData;
+      tmp.setAttribute('readonly', '');
+      tmp.style.position = 'fixed';
+      tmp.style.top = '-1000px';
+      tmp.style.opacity = '0';
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(tmp);
+      done();
     });
   };
 
