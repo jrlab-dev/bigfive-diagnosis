@@ -644,16 +644,17 @@
   }
   .ai-copy-btn:hover { opacity: .9; }
   .ai-copy-btn.copied { background: linear-gradient(135deg, #10b981, #059669); }
-  /* 2026-08-23：指示文なしの出口。★3択の列には並べない（4択にすると迷って手が止まる）。
-     用途が違う人だけが見つければいい小さな出口なので、主ボタンより弱く見せる */
-  .ai-raw-copy {
-    display: block; width: 100%; margin-top: 8px; padding: 7px 4px;
-    background: none; border: none; color: var(--dim);
-    font-size: 12px; font-family: inherit; text-decoration: underline;
-    text-underline-offset: 3px; cursor: pointer; transition: color .2s;
+  /* 2026-08-23：話し方の指定は折りたたみへ（既定＝指示なし）。
+     画面から指示関係のものを消し、必要な人だけ開く形にする */
+  .ai-mode-details { margin-bottom: 12px; }
+  .ai-mode-summary {
+    font-size: 12px; color: var(--dim); cursor: pointer; padding: 6px 2px;
+    list-style: none; user-select: none;
   }
-  .ai-raw-copy:hover { color: var(--purple); }
-  .ai-raw-copy.copied { color: #10b981; text-decoration: none; }
+  .ai-mode-summary::-webkit-details-marker { display: none; }
+  .ai-mode-summary::before { content: '▸ '; }
+  .ai-mode-details[open] .ai-mode-summary::before { content: '▾ '; }
+  .ai-mode-summary:hover { color: var(--purple); }
   .ai-mode-choice { margin-bottom: 12px; }
   .ai-mode-title { font-size: 12px; font-weight: 700; color: var(--dim); margin: 0 0 8px; }
   .ai-mode-btns { display: flex; flex-direction: column; gap: 6px; }
@@ -1593,22 +1594,29 @@
         <p style="font-size:12px; font-weight:700; color:#a78bfa; margin:0 0 8px;">使うと、こんな会話ができます（例）</p>
         <p style="font-size:12px; color:var(--dim); margin:0 0 6px;">🙂 あなた：（プロフィールを貼り付けて）職場の人間関係について相談したいです</p>
         <p style="font-size:12px; margin:0 0 6px; background:rgba(139,92,246,0.08); border-radius:8px; padding:8px 10px; line-height:1.7;">🤖 AI：それは気が張りますね。協調性が高く、感受性も高めなので、相手の機嫌を先に察してしまって、そのぶん疲れがたまりやすいのだと思います。無理に距離を詰めようとせず、返事を一拍おくだけでもずいぶん違います。差し支えなければ、いちばん気をつかうのはどんな場面ですか。</p>
-        <p style="font-size:11px; color:var(--dim); margin:0;">→ 話を聞いたうえで、考えも返してくれます。「まず聞いてほしい」「答えがほしい」も下のボタンで選べます。</p>
+        <p style="font-size:11px; color:var(--dim); margin:0;">→ 指示は付けず、あなたのデータだけを渡します。AIが自分で読み取って話しかけてきます。</p>
       </div>
-      <div class="ai-mode-choice" id="aiModeChoice">
-        <p class="ai-mode-title">AIにどう相談したいですか</p>
-        <div class="ai-mode-btns">
-          <button type="button" class="ai-mode-btn" data-mode="listen">まず聞いてほしい</button>
-          <button type="button" class="ai-mode-btn on" data-mode="both">聞いたうえで、考えも聞きたい（おすすめ）</button>
-          <button type="button" class="ai-mode-btn" data-mode="answer">答えがほしい</button>
+      <!-- 2026-08-23：既定を「指示なし」に変えた（準也さん判断）。
+           きっかけ＝GPT・Claude・Geminiの3つに素のデータだけを貼って試したところ、
+           3つとも言われずに「仮説を1つ出して、当たっているか本人に聞く」に自力で着地した。
+           ＝指示文が担っていた仕事をAI側がやるようになった＝当て木の役目が終わりつつある。
+           準也さん「昔やった時と比べてちゃんとやってくれてる感がある。あれこれ指示書かない方がいい」。
+           ★3択は捨てずに折りたたみへ。話し方を指定したい人（せっかちな人・まず聞いてほしい人）の
+             逃げ道は残す。どちらが選ばれるかは ai_profile_copy_raw ÷ ai_profile_copy で測る -->
+      <details class="ai-mode-details">
+        <summary class="ai-mode-summary">AIへの話し方を指定する（ふつうは不要）</summary>
+        <div class="ai-mode-choice" id="aiModeChoice">
+          <div class="ai-mode-btns">
+            <button type="button" class="ai-mode-btn on" data-mode="none">指示なし（そのまま渡す）</button>
+            <button type="button" class="ai-mode-btn" data-mode="listen">まず聞いてほしい</button>
+            <button type="button" class="ai-mode-btn" data-mode="both">聞いたうえで、考えも聞きたい</button>
+            <button type="button" class="ai-mode-btn" data-mode="answer">答えがほしい</button>
+          </div>
+          <p class="ai-mode-note">会話の途中でも「聞くだけでいい」「答えがほしい」と言えば切り替わります。</p>
         </div>
-        <p class="ai-mode-note">会話の途中でも「聞くだけでいい」「答えがほしい」と言えば切り替わります。</p>
-      </div>
+      </details>
       <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
-      <!-- 2026-08-23：指示文を一切つけない出口（準也さん発案）。相談用の指示が邪魔になる使い方
-           （AIのメモリに入れておく・自己分析・キャラ設定など）と、指示文の賞味期限への備え -->
-      <button type="button" class="ai-raw-copy" id="aiRawCopyBtn">指示なしで、データだけコピー</button>
       <div id="aiAfterLinks" style="display:none; text-align:center; font-size:13px; margin-top:10px; line-height:2;">
         コピーできました。AIを開いて、貼り付けて送信してください：<br>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Geminiを開く ↗</a>
@@ -3407,10 +3415,14 @@ function renderAIProfile() {
   }
 
   const aiProfileBody = lines.join('\n');
+  // 2026-08-23：既定は 'none'＝指示を一切つけず、診断データだけを渡す（準也さん判断）。
+  // 'none' は AI_MODE_LINE に無いので、妥当性チェックで明示的に通す必要がある
+  let currentAiMode = 'none';
   function applyAiMode(mode) {
-    if (!AI_MODE_LINE[mode]) mode = 'both';
+    if (mode !== 'none' && !AI_MODE_LINE[mode]) mode = 'none';
+    currentAiMode = mode;
     try { localStorage.setItem('bigfive_ai_mode', mode); } catch (e) {}
-    textarea.value = aiHeaderFor(mode) + aiProfileBody;
+    textarea.value = (mode === 'none') ? aiProfileData : aiHeaderFor(mode) + aiProfileBody;
     document.querySelectorAll('#aiModeChoice .ai-mode-btn').forEach(function(b) {
       b.classList.toggle('on', b.getAttribute('data-mode') === mode);
     });
@@ -3418,14 +3430,17 @@ function renderAIProfile() {
   document.querySelectorAll('#aiModeChoice .ai-mode-btn').forEach(function(b) {
     b.onclick = function() { applyAiMode(b.getAttribute('data-mode')); };
   });
-  let savedAiMode = 'both';
-  try { savedAiMode = localStorage.getItem('bigfive_ai_mode') || 'both'; } catch (e) {}
+  // ★過去に自分で話し方を選んだ人は、その設定を尊重する（勝手に指示なしへ戻さない）
+  let savedAiMode = 'none';
+  try { savedAiMode = localStorage.getItem('bigfive_ai_mode') || 'none'; } catch (e) {}
   applyAiMode(savedAiMode);
 
   // コピー機能（onclickで重複登録を防ぐ）
   document.getElementById('aiCopyBtn').onclick = function() {
     const btn = this;
     sendCount('ai_profile_copy');
+    // 内訳＝指示を一切つけずに渡した回数（2026-08-23）。合算との比で「指示なしで足りているか」を見る
+    if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
     const showAiLinks = function() { const el = document.getElementById('aiAfterLinks'); if (el) el.style.display = 'block'; };
     navigator.clipboard.writeText(textarea.value).then(() => {
       btn.textContent = 'コピーしました ✓';
@@ -3442,48 +3457,13 @@ function renderAIProfile() {
     });
   };
 
-  // 指示文を一切つけず、診断データだけをコピーする出口（2026-08-23・準也さん発案）
-  // ★カウンターは合算(ai_profile_copy)にも足す＝8/1からの蓄積を切らさない
-  //   （8/18の準也さん裁定「今までの蓄積を断絶してしまうのはダメ」と同じ扱い）。
-  //   内訳は ai_profile_copy_raw で見る（result_ai_click / result_ai_click_top と同じ方式）
-  const rawBtn = document.getElementById('aiRawCopyBtn');
-  if (rawBtn) rawBtn.onclick = function() {
-    if (rawBtn.classList.contains('copied')) return;
-    sendCount('ai_profile_copy');
-    sendCount('ai_profile_copy_raw');
-    const done = function() {
-      rawBtn.textContent = 'コピーしました ✓（指示なし）';
-      rawBtn.classList.add('copied');
-      const el = document.getElementById('aiAfterLinks');
-      if (el) el.style.display = 'block';
-      setTimeout(function() {
-        rawBtn.textContent = '指示なしで、データだけコピー';
-        rawBtn.classList.remove('copied');
-      }, 2000);
-    };
-    navigator.clipboard.writeText(aiProfileData).then(done).catch(function() {
-      // clipboard APIが使えない端末用。表示中のtextareaは指示文つきなので、
-      // 一時的な入れ物を作ってそちらをコピーする（画面の中身は変えない）
-      const tmp = document.createElement('textarea');
-      tmp.value = aiProfileData;
-      tmp.setAttribute('readonly', '');
-      tmp.style.position = 'fixed';
-      tmp.style.top = '-1000px';
-      tmp.style.opacity = '0';
-      document.body.appendChild(tmp);
-      tmp.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(tmp);
-      done();
-    });
-  };
-
   // 質問例タップで「プロフィール＋質問」をまとめてコピー（onclickで重複登録を防ぐ）
   document.querySelectorAll('.ai-examples li.ai-ex').forEach(function(li) {
     const q = li.textContent.trim();
     li.onclick = function() {
       if (li.classList.contains('excopied')) return;
       sendCount('ai_profile_copy');
+      if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
       const combined = textarea.value + '\n\n【相談したいこと】\n' + q;
       const done = function() {
         li.textContent = '✓ コピーしました！AIに貼り付けてください';
