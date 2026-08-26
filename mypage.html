@@ -2413,8 +2413,25 @@ function renderBadges() {
 // ===== コレクター順位（2026-08-19追加）=====
 // GET /api/rank?id=<同期ID> の listed/rank/cards/above/min_cards を見せて「次に集める理由」を作る。
 // ★total（載っている人数）だけは絶対に表示しない（参加者が少ない現状が分かってしまうため・準也さん指示 2026-08-19）
+//
+// 🚧 2026-08-27：表示だけを止めている（準也さん判断・実施日は8/27、仕掛けを作ったのは8/25）
+//    なぜ＝載っているのが14人しかいない。準也さんの言葉＝「大した人じゃないんで隠しましょう。
+//         隠せなくなる方が増えていく方が大変ですね」＝人数が育ってから出したい、という判断。
+//    ★戻し方＝下の RANK_UI を true にするだけ。コードは1行も消していない。
+//    ★止めている間も枚数は溜め続ける（下の loadCollectorRank の「静かな反映」を残してある）。
+//      これをやめると、復活したとき2026-08-27の古い数字から再開になる。
+//    ★戻す目安＝順位に載る人が増えて、順位が毎週動くようになったとき（準也さん「また人数が増えてきたら出す」）。
+//      止めた時点の中身は `_private/【引き継ぎ】履歴.md` の 2026-08-27 の節に控えてある
+//      （14人・1位166枚〜14位23枚・合計878枚）。
+//    ⚠️同じ人が2行に載っている疑いがある（101枚・57枚・50枚が2人ずつ）。
+//      原因＝復元しても同期IDを引き継がない作り（SYNC_EXCLUDE_KEYS に bigfive_sync_id）。
+//      復活させるときは、そこも直すこと。詳細は履歴の2026-08-27「二重カウント」節。
+const RANK_UI = false;
+
 const RANK_API_URL = 'https://bigfive.jr-genius.jp/api/rank';
-const RANK_BANNER_SHELL = '<div class="report-banner" id="collectorRankBanner"></div>';
+// RANK_UI が false のときは空文字＝バナーの入れ物ごと作らない。
+// renderCollectorRank は入れ物が無ければ何もしないので、これだけで表示が消える。
+const RANK_BANNER_SHELL = RANK_UI ? '<div class="report-banner" id="collectorRankBanner"></div>' : '';
 let _rankJson = null;   // APIの返り値（1回のページ表示で1回だけ取りに行く）
 let _rankDone = false;
 
@@ -2546,6 +2563,8 @@ function loadCollectorRank() {
   const syncId = localStorage.getItem(SYNC_ID_KEY);
   if (!syncId) {
     // まだ保存していない人には「いま保存すると何位か」だけ聞く（IDは送らない＝個人のデータは渡さない）
+    // 🚧2026-08-25：表示を止めている間は、見せるためだけの問い合わせをしない（下の「静かな反映」は残す）
+    if (!RANK_UI) return;
     const myCards = myAlbumCount();
     if (myCards < 20) return;   // 20枚未満は聞くだけ無駄（そもそも載れない）
     _rankDone = true;
@@ -2563,6 +2582,9 @@ function loadCollectorRank() {
       renderCollectorRank(json);
       // ★一度でも保存したことがある人は、集めたぶんを黙って反映する（本人は何もしなくていい・2026-08-21）。
       //   保存を選んだ人だけが対象。差が無いときは通信しない。
+      // 🚧2026-08-25：★ここは RANK_UI が false でも動かし続ける（意図的）。
+      //    表示を止めている間も枚数を溜めておくため。ここを止めると、順位を復活させたときに
+      //    2026-08-25 の古い数字（1位166枚〜13位23枚・13人）から再開になってしまう。
       if (myAlbumCount() > (json.cards || 0)) runRankSync(true);
     })
     .catch(function() {
@@ -3435,12 +3457,34 @@ function renderAIProfile() {
   try { savedAiMode = localStorage.getItem('bigfive_ai_mode') || 'none'; } catch (e) {}
   applyAiMode(savedAiMode);
 
+  /* ★2026-08-27追加：コピーを「何人が」したのかも数える（準也さん判断）
+   *
+   * なぜ＝カウンター（sendCount）は回数しか数えていない。
+   *   GO条件「コピー30件以上・率15%以上」は本来「十分な人数が欲しがっているか」を測る線なのに、
+   *   1人が20回押しても20件になるため、いまの数字では判定できない。
+   *   （例＝8/26のコピー22件が「20人が1回ずつ」か「2人が11回ずつ」かで判定は正反対になる）
+   *
+   * なぜGA4か＝GA4は同じイベントの「人数（totalUsers）」を自動で数えてくれる。
+   *   ★カウンター側（KVの無料枠1,000回/日）は一切増やさない。GA4は費用も枠も増えない。
+   *   2026-08-04に決めた「枠を使わない計測はGA4へ」の方針どおり。
+   *
+   * 見方＝GA4で eventName='ai_profile_copy' の eventCount（回数）と totalUsers（人数）を並べる。 */
+  function countCopyOnce(source) {
+    try {
+      if (window.gtag) gtag('event', 'ai_profile_copy', {
+        mode: currentAiMode || 'none',   // none＝指示なし（2026-08-23からの既定）
+        source: source,                  // button＝コピーボタン／example＝質問例タップ
+      });
+    } catch (e) {}
+  }
+
   // コピー機能（onclickで重複登録を防ぐ）
   document.getElementById('aiCopyBtn').onclick = function() {
     const btn = this;
     sendCount('ai_profile_copy');
     // 内訳＝指示を一切つけずに渡した回数（2026-08-23）。合算との比で「指示なしで足りているか」を見る
     if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
+    countCopyOnce('button');   // 人数を数えるため（2026-08-27）
     const showAiLinks = function() { const el = document.getElementById('aiAfterLinks'); if (el) el.style.display = 'block'; };
     navigator.clipboard.writeText(textarea.value).then(() => {
       btn.textContent = 'コピーしました ✓';
@@ -3464,6 +3508,7 @@ function renderAIProfile() {
       if (li.classList.contains('excopied')) return;
       sendCount('ai_profile_copy');
       if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
+      countCopyOnce('example');   // 人数を数えるため（2026-08-27）
       const combined = textarea.value + '\n\n【相談したいこと】\n' + q;
       const done = function() {
         li.textContent = '✓ コピーしました！AIに貼り付けてください';
