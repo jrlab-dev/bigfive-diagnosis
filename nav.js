@@ -413,3 +413,56 @@ body { padding-top: 52px !important; }
   // 表示をブロックしないよう遅延実行
   setTimeout(send, 3000);
 })();
+
+/* ===== ブログの「診断を受ける」ボタンのクリックを数える（2026-08-27追加）=====
+ *
+ * なぜ＝ブログ着地414のうち start.html まで来るのは12（2.9%）しかない。
+ *   原因を切り分けたいが、start.html 到達だけを見ていると
+ *   「どのボタンが押されたか」「どの文言が効いたか」が分からない。
+ *   ★転換率で判定しようとすると各群708セッション＝3か月かかる（2026-08-27に試算）。
+ *     ボタン自体のクリックを数えれば、2週間で答えが出る。
+ *
+ * 何を送るか＝GA4イベント blog_cta_click
+ *   pos     … bottom（記事のいちばん下・いまの1か所）／ mid（記事の途中・これから足す）
+ *   variant … self（いまの「診断を受ける」系）／ compat（「あの人との相性を見る」系・A案）
+ *   slug    … どの記事か
+ *   ★属性が無いときは bottom / self として数える＝既存246本は1本も編集せずに数え始められる。
+ *     文言や位置を変えるときに data-cta-pos / data-cta-variant を足せばよい。
+ *
+ * ★カウンター（KVの無料枠1,000回/日）は使わない。GA4は費用も枠も増えない
+ *   （2026-08-04に決めた「枠を使わない計測はGA4へ」の方針どおり）。
+ * ★ブログ配下だけで動かす（cta-btn はトップ・FAQ・科学的根拠でも使われているため）。 */
+(function () {
+  try {
+    if (location.pathname.indexOf('/blog/') === -1) return;
+
+    var slug = (location.pathname.split('/').pop() || '').replace('.html', '');
+
+    function bind() {
+      var btns = document.querySelectorAll('a.cta-btn');
+      for (var i = 0; i < btns.length; i++) {
+        (function (a) {
+          if (a.getAttribute('data-cta-bound') === '1') return;   // 二重登録よけ
+          a.setAttribute('data-cta-bound', '1');
+          a.addEventListener('click', function () {
+            try {
+              if (window.gtag) window.gtag('event', 'blog_cta_click', {
+                pos: a.getAttribute('data-cta-pos') || 'bottom',
+                variant: a.getAttribute('data-cta-variant') || 'self',
+                slug: slug
+              });
+            } catch (e) {}
+          });
+        })(btns[i]);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bind);
+    } else {
+      bind();
+    }
+  } catch (e) {
+    // 計測の失敗でページを壊さない
+  }
+})();
