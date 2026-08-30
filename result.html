@@ -831,6 +831,109 @@
     margin: 18px 0 12px; padding-top: 16px;
     border-top: 1px solid rgba(139,92,246,0.22);
   }
+
+  /* ═══ 30項目レポートの案内（2026-08-30 全面作り直し）═══
+     モーダルをやめてページ内セクションにした。既存の .paid-teaser-* は
+     試し読み部分でそのまま使い続けているので消していない。 */
+  .rep300 { display: none; flex-direction: column; gap: 10px; }
+  .rep300.show { display: flex; }
+
+  /* ── 30項目の目次（量を伝えるのが目的） ── */
+  .rep300-toc { display: flex; flex-direction: column; gap: 7px; margin-top: 4px; }
+  .rep300-toc-group { display: flex; align-items: baseline; gap: 8px; }
+  .rep300-toc-factor {
+    flex: 0 0 3.6em; font-size: 11px; font-weight: 700; color: var(--purple);
+    letter-spacing: .02em;
+  }
+  .rep300-toc-items { display: flex; flex-wrap: wrap; gap: 4px 6px; }
+  .rep300-toc-item {
+    font-size: 11.5px; line-height: 1.5; color: var(--text);
+    background: rgba(139,92,246,0.10); border: 1px solid rgba(139,92,246,0.16);
+    border-radius: 6px; padding: 2px 7px; white-space: nowrap;
+  }
+  /* 試し読みで選ばれた項目＝その人自身の項目を光らせる（「自分の話だ」と分かるように） */
+  .rep300-toc-item.is-mine {
+    color: var(--cyan); font-weight: 700;
+    background: rgba(34,211,238,0.13); border-color: rgba(34,211,238,0.34);
+  }
+  .rep300-toc-note {
+    font-size: 11.5px; color: var(--dim); line-height: 1.7; text-align: center;
+    margin: 6px 0 0;
+  }
+
+  /* ── 2つの道（集める／いま開く）── */
+  .rep300-ways {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 14px; padding-top: 16px;
+    border-top: 1px solid rgba(139,92,246,0.22);
+  }
+  .rep300-way {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 14px 10px 12px; border-radius: 10px; min-height: 152px;
+    background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.16);
+  }
+  .rep300-way-lead { font-size: 11px; color: var(--dim); line-height: 1.5; }
+  .rep300-way-big {
+    font-size: 21px; font-weight: 900; color: var(--text);
+    line-height: 1.3; margin: 2px 0 0; font-variant-numeric: tabular-nums;
+  }
+  .rep300-way-sub { font-size: 11px; color: var(--dim); line-height: 1.5; }
+  .rep300-way-btn {
+    margin-top: auto; padding-top: 9px; width: 100%; display: block; text-align: center;
+    font-size: 13px; font-weight: 700; padding: 9px 8px; border-radius: 8px;
+    border: 1px solid rgba(139,92,246,0.45); background: transparent;
+    color: var(--text); cursor: pointer; text-decoration: none;
+    font-family: inherit; transition: background .15s, border-color .15s;
+  }
+  .rep300-way-btn:hover { background: rgba(139,92,246,0.18); }
+  .rep300-way-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  /* 集めるほうを主役にする（準也さん＝「300枚集めてくれるなら、それの方が300円より私は嬉しい」） */
+  .rep300-way-btn-main {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border-color: transparent; color: #fff;
+  }
+  .rep300-way-btn-main:hover { filter: brightness(1.1); background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+
+  /* ── 無料の出口（小さく下に）── */
+  .rep300-alt { font-size: 11.5px; text-align: center; line-height: 1.7; margin: 10px 0 0; }
+  .rep300-alt a { color: var(--dim); text-decoration: underline; }
+
+  /* ── 押したあとのお礼 ── */
+  .rep300-thanks {
+    margin-top: 14px; padding: 16px 14px; border-radius: 10px;
+    background: rgba(34,211,238,0.09); border: 1px solid rgba(34,211,238,0.22);
+    text-align: center;
+  }
+  .rep300-thanks-title { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
+  .rep300-thanks-text { font-size: 12.5px; line-height: 1.95; color: var(--text); margin: 0; }
+  .rep300-thanks-text span { display: inline-block; }
+
+  /* ── レポートを開く ── */
+  .rep300-open {
+    display: block; margin-top: 12px; text-align: center; text-decoration: none;
+    font-size: 14px; font-weight: 700; padding: 12px; border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff;
+  }
+  .rep300-open:hover { filter: brightness(1.1); }
+
+  /* 明るいテーマ */
+  body.theme-light .rep300-toc-item { color: #334155; background: rgba(139,92,246,0.08); }
+  body.theme-light .rep300-toc-item.is-mine { color: #0369a1; background: rgba(34,211,238,0.14); }
+  body.theme-light .rep300-toc-note,
+  body.theme-light .rep300-way-lead,
+  body.theme-light .rep300-way-sub { color: #64748b; }
+  body.theme-light .rep300-way-big,
+  body.theme-light .rep300-thanks-title,
+  body.theme-light .rep300-thanks-text { color: #1e293b; }
+  body.theme-light .rep300-way-btn { color: #1e293b; }
+  body.theme-light .rep300-way-btn-main { color: #fff; }
+  body.theme-light .rep300-alt a { color: #64748b; }
+
+  /* 画面が狭いときは2つの道を縦に積む */
+  @media (max-width: 360px) {
+    .rep300-ways { grid-template-columns: 1fr; }
+  }
+
   .paid-modal-price small { font-size: 12px; color: var(--dim); font-weight: 500; }
   body.theme-light .paid-modal-price { color: #1e293b; border-top-color: rgba(139,92,246,0.2); }
   /* その人自身の項目名を出す一行（2026-08-18） */
@@ -1309,9 +1412,25 @@
        ⚠ 「無料」と明かすのは購入操作のあと（準也さん裁定 7/31）。先に無料と言うと
          「タダなら読む」しか測れず、支払い意思が分からない。
        流れ＝試し読み「続きを全部読む」→ 案内1枚目「¥980・購入にすすむ」→ 2枚目「お支払い不要・開く」 -->
-  <div class="report-card paid-teaser" id="paidTeaser">
+  <!-- ═══ 30項目レポートの案内（2026-08-30 全面作り直し・準也さん決定）═══
+       ★モーダルをやめ、ページ内のセクションにした。
+         理由＝8/18に中身を改稿したのに3秒離脱が38%→52.5%と悪化した。
+         ＝中身の問題ではなく器の問題。モーダルは「閉じるためのUI」で、
+           出た瞬間に閉じるボタンを探される。100人中44人が3秒未満＝読んでいない。
+         セクションなら閉じるボタンが無く、読まない人は通り過ぎるだけ。
+       ★見せる順番＝①中身 → ②30項目の目次（量を伝える）→ ③そこで初めて2つの道。
+         値段は最後。いままでは「読む前に払え」だったので、原理的に支払い意思が測れなかった。
+       ★レポートは無料。カード300枚の機能開放にした。600円は「集めずにすぐ開く」逃げ道。
+         決済は入れない（準也さん＝「実際お金を払ってもらう仕組みを入れると私自身がマイナスを被る」）。
+       ★成功の判定は rep300_pay ではなく rep300_collect。
+         準也さん＝「300枚集めてくれるなら、それの方が300円より私は嬉しい」
+       全記録＝plans/【計画】30項目レポートを無料化して300枚で開放_2026-08-30.md -->
+  <div class="report-card rep300" id="rep300">
+
+    <!-- ① 中身から始める（値段も枚数も出さない） -->
     <p class="paid-teaser-title">あなたの性格を、30項目でくわしく</p>
     <p class="paid-teaser-sub">外向性など5つの性格を、それぞれ6つに分けた30項目で解説します</p>
+
     <div class="paid-teaser-quote" id="paidTeaserQuote" style="display:none;">
       <span class="paid-teaser-facet" id="paidTeaserFacet"></span>
       <p class="paid-teaser-text" id="paidTeaserText"></p>
@@ -1323,62 +1442,56 @@
       <p class="paid-teaser-text" id="paidTeaserCrossText"></p>
       <div class="paid-teaser-fade"></div>
     </div>
-    <button class="btn-paid" id="paidBtn">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-      </svg>
-      続きを全部読む
-    </button>
-    <p class="paid-note">30項目すべての解説（約1万字）＋心理学診断とのクロス分析</p>
-  </div>
 
-  <!-- 案内モーダル（1枚目＝値段と購入。2枚目＝ここで初めて無料と明かす） -->
-  <div class="paid-modal" id="paidModal">
-    <!-- 2026-08-18 改稿：値段を先頭から下げ、先に「何が手に入るか」を読ませる形にした。
-         ⚠️改稿前は「開いた瞬間に¥980が画面中央」で、到達60人中23人（38%）が3秒未満で離脱していた
-           ＝測れていたのは支払い意思ではなく「値段への反射」だった（2026-08-18の分析）。
-         ★カウンターの定義は一切変えていない（準也さん裁定 2026-08-18「今までの蓄積を断絶するのはダメ」）＝
-           paid_btn_click（分母）＝案内を開いた／paid_buy_click（分子）＝¥980を見て「購入にすすむ」を押した。
-           ボタンの文言も、値段を見てから押す流れもそのまま。だから8/1からの60件と同じものを数え続ける。
-         ★効果の見方＝paid_close_fast ÷ paid_btn_click（改稿前は38%）の低下。変更日は計測ノイズ記録に記載。 -->
-    <div class="paid-modal-inner" id="paidModalStep1">
-      <p class="paid-modal-title">いま見えているのは、5つだけです</p>
-      <p class="paid-modal-text">
-        <span>120問版は、</span><span>5つの性格の内側にある</span><span><b>30の項目</b>まで</span><span>測っています。</span><br>
-        <span>詳細レポートは、</span><span>その30項目ぜんぶに、</span><span>あなたの点数に合わせて</span><span>書いた解説です。</span><span>全部で約1万字。</span><br>
-        <span>愛着スタイルやHSPなどを</span><span>受けた方には、</span><span>かけ合わせの章も</span><span>つきます。</span>
-      </p>
-      <!-- その人自身の項目名を出す（試し読みが取れたときだけ・2026-08-18追加）。
-           汎用の説明で終わらせず「自分の話だ」と分かるようにする。中身は実物と同じ判定を使う -->
-      <p class="paid-modal-mine" id="paidModalMine" style="display:none;"></p>
-      <!-- サンプル＝見本の30桁（準也さん裁定7/31「見せないと買う人はいない」）。
-           1〜5の極端な点数を含まない組み合わせにして、尖った本文は晒さない。
-           ★2026-08-18に値段より前へ移動＝「中身を見てから決められる」と先に伝えるため -->
-      <a class="paid-sample-link" id="paidSampleLink" target="_blank" rel="noopener"
-         href="facet-report.html?facets=323423432434443243344324234323&sample=1">中身を見てから決められます（見本の点数で全文）</a>
-      <p class="paid-modal-price">¥980 <small>買い切り・追加料金なし</small></p>
-      <button class="paid-modal-open" id="paidBuyBtn">購入にすすむ</button>
-      <!-- 2026-08-09：¥980を見て閉じた人が、何も持たずに帰らないための無料の出口。
-           ここまで33人到達して購入0だが、その30人はサイトから何も得ずに離脱している。
-           ★¥980より小さく・下に置く（同じ大きさで並べると全員が無料を押して有料テストが壊れる） -->
-      <p class="paid-modal-alt">
-        無料で読めるものもあります。<br>
-        <a id="paidAltFree" href="report.html">これまでの診断をまとめた総合レポートを見る（無料）</a>
-      </p>
-      <button class="paid-modal-close" id="paidModalClose1">とじる</button>
+    <!-- ② 30項目の目次を全部見せる（2026-08-30新設）
+         ⚠️いままでは1項目だけ出してフェードさせていた＝「これだけ？」で終わっていた。
+           目次で量を伝えるのが狙い（準也さん＝「内訳とかサンプルはもちろん見せていく」）。
+         中身は facets.js の FACET_META（30項目の共通の正本）から作る。 -->
+    <div class="rep300-toc" id="rep300Toc"></div>
+    <p class="rep300-toc-note">この30項目すべてに、あなたの点数に合わせた解説がつきます（全部で約1万字）</p>
+
+    <!-- ③ そこで初めて2つの道（値段は最後） -->
+    <div class="rep300-ways" id="rep300Ways" style="display:none;">
+
+      <div class="rep300-way rep300-way-collect">
+        <p class="rep300-way-lead">カードを集めて開ける</p>
+        <p class="rep300-way-big" id="rep300Remain">あと300枚</p>
+        <p class="rep300-way-sub" id="rep300Have">いま0枚</p>
+        <a class="rep300-way-btn rep300-way-btn-main" id="rep300CollectBtn" href="gacha.html">集めに行く</a>
+      </div>
+
+      <div class="rep300-way rep300-way-pay">
+        <p class="rep300-way-lead">集めずに、いま開ける</p>
+        <p class="rep300-way-big">600円</p>
+        <button class="rep300-way-btn" id="rep300PayBtn">いま開く</button>
+      </div>
+
     </div>
-    <div class="paid-modal-inner" id="paidModalStep2" style="display:none;">
-      <span class="paid-modal-badge">公開記念</span>
-      <p class="paid-modal-title">ありがとうございます 🎉</p>
-      <p class="paid-modal-text">
-        <span>このレポートを手に取っていただき、</span><span>ありがとうございます。</span><br>
-        <span>公開記念につき、</span><span><b>今回は無料でお渡しします</b>。</span><span>お支払いは不要です。</span><br>
-        <span>30項目すべて、</span><span>あなたの点数に合わせて</span><span>書いた解説です。</span><br>
-        <span>どうぞゆっくりお読みください。</span>
+
+    <!-- 無料の出口（2026-08-09新設・小さく下に置く）
+         ⚠️同じ大きさで並べると全員がこちらを押して、上の2つが測れなくなる。 -->
+    <p class="rep300-alt">
+      <a id="paidAltFree" href="report.html">これまでの診断をまとめた総合レポートを見る（無料）</a>
+    </p>
+
+    <!-- ④ 600円を押したあと／300枚に届いたあと（最初は隠している）
+         ★文言は準也さんが選んだ案②（2026-08-30）。
+           「赤字です」「無料で置いておきたくて」「押しても赤字は変わらない」は
+           準也さんの判断で全部落とした（＝嘘・言い訳になるため）。
+           残したのは「お金を払ってでも読みたい、と思ってもらえたこと」だけ。
+         ★一度押した端末はずっと開ける（2026-08-09裁定を維持・8/30に準也さん再確認
+           「一回読んでもらった人は、もうお金払った人と同じ扱いですね」）。 -->
+    <div class="rep300-thanks" id="rep300Thanks" style="display:none;">
+      <p class="rep300-thanks-title">ありがとうございます</p>
+      <p class="rep300-thanks-text">
+        <span>お支払いは要りません。</span><span>このままお読みいただけます。</span><br>
+        <span><b>お金を払ってでも読みたい。</b></span><br>
+        <span>そう思っていただけたことが、</span><span>いちばんの答えでした。</span>
       </p>
-      <a class="paid-modal-open" id="paidModalOpen" href="#">レポートを開く（無料）</a>
-      <button class="paid-modal-close" id="paidModalClose2">とじる</button>
     </div>
+
+    <a class="rep300-open" id="rep300Open" href="#" style="display:none;">レポートを開く</a>
+
   </div>
 
   <!-- キャリア適性診断への誘導 -->
@@ -1624,6 +1737,9 @@
 <script src="hidden_characters.js"></script>
 <script src="image-resolver.js"></script>
 <script src="character-registry.js"></script>
+<!-- 30項目（ファセット）の定義。facet-report.html と共通の正本（2026-08-30に切り出し）。
+     30項目レポートの案内で「目次」を出すのに使う -->
+<script src="facets.js"></script>
 <script src="album.js"></script>
 <script src="unlock.js"></script>
 <script src="concierge.js"></script>
@@ -2915,14 +3031,16 @@ if (version === '10') {
   if (version !== '120' || !facetsParam || !/^[1-5]{30}$/.test(facetsParam)) return;
   if (isOtherMode || isChildMode || isSharedView) return;
 
-  var teaser  = document.getElementById('paidTeaser');
-  var btn     = document.getElementById('paidBtn');
-  var modal   = document.getElementById('paidModal');
-  var step1   = document.getElementById('paidModalStep1');
-  var step2   = document.getElementById('paidModalStep2');
-  var buyBtn  = document.getElementById('paidBuyBtn');
-  var openBtn = document.getElementById('paidModalOpen');
-  if (!teaser || !btn || !modal || !step1 || !step2 || !buyBtn || !openBtn) return;
+  var sec        = document.getElementById('rep300');
+  var tocEl      = document.getElementById('rep300Toc');
+  var waysEl     = document.getElementById('rep300Ways');
+  var payBtn     = document.getElementById('rep300PayBtn');
+  var collectBtn = document.getElementById('rep300CollectBtn');
+  var thanksEl   = document.getElementById('rep300Thanks');
+  var openBtn    = document.getElementById('rep300Open');
+  var remainEl   = document.getElementById('rep300Remain');
+  var haveEl     = document.getElementById('rep300Have');
+  if (!sec || !tocEl || !waysEl || !payBtn || !openBtn) return;
 
   function count(name) {
     // GA4にも送る（2026-08-10追加）。カウンター（KV）は累計しか持てないので
@@ -2947,7 +3065,7 @@ if (version === '10') {
                   (gender ? '&gender=' + encodeURIComponent(gender) : '');
   openBtn.href = reportUrl;
 
-  teaser.classList.add('show');
+  sec.classList.add('show');
 
   // ---- 試し読み：いちばん特徴的な項目（3から最も離れた項目・同点なら高い方）の書き出しを見せる ----
   // 本文はワーカー越し（本番）。ローカル確認時は _facet-texts-local.json（gitには入れない）
@@ -3037,14 +3155,8 @@ if (version === '10') {
         // 冒頭だけ渡す。あふれた分はCSSのぼかしで「続きがある」見た目になる
         document.getElementById('paidTeaserText').textContent = body.slice(0, 140);
         document.getElementById('paidTeaserQuote').style.display = 'block';
-        // 案内モーダルにも、その人自身の項目名を出す（2026-08-18）。
-        // 試し読みと同じ判定（bestI＝いちばん特徴が出ている項目）を使うので中身は一致する
-        var mineEl = document.getElementById('paidModalMine');
-        if (mineEl) {
-          mineEl.textContent =
-            'あなたの場合、いちばん特徴が出ていたのは「' + TEASER_NAMES[bestI] + '」でした。';
-          mineEl.style.display = 'block';
-        }
+        // 目次の中で、その人自身の項目を光らせる（2026-08-18の狙いを引き継いだもの）
+        highlightToc(TEASER_NAMES[bestI]);
       }
       // クロス分析章の試し読み（採点最上位の1本の書き出し・ワーカーが選んで返す）
       var cx = data._cross;
@@ -3057,77 +3169,110 @@ if (version === '10') {
     })
     .catch(function(){});   // 取れなくてもカード自体は出す（試し読み無しで動く）
 
-  // ---- 案内モーダル（1枚目→2枚目） ----
-  // ¥980の画面を開いた時刻。閉じるまでの秒数で「即座に拒否」と「悩んだ末の断念」を分ける（2026-08-09）
-  var paidOpenedAt = 0;
-  btn.addEventListener('click', function() {
-    count('paid_btn_click');
-    paidOpenedAt = Date.now();
-    // すでに「購入にすすむ」まで進んだ端末には、2枚目（無料案内）から見せる。
-    // ★2026-08-09 準也さん裁定＝この挙動は仕様。有料化を本格化しても直さない。
-    //   「一度でも買う気を示してくれた人は、ずっと無料でよい。まだ何もない時期に
-    //    触ってくれた最初の人たちは貴重な財産でありファン。このサイトは
-    //    “いろんな心理学の組み合わせで結果を育てていく”のがコンセプトなので、
-    //    その人たちに使い続けてもらうこと自体に価値がある」
-    //   ⚠️将来これを「支払わずに無料で読めてしまうバグ」と判断して直さないこと。
-    var seen = false;
-    try { seen = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
-    step1.style.display = seen ? 'none' : 'block';
-    step2.style.display = seen ? 'block' : 'none';
-    modal.classList.add('open');
-  });
-  buyBtn.addEventListener('click', function() {
-    count('paid_buy_click');
-    step1.style.display = 'none';
-    step2.style.display = 'block';
-  });
-  openBtn.addEventListener('click', function() {
-    count('paid_free_open');
-  });
-  // ¥980を断って無料の総合レポートへ流れた人（2026-08-09）。
-  // 「拒否して離脱」と「拒否したが無料は見た」を区別する。後から期間比較もできる
-  var altFree = document.getElementById('paidAltFree');
-  if (altFree) altFree.addEventListener('click', function() { count('paid_alt_free_click'); });
-  function closeModal() {
-    modal.classList.remove('open');
-    // 開いてから閉じるまでの秒数を3段階で記録（2026-08-09）。買わなかった理由の切り分けに使う
-    if (paidOpenedAt) {
-      var sec = (Date.now() - paidOpenedAt) / 1000;
-      // 区切りの根拠（2026-08-10に実測して決め直した／それ以前の3秒・15秒は根拠なしの決め打ちだった）
-      //   案内1枚目は205文字。読み切るのに20.5秒（速い流し読み）〜25.6秒（ふつう）かかる。
-      //   一方 ¥980 は案内が開いた瞬間に画面中央に見える（スマホ390pxで上から240px・スクロール不要）。
-      //   3秒 ＝値段は認識できるが本文は絶対に読めない時間
-      //   21秒＝どんなに速く読んでも読み切れない下限（＝準也さん裁定 2026-08-10）
-      count(sec < 3 ? 'paid_close_fast' : (sec < 21 ? 'paid_close_mid' : 'paid_close_slow'));
-      /* ★2026-08-22追加：上の3段階を細かく割ったもの（準也さん指摘
-       *   「3秒で閉じていた人が3.5秒になっただけでは意味がない」）。
-       * ★上の1行は一切変えていない＝8/10からの蓄積はそのまま生きている。これは「足しただけ」。
-       * 背景＝8/18の案内改修で即閉じが81%→40%に下がったが、残りが「3.5秒」なのか
-       *   「本当に読み始めた」のかを区別できなかった。生の秒数はGA4にも送っているが、
-       *   カスタムディメンション未登録で取り出せないことが8/22に判明した。 */
-      if (sec >= 3 && sec < 21) {
-        count(sec < 4 ? 'paid_close_s3_4' : sec < 6 ? 'paid_close_s4_6'
-              : sec < 11 ? 'paid_close_s6_11' : 'paid_close_s11_21');
+  // ---- 30項目の目次を作る（2026-08-30新設）----
+  // ★狙い＝「量」を伝える。いままでは1項目だけ見せてフェードさせていたので
+  //   「これだけ？」で終わっていた（100人中44人が3秒未満で離脱）。
+  // 中身は facets.js の FACET_META（30項目の共通の正本）。因子ごとに6つずつ並べる。
+  var FACTOR_LABEL = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  var FACTOR_ORDER = ['O','C','E','A','N'];
+  function buildToc() {
+    if (typeof FACET_META === 'undefined') return;   // facets.js が読めていなければ黙って出さない
+    var html = '';
+    FACTOR_ORDER.forEach(function(f) {
+      var list = FACET_META.filter(function(m){ return m.factor === f; });
+      if (!list.length) return;
+      html += '<div class="rep300-toc-group">'
+            + '<span class="rep300-toc-factor">' + FACTOR_LABEL[f] + '</span>'
+            + '<span class="rep300-toc-items">'
+            + list.map(function(m){
+                return '<span class="rep300-toc-item" data-name="' + m.name + '">' + m.name + '</span>';
+              }).join('')
+            + '</span></div>';
+    });
+    tocEl.innerHTML = html;
+  }
+  // 試し読みで選ばれた項目（＝いちばん特徴が出ている項目）を目次の中で光らせる。
+  // 汎用の一覧で終わらせず「自分の話だ」と分かるようにする（2026-08-18の狙いを引き継いだもの）
+  function highlightToc(name) {
+    if (!name) return;
+    var els = tocEl.querySelectorAll('.rep300-toc-item');
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-name') === name) {
+        els[i].classList.add('is-mine');
+        els[i].textContent = name + '（あなたの特徴）';
+        return;
       }
-      // ★秒数そのものもGA4へ送る。3段階の区切りは後から変えられない（カウンターは累計しか持たない）が、
-      //   生の秒数が残っていれば何秒で切り直しても分析できる
-      try { if (window.gtag) gtag('event', 'paid_close', { seconds: Math.round(sec * 10) / 10 }); } catch (e) {}
-      // 即閉じ（＝値段を見て3秒未満で閉じた）端末に印を残す（2026-08-10追加）。
-      // 次にこの結果ページへ戻ってきたら revisit_after_close を数える＝「幻滅して離れたのか」を率で見るため
-      if (sec < 3) { try { localStorage.setItem('paid_closed_fast', '1'); } catch (e) {} }
-      paidOpenedAt = 0;
     }
   }
-  document.getElementById('paidModalClose1').addEventListener('click', closeModal);
-  document.getElementById('paidModalClose2').addEventListener('click', closeModal);
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) closeModal();   // 外側を押しても閉じる
+  buildToc();
+
+  // ---- いま何枚持っているかで、見せるものを変える ----
+  // ★レポートはカード300枚の機能開放（2026-08-30・準也さん決定）。600円は集めずに開く逃げ道。
+  //   決済は入れない＝押した人にはそのまま開く。
+  // ★一度押した端末は、以後ずっと開ける（2026-08-09裁定を8/30に準也さんが再確認
+  //   「一回読んでもらった人は、もうお金払った人と同じ扱いですね」）。
+  //   ⚠️これを「支払わずに読めてしまうバグ」と判断して直さないこと。
+  var REP300_GOAL = 300;
+  var cardCount = 0;
+  try { if (typeof getCardCount === 'function') cardCount = getCardCount() || 0; } catch (e) {}
+  var reached = cardCount >= REP300_GOAL;
+  var alreadyPaid = false;
+  try { alreadyPaid = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
+
+  function showOpen() {
+    waysEl.style.display = 'none';
+    openBtn.style.display = 'block';
+    // 開ける人には無料の出口は要らない（迷わせない）
+    var alt = document.querySelector('.rep300-alt');
+    if (alt) alt.style.display = 'none';
+  }
+
+  if (reached || alreadyPaid) {
+    showOpen();
+    if (reached) count('rep300_unlock');
+  } else {
+    waysEl.style.display = '';
+    remainEl.textContent = 'あと' + (REP300_GOAL - cardCount) + '枚';
+    haveEl.textContent   = 'いま' + cardCount + '枚';
+  }
+
+  // ---- 数える（2026-08-30新設）----
+  // ★分母は rep300_view ではなく rep300_toc（＝30項目の目次まで見た＝中身を知った）。
+  //   いままでの paid_btn_click は「読む前」の数字なので、混ぜずに別で数える。
+  // ★成功の判定は rep300_pay ではなく rep300_collect
+  //   （準也さん＝「300枚集めてくれるなら、それの方が300円より私は嬉しい」）。
+  var sawView = false, sawToc = false;
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(en) {
+        if (!en.isIntersecting) return;
+        if (en.target === sec && !sawView) { sawView = true; count('rep300_view'); }
+        if (en.target === tocEl && !sawToc) { sawToc = true; count('rep300_toc'); }
+      });
+    }, { threshold: 0.3 });
+    io.observe(sec);
+    io.observe(tocEl);
+  } else {
+    // 古い端末では出し分けせず、表示された時点で両方1回ずつ数える
+    count('rep300_view'); count('rep300_toc');
+  }
+
+  collectBtn.addEventListener('click', function() { count('rep300_collect'); });
+
+  payBtn.addEventListener('click', function() {
+    count('rep300_pay');
+    // 次回からも開けるようにする（＝一度押した人はずっと無料。上の裁定どおり）
+    try { localStorage.setItem('counted_paid_buy_click', '1'); } catch (e) {}
+    thanksEl.style.display = 'block';
+    showOpen();
+    // お礼が画面に入るところまで運ぶ（押したのに何も起きていないように見えるのを防ぐ）
+    try { thanksEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
   });
-  // ×を押さずにタブを閉じる・戻るで離れた場合も記録する（sendBeaconなので離脱時でも届く・2026-08-09）
-  window.addEventListener('pagehide', function() {
-    if (paidOpenedAt && modal.classList.contains('open')) closeModal();
-  });
+
+  var altFree = document.getElementById('paidAltFree');
+  if (altFree) altFree.addEventListener('click', function() { count('paid_alt_free_click'); });
 })();
+
 
 /* ===== 年代の調査（2026-08-16・準也さん承認） =====
  * ★出さない条件（準也さん指摘 2026-08-16）＝**一度でも答えた人には二度と出さない**。
