@@ -3080,6 +3080,12 @@ if (version === '10') {
 
   sec.classList.add('show');
 
+  // ★分母＝レポート枠を出した時点で数える（2026-08-31新設。スクロールを条件にしない）。
+  //   ここは120問版だけが通る（このブロックの先頭で version!=='120' を弾いている）。
+  //   quiz_complete_120 は「新規完走のみ」なので再訪を含まない。こちらは再訪も含むため、
+  //   rep300_shown − quiz_complete_120 ≒ 見返した回数 が自動的に出る。
+  count('rep300_shown');
+
   // ---- 試し読み：いちばん特徴的な項目（3から最も離れた項目・同点なら高い方）の書き出しを見せる ----
   // 本文はワーカー越し（本番）。ローカル確認時は _facet-texts-local.json（gitには入れない）
   var TEASER_KEYS = ['N1','N2','N3','N4','N5','N6','E1','E2','E3','E4','E5','E6',
@@ -3249,25 +3255,61 @@ if (version === '10') {
     haveEl.textContent   = 'いま' + cardCount + '枚';
   }
 
-  // ---- 数える（2026-08-30新設）----
-  // ★分母は rep300_view ではなく rep300_toc（＝30項目の目次まで見た＝中身を知った）。
-  //   いままでの paid_btn_click は「読む前」の数字なので、混ぜずに別で数える。
-  // ★成功の判定は rep300_pay ではなく rep300_collect
+  // ---- 数える（2026-08-30新設 → 2026-08-31に作り直し）----
+  // ⚠️旧 rep300_view / rep300_toc は【廃止】した。ここで発火させない（もう増えない）。
+  //   理由＝初日の実測で view14／toc14 が完全一致。同じ条件の観測器を仕掛けて測ったところ、
+  //   toc のほうが 40〜80px“先”に発火していた（判定が「その要素の30%」なので、
+  //   大きい枠753pxより小さい目次281pxのほうが先に30%を満たす）＝2本で1つの瞬間しか測れていない。
+  //   さらに準也さん指摘＝その位置では「集めに行く」も「600円」もまだ画面に出ていない
+  //   （2つの道は view の320px下）。＝選択肢を見ていない人を分母にしていた。
+  //   実測の道具＝_private/_一時/measure_rep300_20260831.js／設計＝plans/【計画】…_2026-08-30.md の8/31追記。
+  //
+  // ★分母は rep300_shown（上の sec.classList.add('show') の直後で数えている）。
+  // ★rep300_ways ＝ 2つの道が50%以上・3秒以上見えた＝「選択肢をちゃんと見た」。
+  //   50%の根拠＝ネット広告の標準（IAB/MRC）は面積50%以上・1秒以上。30%は特大バナー限定の例外。
+  //   3秒の根拠＝このサイトが実際に判定に使った線（旧モデル＝「100人中44人が3秒未満で閉じた＝読んでいない」）。
+  //   ⚠️別のタブに移っている間は数えない（画面に出ていても見ていないため）。
+  // ★成功の判定は rep300_pay ではなく rep300_collect ÷ rep300_ways
   //   （準也さん＝「300枚集めてくれるなら、それの方が300円より私は嬉しい」）。
-  var sawView = false, sawToc = false;
-  if (window.IntersectionObserver) {
-    var io = new IntersectionObserver(function(entries) {
+  // ※count() は1端末1回・dev_nocount で止まる（GA4だけは止めない＝2026-08-01裁定）。
+  //   waysEl が display:none のとき（＝300枚到達済み・支払い済みで選択肢を見せていない人）は
+  //   発火しない。これは正しい＝選択肢を出していない人を分母に入れない。
+  if (waysEl && window.IntersectionObserver) {
+    var waysTimer = null, waysDone = false;
+
+    function waysVisibleRatio() {
+      var r  = waysEl.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      if (!r.height) return 0;
+      return Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)) / r.height;
+    }
+    function stopWaysTimer() {
+      if (waysTimer) { clearTimeout(waysTimer); waysTimer = null; }
+    }
+    function startWaysTimer() {
+      if (waysDone || waysTimer || document.hidden) return;
+      waysTimer = setTimeout(function() {
+        waysTimer = null;
+        if (waysDone) return;
+        waysDone = true;
+        count('rep300_ways');
+      }, 3000);
+    }
+
+    var waysIo = new IntersectionObserver(function(entries) {
       entries.forEach(function(en) {
-        if (!en.isIntersecting) return;
-        if (en.target === sec && !sawView) { sawView = true; count('rep300_view'); }
-        if (en.target === tocEl && !sawToc) { sawToc = true; count('rep300_toc'); }
+        if (en.target !== waysEl) return;
+        if (en.isIntersecting && en.intersectionRatio >= 0.5) startWaysTimer();
+        else stopWaysTimer();
       });
-    }, { threshold: 0.3 });
-    io.observe(sec);
-    io.observe(tocEl);
-  } else {
-    // 古い端末では出し分けせず、表示された時点で両方1回ずつ数える
-    count('rep300_view'); count('rep300_toc');
+    }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+    waysIo.observe(waysEl);
+
+    // 別のタブに移ったら止める。戻ってきて、まだ半分以上見えていれば測り直す
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) stopWaysTimer();
+      else if (waysVisibleRatio() >= 0.5) startWaysTimer();
+    });
   }
 
   collectBtn.addEventListener('click', function() { count('rep300_collect'); });

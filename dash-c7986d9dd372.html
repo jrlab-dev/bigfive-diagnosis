@@ -119,8 +119,15 @@ var TILES = [
   {key:'result_view_new',      label:'　└ はじめての人',             unit:'人'},
   {key:'result_view_return',   label:'　└ 戻ってきた常連',           unit:'回'},
   {key:'report_view',          label:'総合レポートを見た',           unit:'回'},
-  {key:'paid_btn_click',       label:'¥980の画面まで来た人',         unit:'人'},
-  {key:'paid_buy_click',       label:'購入に進んだ人',               unit:'人'},
+  // ── 30項目レポート（2026-08-30に作り直した導線。計測は8/31に組み直し）──
+  //   ★下の paid_* は8/30より前の「読む前に払え」だった頃の数字。もう増えない。混ぜて読まないこと。
+  {key:'rep300_shown',         label:'30項目レポートの案内が出た',   unit:'人'},
+  {key:'rep300_ways',          label:'　└ 2つの道をちゃんと見た',    unit:'人'},
+  {key:'rep300_collect',       label:'　　└ 集めに行った（★本命）',  unit:'人'},
+  {key:'rep300_pay',           label:'　　└ 600円で開いた',          unit:'人'},
+  {key:'rep300_unlock',        label:'　　└ 300枚に到達して開いた',  unit:'人'},
+  {key:'paid_btn_click',       label:'¥980の画面まで来た人（旧）',   unit:'人'},
+  {key:'paid_buy_click',       label:'購入に進んだ人（旧）',         unit:'人'},
   {key:'paid_close_fast',      label:'3秒未満で閉じた人（高いと判断）', unit:'人'},
   {key:'revisit_after_close',  label:'即閉じ後に戻ってきた人',       unit:'人'},
   {key:'cross_teaser_click',   label:'クロス分析の予告を押した人',   unit:'人'},
@@ -147,8 +154,19 @@ var SUMMARY_KEYS = ['__quiz_all','quiz_complete_120','result_view','report_view'
 // 漏斗2本
 var FUNNELS = [
   {
-    title:'お金の道（120問 → 有料レポート）',
-    note:'120問をやり切った人だけが試し読みにたどり着ける一本道です。',
+    title:'お金の道・いまの形（120問 → 300枚レポート）',
+    note:'2026-08-30に作り直した導線。レポートは無料で、カード300枚の機能開放にした。600円は集めずに開く逃げ道（決済は入れていない）。'
+       + '★見るのは一番下＝集めに行った人。案内が出た数は再訪も含むので、120問をやり切った数より多くなることがある（差＝見返した人）。',
+    steps:[
+      {key:'rep300_shown',   label:'レポートの案内が出た'},
+      {key:'rep300_ways',    label:'2つの道をちゃんと見た（半分以上・3秒以上）'},
+      {key:'rep300_collect', label:'集めに行った（★成功の判定）'}
+    ]
+  },
+  {
+    title:'お金の道・8/30より前（もう増えない）',
+    note:'「読む前に¥980を払え」だった頃の記録。8/30に作り直したので、ここから先は増えません。'
+       + '上の新しい道と比べられるのは一番下どうし（どちらも押した数）だけです。',
     steps:[
       {key:'__quiz_all',        label:'診断を最後までやった'},
       {key:'quiz_complete_120', label:'そのうち120問をやった'},
@@ -182,6 +200,12 @@ var LABELS = {
   'result_view_return':'　└ 戻ってきた常連', 'result_ai_click':'結果ページのAI相談ボタン',
   'result_ai_click_top':'　└ うち上部のボタン', 'ai_profile_copy':'AIプロフィールをコピーした',
   'blog_link_view':'おすすめ記事が出た（のべ）', 'blog_link_click':'　└ そこからクリック',
+  // 30項目レポート（2026-08-30改装・計測は8/31に組み直し）。すべて1端末1回＝「人」の数。
+  'rep300_shown':'30項目レポートの案内が出た', 'rep300_ways':'　└ 2つの道をちゃんと見た',
+  'rep300_collect':'　　└ 集めに行った（★本命）', 'rep300_pay':'　　└ 600円で開いた',
+  'rep300_unlock':'　　└ カード300枚に到達して開いた',
+  // ⚠️廃止（2026-08-31）＝この2本は同じ瞬間を二重に数えていた。8/31以降は増えない。
+  'rep300_view':'【廃止】案内が画面をかすめた', 'rep300_toc':'【廃止】同上（二重計上）',
   'paid_btn_click':'試し読み「続きを全部読む」', 'paid_buy_click':'¥980を見て購入に進んだ',
   'paid_free_open':'無料と知ってレポートを開いた', 'paid_report_view':'30項目レポートを表示した',
   'paid_sample_view':'見本を見た', 'paid_ai_copy':'レポート全文をAIに持ち出した',
@@ -234,7 +258,10 @@ var GROUPS = [
   {title:'② 結果ページ', keys:['result_view','result_view_new','result_view_return',
                                'result_ai_click','result_ai_click_top','ai_profile_copy',
                                'blog_link_view','blog_link_click']},
-  {title:'③ 有料レポート（30項目）', keys:['paid_btn_click','paid_buy_click','paid_free_open',
+  {title:'③-1 30項目レポート（8/30改装後・いまはこれを見る）',
+                               keys:['rep300_shown','rep300_ways','rep300_collect',
+                                     'rep300_pay','rep300_unlock']},
+  {title:'③-2 有料レポート（8/30より前・もう増えない）', keys:['paid_btn_click','paid_buy_click','paid_free_open',
                                           'paid_report_view','paid_sample_view','paid_ai_copy',
                                           'paid_close_fast','paid_close_mid','paid_close_slow',
                                           'paid_alt_free_click','revisit_after_close']},
