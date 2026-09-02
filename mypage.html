@@ -693,6 +693,7 @@
   }
   .sync-title { font-size: 14px; font-weight: 600; color: #a5b4fc; margin-bottom: 4px; }
   .sync-desc { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
+  .sync-auto-note { font-size: 12px; color: var(--dim); margin-bottom: 8px; }
   .sync-btn {
     width: 100%; padding: 11px; border-radius: 8px; font-size: 13px;
     cursor: pointer; border: none; transition: all 0.2s;
@@ -1660,6 +1661,7 @@
       </span>
     </div>
     <div class="sync-desc">保存すると、ひらがなの「引き継ぎ番号」が発行されます。ボタン1つで自分のメールに送れるので、機種変更のときはメールを見ながら番号を入れるだけでデータを戻せます（サーバーに90日間保管・訪問のたびに自動で預け直し）。</div>
+    <div class="sync-auto-note" id="syncAutoNote" style="display:none"></div>
     <button class="sync-btn save" id="syncSaveBtn">このデバイスのデータを保存する</button>
     <div class="sync-id-box" id="syncIdBox" style="display:none">
       <div class="sync-short-label">引き継ぎ番号（これだけでOK）</div>
@@ -2825,6 +2827,7 @@ async function saveToCloud() {
   const res = await fetch(`${SYNC_API}/save`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // Workerが置くクッキー（bf_sync）を受け取るため
     body: JSON.stringify(payload),
   });
   const json = await res.json();
@@ -3069,6 +3072,19 @@ document.getElementById('syncCancelBtn').addEventListener('click', () => {
     updateSyncMailLink();
     fetchShortKey(existingId);
   }
+})();
+
+// 自動バックアップの最終保存を1行で伝える（2026-09-02）。記録が無いときは何も出さない
+(function() {
+  const el = document.getElementById('syncAutoNote');
+  if (!el) return;
+  const t = parseInt(localStorage.getItem('bigfive_sync_last_auto'), 10);
+  if (!t) return;
+  const d = new Date(t);
+  if (isNaN(d.getTime())) return;
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  el.textContent = `毎日自動で保存しています（最終保存：${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours()}:${mm}）`;
+  el.style.display = 'block';
 })();
 
 // レンダリング

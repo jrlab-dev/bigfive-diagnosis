@@ -67,6 +67,11 @@
       color: #94a3b8;
       margin-bottom: 6px;
     }
+    .handoff-note {
+      font-size: 0.78rem;
+      color: var(--dim);
+      margin-top: 10px;
+    }
     .progress-bar-bg {
       background: #1e293b;
       border-radius: 999px;
@@ -342,6 +347,7 @@
       <div class="progress-bar-fill" id="progressBar"></div>
     </div>
   </div>
+  <div class="handoff-note" id="handoffNote" style="display:none"></div>
 </div>
 
 <div class="rarity-name" id="rarityName">All</div>
@@ -596,6 +602,44 @@
   });
   var el = document.getElementById('unlockMapList');
   if (el) el.innerHTML = html;
+})();
+</script>
+
+<script>
+// ===== 引き継ぎ番号を見出しの下に出す（2026-09-02）=====
+// 同期IDを持つ人にだけ出す。番号は一度取れたら控えて、2回目以降は通信しない。
+// ⚠️別の<script>に分けてある＝上のスクリプトが途中で転んでも、この行は出る
+// 控えにはIDも一緒に入れる（別の端末から引き継いだあとに古い番号を出さないため）
+(function() {
+  var el = document.getElementById('handoffNote');
+  if (!el) return;
+  var id = localStorage.getItem('bigfive_sync_id');
+  if (!id) return;
+
+  function show(display) {
+    el.textContent = '引き継ぎ番号：' + display + '（機種変更のときに使います）';
+    el.style.display = 'block';
+  }
+
+  try {
+    var cached = JSON.parse(localStorage.getItem('bigfive_sync_short') || 'null');
+    if (cached && cached.id === id && cached.display) { show(cached.display); return; }
+  } catch (e) {}
+
+  if (!window.fetch) return;
+  fetch('https://bigfive.jr-genius.jp/api/shortkey', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id })
+  }).then(function(res) {
+    return res.json();
+  }).then(function(json) {
+    if (!json || !json.display) return; // 取れなければ行ごと出さない
+    try {
+      localStorage.setItem('bigfive_sync_short', JSON.stringify({ id: id, display: json.display }));
+    } catch (e) {}
+    show(json.display);
+  }).catch(function() {});
 })();
 </script>
 

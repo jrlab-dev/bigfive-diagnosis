@@ -293,7 +293,11 @@ body { padding-top: 52px !important; }
 
   var SYNC_ID_KEY = 'bigfive_sync_id';
   var LAST_AUTO_KEY = 'bigfive_sync_last_auto';
+  var RESTORE_CHECKED_KEY = 'bigfive_restore_checked';
   var AUTO_BACKUP_URL = 'https://bigfive.jr-genius.jp/api/save';
+  var AUTO_LOAD_URL = 'https://bigfive.jr-genius.jp/api/load';
+  var COUNT_URL = 'https://bigfive.jr-genius.jp/count/hit?e=';
+  var SYNC_ID_MIN_CARDS = 3; // カードがこの枚数になったら同期IDを自動発行する（2026-09-02）
   var FIXED_KEYS = [
     'attachment_result', 'hsp_result', 'locus_result', 'eq_result',
     'impostor_result', 'sdt_result', 'schwartz_result', 'mindset_result',
@@ -318,10 +322,40 @@ body { padding-top: 52px !important; }
     return data;
   }
 
+  // 計測（1端末1回・dev_nocount=1で止まる）＝result.html の count() と同じ流儀
+  function count(name) {
+    try {
+      if (localStorage.getItem('dev_nocount') === '1') return;
+      if (localStorage.getItem('counted_' + name) === '1') return;
+      localStorage.setItem('counted_' + name, '1');
+      fetch(COUNT_URL + name, { method: 'POST', keepalive: true }).catch(function() {});
+    } catch (e) {}
+  }
+
+  function albumCount() {
+    try {
+      var a = JSON.parse(localStorage.getItem('bigfive_album') || '[]');
+      return Array.isArray(a) ? a.length : 0;
+    } catch (e) { return 0; }
+  }
+
+  // 同期IDの自動発行（2026-09-02）＝カードが3枚以上になった人にだけ発行する。
+  // ⚠️順位表（/api/rank）に載る条件は変えていない。ここは「保存のための発行」。
+  function ensureSyncId() {
+    var id = localStorage.getItem(SYNC_ID_KEY);
+    if (id) return id;
+    if (albumCount() < SYNC_ID_MIN_CARDS) return '';
+    if (!window.crypto || typeof crypto.randomUUID !== 'function') return ''; // 古いブラウザでは何もしない
+    id = crypto.randomUUID();
+    localStorage.setItem(SYNC_ID_KEY, id);
+    count('sync_id_auto');
+    return id;
+  }
+
   function autoBackup() {
     try {
-      var syncId = localStorage.getItem(SYNC_ID_KEY);
-      if (!syncId) return; // IDを持つ人のみ対象（勝手に発行しない）
+      var syncId = ensureSyncId();
+      if (!syncId) return; // カードが3枚未満・IDも無い＝いままでどおり何もしない
 
       var lastAuto = parseInt(localStorage.getItem(LAST_AUTO_KEY), 10) || 0;
       if (Date.now() - lastAuto < 24 * 60 * 60 * 1000) return; // 24時間以内はスキップ
@@ -334,12 +368,14 @@ body { padding-top: 52px !important; }
       fetch(AUTO_BACKUP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Workerが置くクッキー（bf_sync）を受け取るため
         body: JSON.stringify(payload)
       }).then(function(res) {
         return res.json();
       }).then(function(json) {
         if (json && json.ok) {
           localStorage.setItem(LAST_AUTO_KEY, String(Date.now()));
+          count('backup_auto_ok');
         }
       }).catch(function() {
         // 失敗時は無音（リトライ・通知なし）
@@ -349,8 +385,90 @@ body { padding-top: 52px !important; }
     }
   }
 
-  // ページ表示をブロックしないよう遅延実行
-  setTimeout(autoBackup, 2500);
+  // ===== 自動復元（2026-09-02）=====
+  // Safariの7日消去で localStorage が消えても、Workerが Set-Cookie で置いた bf_sync は残る。
+  // それを頼りに、引数なしの /api/load で前回の続きを取り戻す。
+  var RESTORE_ARRAY_KEYS = ['bigfive_my_results', 'bigfive_other_results', 'bigfive_album'];
+  var RESTORE_LIMITS = { 'bigfive_my_results': 5, 'bigfive_other_results': 100, 'bigfive_album': 8300 };
+
+  // mypage.html の applySyncData(…, 'merge') と同じ規則で戻す。
+  // 違いは1点＝配列以外のキーは「手元に無いものだけ」入れる（手元の値を上書きしない）
+  function mergeRestoredData(data) {
+    Object.keys(data).forEach(function(k) {
+      if (k === SYNC_ID_KEY || k === LAST_AUTO_KEY) return;
+      var v = data[k];
+      if (typeof v !== 'string') return;
+      if (RESTORE_ARRAY_KEYS.indexOf(k) < 0) {
+        if (localStorage.getItem(k) === null) localStorage.setItem(k, v);
+        return;
+      }
+      try {
+        var current = JSON.parse(localStorage.getItem(k) || '[]');
+        var loaded = JSON.parse(v);
+        if (!Array.isArray(current) || !Array.isArray(loaded)) { localStorage.setItem(k, v); return; }
+        var seen = {}, merged = [];
+        current.concat(loaded).forEach(function(item) {
+          var sig = JSON.stringify(item);
+          if (!Object.prototype.hasOwnProperty.call(seen, sig)) { seen[sig] = 1; merged.push(item); }
+        });
+        var limit = RESTORE_LIMITS[k];
+        if (limit && merged.length > limit) merged = merged.slice(0, limit);
+        localStorage.setItem(k, JSON.stringify(merged));
+      } catch (e) {
+        localStorage.setItem(k, v);
+      }
+    });
+  }
+
+  function showRestoreToast(cards) {
+    try {
+      var el = document.createElement('div');
+      el.textContent = '前回の続きを戻しました（カード' + cards + '枚）';
+      el.setAttribute('style', 'position:fixed;right:12px;bottom:12px;z-index:99999;max-width:80vw;' +
+        'padding:9px 13px;border-radius:9px;font-size:12px;line-height:1.5;' +
+        'background:rgba(17,24,39,0.92);color:#e2e8f0;box-shadow:0 4px 14px rgba(0,0,0,0.3);');
+      document.body.appendChild(el);
+      setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 3000);
+    } catch (e) {}
+  }
+
+  function autoRestore() {
+    try {
+      if (localStorage.getItem(SYNC_ID_KEY)) return null;          // IDがある人は対象外
+      if (albumCount() > 0) return null;                            // カードが残っている＝消えていない
+      if (localStorage.getItem(RESTORE_CHECKED_KEY)) return null;   // 1端末1回だけ
+      if (!window.fetch) return null;
+      // ⚠️印（bigfive_restore_checked）は「200で答えが返った」ときだけ置く。
+      //   引数なし /api/load に未対応の古いWorkerは 400 {"error":"Invalid id"} を返す（2026-09-02にcurlで実測）。
+      //   そこで印を置くと、Workerが新しくなっても二度と戻せない端末になる。
+      var answered = false;
+      return fetch(AUTO_LOAD_URL, { credentials: 'include' }).then(function(res) {
+        answered = !!res.ok;
+        if (!answered) return null; // 古いWorker＝答えではない。次の訪問でもう一度試す
+        return res.json().catch(function() { return null; });
+      }).then(function(json) {
+        if (!answered) return;
+        // 答えが届いた＝見つかっても見つからなくても印を置く（通信エラーのときは置かない）
+        localStorage.setItem(RESTORE_CHECKED_KEY, '1');
+        if (!json || !json.found || !json.data) { count('restore_auto_miss'); return; }
+        mergeRestoredData(json.data);
+        if (json.user_id) localStorage.setItem(SYNC_ID_KEY, json.user_id);
+        count('restore_auto_ok');
+        showRestoreToast(albumCount());
+        setTimeout(function() { location.reload(); }, 1500);
+      }).catch(function() {
+        // 通信エラー＝印を置かないので、次の訪問でもう一度試す
+      });
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // ページ表示をブロックしないよう遅延実行（戻してから、いつもの自動バックアップ）
+  setTimeout(function() {
+    var p = autoRestore();
+    if (p && p.then) p.then(autoBackup, autoBackup); else autoBackup();
+  }, 2500);
 })();
 
 /* ===== 掛け合わせデータの送信（2026-08-15新設・準也さん指示） =====

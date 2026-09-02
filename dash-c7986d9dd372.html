@@ -238,6 +238,11 @@ var LABELS = {
   'share_img_save':'画像を保存した', 'share_x':'Xでシェア', 'share_line':'LINEでシェア',
   'share_copy':'URLをコピー', 'share_facebook':'Facebookでシェア',
   'reladvice_view':'相性アドバイスを見た（のべ）', 'reladvice_ai_copy':'相性アドバイスをAIにコピー',
+  // バックアップ・端末引継ぎ（すべて1端末1回＝「人」の数）。自動のぶんは2026-09-02から
+  'backup_save_click':'自分で「保存する」を押した', 'backup_mail_click':'　└ 番号をメールで送った',
+  'backup_restore_ok':'番号・IDで引き継いだ',
+  'sync_id_auto':'同期IDを自動発行した', 'backup_auto_ok':'自動バックアップが成功した',
+  'restore_auto_ok':'自動で戻せた', 'restore_auto_miss':'　└ 戻そうとしたが無かった',
 };
 // 相性アドバイスのテーマ別（表示とAIコピーで28項目）
 var RELADVICE = {
@@ -278,6 +283,10 @@ var GROUPS = [
   {title:'⑨ 相性アドバイス', keys:['reladvice_view','reladvice_ai_copy'].concat(
       Object.keys(RELADVICE).map(function(k){ return 'reladvice_view_' + k; }),
       Object.keys(RELADVICE).map(function(k){ return 'reladvice_ai_copy_' + k; }))},
+  // ⑩ 消えない置き場（2026-09-02）。判定に使う数字＝backup_auto_ok の週の増分＝守られている端末の数
+  {title:'⑩ バックアップ・端末引継ぎ', keys:['backup_save_click','backup_mail_click','backup_restore_ok',
+                                             'sync_id_auto','backup_auto_ok',
+                                             'restore_auto_ok','restore_auto_miss']},
 ];
 
 /* ============================================================
