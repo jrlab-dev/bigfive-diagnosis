@@ -1,6 +1,6 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-09-02",
+  "_updated": "2026-09-04",
   "maxItems": 4,
   "groups": [
     {
@@ -46,6 +46,7 @@
         { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/kanpeki-shugi-hajimenai.html", "title": "完璧主義の人が一番やっていないこと" },
         { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/yotei-tsumekomi-sugiru.html", "title": "予定を詰め込みすぎる人の心理" },
         { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/orei-ienai-hito.html", "title": "ありがとうが言えない人の心理" },
+        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/hitorigoto-ooi-hito.html", "title": "独り言が多い人の心理" },
         { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/henka-nigate-seikaku.html", "title": "変化が苦手な人は性格？　変化に弱い人の正体" },
         { "cond": [{ "f": "E", "max": 2 }, { "f": "A", "max": 2 }], "url": "/blog/hitori-ga-suki-tsumetai-seikaku.html", "title": "1人が好きな人は冷たいのか" },
         { "cond": [{ "f": "E", "min": 4 }, { "f": "C", "min": 4 }], "url": "/blog/makezukirai-seikaku.html", "title": "負けず嫌いは性格？　勝ち負けにこだわる人の正体" },
