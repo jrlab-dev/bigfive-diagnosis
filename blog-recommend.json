@@ -1,110 +1,890 @@
 {
   "_note": "結果ページ『あなたにおすすめの記事』の対応表。記事を追加したら、ここに1行足すだけでよい（result.htmlは触らない）。groupsは上から順に1本ずつ選ばれる。cond は全部満たしたときだけ候補になり、cond に入れた因子の『3からの離れ方』の合計が大きいものが優先される（＝その人の特徴が強い記事ほど上に来る）。cond が空なら誰にでも出せる汎用記事で、他に候補が無いときの受け皿になる。因子は O=開放性 C=誠実性 E=外向性 A=協調性 N=感受性（神経症傾向）、スコアは1〜5。",
-  "_updated": "2026-09-04",
+  "_updated": "2026-09-05",
   "maxItems": 4,
   "groups": [
     {
       "id": "factor",
       "label": "あなたの性格そのもの",
       "items": [
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/neuroticism-high.html", "title": "感受性が高い人の特徴" },
-        { "cond": [{ "f": "N", "max": 2 }], "url": "/blog/neuroticism-low.html", "title": "感受性が低い人の特徴" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/openness-high.html", "title": "開放性が高い人の特徴" },
-        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/openness-low.html", "title": "開放性が低い人の特徴" },
-        { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/conscientiousness-high.html", "title": "誠実性が高い人の特徴" },
-        { "cond": [{ "f": "C", "max": 2 }], "url": "/blog/conscientiousness-low.html", "title": "誠実性が低い人の特徴" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/extraversion-high.html", "title": "外向性が高い人の特徴" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/extraversion-low.html", "title": "外向性が低い（内向的）人の特徴" },
-        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/agreeableness-high.html", "title": "協調性が高い人の特徴" },
-        { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/agreeableness-low.html", "title": "協調性が低い人の特徴" },
-        { "cond": [], "url": "/blog/bigfive-kekka-mikata.html", "title": "診断結果の見方　5本のバーの正しい読み方" }
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/neuroticism-high.html",
+          "title": "感受性が高い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "max": 2
+            }
+          ],
+          "url": "/blog/neuroticism-low.html",
+          "title": "感受性が低い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/openness-high.html",
+          "title": "開放性が高い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/openness-low.html",
+          "title": "開放性が低い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/conscientiousness-high.html",
+          "title": "誠実性が高い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            }
+          ],
+          "url": "/blog/conscientiousness-low.html",
+          "title": "誠実性が低い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/extraversion-high.html",
+          "title": "外向性が高い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/extraversion-low.html",
+          "title": "外向性が低い（内向的）人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/agreeableness-high.html",
+          "title": "協調性が高い人の特徴"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/agreeableness-low.html",
+          "title": "協調性が低い人の特徴"
+        },
+        {
+          "cond": [],
+          "url": "/blog/bigfive-kekka-mikata.html",
+          "title": "診断結果の見方　5本のバーの正しい読み方"
+        }
       ]
     },
     {
       "id": "worry",
       "label": "その性格で起きやすいこと",
       "items": [
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "A", "min": 4 }], "url": "/blog/kiwo-tsukaisu.html", "title": "気を使いすぎて疲れる人が知るべき、自分の性格の正体" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "E", "max": 2 }], "url": "/blog/hitomishiri-seikaku.html", "title": "人見知り・あがり症は性格？　初対面で緊張する人の正体" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "C", "min": 4 }], "url": "/blog/makasenai-kanpeki-shugi.html", "title": "「全部自分でやってしまう人」の正体" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "C", "min": 4 }, { "f": "A", "min": 4 }], "url": "/blog/kakunin-shisugiru-hito.html", "title": "「確認しすぎる人」の正体　不安で前に進めない心理" },
-        { "cond": [{ "f": "C", "max": 2 }, { "f": "O", "min": 4 }], "url": "/blog/akippoi-seikaku.html", "title": "何をやっても続かない・落ち着かない人の正体" },
-        { "cond": [{ "f": "C", "max": 2 }, { "f": "N", "min": 4 }], "url": "/blog/nige-guse.html", "title": "逃げ癖がある人の心理" },
-        { "cond": [{ "f": "A", "min": 4 }, { "f": "E", "min": 4 }], "url": "/blog/happo-bijin.html", "title": "八方美人な人の心理" },
-        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/warukunai-noni-ayamaru.html", "title": "悪くないのに謝ってしまう人" },
-        { "cond": [{ "f": "A", "max": 2 }, { "f": "N", "min": 4 }], "url": "/blog/waruguchi-bakari-iu-hito.html", "title": "悪口ばかり言う人の心理" },
-        { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/higaisha-ishiki-tsuyoi-hito.html", "title": "被害者意識が強い人の心理" },
-        { "cond": [{ "f": "A", "max": 2 }, { "f": "O", "max": 2 }], "url": "/blog/ganko-hito.html", "title": "「頑固な人」の心理　なぜ人の意見を聞き入れられないのか" },
-        { "cond": [{ "f": "E", "min": 4 }, { "f": "N", "min": 4 }], "url": "/blog/homaretai-seikaku.html", "title": "褒められたい・認められたい欲が強いのは性格？" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/hitori-hanseikai.html", "title": "夜の「ひとり反省会」がやめられない" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/hikaku-shite-shimau.html", "title": "人と比べてしまって疲れる心理" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/jiko-koteikan-hikui.html", "title": "自己肯定感が低い人の特徴と原因" },
-        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/kotowarenai.html", "title": "断れない性格を直したい人へ" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/introvert-naoshitai.html", "title": "「内向的な性格を直したい」は本当に必要か" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/zatsudan-nigate.html", "title": "雑談が苦手な人の性格" },
-        { "cond": [{ "f": "C", "max": 2 }], "url": "/blog/mendokusagari.html", "title": "めんどくさがりを直したい" },
-        { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/kanpeki-shugi-hajimenai.html", "title": "完璧主義の人が一番やっていないこと" },
-        { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/yotei-tsumekomi-sugiru.html", "title": "予定を詰め込みすぎる人の心理" },
-        { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/orei-ienai-hito.html", "title": "ありがとうが言えない人の心理" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/hitorigoto-ooi-hito.html", "title": "独り言が多い人の心理" },
-        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/henka-nigate-seikaku.html", "title": "変化が苦手な人は性格？　変化に弱い人の正体" },
-        { "cond": [{ "f": "E", "max": 2 }, { "f": "A", "max": 2 }], "url": "/blog/hitori-ga-suki-tsumetai-seikaku.html", "title": "1人が好きな人は冷たいのか" },
-        { "cond": [{ "f": "E", "min": 4 }, { "f": "C", "min": 4 }], "url": "/blog/makezukirai-seikaku.html", "title": "負けず嫌いは性格？　勝ち負けにこだわる人の正体" },
-        { "cond": [], "url": "/blog/jiko-bunseki-owaranai.html", "title": "自己分析が終わらない人の心理" }
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/kiwo-tsukaisu.html",
+          "title": "気を使いすぎて疲れる人が知るべき、自分の性格の正体"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/hitomishiri-seikaku.html",
+          "title": "人見知り・あがり症は性格？　初対面で緊張する人の正体"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/makasenai-kanpeki-shugi.html",
+          "title": "「全部自分でやってしまう人」の正体"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "C",
+              "min": 4
+            },
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/kakunin-shisugiru-hito.html",
+          "title": "「確認しすぎる人」の正体　不安で前に進めない心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            },
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/akippoi-seikaku.html",
+          "title": "何をやっても続かない・落ち着かない人の正体"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            },
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/nige-guse.html",
+          "title": "逃げ癖がある人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            },
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/happo-bijin.html",
+          "title": "八方美人な人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/warukunai-noni-ayamaru.html",
+          "title": "悪くないのに謝ってしまう人"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            },
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/waruguchi-bakari-iu-hito.html",
+          "title": "悪口ばかり言う人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/higaisha-ishiki-tsuyoi-hito.html",
+          "title": "被害者意識が強い人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            },
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/ganko-hito.html",
+          "title": "「頑固な人」の心理　なぜ人の意見を聞き入れられないのか"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            },
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/homaretai-seikaku.html",
+          "title": "褒められたい・認められたい欲が強いのは性格？"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/hitori-hanseikai.html",
+          "title": "夜の「ひとり反省会」がやめられない"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/hikaku-shite-shimau.html",
+          "title": "人と比べてしまって疲れる心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/jiko-koteikan-hikui.html",
+          "title": "自己肯定感が低い人の特徴と原因"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/kotowarenai.html",
+          "title": "断れない性格を直したい人へ"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/introvert-naoshitai.html",
+          "title": "「内向的な性格を直したい」は本当に必要か"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/zatsudan-nigate.html",
+          "title": "雑談が苦手な人の性格"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            }
+          ],
+          "url": "/blog/mendokusagari.html",
+          "title": "めんどくさがりを直したい"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/kanpeki-shugi-hajimenai.html",
+          "title": "完璧主義の人が一番やっていないこと"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/yotei-tsumekomi-sugiru.html",
+          "title": "予定を詰め込みすぎる人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/orei-ienai-hito.html",
+          "title": "ありがとうが言えない人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/hitorigoto-ooi-hito.html",
+          "title": "独り言が多い人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/henka-nigate-seikaku.html",
+          "title": "変化が苦手な人は性格？　変化に弱い人の正体"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            },
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/hitori-ga-suki-tsumetai-seikaku.html",
+          "title": "1人が好きな人は冷たいのか"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            },
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/makezukirai-seikaku.html",
+          "title": "負けず嫌いは性格？　勝ち負けにこだわる人の正体"
+        },
+        {
+          "cond": [],
+          "url": "/blog/jiko-bunseki-owaranai.html",
+          "title": "自己分析が終わらない人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/muhyoujou-warawanai-hito.html",
+          "title": "無表情な人の心理"
+        }
       ]
     },
     {
       "id": "love",
       "label": "人との関わり方",
       "items": [
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/love-neuroticism-high.html", "title": "考えすぎて動けない人の恋愛" },
-        { "cond": [{ "f": "N", "max": 2 }], "url": "/blog/love-neuroticism-low.html", "title": "感情が安定しすぎる人の恋愛" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/love-extraversion-low.html", "title": "想いが溢れるほど動けない　内向的な人の恋愛の仕組み" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/love-extraversion-high.html", "title": "恋愛がうまくいくのに「何か足りない」" },
-        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/love-agreeableness-high.html", "title": "優しすぎる人の恋愛　我慢に気づかないまま尽くしてしまう理由" },
-        { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/love-agreeableness-low.html", "title": "「もっと合わせてよ」と言われ続ける人の恋愛" },
-        { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/love-conscientiousness-high.html", "title": "完璧主義者の恋愛　「ちゃんとしてほしい」が積み重なる理由" },
-        { "cond": [{ "f": "C", "max": 2 }], "url": "/blog/love-conscientiousness-low.html", "title": "「なんでいつも忘れるの」　ルーズな人が詰められる本当の理由" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/love-openness-high.html", "title": "飽きっぽい人の恋愛　好奇心が愛情を食べてしまう理由" },
-        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/love-openness-low.html", "title": "いつもの場所で、いつもの話をする　保守的な人の恋愛" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "A", "max": 3 }], "url": "/blog/hito-o-tamesu-hito.html", "title": "人を試す人の心理　わざと突き放して反応を見てしまう理由" },
-        { "cond": [{ "f": "E", "min": 4 }, { "f": "A", "max": 3 }], "url": "/blog/jibun-no-hanashi-bakari.html", "title": "自分の話ばかりする人の心理" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "A", "min": 4 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
-        { "cond": [{ "f": "N", "min": 5 }], "url": "/blog/renai-izon.html", "title": "恋愛依存になりやすい人の心理" },
-        { "cond": [{ "f": "N", "min": 4 }, { "f": "C", "min": 4 }], "url": "/blog/moto-koibito-hikizuru.html", "title": "元恋人を引きずってしまう心理　「忘れられない」の正体" },
-        { "cond": [], "url": "/blog/bigfive-love-compatibility.html", "title": "性格と恋愛相性の科学　5因子で見るカップルの傾向" }
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/love-neuroticism-high.html",
+          "title": "考えすぎて動けない人の恋愛"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "max": 2
+            }
+          ],
+          "url": "/blog/love-neuroticism-low.html",
+          "title": "感情が安定しすぎる人の恋愛"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/love-extraversion-low.html",
+          "title": "想いが溢れるほど動けない　内向的な人の恋愛の仕組み"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/love-extraversion-high.html",
+          "title": "恋愛がうまくいくのに「何か足りない」"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/love-agreeableness-high.html",
+          "title": "優しすぎる人の恋愛　我慢に気づかないまま尽くしてしまう理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/love-agreeableness-low.html",
+          "title": "「もっと合わせてよ」と言われ続ける人の恋愛"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/love-conscientiousness-high.html",
+          "title": "完璧主義者の恋愛　「ちゃんとしてほしい」が積み重なる理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            }
+          ],
+          "url": "/blog/love-conscientiousness-low.html",
+          "title": "「なんでいつも忘れるの」　ルーズな人が詰められる本当の理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/love-openness-high.html",
+          "title": "飽きっぽい人の恋愛　好奇心が愛情を食べてしまう理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/love-openness-low.html",
+          "title": "いつもの場所で、いつもの話をする　保守的な人の恋愛"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "A",
+              "max": 3
+            }
+          ],
+          "url": "/blog/hito-o-tamesu-hito.html",
+          "title": "人を試す人の心理　わざと突き放して反応を見てしまう理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            },
+            {
+              "f": "A",
+              "max": 3
+            }
+          ],
+          "url": "/blog/jibun-no-hanashi-bakari.html",
+          "title": "自分の話ばかりする人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/renai-izon.html",
+          "title": "恋愛依存になりやすい人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 5
+            }
+          ],
+          "url": "/blog/renai-izon.html",
+          "title": "恋愛依存になりやすい人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            },
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/moto-koibito-hikizuru.html",
+          "title": "元恋人を引きずってしまう心理　「忘れられない」の正体"
+        },
+        {
+          "cond": [],
+          "url": "/blog/bigfive-love-compatibility.html",
+          "title": "性格と恋愛相性の科学　5因子で見るカップルの傾向"
+        }
       ]
     },
     {
       "id": "life",
       "label": "暮らしに生かす",
       "items": [
-        { "cond": [{ "f": "C", "max": 2 }], "url": "/blog/diet-conscientiousness-low.html", "title": "三日坊主の人がダイエットを続けるには、意志力より先にやることがある" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/diet-neuroticism-high.html", "title": "優しい人が太りやすい理由と、それを変える方法" },
-        { "cond": [{ "f": "A", "min": 4 }], "url": "/blog/diet-agreeableness-high.html", "title": "空気を読む人が太りやすい本当の理由" },
-        { "cond": [{ "f": "C", "min": 4 }], "url": "/blog/nagaiiki-seikaku.html", "title": "長生きする人に共通する性格　明るさより、まじめさ" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/diet-extraversion-low.html", "title": "内向的な人のダイエットが続かないのは、環境が間違っているからだ" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/diet-extraversion-high.html", "title": "一人でやるから続かない　外向的な人のダイエット設計" },
-        { "cond": [{ "f": "N", "max": 2 }], "url": "/blog/diet-neuroticism-low.html", "title": "メンタルが安定している人がダイエットで陥る、意外な落とし穴" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/manga-character-bigfive.html", "title": "漫画・アニメのキャラクター設定にビッグファイブを使う" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/trpg-character-make.html", "title": "TRPGのキャラメイクに「性格値」を入れる" },
-        { "cond": [{ "f": "O", "min": 4 }, { "f": "C", "max": 2 }], "url": "/blog/sousaku-kansei-dekinai.html", "title": "創作が完成しない人の心理" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/ai-character-seikaku-prompt.html", "title": "AIにキャラの性格を指定する方法" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/game-genre-seikaku.html", "title": "好きなゲームジャンルでわかる性格" },
-        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/shumi-ga-nai.html", "title": "趣味がない・何をやっても楽しくない人へ" },
-        { "cond": [{ "f": "E", "max": 2 }], "url": "/blog/hitori-shumi-minna-shumi.html", "title": "一人が楽しい趣味・人といるのが楽しい趣味" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/hitori-shumi-minna-shumi.html", "title": "一人が楽しい趣味・人といるのが楽しい趣味" },
-        { "cond": [{ "f": "N", "min": 4 }], "url": "/blog/oshikatsu-shinri.html", "title": "推し活にハマる人の心理" },
-        { "cond": [{ "f": "E", "min": 4 }], "url": "/blog/oshikatsu-shinri.html", "title": "推し活にハマる人の心理" },
-        { "cond": [{ "f": "O", "min": 4 }], "url": "/blog/diet-openness-high.html", "title": "飽き性の人のダイエットが続かない本当の理由" },
-        { "cond": [{ "f": "O", "max": 2 }], "url": "/blog/diet-openness-low.html", "title": "同じことを続けられる人が、ダイエットで一番やってはいけないこと" },
-        { "cond": [{ "f": "A", "max": 2 }], "url": "/blog/diet-agreeableness-low.html", "title": "自分流を曲げない人のダイエット　競争心を正しく使う方法" },
-        { "cond": [{ "f": "E", "max": 2 }, { "f": "O", "max": 2 }], "url": "/blog/indoor-outdoor-seikaku.html", "title": "インドア派・アウトドア派でわかる性格" },
-        { "cond": [{ "f": "O", "min": 4 }, { "f": "E", "min": 4 }], "url": "/blog/indoor-outdoor-seikaku.html", "title": "インドア派・アウトドア派でわかる性格" },
-        { "cond": [], "url": "/blog/kyodai-seikaku-chigau.html", "title": "兄弟で性格が違うのはなぜ？" },
-        { "cond": [], "url": "/blog/shumi-seikaku-type-guide.html", "title": "性格タイプ別・向いている趣味の見つけ方" },
-        { "cond": [], "url": "/blog/shigoto-muki-fumuki.html", "title": "あなたに向いている仕事・向いていない仕事" }
+        {
+          "cond": [
+            {
+              "f": "C",
+              "max": 2
+            }
+          ],
+          "url": "/blog/diet-conscientiousness-low.html",
+          "title": "三日坊主の人がダイエットを続けるには、意志力より先にやることがある"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/diet-neuroticism-high.html",
+          "title": "優しい人が太りやすい理由と、それを変える方法"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "min": 4
+            }
+          ],
+          "url": "/blog/diet-agreeableness-high.html",
+          "title": "空気を読む人が太りやすい本当の理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "C",
+              "min": 4
+            }
+          ],
+          "url": "/blog/nagaiiki-seikaku.html",
+          "title": "長生きする人に共通する性格　明るさより、まじめさ"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/diet-extraversion-low.html",
+          "title": "内向的な人のダイエットが続かないのは、環境が間違っているからだ"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/diet-extraversion-high.html",
+          "title": "一人でやるから続かない　外向的な人のダイエット設計"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "max": 2
+            }
+          ],
+          "url": "/blog/diet-neuroticism-low.html",
+          "title": "メンタルが安定している人がダイエットで陥る、意外な落とし穴"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/manga-character-bigfive.html",
+          "title": "漫画・アニメのキャラクター設定にビッグファイブを使う"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/trpg-character-make.html",
+          "title": "TRPGのキャラメイクに「性格値」を入れる"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            },
+            {
+              "f": "C",
+              "max": 2
+            }
+          ],
+          "url": "/blog/sousaku-kansei-dekinai.html",
+          "title": "創作が完成しない人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/ai-character-seikaku-prompt.html",
+          "title": "AIにキャラの性格を指定する方法"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/game-genre-seikaku.html",
+          "title": "好きなゲームジャンルでわかる性格"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/game-genre-seikaku.html",
+          "title": "好きなゲームジャンルでわかる性格"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/shumi-ga-nai.html",
+          "title": "趣味がない・何をやっても楽しくない人へ"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            }
+          ],
+          "url": "/blog/hitori-shumi-minna-shumi.html",
+          "title": "一人が楽しい趣味・人といるのが楽しい趣味"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/hitori-shumi-minna-shumi.html",
+          "title": "一人が楽しい趣味・人といるのが楽しい趣味"
+        },
+        {
+          "cond": [
+            {
+              "f": "N",
+              "min": 4
+            }
+          ],
+          "url": "/blog/oshikatsu-shinri.html",
+          "title": "推し活にハマる人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/oshikatsu-shinri.html",
+          "title": "推し活にハマる人の心理"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            }
+          ],
+          "url": "/blog/diet-openness-high.html",
+          "title": "飽き性の人のダイエットが続かない本当の理由"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/diet-openness-low.html",
+          "title": "同じことを続けられる人が、ダイエットで一番やってはいけないこと"
+        },
+        {
+          "cond": [
+            {
+              "f": "A",
+              "max": 2
+            }
+          ],
+          "url": "/blog/diet-agreeableness-low.html",
+          "title": "自分流を曲げない人のダイエット　競争心を正しく使う方法"
+        },
+        {
+          "cond": [
+            {
+              "f": "E",
+              "max": 2
+            },
+            {
+              "f": "O",
+              "max": 2
+            }
+          ],
+          "url": "/blog/indoor-outdoor-seikaku.html",
+          "title": "インドア派・アウトドア派でわかる性格"
+        },
+        {
+          "cond": [
+            {
+              "f": "O",
+              "min": 4
+            },
+            {
+              "f": "E",
+              "min": 4
+            }
+          ],
+          "url": "/blog/indoor-outdoor-seikaku.html",
+          "title": "インドア派・アウトドア派でわかる性格"
+        },
+        {
+          "cond": [],
+          "url": "/blog/kyodai-seikaku-chigau.html",
+          "title": "兄弟で性格が違うのはなぜ？"
+        },
+        {
+          "cond": [],
+          "url": "/blog/shumi-seikaku-type-guide.html",
+          "title": "性格タイプ別・向いている趣味の見つけ方"
+        },
+        {
+          "cond": [],
+          "url": "/blog/shigoto-muki-fumuki.html",
+          "title": "あなたに向いている仕事・向いていない仕事"
+        }
       ]
     }
   ]
