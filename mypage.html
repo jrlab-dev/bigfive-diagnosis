@@ -3485,11 +3485,16 @@ function renderAIProfile() {
    *   2026-08-04に決めた「枠を使わない計測はGA4へ」の方針どおり。
    *
    * 見方＝GA4で eventName='ai_profile_copy' の eventCount（回数）と totalUsers（人数）を並べる。 */
-  function countCopyOnce(source) {
+  /* ⚠️パラメータ名に source を使わないこと（2026-09-07に改名）。
+   *   GA4では source / medium / campaign / term / content は流入元の予約語で、
+   *   イベントに付けるとそのセッションの流入元がその値で上書きされる。
+   *   実害＝2026-08-27にこの計測を足してから、GA4の流入元に「button」「example」という
+   *   存在しない流入元が毎日5〜15セッション現れ、その分 Google・ChatGPT・直接から奪われていた。 */
+  function countCopyOnce(copyFrom) {
     try {
       if (window.gtag) gtag('event', 'ai_profile_copy', {
         mode: currentAiMode || 'none',   // none＝指示なし（2026-08-23からの既定）
-        source: source,                  // button＝コピーボタン／example＝質問例タップ
+        copy_from: copyFrom,             // button＝コピーボタン／example＝質問例タップ
       });
     } catch (e) {}
   }
