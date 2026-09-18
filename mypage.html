@@ -1530,6 +1530,7 @@
   ]
 }
 </script>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
@@ -1761,6 +1762,7 @@
   </div>
 </div>
 
+<script src="personality-types.js?v=20260919"></script>
 <script>
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
@@ -1911,6 +1913,7 @@ function renderMyResults() {
     const v = String(r.version || '10');
     const vLabel = v + 'Q';
     const vColor = vBadgeColors[v] || '#64748b';
+    const typeName = PersonalityTypes.getName(r.code, r.typeName || r.code || '');
 
     const isActive = i === activeIdx;
     return `
@@ -1922,7 +1925,7 @@ function renderMyResults() {
           </div>
         </div>
         <div class="result-card-content">
-          <div class="result-card-name">${r.typeName}</div>
+          <div class="result-card-name">${typeName}</div>
           <div class="result-card-meta">
             <span class="result-card-code">${r.code}</span>
             <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:${vColor}33;color:${vColor};border:1px solid ${vColor}66;">${vLabel}</span>
@@ -2676,7 +2679,7 @@ function renderAlbum() {
       var imgRest = imgCandidates.slice(1).join('|');
       var r = card.rarity || 'common';
       html += '<a href="result.html?type=' + card.code + '&v=' + card.version + '&gender=' + card.gender + '&rarity=' + r + '&saved=1" class="' + cls + ' rarity-' + r + '">';
-      html += '<img src="' + imgPath + '" data-rest="' + imgRest + '" alt="' + (card.typeName || card.code) + '" loading="lazy" onerror="if(this.dataset.rest){var a=this.dataset.rest.split(\'|\');this.src=a.shift();this.dataset.rest=a.join(\'|\')}else{this.style.display=\'none\'}">';
+      html += '<img src="' + imgPath + '" data-rest="' + imgRest + '" alt="' + PersonalityTypes.getName(card.code, card.typeName || card.code || '') + '" loading="lazy" onerror="if(this.dataset.rest){var a=this.dataset.rest.split(\'|\');this.src=a.shift();this.dataset.rest=a.join(\'|\')}else{this.style.display=\'none\'}">';
       html += '<div class="coll-num">' + i + '</div>';
       if (unlock) html += '<div class="coll-unlock-label">' + unlock.label + '解放済</div>';
       html += '</a>';
@@ -2995,7 +2998,10 @@ function applySyncData(loadedData, mode) {
           localStorage.setItem(k, v);
         }
       } else {
-        localStorage.setItem(k, v);
+        // 記念は一度得たら保持。統合時に以前の端末の古いメタで消さない。
+        const value = k === 'bigfive_album_meta' && window.AlbumUtils && AlbumUtils.mergeCollectionRewardMeta
+          ? AlbumUtils.mergeCollectionRewardMeta(v, false) : v;
+        localStorage.setItem(k, value);
       }
     });
   }
@@ -3296,7 +3302,7 @@ function renderAIProfile() {
   // ビッグファイブ
   if (bf) {
     const s = bf.scores || {};
-    const typeName = bf.typeName || '';
+    const typeName = PersonalityTypes.getName(bf.code, bf.typeName || '');
     const bfLvl = v => { const n = parseInt(v, 10); return isNaN(n) ? '' : n >= 4 ? '（高め）' : n <= 2 ? '（低め）' : '（中間）'; };
     const bfFmt = v => v ? `${v}/5${bfLvl(v)}` : '?';
     lines.push('■ ビッグファイブ性格診断');
@@ -3550,15 +3556,15 @@ function renderAIProfile() {
   });
 }
 </script>
-<script src="image-resolver.js"></script>
-<script src="hidden_characters.js"></script>
-<script src="character-registry.js"></script>
-<script src="rarity.js"></script>
-<script src="album.js"></script>
+<script src="image-resolver.js?v=20260919"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="character-registry.js?v=20260919"></script>
+<script src="rarity.js?v=20260919"></script>
+<script src="album.js?v=20260919"></script>
 <script src="unlock.js"></script>
 <script src="gacha-utils.js"></script>
 <script src="concierge.js"></script>
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919"></script>
 <script>
 (function() {
   if (typeof GachaUtils !== 'undefined') {
@@ -3616,5 +3622,4 @@ if (location.hash === '#aiProfileSection') {
 </script>
 </body>
 </html>
-
 

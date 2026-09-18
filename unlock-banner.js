@@ -83,6 +83,11 @@
 
   function showNext() {
     if (queue.length === 0) { isShowing = false; return; }
+    // 記念カードの発見を先に見せる。機能解放の内容は消さず、閉じた後へ回す。
+    if (window.AlbumUtils && AlbumUtils.isCollectionRewardBusy && AlbumUtils.isCollectionRewardBusy()) {
+      isShowing = false;
+      return;
+    }
     isShowing = true;
     var item = queue.shift();
 
@@ -127,5 +132,9 @@
     unlocks.forEach(function(u) { queue.push(u); });
     if (!isShowing) showNext();
   };
+
+  window.addEventListener('bigfive:collection-rewards-finished', function() {
+    if (!isShowing) showNext();
+  });
 
 })();

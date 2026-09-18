@@ -399,6 +399,10 @@ body { padding-top: 52px !important; }
       var v = data[k];
       if (typeof v !== 'string') return;
       if (RESTORE_ARRAY_KEYS.indexOf(k) < 0) {
+        if (k === 'bigfive_album_meta' && window.AlbumUtils && AlbumUtils.mergeCollectionRewardMeta) {
+          localStorage.setItem(k, AlbumUtils.mergeCollectionRewardMeta(v, localStorage.getItem(k) !== null));
+          return;
+        }
         if (localStorage.getItem(k) === null) localStorage.setItem(k, v);
         return;
       }

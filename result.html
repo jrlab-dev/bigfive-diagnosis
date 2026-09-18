@@ -16,6 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="診断結果 — ビッグファイブ診断">
 <meta name="twitter:description" content="性格診断結果。ビッグファイブであなたの個性を科学的に解説。弱点の伸ばし方・適職・相性診断も無料で公開。友達とシェアして比べよう。">
+<script src="card-delivery.js?v=20260919"></script>
 <script>
 (function(){
   var p=new URLSearchParams(location.search);
@@ -23,8 +24,8 @@
   var c=p.get('char');
   var v=p.get('v')||'10';
   var src;
-  if(c){src='https://bigfive.jr-genius.jp/ogp-image?char='+encodeURIComponent(c)+'&type=share';}
-  else if(code){src='https://bigfive.jr-genius.jp/ogp-image?code='+encodeURIComponent(code)+'&gender='+g+'&type=share'+(v==='10'?'&rarity=r0':'')+(v==='30'?'&v=30':'');}
+  if(c){src=CardDelivery.imageUrl({char:c,type:'share'});}
+  else if(code){var q={code:code,gender:g,v:v,type:'share'};if(p.get('rarity'))q.rarity=p.get('rarity');src=CardDelivery.imageUrl(q);}
   if(src){
     var m=document.createElement('meta');m.setAttribute('property','og:image');m.setAttribute('content',src);document.head.appendChild(m);
     var m2=document.createElement('meta');m2.setAttribute('name','twitter:image');m2.setAttribute('content',src);document.head.appendChild(m2);
@@ -327,10 +328,10 @@
 
   /* キャラクター */
   .char-area {
-    position: absolute; top: 5%; left: 50%;
+    position: absolute; top: 6.8%; left: 50%;
     transform: translateX(-50%);
-    width: 90%; height: 82%;
-    display: flex; align-items: flex-start; justify-content: center;
+    width: 86.4%; height: 86.4%;
+    display: flex; align-items: center; justify-content: center;
     z-index: 3; pointer-events: none;
   }
   .char-img {
@@ -364,7 +365,7 @@
   .card-content {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
     display: flex; flex-direction: column; align-items: center;
-    padding: 0 16px 12px;
+    padding: 0 8px 4px;
     background: linear-gradient(to bottom, transparent 0%, rgba(10,14,39,0.7) 20%, rgba(10,14,39,0.85) 100%);
   }
   .scores {
@@ -372,14 +373,14 @@
     grid-template-columns: 1fr 1fr;
     gap: 0 12px; margin-bottom: 0;
   }
-  .score-item { display: flex; align-items: center; gap: 4px; }
+  .score-item { display: flex; align-items: center; gap: 4px; line-height: 12px; }
   .score-label { font-size: 11px; font-weight: 700; width: 14px; text-align: center; }
   .score-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.4); border-radius: 3px; overflow: hidden; }
   .score-bar { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
   .score-val { font-size: 10px; color: var(--dim); width: 12px; text-align: right; }
   .description {
-    font-size: 12px; line-height: 1.6; text-align: left;
-    color: #cbd5e1; padding: 6px 10px;
+    font-size: 12px; line-height: 1.35; text-align: left;
+    color: #cbd5e1; padding: 2px 4px;
     background: rgba(0,0,0,0.10); border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.05);
     width: 100%; backdrop-filter: blur(4px);
@@ -1172,9 +1173,10 @@
 
   @media (max-width: 400px) {
     .card { padding: 16px 14px 14px; }
-    .type-name { font-size: 17px; }
-    .description { font-size: 11px; padding: 6px 8px; }
-    .scores { gap: 4px 12px; }
+    .type-name { font-size: 19px; }
+    .type-code { top: 34px; }
+    .description { font-size: 11px; padding: 2px 4px; }
+    .scores { gap: 0 12px; }
     .result-buttons { flex-direction: column; align-items: center; }
   }
 
@@ -1747,16 +1749,18 @@
 
 </div>
 
-<script src="hidden_characters.js"></script>
-<script src="image-resolver.js"></script>
-<script src="character-registry.js"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="image-resolver.js?v=20260919"></script>
+<script src="personality-types.js?v=20260919"></script>
+<script src="character-display-bounds.js?v=20260919"></script>
+<script src="character-registry.js?v=20260919"></script>
 <!-- 30項目（ファセット）の定義。facet-report.html と共通の正本（2026-08-30に切り出し）。
      30項目レポートの案内で「目次」を出すのに使う -->
 <script src="facets.js"></script>
-<script src="album.js"></script>
+<script src="album.js?v=20260919"></script>
 <script src="unlock.js"></script>
 <script src="concierge.js"></script>
-<script src="rarity.js"></script>
+<script src="rarity.js?v=20260919"></script>
 <script src="compat.js"></script>
 <script src="advice.js"></script>
 <script src="report-texts.js"></script>
@@ -2316,8 +2320,9 @@ function getRarity() {
   // オリジナルアニメキャラ上書き
   var ov = ANIME_RARITY_OVERRIDE[typeCode];
   if (ov) {
-    if (gender && ov[gender]) return ov[gender];
-    return ov.default;
+    var ovR = (gender && ov[gender]) || ov.default;
+    // 30問版はシークレット（r7）画像を表示しないため、上書き値がr7のときはスコア導出へ落とす（54421/M→r3。60/120問版は従来どおり）
+    if (!(ovR === 'r7' && version !== '60' && version !== '120')) return ovR;
   }
 
   // 60問版・120問版のみドンピシャ隠しキャラ判定（30問版はsecret画像を表示しないため。album.js computeRarityForAlbum と同じ条件）
@@ -2348,55 +2353,12 @@ function getRarity() {
   return 'r5';
 }
 
-// ===== 説明文生成 =====
+// 全版共通の新しい性格名とカード短文（実スコアはそのまま）。
 function genDescription() {
-  const f = [O, C, E, A, N];
-  const keys = ['O', 'C', 'E', 'A', 'N'];
-  // 3からの距離が大きい因子＝その人の特徴が強い因子を優先して2つ選ぶ
-  const ranked = keys
-    .map((k, i) => ({ k, score: f[i], dist: Math.abs(f[i] - 3) }))
-    .filter(x => x.dist > 0)
-    .sort((a, b) => b.dist - a.dist);
-  const parts = ranked.slice(0, 2).map(x => fragments[x.k][x.score]);
-  if (parts.length === 0) {
-    parts.push(fragments.O[3]);
-    parts.push(fragments.E[3]);
-  }
-  return parts.slice(0, 2).join('。') + '。';
+  return PersonalityTypes.getDescription(typeCode);
 }
-
-// ===== タイプ名生成 =====
 function genTypeName() {
-  const scores = { O, C, E, A, N };
-  let main = 'O', max = O;
-  for (const [k, v] of Object.entries(scores)) {
-    if (v > max) { max = v; main = k; }
-  }
-  const mainLabels = {
-    O: { high: '探求者', low: '確実派' },
-    C: { high: '実行者', low: '自由人' },
-    E: { high: '社交家', low: '内省家' },
-    A: { high: '調停者', low: '競争者' },
-    N: { high: '感受家', low: '平静派' }
-  };
-  const subLabels = {
-    O: { high: '発想家', low: '現実派' },
-    C: { high: '規律派', low: '柔軟派' },
-    E: { high: 'ムードメーカー', low: '思考家' },
-    A: { high: '支援者', low: '自立派' },
-    N: { high: '繊細派', low: '泰然家' }
-  };
-  const mainEntry = mainLabels[main];
-  const mainLabel = max >= 4 ? mainEntry.high : mainEntry.low;
-  // 2番目に特徴的な因子（スコア1または5）
-  let sub = '';
-  for (const [k, v] of Object.entries(scores)) {
-    if (k !== main && (v === 1 || v === 5)) {
-      sub = subLabels[k][v === 5 ? 'high' : 'low'];
-      break;
-    }
-  }
-  return sub ? `${sub}・${mainLabel}` : mainLabel;
+  return PersonalityTypes.getName(typeCode, typeCode);
 }
 
 // ===== 描画 =====
@@ -2429,16 +2391,19 @@ document.getElementById('typeName').textContent = genTypeName();
 // 名前が見切れる場合はフォントサイズを縮小
 const nameEl_r = document.getElementById('typeName');
 function shrinkTypeName() {
-  const parent = nameEl_r.parentElement;
-  const maxW = parent.clientWidth - 32; // padding分引く
-  if (nameEl_r.scrollWidth > maxW) {
-    const ratio = maxW / nameEl_r.scrollWidth;
+  nameEl_r.style.fontSize = '';
+  const maxW = nameEl_r.clientWidth - 32;
+  const range = document.createRange();
+  range.selectNodeContents(nameEl_r);
+  const textWidth = range.getBoundingClientRect().width;
+  if (textWidth > maxW && maxW > 0) {
     const currentSize = parseFloat(getComputedStyle(nameEl_r).fontSize);
-    nameEl_r.style.fontSize = Math.max(currentSize * ratio, 10) + 'px';
+    nameEl_r.style.fontSize = Math.max(currentSize * maxW / textWidth, 10) + 'px';
   }
 }
 requestAnimationFrame(() => setTimeout(shrinkTypeName, 100));
 window.addEventListener('load', shrinkTypeName);
+window.addEventListener('resize', shrinkTypeName);
 document.getElementById('typeCode').textContent = `O${O} C${C} E${E} A${A} N${N}`;
 // キャリアリンクに現在の診断スコアを渡す
 var careerLinkEl = document.getElementById('careerLink');
@@ -2484,6 +2449,7 @@ function setCharImage(path, isHidden) {
   selectedCharImagePath = path;
   selectedCharIsHidden = !!isHidden;
   charImg.src = path;
+  requestAnimationFrame(fitCharacterToCard);
 }
 // ImageResolver を使用した統一画像検索（secret → only → marume243 の3ステップ）
 {
@@ -2506,9 +2472,53 @@ function setCharImage(path, isHidden) {
   } else {
     charImg.onerror = () => { charImg.style.display = 'none'; };
     const rC = typeCode.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
-    setCharImage('images/characters/marume243/' + gender + '/' + rC + '.webp', false);
+    const baseFolder = ['30','60','120'].includes(version) ? 'renewal243' : 'marume243';
+    setCharImage('images/characters/' + baseFolder + '/' + gender + '/' + rC + '.webp', false);
   }
 }
+
+// カードいっぱいに人物を表示する。画像自体の寸法や縦横比は変えない。
+function fitCharacterToCard() {
+  const area = card.querySelector('.char-area');
+  const heading = document.getElementById('typeName');
+  const codeLabel = document.getElementById('typeCode');
+  if (!area || !heading || !codeLabel) return;
+  // 見出し直下のコード位置は従来どおり保つ。人物はこの領域と重なってよい。
+  codeLabel.style.top = (heading.offsetTop + heading.offsetHeight + 5) + 'px';
+  area.style.top = '6.8%';
+  area.style.width = '86.4%';
+  area.style.height = '86.4%';
+  area.style.alignItems = 'center';
+  area.style.overflow = 'hidden';
+  charImg.style.width = '100%';
+  charImg.style.maxWidth = '100%';
+  const bounds = (window.CHARACTER_DISPLAY_BOUNDS || {})[selectedCharImagePath];
+  // 描画済みの透明余白だけを表示枠の外へ出し、人物は縦横同率で収める。
+  if (bounds) {
+    const [x0,y0,x1,y1] = bounds.bbox;
+    const width = area.clientWidth, height = area.clientHeight;
+    const scale = Math.min(width / (x1-x0), height / (y1-y0));
+    charImg.style.position = 'absolute';
+    charImg.style.maxWidth = 'none';
+    charImg.style.width = bounds.size[0] * scale + 'px';
+    charImg.style.height = bounds.size[1] * scale + 'px';
+    charImg.style.left = ((width-(x1-x0)*scale)/2-x0*scale) + 'px';
+    charImg.style.top = ((height-(y1-y0)*scale)/2-y0*scale) + 'px';
+  } else {
+    charImg.style.position = '';
+    charImg.style.height = '100%';
+    charImg.style.left = '';
+    charImg.style.top = '';
+  }
+}
+if (typeof ResizeObserver !== 'undefined') {
+  const cardTextObserver = new ResizeObserver(fitCharacterToCard);
+  [card, document.getElementById('typeName'), document.getElementById('typeCode')]
+    .forEach(el => { if (el) cardTextObserver.observe(el); });
+}
+window.addEventListener('resize', fitCharacterToCard);
+window.addEventListener('load', fitCharacterToCard);
+requestAnimationFrame(fitCharacterToCard);
 
 // ===== 特性詳細カード =====
 const sc = { O, C, E, A, N };
@@ -3815,7 +3825,7 @@ if (isOtherMode) {
   // ワーカーの /share ページ（静的OGPタグ入り・人は結果ページへ即転送）を経由してシェアする
   const typeName = document.getElementById('typeName').textContent;
   const shareParams = new URLSearchParams();
-  ['code', 'type', 'gender', 'v', 'char', 'facets', 'name', 'rel'].forEach(function(k) {
+  ['code', 'type', 'gender', 'v', 'rarity', 'char', 'facets', 'name', 'rel'].forEach(function(k) {
     const val = params.get(k);
     if (val) shareParams.set(k, val);
   });
@@ -3823,7 +3833,10 @@ if (isOtherMode) {
     shareParams.set('code', typeCode);
   }
   shareParams.set('n', typeName);
-  const shareUrl = 'https://bigfive.jr-genius.jp/share?' + shareParams.toString();
+  shareParams.set('gender', gender);
+  shareParams.set('v', version);
+  shareParams.set('rarity', getRarity());
+  const shareUrl = CardDelivery.shareUrl(shareParams);
 
   // シェア用テキスト生成
   const shareText = `私の性格タイプは「${typeName}」でした🧬\n画像の「あるある」、当たってる…？\n\n#性格診断 #ビッグファイブ\n`;
@@ -3909,8 +3922,8 @@ if (isOtherMode) {
     var code = p.get('code') || p.get('type'), g = p.get('gender') || 'F';
     var c = p.get('char');
     var src = '';
-    if (c) { src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + encodeURIComponent(c) + '&type=share'; }
-    else if (code) { src = 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(code) + '&gender=' + g + '&type=share' + (version === '10' ? '&rarity=r0' : '') + (version === '30' ? '&v=30' : ''); }
+    if (c) { src = CardDelivery.imageUrl({char:c,type:'share'}); }
+    else if (code) { src = CardDelivery.imageUrl({code:code,gender:g,v:version,rarity:getRarity(),type:'share'}); }
     if (!src) return; // パラメータなし＝プレビュー非表示のまま
     var box = document.getElementById('sharePreview');
     var img = document.getElementById('sharePreviewImg');
@@ -5188,9 +5201,9 @@ if (isOtherMode) {
   }
 })();
 </script>
-<script src="unlock-banner.js"></script>
+<script src="unlock-banner.js?v=20260919"></script>
 
-<script src="gacha-utils.js"></script><script src="nav.js"></script>
+<script src="gacha-utils.js"></script><script src="nav.js?v=20260919"></script>
 
 <!-- ===== 統合スコア機能（あの人モード × 本人共有データ） ===== -->
 <script>
@@ -5300,4 +5313,3 @@ if (isOtherMode) {
 
 </body>
 </html>
-

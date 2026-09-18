@@ -10,31 +10,29 @@
 
   function getDisplayImage(code, gender, version) {
     if (IR) return IR.getDisplayImage(code, gender, version);
-    // フォールバック: 旧パス（image-resolver がない場合のみ）
-    var g = gender === 'M' ? 'M' : 'F';
-    var rCode = String(code || '33333').split('').map(function(d) {
-      var n = parseInt(d, 10);
-      return n <= 2 ? '1' : n >= 4 ? '5' : '3';
-    }).join('');
-    return 'images/characters/marume243/' + g + '/' + rCode + '.webp';
+    // フォールバック: image-resolver がない場合も版別の通常fallbackを維持
+    return getFallbackImage(code, gender, version);
   }
 
-  function getFallbackImage(code, gender) {
-    if (IR) return IR.getFallbackImage(code, gender);
+  function getFallbackImage(code, gender, version) {
+    if (IR) return IR.getFallbackImage(code, gender, version);
     var g = gender === 'M' ? 'M' : 'F';
     var rCode = String(code || '33333').split('').map(function(d) {
       var n = parseInt(d, 10);
       return n <= 2 ? '1' : n >= 4 ? '5' : '3';
     }).join('');
-    return 'images/characters/marume243/' + g + '/' + rCode + '.webp';
+    var v = String(version || '10');
+    var directory = (v === '30' || v === '60' || v === '120') ? 'renewal243' : 'marume243';
+    return 'images/characters/' + directory + '/' + g + '/' + rCode + '.webp';
   }
 
   function getCardUrl(code, gender, version) {
     if (IR) return IR.getCardUrl(code, gender, version);
     var v = String(version || '10');
-    var rarity = (v === '10') ? 'r0' : 'r6';
-    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(String(code || '33333')) +
-      '&gender=' + (gender === 'M' ? 'M' : 'F') + '&rarity=' + rarity;
+    var q = {code:String(code || '33333'),gender:gender === 'M' ? 'M' : 'F',v:v};
+    if (q.v === '10') q.rarity = 'r0';
+    if (window.CardDelivery) return CardDelivery.imageUrl(q);
+    return 'https://bigfive.jr-genius.jp/ogp-image?' + new URLSearchParams(q).toString();
   }
 
   function roundedCode(code) {
@@ -51,6 +49,7 @@
       return {
         display10: getDisplayImage(code, gender, '10'),
         display30: getDisplayImage(code, gender, '30'),
+        display60: getDisplayImage(code, gender, '60'),
         display120: getDisplayImage(code, gender, '120'),
         roundedImage: getFallbackImage(code, gender),
         card10: getCardUrl(code, gender, '10'),

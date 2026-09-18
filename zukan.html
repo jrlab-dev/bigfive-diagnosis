@@ -417,6 +417,7 @@
   ]
 }
 </script>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
@@ -491,6 +492,8 @@
 <div class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-3px;margin-right:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>隠しキャラクター</div>
 <div class="card-grid" id="hiddenGrid"></div>
 
+<section data-milestone-collection hidden aria-label="収集記念のシークレット"></section>
+
 <div class="unlock-map-section">
   <div class="unlock-map-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> 🔒 これから解放される機能</div>
   <div id="unlockMapList"></div>
@@ -498,12 +501,12 @@
 
 <a href="mypage.html" class="back-link">← マイページに戻る</a>
 
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919"></script>
 <script src="unlock.js"></script>
-<script src="image-resolver.js"></script>
-<script src="hidden_characters.js"></script>
-<script src="album.js"></script>
-<script src="rarity.js"></script>
+<script src="image-resolver.js?v=20260919"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="album.js?v=20260919"></script>
+<script src="rarity.js?v=20260919"></script>
 <script>
 (function() {
   'use strict';
@@ -524,10 +527,16 @@
   }
 
   // レア度は保存値を信じず、コード（と種別）から計算し直す（旧表記commonデータ対策）
-  function deriveRarity(code, gender, kind) {
+  // version（所持カードの版）を渡されたときだけ判定に使う。30問版の所持カードはr7（旧secret表記を含む）をスコア導出へ落とす（54421/M→r3。60/120問版は従来どおり）
+  function deriveRarity(code, gender, kind, version) {
     if (kind === 'r0') return 'r0';
     var r = (typeof computeRarity === 'function') ? computeRarity(code, gender) : 'r1';
-    return r === 'secret' ? 'r7' : r;
+    if ((r === 'r7' || r === 'secret') && version === '30') {
+      var v = [+code[0], +code[1], +code[2], +code[3], +code[4]];
+      var mc = (v[0] === 5) + (v[1] === 5) + (v[2] === 1 || v[2] === 5) + (v[3] === 1 || v[3] === 5) + (v[4] === 1);
+      return ['r1', 'r2', 'r3', 'r4', 'r5'][Math.min(mc, 4)];
+    }
+    return r === 'secret' ? 'r7' : r; // 旧表記secretの後方互換（2026-09-17廃止・r7へ読み替え）
   }
 
   // ---- データ構築 ----
@@ -576,7 +585,7 @@
           gender: gender,
           kind: 'normal',
           owned: !!owned,
-          rarity: deriveRarity(code, gender, 'normal'),
+          rarity: deriveRarity(code, gender, 'normal', owned ? owned.version : undefined),
           link: owned ? owned : null
         });
       });
@@ -615,7 +624,7 @@
         kind: 'extra',
         owned: true,
         // version=10ならr0扱いで計算（保存値は使わない）
-        rarity: deriveRarity(owned.code, owned.gender, owned.version === '10' ? 'r0' : 'normal'),
+        rarity: deriveRarity(owned.code, owned.gender, owned.version === '10' ? 'r0' : 'normal', owned.version),
         link: owned
       });
     });
@@ -821,12 +830,12 @@
   // 取得済み＝R2の焼き済みカード1枚絵（ワーカー経由・CDNキャッシュあり）
   // rarityは保存値（link.rarity）でなくセルの計算値（card.rarity）を使う
   function cardImageUrl(card) {
-    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + card.link.code +
-      '&gender=' + card.link.gender + '&rarity=' + card.rarity + '&v=' + (card.link.version || '30');
+    return CardDelivery.imageUrl({code:card.link.code,gender:card.link.gender,rarity:card.rarity,v:card.link.version || '30'});
   }
   // 未取得＝キャラ画像シルエット（git内資産・ワーカーへのリクエストゼロ／丸め＝toScaleCode）
   function silhouetteImagePath(card) {
-    return 'images/characters/marume243/' + card.gender + '/' + toScaleCode(card.code) + '.webp';
+    var folder = card.kind === 'r0' ? 'marume243' : 'renewal243';
+    return 'images/characters/' + folder + '/' + card.gender + '/' + toScaleCode(card.code) + '.webp';
   }
   function setFilter(f) {
     currentFilter = f;
@@ -980,7 +989,7 @@
       }
       var img = document.createElement('img');
       if (owned) {
-        img.src = 'https://bigfive.jr-genius.jp/ogp-image?char=' + hc.id;
+        img.src = CardDelivery.imageUrl({char:hc.id});
       } else {
         var code5 = '' + hc.o + hc.c + hc.e + hc.a + hc.n;
         img.src = 'images/characters/secret/' + (hc.gender === 'M' ? 'M' : 'F') + '/' + code5 + '.webp';

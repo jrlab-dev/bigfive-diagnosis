@@ -451,6 +451,7 @@ body {
   ]
 }
 </script>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body data-feature-gate="report" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
@@ -543,7 +544,8 @@ body {
 
 </div>
 
-<script src="image-resolver.js"></script>
+<script src="personality-types.js?v=20260919"></script>
+<script src="image-resolver.js?v=20260919"></script>
 <script src="cross-att-texts.js?v=7"></script>
 <script>
 // ===== 定義集 =====
@@ -691,7 +693,7 @@ function renderProfile(bf) {
   charEl.appendChild(img);
 
   document.getElementById('profileCode').textContent = bf.code;
-  document.getElementById('profileName').textContent = bf.typeName || '—';
+  document.getElementById('profileName').textContent = PersonalityTypes.getName(bf.code, bf.typeName || '—');
 
   const barsHtml = ['O','C','E','A','N'].map(f => {
     const score = scores[f] || 3;
@@ -713,7 +715,7 @@ function renderTestsGrid(data) {
   const tests = [
     {
       icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>', label: 'ビッグファイブ',
-      value: data.bf ? data.bf.typeName : null,
+      value: data.bf ? PersonalityTypes.getName(data.bf.code, data.bf.typeName || '') : null,
       color: '#8b5cf6', url: 'quiz.html'
     },
     {
@@ -1535,7 +1537,7 @@ function renderGrowth(steps) {
 (function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=report_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
 </script>
 
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919"></script>
 <script src="unlock.js"></script>
 </body>
 </html>

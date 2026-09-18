@@ -952,6 +952,7 @@
   ]
 }
 </script>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body data-feature-gate="team" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
@@ -992,6 +993,7 @@
   <div class="result-section" id="resultSection"></div>
 </div>
 
+<script src="personality-types.js?v=20260919"></script>
 <script>
 // ===== 定数 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
@@ -1115,7 +1117,7 @@ function loadMembers() {
     const scores = r.scores || codeToScores(r.code);
     members.push({
       id: 'my_0',
-      name: r.typeName || `自分 (${r.code})`,
+      name: PersonalityTypes.getName(r.code, r.typeName || `自分 (${r.code})`),
       code: r.code,
       scores,
       gender: r.gender || 'F',
@@ -2385,7 +2387,7 @@ if (viewTeamData && allMembers.length >= 2) {
 
   <p class="updated">最終更新：2026年8月17日</p>
 </section>
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919"></script>
 <script src="unlock.js"></script>
 <script>
 (function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=team_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();

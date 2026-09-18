@@ -11,8 +11,17 @@
   var MY_KEY = 'bigfive_my_results';
   var OTHER_KEY = 'bigfive_other_results';
   var MAX_CARDS = 8300;
+  // 通常カードと混ぜない収集記念。記念カード自身で枚数条件を進めない。
+  var COLLECTION_THRESHOLDS = [100, 200, 300, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000];
+  var PENDING_KEY = 'bigfive_collection_reward_pending';
+  var pendingMemory = [];
+  var migrating = false;
+  var rewardUILoading = false;
+  var rewardUIFailed = false;
+  var albumScript = document.currentScript;
+  var assetBase = albumScript && albumScript.src ? new URL('.', albumScript.src).href : new URL('.', location.href).href;
 
-  var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, common: 1, rare: 2, legendary: 3, secret: 4 };
+  var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, r8: 9, common: 1, rare: 2, legendary: 3, secret: 4 }; // r8=収集記念（2026-09-17新設）。secretは旧保存データの後方互換
 
   // --- ユーティリティ ---
 
@@ -26,12 +35,14 @@
   }
 
   function getAlbumMeta() {
+    var meta;
     try {
-      var meta = JSON.parse(localStorage.getItem(META_KEY));
-      return meta || { migrated: false, milestones: {} };
-    } catch(e) {
-      return { migrated: false, milestones: {} };
-    }
+      meta = JSON.parse(localStorage.getItem(META_KEY));
+    } catch(e) {}
+    if (!meta || typeof meta !== 'object' || Array.isArray(meta)) meta = { migrated: false };
+    if (!meta.milestones || typeof meta.milestones !== 'object' || Array.isArray(meta.milestones)) meta.milestones = {};
+    if (!meta.collectionRewards || typeof meta.collectionRewards !== 'object' || Array.isArray(meta.collectionRewards)) meta.collectionRewards = {};
+    return meta;
   }
 
   function saveAlbumMeta(meta) {
@@ -59,8 +70,9 @@
     // オリジナルアニメキャラ上書き（rarity.js未読込のページでも落ちないようガード）
     var ov = (typeof ANIME_RARITY_OVERRIDE !== 'undefined') ? ANIME_RARITY_OVERRIDE[code] : null;
     if (ov) {
-      if (gender && ov[gender]) return ov[gender];
-      return ov.default;
+      var ovR = (gender && ov[gender]) || ov.default;
+      // 30問版はシークレット（r7）画像を表示しないため、上書き値がr7のときはスコア導出へ落とす（54421/M→r3。60/120問版は従来どおり）
+      if (!(ovR === 'r7' && version !== '60' && version !== '120')) return ovR;
     }
 
     // MAX因子判定ヘルパー
@@ -146,7 +158,7 @@
           cards[existingIdx].hiddenImgPath = cardData.hiddenImgPath || cards[existingIdx].hiddenImgPath || null;
         }
         saveAlbumCards(cards);
-        checkMilestones(cards.length);
+        checkMilestones(cards.length, { previousCount: cards.length, silent: migrating });
         return true;
       }
       return false;
@@ -157,7 +169,7 @@
     cards.push({
       code: cardData.code,
       gender: cardData.gender,
-      typeName: cardData.typeName || cardData.code,
+      typeName: (window.PersonalityTypes ? PersonalityTypes.getName(cardData.code, cardData.typeName || cardData.code) : (cardData.typeName || cardData.code)),
       version: cardData.version || '30',
       rarity: cardData.rarity || 'common',
       isHidden: !!cardData.isHidden,
@@ -168,26 +180,129 @@
     });
 
     saveAlbumCards(cards);
-    checkMilestones(cards.length);
+    checkMilestones(cards.length, { previousCount: cards.length - 1, silent: migrating });
     return true;
   }
 
   // --- 実績チェック ---
 
-  function checkMilestones(count) {
+  function checkMilestones(count, options) {
+    options = options || {};
+    if (!Number.isFinite(count) || count < 0) return [];
     var meta = getAlbumMeta();
     var thresholds = [10, 50, 100, 500, 1000, 5000];
     var changed = false;
+    var previous = typeof options.previousCount === 'number' ? options.previousCount : count;
+    var fresh = [], badges = [];
 
     thresholds.forEach(function(t) {
       if (count >= t && !meta.milestones[t]) {
         meta.milestones[t] = { unlocked: true, date: new Date().toISOString() };
         changed = true;
-        showMilestoneToast(t);
+        if (!options.silent && t > previous && COLLECTION_THRESHOLDS.indexOf(t) < 0) badges.push(t);
       }
     });
 
-    if (changed) saveAlbumMeta(meta);
+    COLLECTION_THRESHOLDS.forEach(function(t) {
+      if (count < t || meta.collectionRewards[t]) return;
+      meta.collectionRewards[t] = { threshold: t, awardedAt: new Date().toISOString() };
+      changed = true;
+      if (!options.silent && t > previous) fresh.push(t);
+    });
+    // 所有の保存が成功してから演出へ渡す。失敗しても通常カードは消さない。
+    if (changed) {
+      try { saveAlbumMeta(meta); } catch(e) { return []; }
+      if (fresh.length) queueCollectionRewards(fresh);
+      dispatchRewardEvent('bigfive:collection-rewards-changed');
+    }
+    badges.forEach(showMilestoneToast);
+    return fresh;
+  }
+
+  function getCollectionRewards() {
+    var owned = getAlbumMeta().collectionRewards;
+    return COLLECTION_THRESHOLDS.filter(function(t) { return !!owned[t]; }).map(function(t) {
+      return { threshold: t, awardedAt: owned[t].awardedAt || null, rarity: 'r8', isMilestone: true }; // 2026-09-17 収集記念はR8（保存データはthresholdのみで書き換え無し・読むときの読み替え）
+    });
+  }
+
+  // 統合時だけ取得記録を和集合にする。通常の診断・カード配列の統合規則は変えない。
+  function mergeCollectionRewardMeta(incomingRaw, keepLocalFields) {
+    var incoming;
+    try { incoming = JSON.parse(incomingRaw); } catch(e) { return incomingRaw; }
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) return incomingRaw;
+    var local = getAlbumMeta();
+    var target = keepLocalFields ? local : incoming;
+    var remote = incoming.collectionRewards || {};
+    var merged = {};
+    COLLECTION_THRESHOLDS.forEach(function(t) {
+      var old = local.collectionRewards[t], loaded = remote[t];
+      if (old || loaded) merged[t] = { threshold: t, awardedAt: (old && old.awardedAt) || (loaded && loaded.awardedAt) || null };
+    });
+    target.collectionRewards = merged;
+    return JSON.stringify(target);
+  }
+
+  function getPendingCollectionRewards() {
+    var list = pendingMemory;
+    try { var saved = sessionStorage.getItem(PENDING_KEY); if (saved) list = JSON.parse(saved); } catch(e) {}
+    if (!Array.isArray(list)) list = [];
+    var owned = getAlbumMeta().collectionRewards;
+    return list.filter(function(t, i) {
+      return COLLECTION_THRESHOLDS.indexOf(t) >= 0 && !!owned[t] && list.indexOf(t) === i;
+    }).sort(function(a, b) { return a - b; });
+  }
+
+  function savePendingCollectionRewards(list) {
+    pendingMemory = list;
+    try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(list)); } catch(e) {}
+  }
+
+  function queueCollectionRewards(list) {
+    var pending = getPendingCollectionRewards();
+    list.forEach(function(t) { if (pending.indexOf(t) < 0) pending.push(t); });
+    savePendingCollectionRewards(pending);
+    loadCollectionRewardUI();
+  }
+
+  function consumeCollectionReward(threshold) {
+    var list = getPendingCollectionRewards();
+    if (list.indexOf(threshold) < 0) return false;
+    savePendingCollectionRewards(list.filter(function(t) { return t !== threshold; }));
+    return true;
+  }
+
+  function dispatchRewardEvent(name) {
+    window.dispatchEvent(new CustomEvent(name));
+  }
+
+  function reconcileCollectionRewards() {
+    var cards = getAlbumCards();
+    if (Array.isArray(cards)) checkMilestones(cards.length, { silent: true, previousCount: cards.length });
+  }
+
+  function isCollectionRewardBusy() {
+    return !rewardUIFailed && (getPendingCollectionRewards().length > 0 ||
+      !!document.querySelector('.bf-milestone-dialog[open][data-celebration]'));
+  }
+
+  function loadCollectionRewardUI() {
+    if (rewardUILoading || window.CollectionMilestones) return;
+    if (!getPendingCollectionRewards().length && !document.querySelector('[data-milestone-collection]')) return;
+    rewardUILoading = true;
+    var script = document.createElement('script');
+    script.src = assetBase + 'milestone-cards.js?v=20260919';
+    script.async = true;
+    script.onerror = function() {
+      markCollectionRewardUIFailed();
+      rewardUILoading = false;
+    };
+    document.head.appendChild(script);
+  }
+
+  function markCollectionRewardUIFailed() {
+    rewardUIFailed = true;
+    dispatchRewardEvent('bigfive:collection-rewards-finished');
   }
 
   function showMilestoneToast(milestone) {
@@ -227,6 +342,8 @@
     try { myResults = JSON.parse(localStorage.getItem(MY_KEY)) || []; } catch(e) {}
     try { otherResults = JSON.parse(localStorage.getItem(OTHER_KEY)) || []; } catch(e) {}
 
+    migrating = true;
+    try {
     myResults.forEach(function(r) {
       if (!r.code || !r.gender) return;
       var rarity = r.rarity || computeRarityForAlbum(r.code, r.version, r.gender);
@@ -235,7 +352,7 @@
       addToAlbum({
         code: r.code,
         gender: r.gender,
-        typeName: r.typeName || r.code,
+        typeName: (window.PersonalityTypes ? PersonalityTypes.getName(r.code, r.typeName || r.code) : (r.typeName || r.code)),
         version: r.version || '30',
         rarity: rarity,
         isHidden: !!hc,
@@ -255,7 +372,7 @@
       addToAlbum({
         code: r.code,
         gender: gender,
-        typeName: r.typeName || r.code,
+        typeName: (window.PersonalityTypes ? PersonalityTypes.getName(r.code, r.typeName || r.code) : (r.typeName || r.code)),
         version: version,
         rarity: rarity,
         isHidden: !!hc,
@@ -265,8 +382,14 @@
       });
     });
 
+    } finally {
+      migrating = false;
+    }
+    // addToAlbumで書いた取得記録を、移行前の古いmetaで消さない。
+    meta = getAlbumMeta();
     meta.migrated = true;
     saveAlbumMeta(meta);
+    reconcileCollectionRewards();
   }
 
   // --- 画像パス取得 ---
@@ -318,6 +441,14 @@
     migrateExistingResults: migrateExistingResults,
     getAlbumMeta: getAlbumMeta,
     checkMilestones: checkMilestones,
+    getCollectionRewards: getCollectionRewards,
+    mergeCollectionRewardMeta: mergeCollectionRewardMeta,
+    getPendingCollectionRewards: getPendingCollectionRewards,
+    consumeCollectionReward: consumeCollectionReward,
+    reconcileCollectionRewards: reconcileCollectionRewards,
+    isCollectionRewardBusy: isCollectionRewardBusy,
+    markCollectionRewardUIFailed: markCollectionRewardUIFailed,
+    COLLECTION_THRESHOLDS: COLLECTION_THRESHOLDS.slice(),
     getCardImagePath: getCardImagePath,
     getCardImageCandidates: getCardImageCandidates,
     MAX_CARDS: MAX_CARDS,
@@ -326,6 +457,15 @@
     META_KEY: META_KEY
   };
 
+  reconcileCollectionRewards();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadCollectionRewardUI);
+  else loadCollectionRewardUI();
+  window.addEventListener('pageshow', function() { reconcileCollectionRewards(); loadCollectionRewardUI(); });
+  window.addEventListener('storage', function(e) {
+    if (e.key === STORAGE_KEY || e.key === META_KEY || e.key === null) {
+      reconcileCollectionRewards();
+      dispatchRewardEvent('bigfive:collection-rewards-changed');
+    }
+  });
+
 })();
-
-

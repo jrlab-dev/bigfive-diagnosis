@@ -202,6 +202,7 @@ body {
   .ai-mode-btn.on { background: rgba(139,92,246,0.18); border-color: #8b5cf6; opacity: 1; }
   .ai-mode-btn.on::before { content: "● "; }
 </style>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="container">
@@ -247,9 +248,10 @@ body {
   </div>
 
 </div>
-<script src="image-resolver.js"></script>
+<script src="image-resolver.js?v=20260919"></script>
 <script src="reladvice-engine.js"></script>
 <script src="reladvice-data.js"></script>
+<script src="personality-types.js?v=20260919"></script>
 <script>
 function toImgCode(code) {
   return (code || '33333').split('').map(function(d) {
@@ -340,7 +342,7 @@ function renderPersonGrid() {
     }).join('');
 
     var dateStr = p.date ? new Date(p.date).toLocaleDateString('ja-JP', {month:'numeric', day:'numeric'}) : '';
-    var meta = [p.typeName, dateStr].filter(Boolean).join('  ');
+    var meta = [PersonalityTypes.getName(p.code, p.typeName || ''), dateStr].filter(Boolean).join('  ');
 
     card.innerHTML = avatarImg(p, 48)
       + '<div class="person-info">'
@@ -604,8 +606,8 @@ function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 allPersons = loadAllPersons();
 renderPersonGrid();
 </script>
-<script src="hidden_characters.js"></script>
-<script src="character-registry.js"></script>
-<script src="nav.js"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="character-registry.js?v=20260919"></script>
+<script src="nav.js?v=20260919"></script>
 </body>
 </html>

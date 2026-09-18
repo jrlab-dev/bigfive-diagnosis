@@ -16,7 +16,6 @@ const HIDDEN_CHARACTERS = [
   { id:'luffy',      name:'モンキー・D・ルフィ',      work:'ワンピース',              o:5, c:1, e:5, a:3, n:1, gender:'M', img:'51531.webp' },
   { id:'nami',       name:'ナミ',                      work:'ワンピース',              o:3, c:5, e:4, a:2, n:3, gender:'F', img:'35423.webp' },
   { id:'sanji',      name:'サンジ',                    work:'ワンピース',              o:3, c:3, e:4, a:4, n:3, gender:'M', img:'33443.webp' },
-  { id:'robin',      name:'ニコ・ロビン',              work:'ワンピース',              o:5, c:4, e:1, a:3, n:2, gender:'F', img:'54132.webp' },
   { id:'ace',        name:'ポートガス・D・エース',     work:'ワンピース',              o:3, c:2, e:5, a:5, n:3, gender:'M', img:'32553.webp' },
   { id:'shanks',     name:'シャンクス',                work:'ワンピース',              o:4, c:2, e:5, a:5, n:1, gender:'M', img:'42551.webp' },
   { id:'law',        name:'トラファルガー・ロー',      work:'ワンピース',              o:3, c:5, e:1, a:2, n:2, gender:'M', img:'35122.webp' },
@@ -43,7 +42,6 @@ const HIDDEN_CHARACTERS = [
 
   // ===== 逃げるは恥だが役に立つ（2体）=====
   { id:'tsuzaki',    name:'津崎平匡',                  work:'逃げるは恥だが役に立つ',   o:3, c:5, e:1, a:3, n:3, gender:'M', img:'35133.webp' },
-  { id:'mikuri',     name:'森山みくり',                work:'逃げるは恥だが役に立つ',   o:4, c:4, e:3, a:4, n:3, gender:'F', img:'44343.webp' },
 
   // ===== 名探偵コナン（4体）=====
   { id:'conan',      name:'江戸川コナン',              work:'名探偵コナン',            o:5, c:5, e:3, a:3, n:1, gender:'M', img:'55331.webp' },

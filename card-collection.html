@@ -329,6 +329,7 @@
   ]
 }
 </script>
+<script src="card-delivery.js?v=20260919"></script>
 </head>
 <body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
 <div class="bg-light-blobs" aria-hidden="true">
@@ -367,6 +368,8 @@
 
 <div class="card-grid" id="cardGrid"></div>
 
+<section data-milestone-collection hidden aria-label="収集記念のシークレット"></section>
+
 <!-- 削除確認モーダル -->
 <div class="delete-confirm" id="deleteConfirm">
   <div class="delete-confirm-box">
@@ -387,12 +390,12 @@
 
 <a href="mypage.html" class="back-link">← マイページに戻る</a>
 
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919"></script>
 <script src="unlock.js"></script>
-<script src="image-resolver.js"></script>
-<script src="hidden_characters.js"></script>
-<script src="album.js"></script>
-<script src="rarity.js"></script>
+<script src="image-resolver.js?v=20260919"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="album.js?v=20260919"></script>
+<script src="rarity.js?v=20260919"></script>
 <script>
 (function() {
   'use strict';
@@ -502,13 +505,19 @@
     var grid = document.getElementById('cardGrid');
     var countEl = document.getElementById('countLabel');
     var filtered = applyFilter();
+    var rewardSection = document.querySelector('[data-milestone-collection]');
+    var rewardCount = (currentFilter === 'all' || currentFilter === 'r6' || currentFilter === 'r8') && window.AlbumUtils
+      ? AlbumUtils.getCollectionRewards().length : 0;
+    rewardSection.dataset.collectionFilter = currentFilter;
+    rewardSection.hidden = !rewardCount;
+    window.dispatchEvent(new CustomEvent('bigfive:collection-filter-changed'));
 
-    countEl.textContent = filtered.length + '枚';
+    countEl.textContent = filtered.length + '枚' + (rewardCount ? ' ＋ 収集記念' + rewardCount + '枚' : '');
 
     // グリッド描画
     grid.innerHTML = '';
     if (filtered.length === 0) {
-      grid.innerHTML = '<div class="empty-state">カードがありません<br>診断を受けてカードをゲットしよう！</div>';
+      if (!rewardCount) grid.innerHTML = '<div class="empty-state">カードがありません<br>診断を受けてカードをゲットしよう！</div>';
       return;
     }
 

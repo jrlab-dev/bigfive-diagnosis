@@ -7,13 +7,14 @@
  * 新フォルダ構成:
  *   images/characters/
  *   ├── marume243/{M,F}/   — 243パターン丸めキャラ（{1,3,5}コード）
+ *   ├── renewal243/{M,F}/  — 30/60/120問版の243パターン丸めキャラ
  *   ├── only/{M,F}/        — パラメータードンピシャのオリジナルキャラ
  *   └── secret/{M,F}/      — 著作権アニメキャラ
  *
  * 検索順序（バージョン別）:
  *   1. secret/{gender}/{rawCode}.webp     （'60'/'120'のみ）
  *   2. only/{gender}/{rawCode}.webp       （'30'/'60'/'120'/'child'）
- *   3. marume243/{gender}/{roundedCode}.webp （全バージョン・フォールバック）
+ *   3. 通常フォールバック（10/child/未知はmarume243、30/60/120はrenewal243）
  *
  * 設計方針: ファイルを置くだけで反映。コード変更・設定更新不要。
  */
@@ -53,6 +54,12 @@
     return v === '30' || v === '60' || v === '120' || v === 'child';
   }
 
+  /** 通常フォールバックの系統。10問版・子ども版・未知版は旧画像を使う。 */
+  function fallbackDirectory(version) {
+    var v = normalizeVersion(version);
+    return (v === '30' || v === '60' || v === '120') ? 'renewal243' : 'marume243';
+  }
+
   // ── コア: 統一画像検索 ────────────────────────────────
 
   /**
@@ -77,8 +84,8 @@
       return { path: 'images/characters/only/' + gender + '/' + code + '.webp', tier: 'only' };
     }
 
-    // ステップ3: marume243（全バージョン・フォールバック）
-    return { path: 'images/characters/marume243/' + gender + '/' + rCode + '.webp', tier: 'marume243' };
+    // ステップ3: 通常フォールバック（10/child/未知は旧、30/60/120は新）
+    return { path: 'images/characters/' + fallbackDirectory(version) + '/' + gender + '/' + rCode + '.webp', tier: 'marume243' };
   }
 
   /**
@@ -102,36 +109,37 @@
     if (canShowOnly(version)) {
       candidates.push({ path: 'images/characters/only/' + gender + '/' + code + '.webp', tier: 'only' });
     }
-    candidates.push({ path: 'images/characters/marume243/' + gender + '/' + rCode + '.webp', tier: 'marume243' });
+    candidates.push({ path: 'images/characters/' + fallbackDirectory(version) + '/' + gender + '/' + rCode + '.webp', tier: 'marume243' });
 
     return candidates;
   }
 
   /**
-   * 同期版: 常に存在が保証された marume243 パスを返す。
+   * 同期版: 通常フォールバックのパスを返す。
    * secret/only 画像を試したい場合は getCandidates() を使用し、
    * onerror で順次フォールバックすること。
    */
   function getDisplayImage(code, gender, version) {
-    return getFallbackImage(code, gender);
+    return getFallbackImage(code, gender, version);
   }
 
   /**
-   * フォールバック画像（常に marume243 の丸めコード）。
+   * フォールバック画像（版に応じた系統の丸めコード）。
    * onerror 時の最終保険。
    */
-  function getFallbackImage(code, gender) {
+  function getFallbackImage(code, gender, version) {
     gender = normalizeGender(gender);
-    return 'images/characters/marume243/' + gender + '/' + roundedCode(code) + '.webp';
+    return 'images/characters/' + fallbackDirectory(version) + '/' + gender + '/' + roundedCode(code) + '.webp';
   }
 
   /**
    * OGPカードURL生成。
    */
   function getCardUrl(code, gender, version) {
-    var rarity = normalizeVersion(version) === '10' ? 'r0' : 'r6';
-    return 'https://bigfive.jr-genius.jp/ogp-image?code=' + encodeURIComponent(String(code || '33333')) +
-      '&gender=' + normalizeGender(gender) + '&rarity=' + rarity;
+    var q = {code:String(code || '33333'),gender:normalizeGender(gender),v:String(version || '10')};
+    if (q.v === '10') q.rarity = 'r0';
+    if (window.CardDelivery) return CardDelivery.imageUrl(q);
+    return 'https://bigfive.jr-genius.jp/ogp-image?' + new URLSearchParams(q).toString();
   }
 
   /**
