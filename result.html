@@ -3055,15 +3055,15 @@ if (version === '10') {
   var haveEl     = document.getElementById('rep300Have');
   if (!sec || !tocEl || !waysEl || !payBtn || !openBtn) return;
 
-  function count(name) {
+  function count(name, gaOptions) {
     // GA4にも送る（2026-08-10追加）。カウンター（KV）は累計しか持てないので
     // 「同じ人が2回目も即閉じしたか」「そのあと戻ってきたか」が追えない。ユーザー単位で見られるGA4に流す。
     // ⚠️ここは1端末1回の制限をかけない／dev_nocountでも止めない（GA4は止めない＝2026-08-01裁定）
     // ⚠️GA4本体（nav.js）はページ末尾で読み込まれる。ページ表示と同時に鳴る計測（paid_pre_view）は
     // この時点でまだ gtag が無いので、無ければ3秒後に1回だけ送り直す
     try {
-      if (window.gtag) gtag('event', name);
-      else setTimeout(function () { try { if (window.gtag) gtag('event', name); } catch (e) {} }, 3000);
+      if (window.gtag) gtag('event', name, gaOptions || {});
+      else setTimeout(function () { try { if (window.gtag) gtag('event', name, gaOptions || {}); } catch (e) {} }, 3000);
     } catch (e) {}
     try {
       if (localStorage.getItem('dev_nocount') === '1') return;
@@ -3312,7 +3312,33 @@ if (version === '10') {
     });
   }
 
-  collectBtn.addEventListener('click', function() { count('rep300_collect'); });
+  // 通常の移動はGA4のイベント処理後。未応答でも800msで移動する。
+  // 新しいタブ・修飾キーなどのブラウザ本来の操作はそのまま通す。
+  var collectPending = false;
+  window.addEventListener('pageshow', function() { collectPending = false; });
+  collectBtn.addEventListener('click', function(event) {
+    if (event.defaultPrevented) return;
+    var target = (collectBtn.getAttribute('target') || '_self').toLowerCase();
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey ||
+        target !== '_self' || collectBtn.hasAttribute('download') || typeof window.gtag !== 'function') {
+      count('rep300_collect');
+      return;
+    }
+    event.preventDefault();
+    if (collectPending) return;
+    collectPending = true;
+    var next = collectBtn.href, moved = false;
+    function move() {
+      if (moved) return;
+      moved = true;
+      location.assign(next);
+    }
+    var timer = setTimeout(move, 800);
+    count('rep300_collect', {
+      event_timeout: 800,
+      event_callback: function() { clearTimeout(timer); move(); }
+    });
+  });
 
   payBtn.addEventListener('click', function() {
     count('rep300_pay');

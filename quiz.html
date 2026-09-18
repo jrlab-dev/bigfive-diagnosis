@@ -734,6 +734,10 @@ function calcScore() {
 }
 
 // ===== 結果表示 =====
+let quizCompletionCounted = false;
+let resultNavigationPending = false;
+window.addEventListener('pageshow', function(event) { if (event.persisted) resultNavigationPending = false; });
+
 function showResult() {
   const result = calcScore();
   questionArea.style.display = 'none';
@@ -745,9 +749,15 @@ function showResult() {
   }, 1500);
 
   function goToResult(gender) {
+    if (resultNavigationPending) return;
+    if (answers.length !== questions.length ||
+        answers.filter(a => Number.isInteger(a) && a >= 1 && a <= 5).length !== questions.length) return;
+    resultNavigationPending = true;
+    const firstCompletion = !quizCompletionCounted;
+    quizCompletionCounted = true;
     // 診断完了の計測（バージョン別・新規完走のみ。マイページ再閲覧・シェア閲覧は含まない）
     try {
-      if (localStorage.getItem('dev_nocount') !== '1') {
+      if (firstCompletion && localStorage.getItem('dev_nocount') !== '1') {
         var __qc = 'https://bigfive.jr-genius.jp/count/hit?e=quiz_complete_' + version;
         if (navigator.sendBeacon) navigator.sendBeacon(__qc);
         else if (window.fetch) fetch(__qc, { method: 'POST', keepalive: true }).catch(function(){});
@@ -771,7 +781,7 @@ function showResult() {
       var __sentMax = 0;
       try { __sentMax = parseInt(localStorage.getItem('bigfive_anon_sent') || '0', 10) || 0; } catch (e) {}
       var __thisVer = parseInt(version, 10) || 0;
-      if (localStorage.getItem('dev_nocount') !== '1' && __allAnswered && __thisVer > __sentMax) {
+      if (firstCompletion && localStorage.getItem('dev_nocount') !== '1' && __allAnswered && __thisVer > __sentMax) {
         fetch('https://bigfive.jr-genius.jp/count/anon', {
           method: 'POST',
           keepalive: true,
@@ -809,7 +819,23 @@ function showResult() {
     // other_quizから来た場合で、自分のコードがある場合は渡す（診断前にLocalStorageから取得したもの）
     // ※診断結果自体はtypeパラメータで渡されるので、これは参照用
     if (myCode && ref === 'other') url += `&stored_my_code=${myCode}`;
-    window.location.href = url;
+    let moved = false;
+    function move() {
+      if (moved) return;
+      moved = true;
+      window.location.href = url;
+    }
+    // 追加のGA4計測にはイベント名だけを送り、回答・スコア・性別を載せない。
+    // 同じ受検の見返しは再計上しない。GA4が止まっても結果表示を妨げない。
+    if (!firstCompletion || typeof window.gtag !== 'function') { move(); return; }
+    const timer = setTimeout(move, 800);
+    try {
+      window.gtag('event', 'quiz_complete_' + version, {
+        send_to: 'G-9DSFS2TYHG',
+        event_timeout: 800,
+        event_callback: function() { clearTimeout(timer); move(); }
+      });
+    } catch (e) { clearTimeout(timer); move(); }
   }
 
   document.getElementById('genderF').addEventListener('click', () => goToResult('F'));
@@ -867,6 +893,8 @@ function showResult() {
   document.getElementById('resumeRestart').addEventListener('click', () => {
     clearProgress();
     startedAt = 0;                      // 最初からやり直すなら計測もやり直す
+    quizCompletionCounted = false;
+    resultNavigationPending = false;
     banner.classList.remove('visible');
     render();
   });
