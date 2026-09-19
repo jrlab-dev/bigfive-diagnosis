@@ -2780,7 +2780,7 @@ const SYNC_ID_KEY = 'bigfive_sync_id';
 const SYNC_API = 'https://bigfive.jr-genius.jp/api';
 // 同期IDと自動バックアップ時刻はデバイス固有の管理情報のため、同期データには含めない
 // 自己プロフィールはブラウザ内専用。生い立ちの一括転送・上書きを防ぐ。
-const SYNC_EXCLUDE_KEYS = ['bigfive_sync_id', 'bigfive_sync_last_auto', 'bigfive_selfprofile'];
+const SYNC_EXCLUDE_KEYS = ['bigfive_sync_id', 'bigfive_sync_last_auto', 'bigfive_selfprofile', 'selfprofile_local_v2', 'selfprofile_local_previous_v1'];
 const SYNC_DATA_KEYS = [
   'bigfive_my_results', 'bigfive_my_name', 'bigfive_other_results',
   'bigfive_album', 'bigfive_album_meta',
@@ -3565,7 +3565,7 @@ function renderAIProfile() {
 <script src="unlock.js"></script>
 <script src="gacha-utils.js"></script>
 <script src="concierge.js"></script>
-<script src="nav.js?v=20260919"></script>
+<script src="nav.js?v=20260919-profile2"></script>
 <script>
 (function() {
   if (typeof GachaUtils !== 'undefined') {

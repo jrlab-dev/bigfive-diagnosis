@@ -396,7 +396,7 @@ body { padding-top: 52px !important; }
   // 違いは1点＝配列以外のキーは「手元に無いものだけ」入れる（手元の値を上書きしない）
   function mergeRestoredData(data) {
     Object.keys(data).forEach(function(k) {
-      if (k === SYNC_ID_KEY || k === LAST_AUTO_KEY || k === 'bigfive_selfprofile') return;
+      if (k === SYNC_ID_KEY || k === LAST_AUTO_KEY || k === 'bigfive_selfprofile' || k === 'selfprofile_local_v2' || k === 'selfprofile_local_previous_v1') return;
       var v = data[k];
       if (typeof v !== 'string') return;
       if (RESTORE_ARRAY_KEYS.indexOf(k) < 0) {

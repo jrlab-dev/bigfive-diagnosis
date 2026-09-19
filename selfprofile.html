@@ -908,7 +908,30 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
 
 <script src="selfprofile-history.js"></script>
 <script>
-const KEY = 'bigfive_selfprofile';
+// bigfive_ は旧版nav.jsが一括送信するため、ブラウザ内専用データは別名で保持する。
+const KEY = 'selfprofile_local_v2';
+const LEGACY_PROFILE_KEY = 'bigfive_selfprofile';
+const LEGACY_PROFILE_BACKUPS = 'selfprofile_local_previous_v1';
+let profileMigrationFailed = false;
+try {
+  const old = localStorage.getItem(LEGACY_PROFILE_KEY);
+  if (old !== null) {
+    const current = localStorage.getItem(KEY);
+    if (current === null) {
+      localStorage.setItem(KEY, old);
+      if (localStorage.getItem(KEY) !== old) throw new Error('migration verification failed');
+    } else if (current !== old) {
+      // 古いタブで別の記録が保存された場合も、どちらも失わない。
+      const backups = JSON.parse(localStorage.getItem(LEGACY_PROFILE_BACKUPS) || '[]');
+      if (!Array.isArray(backups)) throw new Error('invalid backup');
+      if (!backups.includes(old)) backups.push(old);
+      const serialized = JSON.stringify(backups);
+      localStorage.setItem(LEGACY_PROFILE_BACKUPS, serialized);
+      if (localStorage.getItem(LEGACY_PROFILE_BACKUPS) !== serialized) throw new Error('backup verification failed');
+    }
+    localStorage.removeItem(LEGACY_PROFILE_KEY);
+  }
+} catch (e) { profileMigrationFailed = true; }
 
 // ===== 初期化 =====
 window.addEventListener('DOMContentLoaded', () => {
@@ -919,6 +942,15 @@ window.addEventListener('DOMContentLoaded', () => {
   loadOtherDiagnostics();
   setupEnterNav();
   initializeProfileFlow();
+  if (profileMigrationFailed) showToast('以前の記録を移せませんでした。元の記録は残しています。');
+  if (localStorage.getItem(LEGACY_PROFILE_BACKUPS)) {
+    const button=document.createElement('button');button.className='btn-exp';button.type='button';button.textContent='以前の保存形式の控えをダウンロード';
+    button.onclick=()=>{
+      const blob=new Blob([localStorage.getItem(LEGACY_PROFILE_BACKUPS)],{type:'application/json'});
+      const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='my-profile-previous.json';link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+    };
+    document.querySelector('.profile-other').append(button);
+  }
 });
 
 // ===== 生年月日：blur時に整形 =====
@@ -1759,6 +1791,7 @@ function collectProfileData() {
 
 function saveAll() {
   try {
+    if (profileMigrationFailed) throw new Error('migration incomplete');
     const data = collectProfileData();
     data.updatedAt = new Date().toISOString();
     localStorage.setItem(KEY, JSON.stringify(data));
@@ -2123,6 +2156,8 @@ async function copyText(text) {
 function deleteAll() {
   if (!confirm('プロファイルをすべて削除しますか？\nこの操作は元に戻せません。')) return;
   localStorage.removeItem(KEY);
+  localStorage.removeItem(LEGACY_PROFILE_KEY);
+  localStorage.removeItem(LEGACY_PROFILE_BACKUPS);
   location.reload();
 }
 
@@ -2432,6 +2467,6 @@ function downloadTxt() {
   showToast('✓ ファイルを保存しました');
 }
 </script>
-<script src="nav.js"></script>
+<script src="nav.js?v=20260919-profile2"></script>
 </body>
 </html>
