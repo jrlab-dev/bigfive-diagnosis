@@ -196,7 +196,8 @@ body {
 
 .gcard-img {
   width: 140px; height: 140px; border-radius: 10px;
-  background-size: 115% 115%; background-position: center;
+  /* 完成カードの外周にある暗い1px相当だけを隠し、枠と文字は欠けさせない。 */
+  background-size: 102% 102%; background-position: center;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 0 24px var(--glow, rgba(200,160,60,0.35));
   flex: none; position: relative;
 }
@@ -692,7 +693,8 @@ body.theme-light .carddas-overlay.active {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   border-radius: 8px;
-  transform: scale(1.15);
+  /* 焼き付け済み完成カードの角丸を枠になじませる最小限の拡大。 */
+  transform: scale(1.02);
 }
 .carddas-front-emoji {
   display: none;
