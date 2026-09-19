@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>私の自己プロファイル — 自分を持ち歩く</title>
-<meta name="description" content="名前・学歴・職歴・性格を記録する自分専用のプロファイル。ビッグファイブ診断結果とあわせて自己理解を深めるツールです。入力した情報は外部に一切送信されず、このデバイスにのみ保存されます。">
+<meta name="description" content="名前・学歴・職歴・性格を記録する自分専用のプロファイル。ビッグファイブ診断結果とあわせて自己理解を深めるツールです。このブラウザに保存し、共有する内容を選んでAIに渡せます。">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -488,12 +488,56 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
   input, textarea, select { border: 1px solid #ddd; background: #fafafa; }
   .page { padding: 10px; max-width: 100%; }
 }
+
+/* 根拠つき自分史 */
+.lifehist-toggle { width:100%; font-family:inherit; text-align:left; }
+.lh-group { border:1px solid var(--border); border-radius:8px; margin:10px 0; }
+.lh-group > summary { padding:14px 12px; cursor:pointer; font-weight:700; font-size:13px; color:var(--text); }
+.lh-group-body { padding:0 12px 12px; }
+.lh-question { min-width:0; border:0; border-top:1px solid var(--border); padding:16px 0; margin:0; }
+.lh-question legend { font-size:14px; line-height:1.7; color:var(--text); padding:0; max-width:100%; }
+.lh-question label { display:block; margin:10px 0 5px; font-size:12px; color:var(--text); }
+.lh-question select { width:100%; max-width:100%; min-height:44px; font-size:14px; }
+.lh-question textarea { width:100%; min-height:64px; }
+.lh-question :disabled { opacity:.5; }
+.lh-share { display:flex !important; align-items:center; gap:8px; min-height:44px; cursor:pointer; }
+.lh-share input { width:18px; height:18px; flex-shrink:0; }
+.lh-evidence { display:inline-block; font-size:11px; padding:3px 8px; border-radius:12px; background:var(--bg3); color:var(--text); margin:6px 0; }
+.lh-research { font-size:12px; line-height:1.7; color:var(--dim); margin:4px 0 10px; overflow-wrap:anywhere; }
+.lh-research summary { cursor:pointer; min-height:32px; }
+.lh-research a { color:var(--accent); text-decoration:underline; }
+.lh-question :focus-visible, .lh-group summary:focus-visible, .lifehist-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+#aiProfilePreview { width:100%; margin:10px 0; font-size:12px; }
+.save-bar .lifehist-note { margin:0 0 5px; padding:5px 8px; font-size:10px; }
+.toast { bottom:120px; white-space:normal; text-align:center; width:max-content; max-width:calc(100vw - 32px); }
+
+/* 入力とAI共有を分ける */
+.profile-extra { border:1px solid var(--border); border-radius:10px; padding:14px; margin:18px 0; }
+.profile-extra > summary,.profile-other > summary { cursor:pointer; padding:8px 0; font-weight:700; color:var(--text); }
+.profile-jump { display:inline-block; color:var(--accent); padding:10px 0; text-decoration:underline; }
+#profileExport { scroll-margin-top:80px; }
+#profileExport h2 { font-size:20px; margin-bottom:12px; }
+#profileExport h3 { font-size:16px; margin:20px 0 10px; }
+#profileExport h4 { font-size:14px; margin:16px 0 8px; }
+.profile-purpose { border:0; padding:0; margin:12px 0; }
+.profile-purpose legend { font-weight:700; margin-bottom:10px; }
+.profile-purpose label,.profile-share-option { display:flex; gap:9px; align-items:center; min-height:44px; padding:9px 10px; border:1px solid var(--border); border-radius:8px; margin:6px 0; font-size:13px; cursor:pointer; color:var(--text); }
+.profile-purpose input,.profile-share-option input { flex-shrink:0; width:18px; height:18px; }
+.profile-share-sections { display:grid; grid-template-columns:1fr 1fr; gap:4px 10px; }
+.lh-share[hidden] { display:none !important; }
+#profileHistoryShare .lh-share,#profileLegacyShare .lh-share { border:1px solid var(--border); border-radius:8px; padding:10px; font-size:13px; line-height:1.7; }
+#profileShareCount,#profileHistoryEmpty { font-size:12px; color:var(--dim); }
+.profile-copy { margin:14px 0 8px; }
+.profile-other .btn-exp { width:100%; margin-top:8px; }
+.save-bar { position:static; padding:12px 0; }
+.toast { bottom:24px; }
+@media(max-width:400px) { .profile-share-sections { grid-template-columns:1fr; } }
 </style>
 </head>
 <body><script>if(localStorage.getItem('bigfive_theme')!=='dark')document.body.classList.add('theme-light');</script>
 
 <div class="priv-bar">
-  🔒 このデータは外部に一切送信されません。このデバイスにのみ保存されます。
+  🔒 プロフィールはこのブラウザに保存します。AIに渡す内容は自分で選べます。
 </div>
 
 <div class="page">
@@ -504,8 +548,9 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
 
   <div class="page-head">
     <h1>私の自己プロファイル</h1>
-    <p>AIに「私」を伝えるためのコンテキストドキュメント。就職・転職・ブログ執筆・キャリア相談など、AIを使うたびに一から説明しなくて済む。</p>
-    <div class="last-save" id="lastSave"></div>
+    <p>ビッグファイブなどの診断結果に、あなたの経験・価値観を添えて。AIがあなたの背景を踏まえて相談に応じるためのプロフィールです。</p>
+    <p>入力はすべて任意です。伝えたいことを加えると、診断結果だけでは分からないあなたの背景もAIに伝えられます。書けるところだけで使えます。</p>
+    <div class="last-save" id="lastSave"></div><p id="profileReady" class="lifehist-note"></p><a class="profile-jump" href="#profileExport">AIに渡す内容を選ぶ →</a>
   </div>
 
   <!-- 1. 基本情報 -->
@@ -525,7 +570,131 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
     <option value="宮崎県"><option value="鹿児島県"><option value="沖縄県">
   </datalist>
 
-  <div class="sec" data-sec="basic">
+  <div class="sec" data-sec="personality">
+    <div class="sec-head">
+      <span>性格・心理データ</span>
+      <span id="bfTag"></span>
+      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="personality"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+    </div>
+    <div class="sec-body">
+      <div style="font-size:10px;color:var(--dim2);margin-bottom:6px;letter-spacing:.04em;">ビッグファイブ</div>
+      <div class="bf-row" id="bfDisplay">
+        <span style="font-size:12px;color:var(--dim);">診断データなし</span>
+      </div>
+      <div id="bfManualWrap" style="display:none">
+        <div class="bf-manual-grid">
+          <div class="row"><label>開放性 O</label><input type="number" id="m-O" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>誠実性 C</label><input type="number" id="m-C" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>外向性 E</label><input type="number" id="m-E" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>協調性 A</label><input type="number" id="m-A" min="0" max="100" placeholder="0-100"></div>
+          <div class="row"><label>感受性 N</label><input type="number" id="m-N" min="0" max="100" placeholder="0-100"></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-auto" onclick="reloadBf()">診断結果を再読み込み</button>
+        <button class="btn-auto" id="btnBfManual" onclick="toggleBfManual()">手動で入力する</button>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--border2);padding-top:12px;">
+        <div style="font-size:10px;color:var(--dim2);margin-bottom:8px;letter-spacing:.04em;">他の診断結果</div>
+        <div class="other-diag-wrap" id="otherDiagDisplay">
+          <span style="font-size:11px;color:var(--dim2);">他の診断を受けると結果が表示されます</span>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="btn-auto" onclick="loadOtherDiagnostics()">診断結果を再読み込み</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自己分析 -->
+  <div class="sec" data-sec="analysis">
+    <div class="sec-head">
+      <span>自己分析</span>
+      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="analysis"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+    </div>
+    <div class="sec-body">
+      <div class="row">
+        <label>強み・得意なこと</label>
+        <textarea id="strengths" rows="3" placeholder="例：計画を立てて粘り強く実行できる。細部への注意力が高い。一度信頼した人を長期的にサポートする。"></textarea>
+      </div>
+      <div class="row">
+        <label>弱み・課題・成長したい点</label>
+        <textarea id="weaknesses" rows="3" placeholder="例：完璧主義で人に任せるのが苦手。新しい環境への適応に時間がかかる。"></textarea>
+      </div>
+      <div class="row">
+        <label>価値観・仕事で大切にしていること</label>
+        <textarea id="values" rows="3" placeholder="例：誠実であること、継続する力、チームへの貢献。成果より過程を重視したい。"></textarea>
+      </div>
+      <div class="row">
+        <label>志望動機の素材・仕事への思い（転職・就活用）</label>
+        <textarea id="motivation" rows="3" placeholder="例：前職で○○を経験し、より○○に関わる仕事がしたいと感じた。人の成長を支援することに喜びを感じる。"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生い立ち・背景 -->
+  <div class="sec" data-sec="bg">
+    <div class="sec-head">
+      <span>生い立ち・背景</span>
+      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="bg"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+    </div>
+    <div class="sec-body">
+      <div class="row lifehist-wrap">
+        <button type="button" class="lifehist-toggle" id="lifehistToggle" aria-expanded="false" aria-controls="lifehistPanel" onclick="toggleLifeHistoryPanel()">
+          <span>研究をもとにした質問から記録する（任意）</span>
+          <span class="lifehist-arrow" id="lifehistArrow">▸</span>
+        </button>
+        <div class="lifehist-panel" id="lifehistPanel" hidden>
+          <p class="lifehist-note">すべて任意の質問です。伝えたい経験を加えることで、AIがあなたの背景を踏まえて話すための手がかりになります。つらい経験を含め、答えたくない項目はそのまま飛ばせます。詳しく書く必要もありません。</p>
+          <p class="lifehist-note">「関連の根拠：高め」は複数研究の統合で関連が支持された領域、「中程度」は追跡研究などの支持がある一方、研究数・一貫性・対象に制約がある領域です。このサイト独自の目安で、影響の大きさや性格の原因を示すものではありません。質問は独自に作成したもので、診断や検証済み心理尺度ではありません。</p><p class="lifehist-note">選ぶだけで記録できます。保存しただけではAI用の文章に入りません。渡したい回答だけ、最後に選んでください。共有する内容は、最後の「AIに渡す」でまとめて選べます。</p>
+          <div id="lifehistTabPanels"></div>
+        </div>
+      </div>
+      <div class="row">
+        <label>自分で追加したい背景・出来事（任意）</label>
+        <textarea id="background" rows="4" placeholder="質問にない経験や、AIに伝えておきたい背景があれば自由に追加できます。"></textarea>
+      </div>
+      <div class="row">
+        <label>対人スタイル・接し方のコツ（AIへの補足に有効）</label>
+        <textarea id="style" rows="3" placeholder="例：結論から話してほしい。フィードバックは直接的に。長い説明より箇条書きが好き。"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 目標 -->
+  <div class="sec" data-sec="goals">
+    <div class="sec-head">
+      <span>目標</span>
+      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="goals"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+    </div>
+    <div class="sec-body">
+      <div class="cols2">
+        <div class="row">
+          <label>希望職種・希望条件</label>
+          <textarea id="jobTarget" rows="3" placeholder="例：ITエンジニア、フルリモート可、年収500万以上"></textarea>
+        </div>
+        <div class="row">
+          <label>長期目標・理想の姿</label>
+          <textarea id="longGoal" rows="3" placeholder="例：自分のペースで働ける環境を作る。専門性を活かして独立したい。"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自由メモ -->
+  <div class="sec" data-sec="memo">
+    <div class="sec-head">
+      <span>自由メモ</span>
+      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="memo"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+    </div>
+    <div class="sec-body">
+      <div class="row">
+        <textarea id="memo" rows="3" placeholder="趣味、AIへの補足、その他なんでも"></textarea>
+      </div>
+    </div>
+  </div>
+
+<details class="profile-extra" id="profileExtra"><summary>履歴書などに使う情報（任意）</summary><p class="lifehist-note">氏名・連絡先・学歴・職歴・資格は、必要なときだけ入力できます。AIに渡すかどうかは最後に選べます。</p>  <div class="sec" data-sec="basic">
     <div class="sec-head">
       <span>基本情報</span>
       <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="basic"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
@@ -695,200 +864,40 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
   </div>
 
   <!-- 性格・心理データ -->
-  <div class="sec" data-sec="personality">
-    <div class="sec-head">
-      <span>性格・心理データ</span>
-      <span id="bfTag"></span>
-      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="personality"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-    </div>
-    <div class="sec-body">
-      <div style="font-size:10px;color:var(--dim2);margin-bottom:6px;letter-spacing:.04em;">ビッグファイブ</div>
-      <div class="bf-row" id="bfDisplay">
-        <span style="font-size:12px;color:var(--dim);">診断データなし</span>
-      </div>
-      <div id="bfManualWrap" style="display:none">
-        <div class="bf-manual-grid">
-          <div class="row"><label>開放性 O</label><input type="number" id="m-O" min="0" max="100" placeholder="0-100"></div>
-          <div class="row"><label>誠実性 C</label><input type="number" id="m-C" min="0" max="100" placeholder="0-100"></div>
-          <div class="row"><label>外向性 E</label><input type="number" id="m-E" min="0" max="100" placeholder="0-100"></div>
-          <div class="row"><label>協調性 A</label><input type="number" id="m-A" min="0" max="100" placeholder="0-100"></div>
-          <div class="row"><label>感受性 N</label><input type="number" id="m-N" min="0" max="100" placeholder="0-100"></div>
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn-auto" onclick="reloadBf()">診断結果を再読み込み</button>
-        <button class="btn-auto" id="btnBfManual" onclick="toggleBfManual()">手動で入力する</button>
-      </div>
-      <div style="margin-top:14px;border-top:1px solid var(--border2);padding-top:12px;">
-        <div style="font-size:10px;color:var(--dim2);margin-bottom:8px;letter-spacing:.04em;">他の診断結果</div>
-        <div class="other-diag-wrap" id="otherDiagDisplay">
-          <span style="font-size:11px;color:var(--dim2);">他の診断を受けると結果が表示されます</span>
-        </div>
-        <div style="margin-top:8px;">
-          <button class="btn-auto" onclick="loadOtherDiagnostics()">診断結果を再読み込み</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 自己分析 -->
-  <div class="sec" data-sec="analysis">
-    <div class="sec-head">
-      <span>自己分析</span>
-      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="analysis"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-    </div>
-    <div class="sec-body">
-      <div class="row">
-        <label>強み・得意なこと</label>
-        <textarea id="strengths" rows="3" placeholder="例：計画を立てて粘り強く実行できる。細部への注意力が高い。一度信頼した人を長期的にサポートする。"></textarea>
-      </div>
-      <div class="row">
-        <label>弱み・課題・成長したい点</label>
-        <textarea id="weaknesses" rows="3" placeholder="例：完璧主義で人に任せるのが苦手。新しい環境への適応に時間がかかる。"></textarea>
-      </div>
-      <div class="row">
-        <label>価値観・仕事で大切にしていること</label>
-        <textarea id="values" rows="3" placeholder="例：誠実であること、継続する力、チームへの貢献。成果より過程を重視したい。"></textarea>
-      </div>
-      <div class="row">
-        <label>志望動機の素材・仕事への思い（転職・就活用）</label>
-        <textarea id="motivation" rows="3" placeholder="例：前職で○○を経験し、より○○に関わる仕事がしたいと感じた。人の成長を支援することに喜びを感じる。"></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- 生い立ち・背景 -->
-  <div class="sec" data-sec="bg">
-    <div class="sec-head">
-      <span>生い立ち・背景</span>
-      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="bg"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-    </div>
-    <div class="sec-body">
-      <div class="row">
-        <label>生い立ち・家族・転機になった出来事</label>
-        <textarea id="background" rows="4" placeholder="例：長野県の山間部で育つ。3人兄弟の長男。農家の家庭で自然の中で過ごした幼少期が今の価値観に大きく影響。"></textarea>
-      </div>
-      <div class="row lifehist-wrap">
-        <div class="lifehist-toggle" onclick="toggleLifeHistoryPanel()">
-          <span>気になる項目から選んで振り返る（任意・答えたい分だけでOK）</span>
-          <span class="lifehist-arrow" id="lifehistArrow">▸</span>
-        </div>
-        <div class="lifehist-panel" id="lifehistPanel" style="display:none">
-          <p class="lifehist-note">全部答える必要はありません。気になるものだけで大丈夫です。つらい内容は無理に書かなくてOK。深刻な内容は、AIだけでなく専門機関・医療機関にもご相談ください。</p>
-          <div class="lifehist-tabs" id="lifehistTabs"></div>
-          <div id="lifehistTabPanels"></div>
-        </div>
-      </div>
-      <div class="row">
-        <label>対人スタイル・接し方のコツ（AIへの補足に有効）</label>
-        <textarea id="style" rows="3" placeholder="例：結論から話してほしい。フィードバックは直接的に。長い説明より箇条書きが好き。"></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- 目標 -->
-  <div class="sec" data-sec="goals">
-    <div class="sec-head">
-      <span>目標</span>
-      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="goals"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-    </div>
-    <div class="sec-body">
-      <div class="cols2">
-        <div class="row">
-          <label>希望職種・希望条件</label>
-          <textarea id="jobTarget" rows="3" placeholder="例：ITエンジニア、フルリモート可、年収500万以上"></textarea>
-        </div>
-        <div class="row">
-          <label>長期目標・理想の姿</label>
-          <textarea id="longGoal" rows="3" placeholder="例：自分のペースで働ける環境を作る。専門性を活かして独立したい。"></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 自由メモ -->
-  <div class="sec" data-sec="memo">
-    <div class="sec-head">
-      <span>自由メモ</span>
-      <label class="toggle-wrap"><span class="toggle-label">渡す</span><span class="toggle"><input type="checkbox" checked data-toggle="memo"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-    </div>
-    <div class="sec-body">
-      <div class="row">
-        <textarea id="memo" rows="3" placeholder="趣味、AIへの補足、その他なんでも"></textarea>
-      </div>
-    </div>
-  </div>
-
+</details>
   <!-- 保存ボタン -->
   <div class="save-bar">
-    <button class="btn-save" onclick="saveAll()">保存する</button>
+    <p class="lifehist-note">このブラウザに保存します。ブラウザのデータを削除すると失われます。別の端末には自動で引き継がれません。</p><button class="btn-save" onclick="saveAll()">保存する</button>
   </div>
 
-  <!-- 出力 -->
-  <div class="export-sec" style="margin-top:24px">
-    <div class="export-head">出力・エクスポート</div>
-    <p style="font-size:11px;color:var(--dim);margin-bottom:10px;">各セクションの「渡す」トグルで、AIに含める情報を選択できます。用途に合わせてプリセットを選ぶと便利です。</p>
-    <div class="preset-bar">
-      <button class="btn-preset" onclick="applyPreset('blog')">ブログ用</button>
-      <button class="btn-preset" onclick="applyPreset('resume')">履歴書用</button>
-      <button class="btn-preset" onclick="applyPreset('selfpr')">自己PR用</button>
-      <button class="btn-preset" onclick="applyPreset('narikiru')">なりきり用</button>
-      <button class="btn-preset" onclick="applyPreset('all')">全選択</button>
-      <button class="btn-preset" onclick="applyPreset('none')">全解除</button>
-    </div>
-    <div class="export-head" style="margin-top:0;margin-bottom:6px;font-size:10px;color:var(--dim2);">── AIに渡す ──────────────</div>
-    <div class="export-btns">
-      <button class="btn-exp" onclick="copyAi()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        <span class="btn-exp-label">
-          プロフィール全文をコピー（汎用）
-          <span class="btn-exp-sub">AIとの会話冒頭に貼り付けて「私のことを踏まえて話してください」と使う</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="copyNarikiruPrompt()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        <span class="btn-exp-label">
-          「私になりきって」プロンプトをコピー
-          <span class="btn-exp-sub">AIが自分として返答・文章生成する。SNS投稿・返信文・自己紹介など</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="copyBlogPrompt()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        <span class="btn-exp-label">
-          「私の視点でブログ記事を書いて」プロンプトをコピー
-          <span class="btn-exp-sub">自分の価値観・文体・生い立ちを踏まえた記事をAIが執筆</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="copySelfPrPrompt()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        <span class="btn-exp-label">
-          自己PR草稿をAIに生成させるプロンプトをコピー
-          <span class="btn-exp-sub">就職・転職活動用の自己PR文をAIに書かせるプロンプト</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="copyResume()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <span class="btn-exp-label">
-          履歴書フォーマットでコピー
-          <span class="btn-exp-sub">学歴・職歴・資格を日本の履歴書形式に整形してコピー</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="downloadTxt()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span class="btn-exp-label">
-          テキストファイルとして保存
-          <span class="btn-exp-sub">全データを .txt ファイルでダウンロード</span>
-        </span>
-      </button>
-      <button class="btn-exp" onclick="doPrint()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        <span class="btn-exp-label">
-          PDFとして保存
-          <span class="btn-exp-sub">印刷ダイアログで「PDFに保存」を選択</span>
-        </span>
-      </button>
-    </div>
-  </div>
+  <section class="export-sec" id="profileExport" aria-labelledby="profileExportTitle">
+    <h2 id="profileExportTitle">AIに渡す</h2>
+    <p class="lifehist-note">診断結果と、伝えたい背景をひとつに。用途を選び、今回渡す内容を確認してください。入力した内容の保存とは別の操作です。</p>
+    <fieldset class="profile-purpose"><legend>1. 何に使いますか？</legend>
+      <label><input type="radio" name="profilePurpose" value="general" checked> 普段の相談</label>
+      <label><input type="radio" name="profilePurpose" value="career"> 仕事・履歴書の相談</label>
+      <label><input type="radio" name="profilePurpose" value="blog"> 自分らしいブログ</label>
+    </fieldset>
+    <p id="profilePurposeHint" class="lifehist-note"></p>
+    <h3>2. 今回渡す内容を選ぶ</h3>
+    <div id="profileShareSections" class="profile-share-sections"></div>
+    <h4>質問への回答・以前の記録</h4>
+    <p class="lifehist-note">ここで選んだ回答だけを渡します。用途を変えると、この選択は解除されます。</p>
+    <p id="profileHistoryEmpty">回答を選ぶと、ここで共有するか選べます。回答しなくても使えます。</p>
+    <div id="profileHistoryShare"></div><div id="profileLegacyShare"></div>
+    <p id="profileShareCount" aria-live="polite"></p>
+    <h3>3. 文章を確認してコピー</h3>
+    <button class="btn-exp" type="button" onclick="previewAiProfile()">AIに渡す文章を確認・更新</button>
+    <textarea id="aiProfilePreview" aria-label="AIに渡す文章の確認" rows="10" readonly hidden></textarea>
+    <button class="btn-save profile-copy" type="button" onclick="copyPurposeProfile()">選んだ内容をコピー</button>
+    <p class="lifehist-note">好きなAIの会話欄へ貼り付けて、相談したいことやブログのテーマを添えてください。</p>
+    <details class="profile-other"><summary>その他の出力</summary>
+      <button class="btn-exp" type="button" onclick="copyAi()">依頼文なしでプロフィールをコピー</button>
+      <button class="btn-exp" type="button" onclick="downloadTxt()">選んだプロフィールをテキスト保存</button>
+      <button class="btn-exp" type="button" onclick="copyResume()">選んだ情報を履歴書書式でコピー</button>
+      <button class="btn-exp" type="button" onclick="doPrint()">入力したプロフィールを印刷・PDF保存</button>
+    </details>
+  </section>
 
   <div class="danger-zone">
     <button class="btn-delete" onclick="deleteAll()">プロファイルをすべて削除する</button>
@@ -897,197 +906,19 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
 
 <div class="toast" id="toast"></div>
 
+<script src="selfprofile-history.js"></script>
 <script>
 const KEY = 'bigfive_selfprofile';
-
-// ===== 自分史（振り返りQ&A）データ定義 =====
-// 根拠：_private/性格形成に影響する人生の出来事_心理学データ.md（2026-07-04リサーチ）
-// エビデンスの強さで優先順位づけ。出生順序・きょうだいの人数・名前は根拠が弱いため候補に含めない。
-const LIFE_HISTORY_TABS = [
-  { id: 'events', label: '出来事', categories: [
-    { id: 'lh_childhood', label: '幼少期・家庭環境', questions: [
-      { id: 'childhood_ace', text: '小さい頃、つらい経験（虐待・ネグレクトなど）が続いた時期はありましたか', note: 'つらい内容は無理に書かなくて大丈夫です。深刻な内容は専門機関・医療機関にもご相談ください。' },
-      { id: 'childhood_parenting', text: '両親の育て方はどんな感じでしたか（厳しめ・おおらか・干渉が強い等）' },
-    ]},
-    { id: 'lh_school', label: '学校・思春期', questions: [
-      { id: 'school_bullying', text: 'いじめを受けた（または関わった）経験はありますか', note: 'つらい内容は無理に書かなくて大丈夫です。' },
-      { id: 'school_birthmonth', text: '学年の中で早生まれ（1〜3月生まれ）でしたか、遅生まれ（4月生まれ）でしたか' },
-    ]},
-    { id: 'lh_career', label: '仕事・キャリア', questions: [
-      { id: 'career_jobloss', text: '失業・雇用不安が続いた時期はありましたか' },
-      { id: 'career_firstjob', text: '初めての就職はどんな経験でしたか' },
-    ]},
-    { id: 'lh_loss', label: '喪失・病気', questions: [
-      { id: 'loss_bereavement', text: '近親者を亡くした経験はありますか', note: 'つらい内容は無理に書かなくて大丈夫です。' },
-      { id: 'loss_illness', text: '大きな病気・怪我をした時期はありますか' },
-    ]},
-    { id: 'lh_love', label: '恋愛・結婚', questions: [
-      { id: 'love_marriage', text: '結婚・離婚・大きな別れの経験はありますか' },
-    ]},
-    { id: 'lh_env', label: 'その他の環境変化', questions: [
-      { id: 'env_change', text: '引っ越し・移住・育児・介護など、大きな環境の変化はありましたか' },
-    ]},
-  ]},
-  { id: 'labels', label: 'レッテル・言われ続けた言葉', categories: [
-    { id: 'lh_labels', label: 'よく言われた言葉・役割', questions: [
-      { id: 'label_bloodtype', text: '小さい頃から「あなたは○型だから」と言われ続けたことはありますか' },
-      { id: 'label_role', text: '「長男/長女だから」「女の子だから」のように、役割を期待され続けたことはありますか' },
-      { id: 'label_sibling', text: 'きょうだいと比べて「正反対のタイプ」と言われて育ちましたか' },
-      { id: 'label_freeform', text: '昔からよく言われてきた「◯◯な子」という言葉はありますか' },
-    ]},
-  ]},
-  { id: 'era', label: '時代背景', categories: [
-    { id: 'lh_era', label: '育った時代・社会人になったタイミング', questions: [
-      { id: 'era_economy', text: '社会人になったタイミングは、どんな経済状況でしたか（就職氷河期・好景気など）' },
-    ]},
-  ]},
-];
-
-function renderLifeHistoryUI() {
-  const tabsEl = document.getElementById('lifehistTabs');
-  const panelsEl = document.getElementById('lifehistTabPanels');
-  if (!tabsEl || !panelsEl) return;
-  tabsEl.innerHTML = '';
-  panelsEl.innerHTML = '';
-  LIFE_HISTORY_TABS.forEach((tab, i) => {
-    const tabBtn = document.createElement('button');
-    tabBtn.type = 'button';
-    tabBtn.className = 'lifehist-tab' + (i === 0 ? ' active' : '');
-    tabBtn.textContent = tab.label;
-    tabBtn.id = 'lifehistTab_' + tab.id;
-    tabBtn.onclick = () => showLifeHistoryTab(tab.id);
-    tabsEl.appendChild(tabBtn);
-
-    const panel = document.createElement('div');
-    panel.className = 'lifehist-tabpanel' + (i === 0 ? ' active' : '');
-    panel.id = 'lifehistTabPanel_' + tab.id;
-
-    tab.categories.forEach(cat => {
-      const catEl = document.createElement('div');
-      catEl.className = 'lifehist-cat';
-
-      const headEl = document.createElement('div');
-      headEl.className = 'lifehist-cat-head';
-      headEl.innerHTML = '<span>' + escHtml(cat.label) + '</span><span class="lifehist-cat-arrow" id="lifehistCatArrow_' + cat.id + '">▸</span>';
-      headEl.onclick = () => toggleLifeHistoryCat(cat.id);
-
-      const bodyEl = document.createElement('div');
-      bodyEl.className = 'lifehist-cat-body';
-      bodyEl.id = 'lifehistCatBody_' + cat.id;
-
-      cat.questions.forEach(q => {
-        const qEl = document.createElement('div');
-        qEl.className = 'lifehist-q';
-        qEl.setAttribute('data-qid', q.id);
-        let html = '<p class="lifehist-qtext">' + escHtml(q.text) + '</p>';
-        if (q.note) html += '<p class="lifehist-qnote">' + escHtml(q.note) + '</p>';
-        html += '<div class="lifehist-ans-btns">' +
-          '<button type="button" class="lifehist-ans-btn" data-ans="yes" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'yes\')">はい・詳しく書く</button>' +
-          '<button type="button" class="lifehist-ans-btn" data-ans="no" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'no\')">いいえ</button>' +
-          '<button type="button" class="lifehist-ans-btn" data-ans="skip" onclick="setLifeHistoryAnswer(\'' + q.id + '\',\'skip\')">答えたくない</button>' +
-          '</div>' +
-          '<textarea class="lifehist-detail" id="lifehist_detail_' + q.id + '" style="display:none" placeholder="よければ、もう少し詳しく（無理に埋めなくてOK）"></textarea>';
-        qEl.innerHTML = html;
-        bodyEl.appendChild(qEl);
-      });
-
-      catEl.appendChild(headEl);
-      catEl.appendChild(bodyEl);
-      panel.appendChild(catEl);
-    });
-
-    panelsEl.appendChild(panel);
-  });
-}
-
-function showLifeHistoryTab(tabId) {
-  document.querySelectorAll('.lifehist-tab').forEach(b => b.classList.toggle('active', b.id === 'lifehistTab_' + tabId));
-  document.querySelectorAll('.lifehist-tabpanel').forEach(p => p.classList.toggle('active', p.id === 'lifehistTabPanel_' + tabId));
-}
-
-function toggleLifeHistoryCat(catId) {
-  const body = document.getElementById('lifehistCatBody_' + catId);
-  const arrow = document.getElementById('lifehistCatArrow_' + catId);
-  if (!body) return;
-  const opening = !body.classList.contains('open');
-  body.classList.toggle('open', opening);
-  if (arrow) arrow.classList.toggle('open', opening);
-}
-
-function toggleLifeHistoryPanel() {
-  const panel = document.getElementById('lifehistPanel');
-  const arrow = document.getElementById('lifehistArrow');
-  const isOpen = panel.style.display !== 'none';
-  panel.style.display = isOpen ? 'none' : '';
-  if (arrow) arrow.classList.toggle('open', !isOpen);
-}
-
-function setLifeHistoryAnswer(qid, ans) {
-  const qEl = document.querySelector('.lifehist-q[data-qid="' + qid + '"]');
-  if (!qEl) return;
-  qEl.setAttribute('data-answer', ans);
-  qEl.querySelectorAll('.lifehist-ans-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-ans') === ans));
-  const ta = document.getElementById('lifehist_detail_' + qid);
-  if (ta) ta.style.display = (ans === 'yes') ? '' : 'none';
-}
-
-function collectLifeHistory() {
-  const out = {};
-  document.querySelectorAll('.lifehist-q').forEach(qEl => {
-    const qid = qEl.getAttribute('data-qid');
-    const ans = qEl.getAttribute('data-answer') || '';
-    if (!ans) return;
-    const ta = document.getElementById('lifehist_detail_' + qid);
-    out[qid] = { answer: ans, detail: (ans === 'yes' && ta) ? ta.value.trim() : '' };
-  });
-  return out;
-}
-
-function restoreLifeHistory(lifeHistory) {
-  if (!lifeHistory) return;
-  Object.keys(lifeHistory).forEach(qid => {
-    const entry = lifeHistory[qid];
-    if (!entry || !entry.answer) return;
-    setLifeHistoryAnswer(qid, entry.answer);
-    if (entry.answer === 'yes' && entry.detail) {
-      const ta = document.getElementById('lifehist_detail_' + qid);
-      if (ta) ta.value = entry.detail;
-    }
-    if (entry.answer === 'yes') {
-      const qEl = document.querySelector('.lifehist-q[data-qid="' + qid + '"]');
-      const body = qEl && qEl.closest('.lifehist-cat-body');
-      if (body) {
-        body.classList.add('open');
-        const arrow = document.getElementById('lifehistCatArrow_' + body.id.replace('lifehistCatBody_', ''));
-        if (arrow) arrow.classList.add('open');
-      }
-    }
-  });
-}
-
-function buildLifeHistoryText(lifeHistory) {
-  if (!lifeHistory) return '';
-  const lines = [];
-  LIFE_HISTORY_TABS.forEach(tab => {
-    tab.categories.forEach(cat => {
-      cat.questions.forEach(q => {
-        const entry = lifeHistory[q.id];
-        if (entry && entry.answer === 'yes' && entry.detail) {
-          lines.push('・' + q.text + '\n　→ ' + entry.detail);
-        }
-      });
-    });
-  });
-  return lines.join('\n');
-}
 
 // ===== 初期化 =====
 window.addEventListener('DOMContentLoaded', () => {
   renderLifeHistoryUI();
+  restoreLifeHistory({});
   loadAll();
   reloadBf();
   loadOtherDiagnostics();
   setupEnterNav();
+  initializeProfileFlow();
 });
 
 // ===== 生年月日：blur時に整形 =====
@@ -1784,11 +1615,12 @@ function reloadBf() {
       if (arr.length) { scores = arr[arr.length-1].scores; break; }
     } catch(e) {}
   }
+  if (!scores && window._bfPct) { renderBf(window._bfPct, window._bfPct.source || 'auto', true); return window._bfPct; }
   renderBf(scores, 'auto');
   return scores;
 }
 
-function renderBf(scores, src) {
+function renderBf(scores, src, alreadyPercent = false) {
   const wrap = document.getElementById('bfDisplay');
   const tag  = document.getElementById('bfTag');
   if (!scores) {
@@ -1796,20 +1628,17 @@ function renderBf(scores, src) {
     tag.innerHTML = '';
     return;
   }
-  const toP = v => Math.round((v-1)/4*100);
-  const isRaw = (scores.O > 5); // すでに0-100ならそのまま
-  const pct = {
-    O: isRaw ? scores.O : toP(scores.O||scores.o||3),
-    C: isRaw ? scores.C : toP(scores.C||scores.c||3),
-    E: isRaw ? scores.E : toP(scores.E||scores.e||3),
-    A: isRaw ? scores.A : toP(scores.A||scores.a||3),
-    N: isRaw ? scores.N : toP(scores.N||scores.n||3),
-  };
+  const pct = {};
+  ['O','C','E','A','N'].forEach(k => {
+    const v = scores[k] ?? scores[k.toLowerCase()];
+    if (typeof v !== 'number' || !Number.isFinite(v)) return;
+    pct[k] = Math.max(0, Math.min(100, alreadyPercent ? v : Math.round((v - 1) / 4 * 100)));
+  });
   window._bfPct = {...pct, source: src};
   const labels = {O:'開放性',C:'誠実性',E:'外向性',A:'協調性',N:'感受性'};
   const colors = {O:'var(--c-O)',C:'var(--c-C)',E:'var(--c-E)',A:'var(--c-A)',N:'var(--c-N)'};
   wrap.innerHTML = ['O','C','E','A','N'].map(k =>
-    `<span class="bf-item"><span class="bf-dot" style="background:${colors[k]}"></span><span class="bf-key">${labels[k]}(${k})</span>&nbsp;<span class="bf-val">${pct[k]}</span></span>`
+    `<span class="bf-item"><span class="bf-dot" style="background:${colors[k]}"></span><span class="bf-key">${labels[k]}(${k})</span>&nbsp;<span class="bf-val">${pct[k] ?? '未入力'}</span></span>`
   ).join('');
   tag.innerHTML = src === 'auto' ? '<span class="bf-auto-tag">診断結果より</span>' : '<span class="bf-auto-tag" style="background:rgba(160,128,96,.1);border-color:rgba(160,128,96,.3);color:var(--accent)">手動入力</span>';
 }
@@ -1823,7 +1652,7 @@ function toggleBfManual() {
   if (show) {
     ['O','C','E','A','N'].forEach(k => {
       const el = document.getElementById('m-'+k);
-      if (el && window._bfPct) el.value = window._bfPct[k] || '';
+      if (el && window._bfPct) el.value = window._bfPct[k] ?? '';
     });
   }
 }
@@ -1839,8 +1668,9 @@ function getManualBf() {
 }
 
 // ===== 保存 =====
-function saveAll() {
+function collectProfileData() {
   const data = {
+    ...readStoredProfile(),
     lastName:       val('lastName'),
     firstName:      val('firstName'),
     birthdate:      val('birthdate'),
@@ -1909,7 +1739,7 @@ function saveAll() {
 
   // ビッグファイブ
   const manual = document.getElementById('bfManualWrap').style.display !== 'none' ? getManualBf() : null;
-  if (manual) { data.bigfive = {...manual, source:'manual'}; renderBf(manual,'manual'); }
+  if (manual) { data.bigfive = {...manual, source:'manual'}; renderBf(manual,'manual',true); }
   else if (window._bfPct) data.bigfive = window._bfPct;
 
   // トグル状態
@@ -1922,10 +1752,21 @@ function saveAll() {
   // 自分史（振り返りQ&A）
   data.lifeHistory = collectLifeHistory();
 
-  data.updatedAt = new Date().toISOString();
-  localStorage.setItem(KEY, JSON.stringify(data));
-  showLastSave(data.updatedAt);
-  showToast('✓ 保存しました');
+  data.lifeHistoryVersion = 2;
+  data.exportPurpose = getProfilePurpose();
+  return data;
+}
+
+function saveAll() {
+  try {
+    const data = collectProfileData();
+    data.updatedAt = new Date().toISOString();
+    localStorage.setItem(KEY, JSON.stringify(data));
+    showLastSave(data.updatedAt);
+    showToast('✓ 保存しました');
+  } catch (e) {
+    showToast('保存できませんでした。入力は画面に残っています。');
+  }
 }
 
 function val(id) { return (document.getElementById(id)?.value||'').trim(); }
@@ -1966,7 +1807,8 @@ function loadAll() {
   const raw = localStorage.getItem(KEY);
   if (!raw) return;
   let d;
-  try { d = JSON.parse(raw); } catch(e) { return; }
+  try { d = JSON.parse(raw); } catch(e) { showToast('保存データを読み取れません。元のデータは変更していません。'); return; }
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return;
 
   const simple = ['lastName','firstName','birthdate','genderOfficial','genderSelf',
                   'hometown','postalCode','addrPref','addrCity','addrTown','addrStreet','addrBuilding','email','phone',
@@ -2003,7 +1845,7 @@ function loadAll() {
 
   if (d.bigfive) {
     window._bfPct = d.bigfive;
-    renderBf(d.bigfive, d.bigfive.source || 'auto');
+    renderBf(d.bigfive, d.bigfive.source || 'auto', true);
     if (d.bigfive.source === 'manual') {
       document.getElementById('bfManualWrap').style.display = '';
       document.getElementById('btnBfManual').textContent = '手動入力を閉じる';
@@ -2245,21 +2087,36 @@ ${profile}
 テーマと文字数を入力してから「書いてください」と指示してください。`;
 }
 
-function getDataObj() {
+function readStoredProfile() {
   const raw = localStorage.getItem(KEY);
-  try { return JSON.parse(raw) || {}; } catch(e) { return {}; }
+  if (!raw) return {};
+  const data = JSON.parse(raw);
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('保存データを読み取れません');
+  return data;
+}
+
+function getDataObj() { return collectProfileData(); }
+
+function previewAiProfile() {
+  const box = document.getElementById('aiProfilePreview');
+  try { box.value = buildPurposeText(); box.hidden = false; }
+  catch (e) { showToast('保存データを読み取れません。元のデータは変更していません。'); }
 }
 
 // ===== 出力操作（プリセット版は末尾で定義）=====
 function doPrint() { showToast('印刷ダイアログで「PDFに保存」を選択してください'); setTimeout(()=>window.print(), 500); }
 
-function copyText(text) {
-  navigator.clipboard.writeText(text).catch(() => {
+async function copyText(text) {
+  try {
+    if (!navigator.clipboard) throw new Error('clipboard unavailable');
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
     const ta = document.createElement('textarea');
     ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-  });
+    document.body.appendChild(ta);
+    try { ta.select(); if (!document.execCommand('copy')) throw new Error('copy failed'); }
+    finally { ta.remove(); }
+  }
 }
 
 // ===== 削除 =====
@@ -2275,6 +2132,48 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   clearTimeout(t._t);
   t._t = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+
+const PROFILE_PURPOSES = {
+  general: {sections:['personality','analysis','bg','goals','memo'], hint:'診断結果と、あなたが大切にしていることを相談の手がかりにします。', request:'以下は私が共有を選んだプロフィールです。診断結果と本人の記録を区別し、私の背景を踏まえて相談に乗ってください。情報が足りないときは質問してください。'},
+  career: {sections:['personality','analysis','work','skills','goals'], hint:'強み・職歴・目標を中心に、履歴書や仕事の相談に使います。氏名や住所は初期選択に含めません。', request:'以下のプロフィールを踏まえて、私に合う仕事・応募先への伝え方・履歴書の戦略を一緒に考えてください。職歴や資格、実績を創作せず、応募先や不足情報は質問してください。診断だけで適職を決めつけないでください。'},
+  blog: {sections:['personality','analysis','bg','goals','memo'], hint:'価値観・経験・伝え方の好みを、文章づくりの手がかりにします。', request:'以下のプロフィールを参考に、私の価値観や考え方に合うブログを書く手伝いをしてください。テーマと文体の希望を確認し、本人が語っていない体験や事実を創作しないでください。共有した私生活の情報を、そのまま公開文に書かないでください。'}
+};
+function getProfilePurpose() { return document.querySelector('[name="profilePurpose"]:checked')?.value || 'general'; }
+function buildPurposeText() { return PROFILE_PURPOSES[getProfilePurpose()].request + '\n\n' + buildFilteredText(); }
+function copyPurposeProfile() { return copyProfileOutput(buildPurposeText, '✓ コピーしました。好きなAIに貼り付けて使えます'); }
+function refreshProfileReview() {
+  const purpose=PROFILE_PURPOSES[getProfilePurpose()];
+  document.getElementById('profilePurposeHint').textContent=purpose.hint;
+  const count=[...document.querySelectorAll('#profileHistoryShare input:checked,#profileLegacyShare input:checked')].filter(x=>!x.disabled).length;
+  document.getElementById('profileShareCount').textContent='今回渡す質問の回答・以前の記録：'+count+'件';
+  const preview=document.getElementById('aiProfilePreview');
+  if (!preview.hidden) { try { preview.value=buildPurposeText(); } catch(e) { preview.value='保存データを読み取れません。元のデータは変更していません。'; } }
+}
+function initializeProfileFlow() {
+  const names={personality:'診断結果',analysis:'強み・価値観',bg:'自由に書いた背景・接し方',goals:'目標・希望',memo:'自由メモ',basic:'氏名・基本情報',contact:'住所・連絡先',edu:'学歴',work:'職歴',skills:'資格・スキル'};
+  const container=document.getElementById('profileShareSections');
+  Object.keys(names).forEach(key=>{
+    const input=document.querySelector('[data-toggle="'+key+'"]');
+    const old=input.closest('label');
+    const label=document.createElement('label');label.className='profile-share-option';
+    label.append(input,document.createTextNode(names[key]));container.append(label);old.remove();
+  });
+  let stored={};try{stored=readStoredProfile();}catch(e){}
+  const purpose=Object.prototype.hasOwnProperty.call(PROFILE_PURPOSES,stored.exportPurpose)?stored.exportPurpose:'general';
+  document.querySelector('[name="profilePurpose"][value="'+purpose+'"]').checked=true;
+  if(!stored.toggleState) document.querySelectorAll('[data-toggle]').forEach(x=>x.checked=PROFILE_PURPOSES[purpose].sections.includes(x.dataset.toggle));
+  document.querySelectorAll('[name="profilePurpose"]').forEach(radio=>radio.addEventListener('change',()=>{
+    document.querySelectorAll('[data-toggle]').forEach(x=>x.checked=PROFILE_PURPOSES[getProfilePurpose()].sections.includes(x.dataset.toggle));
+    document.querySelectorAll('#profileHistoryShare input,#profileLegacyShare input').forEach(x=>x.checked=false);
+    refreshProfileReview();
+  }));
+  document.querySelector('.page').addEventListener('input',refreshProfileReview);
+  document.querySelector('.page').addEventListener('change',refreshProfileReview);
+  const hasDiagnosis=!!window._bfPct || document.querySelector('#otherDiagDisplay .diag-chip');
+  document.getElementById('profileReady').textContent=hasDiagnosis?'診断結果が入っています。このままでもAIに渡せます。必要な背景だけ付け足してください。':'診断結果がなくても使えます。診断を受けると、対応する結果をここに読み込めます。';
+  refreshHistorySharing();refreshProfileReview();
 }
 
 // ===== プリセット =====
@@ -2402,7 +2301,7 @@ function buildFilteredText() {
     ['価値観',         'values',     'analysis'],
     ['志望動機の素材', 'motivation', 'analysis'],
     ['生い立ち・背景', 'background', 'bg'],
-    ['自分史（振り返りメモ）', 'lifeHistoryText', 'bg'],
+
     ['対人スタイル',   'style',      'bg'],
     ['希望職種・条件', 'jobTarget',  'goals'],
     ['長期目標',       'longGoal',   'goals'],
@@ -2412,13 +2311,14 @@ function buildFilteredText() {
     if (inc.includes(sec) && d[key]) { lines.push('【'+label+'】'); lines.push(d[key]); lines.push(''); }
   });
 
+  if (d.lifeHistoryText) lines.push('【本人が選んだ経験・背景】', d.lifeHistoryText, '');
   lines.push('生成日時: ' + new Date().toLocaleDateString('ja-JP'));
   return lines.join('\n');
 }
 
 function buildFilteredNarikiruPrompt() {
   const d = getDataObj();
-  const fullName = [d.lastName, d.firstName].filter(Boolean).join(' ') || '私';
+  const fullName = getIncludedSections().includes('basic') ? ([d.lastName, d.firstName].filter(Boolean).join(' ') || '私') : '私';
   const profile = buildFilteredText();
   return `以下のプロファイルは「${fullName}」という人物の自己情報です。
 あなたはこれから、このプロファイルに基づいて「${fullName}」本人として振る舞ってください。
@@ -2434,7 +2334,7 @@ ${profile}
 
 function buildFilteredBlogPrompt() {
   const d = getDataObj();
-  const fullName = [d.lastName, d.firstName].filter(Boolean).join(' ') || '私';
+  const fullName = getIncludedSections().includes('basic') ? ([d.lastName, d.firstName].filter(Boolean).join(' ') || '私') : '私';
   const profile = buildFilteredText();
   return `以下のプロファイルは「${fullName}」という人物の自己情報です。
 このプロファイルを踏まえて、${fullName}の視点・価値観・文体でブログ記事を書いてください。
@@ -2514,11 +2414,15 @@ function buildFilteredResume() {
 }
 
 // エクスポートボタンをフィルタ版に差し替え
-function copyAi()             { copyText(buildFilteredText());            showToast('✓ プロフィールをコピーしました'); }
-function copyNarikiruPrompt() { copyText(buildFilteredNarikiruPrompt());  showToast('✓ なりきりプロンプトをコピーしました'); }
-function copyBlogPrompt()     { copyText(buildFilteredBlogPrompt());      showToast('✓ ブログ記事プロンプトをコピーしました'); }
-function copySelfPrPrompt()   { copyText(buildFilteredSelfPrPrompt());    showToast('✓ 自己PRプロンプトをコピーしました'); }
-function copyResume()         { copyText(buildFilteredResume());          showToast('✓ 履歴書フォーマットをコピーしました'); }
+async function copyProfileOutput(build, message) {
+  try { await copyText(build()); showToast(message); }
+  catch (e) { showToast('コピーできませんでした。文章の確認欄から選択してコピーしてください。'); }
+}
+function copyAi()             { return copyProfileOutput(buildFilteredText, '✓ プロフィールをコピーしました'); }
+function copyNarikiruPrompt() { return copyProfileOutput(buildFilteredNarikiruPrompt, '✓ なりきりプロンプトをコピーしました'); }
+function copyBlogPrompt()     { return copyProfileOutput(buildFilteredBlogPrompt, '✓ ブログ記事プロンプトをコピーしました'); }
+function copySelfPrPrompt()   { return copyProfileOutput(buildFilteredSelfPrPrompt, '✓ 自己PRプロンプトをコピーしました'); }
+function copyResume()         { return copyProfileOutput(buildFilteredResume, '✓ 履歴書フォーマットをコピーしました'); }
 function downloadTxt() {
   const blob = new Blob([buildFilteredText()], {type:'text/plain;charset=utf-8'});
   const a = document.createElement('a');

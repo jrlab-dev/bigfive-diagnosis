@@ -315,7 +315,8 @@ body { padding-top: 52px !important; }
     // bigfive_ で始まる残りのキーも収集（同期ID・自動バックアップの記録用キーは除外）
     for (var i = 0; i < localStorage.length; i++) {
       var key = localStorage.key(i);
-      if (key && key.indexOf('bigfive_') === 0 && key !== LAST_AUTO_KEY && key !== SYNC_ID_KEY && !data[key]) {
+      // 自己プロフィールはブラウザ内専用。個人の生い立ちを一括同期へ含めない。
+      if (key && key.indexOf('bigfive_') === 0 && key !== 'bigfive_selfprofile' && key !== LAST_AUTO_KEY && key !== SYNC_ID_KEY && !data[key]) {
         data[key] = localStorage.getItem(key);
       }
     }
@@ -395,7 +396,7 @@ body { padding-top: 52px !important; }
   // 違いは1点＝配列以外のキーは「手元に無いものだけ」入れる（手元の値を上書きしない）
   function mergeRestoredData(data) {
     Object.keys(data).forEach(function(k) {
-      if (k === SYNC_ID_KEY || k === LAST_AUTO_KEY) return;
+      if (k === SYNC_ID_KEY || k === LAST_AUTO_KEY || k === 'bigfive_selfprofile') return;
       var v = data[k];
       if (typeof v !== 'string') return;
       if (RESTORE_ARRAY_KEYS.indexOf(k) < 0) {
