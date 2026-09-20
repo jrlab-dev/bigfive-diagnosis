@@ -129,6 +129,30 @@
       padding: 4px 0 10px;
     }
 
+    .collection-loading {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #64748b;
+      font-size: 0.78rem;
+      padding: 5px 12px 12px;
+    }
+    .collection-loading[hidden] { display: none; }
+    .collection-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(139,92,246,0.22);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: collection-spin 0.8s linear infinite;
+    }
+    @keyframes collection-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .collection-spinner { animation-duration: 1.8s; }
+    }
+
     /* カードグリッド */
     .card-grid {
       display: grid;
@@ -365,8 +389,11 @@
   <button class="filter-tab" data-filter="r7">Dark</button>
 </div>
 <div class="count-label" id="countLabel"></div>
-
 <div class="card-grid" id="cardGrid"></div>
+<div class="collection-loading" id="collectionLoading" role="status" aria-live="polite" hidden>
+  <span class="collection-spinner" aria-hidden="true"></span>
+  <span id="collectionLoadingText">カードを読み込み中...</span>
+</div>
 
 <section data-milestone-collection hidden aria-label="収集記念のシークレット"></section>
 
@@ -394,7 +421,7 @@
 <script src="unlock.js"></script>
 <script src="image-resolver.js?v=20260919"></script>
 <script src="hidden_characters.js?v=20260919"></script>
-<script src="album.js?v=20260919"></script>
+<script src="album.js?v=20260920-fast"></script>
 <script src="rarity.js?v=20260919"></script>
 <script>
 (function() {
@@ -404,6 +431,11 @@
   var ownedCards = [];
   var deleteTarget = null;
   var deleteConfirmStep = 0;
+  var renderGeneration = 0;
+  var renderFrame = null;
+  var renderObserver = null;
+  var filtersBound = false;
+  var RENDER_BATCH_SIZE = 24;
 
   // レアリティ名マッピング
   var rarityNames = {
@@ -475,19 +507,22 @@
     document.getElementById('progressBar').style.width = Math.min(ownedCount / 8298 * 100, 100).toFixed(1) + '%';
 
     // フィルタータブ
-    document.querySelectorAll('.filter-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        // レアリティ名を表示
-        var rarityNameEl = document.getElementById('rarityName');
-        if (rarityNameEl && rarityNames[currentFilter]) {
-          rarityNameEl.textContent = rarityNames[currentFilter];
-        }
-        render();
+    if (!filtersBound) {
+      document.querySelectorAll('.filter-tab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          // レアリティ名を表示
+          var rarityNameEl = document.getElementById('rarityName');
+          if (rarityNameEl && rarityNames[currentFilter]) {
+            rarityNameEl.textContent = rarityNames[currentFilter];
+          }
+          render();
+        });
       });
-    });
+      filtersBound = true;
+    }
 
     render();
   }
@@ -499,6 +534,82 @@
     return ownedCards.filter(function(c) {
       return c.rarity === currentFilter;
     });
+  }
+
+  function setLoading(visible, loaded, total, waitingForScroll) {
+    var loading = document.getElementById('collectionLoading');
+    var text = document.getElementById('collectionLoadingText');
+    var spinner = loading.querySelector('.collection-spinner');
+    var grid = document.getElementById('cardGrid');
+    loading.hidden = !visible;
+    spinner.hidden = !visible || !!waitingForScroll;
+    grid.setAttribute('aria-busy', visible && !waitingForScroll ? 'true' : 'false');
+    if (visible) {
+      text.textContent = (waitingForScroll ? '下へ進むと続きを読み込みます ' : 'カードを読み込み中 ') +
+        loaded.toLocaleString() + ' / ' + total.toLocaleString() + '枚';
+    }
+  }
+
+  function createCardElement(card) {
+    // 保存されたrarityではなくコードから正しいrarityを再計算
+    var correctRarity = (typeof AlbumUtils !== 'undefined')
+      ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
+      : ((card.version === '10') ? 'r0' : computeRarity(card.code));
+    card.rarity = correctRarity;
+
+    var el = document.createElement('a');
+    el.className = 'collection-card rarity-' + card.rarity;
+    el.href = 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender + '&saved=1';
+
+    // 長押しで削除
+    var timer = null;
+    el.addEventListener('touchstart', function(e) {
+      timer = setTimeout(function() {
+        e.preventDefault();
+        deleteTarget = card;
+        targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+        confirmEl.classList.add('show');
+      }, 1000);
+    }, { passive: true });
+    el.addEventListener('touchend', function() { clearTimeout(timer); });
+    el.addEventListener('touchmove', function() { clearTimeout(timer); });
+    el.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      deleteTarget = card;
+      targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+      confirmEl.classList.add('show');
+    });
+
+    var img = document.createElement('img');
+    // getCandidates() で result.html と同じ画像検索ロジックを使用（一貫性保証）
+    var IR = window.ImageResolver;
+    if (IR && IR.getCandidates) {
+      var candidates = IR.getCandidates(card.code, card.gender, card.version || '10');
+      var cIdx = 0;
+      img.src = candidates[0].path;
+      img.onerror = function() {
+        cIdx++;
+        if (cIdx < candidates.length) {
+          this.src = candidates[cIdx].path;
+        } else {
+          this.style.display = 'none';
+        }
+      };
+    } else {
+      img.src = AlbumUtils.getCardImagePath(card);
+      img.onerror = function() { this.style.display = 'none'; };
+    }
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = '';
+
+    var label = document.createElement('div');
+    label.className = 'card-label';
+    label.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀');
+
+    el.appendChild(img);
+    el.appendChild(label);
+    return el;
   }
 
   function render() {
@@ -514,73 +625,57 @@
 
     countEl.textContent = filtered.length + '枚' + (rewardCount ? ' ＋ 収集記念' + rewardCount + '枚' : '');
 
-    // グリッド描画
-    grid.innerHTML = '';
+    // 前の一覧が描画中でも即座に止め、最新の絞り込みを優先する。
+    var generation = ++renderGeneration;
+    if (renderFrame !== null) cancelAnimationFrame(renderFrame);
+    if (renderObserver) renderObserver.disconnect();
+    renderFrame = null;
+    renderObserver = null;
+    grid.replaceChildren();
     if (filtered.length === 0) {
+      setLoading(false, 0, 0);
       if (!rewardCount) grid.innerHTML = '<div class="empty-state">カードがありません<br>診断を受けてカードをゲットしよう！</div>';
       return;
     }
 
-    filtered.forEach(function(card) {
-      // 保存されたrarityではなくコードから正しいrarityを再計算
-      var correctRarity = (typeof AlbumUtils !== 'undefined')
-        ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
-        : ((card.version === '10') ? 'r0' : computeRarity(card.code));
-      card.rarity = correctRarity;
-
-      var el = document.createElement('a');
-      el.className = 'collection-card rarity-' + card.rarity;
-      el.href = 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender + '&saved=1';
-
-      // 長押しで削除
-      var timer = null;
-      el.addEventListener('touchstart', function(e) {
-        timer = setTimeout(function() {
-          e.preventDefault();
-          deleteTarget = card;
-          targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
-          confirmEl.classList.add('show');
-        }, 1000);
-      }, { passive: true });
-      el.addEventListener('touchend', function() { clearTimeout(timer); });
-      el.addEventListener('touchmove', function() { clearTimeout(timer); });
-      el.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        deleteTarget = card;
-        targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
-        confirmEl.classList.add('show');
-      });
-
-      var img = document.createElement('img');
-      // getCandidates() で result.html と同じ画像検索ロジックを使用（一貫性保証）
-      var IR = window.ImageResolver;
-      if (IR && IR.getCandidates) {
-        var candidates = IR.getCandidates(card.code, card.gender, card.version || '10');
-        var cIdx = 0;
-        img.src = candidates[0].path;
-        img.onerror = function() {
-          cIdx++;
-          if (cIdx < candidates.length) {
-            this.src = candidates[cIdx].path;
-          } else {
-            this.style.display = 'none';
-          }
-        };
-      } else {
-        img.src = AlbumUtils.getCardImagePath(card);
-        img.onerror = function() { this.style.display = 'none'; };
+    var rendered = 0;
+    setLoading(true, rendered, filtered.length);
+    function scheduleNextBatch() {
+      if (generation !== renderGeneration || renderFrame !== null || rendered >= filtered.length) return;
+      setLoading(true, rendered, filtered.length, false);
+      renderFrame = requestAnimationFrame(appendNextBatch);
+    }
+    function fillVisibleArea() {
+      if (generation !== renderGeneration || rendered >= filtered.length) return;
+      var loading = document.getElementById('collectionLoading');
+      if (loading.getBoundingClientRect().top <= window.innerHeight + 640) scheduleNextBatch();
+    }
+    function appendNextBatch() {
+      renderFrame = null;
+      if (generation !== renderGeneration) return;
+      var end = Math.min(rendered + RENDER_BATCH_SIZE, filtered.length);
+      var fragment = document.createDocumentFragment();
+      while (rendered < end) {
+        fragment.appendChild(createCardElement(filtered[rendered]));
+        rendered++;
       }
-      img.loading = 'lazy';
-      img.alt = '';
-
-      var label = document.createElement('div');
-      label.className = 'card-label';
-      label.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀');
-
-      el.appendChild(img);
-      el.appendChild(label);
-      grid.appendChild(el);
-    });
+      grid.appendChild(fragment);
+      if (rendered < filtered.length) {
+        setLoading(true, rendered, filtered.length, true);
+        requestAnimationFrame(fillVisibleArea);
+      } else {
+        if (renderObserver) renderObserver.disconnect();
+        renderObserver = null;
+        setLoading(false, rendered, filtered.length);
+      }
+    }
+    if ('IntersectionObserver' in window) {
+      renderObserver = new IntersectionObserver(function(entries) {
+        if (entries.some(function(entry) { return entry.isIntersecting; })) scheduleNextBatch();
+      }, { rootMargin: '640px 0px' });
+      renderObserver.observe(document.getElementById('collectionLoading'));
+    }
+    scheduleNextBatch();
   }
 
   init();

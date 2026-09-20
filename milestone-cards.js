@@ -5,7 +5,7 @@
   var base = new URL('.', document.currentScript.src).href;
   var album = window.AlbumUtils;
   var active = null, opening = false, timer = null, failed = false;
-  var galleries = [];
+  var assetVersion = '20260920-fast';
 
   function node(tag, cls, text) {
     var n = document.createElement(tag);
@@ -16,8 +16,8 @@
   function resource(name, style) {
     return new Promise(function(resolve, reject) {
       var n = document.createElement(style ? 'link' : 'script');
-      if (style) { n.rel = 'stylesheet'; n.href = base + name + '?v=20260919'; }
-      else n.src = base + name + '?v=20260919';
+      if (style) { n.rel = 'stylesheet'; n.href = base + name + '?v=' + assetVersion; }
+      else n.src = base + name + '?v=' + assetVersion;
       var timeout = setTimeout(function() { reject(new Error('記念カードの読み込み時間超過')); }, 10000);
       n.onload = function() { clearTimeout(timeout); resolve(); };
       n.onerror = function() { clearTimeout(timeout); reject(new Error('記念カードの読み込み失敗')); };
@@ -35,21 +35,49 @@
     var owned = album.getCollectionRewards().map(function(r) { return r.threshold; });
     return MilestoneArt.catalog.filter(function(item) { return owned.indexOf(item.threshold) >= 0; });
   }
+  function createStaticGallery(items) {
+    var grid = node('div', 'cm-static-grid');
+    items.forEach(function(item) {
+      var card = node('button', 'cm-static-card');
+      card.type = 'button';
+      card.dataset.threshold = item.threshold;
+      card.setAttribute('aria-label', item.name + '・カード' + item.threshold.toLocaleString() + '枚収集記念。光の演出で大きく見る');
+      var img = node('img', 'cm-static-image');
+      img.src = CardDelivery.imageUrl({ milestone: String(item.threshold) });
+      img.alt = item.name + '、カード' + item.threshold.toLocaleString() + '枚収集記念';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.width = 560;
+      img.height = 560;
+      img.onerror = function() {
+        img.remove();
+        card.classList.add('cm-static-card-error');
+        card.append(node('span', 'cm-static-error-name', item.name));
+        card.append(node('span', 'cm-static-error-count', 'カード' + item.threshold.toLocaleString() + '枚収集記念'));
+      };
+      card.append(img);
+      card.addEventListener('click', function() { open(item.threshold); });
+      grid.append(card);
+    });
+    return grid;
+  }
   function renderGalleries() {
     if (!window.MilestoneArt) return;
-    galleries.forEach(function(g) { g.destroy(); }); galleries = [];
     var items = ownedItems();
+    var signature = items.map(function(item) { return item.threshold; }).join(',');
     document.querySelectorAll('[data-milestone-collection]').forEach(function(section) {
       var filter=section.dataset.collectionFilter;
       var visible=!filter || filter==='all' || filter==='r6' || filter==='r8'; // r8=収集記念（2026-09-17新設・Secretタブでの表示は従来どおり）
-      section.replaceChildren(); section.hidden = !items.length || !visible;
+      section.hidden = !items.length || !visible;
       if (!items.length || !visible) return;
+      if (section.dataset.milestoneSignature === signature && section.querySelector('.cm-static-grid')) return;
+      section.replaceChildren();
+      section.dataset.milestoneSignature = signature;
       section.classList.add('cm-collection');
       section.append(node('h2', 'cm-collection-title', '収集記念のシークレット'));
       section.append(node('p', 'cm-collection-count', items.length + '枚の特別なカード'));
-      var surface = MilestoneArt.createSurface(items, open);
-      section.append(surface);
-      galleries.push({ destroy: MilestoneArt.attach(surface) });
+      section.append(createStaticGallery(items));
+      section.append(node('p', 'cm-static-help', 'カードを押すと、光の演出で大きく表示します'));
     });
   }
   function isOtherDialogOpen() {

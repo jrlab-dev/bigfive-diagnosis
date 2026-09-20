@@ -291,7 +291,7 @@
     if (!getPendingCollectionRewards().length && !document.querySelector('[data-milestone-collection]')) return;
     rewardUILoading = true;
     var script = document.createElement('script');
-    script.src = assetBase + 'milestone-cards.js?v=20260919';
+    script.src = assetBase + 'milestone-cards.js?v=20260920-fast';
     script.async = true;
     script.onerror = function() {
       markCollectionRewardUIFailed();
