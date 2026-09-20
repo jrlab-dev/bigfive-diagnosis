@@ -1,7 +1,7 @@
-/* 完成カードrun6／SNS run8の固定配信版。旧URLは上書きしない。 */
+/* 20260919版を引き継ぎ、15353男性の影響分だけ差し替える固定配信版。 */
 (function (root) {
   'use strict';
-  var release = '20260919';
+  var release = '20260920';
   var origin = 'https://bigfive.jr-genius.jp';
   function build(path, input) {
     var p = new URLSearchParams(input || {});

@@ -1752,7 +1752,7 @@
 <script src="hidden_characters.js?v=20260919"></script>
 <script src="image-resolver.js?v=20260919"></script>
 <script src="personality-types.js?v=20260919"></script>
-<script src="character-display-bounds.js?v=20260919"></script>
+<script src="character-display-bounds.js?v=20260920"></script>
 <script src="character-registry.js?v=20260919"></script>
 <!-- 30項目（ファセット）の定義。facet-report.html と共通の正本（2026-08-30に切り出し）。
      30項目レポートの案内で「目次」を出すのに使う -->
@@ -2448,7 +2448,7 @@ let selectedCharIsHidden = false;
 function setCharImage(path, isHidden) {
   selectedCharImagePath = path;
   selectedCharIsHidden = !!isHidden;
-  charImg.src = path;
+  charImg.src = path === 'images/characters/renewal243/M/15353.webp' ? path + '?v=20260920' : path;
   requestAnimationFrame(fitCharacterToCard);
 }
 // ImageResolver を使用した統一画像検索（secret → only → marume243 の3ステップ）
