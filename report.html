@@ -412,6 +412,25 @@ body {
 .missing-list a:hover { text-decoration: underline; }
 
 /* ===== フッター ===== */
+.report-next-card {
+  padding: 22px 20px;
+  border: 1px solid rgba(251,191,36,0.38);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(251,191,36,0.10), rgba(139,92,246,0.12));
+  text-align: center;
+}
+.report-next-title { font-size: 17px; font-weight: 800; margin: 0 0 8px; }
+.report-next-copy { font-size: 13px; color: var(--dim); line-height: 1.8; margin: 0; }
+.report-next-progress { font-size: 15px; font-weight: 800; color: var(--text); margin: 14px 0 4px; }
+.report-next-buttons { display: flex; gap: 10px; margin-top: 16px; }
+.report-next-button {
+  flex: 1; display: block; padding: 12px 8px; border-radius: 10px;
+  text-decoration: none; font-size: 14px; font-weight: 800;
+}
+.report-next-zukan { color: var(--text); background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22); }
+.report-next-gacha { color: #3a2e1e !important; background: linear-gradient(135deg,#fbbf24,#f59e0b); }
+body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255,.72); border-color:rgba(139,92,246,.24); }
+
 .footer-note {
   text-align: center;
   font-size: 11px;
@@ -535,6 +554,20 @@ body {
   <div class="section" id="growthSection">
     <div class="section-label">GROWTH ROADMAP</div>
     <div class="growth-block" id="growthBlock"></div>
+  </div>
+
+  <div class="section" id="reportNextCardSection">
+    <div class="section-label">NEXT STEP</div>
+    <div class="report-next-card">
+      <p class="report-next-title">🎴 次は、カード集めを楽しむ</p>
+      <p class="report-next-copy">診断やガチャでカードが増え、新しい診断が開きます。300枚集めると、性格を30項目に分けた詳細レポートも開きます。</p>
+      <p class="report-next-progress" id="reportCardProgress">カード枚数を確認中...</p>
+      <p class="report-next-copy" id="reportCardRemain"></p>
+      <div class="report-next-buttons">
+        <a class="report-next-button report-next-zukan" id="reportNextZukan" href="zukan.html">図鑑を見る</a>
+        <a class="report-next-button report-next-gacha" id="reportNextGacha" href="gacha.html">🪙 ガチャを引く</a>
+      </div>
+    </div>
   </div>
 
   <div class="footer-note">
@@ -1539,5 +1572,24 @@ function renderGrowth(steps) {
 
 <script src="nav.js?v=20260919"></script>
 <script src="unlock.js"></script>
+<script>
+(function(){
+  var count = 0;
+  try { if (typeof getCardCount === 'function') count = getCardCount() || 0; } catch (e) {}
+  var progress = document.getElementById('reportCardProgress');
+  var remain = document.getElementById('reportCardRemain');
+  if (progress) progress.textContent = 'いま ' + count + '枚';
+  if (remain) remain.textContent = count >= 300
+    ? '30項目の詳細レポートを開ける枚数に到達しています'
+    : '30項目の詳細レポートまで、あと' + (300 - count) + '枚';
+  function ga(id, name) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', function(){ try { if (window.gtag) gtag('event', name); } catch (e) {} });
+  }
+  ga('reportNextZukan', 'report_next_zukan_click');
+  ga('reportNextGacha', 'report_next_gacha_click');
+})();
+</script>
 </body>
 </html>

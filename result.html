@@ -1318,6 +1318,15 @@
       <a href="zukan.html" style="flex:1; display:block; text-align:center; padding:12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); color:var(--text);">図鑑を見る</a>
       <a href="gacha.html" style="flex:1; display:block; text-align:center; padding:12px; border-radius:10px; text-decoration:none; font-weight:700; font-size:14px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#3a2e1e !important;">🪙 ガチャを引く</a>
     </div>
+    <div id="resultFreeReportStep">
+      <div style="display:flex;align-items:center;gap:10px;margin:16px 0 12px;color:var(--dim);font-size:11.5px;">
+        <span style="height:1px;flex:1;background:rgba(255,255,255,0.16);"></span>
+        <span>カードを受け取ったら、次はこちら</span>
+        <span style="height:1px;flex:1;background:rgba(255,255,255,0.16);"></span>
+      </div>
+      <a id="paidAltFree" href="report.html" style="display:block;width:100%;text-align:center;padding:13px 12px;border-radius:10px;text-decoration:none;font-weight:800;font-size:14px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;box-shadow:0 5px 16px rgba(139,92,246,0.24);">これまでの診断をまとめた総合レポートを見る（無料）</a>
+      <p style="margin:8px 0 0;font-size:11.5px;color:var(--dim);text-align:center;line-height:1.6;">受けた診断が増えるほど、あなた専用の分析が育ちます</p>
+    </div>
   </div>
 
   <!-- 相性スコアカード（他者診断から来た場合のみ表示） -->
@@ -1490,12 +1499,6 @@
     </div>
 
     </div>
-
-    <!-- 無料の出口（2026-08-09新設・小さく下に置く）
-         ⚠️同じ大きさで並べると全員がこちらを押して、上の2つが測れなくなる。 -->
-    <p class="rep300-alt">
-      <a id="paidAltFree" href="report.html">これまでの診断をまとめた総合レポートを見る（無料）</a>
-    </p>
 
     <!-- ④ 600円を押したあと／300枚に届いたあと（最初は隠している）
          ★文言は準也さんが選んだ案②（2026-08-30）。
@@ -1692,6 +1695,12 @@
     bindCount('shareFacebook', 'share_facebook');
     bindCount('shareLine', 'share_line');
     bindCount('shareCopy', 'share_copy');
+    // 無料総合レポート入口は10問・30問・120問をGA4でまとめて見る。
+    // KVの旧 paid_alt_free_click は120問版だけで継続し、過去の累計を断絶させない。
+    var freeReportBtn = document.getElementById('paidAltFree');
+    if (freeReportBtn) freeReportBtn.addEventListener('click', function(){
+      try { if (window.gtag) gtag('event', 'result_free_report_click'); } catch (e) {}
+    });
   })();</script>
 
   <!-- 図鑑に追加（共有リンクから来た場合に表示） -->
@@ -2198,6 +2207,12 @@ const isChildMode = isOtherMode && (relation === 'child46' || relation === 'chil
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
 const isSavedView = params.get('saved') === '1';
 const isSharedView = params.get('from') === 'share';
+// 本人がいま受けた診断結果だけを、無料の総合レポートへつなぐ。
+// 保存済み・共有・あの人診断から本人のレポートへ飛ばすと文脈が混ざるため。
+if (isSavedView || isSharedView || isOtherMode) {
+  var freeReportStep = document.getElementById('resultFreeReportStep');
+  if (freeReportStep) freeReportStep.style.display = 'none';
+}
 const personIdx = params.get('idx') !== null ? parseInt(params.get('idx')) : -1;
 const O = parseInt(typeCode[0]), C = parseInt(typeCode[1]);
 const E = parseInt(typeCode[2]), A = parseInt(typeCode[3]), N = parseInt(typeCode[4]);
@@ -3259,9 +3274,6 @@ if (version === '10') {
   function showOpen() {
     waysEl.style.display = 'none';
     openBtn.style.display = 'block';
-    // 開ける人には無料の出口は要らない（迷わせない）
-    var alt = document.querySelector('.rep300-alt');
-    if (alt) alt.style.display = 'none';
   }
 
   if (reached || alreadyPaid) {
