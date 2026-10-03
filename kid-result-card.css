@@ -1,0 +1,42 @@
+/* result.htmlと同じ、性格名・人物・透過説明を重ねる正方形カード。 */
+@font-face{font-family:'Kid Rounded';src:url('fonts/zen-maru-gothic/kid-names.ttf') format('truetype');font-style:normal;font-weight:900;font-display:swap}
+.kr-card{position:relative;isolation:isolate;width:100%;aspect-ratio:1;overflow:hidden;border-radius:8px;border:2px solid #b5b1d34d;background:#15102e;color:#f8fafc;box-shadow:0 8px 32px #0006,0 0 28px #8b5cf633;container-type:inline-size;text-align:center}
+.kr-card *{box-sizing:border-box}
+.kr-card .kr-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,#6d35ab55,transparent 70%),linear-gradient(150deg,#111029,#24103c 50%,#11172b);z-index:0}
+.kr-card .kr-holo{position:absolute;inset:0;background:url('images/kid-art/silver.webp') center/cover;z-index:0}
+.kr-card.kr-kid{color:#172f47;border-color:#deedf3;box-shadow:0 8px 26px #21395545,0 0 20px #bdd3e655}
+.kr-card .kr-tint{position:absolute;inset:0;z-index:1;background:var(--kid-tint,#b9e6fb);opacity:.26}
+.kr-card .kr-light{position:absolute;inset:-40%;z-index:2;pointer-events:none;background:linear-gradient(115deg,transparent 25%,#64ddff30 36%,#ffffffc0 43%,#ffa8ed55 49%,#b7fff530 57%,transparent 68%);mix-blend-mode:soft-light;animation:kr-reflection 7s ease-in-out infinite alternate;transform:translateX(-18%) rotate(-10deg)}
+@keyframes kr-reflection{to{transform:translateX(18%) rotate(10deg)}}
+.kr-card .holo-cv,.kr-card .foil-cv{position:absolute;inset:-100px;z-index:2;pointer-events:none}
+.kr-card .glitter-cv{position:absolute;inset:0;z-index:3;pointer-events:none}
+.kr-card.kr-kid .holo-cv{opacity:.55;mix-blend-mode:overlay}
+.kr-card .kr-character{position:absolute;display:block;z-index:4;max-width:none;width:90%;height:90%;top:6%;left:5%;object-fit:contain;margin:0;aspect-ratio:auto;pointer-events:none}
+.kr-card .kr-name{position:absolute;z-index:6;top:2.4%;left:2%;width:96%;padding:0;margin:0;font-size:clamp(17px,5.9cqw,29px);line-height:1.2;font-weight:900;letter-spacing:.03em;white-space:nowrap;color:inherit;text-shadow:-1px -1px 0 #142237,1px 1px 0 #142237,0 2px 5px #000}
+.kr-card.kr-kid .kr-name{font-family:'Kid Rounded','Hiragino Maru Gothic ProN',sans-serif;font-size:clamp(19px,6.6cqw,33px);color:var(--kid-name-color,#1765bb);-webkit-text-stroke:clamp(1.5px,.55cqw,5.6px) #fff;paint-order:stroke fill;text-shadow:0 2px 5px #ffffffb3;letter-spacing:0}
+.kr-card .kr-code{position:absolute;z-index:6;top:10.2%;left:0;right:0;font-size:clamp(11px,3.3cqw,16px);font-weight:600;letter-spacing:.08em;text-shadow:0 1px 5px #101629}
+.kr-card.kr-kid .kr-code{text-shadow:0 0 5px #fff,0 0 3px #fff}
+.kr-card .kr-bottom{position:absolute;z-index:5;bottom:0;left:0;right:0;padding:3% 2% 2%;background:linear-gradient(transparent,#0c14296e 35%,#0c1429b8);}
+.kr-card.kr-kid .kr-bottom{background:linear-gradient(transparent,#ffffff10 35%,#ffffff38)}
+.kr-card .kr-scores{display:grid;grid-template-columns:1fr 1fr;gap:1px 3%;margin-bottom:1%;text-align:left}
+.kr-card.kr-kid .kr-scores{grid-template-columns:repeat(3,1fr);gap:3%}
+.kr-card .kr-score{display:flex;align-items:center;gap:4%;font-size:clamp(10px,3cqw,14px);font-weight:700;line-height:1.15;text-shadow:0 0 2px #fff5}
+.kr-card.kr-kid .kr-score{display:flex;flex-direction:column;justify-content:flex-end;gap:.3em;text-align:center;font-size:clamp(10px,3.2cqw,15px);line-height:1.3;min-width:0;padding:1.1cqw .5cqw;border:1px solid #ffffffbf;border-radius:2cqw;background:#ffffff52;box-shadow:0 1px 4px #172f471f}
+.kr-card.kr-kid .kr-score-label,.kr-card.kr-kid .kr-score-word{text-shadow:0 0 .22em #fff,0 0 .22em #fff,0 0 .42em #fff,0 0 .65em #fff,0 0 .85em #ffffffed}
+.kr-card.kr-kid .kr-score-label{font-size:inherit;min-height:2.6em;display:flex;align-items:center;justify-content:center;white-space:pre-line}
+.kr-card.kr-kid .kr-score-word{font-size:1.06em;white-space:nowrap;font-weight:800;color:#172f47}
+.kr-score-label{min-width:1.5em;color:var(--factor)}
+.kr-bar{flex:1;height:5px;border-radius:5px;overflow:hidden;background:#b6baca66}
+.kr-bar>i{display:block;height:100%;background:var(--factor);border-radius:inherit}
+.kr-card .kr-description{font-size:clamp(11px,3.35cqw,16px);line-height:1.35;font-weight:600;text-align:left;color:inherit;background:#00000019;border:1px solid #ffffff0d;border-radius:5px;padding:1.2% 1.5%;margin:0;text-shadow:0 1px 3px #0009}
+.kr-card.kr-kid .kr-description{background:#ffffff33;border-color:#ffffff26;text-shadow:0 0 3px #fff,0 0 2px #fff;font-weight:700}
+.kr-card.kr-static .kr-light{animation:none;opacity:.35;transform:translateX(0)}
+.kr-card.kr-static canvas{display:none}
+@media(prefers-reduced-motion:reduce){.kr-card .kr-light{animation:none}.kr-card canvas{display:none}}
+#resultCard.result-card{padding:0;border:0;background:none!important;max-width:480px;width:100%;margin:0 auto 28px;box-shadow:none}
+#resultCard.result-card img{margin:0;aspect-ratio:auto}
+#screen-result{padding-top:76px}
+#screen-result .result-header{margin-bottom:16px}
+#screen-result .result-badge{display:none}
+#screen-result .result-title{font-size:16px;margin:0 0 4px;font-weight:600}
+#screen-result .result-sub{font-size:12px;margin:0}

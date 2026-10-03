@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>計測ダッシュボード</title>
+<style>
+  :root{
+    --bg:#eef1f5; --card:#fff; --ink:#1b2026; --sub:#5d6773; --line:#dde2e8;
+    --good:#12805a; --bad:#c1352b; --warn:#b8720f; --accent:#2b5fa8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+       line-height:1.7;font-size:16px;-webkit-text-size-adjust:100%;}
+  .wrap{max-width:820px;margin:0 auto;padding:16px 13px 70px;}
+  h1{font-size:19px;margin:0 0 2px;}
+  .stamp{color:var(--sub);font-size:12.5px;margin:0 0 16px;}
+  h2{font-size:16px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent);}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;margin:11px 0;}
+
+  /* 一言 */
+  .summary{background:#fff;border:2px solid var(--accent);border-radius:12px;padding:15px 16px;font-size:15.5px;}
+  .summary b{color:var(--accent);}
+  .summary .bad{color:var(--bad);}
+
+  /* 漏斗 */
+  .fstep{display:flex;align-items:center;gap:9px;margin:4px 0;}
+  .fbarwrap{flex:1;min-width:0;}
+  .fbar{height:36px;border-radius:6px;display:flex;align-items:center;padding:0 11px;
+        color:#fff;font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;
+        min-width:104px;}
+  .frate{width:58px;text-align:right;font-size:13px;font-weight:700;flex-shrink:0;}
+  .fnote{font-size:12.5px;color:var(--bad);padding:1px 0 7px 4px;font-weight:700;}
+  .flabel{font-size:12.5px;color:var(--sub);padding-left:2px;}
+
+  /* グラフ */
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px;}
+  .tab{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;
+       font-size:13px;cursor:pointer;color:var(--sub);font-family:inherit;}
+  .tab.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;}
+  .chart{width:100%;height:190px;display:block;}
+  .legend{font-size:12px;color:var(--sub);margin-top:4px;}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:3px;}
+
+  /* タイル */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;}
+  .tile{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px;}
+  .tile .t{font-size:12px;color:var(--sub);line-height:1.45;min-height:2.9em;}
+  .tile .v{font-size:23px;font-weight:700;line-height:1.25;}
+  .tile .u{font-size:11.5px;color:var(--sub);font-weight:400;}
+  .tile .d{font-size:12.5px;font-weight:700;margin-top:1px;}
+  .up{color:var(--good)} .down{color:var(--bad)} .flat{color:var(--sub)}
+
+  /* 毎朝の自動レポート */
+  .report{background:#fffdf6;border:2px solid #e3c86b;border-radius:12px;padding:15px 16px;margin:0 0 14px;}
+  .rtitle{font-size:12.5px;color:#8a6d1f;font-weight:700;margin-bottom:4px;}
+  .rhead{font-size:16.5px;font-weight:700;line-height:1.55;margin-bottom:8px;}
+  .report p{margin:7px 0;font-size:15px;}
+  .rwatch{margin-top:11px;padding-top:10px;border-top:1px dashed #e3c86b;font-size:14.5px;}
+  .rwatch ul{margin:5px 0 0;padding-left:20px;} .rwatch li{margin:3px 0;}
+
+  .note{font-size:12.5px;color:var(--sub);}
+  .err{background:#fdecea;border:1px solid #f3b7b1;color:#8a231b;border-radius:10px;padding:14px;}
+  details{margin-top:9px;} summary{cursor:pointer;font-size:13px;color:var(--sub);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px;}
+  th,td{border:1px solid var(--line);padding:5px 7px;text-align:right;}
+  th{background:#f2f5f8;font-weight:600;} td:first-child,th:first-child{text-align:left;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>計測ダッシュボード</h1>
+  <p class="stamp" id="stamp">読み込み中…</p>
+  <div id="report"></div>
+  <div id="app"><div class="card">数字を取ってきています…</div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   1. 設定
+   ============================================================ */
+var API_DAILY = '/count/daily?days=90';
+var API_STATS = '/count/stats';
+
+// 日別グラフに出す指標（切り替えボタンの並び順）
+var CHART_ITEMS = [
+  {key:'__quiz_all',        label:'診断の完走'},
+  {key:'result_view',       label:'結果を見た'},
+  {key:'quiz_complete_120', label:'120問'},
+  {key:'report_view',       label:'総合レポート'},
+  {key:'gacha_feature_unlock', label:'機能の解放'},
+  {key:'paid_btn_click',    label:'¥980画面'},
+  {key:'ai_profile_copy',   label:'AIコピー'}
+];
+
+var TILES = [
+  {key:'__quiz_all',           label:'診断を最後までやった人',       unit:'人'},
+  {key:'quiz_complete_120',    label:'120問をやり切った人',          unit:'人'},
+  {key:'quiz_complete_30',     label:'30問版をやり切った人',         unit:'人'},
+  {key:'quiz_complete_10',     label:'10問版をやり切った人',         unit:'人'},
+  {key:'result_view',          label:'結果ページの閲覧',             unit:'回'},
+  {key:'result_view_new',      label:'　└ はじめての人',             unit:'人'},
+  {key:'result_view_return',   label:'　└ 戻ってきた常連',           unit:'回'},
+  {key:'report_view',          label:'総合レポートを見た',           unit:'回'},
+  // ── 30項目レポート（2026-08-30に作り直した導線。計測は8/31に組み直し）──
+  //   ★下の paid_* は8/30より前の「読む前に払え」だった頃の数字。もう増えない。混ぜて読まないこと。
+  {key:'rep300_shown',         label:'30項目レポートの案内が出た',   unit:'人'},
+  {key:'rep300_ways',          label:'　└ 2つの道をちゃんと見た',    unit:'人'},
+  {key:'rep300_collect',       label:'　　└ 集めに行った（★本命）',  unit:'人'},
+  {key:'rep300_pay',           label:'　　└ 600円で開いた',          unit:'人'},
+  {key:'rep300_unlock',        label:'　　└ 300枚に到達して開いた',  unit:'人'},
+  {key:'paid_btn_click',       label:'¥980の画面まで来た人（旧）',   unit:'人'},
+  {key:'paid_buy_click',       label:'購入に進んだ人（旧）',         unit:'人'},
+  {key:'paid_close_fast',      label:'3秒未満で閉じた人（高いと判断）', unit:'人'},
+  {key:'revisit_after_close',  label:'即閉じ後に戻ってきた人',       unit:'人'},
+  {key:'cross_teaser_click',   label:'クロス分析の予告を押した人',   unit:'人'},
+  {key:'ai_profile_copy',      label:'AIプロフィールのコピー',       unit:'回'},
+  {key:'gacha_view',           label:'カードのページを開いた',       unit:'回'},
+  {key:'gacha_pull',           label:'ガチャを引いた',               unit:'回'},
+  {key:'gacha_feature_unlock', label:'機能が解放された回数',         unit:'回'},
+  {key:'team_analyze',         label:'チーム相性を診断した',         unit:'回'},
+  {key:'career_view',          label:'キャリア適性診断',             unit:'回'},
+  {key:'attachment_view',      label:'愛着スタイル診断',             unit:'回'},
+  {key:'reladvice_view',       label:'相性アドバイスを見た',         unit:'回'},
+  {key:'other_result_view',    label:'あの人診断の結果',             unit:'回'},
+  {key:'blog_link_view',       label:'おすすめ記事が出た',           unit:'回'},
+  {key:'blog_link_click',      label:'おすすめ記事へのクリック',     unit:'回'},
+  {key:'kotoba_view',          label:'ことば辞典を見た',             unit:'回'}
+];
+
+// 一番上の「一言まとめ」で伸び・落ちを探す対象。
+// ★タイル全部を対象にしない＝件数の小さい項目は率が跳ねて、毎日そればかりが「1位」になるため
+//   （例：1→3で+200%）。判定は昔からの主要8項目に限る。
+var SUMMARY_KEYS = ['__quiz_all','quiz_complete_120','result_view','report_view',
+                    'gacha_feature_unlock','paid_btn_click','paid_buy_click','ai_profile_copy'];
+
+// 漏斗2本
+var FUNNELS = [
+  {
+    title:'お金の道・いまの形（120問 → 300枚レポート）',
+    note:'2026-08-30に作り直した導線。レポートは無料で、カード300枚の機能開放にした。600円は集めずに開く逃げ道（決済は入れていない）。'
+       + '★見るのは一番下＝集めに行った人。案内が出た数は再訪も含むので、120問をやり切った数より多くなることがある（差＝見返した人）。',
+    steps:[
+      {key:'rep300_shown',   label:'レポートの案内が出た'},
+      {key:'rep300_ways',    label:'2つの道をちゃんと見た（半分以上・3秒以上）'},
+      {key:'rep300_collect', label:'集めに行った（★成功の判定）'}
+    ]
+  },
+  {
+    title:'お金の道・8/30より前（もう増えない）',
+    note:'「読む前に¥980を払え」だった頃の記録。8/30に作り直したので、ここから先は増えません。'
+       + '上の新しい道と比べられるのは一番下どうし（どちらも押した数）だけです。',
+    steps:[
+      {key:'__quiz_all',        label:'診断を最後までやった'},
+      {key:'quiz_complete_120', label:'そのうち120問をやった'},
+      {key:'paid_btn_click',    label:'30項目レポートを試し読み'},
+      {key:'paid_buy_click',    label:'¥980を見て購入に進んだ'}
+    ]
+  },
+  {
+    title:'遊び込みの道（結果 → カード → 機能）',
+    // ★総合レポートはここに入れない。一度解放されると何度でも見られるので
+    //   「機能解放の下流」ではなく、並べると通過率245%のような無意味な数字が出る（8/7に実測）。
+    //   総合レポートは下の数字タイルで単独で見る。
+    note:'結果を見たあと、どこまで遊び込んでもらえているか。',
+    steps:[
+      {key:'result_view',          label:'結果ページを見た'},
+      {key:'gacha_view',           label:'カードのページを開いた'},
+      {key:'gacha_feature_unlock', label:'新しい機能が解放された'},
+      {key:'team_analyze',         label:'チーム相性を使った'}
+    ]
+  }
+];
+
+/* ============================================================
+   1-2. カウンター名の日本語表記（2026-08-07追加）
+   英語のままだと何の数字か分からないので、全項目に日本語名をつけ、種類ごとにまとめて出す。
+   ============================================================ */
+var LABELS = {
+  'quiz_complete_10':'10問版をやり終えた', 'quiz_complete_30':'30問版をやり終えた',
+  'quiz_complete_120':'120問版をやり終えた',
+  'result_view':'結果ページを見た（のべ）', 'result_view_new':'　└ はじめての人',
+  'result_view_return':'　└ 戻ってきた常連', 'result_ai_click':'結果ページのAI相談ボタン',
+  'result_ai_click_top':'　└ うち上部のボタン', 'ai_profile_copy':'AIプロフィールをコピーした',
+  'blog_link_view':'おすすめ記事が出た（のべ）', 'blog_link_click':'　└ そこからクリック',
+  // 30項目レポート（2026-08-30改装・計測は8/31に組み直し）。すべて1端末1回＝「人」の数。
+  'rep300_shown':'30項目レポートの案内が出た', 'rep300_ways':'　└ 2つの道をちゃんと見た',
+  'rep300_collect':'　　└ 集めに行った（★本命）', 'rep300_pay':'　　└ 600円で開いた',
+  'rep300_unlock':'　　└ カード300枚に到達して開いた',
+  // ⚠️廃止（2026-08-31）＝この2本は同じ瞬間を二重に数えていた。8/31以降は増えない。
+  'rep300_view':'【廃止】案内が画面をかすめた', 'rep300_toc':'【廃止】同上（二重計上）',
+  'paid_btn_click':'試し読み「続きを全部読む」', 'paid_buy_click':'¥980を見て購入に進んだ',
+  'paid_free_open':'無料と知ってレポートを開いた', 'paid_report_view':'30項目レポートを表示した',
+  'paid_sample_view':'見本を見た', 'paid_ai_copy':'レポート全文をAIに持ち出した',
+  // 案内を閉じるまでの秒数（2026-08-09追加ぶん・表示が漏れていたので2026-08-10に追加）
+  // 区切りの根拠＝案内1枚目は205文字で、読み切るのに20.5秒（速読）〜25.6秒（ふつう）かかる。
+  // ¥980は開いた瞬間に見える。よって3秒＝値段しか見ていない／21秒＝速読でも読み切れない下限
+  'paid_close_fast':'　└ 3秒未満で閉じた（値段だけ見て拒否＝「高い」）',
+  'paid_close_mid':'　└ 3〜21秒で閉じた（読んでいる途中でやめた＝「読ませきれていない」）',
+  'paid_close_slow':'　└ 21秒以上で閉じた（最後まで読んで買わなかった＝「価値が釣り合わない」）',
+  'paid_alt_free_click':'　└ 断って無料レポートへ進んだ',
+  // 幻滅して離れていないかを見る指標（2026-08-10追加）＝revisit_after_close ÷ paid_close_fast
+  'revisit_after_close':'★即閉じした人が、また結果ページに戻ってきた',
+  'cross_teaser_view':'クロス分析の予告カードが出た', 'cross_teaser_click':'クロス分析の予告カードを押した',
+  'gacha_view':'カードのページを開いた', 'gacha_pull':'ガチャを引いた',
+  'gacha_unlock':'新しいカードが出た', 'gacha_feature_unlock':'新しい機能が解放された',
+  'gacha_pull_normal':'　└ ノーマル（8/4で計測終了）', 'gacha_pull_rare':'　└ レア（8/4で計測終了）',
+  'gacha_pull_super':'　└ スーパー（8/4で計測終了）',
+  'gacha_unlock_normal':'　└ 新カード ノーマル（8/4で計測終了）',
+  'gacha_unlock_rare':'　└ 新カード レア（8/4で計測終了）',
+  'gacha_unlock_super':'　└ 新カード スーパー（8/4で計測終了）',
+  'report_view':'総合レポートを見た', 'career_view':'キャリア適性診断',
+  'attachment_view':'愛着スタイル診断', 'team_view':'チーム相性診断を開いた',
+  'team_analyze':'チーム相性を診断した', 'group_view':'グループ分けツール',
+  'hexaco_view':'HEXACO診断', 'eq_view':'「あの人」のEQ診断',
+  'dark_triad_view':'「あの人」のダークトライアド診断',
+  'kotoba_view':'ことば辞典を見た', 'kotoba_test_click':'ことば辞典から診断へ進んだ',
+  'other_result_view':'あの人診断の結果（のべ）', 'other_result_view_30':'　└ 簡易版',
+  'other_result_view_60':'　└ 詳細版', 'other_result_view_120':'　└ 詳細版2',
+  'other_team_click':'あの人診断 → チーム相性へ',
+  'share_img_save':'画像を保存した', 'share_x':'Xでシェア', 'share_line':'LINEでシェア',
+  'share_copy':'URLをコピー', 'share_facebook':'Facebookでシェア',
+  'reladvice_view':'相性アドバイスを見た（のべ）', 'reladvice_ai_copy':'相性アドバイスをAIにコピー',
+  // バックアップ・端末引継ぎ（すべて1端末1回＝「人」の数）。自動のぶんは2026-09-02から
+  'backup_save_click':'自分で「保存する」を押した', 'backup_mail_click':'　└ 番号をメールで送った',
+  'backup_restore_ok':'番号・IDで引き継いだ',
+  'sync_id_auto':'同期IDを自動発行した', 'backup_auto_ok':'自動バックアップが成功した',
+  'restore_auto_ok':'自動で戻せた', 'restore_auto_miss':'　└ 戻そうとしたが無かった',
+};
+// 相性アドバイスのテーマ別（表示とAIコピーで28項目）
+var RELADVICE = {
+  'kimochi':'気持ちが分からない', 'like':'好きな人', 'distance':'距離感', 'fight':'けんか',
+  'kachikan':'価値観', 'work-boss':'職場・上司', 'work-fric':'職場・人間関係',
+  'work-kotowaru':'職場・断れない', 'work-buka':'職場・部下', 'family-kodomo':'家族・子ども',
+  'family-fufu':'家族・夫婦', 'family-oya':'家族・親', 'tsukare':'人といると疲れる',
+  'friend-cool':'友だちと冷めた'
+};
+Object.keys(RELADVICE).forEach(function(k){
+  LABELS['reladvice_view_' + k]    = '　└ ' + RELADVICE[k];
+  LABELS['reladvice_ai_copy_' + k] = '　└ ' + RELADVICE[k] + '（AIコピー）';
+});
+
+// 一覧の並び順（この順に、見出しをつけて表示する）
+var GROUPS = [
+  {title:'① 診断をやり終えた人', keys:['quiz_complete_10','quiz_complete_30','quiz_complete_120']},
+  {title:'② 結果ページ', keys:['result_view','result_view_new','result_view_return',
+                               'result_ai_click','result_ai_click_top','ai_profile_copy',
+                               'blog_link_view','blog_link_click']},
+  {title:'③-1 30項目レポート（8/30改装後・いまはこれを見る）',
+                               keys:['rep300_shown','rep300_ways','rep300_collect',
+                                     'rep300_pay','rep300_unlock']},
+  {title:'③-2 有料レポート（8/30より前・もう増えない）', keys:['paid_btn_click','paid_buy_click','paid_free_open',
+                                          'paid_report_view','paid_sample_view','paid_ai_copy',
+                                          'paid_close_fast','paid_close_mid','paid_close_slow',
+                                          'paid_alt_free_click','revisit_after_close']},
+  {title:'④ クロス分析への案内', keys:['cross_teaser_view','cross_teaser_click']},
+  {title:'⑤ カード・ガチャ', keys:['gacha_view','gacha_pull','gacha_unlock','gacha_feature_unlock',
+                                   'gacha_pull_normal','gacha_pull_rare','gacha_pull_super',
+                                   'gacha_unlock_normal','gacha_unlock_rare','gacha_unlock_super']},
+  {title:'⑥ ほかの診断・機能', keys:['report_view','career_view','attachment_view','team_view',
+                                     'team_analyze','group_view','hexaco_view','eq_view',
+                                     'dark_triad_view','kotoba_view','kotoba_test_click']},
+  {title:'⑦ あの人診断', keys:['other_result_view','other_result_view_30','other_result_view_60',
+                               'other_result_view_120','other_team_click']},
+  {title:'⑧ シェア', keys:['share_img_save','share_x','share_line','share_copy','share_facebook']},
+  {title:'⑨ 相性アドバイス', keys:['reladvice_view','reladvice_ai_copy'].concat(
+      Object.keys(RELADVICE).map(function(k){ return 'reladvice_view_' + k; }),
+      Object.keys(RELADVICE).map(function(k){ return 'reladvice_ai_copy_' + k; }))},
+  // ⑩ 消えない置き場（2026-09-02）。判定に使う数字＝backup_auto_ok の週の増分＝守られている端末の数
+  {title:'⑩ バックアップ・端末引継ぎ', keys:['backup_save_click','backup_mail_click','backup_restore_ok',
+                                             'sync_id_auto','backup_auto_ok',
+                                             'restore_auto_ok','restore_auto_miss']},
+];
+
+/* ============================================================
+   2. 計算のしかた
+   ------------------------------------------------------------
+   カウンターは累計なので、隣り合う記録日の差＝その期間の実績。
+   記録が飛んでいる日（手記録の時代は毎日ではない）は、
+   期間の合計を日数で割って各日に均等に配る＝「推定値」として薄い色で描く。
+   ★リセット直後は差が負になる。負は無効として捨てる（無意味な数字を出さない）。
+   ============================================================ */
+function dayGap(a, b){
+  return Math.round((Date.parse(b+'T00:00:00Z') - Date.parse(a+'T00:00:00Z')) / 86400000);
+}
+// 日本時間の今日（端末の時計が日本以外に設定されていても日本の日付になる）
+function jstToday(){
+  return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function dailySeries(dates, values){
+  var out = new Array(dates.length).fill(null);
+  var prev = -1;
+  for (var i = 0; i < values.length; i++){
+    if (values[i] === null || values[i] === undefined) continue;
+    if (prev >= 0){
+      var diff = values[i] - values[prev];
+      var gap  = dayGap(dates[prev], dates[i]);
+      if (diff >= 0 && gap > 0){
+        var per = diff / gap;
+        for (var k = prev + 1; k <= i; k++){
+          out[k] = { v: per, est: gap > 1 };
+        }
+      }
+    }
+    prev = i;
+  }
+  return out;
+}
+
+// 合成指標（10問＋30問＋120問の完走）
+function seriesOf(counters, key){
+  if (key === '__quiz_all'){
+    var a = counters['quiz_complete_10']  || [];
+    var b = counters['quiz_complete_30']  || [];
+    var c = counters['quiz_complete_120'] || [];
+    var n = Math.max(a.length, b.length, c.length);
+    var out = [];
+    for (var i = 0; i < n; i++){
+      if (a[i] == null || b[i] == null || c[i] == null) { out.push(null); }
+      else { out.push(a[i] + b[i] + c[i]); }
+    }
+    return out;
+  }
+  return counters[key] || [];
+}
+
+/* ★日付を連続させる
+   /count/daily が返す dates は「記録がある日」だけなので、記録が飛んだ日は配列に存在しない。
+   そのままだと「配列の隣＝1日後」という前提が崩れ、増分を配る回数が足りず合計が減る
+   （2026-08-07の検算で result_view の合計が 2,404 → 2,265.5 に目減りして発覚）。 */
+function nextDay(s){
+  return new Date(Date.parse(s + 'T00:00:00Z') + 86400000).toISOString().slice(0,10);
+}
+function fillDates(dates){
+  if (!dates.length) return [];
+  var out = [], cur = dates[0], last = dates[dates.length-1], guard = 0;
+  while (cur <= last && guard++ < 2000){ out.push(cur); cur = nextDay(cur); }
+  return out;
+}
+
+/* 直近n日の合計。★その期間に記録が1つも無ければ null を返す
+   （0を返すと「先週は誰もやらなかった」という嘘になる。記録が無いのと0人は別物） */
+function sumLast(series, n){
+  var s = 0, cnt = 0, has = false;
+  for (var i = series.length - 1; i >= 0 && cnt < n; i--){
+    if (series[i]) { s += series[i].v; has = true; }
+    cnt++;
+  }
+  return has ? s : null;
+}
+// その前のn日ぶんの合計（同じく、記録が無ければ null）
+function sumPrev(series, n){
+  var s = 0, cnt = 0, skipped = 0, has = false;
+  for (var i = series.length - 1; i >= 0; i--){
+    if (skipped < n) { skipped++; continue; }
+    if (cnt >= n) break;
+    if (series[i]) { s += series[i].v; has = true; }
+    cnt++;
+  }
+  return has ? s : null;
+}
+
+function fmt(x){
+  if (x === null || x === undefined || isNaN(x)) return '—';
+  if (x >= 100) return Math.round(x).toLocaleString();
+  if (x >= 10)  return (Math.round(x*10)/10).toString();
+  return (Math.round(x*10)/10).toString();
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+/* ============================================================
+   3. 描画
+   ============================================================ */
+// 最初に出すグラフは result_view（7月からの過去データがそろっている唯一の系列。
+// __quiz_all は8/1以降しか無く、開いた瞬間に棒が数本しか出ず「壊れている」ように見える）
+// stats＝今この瞬間の累計（/count/stats）。日別記録は毎朝5時なので、これが無いと
+// 「昨日の朝までの数字」しか見られない＝今日ぶんが丸ごと見えなかった（2026-08-14に追加）
+var STATE = { dates:[], counters:{}, series:{}, chartKey:'result_view', stats:null, statsAt:null };
+
+var RV_OFFSET = 603;
+var RV_FREEZE = '2026-08-22';
+function restoreResultView(){
+  var nw = STATE.counters['result_view_new'], rt = STATE.counters['result_view_return'];
+  var rv = STATE.counters['result_view'];
+  if (!nw || !rt || !rv) return;
+  STATE.dates.forEach(function(d, i){
+    if (d > RV_FREEZE && nw[i] != null && rt[i] != null) rv[i] = RV_OFFSET + nw[i] + rt[i];
+  });
+}
+
+// その項目の日本語名（合成指標の __quiz_all も引けるようにする）
+function labelOf(key){
+  if (key === '__quiz_all') return '診断の完走（10問＋30問＋120問）';
+  return LABELS[key] || key;
+}
+// 一言まとめ用の呼び名。タイルに書いてある名前（例「¥980の画面まで来た人」）を優先する。
+// 一覧表の名前は仕組みに寄せてあり（例「試し読み『続きを全部読む』」）、まとめ文には向かない
+function shortLabelOf(key){
+  for (var i = 0; i < TILES.length; i++){
+    if (TILES[i].key === key) return TILES[i].label.replace(/^　└ /, '');
+  }
+  return labelOf(key);
+}
+// 最後のスナップショット（＝いちばん新しい記録日）の累計値
+function lastSnap(nm){
+  var arr = STATE.counters[nm] || [];
+  for (var i = arr.length - 1; i >= 0; i--){
+    if (arr[i] !== null && arr[i] !== undefined) return arr[i];
+  }
+  return null;
+}
+// 今この瞬間の累計（statsが取れていないときは null）
+function nowTotal(nm){
+  if (!STATE.stats) return null;
+  if (nm === '__quiz_all'){
+    var a = STATE.stats['quiz_complete_10'], b = STATE.stats['quiz_complete_30'], c = STATE.stats['quiz_complete_120'];
+    if (a == null || b == null || c == null) return null;
+    return a + b + c;
+  }
+  return STATE.stats[nm] === undefined ? null : STATE.stats[nm];
+}
+// 最後の記録から今までに増えた数（リセット等で負になったら無効＝表示しない）
+function sinceSnap(nm){
+  var now = nowTotal(nm), snap = (nm === '__quiz_all')
+    ? (function(){ var a=lastSnap('quiz_complete_10'), b=lastSnap('quiz_complete_30'), c=lastSnap('quiz_complete_120');
+                   return (a==null||b==null||c==null) ? null : a+b+c; })()
+    : lastSnap(nm);
+  if (now === null || snap === null) return null;
+  var d = now - snap;
+  return d < 0 ? null : d;
+}
+
+function buildFunnel(f){
+  var vals = f.steps.map(function(s){ return sumLast(STATE.series[s.key] || [], 7); });
+  var top = (vals[0] !== null && vals[0] > 0) ? vals[0] : 1;
+  // いちばん通過率が低い段を探す（2段目以降・記録が無い段は判定に入れない）
+  var worst = -1, worstRate = 2;
+  for (var i = 1; i < vals.length; i++){
+    var r = (vals[i] !== null && vals[i-1] !== null && vals[i-1] > 0) ? vals[i] / vals[i-1] : null;
+    if (r !== null && r < worstRate){ worstRate = r; worst = i; }
+  }
+  var h = '<div class="card"><div style="font-weight:700;margin-bottom:2px">' + esc(f.title) + '</div>'
+        + '<div class="note" style="margin-bottom:9px">' + esc(f.note) + '（直近7日の合計）</div>';
+  for (var i = 0; i < f.steps.length; i++){
+    var w = (vals[i] !== null && top > 0) ? Math.max(9, Math.round(vals[i] / top * 100)) : 9;
+    var rate = (i === 0 || vals[i] === null || vals[i-1] === null || vals[i-1] <= 0)
+             ? null : vals[i] / vals[i-1];
+    // ★安全装置：通過率が100%を超えたら率を出さない。
+    //   「前の段より多い」＝その段は前の段の下流ではない（見返しなどで膨らむ）ということなので、
+    //   率として見せると必ず誤解を招く。数字そのものは棒の中に出る。
+    var rateOver = (rate !== null && rate > 1.05);
+    if (rateOver) rate = null;
+    var isWorst = (i === worst);
+    var color = isWorst ? '#c1352b' : 'hsl(213,' + (52 - i*5) + '%,' + (42 + i*7) + '%)';
+    var rcls = rate === null ? '' : (rate >= 0.6 ? 'up' : (rate >= 0.3 ? 'flat' : 'down'));
+    h += '<div class="flabel">' + esc(f.steps[i].label) + '</div>'
+       + '<div class="fstep"><div class="fbarwrap"><div class="fbar" style="width:' + w + '%;background:' + color + '">'
+       + fmt(vals[i]) + '</div></div>'
+       + '<div class="frate ' + rcls + '">' + (rate === null ? '' : Math.round(rate*100) + '%') + '</div></div>';
+    if (rateOver){
+      h += '<div class="note" style="padding:0 0 6px 4px">※前の段より多いため、通過率は出していません（この段は前の段の下流ではありません）</div>';
+    }
+    if (isWorst){
+      h += '<div class="fnote">▲ ここがいちばん細い。ここを広げるのが一番効きます</div>';
+    }
+  }
+  return h + '</div>';
+}
+
+function buildChart(){
+  var s = STATE.series[STATE.chartKey] || [];
+  var dates = STATE.dates;
+  var n = Math.min(21, dates.length);
+  var from = dates.length - n;
+  var W = 700, H = 190, padL = 4, padB = 22, padT = 18;
+  var max = 0;
+  for (var i = from; i < dates.length; i++){ if (s[i] && s[i].v > max) max = s[i].v; }
+  if (max <= 0) max = 1;
+  var bw = (W - padL*2) / n;
+  var svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">';
+  for (var i = from; i < dates.length; i++){
+    var d = s[i];
+    var x = padL + (i - from) * bw;
+    var v = d ? d.v : 0;
+    var bh = Math.max(d ? 2 : 0, (H - padB - padT) * (v / max));
+    var y = H - padB - bh;
+    var fill = !d ? '#e3e8ee' : (d.est ? '#a8c4e6' : '#2b5fa8');
+    svg += '<rect x="' + (x+1.5) + '" y="' + y + '" width="' + (bw-3) + '" height="' + bh + '" fill="' + fill + '" rx="2"/>';
+    if (d && (n <= 14 || (i - from) % 2 === 0)){
+      svg += '<text x="' + (x + bw/2) + '" y="' + (y - 4) + '" font-size="10" fill="#5d6773" text-anchor="middle">'
+           + fmt(d.v) + '</text>';
+    }
+    if ((i - from) % Math.ceil(n/7) === 0 || i === dates.length-1){
+      svg += '<text x="' + (x + bw/2) + '" y="' + (H - 7) + '" font-size="10" fill="#7b8695" text-anchor="middle">'
+           + dates[i].slice(5).replace('-','/') + '</text>';
+    }
+  }
+  svg += '</svg>';
+
+  var tabs = '<div class="tabs">';
+  CHART_ITEMS.forEach(function(it){
+    tabs += '<button class="tab' + (it.key === STATE.chartKey ? ' on' : '') + '" data-k="' + it.key + '">'
+          + esc(it.label) + '</button>';
+  });
+  tabs += '</div>';
+
+  /* ★2026-08-14追加：ボタンは7つしか置けないので、残り全部はプルダウンから選ぶ。
+     ボタンを80個並べても選べないが、「グラフで見られるのが7項目だけ」では数字が足りない。 */
+  var inTabs = {};
+  CHART_ITEMS.forEach(function(it){ inTabs[it.key] = 1; });
+  var sel = '<div style="margin:-4px 0 9px"><span class="note">ほかの数字をグラフで見る：</span> '
+          + '<select id="chartSel" style="font-family:inherit;font-size:13px;padding:3px 5px;max-width:100%">'
+          + '<option value="">選んでください</option>';
+  GROUPS.forEach(function(g){
+    var ks = g.keys.filter(function(k){ return STATE.counters[k] && !inTabs[k]; });
+    if (!ks.length) return;
+    sel += '<optgroup label="' + esc(g.title) + '">';
+    ks.forEach(function(k){
+      sel += '<option value="' + esc(k) + '"' + (k === STATE.chartKey ? ' selected' : '') + '>'
+           + esc(labelOf(k).replace(/^　└ /, '')) + '</option>';
+    });
+    sel += '</optgroup>';
+  });
+  sel += '</select></div>';
+
+  var head = '<div style="font-weight:700;margin-bottom:3px">'
+           + esc(labelOf(STATE.chartKey).replace(/^　└ /, '')) + '（1日ごと・直近' + n + '日）</div>';
+
+  return '<div class="card">' + tabs + sel + head + svg
+       + '<div class="legend"><i style="background:#2b5fa8"></i>その日に記録した実測　'
+       + '<i style="background:#a8c4e6"></i>記録が飛んだ期間を日数で割った推定　'
+       + '<i style="background:#e3e8ee"></i>データなし</div></div>';
+}
+
+function buildTiles(){
+  var h = '<div class="tiles">';
+  TILES.forEach(function(t){
+    var s = STATE.series[t.key] || [];
+    var cur = sumLast(s, 7), prev = sumPrev(s, 7);
+    var line;
+    if (cur === null){
+      line = '<div class="d flat">まだ記録がありません</div>';
+    } else if (prev === null){
+      // ★0と表示してはいけない（記録が無いだけで、実際に0人だったわけではない）
+      line = '<div class="d flat">前の7日は記録なし</div>';
+    } else {
+      var df = cur - prev;
+      var cls = Math.abs(df) < 0.5 ? 'flat' : (df > 0 ? 'up' : 'down');
+      var mark = Math.abs(df) < 0.5 ? '±' : (df > 0 ? '▲ +' : '▼ ');
+      line = '<div class="d ' + cls + '">' + mark + fmt(Math.abs(df)) + '　前の7日と比べて</div>';
+    }
+    h += '<div class="tile"><div class="t">' + esc(t.label) + '</div>'
+       + '<div class="v">' + fmt(cur) + '<span class="u"> ' + (t.unit || '人') + '／7日</span></div>'
+       + line + '</div>';
+  });
+  return h + '</div>';
+}
+
+var DAY_KEYS = [
+  {key:'__quiz_all',        label:'診断の完走', unit:'人'},
+  {key:'quiz_complete_120', label:'120問',     unit:'人'},
+  {key:'result_view',       label:'結果ページ', unit:'回'},
+  {key:'paid_btn_click',    label:'¥980の画面', unit:'人'}
+];
+
+function yesterdayLine(){
+  var dates = STATE.dates;
+  if (dates.length < 2) return '';
+  var day = dates[dates.length - 2];   // 最後の記録の1つ前＝「まる1日ぶん」が取れる区間の始まり
+  var parts = [], est = false, any = false;
+  DAY_KEYS.forEach(function(k){
+    var s = STATE.series[k.key] || [];
+    var v = s[s.length - 1];
+    if (!v) return;
+    any = true;
+    if (v.est) est = true;
+    parts.push(esc(k.label) + fmt(v.v) + k.unit);
+  });
+  if (!any) return '';
+  return '<b>' + day.slice(5).replace('-', '/') + ' の1日</b>＝' + parts.join('・')
+       + (est ? '<span class="note">（記録が飛んだ期間の推定を含みます）</span>' : '') + '。<br>';
+}
+
+function buildSummary(){
+  var quiz = STATE.series['__quiz_all'] || [];
+  var last = null;
+  for (var i = quiz.length - 1; i >= 0; i--){ if (quiz[i]) { last = quiz[i]; break; } }
+  var cur7 = sumLast(quiz, 7), prev7 = sumPrev(quiz, 7);
+
+  // いちばん伸びた／落ちた指標を探す（前の7日に記録が無いものは比較しない）
+  var bestName = null, bestRate = 0, worstName = null, worstRate = 0;
+  SUMMARY_KEYS.forEach(function(key){
+    var s = STATE.series[key] || [];
+    var c = sumLast(s, 7), p = sumPrev(s, 7);
+    if (c === null || p === null || p < 3) return;
+    if (c > p){
+      var r = (c - p) / p;
+      if (r > bestRate){ bestRate = r; bestName = shortLabelOf(key); }
+    } else if (c < p){
+      var r2 = (p - c) / p;
+      if (r2 > worstRate){ worstRate = r2; worstName = shortLabelOf(key); }
+    }
+  });
+
+  var h = '<div class="summary">';
+  h += yesterdayLine();
+  h += 'この7日間で <b>診断を最後までやった人が' + fmt(cur7) + '人</b>';
+  if (cur7 !== null && prev7 !== null){
+    var diff = cur7 - prev7;
+    h += '（前の7日より <b' + (diff >= 0 ? '' : ' class="bad"') + '>'
+       + (diff >= 0 ? '+' : '−') + fmt(Math.abs(diff)) + '人</b>）。';
+  } else {
+    h += '。<span class="note">（前の7日は記録が無いので比較できません）</span>';
+  }
+  if (bestName) h += '<br>いちばん伸びたのは <b>' + esc(bestName) + '</b>（+' + Math.round(bestRate*100) + '%）。';
+  if (worstName) h += '<br>いちばん落ちたのは <span class="bad">' + esc(worstName) + '</span>（−' + Math.round(worstRate*100) + '%）。';
+  h += '</div>';
+  return h;
+}
+
+/* ★2026-08-14追加：最後の記録から今までに増えた数
+   日ごとの記録は毎朝5時なので、それ以降に起きたことは、この画面のどこにも出ていなかった。
+   /count/stats（今この瞬間の累計）と、最後の記録の差を出せば「今どうなっているか」が見える。 */
+var NOW_KEYS = ['__quiz_all','quiz_complete_120','result_view','report_view',
+                'paid_btn_click','paid_buy_click','gacha_feature_unlock','ai_profile_copy'];
+
+function buildNow(){
+  if (!STATE.stats || !STATE.dates.length) return '';
+  var lastDate = STATE.dates[STATE.dates.length - 1];
+  var hours = (STATE.statsAt - Date.parse(lastDate + 'T05:00:00+09:00')) / 3600000;
+  var span = (hours <= 0 || isNaN(hours)) ? ''
+           : (hours < 48 ? Math.max(1, Math.round(hours)) + '時間で'
+                         : Math.round(hours / 24) + '日で');
+
+  var h = '<div class="card"><div style="font-weight:700;margin-bottom:2px">'
+        + 'サイトが始まってからの合計（今この瞬間）</div>'
+        + '<div class="note" style="margin-bottom:9px">日ごとの記録は毎朝5時なので、'
+        + '下のグラフや「直近7日」には<b>' + lastDate + ' の朝5時より後のぶんが入っていません</b>。'
+        + 'この段だけが今この瞬間の数字です（小さい字＝朝5時の記録のあと' + span + '増えた数）。</div>'
+        + '<div class="tiles">';
+  NOW_KEYS.forEach(function(k){
+    var inc = sinceSnap(k), total = nowTotal(k);
+    // ★1行に収める（タイルの幅は140px。2行に折り返すと数字より説明が目立って読みにくい）
+    var d = (inc === null) ? '<div class="d flat">—</div>'
+          : (inc > 0 ? '<div class="d up">▲ +' + inc.toLocaleString() + '</div>'
+                     : '<div class="d flat">まだ動きなし</div>');
+    h += '<div class="tile"><div class="t">' + esc(labelOf(k)) + '</div>'
+       + '<div class="v">' + (total === null ? '—' : total.toLocaleString()) + '</div>'
+       + d + '</div>';
+  });
+  return h + '</div></div>';
+}
+
+function render(){
+  var h = '';
+  h += buildSummary();
+  h += '<h2>今この瞬間の数字</h2>';
+  h += buildNow();
+  h += '<h2>どこで人が落ちているか</h2>';
+  FUNNELS.forEach(function(f){ h += buildFunnel(f); });
+  h += '<h2>1日ごとの動き</h2>';
+  h += buildChart();
+  h += '<h2>主な数字（直近7日の合計）</h2>';
+  h += '<div class="note" style="margin:-3px 0 9px">※ ここに出るのは'
+     + '<b>' + STATE.dates[STATE.dates.length-1] + ' の朝5時まで</b>の数字です'
+     + '（それより後のぶんは上の「今この瞬間の数字」で見てください）。'
+     + '「前の7日は記録なし」と出る項目は、そのカウンター自体を作ったのが最近で、'
+     + '比べる相手のデータがまだ無いものです。</div>';
+  h += buildTiles();
+
+  /* 1行ぶんの中身（日本語名・今の累計・記録後の増分・直近7日・その前の7日）
+     ★2026-08-14に列を2本増やした。今までは「昨日の朝までの累計」と「直近7日」の2つしか無く、
+       今日ぶんも、先週との比較も、この表からは読めなかった。 */
+  var lastDate = STATE.dates.length ? STATE.dates[STATE.dates.length - 1] : '';
+  var sinceHead = lastDate ? lastDate.slice(5).replace('-', '/') + '朝〜今' : '記録後';
+
+  function rowOf(nm){
+    var total = nowTotal(nm);
+    if (total === null) total = lastSnap(nm);   // 今の累計が取れない項目は最後の記録で代用
+    var inc = sinceSnap(nm);
+    var s7 = sumLast(STATE.series[nm] || [], 7);
+    var p7 = sumPrev(STATE.series[nm] || [], 7);
+    return '<tr><td>' + esc(LABELS[nm] || nm) + '</td>'
+         + '<td>' + (total === null ? '—' : total.toLocaleString()) + '</td>'
+         + '<td>' + (inc === null ? '—' : (inc > 0 ? '+' + inc.toLocaleString() : '0')) + '</td>'
+         + '<td>' + fmt(s7) + '</td>'
+         + '<td>' + fmt(p7) + '</td></tr>';
+  }
+
+  // 表に出す項目＝日別記録にあるもの ＋ 今の累計にしか無いもの（新設カウンターも必ず出る）
+  var allKeys = {};
+  Object.keys(STATE.counters).forEach(function(k){ allKeys[k] = 1; });
+  if (STATE.stats) Object.keys(STATE.stats).forEach(function(k){ allKeys[k] = 1; });
+  var nItems = Object.keys(allKeys).length;
+
+  // ★既定で開く。閉じていると、この画面で見える数字が8個しか無いように見える
+  h += '<details open><summary>すべての数字を見る（' + nItems + '項目）</summary>'
+     + '<div class="card" style="overflow-x:auto">'
+     + '<table><tr><th>項目</th><th>今の累計</th><th>' + esc(sinceHead) + '</th>'
+     + '<th>直近7日</th><th>その前の7日</th></tr>';
+  var shown = {};
+  GROUPS.forEach(function(g){
+    var rows = g.keys.filter(function(k){ return allKeys[k]; });
+    if (!rows.length) return;
+    h += '<tr><th colspan="5" style="background:#e6ecf3;text-align:left">' + esc(g.title) + '</th></tr>';
+    rows.forEach(function(nm){ shown[nm] = 1; h += rowOf(nm); });
+  });
+  // 分類に入れ忘れたものがあれば最後に出す（項目が増えたときに落ちないように）
+  var rest = Object.keys(allKeys).filter(function(k){ return !shown[k]; }).sort();
+  if (rest.length){
+    h += '<tr><th colspan="5" style="background:#e6ecf3;text-align:left">その他（分類していない項目）</th></tr>';
+    rest.forEach(function(nm){ h += rowOf(nm); });
+  }
+  h += '</table></div></details>';
+
+  document.getElementById('app').innerHTML = h;
+
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(b){
+    b.addEventListener('click', function(){ STATE.chartKey = b.getAttribute('data-k'); render(); });
+  });
+  var selEl = document.getElementById('chartSel');
+  if (selEl){
+    selEl.addEventListener('change', function(){
+      if (!selEl.value) return;
+      STATE.chartKey = selEl.value;
+      render();
+      // 選び直したグラフが画面に入るように、位置を合わせる
+      var el = document.getElementById('chartSel');
+      if (el && el.scrollIntoView) el.scrollIntoView({block:'center'});
+    });
+  }
+}
+
+/* ============================================================
+   4. 読み込み
+   ============================================================ */
+function loadReport(){
+  fetch('/count/report', {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rep){
+      if (!rep || !rep.headline) return;
+      /* ★いつ書いた文章かをはっきりさせる（2026-08-14追加）
+         毎朝の自動作成は止まっているので、放っておくと何日も前の文章が
+         「今朝の報告」という見出しで出続ける＝古い話を今日の話と読んでしまう。 */
+      var age = rep.date ? dayGap(rep.date, jstToday()) : null;
+      var title = (age === null || age <= 0) ? '今朝の報告' : age + '日前に書いた報告';
+      var h = '<div class="report"><div class="rtitle">' + esc(title) + '　'
+            + esc(rep.date || '') + '</div>'
+            + '<div class="rhead">' + esc(rep.headline) + '</div>';
+      (rep.body || []).forEach(function(p){ h += '<p>' + esc(p) + '</p>'; });
+      if (rep.watch && rep.watch.length){
+        h += '<div class="rwatch"><b>次に見るところ</b><ul>';
+        rep.watch.forEach(function(w){ h += '<li>' + esc(w) + '</li>'; });
+        h += '</ul></div>';
+      }
+      if (age !== null && age >= 1){
+        h += '<div class="rwatch" style="color:#8a6d1f">この文章は<b>' + esc(rep.date) + 'に書いたもの</b>で、'
+           + '今日のものではありません（毎朝の自動作成は止めてあります）。'
+           + '<b>下の数字はすべて今日の最新です。</b>新しい読み解きが必要なときは、'
+           + 'いつでも私に「数字を見て」と言ってください。</div>';
+      }
+      document.getElementById('report').innerHTML = h + '</div>';
+    })
+    .catch(function(){ /* 無くても平常運転 */ });
+}
+
+/* 今この瞬間の累計を取る（2026-08-14追加）
+   ★取れなくても画面は壊さない＝その場合は今までどおり「最後の記録まで」の表示になる。 */
+function loadStats(){
+  return fetch(API_STATS, {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(s){
+      if (s && typeof s === 'object'){
+        // ★2026-08-22：result_view は送信を止めたので、今の累計も new+return から作り直す
+        if (s['result_view_new'] != null && s['result_view_return'] != null){
+          s['result_view'] = RV_OFFSET + s['result_view_new'] + s['result_view_return'];
+        }
+        STATE.stats = s; STATE.statsAt = Date.now();
+      }
+    })
+    .catch(function(){ /* 無くても平常運転 */ });
+}
+
+function loadDaily(){
+  fetch(API_DAILY, {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('daily ' + r.status); return r.json(); })
+    .then(function(d){
+      STATE.dates = d.dates || [];
+      STATE.counters = d.counters || {};
+      if (!STATE.dates.length){
+        document.getElementById('app').innerHTML =
+          '<div class="err">まだ記録が1日もありません。毎朝5時の自動記録が動き出すのを待ってください。</div>';
+        return;
+      }
+
+      // ★横軸を連続した日付にそろえる（記録が無い日も枠だけ作る）
+      var filled = fillDates(STATE.dates);
+      if (filled.length !== STATE.dates.length){
+        var map = {};
+        STATE.dates.forEach(function(dt, i){ map[dt] = i; });
+        var nc = {};
+        Object.keys(STATE.counters).forEach(function(k){
+          var src = STATE.counters[k];
+          nc[k] = filled.map(function(dt){
+            return map[dt] === undefined ? null : src[map[dt]];
+          });
+        });
+        STATE.counters = nc;
+        STATE.dates = filled;
+      }
+      restoreResultView();   // ★2026-08-22：止めた result_view を new+return から作り直す
+      // 使う指標ぶんの日別データを先に作っておく
+      var keys = {};
+      CHART_ITEMS.concat(TILES).forEach(function(t){ keys[t.key] = 1; });
+      FUNNELS.forEach(function(f){ f.steps.forEach(function(s){ keys[s.key] = 1; }); });
+      Object.keys(STATE.counters).forEach(function(k){ keys[k] = 1; });
+      Object.keys(keys).forEach(function(k){
+        STATE.series[k] = dailySeries(STATE.dates, seriesOf(STATE.counters, k));
+      });
+
+      var lastDate = STATE.dates[STATE.dates.length - 1];
+      var stamp = '最新の記録：' + lastDate + '（毎朝5時に自動記録）　／　データ期間：'
+                + STATE.dates[0] + ' 〜 ' + lastDate + '（' + STATE.dates.length + '日分）';
+      if (STATE.statsAt){
+        var t = new Date(STATE.statsAt);
+        stamp += '　／　今の累計：' + (t.getMonth()+1) + '/' + t.getDate() + ' '
+               + t.getHours() + ':' + ('0' + t.getMinutes()).slice(-2) + ' 時点';
+      }
+      document.getElementById('stamp').textContent = stamp;
+      render();
+    })
+    .catch(function(e){
+      document.getElementById('app').innerHTML =
+        '<div class="err">数字を取ってこられませんでした（' + esc(e.message) + '）。'
+        + '時間をおいて開き直してください。</div>';
+    });
+}
+
+function boot(){
+  loadReport();
+  // 今の累計を先に取ってから日別を読む（順番が逆だと、今日ぶんの列が空のまま描画される）
+  loadStats().then(loadDaily);
+}
+boot();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+﻿/**
+ * カード図鑑 — アルバム管理
+ *
+ * album.js は hidden_characters.js の後に読み込むこと。
+ */
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'bigfive_album';
+  var META_KEY = 'bigfive_album_meta';
+  var MY_KEY = 'bigfive_my_results';
+  var OTHER_KEY = 'bigfive_other_results';
+  var MAX_CARDS = 8300;
+  // 通常カードと混ぜない収集記念。記念カード自身で枚数条件を進めない。
+  var COLLECTION_THRESHOLDS = [100, 200, 300, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000];
+  var PENDING_KEY = 'bigfive_collection_reward_pending';
+  var pendingMemory = [];
+  var migrating = false;
+  var rewardUILoading = false;
+  var rewardUIFailed = false;
+  var albumScript = document.currentScript;
+  var assetBase = albumScript && albumScript.src ? new URL('.', albumScript.src).href : new URL('.', location.href).href;
+
+  var RARITY_RANK = { r0: 1, r1: 2, r2: 3, r3: 4, r4: 5, r5: 6, r6: 7, r7: 8, r8: 9, kid: 1, common: 1, rare: 2, legendary: 3, secret: 4 }; // kidは大人レア度と別枠。数値は既存の同一キー更新用
+
+  // --- ユーティリティ ---
+
+  function getAlbumCards() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  function saveAlbumCards(cards) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+  }
+
+  function getAlbumMeta() {
+    var meta;
+    try {
+      meta = JSON.parse(localStorage.getItem(META_KEY));
+    } catch(e) {}
+    if (!meta || typeof meta !== 'object' || Array.isArray(meta)) meta = { migrated: false };
+    if (!meta.milestones || typeof meta.milestones !== 'object' || Array.isArray(meta.milestones)) meta.milestones = {};
+    if (!meta.collectionRewards || typeof meta.collectionRewards !== 'object' || Array.isArray(meta.collectionRewards)) meta.collectionRewards = {};
+    return meta;
+  }
+
+  function saveAlbumMeta(meta) {
+    localStorage.setItem(META_KEY, JSON.stringify(meta));
+  }
+
+
+  function toScale(v) { return v <= 2 ? 1 : v >= 4 ? 5 : 3; }
+
+  function findHiddenCharForAlbum(scores, gender) {
+    if (typeof HIDDEN_CHARACTERS === 'undefined') return null;
+    var os = toScale(scores.O), cs = toScale(scores.C);
+    var es = toScale(scores.E), as = toScale(scores.A), ns = toScale(scores.N);
+    return HIDDEN_CHARACTERS.find(function(c) {
+      return c.o === os && c.c === cs && c.e === es && c.a === as && c.n === ns &&
+        (c.gender === 'any' || c.gender === gender);
+    }) || null;
+  }
+
+  function computeRarityForAlbum(code, version, gender) {
+    if (version === 'kid3') return /^[123]{3}$/.test(String(code || '')) ? 'kid' : null;
+    // 10問版：r0固定
+    if (version === '10') return 'r0';
+
+    // オリジナルアニメキャラ上書き（rarity.js未読込のページでも落ちないようガード）
+    var ov = (typeof ANIME_RARITY_OVERRIDE !== 'undefined') ? ANIME_RARITY_OVERRIDE[code] : null;
+    if (ov) {
+      var ovR = (gender && ov[gender]) || ov.default;
+      // 30問版はシークレット（r7）画像を表示しないため、上書き値がr7のときはスコア導出へ落とす（54421/M→r3。60/120問版は従来どおり）
+      if (!(ovR === 'r7' && version !== '60' && version !== '120')) return ovR;
+    }
+
+    // MAX因子判定ヘルパー
+    function isMax(factor, value) {
+      if (factor === 'N') return value === 1;
+      if (factor === 'E' || factor === 'A') return value === 1 || value === 5;
+      return value === 5;
+    }
+
+    // 60問版・120問版のみ隠しキャラ判定（30問版はsecret画像を表示しないため）
+    if (version === '60' || version === '120') {
+      var scores = { O: +code[0], C: +code[1], E: +code[2], A: +code[3], N: +code[4] };
+      var hc = findHiddenCharForAlbum(scores, gender);
+      if (hc) {
+        return hc.a === 1 ? 'r7' : 'r6';
+      }
+    }
+
+    // MAX因子カウント方式でレア度判定
+    var maxCount = 0;
+    if (isMax('O', +code[0])) maxCount++;
+    if (isMax('C', +code[1])) maxCount++;
+    if (isMax('E', +code[2])) maxCount++;
+    if (isMax('A', +code[3])) maxCount++;
+    if (isMax('N', +code[4])) maxCount++;
+
+    // R1: MAX 0個 → R1
+    if (maxCount === 0) return 'r1';
+    // R2: MAX 1個 → R2
+    if (maxCount === 1) return 'r2';
+    // R3: MAX 2個 → R3
+    if (maxCount === 2) return 'r3';
+    // R4: MAX 3個 → R4
+    if (maxCount === 3) return 'r4';
+    // R5: MAX 4-5個 → R5
+    return 'r5';
+  }
+
+  // --- タイプ名取得 ---
+
+  function getTypeName(code, scores) {
+    if (typeof mainLabels === 'undefined' || typeof subLabels === 'undefined') {
+      return code;
+    }
+    var O = scores.O, C = scores.C, E = scores.E, A = scores.A, N = scores.N;
+    var mainIdx = Math.max(O, C, E, A, N);
+    var subIdx = 0, subMax = 0;
+    [O, C, E, A, N].forEach(function(v, i) {
+      if (i !== mainIdx - 1 && v >= subMax) { subMax = v; subIdx = i + 1; }
+    });
+    // mainIdx is 1-5 but subIdx calculation differs; use simple fallback
+    return (mainLabels[mainIdx - 1] || '') + '・' + (subLabels[subIdx - 1] || '');
+  }
+
+  // --- アルバム追加 ---
+
+  function addToAlbum(cardData) {
+    if (!cardData || !cardData.code || !cardData.gender) return false;
+    if (cardData.version === 'kid3' && (!/^[123]{3}$/.test(String(cardData.code)) || (cardData.gender !== 'M' && cardData.gender !== 'F'))) return false;
+
+    var cards = getAlbumCards();
+    var dedupeKey = cardData.code + '_' + cardData.gender;
+    var existingIdx = -1;
+
+    for (var i = 0; i < cards.length; i++) {
+      // versionも含めて判定（10問版と30問版の同じコードは別カードとして扱う）
+      if (cards[i].code === cardData.code && cards[i].gender === cardData.gender && cards[i].version === (cardData.version || '30')) {
+        existingIdx = i;
+        break;
+      }
+    }
+
+    if (existingIdx >= 0) {
+      // レアリティが高い方を保持
+      var existing = cards[existingIdx];
+      var newRank = RARITY_RANK[cardData.rarity] || 1;
+      var oldRank = RARITY_RANK[existing.rarity] || 1;
+      if (newRank > oldRank) {
+        cards[existingIdx].rarity = cardData.rarity;
+        cards[existingIdx].date = cardData.date || new Date().toISOString();
+        if (cardData.isHidden) {
+          cards[existingIdx].isHidden = true;
+          cards[existingIdx].hiddenId = cardData.hiddenId;
+          cards[existingIdx].hiddenImgPath = cardData.hiddenImgPath || cards[existingIdx].hiddenImgPath || null;
+        }
+        saveAlbumCards(cards);
+        checkMilestones(cards.length, { previousCount: cards.length, silent: migrating });
+        return true;
+      }
+      return false;
+    }
+
+    if (cards.length >= MAX_CARDS) return false;
+
+    cards.push({
+      code: cardData.code,
+      gender: cardData.gender,
+      typeName: cardData.version === 'kid3' ? (cardData.typeName || cardData.code) : (window.PersonalityTypes ? PersonalityTypes.getName(cardData.code, cardData.typeName || cardData.code) : (cardData.typeName || cardData.code)),
+      version: cardData.version || '30',
+      rarity: cardData.version === 'kid3' ? 'kid' : (cardData.rarity || 'common'),
+      isHidden: !!cardData.isHidden,
+      hiddenId: cardData.hiddenId || null,
+      hiddenImgPath: cardData.hiddenImgPath || null,
+      date: cardData.date || new Date().toISOString(),
+      source: cardData.source || 'my'
+    });
+
+    saveAlbumCards(cards);
+    checkMilestones(cards.length, { previousCount: cards.length - 1, silent: migrating });
+    return true;
+  }
+
+  // --- 実績チェック ---
+
+  function checkMilestones(count, options) {
+    options = options || {};
+    if (!Number.isFinite(count) || count < 0) return [];
+    var meta = getAlbumMeta();
+    var thresholds = [10, 50, 100, 500, 1000, 5000];
+    var changed = false;
+    var previous = typeof options.previousCount === 'number' ? options.previousCount : count;
+    var fresh = [], badges = [];
+
+    thresholds.forEach(function(t) {
+      if (count >= t && !meta.milestones[t]) {
+        meta.milestones[t] = { unlocked: true, date: new Date().toISOString() };
+        changed = true;
+        if (!options.silent && t > previous && COLLECTION_THRESHOLDS.indexOf(t) < 0) badges.push(t);
+      }
+    });
+
+    COLLECTION_THRESHOLDS.forEach(function(t) {
+      if (count < t || meta.collectionRewards[t]) return;
+      meta.collectionRewards[t] = { threshold: t, awardedAt: new Date().toISOString() };
+      changed = true;
+      if (!options.silent && t > previous) fresh.push(t);
+    });
+    // 所有の保存が成功してから演出へ渡す。失敗しても通常カードは消さない。
+    if (changed) {
+      try { saveAlbumMeta(meta); } catch(e) { return []; }
+      if (fresh.length) queueCollectionRewards(fresh);
+      dispatchRewardEvent('bigfive:collection-rewards-changed');
+    }
+    badges.forEach(showMilestoneToast);
+    return fresh;
+  }
+
+  function getCollectionRewards() {
+    var owned = getAlbumMeta().collectionRewards;
+    return COLLECTION_THRESHOLDS.filter(function(t) { return !!owned[t]; }).map(function(t) {
+      return { threshold: t, awardedAt: owned[t].awardedAt || null, rarity: 'r8', isMilestone: true }; // 2026-09-17 収集記念はR8（保存データはthresholdのみで書き換え無し・読むときの読み替え）
+    });
+  }
+
+  // 統合時だけ取得記録を和集合にする。通常の診断・カード配列の統合規則は変えない。
+  function mergeCollectionRewardMeta(incomingRaw, keepLocalFields) {
+    var incoming;
+    try { incoming = JSON.parse(incomingRaw); } catch(e) { return incomingRaw; }
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) return incomingRaw;
+    var local = getAlbumMeta();
+    var target = keepLocalFields ? local : incoming;
+    var remote = incoming.collectionRewards || {};
+    var merged = {};
+    COLLECTION_THRESHOLDS.forEach(function(t) {
+      var old = local.collectionRewards[t], loaded = remote[t];
+      if (old || loaded) merged[t] = { threshold: t, awardedAt: (old && old.awardedAt) || (loaded && loaded.awardedAt) || null };
+    });
+    target.collectionRewards = merged;
+    return JSON.stringify(target);
+  }
+
+  function getPendingCollectionRewards() {
+    var list = pendingMemory;
+    try { var saved = sessionStorage.getItem(PENDING_KEY); if (saved) list = JSON.parse(saved); } catch(e) {}
+    if (!Array.isArray(list)) list = [];
+    var owned = getAlbumMeta().collectionRewards;
+    return list.filter(function(t, i) {
+      return COLLECTION_THRESHOLDS.indexOf(t) >= 0 && !!owned[t] && list.indexOf(t) === i;
+    }).sort(function(a, b) { return a - b; });
+  }
+
+  function savePendingCollectionRewards(list) {
+    pendingMemory = list;
+    try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(list)); } catch(e) {}
+  }
+
+  function queueCollectionRewards(list) {
+    var pending = getPendingCollectionRewards();
+    list.forEach(function(t) { if (pending.indexOf(t) < 0) pending.push(t); });
+    savePendingCollectionRewards(pending);
+    loadCollectionRewardUI();
+  }
+
+  function consumeCollectionReward(threshold) {
+    var list = getPendingCollectionRewards();
+    if (list.indexOf(threshold) < 0) return false;
+    savePendingCollectionRewards(list.filter(function(t) { return t !== threshold; }));
+    return true;
+  }
+
+  function dispatchRewardEvent(name) {
+    window.dispatchEvent(new CustomEvent(name));
+  }
+
+  function reconcileCollectionRewards() {
+    var cards = getAlbumCards();
+    if (Array.isArray(cards)) checkMilestones(cards.length, { silent: true, previousCount: cards.length });
+  }
+
+  function isCollectionRewardBusy() {
+    return !rewardUIFailed && (getPendingCollectionRewards().length > 0 ||
+      !!document.querySelector('.bf-milestone-dialog[open][data-celebration]'));
+  }
+
+  function loadCollectionRewardUI() {
+    if (rewardUILoading || window.CollectionMilestones) return;
+    if (!getPendingCollectionRewards().length && !document.querySelector('[data-milestone-collection]')) return;
+    rewardUILoading = true;
+    var script = document.createElement('script');
+    script.src = assetBase + 'milestone-cards.js?v=20260920-fast';
+    script.async = true;
+    script.onerror = function() {
+      markCollectionRewardUIFailed();
+      rewardUILoading = false;
+    };
+    document.head.appendChild(script);
+  }
+
+  function markCollectionRewardUIFailed() {
+    rewardUIFailed = true;
+    dispatchRewardEvent('bigfive:collection-rewards-finished');
+  }
+
+  function showMilestoneToast(milestone) {
+    var messages = {
+      10: '10枚コレクト！ ブロンズバッジ取得',
+      50: '50枚コレクト！ シルバーバッジ取得',
+      100: '100枚コレクト！ ゴールドバッジ取得',
+      500: '500枚コレクト！ プラチナバッジ取得',
+      1000: '1000枚コレクト！ ダイヤモンドバッジ取得',
+      5000: '5000枚コレクト！ マスターバッジ取得'
+    };
+    var toast = document.getElementById('albumToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'albumToast';
+      toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);' +
+        'background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:12px 24px;border-radius:12px;' +
+        'font-weight:bold;z-index:10000;transition:transform 0.4s ease;box-shadow:0 4px 20px rgba(139,92,246,0.4);' +
+        'font-size:14px;white-space:nowrap;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = messages[milestone] || milestone + '枚コレクト！';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(function() {
+      toast.style.transform = 'translateX(-50%) translateY(-100px)';
+    }, 2500);
+  }
+
+  // --- 既存データ移行 ---
+
+  function migrateExistingResults() {
+    var meta = getAlbumMeta();
+    if (meta.migrated) return;
+
+    var myResults = [];
+    var otherResults = [];
+    try { myResults = JSON.parse(localStorage.getItem(MY_KEY)) || []; } catch(e) {}
+    try { otherResults = JSON.parse(localStorage.getItem(OTHER_KEY)) || []; } catch(e) {}
+
+    migrating = true;
+    try {
+    myResults.forEach(function(r) {
+      if (!r.code || !r.gender) return;
+      var rarity = r.rarity || computeRarityForAlbum(r.code, r.version, r.gender);
+      var scores = r.scores || { O: +r.code[0], C: +r.code[1], E: +r.code[2], A: +r.code[3], N: +r.code[4] };
+      var hc = findHiddenCharForAlbum(scores, r.gender);
+      addToAlbum({
+        code: r.code,
+        gender: r.gender,
+        typeName: (window.PersonalityTypes ? PersonalityTypes.getName(r.code, r.typeName || r.code) : (r.typeName || r.code)),
+        version: r.version || '30',
+        rarity: rarity,
+        isHidden: !!hc,
+        hiddenId: hc ? hc.id : null,
+        date: r.date || new Date().toISOString(),
+        source: 'my'
+      });
+    });
+
+    otherResults.forEach(function(r) {
+      if (!r.code || r.isChild) return;
+      var gender = r.gender || 'F';
+      var version = r.version || '30';
+      var rarity = r.rarity || computeRarityForAlbum(r.code, version, gender);
+      var scores = r.scores || { O: +r.code[0], C: +r.code[1], E: +r.code[2], A: +r.code[3], N: +r.code[4] };
+      var hc = findHiddenCharForAlbum(scores, gender);
+      addToAlbum({
+        code: r.code,
+        gender: gender,
+        typeName: (window.PersonalityTypes ? PersonalityTypes.getName(r.code, r.typeName || r.code) : (r.typeName || r.code)),
+        version: version,
+        rarity: rarity,
+        isHidden: !!hc,
+        hiddenId: hc ? hc.id : null,
+        date: r.date || new Date().toISOString(),
+        source: 'other'
+      });
+    });
+
+    } finally {
+      migrating = false;
+    }
+    // addToAlbumで書いた取得記録を、移行前の古いmetaで消さない。
+    meta = getAlbumMeta();
+    meta.migrated = true;
+    saveAlbumMeta(meta);
+    reconcileCollectionRewards();
+  }
+
+  // --- 画像パス取得 ---
+
+  /**
+   * カード画像の候補パス一覧（優先順位付き）を返す。
+   * result.html / card-collection.html と同じ ImageResolver.getCandidates()
+   * チェーン（secret→only→marume243）を使い、onerror順送りで一致させる。
+   */
+  function getCardImageCandidates(card) {
+    if (card && card.version === 'kid3') {
+      return /^[123]{3}$/.test(String(card.code || '')) && (card.gender === 'M' || card.gender === 'F')
+        ? ['images/kid-cards/' + card.gender + '/' + card.code + '.webp?v=20260927h'] : [];
+    }
+    // ImageResolver を優先使用（secret → only → marume243 の3ステップ検索・全候補）
+    if (typeof ImageResolver !== 'undefined' && ImageResolver.getCandidates) {
+      var candidates = ImageResolver.getCandidates(card.code, card.gender, card.version || '10');
+      return candidates.map(function(c) { return c.path; });
+    }
+    // 旧フォールバック: CharacterRegistry → hidden → 丸め（1パスのみ）
+    if (typeof CharacterRegistry !== 'undefined') {
+      var registryPath = CharacterRegistry.getDisplayImage(card.code, card.gender, card.version);
+      if (registryPath) return [registryPath];
+    }
+    if (card.isHidden && card.hiddenImgPath) return [card.hiddenImgPath];
+    if (card.isHidden && card.hiddenId) {
+      var hc = null;
+      if (typeof HIDDEN_CHARACTERS !== 'undefined') {
+        hc = HIDDEN_CHARACTERS.find(function(c) { return c.id === card.hiddenId; });
+      }
+      if (hc) {
+        // secret にコードベースのパスを返す
+        var code5 = '' + hc.o + hc.c + hc.e + hc.a + hc.n;
+        return ['images/characters/secret/' + card.gender + '/' + code5 + '.webp'];
+      }
+    }
+    // 1/3/5丸めで marume243 フォールバック
+    var code = card.code;
+    var imgCode = toScale(+code[0]).toString() + toScale(+code[1]).toString() +
+      toScale(+code[2]).toString() + toScale(+code[3]).toString() + toScale(+code[4]).toString();
+    return ['images/characters/marume243/' + card.gender + '/' + imgCode + '.webp'];
+  }
+
+  function getCardImagePath(card) {
+    return getCardImageCandidates(card)[0];
+  }
+
+  // --- グローバル公開 ---
+  window.AlbumUtils = {
+    getAlbumCards: getAlbumCards,
+    addToAlbum: addToAlbum,
+    computeRarityForAlbum: computeRarityForAlbum,
+    migrateExistingResults: migrateExistingResults,
+    getAlbumMeta: getAlbumMeta,
+    checkMilestones: checkMilestones,
+    getCollectionRewards: getCollectionRewards,
+    mergeCollectionRewardMeta: mergeCollectionRewardMeta,
+    getPendingCollectionRewards: getPendingCollectionRewards,
+    consumeCollectionReward: consumeCollectionReward,
+    reconcileCollectionRewards: reconcileCollectionRewards,
+    isCollectionRewardBusy: isCollectionRewardBusy,
+    markCollectionRewardUIFailed: markCollectionRewardUIFailed,
+    COLLECTION_THRESHOLDS: COLLECTION_THRESHOLDS.slice(),
+    getCardImagePath: getCardImagePath,
+    getCardImageCandidates: getCardImageCandidates,
+    MAX_CARDS: MAX_CARDS,
+    RARITY_RANK: RARITY_RANK,
+    STORAGE_KEY: STORAGE_KEY,
+    META_KEY: META_KEY
+  };
+
+  reconcileCollectionRewards();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadCollectionRewardUI);
+  else loadCollectionRewardUI();
+  window.addEventListener('pageshow', function() { reconcileCollectionRewards(); loadCollectionRewardUI(); });
+  window.addEventListener('storage', function(e) {
+    if (e.key === STORAGE_KEY || e.key === META_KEY || e.key === null) {
+      reconcileCollectionRewards();
+      dispatchRewardEvent('bigfive:collection-rewards-changed');
+    }
+  });
+
+})();

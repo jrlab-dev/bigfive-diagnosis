@@ -1,0 +1,2083 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/other_quiz.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あの人の性格を分析する｜ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブ診断であの人の性格を分析します。気になる人・上司・友人など身近な相手の行動を30問で観察し、科学的に性格を判定。あなたとの相性スコアも分かります。無料・登録不要です。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="あの人の性格を分析する｜ビッグファイブ診断">
+<meta property="og:description" content="ビッグファイブ 診断であの人の性格を分析。気になる人・上司・友人などの性格を科学的に判定。30問の行動観察で相性スコアも表示。無料・登録不要。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/other_quiz.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="あの人の性格を分析する｜ビッグファイブ診断">
+<meta name="twitter:description" content="ビッグファイブ 診断であの人の性格を分析。気になる人・上司・友人などの性格を科学的に判定。30問の行動観察で相性スコアも表示。無料・登録不要。">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<!-- 構造化データ（JSON-LD） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Quiz",
+  "name": "あの人の性格を分析する",
+  "url": "https://bigfive.jr-genius.jp/other_quiz.html",
+  "description": "相手の行動を観察してビッグファイブ性格診断を行うツール。相性スコアも表示されます。",
+  "about": {
+    "@type": "Thing",
+    "name": "ビッグファイブ性格分析",
+    "description": "他者の行動観察に基づく性格推測ツール"
+  },
+  "educationalLevel": "Beginner",
+  "educationalUse": "SelfAssessment",
+  "learningResourceType": "Quiz",
+  "timeRequired": "PT5M",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "genre": ["心理学", "性格診断", "相性診断"],
+  "audience": {
+    "@type": "PeopleAudience",
+    "suggestedMinAge": "13"
+  }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --card-bg: rgba(26,10,62,0.45);
+    --card-border: rgba(139,92,246,0.2);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden; line-height: 1.8;
+  }
+  .bg-nebula {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, rgba(139,92,246,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(236,72,153,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 40% at 50% 70%, rgba(139,92,246,0.08) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate;
+  }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: twinkle 4s ease-in-out infinite alternate; }
+
+  /* ===== 共通 ===== */
+  .screen {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    min-height: 100vh;
+    display: none; flex-direction: column;
+    padding: 40px 24px;
+  }
+  .screen.active { display: flex; }
+
+  /* ===== スタート画面 ===== */
+  #startScreen { justify-content: center; align-items: center; text-align: center; }
+  .start-eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    color: var(--purple); margin-bottom: 16px;
+  }
+  .start-title {
+    font-size: 26px; font-weight: 900; line-height: 1.4; margin-bottom: 10px;
+  }
+  .start-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .start-sub { font-size: 14px; color: var(--dim); margin-bottom: 36px; line-height: 1.7; }
+
+  /* 関係性選択 */
+  .rel-label { font-size: 13px; color: var(--dim); text-align: left; width: 100%; margin-bottom: 10px; font-weight: 500; }
+  .rel-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 24px; }
+  .rel-options .rel-btn-child { grid-column: 1 / -1; background: rgba(251,191,36,0.10); border-color: #fbbf24; }
+  .rel-btn {
+    padding: 16px 6px; border-radius: 14px;
+    background: rgba(139,92,246,0.08);
+    border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .2s; text-align: center; line-height: 1.5;
+  }
+  .rel-btn .rel-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+  .rel-btn:hover { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.35); color: var(--text); }
+  .rel-btn.selected { border-color: var(--purple); color: var(--text); font-weight: 700; }
+  .rel-btn.sel-love     { background: rgba(236,72,153,0.15); border-color: var(--pink); }
+  .rel-btn.sel-work     { background: rgba(59,130,246,0.15); border-color: var(--blue); }
+  .rel-btn.sel-friend   { background: rgba(16,185,129,0.15); border-color: #10b981; }
+  .rel-btn.sel-child    { background: rgba(251,191,36,0.20); border-color: #fbbf24; }
+
+  /* 名前入力 */
+  .input-group { width: 100%; margin-bottom: 18px; text-align: left; }
+  .input-label { display: block; font-size: 13px; color: var(--dim); margin-bottom: 8px; font-weight: 500; }
+  .text-input {
+    width: 100%; padding: 14px 18px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.2);
+    border-radius: 12px; color: var(--text); font-family: inherit; font-size: 16px;
+    outline: none; transition: border-color .2s;
+  }
+  .text-input::placeholder { color: var(--dim); }
+  .text-input:focus { border-color: var(--purple); }
+
+  /* 付き合い期間 */
+  .period-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .period-btn {
+    padding: 10px 8px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .period-btn:hover { background: rgba(139,92,246,0.18); color: var(--text); }
+  .period-btn.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); color: var(--text); font-weight: 700; }
+
+  .gender-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .gender-btn {
+    padding: 10px 8px; border-radius: 10px;
+    background: rgba(139,92,246,0.08); border: 1.5px solid rgba(139,92,246,0.15);
+    color: var(--dim); font-family: inherit; font-size: 13px;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .gender-btn:hover { background: rgba(139,92,246,0.18); color: var(--text); }
+  .gender-btn.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); color: var(--text); font-weight: 700; }
+
+  /* キャラクター表示 */
+  .char-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+  .char-img-other {
+    width: 160px; height: 160px; object-fit: contain; border-radius: 16px;
+    background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2);
+  }
+  .char-name-label { font-size: 13px; color: var(--dim); margin-top: 8px; }
+
+  .accuracy-note {
+    display: none; font-size: 12px; color: var(--dim);
+    padding: 10px 14px; background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.15); border-radius: 8px;
+    margin-bottom: 20px; width: 100%; text-align: left;
+  }
+  .accuracy-note.show { display: block; }
+
+  .start-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 14px;
+    color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s; margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+  }
+  .start-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .start-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+  .start-note { font-size: 12px; color: var(--dim); text-align: center; line-height: 1.6; }
+
+  /* ===== クイズ画面 ===== */
+  #quizScreen { justify-content: flex-start; }
+  .who-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+    padding: 10px 14px; border-radius: 10px;
+  }
+  .who-bar.rel-love   { background: rgba(236,72,153,0.09); border: 1px solid rgba(236,72,153,0.22); }
+  .who-bar.rel-work   { background: rgba(59,130,246,0.09); border: 1px solid rgba(59,130,246,0.22); }
+  .who-bar.rel-friend { background: rgba(16,185,129,0.09); border: 1px solid rgba(16,185,129,0.22); }
+  .who-icon { font-size: 20px; }
+  .who-name-txt { font-size: 14px; font-weight: 700; }
+  .rel-love   .who-name-txt { color: var(--pink); }
+  .rel-work   .who-name-txt { color: var(--blue); }
+  .rel-friend .who-name-txt { color: #10b981; }
+  .who-sub-txt { font-size: 12px; color: var(--dim); }
+
+  .progress-fill { height:100%; border-radius:3px; transition: width .4s ease; }
+  .rel-love-bar   .progress-fill { background: linear-gradient(90deg, var(--pink), var(--purple)); }
+  .rel-work-bar   .progress-fill { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  .rel-friend-bar .progress-fill { background: linear-gradient(90deg, #10b981, var(--blue)); }
+
+  .question-num { font-size:13px; font-weight:500; margin-bottom:12px; }
+  .rel-love   .question-num { color: var(--pink); }
+  .rel-work   .question-num { color: var(--blue); }
+  .rel-friend .question-num { color: #10b981; }
+  .question-text { font-size:18px; line-height:1.7; margin-bottom:36px; min-height:80px; transition:opacity .2s; }
+
+  .answers { display:flex; gap:10px; margin-bottom:40px; }
+  .answer-btn {
+    flex:1; padding:14px 4px; font-family:inherit; font-size:12px; font-weight:500;
+    color:var(--dim); background:rgba(139,92,246,0.08); border:1.5px solid rgba(139,92,246,0.15);
+    border-radius:12px; cursor:pointer; transition:border-color .2s, color .2s;
+    min-height:48px; display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  @media (hover: hover) {
+    .answer-btn:hover { background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.4); color:var(--text); }
+  }
+  .answer-btn.selected { background:linear-gradient(135deg,var(--purple),var(--blue)); border-color:transparent; color:#fff; font-weight:700; }
+
+  /* ===== ローディング ===== */
+  #loadingScreen { justify-content:center; align-items:center; text-align:center; gap:24px; }
+  .loading-spinner {
+    width:56px; height:56px; border:3px solid rgba(139,92,246,0.2);
+    border-top-color:var(--purple); border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  .loading-text { font-size:20px; font-weight:700; }
+  .loading-name { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .loading-sub { font-size:14px; color:var(--dim); }
+  .loading-dots::after { content:''; animation:dots 1.5s infinite; }
+
+  /* ===== 結果画面 ===== */
+  #resultScreen { justify-content:flex-start; padding-top:48px; }
+  .result-header { text-align:center; margin-bottom:32px; }
+  .result-rel-badge {
+    display:inline-block; font-size:12px; font-weight:700;
+    border-radius:20px; padding:4px 16px; margin-bottom:12px;
+  }
+  .badge-love   { background:rgba(236,72,153,0.15); color:var(--pink); border:1px solid rgba(236,72,153,0.3); }
+  .badge-work   { background:rgba(59,130,246,0.15); color:var(--blue); border:1px solid rgba(59,130,246,0.3); }
+  .badge-friend { background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); }
+  .result-name { font-size:26px; font-weight:900; margin-bottom:6px; }
+  .result-name em { font-style:normal; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .result-sub { font-size:13px; color:var(--dim); }
+
+  /* 特性バー */
+  .traits-card {
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:16px; padding:24px; margin-bottom:20px; backdrop-filter:blur(8px);
+  }
+  .trait-row { margin-bottom:20px; }
+  .trait-row:last-child { margin-bottom:0; }
+  .trait-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .trait-label { font-size:14px; font-weight:700; }
+  .trait-desc { font-size:11px; color:var(--dim); font-weight:400; margin-left:6px; }
+  .trait-level { font-size:12px; padding:2px 10px; border-radius:10px; font-weight:600; }
+  .lv-high { background:rgba(236,72,153,0.2); color:var(--pink); }
+  .lv-mid  { background:rgba(139,92,246,0.2); color:var(--purple); }
+  .lv-low  { background:rgba(148,163,184,0.15); color:var(--dim); }
+  .bar-bg  { height:8px; background:rgba(255,255,255,0.4); border-radius:4px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+
+  /* 相性カード */
+  .compat-card {
+    border-radius:16px; padding:24px; margin-bottom:20px; text-align:center;
+    backdrop-filter:blur(8px);
+  }
+  .compat-card.love   { background:rgba(236,72,153,0.08); border:1px solid rgba(236,72,153,0.2); }
+  .compat-card.work   { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); }
+  .compat-card.friend { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); }
+  .compat-title { font-size:14px; color:var(--dim); margin-bottom:10px; }
+  .compat-score { font-size:52px; font-weight:900; line-height:1; margin-bottom:8px; }
+  .compat-score.love   { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-score.work   { background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-score.friend { background:linear-gradient(135deg,#10b981,var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .compat-label { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .compat-desc { font-size:13px; color:var(--dim); line-height:1.7; }
+
+  /* 性格説明カード */
+  .desc-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .desc-title { font-size: 13px; color: var(--dim); margin-bottom: 10px; font-weight: 500; }
+  .desc-text { font-size: 15px; line-height: 1.9; color: var(--text); }
+  .desc-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .desc-kw {
+    font-size: 12px; padding: 4px 12px; border-radius: 20px;
+    background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2);
+    color: var(--purple); font-weight: 500;
+  }
+
+  /* 接し方アドバイスカード */
+  .advice-card {
+    background: linear-gradient(145deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.08) 100%);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .advice-card.love   { background: linear-gradient(145deg, rgba(236,72,153,0.12) 0%, rgba(139,92,246,0.08) 100%); border-color: rgba(236,72,153,0.25); }
+  .advice-card.work   { background: linear-gradient(145deg, rgba(59,130,246,0.12) 0%, rgba(139,92,246,0.08) 100%); border-color: rgba(59,130,246,0.25); }
+  .advice-card.friend { background: linear-gradient(145deg, rgba(16,185,129,0.12) 0%, rgba(59,130,246,0.08) 100%); border-color: rgba(16,185,129,0.25); }
+  .advice-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; text-align: center; }
+  .advice-item { margin-bottom: 14px; }
+  .advice-item:last-child { margin-bottom: 0; }
+  .advice-item-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .advice-item-text { font-size: 13px; line-height: 1.7; color: var(--dim); }
+
+  /* 相性誘導カード */
+  .compat-prompt {
+    background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    text-align: center;
+  }
+  .compat-prompt-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .compat-prompt-sub { font-size: 13px; color: var(--dim); margin-bottom: 16px; line-height: 1.7; }
+  .compat-prompt-btn {
+    display: inline-block; padding: 12px 24px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border-radius: 12px; color: #fff; font-size: 14px; font-weight: 700;
+    text-decoration: none; transition: opacity .2s;
+  }
+  .compat-prompt-btn:hover { opacity: .85; }
+
+  /* 精度注記 */
+  .accuracy-card {
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px; padding:14px 16px; margin-bottom:20px;
+    font-size:12px; color:var(--dim); line-height:1.7;
+  }
+
+  /* アクション */
+  .action-btn {
+    width:100%; padding:15px; border:none; border-radius:14px;
+    font-family:inherit; font-size:15px; font-weight:700;
+    cursor:pointer; transition:all .2s; margin-bottom:12px;
+    display:block; text-decoration:none; text-align:center;
+  }
+  .btn-primary { background:linear-gradient(135deg,var(--pink),var(--purple)); color:#fff; }
+  .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
+  .btn-secondary { background:rgba(139,92,246,0.1); border:1.5px solid rgba(139,92,246,0.25); color:var(--text); }
+  .btn-secondary:hover { background:rgba(139,92,246,0.2); }
+  .btn-save { background:linear-gradient(135deg,#10b981,#059669); }
+  .btn-save:hover { box-shadow:0 8px 32px rgba(16,185,129,0.4); }
+  .btn-saved { background:linear-gradient(135deg,rgba(6,182,212,0.8),rgba(59,130,246,0.8)); pointer-events:none; }
+
+  /* 途中保存バナー */
+  .draft-banner {
+    width:100%; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.35);
+    border-radius:12px; padding:14px 16px; margin-bottom:20px; text-align:left;
+  }
+  .draft-banner-title { font-size:13px; font-weight:700; color:#059669; margin-bottom:6px; }
+  .draft-banner-sub { font-size:11px; color:#555; margin-bottom:10px; }
+  .draft-banner-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .draft-resume-btn {
+    flex:1; min-width:140px; padding:10px 14px; border:none; border-radius:8px; cursor:pointer;
+    font-family:inherit; font-size:13px; font-weight:700;
+    background:linear-gradient(135deg,#10b981,#059669); color:#fff;
+  }
+  .draft-discard-btn {
+    padding:10px 14px; border:1px solid #ccc; border-radius:8px; cursor:pointer;
+    font-family:inherit; font-size:12px; color:#888; background:transparent;
+  }
+  /* クイズ画面の途中保存ボタン */
+  .save-progress-btn {
+    display:block; width:100%; margin-top:16px; padding:10px; border:1px solid rgba(16,185,129,0.5);
+    border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600;
+    color:#059669; background:rgba(16,185,129,0.07); text-align:center;
+  }
+  .save-progress-btn:active { background:rgba(16,185,129,0.15); }
+
+  @media(max-width:400px){
+    .question-text{font-size:16px}
+    .answer-btn{font-size:11px;padding:12px 2px}
+    .answers{gap:6px}
+    .start-title{font-size:22px}
+    .rel-options{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  }
+
+  /* ===== バイアス警告カード ===== */
+  .bias-warning {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 16px; padding: 20px;
+    margin-bottom: 16px; text-align: center;
+  }
+  .bias-warning-text {
+    font-size: 13px; color: #fbbf24;
+    margin-bottom: 14px; line-height: 1.6; font-weight: 500;
+  }
+  .bias-btns { display: flex; gap: 10px; flex-direction: column; }
+  .bias-btn-remove {
+    padding: 14px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    color: #fff; font-family: inherit; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s;
+  }
+  .bias-btn-remove:hover { opacity: .9; transform: translateY(-1px); }
+  .bias-btn-keep {
+    padding: 11px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; color: var(--dim);
+    font-family: inherit; font-size: 13px; cursor: pointer; transition: all .2s;
+  }
+  .bias-btn-keep:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+  /* ===== バイアス説明画面 ===== */
+  #biasScreen { justify-content: flex-start; padding-top: 48px; }
+  .bias-screen-header { text-align: center; margin-bottom: 28px; }
+  .bias-screen-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    color: #f59e0b; margin-bottom: 10px;
+  }
+  .bias-screen-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; line-height: 1.4; }
+  .bias-screen-sub { font-size: 13px; color: var(--dim); line-height: 1.7; }
+  .bias-list { width: 100%; margin-bottom: 28px; }
+  .bias-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px; margin-bottom: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; transition: border-color .2s;
+  }
+  .bias-item:hover { border-color: rgba(245,158,11,0.25); }
+  .bias-num {
+    width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 50%; background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: #fbbf24; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bias-body h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .bias-body p { font-size: 13px; color: var(--dim); line-height: 1.6; }
+  .bias-cta {
+    width: 100%; padding: 16px; border: none; border-radius: 14px;
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s; margin-bottom: 12px;
+    display: block;
+  }
+  .bias-cta:hover { opacity: .9; transform: translateY(-1px); }
+  .bias-back {
+    width: 100%; padding: 13px;
+    background: rgba(139,92,246,0.1); border: 1.5px solid rgba(139,92,246,0.25);
+    border-radius: 12px; color: var(--text);
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all .2s; text-align: center;
+  }
+  .bias-back:hover { background: rgba(139,92,246,0.2); }
+
+  /* ===== プレミアムモーダル ===== */
+  .premium-overlay {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .premium-overlay.show { display: flex; }
+  .premium-modal {
+    background: linear-gradient(160deg, #1a0a3e, #0a0e27);
+    border: 1px solid rgba(245,158,11,0.35);
+    border-radius: 20px; padding: 36px 24px;
+    max-width: 320px; width: 100%; text-align: center;
+  }
+  .premium-icon { font-size: 44px; margin-bottom: 14px; }
+  .premium-title { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
+  .premium-sub { font-size: 14px; color: var(--dim); line-height: 1.8; margin-bottom: 24px; }
+  .premium-close {
+    width: 100%; padding: 13px; border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 10px; background: none; color: var(--dim);
+    font-family: inherit; font-size: 14px; cursor: pointer; transition: color .2s;
+  }
+  .premium-close:hover { color: var(--text); }
+
+  /* 診断モード選択 */
+  .mode-options { display:flex; gap:10px; width:100%; margin-top:6px; }
+  .mode-btn {
+    flex:1; padding:14px 10px; border-radius:12px;
+    border:2px solid rgba(139,92,246,0.2); background:var(--card-bg);
+    color:var(--text); cursor:pointer; font-family:inherit;
+    text-align:center; transition:.2s;
+    display:flex; flex-direction:column; gap:4px; align-items:center;
+  }
+  .mode-btn strong { font-size:14px; font-weight:700; }
+  .mode-sub { font-size:11px; color:var(--dim); line-height:1.4; }
+  .mode-btn.selected { border-color:var(--purple); background:rgba(139,92,246,0.15); }
+  .mode-btn.selected strong { color:var(--purple); }
+
+  /* ファセット詳細カード */
+  .facet-card {
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:16px; padding:20px; margin-bottom:16px; width:100%;
+  }
+  .facet-section { margin-bottom:20px; }
+  .facet-section:last-child { margin-bottom:0; }
+  .facet-section-title {
+    font-size:13px; font-weight:700; margin:0 0 12px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .facet-row { margin-bottom:8px; }
+  .facet-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
+  .facet-name { font-size:12px; color:var(--dim); }
+  .facet-lv { font-size:11px; font-weight:600; }
+  .facet-lv.lv-high { color:#f97316; }
+  .facet-lv.lv-mid  { color:var(--dim); }
+  .facet-lv.lv-low  { color:#60a5fa; }
+  .facet-bar-bg { height:5px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; }
+  .facet-bar-fill { height:100%; border-radius:3px; transition:width .6s ease; }
+  .facet-toggle-btn {
+    width:100%; padding:12px; border:1px solid var(--card-border);
+    border-radius:12px; background:var(--card-bg); color:var(--dim);
+    font-family:inherit; font-size:13px; cursor:pointer; margin-bottom:16px;
+    transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .facet-toggle-btn:hover { color:var(--text); border-color:rgba(139,92,246,0.4); }
+
+  /* シックなアイコン */
+  .icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .icon-sm { width: 14px; height: 14px; flex-shrink: 0; }
+  .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "あの人の性格を分析する",
+      "item": "https://bigfive.jr-genius.jp/other_quiz.html"
+    }
+  ]
+}
+</script>
+</head>
+<body data-feature-gate="other" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+<div class="bg-stars" id="bgStars"></div>
+
+<!-- ===== スタート画面 ===== -->
+<div class="screen active" id="startScreen">
+
+  <!-- 途中保存バナー -->
+  <div class="draft-banner" id="draftBanner" style="display:none;">
+    <div class="draft-banner-title" id="draftTitle">途中まで回答しています</div>
+    <div class="draft-banner-sub" id="draftSub"></div>
+    <div class="draft-banner-btns">
+      <button class="draft-resume-btn" id="draftResumeBtn" onclick="resumeFromDraft()"></button>
+      <button class="draft-discard-btn" onclick="discardDraft()">破棄して最初から</button>
+    </div>
+  </div>
+
+  <p class="start-eyebrow">
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      Big Five 他者分析
+    </span>
+  </p>
+  <h1 class="start-title">あの人の性格を<br><em>科学的に推測する</em></h1>
+  <p class="start-sub">行動・言動の観察をもとにビッグファイブ理論で<br>その人の性格を推定します</p>
+
+  <span class="input-label" style="width:100%;text-align:left;">どんな関係ですか？</span>
+  <div class="rel-options">
+    <button class="rel-btn" data-rel="love">
+      <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;margin-bottom:4px;">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+      恋愛・<br>気になる人
+    </button>
+    <button class="rel-btn" data-rel="work">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>仕事・<br>上司・同僚
+    </button>
+    <button class="rel-btn" data-rel="friend">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>友人・<br>知人
+    </button>
+    <button class="rel-btn rel-btn-child" data-rel="child" onclick="location.href='kodomo.html'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>子供を<br>診断する
+    </button>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label" for="personName">診断する人のニックネーム</label>
+    <input type="text" class="text-input" id="personName" placeholder="例：Aさん、田中くん…" maxlength="20">
+  </div>
+
+  <div class="input-group" style="margin-bottom:10px;" id="periodGroup">
+    <span class="input-label">どのくらいの付き合いですか？</span>
+    <div class="period-options">
+      <button class="period-btn" data-period="short">1ヶ月未満</button>
+      <button class="period-btn" data-period="few">1〜6ヶ月</button>
+      <button class="period-btn" data-period="mid">6ヶ月〜2年</button>
+      <button class="period-btn" data-period="long">2年以上</button>
+    </div>
+  </div>
+
+  <div class="input-group" style="margin-bottom:10px;">
+    <span class="input-label">その人の性別は？</span>
+    <div class="gender-options">
+      <button class="gender-btn selected" data-gender="F"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 女性</button>
+      <button class="gender-btn" data-gender="M"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 男性</button>
+    </div>
+  </div>
+
+  <div class="input-group" id="modeGroup" style="display:none;">
+    <span class="input-label">診断モード</span>
+    <div class="mode-options">
+      <button class="mode-btn selected" data-mode="simple">
+        <strong>かんたん 30問</strong>
+        <span class="mode-sub">約5分・全体の性格傾向</span>
+      </button>
+      <button class="mode-btn" data-mode="detailed">
+        <strong>くわしく 60問</strong>
+        <span class="mode-sub">約10分・ファセット詳細まで</span>
+      </button>
+    </div>
+  </div>
+  <div class="input-group" id="detailed2Group" style="display:none;">
+    <div class="mode-options">
+      <button class="mode-btn" id="detailed2Btn" data-mode="detailed2" style="border-color:#10b981;background:rgba(16,185,129,0.08);">
+        <strong style="color:#10b981;">追加精密診断 60問</strong>
+        <span class="mode-sub">2回目・合計120問相当の精度へ</span>
+      </button>
+    </div>
+    <p style="font-size:11px;color:var(--dim);margin:6px 0 0;text-align:center;">この人の60問データが見つかりました。追加診断で精度が上がります。</p>
+  </div>
+
+  <div class="accuracy-note" id="accuracyNote"></div>
+
+  <button class="start-btn" id="startBtn" disabled>診断スタート →</button>
+  <p class="start-note">
+    ※この診断は観察情報からの推定です。本人の実際の性格と異なる場合があります。
+  </p>
+</div>
+
+<!-- ===== クイズ画面 ===== -->
+<div class="screen" id="quizScreen">
+  <div class="who-bar" id="whoBar">
+    <svg class="who-icon icon" id="whoIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    <div>
+      <div class="who-name-txt" id="whoName">—</div>
+      <div class="who-sub-txt" id="whoSub">を観察して答えてください</div>
+    </div>
+  </div>
+  <div class="progress" id="progressWrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/15</span>
+  </div>
+  <div class="question-area" id="questionArea">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-text" id="questionText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらとも<br>言えない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+    <button class="save-progress-btn" id="saveProgressBtn" style="display:none;" onclick="saveDraft()">ここまで保存する</button>
+  </div>
+</div>
+
+<!-- ===== ローディング ===== -->
+<div class="screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p class="loading-text"><span class="loading-name" id="loadingName">—</span>の性格を分析中<span class="loading-dots"></span></p>
+  <p class="loading-sub">観察データから性格傾向を導き出しています</p>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div class="screen" id="resultScreen">
+  <div class="result-header">
+    <span class="result-rel-badge" id="relBadge">—</span>
+    <p class="result-name"><em id="resultName">—</em>の推定性格</p>
+    <p class="result-sub">ビッグファイブ理論による観察分析</p>
+    <div id="badge120" style="display:none;margin-top:8px;padding:6px 14px;background:linear-gradient(135deg,#10b981,#059669);border-radius:20px;font-size:12px;font-weight:700;color:#fff;text-align:center;">120問相当・精密版</div>
+  </div>
+  <div class="char-area" id="charArea" style="display:none;">
+    <img class="char-img-other" id="charImgOther" src="" alt="キャラクター">
+    <p class="char-name-label" id="charNameLabel"></p>
+  </div>
+  <div class="traits-card" id="traitsCard"></div>
+  <div class="compat-card" id="compatCard"></div>
+  <div class="advice-card" id="adviceCard" style="display:none;"></div>
+  <div class="compat-prompt" id="teamPromptCard" style="display:none;"></div>
+  <div class="desc-card" id="descCard"></div>
+  <div id="facetCardWrap" style="display:none;width:100%;">
+    <button class="facet-toggle-btn" id="facetToggleBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      ファセット詳細を見る
+    </button>
+    <div class="facet-card" id="facetCard" style="display:none;"></div>
+  </div>
+  <div class="accuracy-card" id="resultAccuracyNote"></div>
+
+  <!-- 観察者情報パネル -->
+  <div class="observer-info-card" id="observerInfoCard" style="display:none;"></div>
+
+  <!-- SOKAモデル注釈 -->
+  <div class="soka-note" id="sokaNote" style="display:none;"></div>
+
+  <button class="action-btn btn-save" id="saveBtn">
+    <span class="icon-with-text">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+        <path d="M17 21v-8H7v8M7 3v5h8"/>
+      </svg>
+      結果を保存
+    </span>
+  </button>
+  <button class="action-btn btn-primary" id="retryBtn">別の人を診断する</button>
+  <a href="index.html" class="action-btn btn-secondary">トップに戻る</a>
+</div>
+
+<script>
+// ===== 子供用質問データ =====
+const questionsFixed15 = [
+  { text: 'この子は、初めて会う人にも自分から話しかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が悲しんでいると一緒に心配します', factor:'A', dir:'+' },
+  { text: 'この子は、やると決めたことを最後までやり遂げます', factor:'C', dir:'+' },
+  { text: 'この子は、嫌なことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、「なぜ？」「どうして？」とよく質問します', factor:'O', dir:'+' },
+  { text: 'この子は、一人遊びや静かな環境を好みます', factor:'E', dir:'-' },
+  { text: 'この子は、おもちゃや道具を友達と分け合えます', factor:'A', dir:'+' },
+  { text: 'この子は、言われなくても使ったものを元の場所に戻します', factor:'C', dir:'+' },
+  { text: 'この子は、気持ちをすぐに切り替えて立ち直れます', factor:'N', dir:'-' },
+  { text: 'この子は、知らない遊びや活動に積極的に挑戦します', factor:'O', dir:'+' },
+  { text: 'この子は、グループの中で意見を積極的に言います', factor:'E', dir:'+' },
+  { text: 'この子は、意見が合わないとき相手に強く言いすぎてしまうことがあります', factor:'A', dir:'-' },
+  { text: 'この子は、決めたルールや約束をきちんと守ります', factor:'C', dir:'+' },
+  { text: 'この子は、予定が変わったり思い通りにならないと不安になりやすいです', factor:'N', dir:'+' },
+  { text: 'この子は、空想やお話をつくるのが好きです', factor:'O', dir:'+' },
+];
+const questionsChild46 = [
+  { text: 'この子は、砂場や外遊びで知らない子にも「一緒に遊ぼう」と声をかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が転んだときにすぐ「大丈夫？」と声をかけます', factor:'A', dir:'+' },
+  { text: 'この子は、幼稚園・保育園のお片付けの時間に自分から片付けます', factor:'C', dir:'+' },
+  { text: 'この子は、思い通りにならないと気持ちをなかなか落ち着かせられません', factor:'N', dir:'+' },
+  { text: 'この子は、虫や花など身近な生き物をじっくり観察します', factor:'O', dir:'+' },
+  { text: 'この子は、友達と遊ぶとき自分からルールや遊び方を提案します', factor:'E', dir:'+' },
+  { text: 'この子は、友達がほしがっているおもちゃを譲ることができます', factor:'A', dir:'+' },
+  { text: 'この子は、先生に言われた手順をきちんと守ろうとします', factor:'C', dir:'+' },
+  { text: 'この子は、新しい場所や初めての行事の前に不安そうな様子を見せます', factor:'N', dir:'+' },
+  { text: 'この子は、絵本や紙芝居の続きを自分なりに考えて話してくれます', factor:'O', dir:'+' },
+  { text: 'この子は、にぎやかな場所やイベントが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、友達とけんかしても自分から謝ることが苦手です', factor:'A', dir:'-' },
+  { text: 'この子は、気が進まない作業は途中でやめてしまうことがあります', factor:'C', dir:'-' },
+  { text: 'この子は、親がそばにいなくても落ち着いて過ごせます', factor:'N', dir:'-' },
+  { text: 'この子は、いつも同じ遊びより、新しい遊び方を試したがります', factor:'O', dir:'+' },
+];
+const questionsChild79 = [
+  { text: 'この子は、休み時間にクラスの友達を誘って一緒に遊びます', factor:'E', dir:'+' },
+  { text: 'この子は、困っているクラスメートがいると自分から手伝おうとします', factor:'A', dir:'+' },
+  { text: 'この子は、宿題を毎日決まった時間に自分から取り組みます', factor:'C', dir:'+' },
+  { text: 'この子は、うまくいかないことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、授業で「もっと知りたい」と思ったことを家でも調べます', factor:'O', dir:'+' },
+  { text: 'この子は、グループ学習のとき自分から発言したり仕切ったりします', factor:'E', dir:'+' },
+  { text: 'この子は、グループの意見に反対でも、相手を傷つけないよう言い方を考えます', factor:'A', dir:'+' },
+  { text: 'この子は、係の仕事や当番を忘れずにこなします', factor:'C', dir:'+' },
+  { text: 'この子は、友達とトラブルがあっても翌日には普通に接することができます', factor:'N', dir:'-' },
+  { text: 'この子は、本や授業で知ったことについて「もっと知りたい」とよく言います', factor:'O', dir:'+' },
+  { text: 'この子は、放課後は一人でいるより友達と過ごすほうが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、自分さえよければいいという行動をとることがあります', factor:'A', dir:'-' },
+  { text: 'この子は、やりたくない課題でも途中で投げ出さずに続けます', factor:'C', dir:'+' },
+  { text: 'この子は、発表や人前に立つ場面でひどく緊張します', factor:'N', dir:'+' },
+  { text: 'この子は、決まったやり方より自分なりのやり方を試したがります', factor:'O', dir:'+' },
+];
+
+// ===== 質問データ（インターリーブ順） =====
+const questions = [
+  { text: '初対面の人にも自分から話しかけ、すぐに打ち解けるほうだと思う', factor:'E', dir:'+' },
+  { text: '予定が急に変わったり、思い通りにいかないとき、強く動揺する様子がある', factor:'N', dir:'+' },
+  { text: '新しい場所・食べ物・体験に対して、抵抗よりも「試してみたい」という反応を見せる', factor:'O', dir:'+' },
+  { text: '約束の時間・期限をきちんと守り、遅刻やすっぽかしがほとんどない', factor:'C', dir:'+' },
+  { text: '困っている人を見かけると、自分から声をかけて助けようとする', factor:'A', dir:'+' },
+  { text: '人が集まる場所や賑やかなイベントが好きそうで、積極的に参加する', factor:'E', dir:'+' },
+  { text: '心配事があると、同じ不安を何度も繰り返し話したり、引きずる傾向がある', factor:'N', dir:'+' },
+  { text: 'いつもと違うやり方や、ユニークなアイデアを提案することがある', factor:'O', dir:'+' },
+  { text: '身の回りの整理整頓ができていて、物事をきちんと管理している様子がある', factor:'C', dir:'+' },
+  { text: '意見が対立しそうな場面で、争いを避けて丸く収めようとする', factor:'A', dir:'+' },
+  { text: '一人で過ごす時間を大切にしていて、人混みの後は充電が必要そうだ', factor:'E', dir:'-' },
+  { text: '多少のトラブルでも「まあいいか」と切り替えが早く、動じない印象がある', factor:'N', dir:'-' },
+  { text: '慣れたやり方や定番を好み、変化を求めない安定志向に見える', factor:'O', dir:'-' },
+  { text: '行き当たりばったりで動くことが多く、計画を立てて行動するタイプではない', factor:'C', dir:'-' },
+  { text: '自分の意見を曲げず、主張が強い印象がある', factor:'A', dir:'-' },
+  { text: 'グループや集まりの中で、自然と中心的な役割になることが多い', factor:'E', dir:'+' },
+  { text: '人から批判されたり失敗したとき、しばらく引きずって落ち込む様子がある', factor:'N', dir:'+' },
+  { text: '趣味や興味の幅が広く、新しい分野を学ぶことを楽しんでいるように見える', factor:'O', dir:'+' },
+  { text: '衝動的に行動するより、先を見越して計画を立ててから動くことが多い', factor:'C', dir:'+' },
+  { text: '自分が損をしても、相手との関係を壊したくないと考える傾向がある', factor:'A', dir:'+' },
+  // --- 追加10問（各因子2問ずつ） ---
+  { text: '電話やメッセージで、相手よりも多く話す方だと思う', factor:'E', dir:'+' },
+  { text: '人前で笑顔やジェスチャーが多く、表現が豊かな印象がある', factor:'E', dir:'+' },
+  { text: 'プレッシャーがかかる場面で、手が震えたり声が上すがったりすることがある', factor:'N', dir:'+' },
+  { text: '人混みや狭い場所で、落ち着かない様子を見せることがある', factor:'N', dir:'+' },
+  { text: '映画・音楽・アートなどに興味を示し、自分なりの好みを持っている', factor:'O', dir:'+' },
+  { text: '抽象的な議論や「もしも〜だったら」のような話を楽しむ様子がある', factor:'O', dir:'+' },
+  { text: '細かいミスを見逃さず、やり直しをして正確に仕上げようとする傾向がある', factor:'C', dir:'+' },
+  { text: '目標や期限を自分で設定し、それに向けてコツコツ進めるタイプだと思う', factor:'C', dir:'+' },
+  { text: '他人の気持ちに敏感で、相手が不快そうだと察して気遣うことが多い', factor:'A', dir:'+' },
+  { text: 'グループの決定に不満があっても、波風を立てずに従うことが多い', factor:'A', dir:'+' },
+];
+let activeQuestions = questions;
+let total = questions.length;
+
+// ===== 精密版60問（ファセット対応） =====
+const questionsDetailed = [
+  { text: '先のことを心配して、事前に何度も確認を取ろうとする様子がある', factor:'N', facet:'N1', dir:'+' },
+  { text: '先が見えない状況でも焦らず、落ち着いて行動する様子がある', factor:'N', facet:'N1', dir:'-' },
+  { text: '小さなミスや思い通りにいかないことで、声を荒げたり苛立ちを見せることがある', factor:'N', facet:'N2', dir:'+' },
+  { text: '理不尽なことがあっても、感情的にならず穏やかに対応することが多い', factor:'N', facet:'N2', dir:'-' },
+  { text: 'うまくいかないことが続くと、表情が暗くなったり口数が減る様子がある', factor:'N', facet:'N3', dir:'+' },
+  { text: '失敗や挫折があっても、翌日には通常通りのペースで動いている様子がある', factor:'N', facet:'N3', dir:'-' },
+  { text: '大勢の前で話したり注目を浴びる場面で、明らかに緊張したり縮こまる様子がある', factor:'N', facet:'N4', dir:'+' },
+  { text: '大勢の前でのプレゼンや発表でも、声のトーンや姿勢が普段と変わらない様子がある', factor:'N', facet:'N4', dir:'-' },
+  { text: '衝動的に発言したり行動したりして、後から後悔している様子が見受けられる', factor:'N', facet:'N5', dir:'+' },
+  { text: '感情的になりそうな場面でも、すぐには発言せず間を置いてから応答することが多い', factor:'N', facet:'N5', dir:'-' },
+  { text: '急なトラブルや予定外の変更が重なると、対応が止まってパニック状態になることがある', factor:'N', facet:'N6', dir:'+' },
+  { text: 'プレッシャーのかかる状況でも、冷静さを保って対処する様子がある', factor:'N', facet:'N6', dir:'-' },
+  { text: '見知らぬ人が集まる場でも積極的に話しかけ、打ち解けた雰囲気を作ることが多い', factor:'E', facet:'E1', dir:'+' },
+  { text: 'パーティや懇親会など大人数の場では、自分から話しかけることをほとんどしない様子がある', factor:'E', facet:'E1', dir:'-' },
+  { text: '休日や空き時間も誰かと過ごすことを好み、積極的に誘いをかけることが多い', factor:'E', facet:'E2', dir:'+' },
+  { text: '誘いを断って一人で過ごす選択をすることが多い', factor:'E', facet:'E2', dir:'-' },
+  { text: '話し合いの場で、はっきりと自分の立場や意見を述べることが多い', factor:'E', facet:'E3', dir:'+' },
+  { text: '自分の考えがあっても、場の雰囲気を読んで発言を控えることが多い', factor:'E', facet:'E3', dir:'-' },
+  { text: '仕事や活動に取り組む際のエネルギーが高く、テキパキと行動する様子がある', factor:'E', facet:'E4', dir:'+' },
+  { text: '作業量が多い局面でも急ぐそぶりを見せず、一定の遅めのペースで動くことが多い', factor:'E', facet:'E4', dir:'-' },
+  { text: '日常の中でも新しい体験や刺激を求めて、チャレンジングな選択をすることが多い', factor:'E', facet:'E5', dir:'+' },
+  { text: 'リスクを伴う仕事や活動の話が出ると、参加を断ったり消極的な反応をすることが多い', factor:'E', facet:'E5', dir:'-' },
+  { text: '日常の中でよく笑い、ユーモアを交えながら場の雰囲気を明るくすることが多い', factor:'E', facet:'E6', dir:'+' },
+  { text: '会話の場でも笑いや冗談はほとんど見られず、場の雰囲気はフラットなままであることが多い', factor:'E', facet:'E6', dir:'-' },
+  { text: '普通とは違う視点からアイデアを出したり、独創的な解決策を提案することがある', factor:'O', facet:'O1', dir:'+' },
+  { text: '実績のある方法を好み、奇抜なアイデアより定石を重視する様子がある', factor:'O', facet:'O1', dir:'-' },
+  { text: 'インテリアや服装など日常の中でも美的センスへのこだわりを見せることがある', factor:'O', facet:'O2', dir:'+' },
+  { text: '服装や持ち物に統一感がなく、見た目のコーディネートに時間をかけない様子がある', factor:'O', facet:'O2', dir:'-' },
+  { text: '映画や音楽を体験したあと、感動や興奮を言葉や表情で積極的に伝える様子がある', factor:'O', facet:'O3', dir:'+' },
+  { text: '感動的な場面でも表情を変えず、感情があまり表に出ない様子がある', factor:'O', facet:'O3', dir:'-' },
+  { text: '予定外の変更や急な方針転換があっても、不満を見せずに新しい方向に即座に動く様子がある', factor:'O', facet:'O4', dir:'+' },
+  { text: '馴染みのある場所・食べ物・やり方にとどまる選択が多い様子がある', factor:'O', facet:'O4', dir:'-' },
+  { text: '難しいテーマや複雑な問題を前にしても、食いついて考え続ける様子がある', factor:'O', facet:'O5', dir:'+' },
+  { text: '説明を一度聞いただけで次の話題に移り、深掘りする質問をほとんどしない様子がある', factor:'O', facet:'O5', dir:'-' },
+  { text: '前例と異なるやり方を提案したり、既存の手順を独自に変更して進めることがある', factor:'O', facet:'O6', dir:'+' },
+  { text: '組織のルールや社会的な規範を重んじ、慣例に沿って行動することが多い', factor:'O', facet:'O6', dir:'-' },
+  { text: '相手の言葉を疑わずそのまま受け入れ、素直に行動することが多い', factor:'A', facet:'A1', dir:'+' },
+  { text: '相手の話を聞いても、すぐには同意せず確認や裏取りをしようとする様子がある', factor:'A', facet:'A1', dir:'-' },
+  { text: 'ミスが発覚したとき、言い訳より先に事実をそのまま報告する様子がある', factor:'A', facet:'A2', dir:'+' },
+  { text: '都合が悪いときは事実をぼかしたり、ルールを都合よく解釈した行動が見られることがある', factor:'A', facet:'A2', dir:'-' },
+  { text: '誰かが困っているとき、自分の作業を中断してでも助けに行く行動が見られる', factor:'A', facet:'A3', dir:'+' },
+  { text: '自分に直接関係のないことには手を貸さず、自分の用事を優先する様子がある', factor:'A', facet:'A3', dir:'-' },
+  { text: 'グループ作業では全員が貢献できるよう気を配り、孤立しそうな人に声をかけて参加を促す行動が見られる', factor:'A', facet:'A4', dir:'+' },
+  { text: 'チームで決めたやり方が合わないと、断りなく独自の方法で進めてしまうことがある', factor:'A', facet:'A4', dir:'-' },
+  { text: '実績や成果を自ら語らず、功績を他の人や状況のおかげとして話すことが多い', factor:'A', facet:'A5', dir:'+' },
+  { text: '自分の実績や能力を場の雰囲気に関係なく積極的にアピールすることが多い', factor:'A', facet:'A5', dir:'-' },
+  { text: '相手が落ち込んでいるとき、解決策より先に気持ちを聞こうとする言動が見られる', factor:'A', facet:'A6', dir:'+' },
+  { text: '相手の気持ちより事実や効率を優先し、感情的な配慮が少ない発言をすることがある', factor:'A', facet:'A6', dir:'-' },
+  { text: '複雑な問題や状況に直面しても、素早く状況を整理して対処策を出す様子がある', factor:'C', facet:'C1', dir:'+' },
+  { text: '問題が起きると何から手をつければよいか分からなくなり、周囲に指示を求めることが多い', factor:'C', facet:'C1', dir:'-' },
+  { text: '情報やタスクをメモやリストで管理し、頭の中だけに頼らない様子がある', factor:'C', facet:'C2', dir:'+' },
+  { text: '持ち物や書類が整理されておらず、必要なものを探すことが多い様子がある', factor:'C', facet:'C2', dir:'-' },
+  { text: '一度引き受けたことは途中で諦めず、最後まで責任を持って仕上げる様子がある', factor:'C', facet:'C3', dir:'+' },
+  { text: '途中で興味を失ったり大変になると、やりかけのことを放り出す様子がある', factor:'C', facet:'C3', dir:'-' },
+  { text: '成果がすぐに見えなくても、途中で諦めずコツコツ取り組み続ける様子がある', factor:'C', facet:'C4', dir:'+' },
+  { text: '目に見える成果がすぐに出ない活動には興味を失い、別のことに切り替えてしまうことが多い', factor:'C', facet:'C4', dir:'-' },
+  { text: 'やるべきことがあれば誘惑や気分に流されず、集中して取り組める様子がある', factor:'C', facet:'C5', dir:'+' },
+  { text: '面白いものや楽な選択肢があると、本来の課題から脱線してしまうことが多い', factor:'C', facet:'C5', dir:'-' },
+  { text: '大きな決断をする前に情報を集め、じっくりと考えてから行動に移す様子がある', factor:'C', facet:'C6', dir:'+' },
+  { text: '十分な情報がそろっていない状態でも、その場の判断で決定してしまうことが多い', factor:'C', facet:'C6', dir:'-' },
+];
+
+// ===== 追加精密版60問（2回目・バイアス除去・行動観察ベース） =====
+const questionsDetailed2 = [
+  { text: '前日から何度も持ち物や準備物を確認したり、当日の朝早くから準備を始める様子がある', factor:'N', facet:'N1', dir:'+' },
+  { text: '大事な問題が未解決でも、その日の業務を普段通りのペースで進めることができる様子がある', factor:'N', facet:'N1', dir:'-' },
+  { text: '自分のミスや不手際を指摘されたとき、反論や言い訳が受け入れより先に出ることが多い', factor:'N', facet:'N2', dir:'+' },
+  { text: '理不尽な状況に置かれても、その場では声を荒げず後から静かに対処する様子がある', factor:'N', facet:'N2', dir:'-' },
+  { text: 'うまくいかないことが続くと「自分はだめだ」「向いていない」という発言が増える様子がある', factor:'N', facet:'N3', dir:'+' },
+  { text: '批判を受けた後も自己嫌悪に陥らず、「次どうするか」の話に素早く切り替える様子がある', factor:'N', facet:'N3', dir:'-' },
+  { text: '大勢の場で急に静かになったり、周囲の視線を気にしてそわそわする様子が見受けられる', factor:'N', facet:'N4', dir:'+' },
+  { text: '服装や行動を他者に指摘されても特に動じず、気にしていない様子を見せることが多い', factor:'N', facet:'N4', dir:'-' },
+  { text: '「甘いものをやめる」「スマホを控える」と言いながら短期間で元に戻るパターンが繰り返される様子がある', factor:'N', facet:'N5', dir:'+' },
+  { text: 'カッとなりそうな場面でその場を離れたり沈黙を選ぶ行動が見られることがある', factor:'N', facet:'N5', dir:'-' },
+  { text: '締め切りやプレッシャーが重なると、急に体調不良を訴えたりやる気を失う様子がある', factor:'N', facet:'N6', dir:'+' },
+  { text: '突発的なトラブルが重なっても「まずこれ」と1つずつ着手できる様子がある', factor:'N', facet:'N6', dir:'-' },
+  { text: '初めて会った人の名前や特徴を後日も覚えており、次に会ったとき自然に使う様子がある', factor:'E', facet:'E1', dir:'+' },
+  { text: '一対一では話せるが、グループになると発言の頻度が目に見えて減ることが多い', factor:'E', facet:'E1', dir:'-' },
+  { text: '連絡が途絶えている友人や知人に自分から連絡を取ることが多い様子がある', factor:'E', facet:'E2', dir:'+' },
+  { text: '長期休暇を一人か少人数でゆっくり過ごすことを好んでいる様子がある', factor:'E', facet:'E2', dir:'-' },
+  { text: '上の立場の人が間違っていると思ったとき、直接指摘できる場面が見受けられる', factor:'E', facet:'E3', dir:'+' },
+  { text: '自分の案が却下されても特に不満を表に出さず、多数決に黙って従う様子がある', factor:'E', facet:'E3', dir:'-' },
+  { text: '仕事が終わった後も、何か別のことを始めたり学んだりしている様子がある', factor:'E', facet:'E4', dir:'+' },
+  { text: '休日でもエネルギーが余っている様子がなく、少し動いたら長時間休む生活リズムの様子がある', factor:'E', facet:'E4', dir:'-' },
+  { text: '行ったことのない場所や食べたことのない料理を率先して試そうとする行動が見られる', factor:'E', facet:'E5', dir:'+' },
+  { text: '旅行先でも定番コースや有名店を選び、なるべくはずれのない選択をしようとする様子がある', factor:'E', facet:'E5', dir:'-' },
+  { text: '些細な日常の出来事を楽しそうに話し、周りを笑わせる話題を自然に提供することが多い', factor:'E', facet:'E6', dir:'+' },
+  { text: '楽しい場面でも感情の起伏がほとんど見えず、テンションの変化が表情に出にくい様子がある', factor:'E', facet:'E6', dir:'-' },
+  { text: '「もしこうだったら？」という仮定の話を好んで展開させ、会話を広げることが多い', factor:'O', facet:'O1', dir:'+' },
+  { text: '議論の場でアイデアを求められると、既存の事例や前例を引用して答えることが多い', factor:'O', facet:'O1', dir:'-' },
+  { text: '場の雰囲気やデザインの細部（照明・配色など）に気づいてコメントすることがある', factor:'O', facet:'O2', dir:'+' },
+  { text: '機能的に問題がなければ見た目へのこだわりは示さず、実用性を優先する様子がある', factor:'O', facet:'O2', dir:'-' },
+  { text: '自然の景色や場の雰囲気に感化されて「なんかすごい」「きれいだね」と感情を口にする場面がある', factor:'O', facet:'O3', dir:'+' },
+  { text: '相手が感情的な話をしているとき、共感より先に「で、どうするの？」と解決策を求めることが多い', factor:'O', facet:'O3', dir:'-' },
+  { text: '同じやり方でうまくいっていても「もっと良い方法があるはず」と探し続ける様子がある', factor:'O', facet:'O4', dir:'+' },
+  { text: 'メニューや選択肢が多い場面でいつもの定番を選び、試してみようとしないことが多い', factor:'O', facet:'O4', dir:'-' },
+  { text: '自分の専門外の分野（芸術・歴史・科学など）の話題にも積極的に参加し、意見を述べることがある', factor:'O', facet:'O5', dir:'+' },
+  { text: '知らないことを聞かれたとき「詳しくないので」と打ち切り、それ以上調べようとしないことが多い', factor:'O', facet:'O5', dir:'-' },
+  { text: '異なる文化や価値観の話を聞くと、否定せず興味深そうに掘り下げる様子がある', factor:'O', facet:'O6', dir:'+' },
+  { text: '「昔からそうしてきた」「みんなそうだから」という理由で行動を正当化することが多い', factor:'O', facet:'O6', dir:'-' },
+  { text: '初対面の人でも相手の言葉を額面通りに受け取り、善意を前提に接することが多い', factor:'A', facet:'A1', dir:'+' },
+  { text: '頼みごとや提案を受けたとき、相手の意図や裏事情を考えてから動くことが多い', factor:'A', facet:'A1', dir:'-' },
+  { text: '自分が不利な状況でも、嘘や言い訳より事実を伝えることを選ぶ場面が見受けられる', factor:'A', facet:'A2', dir:'+' },
+  { text: '自分に有利になるよう事実を少し誇張したり省略して伝えることがある', factor:'A', facet:'A2', dir:'-' },
+  { text: '見返りが期待できない状況でも、困っている相手の手伝いを引き受けることが多い', factor:'A', facet:'A3', dir:'+' },
+  { text: '忙しいときに頼まれごとをされると、断ったり後回しにすることが多い様子がある', factor:'A', facet:'A3', dir:'-' },
+  { text: '意見の違う相手と議論になっても「どちらも正しい部分がある」と着地させることが多い', factor:'A', facet:'A4', dir:'+' },
+  { text: 'グループで作業するとき、自分のやり方を押し通して他のメンバーの方法を試そうとしないことが多い', factor:'A', facet:'A4', dir:'-' },
+  { text: '自分より他の人の功績を褒め、場の注目を他に向けることが多い', factor:'A', facet:'A5', dir:'+' },
+  { text: 'グループでの成功でも「自分がやった」という文脈で話すことが多い様子がある', factor:'A', facet:'A5', dir:'-' },
+  { text: '問題が解決していなくても「つらかったね」と相手の感情を受け止める発言が自然に出ることが多い', factor:'A', facet:'A6', dir:'+' },
+  { text: '泣いている人や落ち込んでいる人に対してどう対応すれば良いか迷っている様子が見受けられる', factor:'A', facet:'A6', dir:'-' },
+  { text: '初めて取り組む作業でも、まず自分でやってみようとする姿勢が見られる', factor:'C', facet:'C1', dir:'+' },
+  { text: '自分のスキルや判断に自信がなく、よく「私にできるでしょうか」「これで合ってますか」と確認することが多い', factor:'C', facet:'C1', dir:'-' },
+  { text: '使ったものを元の場所に戻したり共用スペースを使う前より綺麗にする行動が見られる', factor:'C', facet:'C2', dir:'+' },
+  { text: '作業スペースや持ち物が散らかっていても気にする様子がなく、整頓を促されても優先度が低い様子がある', factor:'C', facet:'C2', dir:'-' },
+  { text: '自分が直接担当ではなくても問題が起きた仕事には自分から名乗り出て解決しようとする場面がある', factor:'C', facet:'C3', dir:'+' },
+  { text: '締め切りや約束をほぼ守るがギリギリか少し遅れることが多い様子がある', factor:'C', facet:'C3', dir:'-' },
+  { text: '目標を数値や期日で具体化し進捗を定期的に確認している様子がある', factor:'C', facet:'C4', dir:'+' },
+  { text: '途中から成果物のクオリティが落ち、最初に宣言していた基準より明らかに低い状態で完成とすることが多い', factor:'C', facet:'C4', dir:'-' },
+  { text: '気が乗らなくても毎日決まった時間に同じ行動をとる習慣が身についている様子がある', factor:'C', facet:'C5', dir:'+' },
+  { text: '気乗りしない仕事を前にして、まず環境を整えたり別の準備を始めて本題に入るまでが長い様子がある', factor:'C', facet:'C5', dir:'-' },
+  { text: '大きな買い物や契約をする前に比較検討や下調べを念入りに行う様子がある', factor:'C', facet:'C6', dir:'+' },
+  { text: '勢いで決断して後から「もっと考えればよかった」と言うことが繰り返される様子がある', factor:'C', facet:'C6', dir:'-' },
+];
+
+// ===== 関係性設定 =====
+const relConfig = {
+  love: {
+    icon: '', label: '恋愛・気になる人',
+    badge: '恋愛・気になる人', badgeClass: 'badge-love',
+    barClass: 'rel-love-bar', whoClass: 'rel-love', qClass: 'rel-love',
+    compatTitle: '恋愛相性スコア',
+    // 恋愛は 神経症傾向の差・外向性の一致・協調性の高さ を重視
+    compatWeights: { E: 1.5, N: 2.0, O: 1.0, C: 0.8, A: 1.5 },
+    compatHigh: 'とても良い相性です！感情的な波長が合いやすく、自然体でいられる関係です。',
+    compatMid:  'お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
+    compatLow:  '性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
+    // 信頼度情報（心理学研究に基づく）
+    observerNote: '恋人・パートナーからの評価は、全関係性の中で最も正確です。プライベートな姿も見られるため、特に情緒安定性の評価が信頼できます。',
+    accurateFactors: ['E','N','A','C'],
+    lessAccurateFactors: ['O'],
+  },
+  work: {
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>', label: '仕事・上司・同僚',
+    badge: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> 仕事・職場', badgeClass: 'badge-work',
+    barClass: 'rel-work-bar', whoClass: 'rel-work', qClass: 'rel-work',
+    compatTitle: '仕事の相性スコア',
+    // 仕事は 誠実性の一致・協調性の高さ を重視
+    compatWeights: { E: 0.8, N: 1.2, O: 1.0, C: 2.0, A: 1.8 },
+    compatHigh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> 仕事上の相性は良好です！お互いの強みを活かし合える関係です。',
+    compatMid:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> コミュニケーションを丁寧にすれば良いチームワークが生まれます。',
+    compatLow:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> スタイルの違いがあります。役割分担を明確にすると力を発揮しやすくなります。',
+    // 信頼度情報
+    observerNote: '職場関係では、誠実性や協調性の評価が正確です。ただし感情面や内面的な思考は見えにくいため、参考程度にしてください。',
+    accurateFactors: ['C','A'],
+    lessAccurateFactors: ['N','O'],
+  },
+  friend: {
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>', label: '友人・知人',
+    badge: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 友人・知人', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    compatTitle: '友人としての相性スコア',
+    compatWeights: { E: 1.5, N: 1.0, O: 2.0, C: 0.8, A: 1.5 },
+    compatHigh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 気の合う友人です！話題が合いやすく、一緒にいて楽しい関係です。',
+    compatMid:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> お互いの違いを楽しめれば、刺激し合える良い関係になります。',
+    compatLow:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v6h-6"/></svg> タイプは違いますが、だからこそ新しい視点をもらえる関係かもしれません。',
+    observerNote: '友人関係では、外向性や開放性の評価が正確です。ただし真面目さや感情面は遊びの場面では見えにくいため、参考程度にしてください。',
+    accurateFactors: ['E','O'],
+    lessAccurateFactors: ['C','N'],
+  },
+  child46: {
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>', label: '子供（4〜6歳）',
+    badge: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 子供（4〜6歳）', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    isChild: true,
+    observerNote: '親による観察評価は幼児期の主流な測定方法です。外向性・協調性は正確に見えやすい一方、感情の内面は見えにくい場合があります。',
+    accurateFactors: ['E','A'],
+    lessAccurateFactors: ['N','O'],
+  },
+  child79: {
+    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>', label: '子供（7〜9歳）',
+    badge: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> 子供（7〜9歳）', badgeClass: 'badge-friend',
+    barClass: 'rel-friend-bar', whoClass: 'rel-friend', qClass: 'rel-friend',
+    isChild: true,
+    observerNote: '小学校低学年では学校生活が加わり、親が見えない場面も増えます。誠実性・外向性は把握しやすいですが、感情面は参考程度にしてください。',
+    accurateFactors: ['C','E'],
+    lessAccurateFactors: ['N','O'],
+  },
+};
+
+const traitInfo = {
+  E: { name: '外向性',     desc: '社交的・話好き・積極的',         color: '#f97316' },
+  N: { name: '神経症傾向', desc: '感情的・不安になりやすい・敏感', color: '#14b8a6' },
+  O: { name: '開放性',     desc: '好奇心旺盛・創造的・変化好き',   color: '#8b5cf6' },
+  C: { name: '誠実性',     desc: '計画的・責任感・几帳面',         color: '#3b82f6' },
+  A: { name: '協調性',     desc: '思いやり・協力的・争い回避',     color: '#f472b6' },
+};
+
+const periodNotes = {
+  short: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 知り合ってまもないため推定誤差が大きい場合があります。',
+  few:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> ある程度の観察データがあります。参考程度にご活用ください。',
+  mid:   '✅ 十分な観察期間があります。推定精度は比較的高いでしょう。',
+  long:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 長期の観察データがあります。かなり精度の高い推定が期待できます。',
+};
+
+// ===== 状態 =====
+let personName = '', personPeriod = '', personRel = '', personGender = 'F';
+let diagMode = 'simple';
+let current = 0;
+const ans = new Array(total).fill(null);
+
+// 自分のスコア（result.htmlから渡される または LocalStorageから読み込み）
+const urlParams = new URLSearchParams(window.location.search);
+let myCode = urlParams.get('my') || '';
+
+// URLパラメータになければ LocalStorageから適用中の自分のコードを読み込む
+if (!myCode) {
+  try {
+    const STORAGE_KEY_MY = 'bigfive_my_results';
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    if (myResults.length > 0) {
+      const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), myResults.length - 1);
+      myCode = myResults[activeIdx].code;
+    }
+  } catch (e) {
+    console.error('LocalStorage読み込みエラー:', e);
+  }
+}
+
+const myScores = myCode.length === 5 ? {
+  O: parseInt(myCode[0]), C: parseInt(myCode[1]),
+  E: parseInt(myCode[2]), A: parseInt(myCode[3]), N: parseInt(myCode[4])
+} : null;
+
+// ===== 画面切替 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== スタート画面 =====
+const nameInput  = document.getElementById('personName');
+const startBtn   = document.getElementById('startBtn');
+const accNote    = document.getElementById('accuracyNote');
+
+document.querySelectorAll('.rel-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.rel === 'child') return; // kodomo.html へ遷移するので処理しない
+    document.querySelectorAll('.rel-btn').forEach(b => {
+      b.classList.remove('selected','sel-love','sel-work','sel-friend');
+    });
+    btn.classList.add('selected', `sel-${btn.dataset.rel}`);
+    personRel = btn.dataset.rel;
+    document.getElementById('periodGroup').style.display = '';
+    checkReady();
+  });
+});
+
+nameInput.addEventListener('input', () => {
+  checkReady();
+  checkDetailed2Available();
+});
+
+function checkDetailed2Available() {
+  try {
+    const name = nameInput.value.trim();
+    const grp = document.getElementById('detailed2Group');
+    if (!name) { grp.style.display = 'none'; return; }
+    if (typeof isUnlocked === 'function' && !isUnlocked('other-detailed2')) {
+      grp.style.display = 'none'; return;
+    }
+    const others = JSON.parse(localStorage.getItem('bigfive_other_results') || '[]');
+    const has60 = others.some(r => r.name === name && r.version === '60');
+    grp.style.display = has60 ? '' : 'none';
+  } catch(e) { document.getElementById('detailed2Group').style.display = 'none'; }
+}
+
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    personPeriod = btn.dataset.period;
+    accNote.innerHTML = periodNotes[personPeriod];
+    accNote.classList.add('show');
+    document.getElementById('modeGroup').style.display = '';
+    checkReady();
+  });
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.mode === 'detailed') {
+      try {
+        const cardCount = JSON.parse(localStorage.getItem('bigfive_album') || '[]').length;
+        if (typeof isUnlocked === 'function' && !isUnlocked('other-detailed')) {
+          const required = typeof getRequiredCards === 'function' ? getRequiredCards('other-detailed') : 5;
+          const remaining = required - cardCount;
+          btn.title = `あと${remaining}枚で解放`;
+          const wrap = document.getElementById('modeGroup');
+          let note = wrap.querySelector('.mode-lock-note');
+          if (!note) {
+            note = document.createElement('p');
+            note.className = 'mode-lock-note';
+            note.style.cssText = 'font-size:12px;color:#f97316;margin:8px 0 0;text-align:center;';
+            wrap.appendChild(note);
+          }
+          note.textContent = `精密版は${required}枚で解放（あと${remaining}枚）`;
+          return;
+        }
+      } catch(e) {}
+    }
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    diagMode = btn.dataset.mode;
+    const note = document.getElementById('modeGroup').querySelector('.mode-lock-note');
+    if (note) note.textContent = '';
+  });
+});
+
+document.querySelectorAll('.gender-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    personGender = btn.dataset.gender;
+  });
+});
+
+function checkReady() {
+  startBtn.disabled = !(nameInput.value.trim() && personPeriod && personRel);
+}
+
+startBtn.addEventListener('click', () => {
+  personName = nameInput.value.trim();
+  const cfg = relConfig[personRel];
+
+  // 質問セットを切り替え
+  if (personRel === 'child46') {
+    activeQuestions = [...questionsFixed15, ...questionsChild46];
+  } else if (personRel === 'child79') {
+    activeQuestions = [...questionsFixed15, ...questionsChild79];
+  } else if (diagMode === 'detailed') {
+    activeQuestions = questionsDetailed;
+  } else if (diagMode === 'detailed2') {
+    activeQuestions = questionsDetailed2;
+  } else {
+    activeQuestions = questions;
+  }
+  total = activeQuestions.length;
+  // who bar
+  const whoBar = document.getElementById('whoBar');
+  whoBar.className = `who-bar ${cfg.whoClass}`;
+  document.getElementById('whoIcon').innerHTML = cfg.icon;
+  document.getElementById('whoName').textContent = personName;
+  document.getElementById('whoSub').textContent = `を観察して答えてください（${cfg.label}）`;
+  // progress color
+  document.getElementById('progressWrap').className = `progress ${cfg.barClass}`;
+  // question num color
+  document.getElementById('questionNum').className = `question-num ${cfg.qClass}`;
+  // loading name
+  document.getElementById('loadingName').textContent = personName;
+  document.getElementById('resultName').textContent = personName;
+  // rel badge
+  const badge = document.getElementById('relBadge');
+  badge.innerHTML = cfg.badge;
+  badge.className = `result-rel-badge ${cfg.badgeClass}`;
+
+  current = 0;
+  ans.length = total; ans.fill(null);
+  document.getElementById('saveProgressBtn').style.display = (diagMode === 'detailed' || diagMode === 'detailed2') ? '' : 'none';
+  render();
+  showScreen('quizScreen');
+});
+
+// ===== クイズ =====
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const questionNum  = document.getElementById('questionNum');
+const questionText = document.getElementById('questionText');
+const answersEl    = document.getElementById('answers');
+const backBtn      = document.getElementById('backBtn');
+
+function render(showSaved = true) {
+  progressFill.style.width = `${((current+1)/total)*100}%`;
+  progressText.textContent = `${current+1}/${total}`;
+  questionNum.textContent = `Q${current+1}`;
+  questionText.textContent = activeQuestions[current].text;
+  answersEl.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (showSaved) {
+    const savedAns = ans[current];
+    if (savedAns !== null) {
+      const target = answersEl.querySelector(`[data-val="${savedAns}"]`);
+      if (target) target.classList.add('selected');
+    }
+  }
+  backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+let timer = null;
+
+answersEl.addEventListener('click', e => {
+  const btn = e.target.closest('.answer-btn');
+  if (!btn) return;
+  clearTimeout(timer);
+  ans[current] = parseInt(btn.dataset.val);
+  answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  timer = setTimeout(() => {
+    answersEl.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+    if (current < total-1) { current++; render(false); }
+    else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
+  }, 300);
+});
+
+backBtn.addEventListener('click', () => {
+  clearTimeout(timer);
+  if (current>0){current--; render();}
+});
+
+// ===== スコア計算 =====
+
+/* 素点を段階に直す（2026-08-21・quiz.html と同じ方式に統一）
+ *
+ * toLevel  … 1問あたりの平均を四捨五入して1〜5にする（ファセット用）
+ * toLevel3 … 1・3・5の3段階にする（因子用）。境目 2.5/3.5 は、
+ *            5段階に切ってから marume243 の丸め規則(1,2→1／3→3／4,5→5)を
+ *            当てるのと完全に同じ位置。10問版の判定とも一致する。
+ *
+ * ⚠️旧版は因子が 1問あたり 1.67/3.33（0点を起点に3等分）だった。最低点は0ではなく1なので、
+ *   ほぼ全問を「まったくあてはまらない」にしないと「1」にならない状態だった。
+ *   さらに120問合成のときだけ 2.33/3.67 を使っており、経路によって結果が変わり得た。
+ *   経緯＝_private/plans/【要調査】スコアの5段階の切り方_2026-08-21.md */
+function toLevel(sum, n) {
+  const v = sum / n;
+  return v < 1.5 ? 1 : v < 2.5 ? 2 : v < 3.5 ? 3 : v < 4.5 ? 4 : 5;
+}
+function toLevel3(sum, n) {
+  const v = sum / n;
+  return v < 2.5 ? 1 : v < 3.5 ? 3 : 5;
+}
+
+// ===== 120問合成スコア計算 =====
+function calcCombined120(name, sc2) {
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+    const r60 = others.find(r => r.name === name && r.version === '60');
+    if (!r60 || !r60.scores || !r60.scores.facets || !sc2.facets) return sc2;
+    const f1 = r60.scores.facets, f2 = sc2.facets;
+    const facetFactorMap = {
+      N1:'N',N2:'N',N3:'N',N4:'N',N5:'N',N6:'N',
+      E1:'E',E2:'E',E3:'E',E4:'E',E5:'E',E6:'E',
+      O1:'O',O2:'O',O3:'O',O4:'O',O5:'O',O6:'O',
+      A1:'A',A2:'A',A3:'A',A4:'A',A5:'A',A6:'A',
+      C1:'C',C2:'C',C3:'C',C4:'C',C5:'C',C6:'C'
+    };
+    const combined = {};
+    for (const fId of Object.keys(facetFactorMap)) {
+      combined[fId] = Math.round(((f1[fId]||3) + (f2[fId]||3)) / 2);
+    }
+    const factors = {N:[],E:[],O:[],A:[],C:[]};
+    for (const [fId, score] of Object.entries(combined)) {
+      factors[facetFactorMap[fId]].push(score);
+    }
+    const result = {};
+    for (const [f, scores] of Object.entries(factors)) {
+      // 入力は各ファセットの1〜5。そのまま平均して3段階へ丸める
+      result[f] = toLevel3(scores.reduce((a,b)=>a+b,0), scores.length);
+    }
+    result.facets = combined;
+    return result;
+  } catch(e) { return sc2; }
+}
+
+function calcScores() {
+  const fm = { E:[], N:[], O:[], C:[], A:[] };
+  const facetMap = {};
+  activeQuestions.forEach((q,i) => {
+    const raw = ans[i] || 3;
+    const val = q.dir==='-' ? (6-raw) : raw;
+    fm[q.factor].push(val);
+    if (q.facet) {
+      if (!facetMap[q.facet]) facetMap[q.facet] = [];
+      facetMap[q.facet].push(val);
+    }
+  });
+  const sc = {};
+  for (const [f, vals] of Object.entries(fm)) {
+    sc[f] = toLevel3(vals.reduce((a,b)=>a+b,0), vals.length);
+  }
+  if (Object.keys(facetMap).length > 0) {
+    sc.facets = {};
+    for (const [facetId, vals] of Object.entries(facetMap)) {
+      sc.facets[facetId] = toLevel(vals.reduce((a,b)=>a+b,0), vals.length);
+    }
+  }
+  return sc;
+}
+
+// ===== 性格説明生成 =====
+const traitDesc = {
+  E: {
+    5: { text: '社交的でエネルギッシュ。人と関わることで活力を得るタイプ。', kw: ['社交的','話好き','場を盛り上げる'] },
+    3: { text: '状況に応じて社交的にも一人の時間も楽しめるバランス型。', kw: ['状況対応力','柔軟','程よい社交性'] },
+    1: { text: '内向的で一人の時間を大切にする。深く考えることを好む。', kw: ['内向的','思慮深い','一人時間重視'] },
+  },
+  N: {
+    5: { text: '感受性が豊かで細かいことも気になりやすい。感情の波が出やすい。', kw: ['繊細','感情的','ストレスに敏感'] },
+    3: { text: '感情のコントロールはできる方だが、時に不安や心配を感じやすい。', kw: ['感情豊か','普通の敏感さ'] },
+    1: { text: '精神的に安定していてプレッシャーにも動じにくい。', kw: ['精神的安定','冷静','切り替えが早い'] },
+  },
+  O: {
+    5: { text: '好奇心旺盛で新しいことへの挑戦を楽しむ。発想が豊か。', kw: ['好奇心旺盛','創造的','変化好き'] },
+    3: { text: '新しいことにも慣れたことにも対応できる実用的なタイプ。', kw: ['バランス型','実用的','柔軟'] },
+    1: { text: '安定を好み、慣れたやり方を着実にこなす堅実なタイプ。', kw: ['堅実','安定志向','実直'] },
+  },
+  C: {
+    5: { text: '責任感が強く、約束や期限を大切にする計画型。', kw: ['責任感が強い','計画的','几帳面'] },
+    3: { text: 'ある程度の計画性はあるが、柔軟に対応することもできる。', kw: ['普通の計画性','融通が利く'] },
+    1: { text: '自由奔放で直感的に動くことが多い。柔軟性と即興力がある。', kw: ['自由奔放','直感型','即興力'] },
+  },
+  A: {
+    5: { text: '思いやりがあり人間関係を大切にする。争いを避ける平和主義。', kw: ['思いやり','協力的','平和主義'] },
+    3: { text: '協調しながらも自分の意見を持つバランスの取れたタイプ。', kw: ['協調性あり','自己主張できる'] },
+    1: { text: '自己主張がはっきりしており、競争心もある。リーダー気質。', kw: ['自己主張強い','競争心','リーダー気質'] },
+  },
+};
+
+function genPersonDesc(sc, name) {
+  // 最もスコアが高い2特性を特定
+  const sorted = Object.entries(sc).sort((a,b) => b[1]-a[1]);
+  const top1 = sorted[0][0], top2 = sorted[1][0];
+
+  // 総合説明文
+  const e1 = traitDesc[top1][sc[top1]];
+  const e2 = traitDesc[top2][sc[top2]];
+
+  const summaries = {
+    EO: `${name}さんは、明るく社交的でありながら好奇心旺盛な行動派タイプです。`,
+    EC: `${name}さんは、社交的でありながら責任感も強い、信頼されやすいタイプです。`,
+    EA: `${name}さんは、人懐こく思いやり深い、周りを温かくする存在です。`,
+    EN: `${name}さんは、表に出る明るさの裏に繊細な感受性を持ち合わせています。`,
+    OC: `${name}さんは、好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。`,
+    OA: `${name}さんは、オープンマインドで人にも親切な、懐の深いタイプです。`,
+    ON: `${name}さんは、豊かな感受性と好奇心を持つ、感性の鋭いタイプです。`,
+    CA: `${name}さんは、誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。`,
+    CN: `${name}さんは、几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。`,
+    AN: `${name}さんは、共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。`,
+  };
+
+  const key = [top1, top2].sort().join('').replace('EN','EN').replace('NE','EN');
+  const keyStr = top1+top2;
+  const reverseKey = top2+top1;
+  const summary = summaries[keyStr] || summaries[reverseKey] || `${name}さんは${e1.kw[0]}で${e2.kw[0]}な性格傾向が見られます。`;
+
+  // キーワード収集（全特性から）
+  const allKw = [];
+  for (const f of ['O','C','E','A','N']) {
+    allKw.push(...(traitDesc[f][sc[f]]?.kw || []).slice(0,1));
+  }
+
+  return { summary, detail: `${e1.text} ${e2.text}`, keywords: allKw };
+}
+
+// ===== 相性スコア計算（学術根拠版＋関係性重み） =====
+function calcCompat(other, my, weights) {
+  if (!my) return null;
+  return Math.round(calcCompatCore(my, other, weights));
+}
+
+// ===== 結果表示 =====
+function showResult() {
+  // あの人診断完了の計測（2026-07-13追加・result.htmlのresult_viewと同じ送信パターン・dev_nocountで検品時オフ）
+  // 2026-07-14追加：バージョン別の内訳も同時送信（診断完了時のみ発火のため新規完走のみを表す）
+  try {
+    if (localStorage.getItem('dev_nocount') !== '1') {
+      var __ouV = diagMode === 'detailed2' ? '120' : diagMode === 'detailed' ? '60' : '30';
+      var __ou = 'https://bigfive.jr-genius.jp/count/hit?e=other_result_view';
+      var __ouVer = 'https://bigfive.jr-genius.jp/count/hit?e=other_result_view_' + __ouV;
+      if (navigator.sendBeacon) { navigator.sendBeacon(__ou); navigator.sendBeacon(__ouVer); }
+      else if (window.fetch) { fetch(__ou, { method: 'POST', keepalive: true }).catch(function(){}); fetch(__ouVer, { method: 'POST', keepalive: true }).catch(function(){}); }
+    }
+  } catch (e) {}
+  document.getElementById('badge120').style.display = 'none';
+  document.getElementById('teamPromptCard').style.display = 'none';
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('other');
+  const sc = calcScores();
+  const cfg = relConfig[personRel];
+
+  // キャラクター画像
+  const charArea = document.getElementById('charArea');
+  const charImg = document.getElementById('charImgOther');
+  const charLabel = document.getElementById('charNameLabel');
+  function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
+  const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
+  charImg.src = `images/characters/marume243/${personGender}/${imgCode}.webp`;
+  charImg.onerror = () => { charArea.style.display = 'none'; };
+  charImg.onload = () => { charArea.style.display = 'flex'; };
+  charLabel.textContent = `${personName}の推定キャラクター`;
+
+  // 特性バー
+  const card = document.getElementById('traitsCard');
+  card.innerHTML = '';
+  ['O','C','E','A','N'].forEach(f => {
+    const s = sc[f], info = traitInfo[f];
+    const pct = s * 20;
+    const lv  = s <= 2 ? '低め' : s === 3 ? '普通' : '高め';
+    const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
+    card.innerHTML += `
+      <div class="trait-row">
+        <div class="trait-header">
+          <span class="trait-label">${info.name}<span class="trait-desc">${info.desc}</span></span>
+          <span class="trait-level ${lvClass}">${lv}</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:0%;background:${info.color};" data-w="${pct}%"></div></div>
+      </div>`;
+  });
+
+  // 性格説明
+  const descCard = document.getElementById('descCard');
+  const { summary, detail, keywords } = genPersonDesc(sc, personName);
+  descCard.innerHTML = `
+    <p class="desc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> ${personName}さんの性格まとめ</p>
+    <p class="desc-text">${summary}<br>${detail}</p>
+    <div class="desc-keywords">${keywords.map(k=>`<span class="desc-kw">${k}</span>`).join('')}</div>`;
+
+  // 相性スコア
+  const compatCard = document.getElementById('compatCard');
+  if (cfg.isChild) {
+    compatCard.className = 'compat-prompt';
+    compatCard.innerHTML = `
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> ${personName}の性格タイプについて</p>
+      <p class="compat-prompt-sub" style="line-height:1.7;">これは保護者から見たお子さんの傾向です。<br>家庭外の姿は反映されない場合があります。<br>結果はあくまで参考としてお使いください。</p>`;
+    // 精度注記を子供向けに上書き
+    document.getElementById('resultAccuracyNote').innerHTML =
+      `※ この診断は保護者の観察をもとにした推定です。お子さんの実際の性格と異なる場合があります。`;
+    // 保存用データをセット（returnの前に必ず実行）
+    window.currentOtherResult = {
+      name: personName,
+      code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+      scores: sc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString(),
+      version: '30',
+      rarity: 'common'
+    };
+    saveOtherResultToList(window.currentOtherResult);
+    addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+    deleteDraft();
+    checkAlreadySaved();
+    showScreen('resultScreen');
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+    }, 100);
+    return;
+  }
+  const score = calcCompat(sc, myScores, cfg.compatWeights);
+  if (score !== null) {
+    // 自分のスコアあり → 相性スコア表示
+    const desc = score >= 75 ? cfg.compatHigh : score >= 50 ? cfg.compatMid : cfg.compatLow;
+    compatCard.className = `compat-card ${personRel}`;
+    compatCard.innerHTML = `
+      <p class="compat-title">${cfg.compatTitle}</p>
+      <div class="compat-score ${personRel}">${score}<span style="font-size:24px;">%</span></div>
+      <p class="compat-label">${score>=75?'相性◎':score>=50?'相性○':'相性△'}</p>
+      <p class="compat-desc">${desc}</p>`;
+
+    // 接し方アドバイス生成
+    const adviceCard = document.getElementById('adviceCard');
+    adviceCard.className = `advice-card ${personRel}`;
+    adviceCard.style.display = 'block';
+    adviceCard.innerHTML = generateAdvice(personRel, sc, personName, {svgSize: 16});
+  } else {
+    // 自分のスコアなし → 自己診断への誘導
+    const otherCode = `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`;
+    const myQueryParam = myCode ? `&my=${myCode}` : '';
+    compatCard.className = 'compat-prompt';
+    compatCard.innerHTML = `
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> ${personName}さんとの相性を見る</p>
+      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${personName}さんとの相性スコア</strong>が表示されます</p>
+      <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}${myQueryParam}" class="compat-prompt-btn">
+        自分を診断して相性を確認する →
+      </a>`;
+    const adviceCard = document.getElementById('adviceCard');
+    adviceCard.style.display = 'none';
+  }
+
+  // 精度注記
+  const accuracyNote = document.getElementById('resultAccuracyNote');
+  if (personPeriod === 'short') {
+    accuracyNote.innerHTML = `
+      <div style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <p style="font-size:14px;font-weight:600;margin:0 0 6px;color:#fca5a5;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 観察期間が非常に短いです</p>
+        <p style="font-size:13px;margin:0;color:var(--text);line-height:1.6;">
+          知り合って1ヶ月未満の評価は、誤差が非常に大きくなります。<br>
+          しばらく期間をおいてから再度診断することを<strong>強くお勧め</strong>します。
+        </p>
+      </div>`;
+  } else {
+    accuracyNote.innerHTML =
+      `${periodNotes[personPeriod]}<br>
+       ※この診断は推定です。本人の実際の性格と異なる場合があります。`;
+  }
+
+  // 観察者情報パネル（関係性による信頼度）
+  const observerCard = document.getElementById('observerInfoCard');
+  if (cfg.observerNote) {
+    const accNames = (cfg.accurateFactors || []).map(f => traitInfo[f].name);
+    const lessNames = (cfg.lessAccurateFactors || []).map(f => traitInfo[f].name);
+    observerCard.style.display = 'block';
+    observerCard.innerHTML = `
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <p style="font-size:13px;font-weight:600;margin:0 0 8px;color:var(--dim);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> この評価の信頼度</p>
+        <p style="font-size:13px;margin:0 0 10px;color:var(--text);line-height:1.6;">${cfg.observerNote}</p>
+        ${accNames.length ? `<p style="font-size:12px;margin:0 0 4px;color:var(--dim);">✅ 信頼しやすい因子：${accNames.join('・')}</p>` : ''}
+        ${lessNames.length ? `<p style="font-size:12px;margin:0;color:var(--dim);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> 参考程度の因子：${lessNames.join('・')}</p>` : ''}
+      </div>`;
+  }
+
+  // SOKAモデル注釈
+  const sokaNote = document.getElementById('sokaNote');
+  sokaNote.style.display = 'block';
+  sokaNote.innerHTML = `
+    <div style="font-size:11px;color:var(--dim);text-align:center;margin-bottom:12px;line-height:1.6;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> 性格心理学の研究によると、<strong style="color:var(--text);">協調性・誠実性</strong>は他者からの評価の方が正確で、<br>
+      <strong style="color:var(--text);">情緒安定性・開放性</strong>は本人の自己評価の方が正確と言われています。
+    </div>`;
+
+  // ファセット詳細表示（60問版のみ）
+  const facetWrap = document.getElementById('facetCardWrap');
+  const facetCard = document.getElementById('facetCard');
+  const facetToggleBtn = document.getElementById('facetToggleBtn');
+  if (sc.facets) {
+    const facetDefs = {
+      N: { label: '神経症傾向', color: '#14b8a6', facets: [
+        { id:'N1', name:'不安' }, { id:'N2', name:'怒り' }, { id:'N3', name:'抑うつ' },
+        { id:'N4', name:'自己意識' }, { id:'N5', name:'無抑制' }, { id:'N6', name:'脆弱性' }
+      ]},
+      E: { label: '外向性', color: '#f97316', facets: [
+        { id:'E1', name:'友好性' }, { id:'E2', name:'群居性' }, { id:'E3', name:'主張性' },
+        { id:'E4', name:'活動性' }, { id:'E5', name:'刺激追求' }, { id:'E6', name:'陽気さ' }
+      ]},
+      O: { label: '開放性', color: '#8b5cf6', facets: [
+        { id:'O1', name:'想像力' }, { id:'O2', name:'芸術的興味' }, { id:'O3', name:'感情性' },
+        { id:'O4', name:'冒険性' }, { id:'O5', name:'知性' }, { id:'O6', name:'自由主義' }
+      ]},
+      A: { label: '協調性', color: '#f472b6', facets: [
+        { id:'A1', name:'信頼' }, { id:'A2', name:'道徳性' }, { id:'A3', name:'利他性' },
+        { id:'A4', name:'協調性' }, { id:'A5', name:'謙虚さ' }, { id:'A6', name:'共感性' }
+      ]},
+      C: { label: '誠実性', color: '#3b82f6', facets: [
+        { id:'C1', name:'有能性' }, { id:'C2', name:'秩序性' }, { id:'C3', name:'義務感' },
+        { id:'C4', name:'達成努力' }, { id:'C5', name:'自己規律' }, { id:'C6', name:'慎重さ' }
+      ]},
+    };
+    let facetHtml = '';
+    for (const [fKey, fDef] of Object.entries(facetDefs)) {
+      facetHtml += `<div class="facet-section">
+        <p class="facet-section-title" style="color:${fDef.color}">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${fDef.color};"></span>
+          ${fDef.label}
+        </p>`;
+      for (const f of fDef.facets) {
+        const s = sc.facets[f.id] || 3;
+        const pct = s * 20;
+        const lv = s <= 2 ? '低め' : s === 3 ? '普通' : s === 4 ? 'やや高め' : '高め';
+        const lvClass = s <= 2 ? 'lv-low' : s === 3 ? 'lv-mid' : 'lv-high';
+        facetHtml += `<div class="facet-row">
+          <div class="facet-header">
+            <span class="facet-name">${f.name}</span>
+            <span class="facet-lv ${lvClass}">${lv}</span>
+          </div>
+          <div class="facet-bar-bg">
+            <div class="facet-bar-fill" style="width:0%;background:${fDef.color};" data-w="${pct}%"></div>
+          </div>
+        </div>`;
+      }
+      facetHtml += '</div>';
+    }
+    facetCard.innerHTML = facetHtml;
+    facetWrap.style.display = '';
+    let facetOpen = false;
+    facetToggleBtn.addEventListener('click', () => {
+      facetOpen = !facetOpen;
+      facetCard.style.display = facetOpen ? '' : 'none';
+      facetToggleBtn.innerHTML = facetOpen
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg> ファセット詳細を閉じる'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> ファセット詳細を見る';
+      if (facetOpen) {
+        setTimeout(() => {
+          facetCard.querySelectorAll('.facet-bar-fill').forEach(b => b.style.width = b.dataset.w);
+        }, 50);
+      }
+    });
+  } else {
+    facetWrap.style.display = 'none';
+  }
+
+  showScreen('resultScreen');
+
+  // バーアニメーション
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+  }, 100);
+
+  // detailed2: 既存60問データと合成してversion:'120'で保存
+  if (diagMode === 'detailed2') {
+    const combinedSc = calcCombined120(personName, sc);
+    window.currentOtherResult = {
+      name: personName,
+      code: `${combinedSc.O}${combinedSc.C}${combinedSc.E}${combinedSc.A}${combinedSc.N}`,
+      scores: combinedSc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString(),
+      version: '120',
+      rarity: 'common'
+    };
+    // 既存の60問エントリを120問に上書き更新
+    try {
+      const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+      const idx = others.findIndex(r => r.name === personName && r.version === '60');
+      if (idx >= 0) {
+        others[idx] = window.currentOtherResult;
+        localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+      } else {
+        saveOtherResultToList(window.currentOtherResult);
+      }
+    } catch(e) { saveOtherResultToList(window.currentOtherResult); }
+    // 120問相当バッジを結果画面に表示
+    const badge120 = document.getElementById('badge120');
+    if (badge120) badge120.style.display = '';
+    // ファセットは合成済みのものを上書き
+    sc.O = combinedSc.O; sc.C = combinedSc.C; sc.E = combinedSc.E;
+    sc.A = combinedSc.A; sc.N = combinedSc.N;
+    if (combinedSc.facets) sc.facets = combinedSc.facets;
+  } else {
+    // 通常保存
+    window.currentOtherResult = {
+      name: personName,
+      code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+      scores: sc,
+      relation: personRel,
+      gender: personGender,
+      date: new Date().toISOString(),
+      version: diagMode === 'detailed' ? '60' : '30',
+      rarity: 'common'
+    };
+    saveOtherResultToList(window.currentOtherResult);
+    addOtherResultToAlbumAndUnlock(window.currentOtherResult);
+  }
+  deleteDraft();
+
+  // チーム相性（役割カード）への導線（2026-07-19追加・自分の結果がある場合のみ表示）
+  const teamPrompt = document.getElementById('teamPromptCard');
+  if (myScores && window.currentOtherResult) {
+    const tr = window.currentOtherResult;
+    // チーム相性が未解放（カード6枚未満）の人には正直に解放条件を添える
+    const teamUnlocked = (typeof isUnlocked !== 'function') || isUnlocked('team');
+    const cardsNow = (typeof getCardCount === 'function') ? getCardCount() : 0;
+    const sub = teamUnlocked
+      ? `2人のチーム相性スコアと、それぞれの<strong>役割カード</strong>が見られます`
+      : `2人のチーム相性スコアと役割カードが見られる機能です<br>（カード<strong>6枚</strong>で解放・いま${cardsNow}枚）`;
+    const btnLabel = teamUnlocked ? 'チーム相性と役割カードを見る →' : 'チーム相性診断を見に行く →';
+    teamPrompt.style.display = 'block';
+    teamPrompt.innerHTML = `
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${personName}さんとチームを組むと？</p>
+      <p class="compat-prompt-sub">${sub}</p>
+      <a href="team.html?pick=${tr.code}&pn=${encodeURIComponent(tr.name)}" class="compat-prompt-btn" id="teamPromptBtn">${btnLabel}</a>`;
+    document.getElementById('teamPromptBtn').addEventListener('click', () => {
+      try {
+        if (localStorage.getItem('dev_nocount') !== '1') {
+          const u = 'https://bigfive.jr-genius.jp/count/hit?e=other_team_click';
+          if (navigator.sendBeacon) navigator.sendBeacon(u);
+          else if (window.fetch) fetch(u, { method: 'POST', keepalive: true }).catch(function(){});
+        }
+      } catch (e) {}
+    });
+  }
+
+  // 保存済みチェック
+  checkAlreadySaved();
+}
+
+// ===== もう一度 =====
+document.getElementById('retryBtn').addEventListener('click', () => {
+  nameInput.value = ''; personName = ''; personPeriod = ''; personRel = '';
+  diagMode = 'simple';
+  document.querySelectorAll('.rel-btn, .period-btn').forEach(b => b.classList.remove('selected','sel-love','sel-work','sel-friend'));
+  document.querySelectorAll('.mode-btn').forEach(b => { b.classList.toggle('selected', b.dataset.mode === 'simple'); });
+  accNote.classList.remove('show');
+  document.getElementById('modeGroup').style.display = 'none';
+  document.getElementById('detailed2Group').style.display = 'none';
+  startBtn.disabled = true;
+  showScreen('startScreen');
+});
+
+// ===== 途中保存機能 =====
+const DRAFT_KEY = 'bigfive_other_quiz_draft';
+
+function saveDraft() {
+  const draft = {
+    personName, personPeriod, personRel, personGender, diagMode,
+    current,
+    ans: Array.from(ans),
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  const btn = document.getElementById('saveProgressBtn');
+  const orig = btn.textContent;
+  btn.textContent = '保存しました';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1500);
+}
+
+function deleteDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+}
+
+function discardDraft() {
+  deleteDraft();
+  document.getElementById('draftBanner').style.display = 'none';
+}
+
+function resumeFromDraft() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+
+    // 状態を復元
+    personName = d.personName || '';
+    personPeriod = d.personPeriod || '';
+    personRel = d.personRel || '';
+    personGender = d.personGender || 'F';
+    diagMode = d.diagMode || 'simple';
+
+    // 質問セットを再設定
+    if (personRel === 'child46') {
+      activeQuestions = [...questionsFixed15, ...questionsChild46];
+    } else if (personRel === 'child79') {
+      activeQuestions = [...questionsFixed15, ...questionsChild79];
+    } else if (diagMode === 'detailed') {
+      activeQuestions = questionsDetailed;
+    } else if (diagMode === 'detailed2') {
+      activeQuestions = questionsDetailed2;
+    } else {
+      activeQuestions = questions;
+    }
+    total = activeQuestions.length;
+
+    // 回答を復元
+    ans.length = total;
+    ans.fill(null);
+    if (d.ans) d.ans.forEach((v, i) => { if (i < total) ans[i] = v; });
+
+    // 最後に回答済みの問題から再開
+    current = Math.min(d.current || 0, total - 1);
+
+    // UI を復元
+    const cfg = relConfig[personRel];
+    if (!cfg) return;
+    const whoBar = document.getElementById('whoBar');
+    whoBar.className = `who-bar ${cfg.whoClass}`;
+    document.getElementById('whoIcon').innerHTML = cfg.icon;
+    document.getElementById('whoName').textContent = personName;
+    document.getElementById('whoSub').textContent = `を観察して答えてください（${cfg.label}）`;
+    document.getElementById('progressWrap').className = `progress ${cfg.barClass}`;
+    document.getElementById('questionNum').className = `question-num ${cfg.qClass}`;
+    document.getElementById('loadingName').textContent = personName;
+    document.getElementById('resultName').textContent = personName;
+    const badge = document.getElementById('relBadge');
+    badge.innerHTML = cfg.badge;
+    badge.className = `result-rel-badge ${cfg.badgeClass}`;
+
+    document.getElementById('saveProgressBtn').style.display = (diagMode === 'detailed' || diagMode === 'detailed2') ? '' : 'none';
+
+    render();
+    showScreen('quizScreen');
+  } catch(e) {
+    deleteDraft();
+  }
+}
+
+function initDraftBanner() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if (!d.personName || !d.personRel) { deleteDraft(); return; }
+    const answered = (d.ans || []).filter(v => v !== null).length;
+    const total60 = (d.diagMode === 'detailed' || d.diagMode === 'detailed2') ? 60 : 30;
+    document.getElementById('draftSub').textContent = `${d.personName}さん（${answered}/${total60}問 回答済み）`;
+    document.getElementById('draftResumeBtn').textContent = `${d.personName}さんの続きから始める`;
+    document.getElementById('draftBanner').style.display = '';
+  } catch(e) { deleteDraft(); }
+}
+
+// ページ読み込み時にバナーチェック
+initDraftBanner();
+
+// ===== 結果保存機能（LocalStorage） =====
+const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const MAX_OTHERS_BASE = 10;
+
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
+// 開放状態に応じた上限を取得
+function getMaxOthers() {
+  return Math.max(MAX_OTHERS_BASE, typeof getOtherLimit === 'function' ? getOtherLimit() : 0);
+}
+
+function showOtherDeleteToast(maxOthers) {
+  var toast = document.createElement('div');
+  toast.textContent = '保存上限（' + maxOthers + '件）のため、一番古いあの人の結果を1件削除しました';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#f9fafb;padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);max-width:90%;text-align:center;';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3500);
+}
+
+function saveOtherResultToList(result) {
+  if (!result) return false;
+
+  let others = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(others)) others = [];
+  const isDuplicate = others.some(r =>
+    r.name === result.name && r.code === result.code
+  );
+
+  if (isDuplicate) return false;
+
+  others.unshift(result);
+  const maxOthers = getMaxOthers();
+  if (others.length > maxOthers) {
+    others.pop();
+    showOtherDeleteToast(maxOthers);
+  }
+  localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+  return true;
+}
+
+function addOtherResultToAlbumAndUnlock(result) {
+  if (!result || !window.AlbumUtils) return;
+
+  const oldAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const version = result.version || '30';
+  const rarity = AlbumUtils.computeRarityForAlbum
+    ? AlbumUtils.computeRarityForAlbum(result.code, version, result.gender)
+    : (result.rarity || 'common');
+
+  const added = AlbumUtils.addToAlbum({
+    code: result.code,
+    gender: result.gender,
+    typeName: result.code,
+    version,
+    rarity,
+    isHidden: false,
+    hiddenId: null,
+    date: result.date,
+    source: String(result.relation || '').indexOf('child') === 0 ? 'child' : 'other'
+  });
+
+  if (!added || typeof getNewUnlocks !== 'function' || typeof showUnlockBanners !== 'function') return;
+
+  const newAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const unlocked = getNewUnlocks(oldAlbumCount, newAlbumCount);
+  if (unlocked.length > 0) {
+    setTimeout(() => showUnlockBanners(unlocked), 800);
+  }
+}
+
+// 保存済みチェック
+function checkAlreadySaved() {
+  if (!window.currentOtherResult) return;
+
+  let others = safeLoad(STORAGE_KEY_OTHERS, []);
+  if (!Array.isArray(others)) others = [];
+  const saveBtn = document.getElementById('saveBtn');
+  if (!saveBtn) return;
+
+  const isSaved = others.some(r =>
+    r.name === window.currentOtherResult.name &&
+    r.code === window.currentOtherResult.code
+  );
+
+  if (isSaved) {
+    saveBtn.textContent = '✓ 保存済み';
+    saveBtn.className = 'action-btn btn-saved';
+  }
+}
+
+// 保存実行
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!window.currentOtherResult) return;
+
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+    const result = window.currentOtherResult;
+
+    // 重複チェック
+    const isDuplicate = others.some(r =>
+      r.name === result.name && r.code === result.code
+    );
+
+    if (!isDuplicate) {
+      others.unshift(result);
+      const maxOthers = getMaxOthers();
+      if (others.length > maxOthers) {
+        others.pop();
+        showOtherDeleteToast(maxOthers);
+      }
+      localStorage.setItem(STORAGE_KEY_OTHERS, JSON.stringify(others));
+    }
+
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.textContent = '✓ 保存しました！';
+    saveBtn.className = 'action-btn btn-saved';
+
+    // アルバムに追加
+    if (window.AlbumUtils) {
+      window.AlbumUtils.addToAlbum({
+        code: result.code,
+        gender: result.gender,
+        typeName: result.code,
+        version: '30',
+        rarity: result.rarity || 'common',
+        isHidden: false,
+        hiddenId: null,
+        date: result.date,
+        source: 'other'
+      });
+    }
+
+    setTimeout(() => {
+      saveBtn.textContent = '✓ 保存済み';
+    }, 2000);
+
+  } catch (e) {
+    console.error('保存エラー:', e);
+    alert('保存に失敗しました');
+  }
+});
+
+// ===== 星の生成 =====
+(function(){
+  const el = document.getElementById('bgStars');
+  let css = '';
+  const n = 60, bright = new Set(), superBright = new Set();
+  while(superBright.size<5) superBright.add(Math.floor(Math.random()*n));
+  while(bright.size<10){const v=Math.floor(Math.random()*n);if(!superBright.has(v))bright.add(v);}
+  for(let i=0;i<n;i++){
+    const x=Math.random()*100,y=Math.random()*100;
+    if(superBright.has(i)){const s=Math.random()*2+3,o=Math.random()*.2+.8;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*4}px ${s*4}px at ${x}% ${y}%,rgba(200,210,255,${o*.4}) 0%,transparent 100%),radial-gradient(${s*8}px ${s*8}px at ${x}% ${y}%,rgba(140,160,255,${o*.15}) 0%,transparent 100%)`;}
+    else if(bright.has(i)){const s=Math.random()*2+2,o=Math.random()*.3+.7;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%),radial-gradient(${s*3}px ${s*3}px at ${x}% ${y}%,rgba(180,200,255,${o*.3}) 0%,transparent 100%)`;}
+    else{const s=Math.random()*1.5+.5,o=Math.random()*.5+.2;css+=`radial-gradient(${s}px ${s}px at ${x}% ${y}%,rgba(255,255,255,${o}) 0%,transparent 100%)`;}
+    if(i<n-1)css+=',';
+  }
+  el.style.backgroundImage=css;
+})();
+</script>
+<script src="image-resolver.js"></script>
+<script src="hidden_characters.js"></script>
+<script src="rarity.js"></script>
+<script src="album.js"></script>
+<script src="compat.js"></script>
+<script src="advice.js"></script>
+<section class="test-about">
+  <h2>「あの人の性格を分析する」とは</h2>
+  <p>この診断は、自分ではなく身近な誰かの性格を、あなたの日ごろの観察をもとにビッグファイブで推定する、<strong>他者評定（本人以外の人が性格を評価すること）</strong>の診断です。心理学では性格を、本人に聞く「自己評定」と、周りの人が見る「他者評定」の両側面から研究する歴史が長くあります。2010年、心理学者のシミーネ・ヴァジーレは両者をくらべて、<strong>「性格のどの側面を、だれがいちばん正確に知っているか」には偏りの法則がある</strong>ことを示しました（Vazire, 2010）。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>性格のうち<strong>「よく見られたい」が絡む部分</strong>（頭のはたらきなど）は、他人の評価のほうが正確なことがある</li>
+      <li>逆に<strong>不安などの心の内側</strong>は、本人の自己評価のほうが正確になりやすい</li>
+      <li>この診断は相手を<strong>決めつける道具ではなく</strong>、関係の中で見えている相手像を整理する道具</li>
+    </ul>
+  </div>
+
+  <h3>なぜ他人のほうが当たることがあるのか</h3>
+  <p>「自分のことは自分がいちばんよく知っている」——実はこれは半分しか正しくありません。ヴァジーレの「自己＝他者の知識の非対称（SOKA）モデル」によれば、性格の特徴によって「より正確に見ている人」が変わります（Vazire, 2010）。</p>
+  <div class="table-wrap"><table>
+    <tr><th>特徴の種類</th><th>より正確なのは</th><th>わけ</th></tr>
+    <tr><td>神経症傾向（不安・落ち込み）</td><td><strong>本人</strong></td><td>心の内側で起きていることで、外からはあまり見えない</td></tr>
+    <tr><td>頭のはたらき（知性・考え方）</td><td><strong>他者（とくに友人）</strong></td><td>「賢く見られたい」という気持ちが自己評価をゆがませやすく、外から見たほうが実際に近くなる</td></tr>
+    <tr><td>外向性（話しぶり・振る舞い）</td><td>本人も他者も<strong>同じくらい</strong></td><td>外から丸見えで、しかも良し悪しの評価が絡みにくい</td></tr>
+  </table></div>
+  <p>要するに、<strong>外から見えにくいものは本人が強く、「よく見られたい」が絡むものは他者が強い</strong>という非対称です。だから他者評定は自己評定の見劣りする代わりではなく、別の角度から相手を知る窓になります。あなたがこの診断で相手に付けた評価と、相手の自己評価がずれていたら、それ自体が「外からどう見えているか」の興味深い情報です。</p>
+
+  <h3>この診断の測り方</h3>
+  <p>設問は全30問で、相手のふだんの行動や言動を思い浮かべながら、あてはまり具合を4段階で答えていきます。最初に「恋愛・気になる人」「仕事・上司・同僚」「友人・知人」など関係性を選びますが、これは結果の言葉遣いを関係に合わせるためで、測る内容は同じビッグファイブの5因子です。なお、評定の正確さは<strong>観察の機会の量と質</strong>に左右されます（Funder, 1995）。一緒に過ごした時間が長く、楽しい場面・慌ただしい場面・失敗した場面など、いろいろな顔を見ているほど、結果は実際の相手に近づきやすいでしょう。</p>
+
+  <h3>ビッグファイブとの関係</h3>
+  <p>この診断の枠組みそのものがビッグファイブ（開放性・誠実性・外向性・協調性・神経症傾向）です。つまり、ビッグファイブ診断の「他者評定版」と考えてください。他者評定を大量の研究からまとめたメタ分析（多くの研究をまとめて平均を取る分析）では、他者評定は自己評定と比べて、<strong>実際の行動を予測する力において同等か、場合によっては上回る</strong>ことが示されています（Connelly &amp; Ones, 2010）。あなた自身のビッグファイブ診断結果と見比べれば、「自分が思う自分」と「他人から見える自分」のずれを具体的に読むことができます。</p>
+
+  <h3>よくある誤解</h3>
+  <ul>
+    <li><strong>「この結果＝相手の本性」</strong>——ではありません。あくまで「あなたの目に見えている相手像」です。観察の機会が限られていれば、結果もその限られた面を反映します。</li>
+    <li><strong>「相手を決めつける道具」</strong>——ではありません。どんな伝え方が相手に届きやすいか、どこで衝突しやすいかを考えるための、コミュニケーションの参考情報です。</li>
+    <li><strong>「自己評定より当たらない」</strong>——とは限りません。外に見える行動については他者評定のほうが正確なことがあり、自己評定と他者評定は補い合う関係にあります。</li>
+  </ul>
+
+  <h3>この診断について</h3>
+  <ul>
+    <li>30問・所要5分ほど・<strong>無料・登録不要</strong></li>
+    <li>回答は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>ビッグファイブ診断とあわせて使うと、<strong>自己評定と他者評定の違い</strong>を読みくらべられます</li>
+  </ul>
+
+  <h3>出典</h3>
+  <ul class="refs">
+    <li>Vazire, S. (2010). Who knows what about a person? The self–other knowledge asymmetry (SOKA) model. <em>Journal of Personality and Social Psychology, 98</em>(2), 281–300. <a href="https://doi.org/10.1037/a0017908" rel="nofollow">doi:10.1037/a0017908</a></li>
+    <li>Connelly, B. S., &amp; Ones, D. S. (2010). An other perspective on personality: Meta-analytic integration of observers' accuracy and predictive validity. <em>Psychological Bulletin, 136</em>(6), 1092–1122. <a href="https://doi.org/10.1037/a0021212" rel="nofollow">doi:10.1037/a0021212</a></li>
+    <li>Funder, D. C. (1995). On the accuracy of personality judgment: A realistic approach. <em>Psychological Review, 102</em>(4), 652–670. <a href="https://doi.org/10.1037/0033-295x.102.4.652" rel="nofollow">doi:10.1037/0033-295x.102.4.652</a></li>
+  </ul>
+
+  <h3>関連する診断</h3>
+  <ul class="related">
+    <li><a href="quiz.html">ビッグファイブ性格診断</a></li>
+    <li><a href="hsp.html">HSP診断</a></li>
+    <li><a href="love.html">恋愛スタイル診断</a></li>
+    <li><a href="team.html">チーム相性診断</a></li>
+    <li><a href="diagnoses.html">診断の一覧を見る</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
+<script src="unlock.js"></script>
+<script src="unlock-banner.js"></script>
+</body>
+</html>

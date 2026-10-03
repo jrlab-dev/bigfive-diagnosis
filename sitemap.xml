@@ -1,0 +1,2332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- トップページ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- ビッグファイブ診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/quiz.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 診断結果 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/result.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- あの人診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/other_quiz.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 子ども性格診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/kodomo.html</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/kodomo-kishitsu.html</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- チーム相性診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/team.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 恋愛スタイル診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/love.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- HSP感受性チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/hsp.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 愛着スタイルチェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/attachment.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- シュワルツ価値観診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/schwartz.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 動機タイプ診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/sdt.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- マインドセット診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/mindset.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 統制の所在チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/locus.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 感情知能チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/eq.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- インポスター症候群チェック -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/impostor.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ダークトライアド診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/dark-triad.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- HEXACO性格診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/hexaco.html</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 公共財ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/pgg.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- リスク選好ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/risk.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 信頼ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/trust.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 最後通牒ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/ultimatum.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ビューティーコンテストゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/beauty.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 時間割引ゲーム -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/delay.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- あの人のダークトライアド診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/other_dark_triad.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- あの人の愛着スタイル診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/other_attachment.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- あの人のEQ診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/other_eq.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 心理学診断 一覧 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/diagnoses.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- キャリア適性診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/career.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- RIASEC職業興味診断 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/riasec.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- キャリア統合分析 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/career-integration.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 総合性格レポート -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/report.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- マイページ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/mypage.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- カードコレクション -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/card-collection.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- キャラクター図鑑 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/zukan.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 科学的根拠 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/science.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- 悩みから引く心理学のことば（日常心理学辞典 段B） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/kotoba.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- クロス分析の仕組み紹介（気づかせ計画・2026-08-03） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/cross.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- よくある質問 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/faq.html</loc>
+    <lastmod>2026-04-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ブログ記事：気を使いすぎて疲れる人が知るべき、自分の性格の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kiwo-tsukaisu.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：気を使いすぎる人がバカに見られる、本当の理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kiwotsukaisugiru-baka-riyu.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：気を使いすぎる人が自己肯定感を上げると、なぜか「行動できる人」に好かれる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kiwotsukaisugiru-jikokoteikan.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：HSPとは？繊細な自分を理解するための基礎知識 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hsp-toha-kiso-chishiki.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：完璧主義の人が一番やっていないこと——それは「始めること」 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kanpeki-shugi-hajimenai.html</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：開放性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：開放性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：誠実性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：誠実性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：外向性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：外向性が低い（内向的）人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：協調性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：協調性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：感受性が高い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-high.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 性格解説：感受性が低い人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-low.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：占いから「使える診断」へ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/uranai-kara-shindan-e.html</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ブログ記事：MBTIの診断結果、嘘じゃない？ビッグファイブとの違い -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mbti-vs-bigfive.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：MBTIの診断結果、なぜ変わるのか -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mbti-kekka-kawaru.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：テストで性格がわかる心理学 科学的信憑性トップ10 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-shinrigaku-top10.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：相性診断、相手に頼めなかった話 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ano-hito-yosoku-aishindan.html</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格は変えられる？心理学が出した、正直な答え -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-kaereru.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：優しい人が太りやすい理由と、それを変える方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-neuroticism-high.html</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：真面目な人ほどダイエットで詰まる理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-conscientiousness-high.html</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：一人でやるから続かない　外向的な人のダイエット設計 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-extraversion-high.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：内向的な人のダイエットが続かないのは、環境が間違っているからだ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-extraversion-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：飽き性の人のダイエットが続かない本当の理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-openness-high.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：同じことを続けられる人が、ダイエットで一番やってはいけないこと -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-openness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：空気を読む人が太りやすい本当の理由　断らない人のためのダイエット設計 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-agreeableness-high.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：自分流を曲げない人のダイエット　競争心を正しく使う方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-agreeableness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：メンタルが安定している人がダイエットで陥る、意外な落とし穴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-neuroticism-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：三日坊主の人がダイエットを続けるには、意志力より先にやることがある -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-conscientiousness-low.html</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：「性格が良い人」がモテない本当の理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/moteru-seikaku-shinjitsu.html</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：考えすぎて動けない人の恋愛——感受性が高い人が一番損をしてる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-neuroticism-high.html</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：片思いで終わる人、付き合ってから好きになる人——恋愛の「正しい順番」は性格によって違う -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-seikaku-junban.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：「優しい人」ほど暴力的パートナーに引き寄せられる理由 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-abusive-seikaku.html</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：恋愛がうまくいくのに「何か足りない」——外交性が高い人の恋愛 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-extraversion-high.html</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：想いが溢れれば溢れるほど動けない。内向的な人の恋愛の仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-extraversion-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ビッグファイブで分かる、あなたに向いている仕事・向いていない仕事 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-muki-fumuki.html</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格タイプ別ダイエット完全ガイド——続かないのは意志の問題じゃない -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/diet-seikaku-type-guide.html</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ブログ記事：性格と恋愛相性の科学　ビッグファイブ5因子で見るカップルの傾向 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfive-love-compatibility.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ビッグファイブのファセット（下位尺度）とは　30の側面で性格の解像度を上げる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfive-facet-toha.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：神経症性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：誠実性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/conscientiousness-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：外向性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/extraversion-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：開放性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/openness-facet.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：協調性の6つのファセット（下位尺度）を徹底解説 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-facet.html</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ルーズな人の恋愛（誠実性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-conscientiousness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：意見が強い人の恋愛（協調性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-agreeableness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：保守的な人の恋愛（開放性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-openness-low.html</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：完璧主義者の恋愛（誠実性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-conscientiousness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：飽きっぽい人の恋愛（開放性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-openness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：優しすぎる人の恋愛（協調性が高い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-agreeableness-high.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：感情が安定しすぎる人の恋愛（神経症性が低い人） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/love-neuroticism-low.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：RIASEC理論とは何か Hollandの6タイプで見る「自分に合う仕事」の探し方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/riasec-toha.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格と仕事の相性を科学的に判定する ビッグファイブ×キャリア適性の仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/career-tekisei-shindan.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：やりがいは選んだ後に育つ 「適性×興味」の統合で見えるキャリアの本命 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/career-integration-toha.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：神経症傾向が高い人の「強み」と付き合い方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/neuroticism-taishoho.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：職場の人間関係と性格タイプ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-ningen-kankei-type.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：協調性が低い人に向いている仕事 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/agreeableness-low-shigoto.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：喧嘩の仕方でわかる性格タイプ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kenka-seikaku-type.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：長続きするカップルの性格パターン -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/nagatsuzuki-couple.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：HSPの恋愛 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hsp-renai.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：外向性が低い人の仕事の強み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/introvert-shigoto.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：嫉妬と性格タイプ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shitto-seikaku-type.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：結婚と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kekkon-seikaku-type.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格とお金 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-okane-kanjokankaku.html</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ブログ記事：性格と睡眠 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-suimin-type.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：性格と学習 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-gakushu-type.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：テスト不安と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/tesuto-fuan-seikaku.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：先延ばし癖と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sakinobashi-kuse-seikaku.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：営業の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-sales.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：企画・商品開発の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-planning.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：マーケティングの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-marketing.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：経営・管理の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-management.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：人事・労務の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-hr_labor.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：経理・財務の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-accounting.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：SE・システム開発の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-se.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：研究・開発の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-research.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：デザイン・クリエイティブの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-design.html</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：広報・PRの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-pr.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：法務の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-legal.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：カスタマーサポートの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-cs.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-production.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-qa.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：物流・購買の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-logistics_p.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：施工・現場管理の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-field.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：医療・看護の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-medical_job.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：教育・教職の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-teaching.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：コンサルティングの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-consultant.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：Web開発の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-webdev.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：データ・AIの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-data-ai.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：営業企画の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-sales-plan.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：小売・店舗の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-retail-store.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：土木・建築の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-civil.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：フリーランスの仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-freelance.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：人事・採用の仕事と性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/job-hr-recruit.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：価値観の科学——シュワルツ理論で読み解く「大切にしたいもの」の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kachikan-no-kagaku.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：愛着スタイルとは——安心・不安・回避の3パターンで読み解く人間関係 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/aichaku-style-toha.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：恋愛スタイル6種類——愛着×ビッグファイブで見る「付き合い方」の傾向 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/rennai-style-6-shurui.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：マインドセットとは——「変われる人」と「変われない人」の違い -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mindset-toha.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：やる気の正体——動機づけの科学が教える「続く」と「続かない」 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/yaruki-no-seitai.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ChatGPTに性格診断させる本当のところ——AI×心理学の可能性と限界 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/chatgpt-seikaku-data.html</loc>
+    <lastmod>2026-05-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：MBTIとエニアグラムをビッグファイブで読み解く -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mbti-enneagram-bigfive.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：すぐ怒る・感情的になりやすい性格の科学 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/okori-yasui-seikaku.html</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：「内向的な性格を直したい」は本当に必要か -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/introvert-naoshitai.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：彼氏と性格が合わない　ビッグファイブで読む「合わなさ」の正体と対処法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kareshi-seikaku-awanai.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：EQ診断とは　感情を「測れる力」として捉え直す5因子の科学 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/eq-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：総合レポートとは　10種類の診断が「一つの人物像」に収束する仕組み -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sogo-report-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：統制の所在とは　「頑張っても意味がない」感覚の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/locus-of-control-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ダークトライアドとは　「扱いにくい自分」を科学で見る3因子の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/dark-triad-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：あの人のダークトライアド診断とは　「なぜこの人と関わるとしんどいのか」を言語化する -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/other-dark-triad-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：あの人の愛着スタイル診断とは　「突然冷たくなる人」「離れると不安になる人」の正体 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/other-attachment-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：あの人のEQ診断とは　感情を「扱える人」かどうかを行動で見る方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/other-eq-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ビッグファイブマン分析とは　EQ・ダークトライアド・愛着スタイルを統合したチーム相性の上位分析 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfiveman-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：グループ分けツールとは　性格データで「公平なチーム」を自動生成する方法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/group-tool-toha.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：チーム相性診断とは　性格で読む「合う組み合わせ」の科学 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/team-compatibility.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：子育てスタイルは性格で決まる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kosodate-seikaku-style.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：AIのせいにする責任転嫁の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-no-sei-shinri.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：AIと人間関係コンテキスト -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-context-jidai-hajimari.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：AIとコンテキストの重要性 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-context-taisetsu.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：AIに代替されない人材の条件 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ai-jidai-shigoto.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ダークトライアドが高い人との距離の取り方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/dark-triad-distance.html</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- ブログ記事：仕事ができるのに自信がない人の性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-jishin-nai.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- ブログ記事：職場で「仕事してるアピール」が強い人のビッグファイブ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-apiru-personality.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ブログ記事：仕事で評価されやすい性格・損しやすい性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-hyoka-seikaku.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ一覧 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- カードコレクション・機能開放ガイド -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/collection-guide.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：ストレス解消法は性格によって違う -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/stress-kaishoho-seikaku.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：やたらと否定ばかりする人の心理学と対処法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitei-bakari-suru-hito.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：SNSの使い方は性格で決まる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sns-seikaku-type.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：友達が多い人・少ない人の性格の違い -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/tomodachi-seikaku.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：なぜあの人は人をいじるのか -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ijiru-seikaku-naze.html</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ブログ記事：報連相できない人の心理と対処法 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hourensou-dekinai-hito.html</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-miss-ooi.html</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shokuba-koritsu-seikaku.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mitame-seikaku-wakaru.html</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mitame-seikaku-jitsuyo.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mitame-seikaku-style-guide.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kirawareru-kowai-seikaku.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/henshin-osoi-hayai-seikaku.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitomae-hanasu-nigate-seikaku.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kataduke-rarenai-seikaku.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sugu-ayamaru-ayamarenai-seikaku.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/impostor-shokogun-toha.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ganbatteiru-noni-hyoka-sarenai-seikaku.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitori-ga-suki-tsumetai-seikaku.html</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/dekiru-noninai-hito.html</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shiji-machi-zoku.html</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/soudan-shinai-hito.html</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/totsugen-yameru-yushu.html</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/makasenai-kanpeki-shugi.html</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/zettai-ayamaranai-hito.html</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kakunin-shisugiru-hito.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hanashi-saegiru-hito.html</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/tegara-yokodori-hito.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-oshitsukeru-hito.html</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ビッグファイブの歴史 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/bigfive-rekishi.html</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 犬派 vs 猫派 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/inu-neko-seikaku.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 優柔不断・決断できない人の性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/yujufudan-kettan.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 投資やギャンブルにハマる人の性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/toushi-gamble-seikaku.html</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 長生きする人に共通する性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/nagaiiki-seikaku.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 人見知り・あがり症 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitomishiri-seikaku.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- スマホ・SNS依存 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sns-izon-seikaku.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 嘘をつきやすい人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/usotsuki-seikaku.html</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 時間を守れない・遅刻する人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/chikoku-seikaku.html</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 浮気しやすい人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/uwaki-seikaku.html</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 人を支配したがる人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shihai-seikaku.html</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 浪費・貯金できない人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/rohi-chokin-seikaku.html</loc>
+    <lastmod>2026-06-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 休めない・仕事中毒な人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shigoto-chudoku-seikaku.html</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 人を信じすぎる・騙されやすい人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/damasareyasui-seikaku.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 変化が苦手・変化に弱い人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/henka-nigate-seikaku.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- ダメ男（暴力以外）に惹かれる女性 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/dame-otoko-hikareru-seikaku.html</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 疑い深い・人を信用できない -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/utagai-bukai-seikaku.html</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 寂しがり屋・一人の時間がこわい -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sabishigari-seikaku.html</loc>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 負けず嫌い・勝ち負けにこだわる -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/makezukirai-seikaku.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 飽きっぽい・何をやっても続かない -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/akippoi-seikaku.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 察してちゃん（言わずに察してほしい心理） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/sasshite-chan.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- マウントを取る人（優越誇示） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/mount-toru-hito.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 性格診断の種類まとめ（目的別の選び方） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/seikaku-shindan-shurui.html</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- かまってちゃん（注目欲求） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kamatte-chan.html</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 褒められたい・認められたい（承認欲求） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/homaretai-seikaku.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 予定が狂うとイライラする（段取り崩れ） -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/keikaku-ikanai-seikaku.html</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 裏表がある人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/uraomote-aru-hito.html</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- よく当たる性格診断の見分け方 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/yoku-ataru-seikaku-shindan.html</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ano-hito-120mon-seimitsu.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 音楽の好みと性格 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/music-seikaku.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 嘘つきな人の特徴 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/usotsuki-tokuchou.html</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 人の話を自分の話にする人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hanashi-jibun-ni-suru-hito.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>  <!-- 人の気持ちを勝手に決めつける人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kimochi-kimetsukeru-hito.html</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 空気が読めない人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kuuki-yomenai.html</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- プライドが高い人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/pride-takai.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 頑固な人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/ganko-hito.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 電話が苦手な人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/denwa-nigate.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>  <!-- 夜のひとり反省会 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/hitori-hanseikai.html</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>  <!-- 自己分析が終わらない人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/jiko-bunseki-owaranai.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 診断結果に振り回される人 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-furimawasareru.html</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 診断結果を見せたくない人の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-misetakunai.html</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 診断結果を比べて落ち込む人の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/shindan-kekka-kurabete-ochikomu.html</loc>
+    <lastmod>2026-07-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 八方美人な人の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/happo-bijin.html</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 断れない性格を直したい人へ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kotowarenai.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 感情の起伏が激しい人へ -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kanjo-kifuku-hageshii.html</loc>
+    <lastmod>2026-07-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 口が軽い人の心理 -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/blog/kuchi-karui.html</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+<!-- ドタキャンする人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/dotakyan-hito.html</loc>
+  <lastmod>2026-08-15</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- すぐ泣いてしまう大人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sugu-naku.html</loc>
+  <lastmod>2026-07-21</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 束縛する人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sokubaku-suru-hito.html</loc>
+  <lastmod>2026-08-03</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- メンタルが弱い・打たれ弱い人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mental-yowai.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 逃げ癖がある人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/nige-guse.html</loc>
+  <lastmod>2026-08-15</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- お節介な人・世話を焼きすぎる人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sewayaki-osekkai.html</loc>
+  <lastmod>2026-08-15</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- あの人の本音がわからない -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/ano-hito-honne-yomitai.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- めんどくさがりを直したい -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mendokusagari.html</loc>
+  <lastmod>2026-07-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 人の目が気になる性格 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-no-me-kininaru.html</loc>
+  <lastmod>2026-07-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 愚痴が多い人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/guchi-ooi.html</loc>
+  <lastmod>2026-07-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 人と比べてしまって疲れる心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hikaku-shite-shimau.html</loc>
+  <lastmod>2026-07-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 自己肯定感が低い人の特徴と原因 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/jiko-koteikan-hikui.html</loc>
+  <lastmod>2026-07-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- 会議で発言できない人の心理 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/kaigi-hatsugen-dekinai.html</loc>
+  <lastmod>2026-07-25</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<!-- ビッグファイブ診断結果の見方 -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/bigfive-kekka-mikata.html</loc>
+  <lastmod>2026-07-26</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<!-- HSS型HSPとは -->
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hss-gata-hsp.html</loc>
+  <lastmod>2026-07-26</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/tenshoku-kurikaesu.html</loc>
+  <lastmod>2026-07-27</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/renai-kyoumi-nai.html</loc>
+  <lastmod>2026-07-28</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/zatsudan-nigate.html</loc>
+  <lastmod>2026-07-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shumi-seikaku-type-guide.html</loc>
+  <lastmod>2026-07-30</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/manga-character-bigfive.html</loc>
+  <lastmod>2026-07-31</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shumi-ga-nai.html</loc>
+  <lastmod>2026-08-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/trpg-character-make.html</loc>
+  <lastmod>2026-08-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hitori-shumi-minna-shumi.html</loc>
+  <lastmod>2026-08-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/oshikatsu-shinri.html</loc>
+  <lastmod>2026-08-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/renai-izon.html</loc>
+  <lastmod>2026-08-03</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-o-tamesu-hito.html</loc>
+  <lastmod>2026-08-04</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/fukigen-nariyasui-hito.html</loc>
+  <lastmod>2026-08-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/seikou-yorokobenai.html</loc>
+  <lastmod>2026-08-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/fukigen-de-tsutaeru-hito.html</loc>
+  <lastmod>2026-08-12</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/jibun-no-hanashi-bakari.html</loc>
+  <lastmod>2026-08-13</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sekkachi-hito.html</loc>
+  <lastmod>2026-08-10</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/homerarete-hitei.html</loc>
+  <lastmod>2026-08-09</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/advice-shitagaru-hito.html</loc>
+  <lastmod>2026-08-08</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/kuchi-dake-hito.html</loc>
+  <lastmod>2026-08-07</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hanashi-nagai-hito.html</loc>
+  <lastmod>2026-08-06</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/kyodai-seikaku-chigau.html</loc>
+  <lastmod>2026-08-14</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/moto-koibito-hikizuru.html</loc>
+  <lastmod>2026-08-15</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sousaku-kansei-dekinai.html</loc>
+  <lastmod>2026-08-16</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/game-genre-seikaku.html</loc>
+  <lastmod>2026-08-17</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shumi-tsuzukanai.html</loc>
+  <lastmod>2026-08-30</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shumi-seikaku-kenkyu.html</loc>
+  <lastmod>2026-08-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/uekara-mesen-hito.html</loc>
+  <lastmod>2026-08-28</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/miei-haru-hito.html</loc>
+  <lastmod>2026-08-26</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/iiwake-ooi-hito.html</loc>
+  <lastmod>2026-08-25</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/higaisha-ishiki-tsuyoi-hito.html</loc>
+  <lastmod>2026-08-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/waruguchi-bakari-iu-hito.html</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/warukunai-noni-ayamaru.html</loc>
+  <lastmod>2026-08-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/indoor-outdoor-seikaku.html</loc>
+  <lastmod>2026-08-21</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/ai-character-seikaku-prompt.html</loc>
+  <lastmod>2026-08-19</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/start.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://bigfive.jr-genius.jp/honne.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/yotei-tsumekomi-sugiru.html</loc>
+  <lastmod>2026-09-01</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/orei-ienai-hito.html</loc>
+  <lastmod>2026-09-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/aruku-no-ga-hayai-hito.html</loc>
+  <lastmod>2026-09-16</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/soshakuon-ga-kininaru-hito.html</loc>
+  <lastmod>2026-09-20</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-no-shippai-o-warau-hito.html</loc>
+  <lastmod>2026-09-21</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sugu-shiraberu-hito.html</loc>
+  <lastmod>2026-09-22</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/setsumei-ga-heta-hito.html</loc>
+  <lastmod>2026-09-19</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shashin-takusan-toru-hito.html</loc>
+  <lastmod>2026-09-17</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/unten-suruto-kawaru-hito.html</loc>
+  <lastmod>2026-09-14</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/wasuremono-ooi-hito.html</loc>
+  <lastmod>2026-09-13</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/koe-ga-chiisai-hito.html</loc>
+  <lastmod>2026-09-12</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sake-you-to-kawaru-hito.html</loc>
+  <lastmod>2026-09-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/namae-oboerarenai.html</loc>
+  <lastmod>2026-09-10</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-ni-kyoumi-ga-nai.html</loc>
+  <lastmod>2026-09-09</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mukashi-no-hanashi-bakari.html</loc>
+  <lastmod>2026-09-08</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/karita-mono-kaesanai-hito.html</loc>
+  <lastmod>2026-09-07</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/koe-ga-ookii-hito.html</loc>
+  <lastmod>2026-09-06</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/muhyoujou-warawanai-hito.html</loc>
+  <lastmod>2026-09-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hitorigoto-ooi-hito.html</loc>
+  <lastmod>2026-09-04</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/joudan-ga-tsuujinai-hito.html</loc>
+  <lastmod>2026-09-24</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/aisatsu-shinai-hito.html</loc>
+  <lastmod>2026-09-25</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/hito-no-namae-yobanai-hito.html</loc>
+  <lastmod>2026-09-27</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shuugou-jikan-yori-hayaku-tsuku-hito.html</loc>
+  <lastmod>2026-09-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/sugu-isogashii-to-iu-hito.html</loc>
+  <lastmod>2026-09-30</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/shittakaburi-suru-hito.html</loc>
+  <lastmod>2026-10-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/ogoritagaru-hito.html</loc>
+  <lastmod>2026-10-03</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+</urlset>

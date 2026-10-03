@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/group.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グループ分け — ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブの診断コードをもとに、性格バランスを考慮したグループ分けができる無料ツール。クラス編成・遠足・チームわけなどに。最大100人まで対応し、5因子の偏りを自動で調整して合理的なチーム構成を提案します。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="グループ分け — ビッグファイブ診断">
+<meta property="og:description" content="診断コードをもとに性格バランスを考慮したグループ分け。複数名簿対応・最大100人。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/group.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  :root {
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --c-O: #8b5cf6; --c-C: #3b82f6; --c-E: #f97316; --c-A: #f472b6; --c-N: #14b8a6;
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 40px 20px 80px;
+  }
+  .container { max-width: 600px; margin: 0 auto; }
+
+  /* ヘッダー */
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .back-link:hover { color: var(--text); }
+  .page-title { font-size: 20px; font-weight: 700; }
+
+  /* タブ */
+  .tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+  .tab-btn { flex: 1; padding: 10px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dim); background: none; border: none; border-radius: 9px; cursor: pointer; transition: all .2s; }
+  .tab-btn.active { color: var(--text); background: rgba(139,92,246,0.2); box-shadow: 0 0 12px rgba(139,92,246,0.15); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== 名簿タブ ===== */
+  .roster-tabs {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 8px;
+  }
+  .roster-tab {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--dim);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; cursor: pointer; transition: all .2s;
+    white-space: nowrap;
+  }
+  .roster-tab:hover { color: var(--text); background: rgba(255,255,255,0.09); }
+  .roster-tab.active {
+    color: var(--text);
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(139,92,246,0.45);
+  }
+  .roster-tab-count {
+    font-size: 11px; font-weight: 400;
+    color: var(--dim); background: rgba(255,255,255,0.08);
+    padding: 1px 6px; border-radius: 10px;
+  }
+  .roster-tab.active .roster-tab-count { color: var(--purple); }
+  .roster-actions {
+    display: flex; gap: 6px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .roster-icon-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--dim); padding: 5px 8px; font-size: 14px;
+    transition: color .2s; line-height: 1; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .roster-icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+  .roster-icon-btn.danger:hover { color: #f87171; background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); }
+  .btn-new-roster {
+    padding: 5px 12px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    color: var(--purple);
+    background: rgba(139,92,246,0.07);
+    border: 1px dashed rgba(139,92,246,0.35);
+    border-radius: 20px; cursor: pointer; transition: all .2s;
+  }
+  .btn-new-roster:hover { background: rgba(139,92,246,0.15); }
+
+  /* インライン名前入力フォーム */
+  .inline-name-form {
+    display: none;
+    gap: 8px; margin-bottom: 14px;
+  }
+  .inline-name-form.open { display: flex; }
+  .inline-name-input {
+    flex: 1; padding: 9px 14px;
+    font-family: inherit; font-size: 14px;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 10px; outline: none;
+    transition: border-color .2s;
+  }
+  .inline-name-input:focus { border-color: var(--purple); }
+  .inline-ok-btn {
+    padding: 9px 16px;
+    font-family: inherit; font-size: 13px; font-weight: 700;
+    color: #fff; background: var(--purple);
+    border: none; border-radius: 10px; cursor: pointer; transition: opacity .2s;
+    white-space: nowrap;
+  }
+  .inline-ok-btn:hover { opacity: .85; }
+  .inline-cancel-btn {
+    padding: 9px 12px;
+    font-family: inherit; font-size: 13px;
+    color: var(--dim); background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+  }
+  .inline-cancel-btn:hover { color: var(--text); }
+
+  /* 追加フォーム */
+  .roster-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .roster-count { font-size: 13px; color: var(--dim); }
+  .roster-count span { color: var(--purple); font-weight: 700; }
+  .add-form { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .add-input { flex: 1; min-width: 0; padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--text); background: rgba(255,255,255,0.05); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; outline: none; transition: border-color .2s; }
+  .add-input::placeholder { color: rgba(148,163,184,0.4); }
+  .add-input:focus { border-color: var(--purple); }
+  .add-input.code { flex: 0 0 90px; font-family: monospace; letter-spacing: .1em; }
+  .add-btn { padding: 10px 18px; font-family: inherit; font-size: 14px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 10px; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .add-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .add-error { font-size: 12px; color: #f87171; margin-bottom: 10px; min-height: 18px; }
+
+  /* 取り込みボタン */
+  .import-btn { display: block; width: 100%; padding: 11px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--purple); background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; transition: all .2s; margin-bottom: 14px; }
+  .import-btn:hover { background: rgba(139,92,246,0.15); }
+
+  /* 生徒リスト */
+  .student-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 16px; }
+  .student-item { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 10px; min-width: 0; }
+  .student-num { font-size: 10px; color: var(--dim); min-width: 16px; text-align: right; flex-shrink: 0; }
+  .student-name { flex: 1; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .student-code { font-family: monospace; font-size: 10px; background: rgba(139,92,246,0.15); color: var(--purple); padding: 1px 5px; border-radius: 5px; letter-spacing: .05em; flex-shrink: 0; }
+  .student-bars { display: none; }
+  .sbar { width: 4px; border-radius: 2px; }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--dim); font-size: 14px; padding: 1px 3px; transition: color .2s; line-height: 1; flex-shrink: 0; }
+  .del-btn:hover { color: #f87171; }
+  .leader-btn { background: none; border: none; cursor: pointer; font-size: 14px; padding: 1px 3px; transition: all .2s; line-height: 1; flex-shrink: 0; }
+  .leader-btn.off { color: var(--dim); opacity: .4; }
+  .leader-btn.off:hover { opacity: .8; }
+  .leader-btn.on { color: #fbbf24; opacity: 1; text-shadow: 0 0 6px rgba(251,191,36,.4); }
+  .empty-roster { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
+  .clear-btn { display: block; width: 100%; padding: 10px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--dim); background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 4px; }
+  .clear-btn:hover { border-color: #f87171; color: #f87171; }
+
+  /* ===== インポートモーダル ===== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    width: 100%; max-width: 600px;
+    background: var(--bg2, #0f1535);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 40px;
+    max-height: 80vh; display: flex; flex-direction: column;
+    animation: slideup .25s ease-out;
+  }
+  @keyframes slideup { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 20px; }
+  .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-size: 12px; color: var(--dim); margin-bottom: 16px; }
+  .modal-actions { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; }
+  .modal-action-btn { padding: 7px 14px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--dim); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: all .2s; }
+  .modal-action-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+  .modal-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .modal-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(139,92,246,0.1);
+    border-radius: 10px; cursor: pointer; transition: all .2s;
+    user-select: none;
+  }
+  .modal-item.checked { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.35); }
+  .modal-item.already { opacity: .4; pointer-events: none; }
+  .modal-checkbox {
+    width: 20px; height: 20px; border-radius: 5px;
+    border: 2px solid rgba(139,92,246,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all .2s; font-size: 11px;
+  }
+  .modal-item.checked .modal-checkbox { background: var(--purple); border-color: var(--purple); }
+  .modal-item-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .modal-item-code { font-family: monospace; font-size: 11px; color: var(--dim); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 5px; }
+  .modal-item-tag { font-size: 10px; color: var(--dim); background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 10px; }
+  .modal-footer { flex-shrink: 0; }
+  .modal-confirm-btn { display: block; width: 100%; padding: 14px; font-family: inherit; font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 12px; cursor: pointer; transition: all .2s; }
+  .modal-confirm-btn:hover:not(:disabled) { opacity: .85; }
+  .modal-confirm-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .modal-cancel { display: block; text-align: center; margin-top: 10px; font-size: 13px; color: var(--dim); cursor: pointer; padding: 6px; }
+  .modal-cancel:hover { color: var(--text); }
+
+  /* ===== グループ分けタブ ===== */
+  .group-settings { background: rgba(26,10,62,0.4); border: 1px solid rgba(139,92,246,0.15); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .settings-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .settings-row:last-child { margin-bottom: 0; }
+  .settings-label { font-size: 13px; color: var(--dim); min-width: 90px; }
+  .num-input { width: 70px; padding: 8px 12px; font-family: inherit; font-size: 15px; font-weight: 700; color: var(--text); text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(139,92,246,0.25); border-radius: 8px; outline: none; transition: border-color .2s; }
+  .num-input:focus { border-color: var(--purple); }
+  .settings-hint { font-size: 12px; color: var(--dim); }
+  .settings-warn { font-size: 12px; color: #fbbf24; margin-top: 6px; }
+
+  /* 名簿選択（グループ分けタブ） */
+  .grouping-roster-info {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--dim);
+    margin-bottom: 16px; padding: 10px 14px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 10px;
+  }
+  .grouping-roster-name { color: var(--purple); font-weight: 700; }
+
+  .btn-generate { display: block; width: 100%; padding: 16px; font-family: inherit; font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--purple), var(--blue)); border: none; border-radius: 14px; cursor: pointer; transition: all .3s; margin-bottom: 28px; }
+  .btn-generate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(139,92,246,0.4); }
+  .btn-generate:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* 結果 */
+  .result-area { display: none; }
+  .result-area.visible { display: block; animation: fadein .4s ease-out; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .result-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .result-title { font-size: 16px; font-weight: 700; }
+  .btn-shuffle { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--purple); background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; cursor: pointer; transition: all .2s; }
+  .btn-shuffle:hover { background: rgba(139,92,246,0.2); }
+  .group-cards { display: flex; flex-direction: column; gap: 14px; }
+  .group-card { background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 14px; padding: 18px; }
+  .group-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .group-name { font-size: 15px; font-weight: 700; }
+  .group-count { font-size: 12px; color: var(--dim); background: rgba(255,255,255,0.07); padding: 3px 10px; border-radius: 20px; }
+  .group-members { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .group-member-chip { font-size: 12px; font-weight: 500; padding: 4px 10px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); border-radius: 20px; }
+  .group-leader-box { margin: 12px 0 14px; padding: 12px 14px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.16); border-radius: 12px; }
+  .leader-section-title { font-size: 11px; color: var(--dim); font-weight: 700; margin: 0 0 8px; }
+  .role-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+  .role-row { display: grid; grid-template-columns: 82px minmax(0,1fr) auto; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); }
+  .role-badge { display: inline-flex; align-items: center; justify-content: center; padding: 3px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; white-space: nowrap; }
+  .role-badge.leader { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.22); }
+  .role-badge.sub1 { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.22); }
+  .role-badge.sub2 { background: rgba(251,191,36,0.13); color: #fbbf24; border: 1px solid rgba(251,191,36,0.24); }
+  .role-badge.member { background: rgba(139,92,246,0.12); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.20); }
+  .role-name { color: var(--text); font-weight: 800; font-size: 12.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .role-score { color: #67e8f9; font-family: monospace; font-size: 11px; font-weight: 800; white-space: nowrap; }
+  .leader-note { font-size: 11px; color: var(--dim); line-height: 1.6; margin: -3px 0 11px; }
+  .leader-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pair-block { padding: 9px 10px; border-radius: 10px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); }
+  .pair-title { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .pair-block.good .pair-title { color: #34d399; }
+  .pair-block.warn .pair-title { color: #f87171; }
+  .pair-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pair-chip { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.05); color: var(--text); }
+  .pair-score { color: #67e8f9; font-family: monospace; font-weight: 800; }
+  .factor-bars { display: flex; flex-direction: column; gap: 6px; }
+  .factor-row { display: flex; align-items: center; gap: 10px; }
+  .factor-label { font-size: 11px; color: var(--dim); min-width: 40px; }
+  .factor-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+  .factor-bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease-out; }
+  .factor-val { font-size: 11px; color: var(--dim); min-width: 28px; text-align: right; font-family: monospace; }
+  .empty-group { text-align: center; padding: 48px 20px; color: var(--dim); font-size: 14px; line-height: 1.8; }
+
+  @media (max-width: 400px) {
+    body { padding: 24px 14px 60px; }
+    .add-input.code { flex: 0 0 80px; }
+    .role-row { grid-template-columns: 1fr; gap: 5px; }
+    .role-score { font-size: 10.5px; }
+    .leader-pairs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body data-feature-gate="group" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-3"></div><div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<div class="container">
+  <header class="header">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      トップに戻る
+    </a>
+    <h1 class="page-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      グループ分け
+    </h1>
+    <div style="width:80px"></div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="roster">👤 名簿管理</button>
+    <button class="tab-btn" data-tab="grouping">🔀 グループ分け</button>
+  </div>
+
+  <!-- 名簿管理 -->
+  <div class="tab-panel active" id="tab-roster">
+
+    <!-- 名簿タブ -->
+    <div class="roster-tabs" id="rosterTabs"></div>
+    <div class="roster-actions">
+      <button class="btn-new-roster" id="newRosterBtn">＋ 新しい名簿</button>
+      <button class="roster-icon-btn" id="renameRosterBtn" title="名前を変更">✏️ 名前変更</button>
+      <button class="roster-icon-btn danger" id="deleteRosterBtn" title="この名簿を削除">🗑 削除</button>
+    </div>
+    <div class="inline-name-form" id="newRosterForm">
+      <input type="text" class="inline-name-input" id="newRosterInput" placeholder="名簿名（例：1年A組）" maxlength="20">
+      <button class="inline-ok-btn" id="newRosterOk">作成</button>
+      <button class="inline-cancel-btn" id="newRosterCancel">✕</button>
+    </div>
+    <div class="inline-name-form" id="renameRosterForm">
+      <input type="text" class="inline-name-input" id="renameRosterInput" placeholder="新しい名前" maxlength="20">
+      <button class="inline-ok-btn" id="renameRosterOk">変更</button>
+      <button class="inline-cancel-btn" id="renameRosterCancel">✕</button>
+    </div>
+
+    <div class="roster-header">
+      <span class="roster-count">登録人数 <span id="rosterCount">0</span> / 100人</span>
+    </div>
+
+    <div class="add-form">
+      <input type="text" id="inputName" class="add-input" placeholder="名前" maxlength="20">
+      <input type="text" id="inputCode" class="add-input code" placeholder="コード" maxlength="5" inputmode="numeric">
+      <button class="add-btn" id="addBtn">追加</button>
+    </div>
+    <div class="add-error" id="addError"></div>
+
+    <button class="import-btn" id="importBtn">📋 保存データ（自分・あの人）から選んで取り込む</button>
+
+    <div class="student-list" id="studentList"></div>
+    <div class="empty-roster" id="emptyRoster">
+      <p>まだ登録されていません。<br>名前と診断コード（5桁）を入力するか<br>「あの人」リストから取り込んでください。</p>
+    </div>
+    <button class="clear-btn" id="clearBtn" style="display:none">この名簿を全て削除する</button>
+  </div>
+
+  <!-- グループ分け -->
+  <div class="tab-panel" id="tab-grouping">
+    <div class="grouping-roster-info" id="groupingRosterInfo"></div>
+
+    <div class="group-settings">
+      <div class="settings-row">
+        <span class="settings-label">グループ数</span>
+        <input type="number" id="groupCount" class="num-input" value="4" min="2" max="20">
+        <span class="settings-hint">グループ</span>
+      </div>
+      <div class="settings-warn" id="settingsWarn"></div>
+    </div>
+
+    <p style="font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:16px;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;border-left:3px solid rgba(139,92,246,0.3)">💡 グループ配分は各グループの平均スコアが均等になるよう行います。ペアの相性は<strong style="color:var(--text)">心理学研究に基づいた関係性スコア</strong>で評価しています。</p>
+
+    <button class="btn-generate" id="generateBtn">バランスよくグループ分けする</button>
+
+    <div class="result-area" id="resultArea">
+      <div class="result-top">
+        <span class="result-title" id="resultTitle"></span>
+        <button class="btn-shuffle" id="shuffleBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          シャッフル
+        </button>
+      </div>
+      <div class="group-cards" id="groupCards"></div>
+    </div>
+
+    <div class="empty-group" id="emptyGroup" style="display:none">
+      <p>名簿にメンバーを登録してから<br>グループ分けを実行してください。</p>
+    </div>
+  </div>
+</div>
+
+<!-- インポートモーダル -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">保存データから取り込む</div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div class="modal-actions">
+      <button class="modal-action-btn" id="selectAllBtn">全選択</button>
+      <button class="modal-action-btn" id="deselectAllBtn">全解除</button>
+    </div>
+    <div class="modal-list" id="modalList"></div>
+    <div class="modal-footer">
+      <button class="modal-confirm-btn" id="modalConfirmBtn" disabled>取り込む</button>
+      <div class="modal-cancel" id="modalCancelBtn">キャンセル</div>
+    </div>
+  </div>
+</div>
+
+<script src="compat.js"></script>
+<script>
+const STORAGE_KEY   = 'bigfive_group_rosters_v2';
+const ACTIVE_KEY    = 'bigfive_group_active_roster';
+const OTHERS_KEY    = 'bigfive_other_results';
+const MY_KEY        = 'bigfive_my_results';
+const MAX_STUDENTS  = 100;
+
+const traitKeys   = ['O','C','E','A','N'];
+const traitNames  = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+const traitColors = { O:'#8b5cf6', C:'#3b82f6', E:'#f97316', A:'#f472b6', N:'#14b8a6' };
+
+function codeToScores(code) {
+  return { O:+code[0], C:+code[1], E:+code[2], A:+code[3], N:+code[4] };
+}
+function isValidCode(code) { return /^[1-5]{5}$/.test(code); }
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// ===== 名簿データ管理 =====
+function loadRosters() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (Array.isArray(raw) && raw.length > 0) return raw;
+  } catch(e) {}
+  // 旧データ（v1）を移行
+  try {
+    const old = JSON.parse(localStorage.getItem('bigfive_group_roster_v1') || '[]');
+    if (old.length > 0) return [{ id: uid(), name: 'メンバー', students: old }];
+  } catch(e) {}
+  return [{ id: uid(), name: 'メンバー', students: [] }];
+}
+function saveRosters() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rosters));
+}
+function getActiveId() {
+  return localStorage.getItem(ACTIVE_KEY) || rosters[0]?.id;
+}
+function setActiveId(id) {
+  localStorage.setItem(ACTIVE_KEY, id);
+}
+function getActiveRoster() {
+  return rosters.find(r => r.id === getActiveId()) || rosters[0];
+}
+
+let rosters = loadRosters();
+
+// ===== 名簿タブ描画 =====
+function renderRosterSelect() {
+  const activeId = getActiveId();
+  const tabs = document.getElementById('rosterTabs');
+  tabs.innerHTML = rosters.map(r =>
+    `<button class="roster-tab${r.id === activeId ? ' active' : ''}" data-id="${escHtml(r.id)}">${escHtml(r.name)}<span class="roster-tab-count">${r.students.length}</span></button>`
+  ).join('');
+  tabs.querySelectorAll('.roster-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setActiveId(btn.dataset.id);
+      renderAll();
+    });
+  });
+  document.getElementById('deleteRosterBtn').disabled = rosters.length <= 1;
+}
+
+// ===== 新しい名簿フォーム =====
+function closeAllInlineForms() {
+  document.getElementById('newRosterForm').classList.remove('open');
+  document.getElementById('renameRosterForm').classList.remove('open');
+}
+
+document.getElementById('newRosterBtn').addEventListener('click', () => {
+  closeAllInlineForms();
+  const form = document.getElementById('newRosterForm');
+  const input = document.getElementById('newRosterInput');
+  form.classList.add('open');
+  input.value = '';
+  input.focus();
+});
+document.getElementById('newRosterCancel').addEventListener('click', () => {
+  closeAllInlineForms();
+});
+function confirmNewRoster() {
+  const name = document.getElementById('newRosterInput').value.trim();
+  if (!name) return;
+  closeAllInlineForms();
+  const roster = { id: uid(), name, students: [] };
+  rosters.push(roster);
+  setActiveId(roster.id);
+  saveRosters();
+  renderAll();
+}
+document.getElementById('newRosterOk').addEventListener('click', confirmNewRoster);
+document.getElementById('newRosterInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmNewRoster();
+  if (e.key === 'Escape') closeAllInlineForms();
+});
+
+// ===== リネームフォーム =====
+document.getElementById('renameRosterBtn').addEventListener('click', () => {
+  closeAllInlineForms();
+  const r = getActiveRoster();
+  const form = document.getElementById('renameRosterForm');
+  const input = document.getElementById('renameRosterInput');
+  form.classList.add('open');
+  input.value = r.name;
+  input.select();
+  input.focus();
+});
+document.getElementById('renameRosterCancel').addEventListener('click', () => {
+  closeAllInlineForms();
+});
+function confirmRename() {
+  const name = document.getElementById('renameRosterInput').value.trim();
+  if (!name) return;
+  closeAllInlineForms();
+  const r = getActiveRoster();
+  r.name = name;
+  saveRosters();
+  renderAll();
+}
+document.getElementById('renameRosterOk').addEventListener('click', confirmRename);
+document.getElementById('renameRosterInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmRename();
+  if (e.key === 'Escape') closeAllInlineForms();
+});
+
+// ===== 名簿削除 =====
+document.getElementById('deleteRosterBtn').addEventListener('click', () => {
+  if (rosters.length <= 1) return;
+  const r = getActiveRoster();
+  // confirm()は使ってもページリセットのリスクが低いため維持
+  if (!confirm(`「${r.name}」を削除しますか？\nこの名簿のデータはすべて消えます。`)) return;
+  rosters = rosters.filter(x => x.id !== r.id);
+  setActiveId(rosters[0].id);
+  saveRosters();
+  renderAll();
+});
+
+// ===== 名簿（生徒リスト）描画 =====
+function renderRoster() {
+  const r = getActiveRoster();
+  const students = r.students;
+  document.getElementById('rosterCount').textContent = students.length;
+
+  const list  = document.getElementById('studentList');
+  const empty = document.getElementById('emptyRoster');
+  const clrBtn = document.getElementById('clearBtn');
+
+  if (students.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    clrBtn.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  clrBtn.style.display = '';
+
+  list.innerHTML = students.map((s, i) => {
+    const sc = codeToScores(s.code);
+    const bars = traitKeys.map(k => {
+      const h = Math.round((sc[k] / 5) * 20 + 2);
+      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75"></div>`;
+    }).join('');
+    const leaderCls = s.leader ? 'on' : 'off';
+    const leaderIcon = s.leader ? '★' : '☆';
+    return `
+      <div class="student-item">
+        <span class="student-num">${i+1}</span>
+        <span class="student-name">${escHtml(s.name)}</span>
+        <span class="student-code">${s.code}</span>
+        <div class="student-bars">${bars}</div>
+        <button class="leader-btn ${leaderCls}" data-id="${s.id}" title="リーダー候補">${leaderIcon}</button>
+        <button class="del-btn" data-id="${s.id}" title="削除">×</button>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.leader-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r2 = getActiveRoster();
+      const st = r2.students.find(s => s.id === btn.dataset.id);
+      if (st) { st.leader = !st.leader; saveRosters(); renderAll(); }
+    });
+  });
+  list.querySelectorAll('.del-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r2 = getActiveRoster();
+      r2.students = r2.students.filter(s => s.id !== btn.dataset.id);
+      saveRosters();
+      renderAll();
+    });
+  });
+}
+
+// ===== 生徒追加 =====
+function addStudent() {
+  const nameEl = document.getElementById('inputName');
+  const codeEl = document.getElementById('inputCode');
+  const errEl  = document.getElementById('addError');
+  const name = nameEl.value.trim();
+  const code = codeEl.value.trim();
+
+  if (!name) { errEl.textContent = '名前を入力してください'; return; }
+  if (!isValidCode(code)) { errEl.textContent = 'コードは1〜5の数字5桁（例：34213）'; return; }
+  const r = getActiveRoster();
+  if (r.students.length >= MAX_STUDENTS) { errEl.textContent = `上限${MAX_STUDENTS}人です`; return; }
+  errEl.textContent = '';
+
+  r.students.push({ id: uid(), name, code });
+  saveRosters();
+  renderAll();
+  nameEl.value = '';
+  codeEl.value = '';
+  nameEl.focus();
+}
+
+document.getElementById('addBtn').addEventListener('click', addStudent);
+document.getElementById('inputCode').addEventListener('keydown', e => { if (e.key === 'Enter') addStudent(); });
+document.getElementById('inputName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('inputCode').focus(); });
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  const r = getActiveRoster();
+  if (!confirm(`「${r.name}」の全${r.students.length}人を削除しますか？`)) return;
+  r.students = [];
+  saveRosters();
+  renderAll();
+});
+
+// ===== インポートモーダル =====
+let modalChecked = new Set();
+let modalItems = []; // モーダル表示中のアイテムキャッシュ
+
+document.getElementById('importBtn').addEventListener('click', openImportModal);
+
+function loadAllSaved() {
+  const myRaw = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch(e) { return []; } })();
+  const othersRaw = (() => { try { return JSON.parse(localStorage.getItem(OTHERS_KEY) || '[]'); } catch(e) { return []; } })();
+  const myDisplayName = (localStorage.getItem('bigfive_my_name') || '').trim();
+  const all = [];
+  // インデックスベースのUIDで重複を防ぐ
+  myRaw.forEach((o, i) => {
+    all.push({ uid: 'my_' + i, name: myDisplayName || o.name || o.typeName || `自分(${o.code})`, code: o.code, tag: '自分' });
+  });
+  othersRaw.forEach((o, i) => {
+    all.push({ uid: 'oth_' + i, name: o.name || `あの人(${o.code})`, code: o.code, tag: 'あの人' });
+  });
+  return all;
+}
+
+function openImportModal() {
+  modalItems = loadAllSaved();
+
+  if (modalItems.length === 0) {
+    alert('保存されているデータがありません。\n先に診断を受けて結果を保存してください。');
+    return;
+  }
+
+  const r = getActiveRoster();
+  // 名前＋コードで取込済み判定（uid変化に依存しない）
+  const existingKeys = new Set(r.students.map(s => s.name + '|' + s.code));
+  const remaining = MAX_STUDENTS - r.students.length;
+
+  document.getElementById('modalSub').textContent =
+    `保存データ ${modalItems.length}件 ／ あと${remaining}人追加可能`;
+
+  modalChecked = new Set();
+  const all = modalItems;
+
+  const list = document.getElementById('modalList');
+  list.innerHTML = all.map(o => {
+    const already = existingKeys.has(o.name + '|' + o.code);
+    const sc = codeToScores(o.code);
+    const bars = traitKeys.map(k => {
+      const h = Math.round((sc[k] / 5) * 18 + 2);
+      return `<div class="sbar" style="height:${h}px;background:${traitColors[k]};opacity:.75;display:inline-block;width:4px;border-radius:2px;vertical-align:bottom"></div>`;
+    }).join('');
+    const tagColor = o.tag === '自分' ? 'rgba(16,185,129,0.2);color:#34d399' : 'rgba(139,92,246,0.15);color:#a78bfa';
+    return `
+      <div class="modal-item${already ? ' already' : ''}" data-uid="${escHtml(o.uid)}" data-name="${escHtml(o.name)}" data-code="${escHtml(o.code)}">
+        <div class="modal-checkbox">${already ? '✓' : ''}</div>
+        <span class="modal-item-name">${escHtml(o.name)}</span>
+        <span style="display:flex;gap:2px;align-items:flex-end;height:20px">${bars}</span>
+        <span class="modal-item-code">${o.code}</span>
+        <span class="modal-item-tag" style="background:${tagColor}">${already ? '取込済' : o.tag}</span>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    item.addEventListener('click', () => {
+      const uid = item.dataset.uid;
+      if (modalChecked.has(uid)) {
+        modalChecked.delete(uid);
+        item.classList.remove('checked');
+        item.querySelector('.modal-checkbox').textContent = '';
+      } else {
+        modalChecked.add(uid);
+        item.classList.add('checked');
+        item.querySelector('.modal-checkbox').textContent = '✓';
+      }
+      updateModalConfirmBtn(remaining);
+    });
+  });
+
+  updateModalConfirmBtn(remaining);
+  document.getElementById('importModal').classList.add('open');
+}
+
+function updateModalConfirmBtn(remaining) {
+  const btn = document.getElementById('modalConfirmBtn');
+  const sel = modalChecked.size;
+  const n = Math.min(sel, remaining);
+  btn.disabled = sel === 0;
+  if (sel === 0) {
+    btn.textContent = '取り込む';
+  } else if (sel > remaining) {
+    btn.textContent = `選択した${sel}人を取り込む（上限のため${remaining}人まで）`;
+  } else {
+    btn.textContent = `選択した${sel}人を取り込む`;
+  }
+}
+
+document.getElementById('selectAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    modalChecked.add(item.dataset.uid);
+    item.classList.add('checked');
+    item.querySelector('.modal-checkbox').textContent = '✓';
+  });
+  const r = getActiveRoster();
+  updateModalConfirmBtn(MAX_STUDENTS - r.students.length);
+});
+
+document.getElementById('deselectAllBtn').addEventListener('click', () => {
+  modalChecked.clear();
+  document.querySelectorAll('.modal-item:not(.already)').forEach(item => {
+    item.classList.remove('checked');
+    item.querySelector('.modal-checkbox').textContent = '';
+  });
+  const r = getActiveRoster();
+  updateModalConfirmBtn(MAX_STUDENTS - r.students.length);
+});
+
+document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+  const r = getActiveRoster();
+  const remaining = MAX_STUDENTS - r.students.length;
+  let added = 0;
+
+  for (const o of modalItems) {
+    if (!modalChecked.has(o.uid)) continue;
+    if (added >= remaining) break;
+    r.students.push({ id: uid(), name: o.name, code: o.code });
+    added++;
+  }
+
+  saveRosters();
+  closeModal();
+  renderAll();
+  if (added > 0) {
+    const skipped = modalChecked.size - added;
+    alert(skipped > 0 ? `${added}人を取り込みました（上限のため${skipped}人スキップ）` : `${added}人を取り込みました`);
+  }
+});
+
+function closeModal() {
+  document.getElementById('importModal').classList.remove('open');
+  modalChecked.clear();
+}
+document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+document.getElementById('importModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('importModal')) closeModal();
+});
+
+// ===== タブ切り替え =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'grouping') updateGroupingUI();
+  });
+});
+
+// ===== グループ分け =====
+function updateGroupingUI() {
+  const r = getActiveRoster();
+  const n = r.students.length;
+  const g = parseInt(document.getElementById('groupCount').value) || 2;
+  const warn = document.getElementById('settingsWarn');
+  const btn  = document.getElementById('generateBtn');
+
+  const leaderCount = r.students.filter(s => s.leader).length;
+  const leaderInfo = leaderCount > 0
+    ? `　<span style="color:#fbbf24">★${leaderCount}名がリーダー候補</span>`
+    : '';
+  document.getElementById('groupingRosterInfo').innerHTML =
+    `使用中の名簿：<span class="grouping-roster-name">${escHtml(r.name)}</span>　<span style="color:var(--dim)">${n}人</span>${leaderInfo}`;
+
+  if (n < 2) {
+    warn.textContent = '名簿にメンバーを2人以上登録してください';
+    btn.disabled = true;
+  } else if (g > n) {
+    warn.textContent = `登録人数（${n}人）よりグループ数が多いです`;
+    btn.disabled = true;
+  } else if (g * 2 > n) {
+    warn.textContent = '1グループあたり1人になる場合があります';
+    btn.disabled = false;
+  } else {
+    warn.textContent = '';
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('groupCount').addEventListener('input', updateGroupingUI);
+
+function generateGroups(seed) {
+  const r = getActiveRoster();
+  const g = Math.max(2, Math.min(20, parseInt(document.getElementById('groupCount').value) || 4));
+
+  let rng = seed || Date.now();
+  const rand = () => { rng = (rng * 1664525 + 1013904223) & 0xffffffff; return (rng >>> 0) / 0xffffffff; };
+  const shuffle = arr => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  const leaders = shuffle(r.students.filter(s => s.leader));
+  const others = shuffle(r.students.filter(s => !s.leader));
+
+  // sort others by total score descending for balanced distribution
+  others.sort((a, b) => {
+    const sa = Object.values(codeToScores(a.code)).reduce((x,y) => x+y, 0);
+    const sb = Object.values(codeToScores(b.code)).reduce((x,y) => x+y, 0);
+    return sb - sa;
+  });
+
+  const groups = Array.from({ length: g }, () => []);
+
+  // place up to 1 leader candidate per group via snake draft
+  leaders.forEach((s, i) => {
+    if (i < g) {
+      const round = Math.floor(i / g);
+      const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
+      groups[pos].push(s);
+    } else {
+      others.push(s); // excess leaders go to general pool
+    }
+  });
+
+  // fill remaining slots with serpentine draft
+  others.forEach((s, i) => {
+    const round = Math.floor(i / g);
+    const pos = round % 2 === 0 ? i % g : g - 1 - (i % g);
+    groups[pos].push(s);
+  });
+  return groups;
+}
+
+function calcLeaderScore(member) {
+  const s = codeToScores(member.code);
+  return (s.E * 1.25) + (s.C * 1.15) + (s.A * 0.65) + ((6 - s.N) * 0.95) + (s.O * 0.25);
+}
+
+function calcPairScore(a, b) {
+  const sa = codeToScores(a.code);
+  const sb = codeToScores(b.code);
+  return Math.round(calcCompatCore(sa, sb));
+}
+
+function getPairRows(members) {
+  const pairs = [];
+  for (let i = 0; i < members.length; i++) {
+    for (let j = i + 1; j < members.length; j++) {
+      pairs.push({ a: members[i], b: members[j], score: calcPairScore(members[i], members[j]) });
+    }
+  }
+  return pairs.sort((a, b) => b.score - a.score);
+}
+
+function calcSubLeader1Score(member, leader) {
+  const s = codeToScores(member.code);
+  return (calcPairScore(leader, member) * 0.42) + (s.C * 8.5) + (s.A * 7.5) + ((6 - s.N) * 7);
+}
+
+function calcSubLeader2Score(member, leader, sub1, members) {
+  const s = codeToScores(member.code);
+  const leaderScores = codeToScores(leader.code);
+  const sub1Scores = sub1 ? codeToScores(sub1.code) : leaderScores;
+  const avg = {};
+  traitKeys.forEach(k => {
+    avg[k] = members.reduce((sum, m) => sum + codeToScores(m.code)[k], 0) / members.length;
+  });
+
+  let teamNeed = 0;
+  let complement = 0;
+  traitKeys.forEach(k => {
+    if (avg[k] < 3.2 && s[k] > avg[k]) teamNeed += (s[k] - avg[k]) * 7;
+    if (avg[k] > 3.8 && s[k] < avg[k]) teamNeed += (avg[k] - s[k]) * 4;
+    const coreAvg = (leaderScores[k] + sub1Scores[k]) / 2;
+    complement += Math.abs(s[k] - coreAvg) * 3.2;
+  });
+
+  const stability = (s.A * 6) + ((6 - s.N) * 6) + (s.C * 3.5);
+  const leaderFit = calcPairScore(leader, member) * 0.18;
+  return teamNeed + complement + stability + leaderFit;
+}
+
+function getGroupRoleRows(members) {
+  if (members.length === 0) return '';
+  // leader candidate takes priority, otherwise auto-select by personality
+  const designated = members.find(m => m.leader);
+  const ranked = [...members].sort((a, b) => calcLeaderScore(b) - calcLeaderScore(a));
+  const leader = designated || ranked[0];
+  const leaderOthers = members.filter(m => m !== leader);
+  const sub1 = leaderOthers.length
+    ? [...leaderOthers].sort((a, b) => calcSubLeader1Score(b, leader) - calcSubLeader1Score(a, leader))[0]
+    : null;
+  const sub2Pool = leaderOthers.filter(m => m !== sub1);
+  const sub2 = sub2Pool.length
+    ? [...sub2Pool].sort((a, b) => calcSubLeader2Score(b, leader, sub1, members) - calcSubLeader2Score(a, leader, sub1, members))[0]
+    : null;
+
+  const leaderLabel = designated ? 'リーダー（候補）' : 'リーダー';
+  const roleOrder = [
+    { member: leader, role: leaderLabel, cls: 'leader', score: null },
+    sub1 ? { member: sub1, role: 'サブ1', cls: 'sub1', score: calcPairScore(leader, sub1) } : null,
+    sub2 ? { member: sub2, role: 'サブ2', cls: 'sub2', score: calcPairScore(leader, sub2) } : null
+  ].filter(Boolean);
+  const picked = new Set(roleOrder.map(r => r.member));
+  const rest = members
+    .filter(m => !picked.has(m))
+    .map(m => ({ member: m, role: 'メンバー', cls: 'member', score: calcPairScore(leader, m) }))
+    .sort((a, b) => b.score - a.score);
+  return roleOrder.concat(rest);
+}
+
+function getGroupLeaderInsight(members) {
+  if (members.length === 0) return '';
+  const roleRows = getGroupRoleRows(members);
+  const roleHtml = roleRows.map(row => `
+    <div class="role-row">
+      <span class="role-badge ${row.cls}">${row.role}</span>
+      <span class="role-name">${escHtml(row.member.name)}</span>
+      <span class="role-score">${row.score === null ? '基準' : 'リーダー相性 ' + row.score + '点'}</span>
+    </div>`).join('');
+
+  const pairRows = getPairRows(members);
+  const bestPair = pairRows[0] || null;
+  const riskyPair = pairRows.length ? pairRows[pairRows.length - 1] : null;
+  const bestHtml = bestPair
+    ? `<span class="pair-chip">${escHtml(bestPair.a.name)} × ${escHtml(bestPair.b.name)} <span class="pair-score">${bestPair.score}点</span></span>`
+    : '<span class="pair-chip">該当なし</span>';
+  const riskyHtml = riskyPair
+    ? `<span class="pair-chip">${escHtml(riskyPair.a.name)} × ${escHtml(riskyPair.b.name)} <span class="pair-score">${riskyPair.score}点</span></span>`
+    : '<span class="pair-chip">該当なし</span>';
+
+  return `
+    <div class="group-leader-box">
+      <div class="leader-section-title">役割候補とリーダーとの相性</div>
+      <div class="role-list">${roleHtml}</div>
+      <div class="leader-note">リーダーは外向性・誠実性・情緒安定を中心に推定。サブ1は右腕型、サブ2は補完型として推定しています。</div>
+      <div class="leader-pairs">
+        <div class="pair-block good">
+          <div class="pair-title">メンバー同士で仲がよさそうな2人</div>
+          <div class="pair-list">${bestHtml}</div>
+        </div>
+        <div class="pair-block warn">
+          <div class="pair-title">メンバー同士でぶつかりやすそうな2人</div>
+          <div class="pair-list">${riskyHtml}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderGroups(groups) {
+  const r = getActiveRoster();
+  const area  = document.getElementById('resultArea');
+  const cards = document.getElementById('groupCards');
+  document.getElementById('resultTitle').textContent =
+    `${escHtml(r.name)}　${groups.length}グループ / ${r.students.length}人`;
+  area.classList.add('visible');
+
+  cards.innerHTML = groups.map((members, gi) => {
+    if (members.length === 0) return '';
+    const avgs = {};
+    traitKeys.forEach(k => {
+      avgs[k] = members.reduce((s, m) => s + codeToScores(m.code)[k], 0) / members.length;
+    });
+    const chips = getGroupRoleRows(members).map(row => `<span class="group-member-chip">${escHtml(row.member.name)}</span>`).join('');
+    const leaderInsight = getGroupLeaderInsight(members);
+    const bars  = traitKeys.map(k => `
+      <div class="factor-row">
+        <span class="factor-label">${traitNames[k]}</span>
+        <div class="factor-bar-bg"><div class="factor-bar-fill" style="width:${(avgs[k]/5)*100}%;background:${traitColors[k]}"></div></div>
+        <span class="factor-val">${avgs[k].toFixed(1)}</span>
+      </div>`).join('');
+    return `
+      <div class="group-card">
+        <div class="group-card-header">
+          <span class="group-name">グループ ${gi + 1}</span>
+          <span class="group-count">${members.length}人</span>
+        </div>
+        <div class="group-members">${chips}</div>
+        ${leaderInsight}
+        <div class="factor-bars">${bars}</div>
+      </div>`;
+  }).join('');
+}
+
+document.getElementById('generateBtn').addEventListener('click', () => {
+  const groups = generateGroups();
+  renderGroups(groups);
+});
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  renderGroups(generateGroups(Date.now() + Math.random()));
+});
+
+// ===== 全描画 =====
+function renderAll() {
+  renderRosterSelect();
+  renderRoster();
+  updateGroupingUI();
+}
+
+renderAll();
+</script>
+<script src="unlock.js"></script>
+<script src="nav.js"></script>
+<script>
+(function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=group_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
+</script>
+</body>
+</html>

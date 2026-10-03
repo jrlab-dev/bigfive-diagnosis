@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 検索結果にもAIにも出さない（関係者だけが使う設定ページ） -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>計測オフ設定（関係者用）</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: #f8fafc; color: #1e293b; line-height: 1.8;
+    display: flex; justify-content: center;
+  }
+  .wrap { width: 100%; max-width: 520px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { font-size: 13px; color: #64748b; margin: 0 0 24px; }
+  .status {
+    border-radius: 14px; padding: 22px 20px; text-align: center;
+    margin-bottom: 20px; border: 2px solid transparent;
+  }
+  .status.off { background: #ecfdf5; border-color: #10b981; }
+  .status.on  { background: #fff7ed; border-color: #f97316; }
+  .status-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .status.off .status-label { color: #059669; }
+  .status.on  .status-label { color: #ea580c; }
+  .status-main { font-size: 18px; font-weight: 700; }
+  .status-note { font-size: 13px; color: #475569; margin-top: 8px; }
+  button {
+    display: block; width: 100%; padding: 15px;
+    font-family: inherit; font-size: 15px; font-weight: 700;
+    border: none; border-radius: 12px; cursor: pointer; margin-bottom: 10px;
+  }
+  .btn-off { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; }
+  .btn-on  { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+  .note {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 18px; font-size: 13px; color: #475569; margin-top: 20px;
+  }
+  .note b { color: #1e293b; }
+  .note ul { margin: 8px 0 0; padding-left: 20px; }
+  .note li { margin-bottom: 6px; }
+  .back { display: block; text-align: center; margin-top: 20px; font-size: 13px; color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>計測オフ設定</h1>
+  <p class="sub">この端末での操作を、サイトの集計に入れないようにします（関係者用）</p>
+
+  <div class="status" id="status">
+    <div class="status-label" id="statusLabel">確認中</div>
+    <div class="status-main" id="statusMain">…</div>
+    <div class="status-note" id="statusNote"></div>
+  </div>
+
+  <button class="btn-off" id="btnOff">この端末で計測をオフにする</button>
+  <button class="btn-on" id="btnOn">オフを解除する（通常に戻す）</button>
+
+  <!-- 2026-08-19追加：マイページの「コレクター順位」（ランキング）からも外す。
+       計測オフ（dev_nocount）とは別の印（dev_norank）。bigfive_ を付けないキー名なのは、
+       引継ぎバックアップで意図せず他の端末に移らないようにするため。 -->
+  <h2 style="font-size:15px;margin:26px 0 4px;">ランキングからも外す</h2>
+  <p style="font-size:13px;color:#64748b;margin:0 0 12px;">
+    マイページの「コレクター順位」の対象からも、この端末を外します（開発・テスト用）。
+  </p>
+
+  <div class="status" id="rankStatus">
+    <div class="status-label" id="rankStatusLabel">確認中</div>
+    <div class="status-main" id="rankStatusMain">…</div>
+    <div class="status-note" id="rankStatusNote"></div>
+  </div>
+
+  <button class="btn-off" id="rankToggleBtn">この端末をランキングから外す</button>
+
+  <h2 style="font-size:15px;margin:26px 0 4px;">はじめて見る人の状態に戻す</h2>
+  <p style="font-size:13px;color:#64748b;margin:0 0 12px;">
+    ¥980の案内など、<b>一度押すと次から出なくなる画面</b>をもう一度確認したいときに使います。
+  </p>
+  <button class="btn-on" id="btnReset">押した記録を消して、はじめての状態に戻す</button>
+  <div id="resetMsg" style="display:none;font-size:13px;color:#059669;background:#ecfdf5;border:1px solid #10b981;border-radius:10px;padding:12px 14px;margin-bottom:10px;"></div>
+
+  <div class="note">
+    <b>知っておいていただきたいこと</b>
+    <ul>
+      <li>この設定は<b>いま開いているブラウザにだけ</b>保存されます。スマホでもテストするなら、<b>スマホでもこのページを開いて</b>ボタンを押してください。</li>
+      <li>「ランキングからも外す」の印も同じで、<b>このブラウザにだけ</b>保存されます（引継ぎバックアップで他の端末に移ることはありません）。</li>
+      <li>ブラウザの履歴やサイトデータを消すと、この設定も一緒に消えます。そのときはまたこのページを開いてください。</li>
+      <li>オフの間も、サイトの動きは普段どおりです。集計に数えられなくなるだけです。</li>
+      <li>このページ自体は何も数えていないので、何度開いても集計は汚れません。</li>
+      <li><b>「はじめての状態に戻す」を使うときは、先に計測をオフにしてください。</b>戻したあとに触ると、その操作が改めて数えられてしまいます。</li>
+    </ul>
+  </div>
+
+  <a class="back" href="index.html">← サイトにもどる</a>
+</div>
+
+<script>
+(function () {
+  var KEY = 'dev_nocount';
+  var box = document.getElementById('status');
+  var label = document.getElementById('statusLabel');
+  var main = document.getElementById('statusMain');
+  var note = document.getElementById('statusNote');
+
+  function read() {
+    try { return localStorage.getItem(KEY) === '1'; } catch (e) { return null; }
+  }
+
+  function draw(justChanged) {
+    var off = read();
+    if (off === null) {  // localStorageが使えない（プライベートモード等）
+      box.className = 'status on';
+      label.textContent = '設定できません';
+      main.textContent = 'このブラウザでは保存できません';
+      note.textContent = 'シークレットモードや、サイトデータをブロックする設定になっている可能性があります。通常のウィンドウで開いてください。';
+      return;
+    }
+    box.className = 'status ' + (off ? 'off' : 'on');
+    label.textContent = off ? '計測オフ' : '計測オン';
+    main.textContent = off ? 'この端末の操作は数えられません' : 'この端末の操作は数えられます';
+    note.textContent = justChanged
+      ? '設定を切り替えました。'
+      : (off ? '安心してサイトを触っていただけます。' : 'テストするなら下のボタンでオフにしてください。');
+  }
+
+  document.getElementById('btnOff').addEventListener('click', function () {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    draw(true);
+  });
+  document.getElementById('btnOn').addEventListener('click', function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    draw(true);
+  });
+
+  // ===== ランキング除外（dev_norank・2026-08-19追加）=====
+  // 計測オフ（dev_nocount）とは別の印。ボタン1つでトグル（押す→立つ、もう一度押す→消える）
+  var RANK_KEY = 'dev_norank';
+  var rBox = document.getElementById('rankStatus');
+  var rLabel = document.getElementById('rankStatusLabel');
+  var rMain = document.getElementById('rankStatusMain');
+  var rNote = document.getElementById('rankStatusNote');
+  var rankBtn = document.getElementById('rankToggleBtn');
+
+  function readRank() {
+    try { return localStorage.getItem(RANK_KEY) === '1'; } catch (e) { return null; }
+  }
+
+  function drawRank() {
+    var excluded = readRank();
+    if (excluded === null) {  // localStorageが使えない（プライベートモード等）
+      rBox.className = 'status on';
+      rLabel.textContent = '設定できません';
+      rMain.textContent = 'このブラウザでは保存できません';
+      rNote.textContent = 'シークレットモードや、サイトデータをブロックする設定になっている可能性があります。';
+      rankBtn.style.display = 'none';
+      return;
+    }
+    rBox.className = 'status ' + (excluded ? 'off' : 'on');
+    rLabel.textContent = excluded ? 'ランキング外' : 'ランキング掲載中';
+    rMain.textContent = excluded ? 'この端末はランキングに入りません' : 'この端末はランキングに入ります';
+    rNote.textContent = excluded
+      ? 'マイページの「コレクター順位」に開発用の表示が出ます。'
+      : '20枚以上集めてバックアップを保存すると、コレクター順位に載ります。';
+    rankBtn.className = excluded ? 'btn-on' : 'btn-off';
+    rankBtn.textContent = excluded ? 'ランキングに戻す（通常に戻す）' : 'この端末をランキングから外す';
+  }
+
+  rankBtn.addEventListener('click', function () {
+    try {
+      if (readRank()) localStorage.removeItem(RANK_KEY);
+      else localStorage.setItem(RANK_KEY, '1');
+    } catch (e) {}
+    drawRank();
+  });
+
+  drawRank();
+
+  document.getElementById('btnReset').addEventListener('click', function () {
+    var removed = 0;
+    try {
+      var keys = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('counted_') === 0) keys.push(k);
+      }
+      for (var j = 0; j < keys.length; j++) { localStorage.removeItem(keys[j]); removed++; }
+    } catch (e) {}
+    var msg = document.getElementById('resetMsg');
+    msg.style.display = 'block';
+    msg.textContent = removed
+      ? removed + '件の記録を消しました。¥980の案内など、はじめて見る画面がまた出るようになります。'
+      : '消す記録はありませんでした（すでにはじめての状態です）。';
+  });
+
+  var v = new URLSearchParams(location.search).get('set');
+  if (v === '1') { try { localStorage.setItem(KEY, '1'); } catch (e) {} draw(true); }
+  else if (v === '0') { try { localStorage.removeItem(KEY); } catch (e) {} draw(true); }
+  else { draw(false); }
+})();
+</script>
+</body>
+</html>

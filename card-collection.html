@@ -1,0 +1,785 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コレクション | ビッグファイブ診断</title>
+  <meta name="description" content="ビッグファイブ診断のカードコレクション。大人のカードと幼児の専用カード54種類を集め、全6,830種類の発見状況を確認できます。">
+  <meta property="og:title" content="コレクション | ビッグファイブ診断">
+  <meta property="og:description" content="ビッグファイブ診断のコレクション。幼児カード54種類を加えた全6,830種類を集めよう。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bigfive.jr-genius.jp/card-collection.html">
+  <meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "カードコレクション【公式】",
+  "url": "https://bigfive.jr-genius.jp/card-collection.html",
+  "description": "ビッグファイブ診断で入手したキャラクターカードのコレクション。レア度別にカードを管理。",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "keywords": ["コレクション", "カード", "レアリティ", "ビッグファイブ"]
+}
+</script>
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/card-collection.html">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="light-mode.css">
+  <style>
+    body {
+      background: #0a0e27;
+      color: #e2e8f0;
+      font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      padding: 68px 16px 12px;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: 1.4rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #a78bfa, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .progress-wrap {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .progress-text {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .handoff-note {
+      font-size: 0.78rem;
+      color: var(--dim);
+      margin-top: 10px;
+    }
+    .progress-bar-bg {
+      background: #1e293b;
+      border-radius: 999px;
+      height: 5px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #ec4899);
+      border-radius: 999px;
+      transition: width 0.5s;
+      width: 0%;
+    }
+
+    /* レアリティ名表示 */
+    .rarity-name {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      padding: 8px 16px 4px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    /* フィルタータブ */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 16px 16px 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid #334155;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-tab.active {
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      border-color: transparent;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .count-label {
+      text-align: center;
+      font-size: 0.74rem;
+      color: #475569;
+      padding: 4px 0 10px;
+    }
+
+    .collection-loading {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #64748b;
+      font-size: 0.78rem;
+      padding: 5px 12px 12px;
+    }
+    .collection-loading[hidden] { display: none; }
+    .collection-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(139,92,246,0.22);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: collection-spin 0.8s linear infinite;
+    }
+    @keyframes collection-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .collection-spinner { animation-duration: 1.8s; }
+    }
+
+    /* カードグリッド */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 0 10px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    @media (min-width: 420px) {
+      .card-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media (min-width: 520px) {
+      .card-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    /* カードサムネイル */
+    .collection-card {
+      aspect-ratio: 1/1;
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid #1e293b;
+      cursor: pointer;
+      transition: transform 0.12s;
+      background: #0f172a;
+      text-decoration: none;
+      display: block;
+    }
+    .collection-card:active { transform: scale(0.93); }
+    .collection-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #0f172a;
+      transform: scale(1.17);
+    }
+    .collection-card .card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.72);
+      font-size: 0.52rem;
+      text-align: center;
+      padding: 2px 1px;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    /* レアリティ枠色 */
+    .collection-card.rarity-r0 { border-color: #78716c; }
+    .collection-card.rarity-r1 { border-color: #60a5fa; }
+    .collection-card.rarity-r2 { border-color: #a78bfa; }
+    .collection-card.rarity-r3 { border-color: #34d399; }
+    .collection-card.rarity-r4 { border-color: #fbbf24; }
+    .collection-card.rarity-r5 { border-color: #f87171; }
+    .collection-card.rarity-r6 { border-color: #f9a8d4; box-shadow: 0 0 6px rgba(249,168,212,0.4); }
+    .collection-card.rarity-r7 { border-color: #7c3aed; box-shadow: 0 0 6px rgba(124,58,237,0.4); }
+    .collection-card.rarity-kid { border-color: #83d9ee; box-shadow: 0 0 6px rgba(131,217,238,0.4); }
+    .collection-card.rarity-kid img { transform: none; }
+    .collection-card.rarity-kid .card-label { display: none; }
+
+    /* 削除確認 */
+    .delete-confirm {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+    }
+    .delete-confirm.show { display: flex; }
+    .delete-confirm-box {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 300px;
+      width: 90%;
+      text-align: center;
+    }
+    .delete-confirm-box p { margin-bottom: 16px; font-size: 14px; line-height: 1.6; }
+    .delete-confirm-box .btn-row { display: flex; gap: 10px; }
+    .delete-confirm-box button {
+      flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; cursor: pointer;
+    }
+    .delete-confirm-box .btn-cancel { background: #334155; color: #94a3b8; }
+    .delete-confirm-box .btn-delete { background: #ef4444; color: #fff; }
+
+    /* 空状態 */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 16px;
+      color: #475569;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    /* 全種類図鑑ボタン */
+    .full-zukan-btn {
+      display: block;
+      max-width: 300px;
+      margin: 32px auto 16px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid #8b5cf6;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .full-zukan-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+    }
+
+    /* 機能解放マップ */
+    .unlock-map-section {
+      max-width: 580px;
+      margin: 32px auto 0;
+      padding: 0 12px;
+    }
+    .unlock-map-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: .06em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .umap-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      border: 1px solid #1e293b;
+      background: #0f172a;
+    }
+    .umap-row.umap-unlocked { border-color: #1e3a2f; background: rgba(16,185,129,0.06); }
+    .umap-count {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      min-width: 38px;
+      text-align: right;
+    }
+    .umap-row.umap-unlocked .umap-count { color: #10b981; }
+    .umap-name {
+      flex: 1;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+    .umap-row.umap-locked .umap-name { color: #475569; }
+    .umap-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #10b981;
+      white-space: nowrap;
+    }
+    .umap-row.umap-locked .umap-status { color: #475569; }
+    .umap-link { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; flex: 1; }
+
+    /* 戻るリンク */
+    .back-link {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+  </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "カードコレクション",
+      "item": "https://bigfive.jr-genius.jp/card-collection.html"
+    }
+  ]
+}
+</script>
+<script src="card-delivery.js?v=20260927h"></script>
+<script src="card-catalog.js?v=20260927h"></script>
+<script src="kid-card-data.js?v=20260927h"></script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<div class="page-header">
+  <h1><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>コレクション</h1>
+  <div class="progress-wrap">
+    <div class="progress-text" id="progressText">読み込み中...</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+  <div class="handoff-note" id="handoffNote" style="display:none"></div>
+</div>
+
+<div class="rarity-name" id="rarityName">All</div>
+<p style="text-align:center;font-size:14px;"><a href="child-update.html" style="color:inherit;text-underline-offset:3px">子ども診断とカードの新しいルールを見る</a></p>
+
+<div class="filter-tabs">
+  <button class="filter-tab active" data-filter="all">全体</button>
+  <button class="filter-tab" data-filter="r0">N</button>
+  <button class="filter-tab" data-filter="r1">R</button>
+  <button class="filter-tab" data-filter="r2">SR</button>
+  <button class="filter-tab" data-filter="r3">SSR</button>
+  <button class="filter-tab" data-filter="r4">UR</button>
+  <button class="filter-tab" data-filter="r5">LR</button>
+  <button class="filter-tab" data-filter="r6">Secret</button>
+  <button class="filter-tab" data-filter="r7">Dark</button>
+  <button class="filter-tab" data-filter="kid">幼児</button>
+</div>
+<div class="count-label" id="countLabel"></div>
+<div class="card-grid" id="cardGrid"></div>
+<div class="collection-loading" id="collectionLoading" role="status" aria-live="polite" hidden>
+  <span class="collection-spinner" aria-hidden="true"></span>
+  <span id="collectionLoadingText">カードを読み込み中...</span>
+</div>
+
+<section data-milestone-collection hidden aria-label="収集記念のシークレット"></section>
+
+<!-- 削除確認モーダル -->
+<div class="delete-confirm" id="deleteConfirm">
+  <div class="delete-confirm-box">
+    <p>このカードをコレクションから削除しますか？<br><span id="deleteTarget" style="color:#a78bfa;font-size:12px;"></span></p>
+    <div class="btn-row">
+      <button class="btn-cancel" id="deleteCancel">キャンセル</button>
+      <button class="btn-delete" id="deleteBtn">削除</button>
+    </div>
+  </div>
+</div>
+
+<div class="unlock-map-section">
+  <div class="unlock-map-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> 機能解放マップ</div>
+  <div id="unlockMapList"></div>
+</div>
+
+<a href="zukan.html" class="full-zukan-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>全種類図鑑を開く</a>
+
+<a href="mypage.html" class="back-link">← マイページに戻る</a>
+
+<script src="nav.js?v=20260919"></script>
+<script src="unlock.js?v=20260927"></script>
+<script src="image-resolver.js?v=20260927h"></script>
+<script src="hidden_characters.js?v=20260919"></script>
+<script src="album.js?v=20260927h"></script>
+<script src="rarity.js?v=20260927"></script>
+<script>
+(function() {
+  'use strict';
+
+  var currentFilter = 'all';
+  var ownedCards = [];
+  var deleteTarget = null;
+  var deleteConfirmStep = 0;
+  var renderGeneration = 0;
+  var renderFrame = null;
+  var renderObserver = null;
+  var filtersBound = false;
+  var RENDER_BATCH_SIZE = 24;
+
+  // レアリティ名マッピング
+  var rarityNames = {
+    all: 'All',
+    r0: 'Normal',
+    r1: 'Rare',
+    r2: 'Super Rare',
+    r3: 'Super Super Rare',
+    r4: 'Ultra Rare',
+    r5: 'Legendary Rare',
+    r6: 'Secret',
+    r7: 'Dark Secret',
+    kid: '幼児カード（専用区分）'
+  };
+
+  var confirmEl = document.getElementById('deleteConfirm');
+  var targetEl = document.getElementById('deleteTarget');
+  var deleteBtnEl = document.getElementById('deleteBtn');
+
+  document.getElementById('deleteCancel').addEventListener('click', function() {
+    confirmEl.classList.remove('show');
+    deleteTarget = null;
+    deleteConfirmStep = 0;
+    deleteBtnEl.textContent = '削除';
+    deleteBtnEl.style.background = '#ef4444';
+  });
+
+  deleteBtnEl.addEventListener('click', function() {
+    if (!deleteTarget || !window.AlbumUtils) return;
+    if (deleteConfirmStep === 0) {
+      deleteConfirmStep = 1;
+      deleteBtnEl.textContent = '本当に削除';
+      deleteBtnEl.style.background = '#991b1b';
+      return;
+    }
+    // step 1: 実行
+    var cards = AlbumUtils.getAlbumCards();
+    cards = cards.filter(function(c) {
+      return !(c.code === deleteTarget.code && c.gender === deleteTarget.gender && c.version === deleteTarget.version);
+    });
+    localStorage.setItem(AlbumUtils.STORAGE_KEY, JSON.stringify(cards));
+    confirmEl.classList.remove('show');
+    deleteTarget = null;
+    deleteConfirmStep = 0;
+    deleteBtnEl.textContent = '削除';
+    deleteBtnEl.style.background = '#ef4444';
+    init();
+  });
+
+  function init() {
+    if (typeof AlbumUtils !== 'undefined') AlbumUtils.migrateExistingResults();
+
+    // アルバムからカードデータを取得
+    var albumCards = (typeof AlbumUtils !== 'undefined') ? AlbumUtils.getAlbumCards() : [];
+
+    // 保存されたrarityが間違っている可能性があるため、コードから再計算
+    albumCards.forEach(function(card) {
+      var correctRarity = (typeof AlbumUtils !== 'undefined')
+        ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
+        : ((card.version === '10') ? 'r0' : computeRarity(card.code));
+      card.rarity = correctRarity;
+    });
+
+    ownedCards = albumCards;
+
+    // 進捗表示
+    var unique = new Set();
+    albumCards.forEach(function(card) {
+      if (!card.code || !card.gender) return;
+      if (card.version === 'kid3') {
+        if (CardCatalog.isKid(card.code, card.version)) unique.add('kid/' + card.code + '/' + card.gender);
+      } else if (card.isHidden && card.hiddenId) {
+        unique.add('hidden/' + card.hiddenId);
+      } else if (card.version === '10') {
+        unique.add('r0/' + card.code + '/' + card.gender);
+      } else {
+        unique.add('normal/' + card.code + '/' + card.gender);
+      }
+    });
+    var uniqueCount = unique.size + AlbumUtils.getCollectionRewards().length;
+    document.getElementById('progressText').textContent = uniqueCount.toLocaleString() + ' / ' + CardCatalog.TOTAL.toLocaleString() + ' 種類発見（所持記録 ' + albumCards.length + '枚）';
+    document.getElementById('progressBar').style.width = Math.min(uniqueCount / CardCatalog.TOTAL * 100, 100).toFixed(1) + '%';
+
+    // フィルタータブ
+    if (!filtersBound) {
+      document.querySelectorAll('.filter-tab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-tab').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          // レアリティ名を表示
+          var rarityNameEl = document.getElementById('rarityName');
+          if (rarityNameEl && rarityNames[currentFilter]) {
+            rarityNameEl.textContent = rarityNames[currentFilter];
+          }
+          render();
+        });
+      });
+      filtersBound = true;
+    }
+
+    render();
+  }
+
+  function applyFilter() {
+    if (currentFilter === 'all') {
+      return ownedCards;
+    }
+    return ownedCards.filter(function(c) {
+      return c.rarity === currentFilter;
+    });
+  }
+
+  function setLoading(visible, loaded, total, waitingForScroll) {
+    var loading = document.getElementById('collectionLoading');
+    var text = document.getElementById('collectionLoadingText');
+    var spinner = loading.querySelector('.collection-spinner');
+    var grid = document.getElementById('cardGrid');
+    loading.hidden = !visible;
+    spinner.hidden = !visible || !!waitingForScroll;
+    grid.setAttribute('aria-busy', visible && !waitingForScroll ? 'true' : 'false');
+    if (visible) {
+      text.textContent = (waitingForScroll ? '下へ進むと続きを読み込みます ' : 'カードを読み込み中 ') +
+        loaded.toLocaleString() + ' / ' + total.toLocaleString() + '枚';
+    }
+  }
+
+  function createCardElement(card) {
+    // 保存されたrarityではなくコードから正しいrarityを再計算
+    var correctRarity = (typeof AlbumUtils !== 'undefined')
+      ? AlbumUtils.computeRarityForAlbum(card.code, card.version || '10', card.gender)
+      : ((card.version === '10') ? 'r0' : computeRarity(card.code));
+    card.rarity = correctRarity;
+
+    var el = document.createElement('a');
+    el.className = 'collection-card rarity-' + card.rarity;
+    el.href = card.version === 'kid3' ? CardCatalog.kidResult(card.code, card.gender)
+      : 'result.html?type=' + card.code + '&v=' + (card.version || '10') + '&gender=' + card.gender + '&saved=1';
+
+    // 長押しで削除
+    var timer = null;
+    el.addEventListener('touchstart', function(e) {
+      timer = setTimeout(function() {
+        e.preventDefault();
+        deleteTarget = card;
+        targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+        confirmEl.classList.add('show');
+      }, 1000);
+    }, { passive: true });
+    el.addEventListener('touchend', function() { clearTimeout(timer); });
+    el.addEventListener('touchmove', function() { clearTimeout(timer); });
+    el.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      deleteTarget = card;
+      targetEl.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀') + ' (' + (card.rarity || '?') + ')';
+      confirmEl.classList.add('show');
+    });
+
+    var img = document.createElement('img');
+    // getCandidates() で result.html と同じ画像検索ロジックを使用（一貫性保証）
+    var IR = window.ImageResolver;
+    if (IR && IR.getCandidates) {
+      var candidates = IR.getCandidates(card.code, card.gender, card.version || '10') || [];
+      var cIdx = 0;
+      if (candidates.length && candidates[0].path) {
+        img.src = candidates[0].path;
+        img.onerror = function() {
+          cIdx++;
+          if (cIdx < candidates.length && candidates[cIdx].path) {
+            this.src = candidates[cIdx].path;
+          } else {
+            this.style.display = 'none';
+          }
+        };
+      } else {
+        img.style.display = 'none';
+      }
+    } else {
+      var fallbackPath = AlbumUtils.getCardImagePath(card);
+      if (fallbackPath) {
+        img.src = fallbackPath;
+        img.onerror = function() { this.style.display = 'none'; };
+      } else {
+        img.style.display = 'none';
+      }
+    }
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = '';
+    if (card.version === 'kid3' && window.KidCardData) {
+      var kidEntry = KidCardData.entries.find(function(r){return r.id===card.code;});
+      if(kidEntry){img.alt=kidEntry.name;el.title=kidEntry.name;}
+    }
+
+    var label = document.createElement('div');
+    label.className = 'card-label';
+    label.textContent = card.code + (card.gender === 'M' ? ' ♂' : ' ♀');
+
+    el.appendChild(img);
+    el.appendChild(label);
+    return el;
+  }
+
+  function render() {
+    var grid = document.getElementById('cardGrid');
+    var countEl = document.getElementById('countLabel');
+    var filtered = applyFilter();
+    var rewardSection = document.querySelector('[data-milestone-collection]');
+    var rewardCount = (currentFilter === 'all' || currentFilter === 'r6' || currentFilter === 'r8') && window.AlbumUtils
+      ? AlbumUtils.getCollectionRewards().length : 0;
+    rewardSection.dataset.collectionFilter = currentFilter;
+    rewardSection.hidden = !rewardCount;
+    window.dispatchEvent(new CustomEvent('bigfive:collection-filter-changed'));
+
+    countEl.textContent = filtered.length + '枚' + (rewardCount ? ' ＋ 収集記念' + rewardCount + '枚' : '');
+
+    // 前の一覧が描画中でも即座に止め、最新の絞り込みを優先する。
+    var generation = ++renderGeneration;
+    if (renderFrame !== null) cancelAnimationFrame(renderFrame);
+    if (renderObserver) renderObserver.disconnect();
+    renderFrame = null;
+    renderObserver = null;
+    grid.replaceChildren();
+    if (filtered.length === 0) {
+      setLoading(false, 0, 0);
+      if (!rewardCount) grid.innerHTML = '<div class="empty-state">カードがありません<br>診断を受けてカードをゲットしよう！</div>';
+      return;
+    }
+
+    var rendered = 0;
+    setLoading(true, rendered, filtered.length);
+    function scheduleNextBatch() {
+      if (generation !== renderGeneration || renderFrame !== null || rendered >= filtered.length) return;
+      setLoading(true, rendered, filtered.length, false);
+      renderFrame = requestAnimationFrame(appendNextBatch);
+    }
+    function fillVisibleArea() {
+      if (generation !== renderGeneration || rendered >= filtered.length) return;
+      var loading = document.getElementById('collectionLoading');
+      if (loading.getBoundingClientRect().top <= window.innerHeight + 640) scheduleNextBatch();
+    }
+    function appendNextBatch() {
+      renderFrame = null;
+      if (generation !== renderGeneration) return;
+      var end = Math.min(rendered + RENDER_BATCH_SIZE, filtered.length);
+      var fragment = document.createDocumentFragment();
+      while (rendered < end) {
+        fragment.appendChild(createCardElement(filtered[rendered]));
+        rendered++;
+      }
+      grid.appendChild(fragment);
+      if (rendered < filtered.length) {
+        setLoading(true, rendered, filtered.length, true);
+        requestAnimationFrame(fillVisibleArea);
+      } else {
+        if (renderObserver) renderObserver.disconnect();
+        renderObserver = null;
+        setLoading(false, rendered, filtered.length);
+      }
+    }
+    if ('IntersectionObserver' in window) {
+      renderObserver = new IntersectionObserver(function(entries) {
+        if (entries.some(function(entry) { return entry.isIntersecting; })) scheduleNextBatch();
+      }, { rootMargin: '640px 0px' });
+      renderObserver.observe(document.getElementById('collectionLoading'));
+    }
+    scheduleNextBatch();
+  }
+
+  init();
+})();
+
+// ===== 機能解放マップ =====
+(function() {
+  if (typeof UNLOCK_TABLE === 'undefined') return;
+  var cardCount = typeof getCardCount === 'function' ? getCardCount() : 0;
+  var legacy = typeof isLegacyUser === 'function' && isLegacyUser();
+  // Stage 2 範囲：25〜99枚の機能のみ表示（urlありのもの）
+  var features = UNLOCK_TABLE.filter(function(e) {
+    return e.cards >= 25 && e.cards <= 99 && e.url;
+  });
+  var html = '';
+  features.forEach(function(f) {
+    var unlocked = legacy || cardCount >= f.cards;
+    var remaining = f.cards - cardCount;
+    var link = unlocked ? '<a class="umap-link" href="' + f.url + '">' : '<span class="umap-link">';
+    var linkClose = unlocked ? '</a>' : '</span>';
+    html += '<div class="umap-row ' + (unlocked ? 'umap-unlocked' : 'umap-locked') + '">'
+      + link
+      + '<div class="umap-count">' + f.cards + '枚</div>'
+      + '<div class="umap-name">' + f.label + '</div>'
+      + linkClose
+      + '<div class="umap-status">' + (unlocked ? '解放済み' : 'あと' + remaining + '枚') + '</div>'
+      + '</div>';
+  });
+  var el = document.getElementById('unlockMapList');
+  if (el) el.innerHTML = html;
+})();
+</script>
+
+<script>
+// ===== 引き継ぎ番号を見出しの下に出す（2026-09-02）=====
+// 同期IDを持つ人にだけ出す。番号は一度取れたら控えて、2回目以降は通信しない。
+// ⚠️別の<script>に分けてある＝上のスクリプトが途中で転んでも、この行は出る
+// 控えにはIDも一緒に入れる（別の端末から引き継いだあとに古い番号を出さないため）
+(function() {
+  var el = document.getElementById('handoffNote');
+  if (!el) return;
+  var id = localStorage.getItem('bigfive_sync_id');
+  if (!id) return;
+
+  function show(display) {
+    el.textContent = '引き継ぎ番号：' + display + '（機種変更のときに使います）';
+    el.style.display = 'block';
+  }
+
+  try {
+    var cached = JSON.parse(localStorage.getItem('bigfive_sync_short') || 'null');
+    if (cached && cached.id === id && cached.display) { show(cached.display); return; }
+  } catch (e) {}
+
+  if (!window.fetch) return;
+  fetch('https://bigfive.jr-genius.jp/api/shortkey', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id })
+  }).then(function(res) {
+    return res.json();
+  }).then(function(json) {
+    if (!json || !json.display) return; // 取れなければ行ごと出さない
+    try {
+      localStorage.setItem('bigfive_sync_short', JSON.stringify({ id: id, display: json.display }));
+    } catch (e) {}
+    show(json.display);
+  }).catch(function() {});
+})();
+</script>
+
+</body>
+</html>
