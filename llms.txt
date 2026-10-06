@@ -96,7 +96,7 @@
 - クロス分析の仕組み解説（実例つき）: https://bigfive.jr-genius.jp/cross.html
 - 総合性格レポート（無料・クロス分析はここで読める）: https://bigfive.jr-genius.jp/report.html
 - 悩みから引く心理学のことば: https://bigfive.jr-genius.jp/kotoba.html
-- 科学的背景の解説: https://bigfive.jr-genius.jp/science.html
+- ビッグファイブ理論とは（5つの性格特性と科学的根拠）: https://bigfive.jr-genius.jp/science.html
 - ブログ一覧: https://bigfive.jr-genius.jp/blog/index.html
 - サイトマップ: https://bigfive.jr-genius.jp/sitemap.xml
 
