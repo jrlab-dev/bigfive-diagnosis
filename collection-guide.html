@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/collection-guide.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>カードを集めて機能解放とは？｜ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブ診断のカードコレクションと機能解放システムを解説します。診断でキャラクターカードを集めるほど、あの人診断・キャリア適性・チーム相性・総合レポート・EQ・RIASEC・ダークトライアドなどの機能が段階的に使えるようになります。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="カードを集めて機能解放とは？｜ビッグファイブ診断">
+<meta property="og:description" content="カードを集めるほど、あの人診断・キャリア分析・チーム相性・総合レポートなどが段階的に解放されます。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/collection-guide.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="カードを集めて機能解放とは？｜ビッグファイブ診断">
+<meta name="twitter:description" content="カードコレクションで診断機能が広がる仕組みを解説。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "カードを集めて機能解放とは？",
+  "url": "https://bigfive.jr-genius.jp/collection-guide.html",
+  "description": "ビッグファイブ診断のカードコレクションと機能解放システムの説明ページ。",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "about": [
+    { "@type": "Thing", "name": "ビッグファイブ診断" },
+    { "@type": "Thing", "name": "カードコレクション" },
+    { "@type": "Thing", "name": "性格診断" },
+    { "@type": "Thing", "name": "心理学診断" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "マイページ", "item": "https://bigfive.jr-genius.jp/mypage.html" },
+    { "@type": "ListItem", "position": 3, "name": "カードを集めて機能解放とは？", "item": "https://bigfive.jr-genius.jp/collection-guide.html" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --muted: #64748b;
+    --purple: #8b5cf6;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --border: rgba(139,92,246,0.18);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.85;
+    overflow-x: hidden;
+  }
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(139,92,246,0.10), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 80% 75%, rgba(6,182,212,0.08), transparent 70%);
+  }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  .site-header-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .nav {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .nav a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .nav a:hover { color: var(--cyan); }
+  .theme-toggle-mini {
+    border: 1px solid rgba(139,92,246,0.35);
+    background: rgba(255,255,255,0.04);
+    color: var(--dim);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .theme-toggle-mini:hover {
+    color: var(--cyan);
+    border-color: rgba(6,182,212,0.45);
+  }
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 58px 20px 72px;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 42px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(139,92,246,0.36);
+    color: #c4b5fd;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 3.2rem);
+    line-height: 1.25;
+    font-weight: 900;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, #fff, #c4b5fd, #67e8f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .lead {
+    max-width: 760px;
+    margin: 0 auto;
+    color: var(--dim);
+    font-size: 15px;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .btn.primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    box-shadow: 0 10px 30px rgba(139,92,246,0.25);
+  }
+  .btn.secondary {
+    color: var(--text);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+  }
+  section { margin-bottom: 42px; }
+  .section-title {
+    font-size: 1.45rem;
+    line-height: 1.45;
+    font-weight: 900;
+    margin-bottom: 14px;
+  }
+  .section-text {
+    color: var(--dim);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .card {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.045);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .card p {
+    color: var(--dim);
+    font-size: 13px;
+    line-height: 1.75;
+  }
+  .path {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: linear-gradient(145deg, rgba(139,92,246,0.08), rgba(6,182,212,0.04));
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .unlock-row {
+    display: grid;
+    grid-template-columns: 76px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(139,92,246,0.12);
+  }
+  .unlock-row:last-child { border-bottom: none; }
+  .count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    min-height: 34px;
+    border-radius: 999px;
+    background: rgba(139,92,246,0.16);
+    color: #ddd6fe;
+    font-size: 13px;
+    font-weight: 900;
+  }
+  .unlock-main strong {
+    display: block;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .unlock-main {
+    min-width: 0;
+  }
+  .unlock-main span {
+    color: var(--dim);
+    font-size: 12px;
+  }
+  .unlock-link {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .note {
+    border: 1px solid rgba(6,182,212,0.20);
+    background: rgba(6,182,212,0.06);
+    border-radius: 12px;
+    padding: 18px;
+    color: var(--dim);
+    font-size: 13px;
+  }
+  .note strong { color: #67e8f9; }
+  .steps {
+    counter-reset: step;
+    display: grid;
+    gap: 12px;
+  }
+  .step {
+    position: relative;
+    padding: 16px 16px 16px 58px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    font-weight: 900;
+    font-size: 13px;
+  }
+  .step h3 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .step p {
+    color: var(--dim);
+    font-size: 13px;
+  }
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+  }
+  body.theme-light {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --dim: #475569;
+    --muted: #64748b;
+    --border: rgba(109,40,217,0.16);
+    background: #f8fafc;
+  }
+  body.theme-light .bg {
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(139,92,246,0.12), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 80% 75%, rgba(6,182,212,0.10), transparent 70%);
+  }
+  body.theme-light .site-header {
+    background: rgba(255,255,255,0.88);
+    border-bottom-color: rgba(109,40,217,0.16);
+  }
+  body.theme-light .brand,
+  body.theme-light .card h3,
+  body.theme-light .unlock-main strong {
+    color: #1e293b;
+  }
+  body.theme-light h1 {
+    background: linear-gradient(135deg, #1e293b, #6d28d9, #0e7490);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  body.theme-light .eyebrow,
+  body.theme-light .count {
+    color: #6d28d9;
+    background: rgba(109,40,217,0.08);
+    border-color: rgba(109,40,217,0.24);
+  }
+  body.theme-light .card,
+  body.theme-light .step {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .path {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .unlock-row {
+    border-bottom-color: rgba(109,40,217,0.10);
+  }
+  body.theme-light .btn.secondary,
+  body.theme-light .theme-toggle-mini {
+    color: #334155;
+    border-color: rgba(109,40,217,0.18);
+    background: rgba(255,255,255,0.75);
+  }
+  body.theme-light .note {
+    color: #475569;
+    background: rgba(6,182,212,0.08);
+    border-color: rgba(6,182,212,0.20);
+  }
+  body.theme-light footer {
+    border-top-color: rgba(109,40,217,0.14);
+  }
+  .unlock-name-link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .unlock-name-link:hover { color: var(--cyan); }
+  @media (max-width: 760px) {
+    .site-header-inner { align-items: flex-start; flex-direction: column; }
+    .nav { justify-content: flex-start; }
+    main { padding-top: 38px; }
+    .grid { grid-template-columns: 1fr; }
+    .unlock-row { display: block; }
+    .count { display: inline-flex; vertical-align: middle; margin-right: 6px; margin-top: 0; }
+    .unlock-main { display: inline; }
+    .unlock-main strong { display: inline; }
+    .unlock-main span { display: block; margin-top: 6px; }
+    .unlock-link { display: none; }
+  }
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg"></div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">ビッグファイブ診断</a>
+    <nav class="nav">
+      <a href="quiz.html">診断する</a>
+      <a href="mypage.html">マイページ</a>
+      <a href="diagnoses.html">診断一覧</a>
+      <button class="theme-toggle-mini" id="themeToggleMini" type="button">DARK</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="eyebrow">COLLECTION SYSTEM</span>
+    <h1>カードを集めるほど、診断できることが増えていく</h1>
+    <p class="lead">
+      ビッグファイブ診断では、診断結果がカードとして保存されます。カードを集めると、性格分析、相性分析、キャリア分析、チーム分析などの機能が段階的に解放されます。
+      ただ読むだけの診断ではなく、自分や身近な人を少しずつ理解していくためのコレクション型システムです。
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="quiz.html">まず診断してカードを集める</a>
+      <a class="btn secondary" href="mypage.html#album">マイページで進行状況を見る</a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">なぜ機能を段階的に解放するのか</h2>
+    <p class="section-text">
+      性格診断は、最初から情報が多すぎると何を見ればいいのか分からなくなります。そこで、このサイトでは最初に基本のビッグファイブ診断を体験し、カードが増えるにつれて分析の幅が広がる設計にしています。
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3>迷わず始められる</h3>
+        <p>最初は基本診断だけで十分です。結果を保存するとカードが増え、次に試す機能が自然に見えてきます。</p>
+      </div>
+      <div class="card">
+        <h3>理解が積み上がる</h3>
+        <p>自分、あの人、チーム、仕事、恋愛という順に、性格データの使い道が広がっていきます。</p>
+      </div>
+      <div class="card">
+        <h3>続ける理由ができる</h3>
+        <p>カード収集と機能解放によって、診断が一度きりではなく、自分を知る継続的な体験になります。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">カードを集めると解放される主な機能</h2>
+    <p class="section-text">
+      解放条件は、マイページのカードコレクションに保存されたカード枚数で決まります。ここでは代表的な機能を紹介します。
+    </p>
+    <div class="path">
+      <div class="unlock-row"><div class="count">1枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/rennai-style-6-shurui.html">恋愛スタイル診断</a></strong><span>Sternbergの三角理論に基づき、愛情・親密さ・情熱・コミットメントのバランスから6つの恋愛スタイルを判定します。恋愛でなぜうまくいかないのか、どんなパートナーシップが自分に合うのかが見えてきます。</span></div><a class="unlock-link" href="love.html">使う</a></div>
+      <div class="unlock-row"><div class="count">1枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/sogo-report-toha.html">総合レポート</a></strong><span>ビッグファイブをはじめ10種類の心理学診断の結果をまとめて表示します。複数の診断が組み合わさって見えてくる「あなただけの傾向」を読み解けます。診断を1つ受けた時点から使えて、受けた診断が増えるほど中身が育っていきます。</span></div><a class="unlock-link" href="report.html">使う</a></div>
+      <div class="unlock-row"><div class="count">1枚</div><div class="unlock-main"><strong>あの人の保存件数が20件に拡張</strong><span>カードを1枚集めるだけで、「あの人」の保存上限が20件に広がります。</span></div></div>
+      <div class="unlock-row"><div class="count">2枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/ano-hito-yosoku-aishindan.html">あの人診断</a></strong><span>気になる人、職場の同僚、友人など、本人に質問しなくてもビッグファイブで性格を分析できます。観察できる行動から推定するため、「聞きにくい」相手でも使えます。相性スコアはもちろん、チーム相性診断や統合スコア分析にも活用でき、このサイトの核となる機能のひとつです。</span></div><a class="unlock-link" href="other_quiz.html">使う</a></div>
+      <div class="unlock-row"><div class="count">3枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/career-tekisei-shindan.html">キャリア適性診断</a></strong><span>18業界×26職種から、あなたの性格に合う仕事を算出します。メタ分析に基づくβ係数方式のアルゴリズムを採用しており、職種ごとに年収目安・将来性・必要スキルも確認できます。8つのキャリアアーキタイプ判定も付いています。</span></div><a class="unlock-link" href="career.html">使う</a></div>
+      <div class="unlock-row"><div class="count">4枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/impostor-shokogun-toha.html">インポスター症候群チェック</a></strong><span>「自分の成功は運や偶然のおかげ」「いつかバレるのでは」という感覚が強いかどうかを測定します。高い成果を出しているにもかかわらず自己評価が低い傾向を可視化し、その背景にある性格的な要因を理解するきっかけになります。</span></div><a class="unlock-link" href="impostor.html">使う</a></div>
+      <div class="unlock-row"><div class="count">5枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/ano-hito-120mon-seimitsu.html">あの人診断 精密版（60問）</a></strong><span>通常の30問版では測れなかったファセット（下位尺度）単位まで分析できる精密版。各因子を6つの観点から測定するため、「外向性は高いが主張性だけ低め」といった細かい傾向まで見えます。行動観察ベースの問題でバイアスの影響を抑えた設計です。</span></div><a class="unlock-link" href="other_quiz.html">使う</a></div>
+      <div class="unlock-row"><div class="count">6枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/team-compatibility.html">チーム相性診断</a></strong><span>最大8人の性格データを一度に分析し、チームとしての相性スコア・強み・注意点を科学的に算出します。友達グループ、クラスのチーム分け、仕事の会議メンバーやプロジェクト編成など、人の組み合わせが結果を左右するあらゆる場面で役立ちます。仲が悪いと言われている2人の相性を調べると「やっぱり」と思わず笑いたくなるほどの納得感があります。ペア別の相性警告やチームタイプ判定（6種類）も付いています。</span></div><a class="unlock-link" href="team.html">使う</a></div>
+      <div class="unlock-row"><div class="count">10枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/aichaku-style-toha.html">愛着スタイル診断</a></strong><span>幼少期の経験から形成される、人との距離感や関係パターンを4タイプで分析します。恋愛でなぜ同じ問題が繰り返されるのか、対人関係でどんな反応が出やすいのかを理解するきっかけになります。</span></div><a class="unlock-link" href="attachment.html">使う</a></div>
+      <div class="unlock-row"><div class="count">14枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/mindset-toha.html">マインドセット診断</a></strong><span>キャロル・ドゥエックの理論に基づき、失敗や成長に対する考え方を測定します。「才能は固定か、変えられるか」という信念が行動の癖にどう影響しているかを可視化します。</span></div><a class="unlock-link" href="mindset.html">使う</a></div>
+      <div class="unlock-row"><div class="count">18枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/kachikan-no-kagaku.html">価値観診断</a></strong><span>シュワルツの価値観理論（10カテゴリ）に基づき、何を優先して意思決定しているかを分析します。「なぜあの人と話が合わないのか」「自分が本当に大切にしていることは何か」が、具体的な言葉で見えてきます。</span></div><a class="unlock-link" href="schwartz.html">使う</a></div>
+      <div class="unlock-row"><div class="count">20枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="zukan.html">コレクション Stage 2</a></strong><span>20枚到達でカードコレクションがStage 2へ進化し、さらに広い図鑑が楽しめるようになります。集めたカードの全容を一覧できる専用ページが解放されます。</span></div><a class="unlock-link" href="card-collection.html">見る</a></div>
+      <div class="unlock-row"><div class="count">25枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/eq-toha.html">EQ診断</a></strong><span>感情を正確に読み取る力、自分の感情を調整する力、相手の気持ちを理解する力を測定します。対人関係の悩みや、コミュニケーションの得意・不得意の背景を把握するのに役立ちます。</span></div><a class="unlock-link" href="eq.html">使う</a></div>
+      <div class="unlock-row"><div class="count">30枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/riasec-toha.html">RIASEC職業興味診断</a></strong><span>ホランドの職業興味理論に基づき、6タイプ（R/I/A/S/E/C）から「今どんな仕事領域に興味があるか」を測定します。60問（約5分）と291問（約20分）の2バージョン。性格的な適性とは別の「興味」の軸から職種を見られます。</span></div><a class="unlock-link" href="riasec.html">使う</a></div>
+      <div class="unlock-row"><div class="count">30枚</div><div class="unlock-main"><strong>あの人の保存件数が30件に拡張</strong><span>「あの人」の保存上限が30件に広がります。複数の人をまとめて管理したい場合に役立ちます。</span></div></div>
+      <div class="unlock-row"><div class="count">35枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/career-integration-toha.html">キャリア統合分析</a></strong><span>キャリア適性診断（性格ベース）とRIASEC（興味ベース）の2つの結果を重ね合わせ、26職種の総合ランキングを出します。「向いている仕事」と「やりたい仕事」が一致しているか、ズレているかが一目でわかります。</span></div><a class="unlock-link" href="career-integration.html">使う</a></div>
+      <div class="unlock-row"><div class="count">40枚</div><div class="unlock-main"><strong>あの人の保存件数が40件に拡張</strong><span>「あの人」の保存上限が40件に広がります。</span></div></div>
+      <div class="unlock-row"><div class="count">40枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/locus-of-control-toha.html">統制の所在診断</a></strong><span>うまくいかないとき「自分のせい」と考えるか「環境のせい」と考えるか、その傾向を分析します。内向型（自己原因帰属）と外向型（外部原因帰属）のバランスは、ストレス耐性・やる気・対人関係の感じ方に深く影響します。</span></div><a class="unlock-link" href="locus.html">使う</a></div>
+      <div class="unlock-row"><div class="count">45枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/yaruki-no-seitai.html">動機づけ診断</a></strong><span>自己決定理論（SDT）に基づき、行動のエネルギー源が「外からの圧力」か「内側からの意欲」かを測定します。なぜあの仕事には熱が入るのに、こちらは続かないのかが見えてきます。</span></div><a class="unlock-link" href="sdt.html">使う</a></div>
+      <div class="unlock-row"><div class="count">50枚</div><div class="unlock-main"><strong>あの人の保存件数が50件に拡張</strong><span>「あの人」の保存上限が50件に広がります。</span></div></div>
+      <div class="unlock-row"><div class="count">50枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/dark-triad-toha.html">ダークトライアド診断</a></strong><span>ナルシシズム・マキャベリアニズム・サイコパシーの3因子を自己分析します。SD3準拠・17問で5つのプロファイルを判定。「自分の中の扱いにくい部分」を直視することで、人間関係の癖を理解するきっかけになります。</span></div><a class="unlock-link" href="dark-triad.html">使う</a></div>
+      <div class="unlock-row"><div class="count">55枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/other-dark-triad-toha.html">あの人のダークトライアド診断</a></strong><span>気になる相手のダークサイドを、観察できる行動から安全に分析します。恋人向けと職場・友人向けの2パターンがあり、自分のダークトライアドとのクロス分析（関係ダイナミクス）も確認できます。</span></div><a class="unlock-link" href="other_dark_triad.html">使う</a></div>
+      <div class="unlock-row"><div class="count">60枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/other-attachment-toha.html">あの人の愛着スタイル診断</a></strong><span>相手の対人パターンを観察ベースで分析し、愛着スタイルを推定します。相手がなぜその行動をするのか、どんな距離感を好むのかを理解することで、関係の改善や維持に活かせます。</span></div><a class="unlock-link" href="other_attachment.html">使う</a></div>
+      <div class="unlock-row"><div class="count">65枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/other-eq-toha.html">あの人のEQ診断</a></strong><span>相手の感情読み取り・調整・対人対応の傾向を、観察できる行動から推定します。チームメンバーや恋人の感情知性を理解することで、コミュニケーションの取り方を調整するヒントになります。</span></div><a class="unlock-link" href="other_eq.html">使う</a></div>
+      <div class="unlock-row"><div class="count">70枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/ano-hito-120mon-seimitsu.html">あの人診断 120問相当精密版</a></strong><span>同じ相手の60問精密診断を1回受けた後に解放される追加診断モードです。1回目とは異なる60問（バイアス除去・行動観察ベース）を受けることで、2セット分のデータを合成し、120問相当の精度でファセットスコアを算出します。長く観察してきた相手への理解をさらに深めたいときに使えます。</span></div><a class="unlock-link" href="other_quiz.html">使う</a></div>
+
+      <div class="unlock-row"><div class="count">77枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/bigfiveman-toha.html">ビッグファイブマン分析</a></strong><span>チーム相性診断の上位モード。EQ・ダークトライアド・愛着スタイルなどのデータを持ったメンバーがいると、相性スコアをさらに精度高く算出します。ペア別の相性警告（良い組み合わせ・注意・危険）やチームタイプ判定も加わり、ビッグファイブだけでは見えなかったチームの実態が浮き彫りになります。</span></div><a class="unlock-link" href="team.html">使う</a></div>
+      <div class="unlock-row"><div class="count">80枚</div><div class="unlock-main"><strong>あの人の保存件数が70件に拡張</strong><span>「あの人」の保存上限が70件に広がります。職場や家族、友人まで診断している方向けの枠です。</span></div></div>
+      <div class="unlock-row"><div class="count">90枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="blog/group-tool-toha.html">グループ分けツール</a></strong><span>性格データのある複数のメンバーを、バランスよくグループに分けます。Snake draft方式で均等配分するほか、リーダー候補・サブリーダー候補の自動推薦、リーダー相性スコア、メンバー同士の良い組み合わせ・注意ペアも確認できます。職場・サークル・教育現場など、グループ編成が必要なシーンで活用できます。</span></div><a class="unlock-link" href="group.html">使う</a></div>
+      <div class="unlock-row"><div class="count">100枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="zukan.html">完全図鑑 Stage 3</a></strong><span>100枚に到達した上級者向けの最終到達点。カードコレクションのフルコンプリートを目指せる、このサイトの頂上です。</span></div><a class="unlock-link" href="zukan.html">使う</a></div>
+      <div class="unlock-row"><div class="count">110枚</div><div class="unlock-main"><strong>あの人の保存件数が85件に拡張</strong><span>「あの人」の保存上限が85件に広がります。</span></div></div>
+      <div class="unlock-row"><div class="count">150枚</div><div class="unlock-main"><strong>あの人の保存件数が100件に拡張</strong><span>「あの人」の保存上限が100件（最大）に広がります。</span></div></div>
+      <div class="unlock-row"><div class="count">200枚</div><div class="unlock-main"><strong><a class="unlock-name-link" href="hexaco.html">HEXACO性格診断</a></strong><span>ビッグファイブに「正直さ・謙虚さ」という第6の因子を加えた、6因子モデルの診断です。ビッグファイブでは測れない「裏表のなさ・欲の少なさ」まで見えるようになります。カードを200枚集めた方だけが開ける、いちばん奥にある診断です。</span></div><a class="unlock-link" href="hexaco.html">使う</a></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">カードを増やす方法</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>自分のビッグファイブ診断を受ける</h3>
+        <p>10問、30問、120問のいずれかを受けると、結果カードが保存されます。120問版はより細かい分析に向いています。</p>
+      </div>
+      <div class="step">
+        <h3>あの人診断で身近な人を分析する</h3>
+        <p>家族、友人、恋人、職場の人などを登録すると、相性やチーム分析にも使えるカードが増えていきます。</p>
+      </div>
+      <div class="step">
+        <h3>共有リンクから本人の結果を保存する</h3>
+        <p>本人が診断結果を共有してくれた場合、その人の自己診断データとして保存できます。自分の観察と本人の自己評価を合わせた統合分析にもつながります。</p>
+      </div>
+      <div class="step">
+        <h3>コインを貯めてガチャを回す</h3>
+        <p>毎日トップページを訪れると🪙コインが1枚もらえます（7日目は3枚）。貯めたコインで<a href="gacha.html" style="color:var(--cyan);text-decoration:none;font-weight:700;">カードガチャ</a>を回すと、診断をしなくてもカードが増やせます。レアリティの高いカードが出ることも。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">このサイトが目指していること</h2>
+    <p class="section-text">
+      心理学には、信憑性があるものとないものが混在しています。このサイトは、科学的根拠のある理論だけを集めました。うさんくさい自己啓発ではなく、研究として積み上げられてきた知見です。
+    </p>
+    <p class="section-text">
+      「なんで自分はこうなんだろう」という疑問に、科学的な説明がつくと、意外なほどすっきりします。「性格が悪いわけじゃない」「意志が弱いわけじゃない」。そういう気づきが、長年の悩みを軽くすることがあります。
+    </p>
+    <p class="section-text">
+      ただ、心理学を学んでも使いこなすのは難しい。本を読んでメモを取っても、そのメモをどう管理するかという別の問題が生まれます。このサイトは、診断するたびに結果がここに蓄積されます。見たいときにまた見に来られる。誰かの性格も、チームの相性も、キャリアの向きも、ここで確認できます。
+    </p>
+    <p class="section-text">
+      カードを集めながら機能が広がっていく仕組みは、心理学を「知識」から「日常で使えるもの」に変えるための設計です。シェアしなくても、誰かに頼まなくても、一人で完結できます。使いこなせるようになってほしい。それがこのサイトの目的です。
+    </p>
+    <div class="note">
+      <strong>補足：</strong> 既に以前から利用している方は、過去データ保護のため一部機能が最初から使える場合があります。カード枚数や解放状態は、マイページのコレクションで確認できます。
+    </div>
+    <div class="cta-row">
+      <a class="btn primary" href="mypage.html">コレクションを確認する</a>
+      <a class="btn secondary" href="diagnoses.html">診断一覧を見る</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 ビッグファイブ診断</p>
+</footer>
+<script>
+(function() {
+  var key = 'bigfive_theme';
+  var btn = document.getElementById('themeToggleMini');
+  if (!btn) return;
+  function updateLabel() {
+    btn.textContent = document.body.classList.contains('theme-light') ? 'DARK' : 'LIGHT';
+  }
+  updateLabel();
+  btn.addEventListener('click', function() {
+    var isLight = document.body.classList.toggle('theme-light');
+    localStorage.setItem(key, isLight ? 'light' : 'dark');
+    updateLabel();
+  });
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

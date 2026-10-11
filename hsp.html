@@ -1,0 +1,591 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/hsp.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSP診断 — ビッグファイブ診断</title>
+<meta name="description" content="HSP（ひといちばい敏感な人）診断を無料・登録不要で受けられます。12問で感覚処理感受性をチェックし、あなたがHSPかを心理学研究に基づき判定。刺激への強さや疲れやすさの傾向が分かり、ビッグファイブとの組み合わせで深い自己理解が得られます。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="HSP感受性チェック — ビッグファイブ診断">
+<meta property="og:description" content="HSP診断｜無料・登録不要。12問でわかる感覚処理感受性チェック。あなたはHSP？心理学研究に基づく診断を今すぐ無料で。ビッグファイブとの組み合わせでより深い自己理解ができる。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/hsp.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HSP感受性チェック — ビッグファイブ診断">
+<meta name="twitter:description" content="HSP診断｜無料・登録不要。12問でわかる感覚処理感受性チェック。あなたはHSP？心理学研究に基づく診断を今すぐ無料で。ビッグファイブとの組み合わせでより深い自己理解ができる。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Quiz",
+  "name": "HSP感受性チェック【公式】",
+  "url": "https://bigfive.jr-genius.jp/hsp.html",
+  "description": "感覚処理感受性（SPS）の心理学研究に基づく12問診断。EOE・AES・LSTの3因子であなたの感受性を無料で分析。",
+  "about": {
+    "@type": "Thing",
+    "name": "HSP（Highly Sensitive Person）",
+    "description": "Elaine Aronの感覚処理感受性理論に基づく気質の測定"
+  },
+  "learningResourceType": "Quiz",
+  "timeRequired": "PT3M",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "genre": ["心理学", "HSP", "感受性チェック"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #14b8a6; --accent2: #0d9488; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(20,184,166,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(139,92,246,0.07) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate; }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+
+  /* ===== イントロ ===== */
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--accent); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
+  .intro-explain { background: rgba(20,184,166,0.05); border: 1px solid rgba(20,184,166,0.2); border-radius: 12px; padding: 14px 16px; max-width: 380px; text-align: left; }
+  .intro-explain p { font-size: 13px; color: var(--dim); line-height: 1.65; }
+  .intro-explain strong { color: var(--text); }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(20,184,166,0.3); transition: transform .2s; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+
+  /* ===== プログレス ===== */
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), #8b5cf6); transition: width .4s ease; }
+
+  /* ===== 質問エリア ===== */
+  .question-num { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 12px; }
+  .question-factor { font-size: 12px; color: var(--dim); margin-bottom: 8px; font-style: italic; }
+  .question-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 60px; }
+  .answer-btn { flex: 1; padding: 14px 4px; font-family: inherit; font-size: 11px; font-weight: 500; color: var(--dim);
+    background: rgba(20,184,166,0.04); border: 1.5px solid rgba(20,184,166,0.15); border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s;
+    min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
+  .answer-btn:hover { background: rgba(20,184,166,0.15); border-color: rgba(20,184,166,0.4); color: var(--text); }
+  .answer-btn.selected { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: #fff; font-weight: 700; }
+  .answer-btn .answer-label { font-size: 10px; line-height: 1.3; }
+
+  /* ===== ローディング ===== */
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(20,184,166,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+
+  /* ===== 結果エリア ===== */
+
+  .result-card { width: 100%; max-width: 420px; border-radius: 24px; overflow: hidden; border: 1.5px solid rgba(20,184,166,0.3); box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+  .result-card-inner { padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; background: rgba(10,14,39,0.7); backdrop-filter: blur(12px); }
+  .result-type-emoji { font-size: 40px; }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--accent); }
+  .result-type-name { font-size: 22px; font-weight: 900; }
+  .result-catch { font-size: 14px; color: var(--accent); font-weight: 700; }
+  .result-desc { font-size: 14px; line-height: 1.8; max-width: 340px; color: var(--dim); padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+  /* ===== 因子バー ===== */
+  .factor-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(20,184,166,0.18); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .factor-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 18px; letter-spacing: .08em; }
+  .factor-row { margin-bottom: 18px; }
+  .factor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .factor-name { font-size: 13px; font-weight: 700; }
+  .factor-score { font-size: 12px; color: var(--dim); }
+  .factor-bar-bg { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+  .factor-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .factor-desc-text { font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+  /* ===== 全体説明ボックス ===== */
+  .detail-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .detail-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .08em; }
+  .detail-section { margin-bottom: 14px; }
+  .detail-section:last-child { margin-bottom: 0; }
+  .detail-label { font-size: 12px; font-weight: 700; color: #a78bfa; margin-bottom: 4px; }
+  .detail-text { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+  /* ===== Big Five クロス ===== */
+  .cross-box { width: 100%; max-width: 420px; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); }
+  .cross-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 12px; letter-spacing: .08em; }
+  .cross-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: #a78bfa; margin: 0 2px 4px; }
+
+  /* ===== 免責 ===== */
+  .disclaimer { width: 100%; max-width: 420px; font-size: 11px; color: var(--dim); line-height: 1.7; text-align: center; padding: 12px 12px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+
+  /* ===== ナビ ===== */
+  .result-nav { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+  .nav-btn { width: 100%; padding: 14px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; text-decoration: none; display: block; }
+  .nav-btn-primary { background: linear-gradient(135deg, #14b8a6, #0d9488); border: none; color: #fff; }
+  .nav-btn-secondary { background: transparent; border: 1.5px solid rgba(255,255,255,0.15); color: var(--dim); }
+  .nav-btn:hover { opacity: .85; transform: translateY(-1px); }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "HSP感受性チェック",
+      "item": "https://bigfive.jr-genius.jp/hsp.html"
+    }
+  ]
+}
+</script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  トップに戻る
+</a>
+
+<div class="quiz-container">
+
+  <!-- イントロ -->
+  <div class="intro" id="introArea">
+    <span class="intro-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg> 感覚処理感受性</span>
+    <h1>あなたの<span>「感じる力」</span>はどのくらい？</h1>
+    <p class="intro-sub">感覚処理感受性（SPS）の心理学研究をもとにした12問のセルフチェック。3つの因子であなたの感受性の特徴を分析します。</p>
+    <div class="intro-explain">
+      <p><strong>答え方：</strong>日頃の自分にどのくらい当てはまるかを直感で選んでください。「正しい答え」はありません。今の自分に一番近いものを選ぶのがコツです。</p>
+    </div>
+    <button class="start-btn" id="startBtn">チェックスタート</button>
+    <p class="intro-note">12問・約3分・無料・登録不要</p>
+  </div>
+
+  <!-- プログレス -->
+  <div class="progress" id="progressArea" style="display:none;">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/12</span>
+  </div>
+
+  <!-- 質問エリア -->
+  <div class="question-area" id="questionArea" style="display:none;">
+    <p class="question-num" id="questionNum">Q1</p>
+    <p class="question-factor" id="questionFactor"></p>
+    <p class="question-text" id="questionText"></p>
+    <div class="scale-labels"><span>全く当てはまらない</span><span>非常に当てはまる</span></div>
+    <div class="answers" id="answersArea"></div>
+    <button class="back-btn" id="backBtn">← 前の問題に戻る</button>
+  </div>
+
+  <!-- ローディング -->
+  <div class="loading" id="loadingArea">
+    <div class="loading-spinner"></div>
+    <p style="font-size:18px;font-weight:500;">分析中…</p>
+    <p style="font-size:13px;color:var(--dim);">あなたの感受性の特徴を読み解いています</p>
+  </div>
+
+  <!-- 結果エリア -->
+  <div class="result" id="resultArea">
+
+    <div class="result-card">
+      <div class="result-card-inner">
+        <p class="result-label">YOUR SENSITIVITY TYPE</p>
+        <div class="result-type-emoji" id="resultEmoji"></div>
+        <p class="result-type-name" id="resultTypeName"></p>
+        <p class="result-catch" id="resultCatch"></p>
+        <p class="result-desc" id="resultDesc"></p>
+      </div>
+    </div>
+
+    <div class="factor-box">
+      <h3>3因子スコア</h3>
+      <div id="factorBars"></div>
+    </div>
+
+    <div class="detail-box" id="detailBox">
+      <h3>詳しい分析</h3>
+      <div id="detailContent"></div>
+    </div>
+
+    <div class="cross-box">
+      <h3>ビッグファイブとの組み合わせ分析</h3>
+      <div id="crossContent"></div>
+    </div>
+
+    <div class="disclaimer">
+      この診断は、感覚処理感受性（SPS）に関する心理学研究（Aron &amp; Aron, 1997 など）を参考にした一般向けセルフチェックコンテンツです。医学的・臨床的な診断ではありません。スコアはあなたの現在の傾向を示す参考指標であり、「HSPである・ない」を確定するものではありません。スコアは体調・環境・時期によって変動することがあります。心理的な悩みや日常生活への支障がある場合は、医療機関や公認心理師への相談をお勧めします。
+    </div>
+
+    <div class="result-nav">
+      <a href="quiz.html?v=10" class="nav-btn nav-btn-primary">ビッグファイブ性格診断もやってみる</a>
+      <a href="index.html" class="nav-btn nav-btn-secondary">トップに戻る</a>
+      <button class="nav-btn nav-btn-secondary" id="retryBtn">もう一度チェックする</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===== 質問データ =====
+const QUESTIONS = [
+  { text: '短い時間に多くのことをこなさなければならないとき、焦りや混乱を感じる', factor: 'EOE' },
+  { text: '騒がしい場所や刺激が多い環境にいると、神経が張り詰めて消耗する',       factor: 'EOE' },
+  { text: '強い刺激にさらされているとき、頭の中が混乱して処理が追いつかなくなる', factor: 'EOE' },
+  { text: '複数の作業を同時にこなすよう求められると、強い圧迫感を覚える',         factor: 'EOE' },
+  { text: '音楽・映画・自然の風景に触れると、周りの人より深く心が動かされる',     factor: 'AES' },
+  { text: '芸術作品や自然の中に、他の人が気づかない豊かさや細部の美しさを感じる', factor: 'AES' },
+  { text: '美しい音楽や映像に感動すると、その余韻がその場を離れてもしばらく続く', factor: 'AES' },
+  { text: '食べ物の味・香り・音楽の細部など、微細な違いを楽しんで味わうことがある', factor: 'AES' },
+  { text: '強い光や大きな音に、周りの人より敏感に反応する',                       factor: 'LST' },
+  { text: '体の痛みや不快感を、周りの人より強く感じる傾向がある',                 factor: 'LST' },
+  { text: 'カフェインや薬の効果が、他の人より強く出ると感じる',                   factor: 'LST' },
+  { text: '衣類のタグ・素材の感触・強いにおいなど、身の回りの感覚刺激が気になりやすい', factor: 'LST' },
+];
+
+const ANSWER_LABELS = ['全く\nあては\nまらない', '少し\nあては\nまる', 'かなり\nあては\nまる', '非常に\nあては\nまる'];
+const FACTOR_LABELS = { EOE: '易興奮性', AES: '美的感受性', LST: '低感覚閾値' };
+const FACTOR_COLORS = { EOE: '#f97316', AES: '#a78bfa', LST: '#14b8a6' };
+const FACTOR_DESCS  = {
+  EOE: { high: '刺激が重なると神経系が素早く反応するタイプです。タスクの多い日や騒がしい場所では他の人より早く「限界のサイン」が出ます。スケジュールにバッファを設けると本来のパフォーマンスが出やすくなります。', low: 'プレッシャーや刺激の多い環境でも神経系が落ち着いて動けるタイプです。マルチタスクや混雑した場所でもペースを崩しにくい安定感があります。' },
+  AES: { high: '芸術・音楽・自然の美しさを深く味わえる感受性を持っています。感動が長く残るのは神経系が情報を豊かに処理している証拠です。創造的な仕事や人の心に寄り添う場面で大きな武器になります。', low: '芸術や美的な刺激への感応が比較的穏やかなタイプです。論理や現実への集中力が高い傾向と組み合わさることが多いです。' },
+  LST: { high: '光・音・痛み・においなど、身体に入ってくる感覚刺激への閾値が低い傾向があります。カフェイン一杯でも効いたり、騒がしい場所の音が気になったりする経験があるかもしれません。環境を整えることで消耗を大きく減らせます。', low: '身体的な刺激への耐性が高く、騒音・光・痛みなどに動じにくいタイプです。身体のタフさが精神的な安定にも繋がっていることが多いです。' },
+};
+
+// ===== 全体タイプ定義 =====
+const TYPES = [
+  { min: 12, max: 19, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', name: '安定型',         catch: '刺激に揺さぶられない、地に足のついた感覚の持ち主',
+    desc: '感覚処理感受性のスコアは低い傾向が見られました。外界の刺激を受け取る際のフィルターが厚く、ストレス耐性の高さやどんな環境でも落ち着いて動ける安定感が特徴です。',
+    strength: '騒がしい環境・タイトなスケジュールでもパフォーマンスを落とさず動ける。変化に動じにくく、現場では「頼れる存在」になりやすい。',
+    advice: '感受性が高い人の「見えない消耗」に気づきにくい場合がある。自分が平気だからといって周囲も同じとは限らない。' },
+  { min: 20, max: 27, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>', name: 'おだやか感受性タイプ', catch: '感じる力と強さを、バランスよく持ち合わせている',
+    desc: '感覚処理感受性がやや低め〜平均の傾向が見られました。ほとんどの環境に適応でき、刺激に強い部分を持ちながら細やかな感覚も一定程度働いている状態です。',
+    strength: '感受性が高すぎないことで、客観的な判断や安定した行動力を維持しやすい。それでいて美しいものや大切な人の気持ちはきちんと受け取れる。',
+    advice: '疲れを感じにくい分、無意識に限界を超えることがある。ときどき自分の状態をチェックする習慣が役立つ。' },
+  { min: 28, max: 33, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>', name: 'チューリップ型',     catch: '感じる力と、現実を渡る力を両方持っている',
+    desc: '感覚処理感受性のスコアが中間帯にありました。これは人口の中で最も多いゾーンです。細かいことに気づく繊細さと日常をうまく乗り越えるたくましさをバランスよく持ち合わせています。',
+    strength: '繊細さとタフさを状況に応じて使い分けられる。感受性が高い人の気持ちも低い人の論理も、両方ある程度理解できる橋渡し役になれる。',
+    advice: '「なんとかなっている」ように見えて実は気疲れが蓄積しているケースもある。「なんか疲れた」を無視しないで。' },
+  { min: 34, max: 41, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-6-8-12a8 8 0 0116 0c0 6-4 9-8 12z"/></svg>', name: '蘭型（高め）',       catch: '世界を、人より一段深く受け取っている',
+    desc: '感覚処理感受性が高い傾向が見られました。光・音・人の表情・場の空気・芸術の細部など、多くの情報を深く処理する神経系の働きが強い可能性があります。',
+    strength: '他の人が見落とすニュアンスや美しさをキャッチできる。人の気持ちに寄り添う力が高く、アートや表現・対人支援の分野で力を発揮しやすい。',
+    advice: '刺激の多い環境では回復に時間がかかることがある。一人で静かに過ごす時間は贅沢ではなく、必要なメンテナンス。' },
+  { min: 42, max: 48, emoji: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', name: '蘭型（最高域）',     catch: '感じる深さが、あなたの最大の才能',
+    desc: '感覚処理感受性が非常に高い傾向が見られました。音楽一曲で情景が浮かび、人の小さな変化に気づき、美しさに胸が締まる——そんな体験が多い人かもしれません。',
+    strength: '創造・共感・観察・直感において卓越した力を発揮できる可能性がある。深く味わえる分、人生の喜びも人より豊か。',
+    advice: '感受性の高さは「直すもの」ではなく「活かすもの」。自分に合う環境・仕事・関係を積極的に選んでいくことが大切。' },
+];
+
+// ===== 状態管理 =====
+let current = 0;
+const answers = new Array(QUESTIONS.length).fill(null);
+const STORAGE_KEY = 'hsp_result';
+
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
+// ===== 星背景 =====
+(function() {
+  const c = document.getElementById('bgStars'), ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  for (let i = 0; i < 100; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*c.width, Math.random()*c.height, Math.random()*1.2, 0, 2*Math.PI);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.15})`;
+    ctx.fill();
+  }
+})();
+
+// ===== スタート =====
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('introArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'flex';
+  document.getElementById('questionArea').style.display = 'flex';
+  showQuestion();
+});
+
+// ===== 質問表示 =====
+function showQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('questionNum').textContent = `Q${current + 1}`;
+  document.getElementById('questionFactor').textContent = FACTOR_LABELS[q.factor];
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressFill').style.width = `${(current / QUESTIONS.length) * 100}%`;
+  document.getElementById('progressText').textContent = `${current + 1}/${QUESTIONS.length}`;
+
+  const area = document.getElementById('answersArea');
+  area.innerHTML = '';
+  [1,2,3,4].forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn' + (answers[current] === val ? ' selected' : '');
+    btn.innerHTML = `<span style="font-size:16px;font-weight:700;">${val}</span><span class="answer-label">${ANSWER_LABELS[val-1]}</span>`;
+    btn.addEventListener('click', () => selectAnswer(val));
+    area.appendChild(btn);
+  });
+
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答選択 =====
+let timer = null;
+
+function selectAnswer(val) {
+  if (timer) return;
+  answers[current] = val;
+  document.querySelectorAll('.answer-btn').forEach((b, i) => {
+    b.classList.toggle('selected', i + 1 === val);
+  });
+  timer = setTimeout(() => {
+    timer = null;
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+    current++;
+    if (current < QUESTIONS.length) showQuestion();
+    else showLoading();
+  }, 280);
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (timer) { clearTimeout(timer); timer = null; }
+  if (current > 0) { current--; showQuestion(); }
+});
+
+// ===== ローディング → 結果 =====
+function showLoading() {
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('questionArea').style.display = 'none';
+  document.getElementById('loadingArea').classList.add('active');
+  setTimeout(showResult, 1800);
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  const sums = { EOE: 0, AES: 0, LST: 0 };
+  QUESTIONS.forEach((q, i) => { sums[q.factor] += (answers[i] || 2); });
+  const total = sums.EOE + sums.AES + sums.LST;
+  return { ...sums, total };
+}
+
+// ===== 結果表示 =====
+function showResult(preScores) {
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('hsp');
+  document.getElementById('loadingArea').classList.remove('active');
+  document.getElementById('resultArea').classList.add('active');
+
+  const s = preScores || calcScores();
+  const type = TYPES.find(t => s.total >= t.min && s.total <= t.max) || TYPES[TYPES.length - 1];
+
+  // タイプカード
+  document.getElementById('resultEmoji').innerHTML = type.emoji;
+  document.getElementById('resultTypeName').textContent = type.name;
+  document.getElementById('resultCatch').textContent = type.catch;
+  document.getElementById('resultDesc').textContent = s.total + '点 — ' + type.desc;
+
+  // 因子バー
+  const factorHTML = ['EOE','AES','LST'].map(f => {
+    const score = s[f];
+    const pct = Math.round(((score - 4) / 12) * 100);
+    const level = score >= 12 ? 'high' : score <= 7 ? 'low' : 'mid';
+    return `<div class="factor-row">
+      <div class="factor-header">
+        <span class="factor-name" style="color:${FACTOR_COLORS[f]}">${FACTOR_LABELS[f]}（${f}）</span>
+        <span class="factor-score">${score} / 16</span>
+      </div>
+      <div class="factor-bar-bg">
+        <div class="factor-bar-fill" style="width:0%;background:${FACTOR_COLORS[f]}" data-pct="${pct}"></div>
+      </div>
+      <p class="factor-desc-text">${FACTOR_DESCS[f][level === 'high' ? 'high' : 'low']}</p>
+    </div>`;
+  }).join('');
+  document.getElementById('factorBars').innerHTML = factorHTML;
+  setTimeout(() => {
+    document.querySelectorAll('.factor-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+  }, 100);
+
+  // 詳細ボックス
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-section">
+      <p class="detail-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>強み</p>
+      <p class="detail-text">${type.strength}</p>
+    </div>
+    <div class="detail-section">
+      <p class="detail-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>アドバイス</p>
+      <p class="detail-text">${type.advice}</p>
+    </div>`;
+
+  // Big Five クロス
+  let bfResults = safeLoad('bigfive_my_results', []);
+  if (!Array.isArray(bfResults)) bfResults = [];
+  const bfResult = bfResults.length > 0 ? bfResults[0] : null;
+  const crossArea = document.getElementById('crossContent');
+
+  if (bfResult && bfResult.scores) {
+    const bf = bfResult.scores;
+    const highFactors = Object.entries(bf).filter(([,v]) => v >= 4).map(([k]) => k);
+    const badges = highFactors.map(k => `<span class="cross-badge">${({O:'開放性',C:'誠実性',E:'外向性',A:'協調性',N:'感受性'})[k]}高</span>`).join('');
+
+    let msg = '';
+    const isHighHSP = s.total >= 34;
+    const N = bf.N || 3, O = bf.O || 3, E = bf.E || 3;
+
+    if (N >= 4 && isHighHSP) {
+      msg = '感じる力が強く、さらに感情の変動も大きい傾向があります。嬉しいことは人より深く喜べますが、ネガティブな刺激にも強く反応しやすい組み合わせです。消耗しやすい分、回復の仕組みを意識的に作ることがとても重要です。';
+    } else if (N <= 2 && isHighHSP) {
+      msg = '感じる力は高いのに、情緒的には安定している——「賢者型HSP」とも呼ばれる組み合わせです。感受性の豊かさを感情に振り回されずに活かせる強みがあります。';
+    } else if (O >= 4 && s.AES >= 12) {
+      msg = '美的感受性の高さと新しいものへの好奇心・創造性が組み合わさっています。芸術・音楽・アイデアの世界で深く輝けるタイプ。感動を「作る側」に回ると力を最大限に発揮できます。';
+    } else if (E <= 2 && (s.EOE >= 12 || s.LST >= 12)) {
+      msg = '内向的な傾向と感覚的な敏感さが重なっています。静かな環境でこそ本来の思考力や集中力が最大限に発揮されるタイプです。';
+    } else if (E >= 4 && isHighHSP) {
+      msg = '外向型のHSP——「外向型蘭」とも呼ばれるパターンです。社交的で刺激を求める半面、後から一人になって回復が必要なことがあります。「楽しんでいるのになぜか疲れる」という経験に覚えがあるかもしれません。';
+    } else {
+      msg = `感受性スコア${s.total}点のあなたと、ビッグファイブの特性が組み合わさることで独自の感じ方・行動スタイルが生まれています。`;
+    }
+
+    crossArea.innerHTML = `<p style="font-size:14px;line-height:1.75;">${badges ? badges + '<br><br>' : ''}${msg}</p>`;
+  } else {
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);">ビッグファイブの結果がまだありません。<a href="quiz.html" style="color:#14b8a6;">性格診断</a>と組み合わせると、より深い分析ができます。</p>`;
+  }
+
+  // 保存
+  if (!preScores) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ scores: s, timestamp: Date.now() }));
+  }
+}
+
+// ===== リトライ =====
+document.getElementById('retryBtn').addEventListener('click', () => {
+  localStorage.removeItem(STORAGE_KEY);
+  current = 0;
+  answers.fill(null);
+  document.getElementById('resultArea').classList.remove('active');
+  document.getElementById('introArea').style.display = 'flex';
+  window.scrollTo(0, 0);
+});
+
+// ===== 保存済み結果があれば直接結果表示 =====
+(function() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return;
+  try {
+    const d = JSON.parse(stored);
+    if (d && d.scores) {
+      document.getElementById('introArea').style.display = 'none';
+      showResult(d.scores);
+    }
+  } catch(e) { localStorage.removeItem(STORAGE_KEY); }
+})();
+</script>
+<section class="test-about">
+  <h2>HSP（ひといちばい敏感な人）とは</h2>
+  <p>HSPは「Highly Sensitive Person（ハイリー・センシティブ・パーソン）」の頭文字で、日本語では「ひといちばい敏感な人」「感受性が強い人」などと紹介される、生まれつきの気質の呼び名です。心理学者のエレイン・アーロンが1996年に著書でこの言葉を広め、翌1997年にアーサー・アーロンとの共著で学術論文を出して研究の土台を築きました（Aron &amp; Aron, 1997）。研究上の正式な名前は<strong>感覚処理感受性（Sensory Processing Sensitivity）</strong>で、医学的な診断名ではありません。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>刺激を深く処理する<strong>生まれつきの気質</strong>で、人のおよそ2〜3割に見られるとされる</li>
+      <li>騒音や人混みでの<strong>疲れやすさ</strong>と、美しいものへの<strong>気づきやすさ</strong>は、同じ性質の表と裏</li>
+      <li>強さはグラデーションになっており、<strong>たんぽぽ・チューリップ・蘭</strong>の3タイプに整理できる</li>
+    </ul>
+  </div>
+
+  <h3>感覚処理感受性の4つの特徴</h3>
+  <p>アーロン夫妻の研究では、この気質には中核となる4つの特徴があるとされています。1つ目は<strong>深い処理</strong>で、受け取った情報をじっくり考えてから反応する傾きです。2つ目は<strong>過剰刺激を受けやすい</strong>ことで、刺激の多い場所では人より先に疲れを感じやすくなります。3つ目は<strong>感情の反応が強く、共感しやすい</strong>こと。4つ目は<strong>繊細な刺激に気づく</strong>ことで、小さな音や光の変化、相手の表情の動きを拾いやすくなります。</p>
+  <p>大事なのは、この4つが<strong>弱さのリストではなく、情報の処理の仕方の特徴</strong>だという点です。同じ「気づきやすさ」も、静かで落ち着いた環境では洞察（ものごとを深く見抜く力）として働き、刺激の多い環境では負担として働くことがあります。得意か不得意かは、気質そのものではなく、<strong>環境との組み合わせ</strong>で決まりやすいと考えられています。</p>
+
+  <h3>たんぽぽ・チューリップ・蘭の3タイプ</h3>
+  <p>感受性の強さは「HSPか、そうでないか」の二択ではなく、なだらかな連続分布になっています。ライオネッティら（2018）は成人906人のデータを分析し、その分布が<strong>低感受性・中感受性・高感受性の3つのグループ</strong>に分かれることを示しました。それぞれを花にたとえたのが、次の3タイプです。</p>
+  <div class="table-wrap"><table>
+    <tr><th>タイプ</th><th>特徴</th><th>目安</th></tr>
+    <tr><td>たんぽぽ型（低感受性）</td><td>環境の影響をゆるやかに受け、どこでも元気に育ちやすい</td><td>およそ3割</td></tr>
+    <tr><td>チューリップ型（中感受性）</td><td>場面によって敏感にもおおらかにもなる、中間のタイプ</td><td>およそ4割</td></tr>
+    <tr><td>蘭型（高感受性）</td><td>環境の影響を強く受ける。恵まれた環境では大きく花開き、厳しい環境ではつまずきやすい</td><td>およそ3割</td></tr>
+  </table></div>
+  <p>「蘭」のたとえが示すように、高感受性は良くも悪くも環境に反応する気質です。落ち着いた環境で深い集中力を発揮する敏感な人もいれば、同じ敏感さが騒がしい職場では負担になることもあります。この診断では、12の設問への答えから、あなたの感受性がこの3タイプのどこに近いかをおよそ推定します。</p>
+
+  <h3>この診断の答え方</h3>
+  <p>設問はアーロン夫妻の尺度（HSP尺度）の考え方を参考に、このサイト向けに作った12問です。「とてもあてはまる」から「まったくあてはまらない」までの4段階で、ふだんの自分に近いほうを選んでください。答えに良し悪しはなく、合計点が高いほど感受性が強い傾向にある、という読み方をします。迷ったら直感で選んで大丈夫です。所要時間は2分ほどです。</p>
+
+  <h3>ビッグファイブとの関係</h3>
+  <p>HSP（感覚処理感受性）とビッグファイブは別の軸です。ビッグファイブは行動全般の傾向を5つの因子で測る枠組みで、感覚処理感受性は刺激への反応の仕方にしぼった気質の研究です。ただし両者は重なりがあり、これまでの研究では次のような傾きが報告されています（Greven et al., 2019）。</p>
+  <div class="table-wrap"><table>
+    <tr><th>ビッグファイブ</th><th>感受性との結びつき</th></tr>
+    <tr><td>神経症傾向</td><td>中程度の正の結びつき。不安や落ち込みを感じやすい傾向が見られる</td></tr>
+    <tr><td>開放性</td><td>弱めの正の結びつき。美意識や想像力との重なりが報告されている</td></tr>
+    <tr><td>外向性</td><td>弱い負の結びつき。ただし「HSP＝内向的」とは限らない</td></tr>
+    <tr><td>誠実性・協調性</td><td>一貫した結びつきは見出されていない</td></tr>
+  </table></div>
+  <p class="refs">※この表の強さは総説の記述にもとづくおおまかな向きで、研究によって幅があります。</p>
+  <p>注目すべきは、<strong>どの結びつきも完全ではない</strong>ことです。感受性の強さは、ビッグファイブの5因子のどれか1つに還元できるものではありません。だからこそ、ビッグファイブ診断とこの診断をあわせて受け、両方の面から自分を眺めることに意味があります。</p>
+
+  <h3>よくある誤解</h3>
+  <ul>
+    <li><strong>「HSPは病気である」</strong>——ではありません。HSPは医学的な診断名ではなく、気質・性格特性の1つとして研究されている呼び名です。つらさが続くときは、気質のせいにせず医療機関や専門家にご相談ください。</li>
+    <li><strong>「HSPだから生きづらい」</strong>——とは限りません。同じ感受性でも、環境や仕事の選び方しだいで力になることが分かっています。苦手な環境を避ける工夫と、得意な環境を選ぶ工夫の両方が役立ちます。</li>
+    <li><strong>「敏感さは直すべき欠点である」</strong>——ではありません。感受性の強さ自体に優劣はなく、研究上は環境との相性の問題として扱われます。慎重さや気づきの深さは、表を返せば長所になる性質です。</li>
+  </ul>
+
+  <h3>この診断について</h3>
+  <ul>
+    <li>12問・所要3分ほど・<strong>無料・登録不要</strong></li>
+    <li>回答は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>ビッグファイブ診断もあわせて受けると、<strong>性格と感受性を掛け合わせた解説</strong>が読めます</li>
+  </ul>
+
+  <h3>出典</h3>
+  <ul class="refs">
+    <li>Aron, E. N., &amp; Aron, A. (1997). Sensory-processing sensitivity and its relation to introversion and emotionality. <em>Journal of Personality and Social Psychology, 73</em>(2), 345–368. <a href="https://doi.org/10.1037/0022-3514.73.2.345" rel="nofollow">doi:10.1037/0022-3514.73.2.345</a></li>
+    <li>Lionetti, F., Aron, A., Aron, E. N., Burns, G. L., Jagiellowicz, J., &amp; Pluess, M. (2018). Dandelions, tulips and orchids: Evidence for the existence of low-sensitive, medium-sensitive and high-sensitive individuals. <em>Translational Psychiatry, 8</em>(1). <a href="https://doi.org/10.1038/s41398-017-0090-6" rel="nofollow">doi:10.1038/s41398-017-0090-6</a></li>
+    <li>Greven, C. U., Lionetti, F., Booth, C., Aron, E. N., Fox, E., Schendan, H. E., Pluess, M., Bruining, H., Acevedo, B., Bijttebier, P., &amp; Homberg, J. (2019). Sensory Processing Sensitivity in the context of Environmental Sensitivity: A critical review and development of research agenda. <em>Neuroscience &amp; Biobehavioral Reviews, 98</em>, 287–305. <a href="https://doi.org/10.1016/j.neubiorev.2019.01.009" rel="nofollow">doi:10.1016/j.neubiorev.2019.01.009</a></li>
+  </ul>
+
+  <h3>関連する診断</h3>
+  <ul class="related">
+    <li><a href="quiz.html">ビッグファイブ性格診断</a></li>
+    <li><a href="eq.html">EQ診断</a></li>
+    <li><a href="kodomo.html">子どもの性格診断（3歳から高校生まで）</a></li>
+    <li><a href="other_quiz.html">あの人の性格を分析する</a></li>
+    <li><a href="diagnoses.html">診断の一覧を見る</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
+<script src="cross-teaser.js?v=1"></script>
+</body>
+</html>

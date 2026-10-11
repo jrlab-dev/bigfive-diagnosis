@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仕事用ダッシュボード.xlsx — ビッグファイブ</title>
+<meta name="description" content="ビッグファイブの診断結果を仕事向けに管理・記録するためのダッシュボードツール。誠実性・協調性・外向性などのスコアを職場のシーンで活かせるよう整理し、チーム運用や自己理解に役立てます。">
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', 'Segoe UI', Meiryo, sans-serif;
+  background: #f0f0f0;
+  color: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ===== TITLE BAR ===== */
+.xl-title {
+  background: #217346;
+  color: #fff;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 8px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.xl-title-icon { font-size: 14px; }
+.xl-title-name { font-size: 12px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xl-title-back {
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding: 2px 7px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 2px;
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+.xl-title-back:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ===== RIBBON TABS ===== */
+.xl-tabs {
+  background: #1a5c38;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 6px;
+  gap: 1px;
+  flex-shrink: 0;
+}
+.xl-tab {
+  padding: 4px 11px 3px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.78);
+  cursor: default;
+  border-radius: 2px 2px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.xl-tab.active {
+  background: #f0f0f0;
+  color: #1a1a1a;
+  font-weight: 700;
+  border-color: #b0b0b0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== RIBBON ===== */
+.xl-ribbon {
+  background: #f0f0f0;
+  border-bottom: 1px solid #b8b8b8;
+  display: flex;
+  align-items: stretch;
+  padding: 2px 6px;
+  gap: 0;
+  flex-shrink: 0;
+  min-height: 52px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.rg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 1px;
+  border-right: 1px solid #c8c8c8;
+}
+.rg:last-child { border-right: none; }
+.rg-btns { display: flex; align-items: center; gap: 2px; flex: 1; padding-top: 2px; }
+.rg-label { font-size: 9px; color: #888; padding-top: 2px; white-space: nowrap; }
+
+/* Ribbon button – large (icon above label) */
+.rb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 2px 5px;
+  min-width: 36px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: #222;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9px;
+  text-align: center;
+  transition: background 0.1s, border-color 0.1s;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.rb:hover { background: #dcedf8; border-color: #9bc0de; }
+.rb:active { background: #c8dff0; }
+.rb .ri { font-size: 16px; line-height: 1; }
+.rb .rl { font-size: 9px; color: #333; }
+
+/* Ribbon button – small (icon + text horizontal) */
+.rb-sm {
+  flex-direction: row;
+  gap: 3px;
+  padding: 2px 6px;
+  min-width: auto;
+  height: 18px;
+  font-size: 10px;
+  align-items: center;
+}
+.rb-sm .ri { font-size: 11px; }
+
+/* Stats in ribbon */
+.rstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  line-height: 1.6;
+}
+.rstat strong { font-size: 18px; color: #217346; font-weight: 700; line-height: 1; }
+.rstat span { font-size: 9px; color: #666; }
+
+/* ===== FORMULA BAR ===== */
+.xl-fbar {
+  background: #fff;
+  border-bottom: 1px solid #c0c0c0;
+  display: flex;
+  align-items: center;
+  height: 21px;
+  padding: 0 6px;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.xl-fbar-ref {
+  width: 60px;
+  border: 1px solid #c8c8c8;
+  border-radius: 1px;
+  padding: 1px 5px;
+  font-size: 11px;
+  text-align: center;
+  color: #444;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.xl-fbar-div { width: 1px; height: 14px; background: #ccc; flex-shrink: 0; }
+.xl-fbar-text { color: #777; font-size: 10px; font-style: italic; }
+
+/* ===== SHEET WRAPPER ===== */
+.sheet-wrap {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+
+/* ===== SHEET TABLE ===== */
+.sh {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+}
+
+/* Column widths */
+.c-no    { width: 32px; }
+.c-name  { width: 100px; }
+.c-pos   { width: 90px; }
+.c-dept  { width: 80px; }
+.c-age   { width: 38px; }
+.c-addr  { width: 120px; }
+.c-fname { width: 120px; }
+.c-sc    { width: 34px; }
+.c-date  { width: 66px; }
+.c-memo  { width: 120px; }
+.c-src   { width: 36px; }
+.c-ops   { width: 88px; }
+
+/* Corner */
+.sh-corner {
+  background: #e0e0e0;
+  border-right: 1px solid #bbb;
+  border-bottom: 2px solid #217346;
+  position: sticky; left: 0; top: 0; z-index: 10;
+}
+
+/* Column headers */
+.sh-ch {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  border-bottom: 2px solid #217346;
+  padding: 2px 4px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  color: #333;
+  line-height: 1.3;
+}
+.sh-ch:hover { background: #d8ead8; }
+.sh-ch.sa { background: #cce0cc; color: #1a5c38; }
+.sh-ch.sd { background: #cce0cc; color: #1a5c38; }
+.sh-ch .sa-arrow { font-size: 8px; color: #217346; }
+
+/* Row number */
+.sh-rn {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  text-align: center;
+  font-size: 10px;
+  color: #777;
+  width: 32px;
+  padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
+  user-select: none;
+}
+tr.row-sel .sh-rn { background: #217346; color: #fff; font-weight: 700; }
+
+/* Data cells */
+.sh-td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 4px;
+  height: 20px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: cell;
+  font-size: 11px;
+}
+tr:hover .sh-td { background: #f4faf6; }
+tr.row-sel .sh-td { background: #e0eee6; }
+
+/* Score cells */
+.sh-sc {
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.s5 { background: #c6efce; color: #276221; }
+.s4 { background: #e2efda; color: #375623; }
+.s3 { color: #666; }
+.s2 { background: #fce4d6; color: #833c0b; }
+.s1 { background: #ffc7ce; color: #9c0006; }
+tr:hover .s5 { background: #b8e5be; }
+tr:hover .s4 { background: #d5e8cc; }
+tr:hover .s2 { background: #f0d4c4; }
+tr:hover .s1 { background: #f5bac4; }
+
+/* Cell content */
+.cv-name { font-weight: 600; font-size: 12px; }
+.cv-sub  { font-size: 10px; color: #555; }
+.cv-dim  { font-size: 10px; color: #aaa; font-style: italic; }
+.cv-date { font-size: 10px; color: #666; font-variant-numeric: tabular-nums; }
+
+/* Source badge */
+.src { font-size: 8px; padding: 0 3px; border-radius: 2px; font-weight: 700; }
+.src-m { background: #e0d8f8; color: #4c1d95; }
+.src-i { background: #d1f5e8; color: #065f46; }
+.src-s { background: #dbeafe; color: #1e40af; }
+
+/* Action buttons in cell */
+.c-ops-wrap { display: flex; gap: 2px; justify-content: center; }
+.c-btn {
+  padding: 0 5px;
+  height: 16px;
+  font-size: 10px;
+  border: 1px solid #c0c0c0;
+  border-radius: 1px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.1s;
+  color: #333;
+  line-height: 1;
+}
+.c-btn:hover { background: #dce8f5; border-color: #8ab4d5; }
+.c-btn.del:hover { background: #fde8e8; border-color: #f0a0a0; color: #c00; }
+
+/* Empty row */
+.empty-row td {
+  text-align: center;
+  padding: 28px 20px;
+  color: #aaa;
+  font-size: 12px;
+  border: 1px solid #e0e0e0;
+  font-style: italic;
+}
+
+/* ===== STATUS BAR ===== */
+.xl-status {
+  background: #217346;
+  color: rgba(255,255,255,0.88);
+  height: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 14px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.xl-status span { white-space: nowrap; }
+
+/* ===== MODAL ===== */
+.mo { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.mo.show { display: flex; }
+.mo-box {
+  background: #fff;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+  width: 100%;
+  max-width: 480px;
+  margin: 12px;
+  max-height: 92vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.mo-hd {
+  background: #217346;
+  color: #fff;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.mo-x { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 14px; padding: 0 3px; line-height: 1; }
+.mo-x:hover { color: #fff; }
+.mo-bd { padding: 12px 14px; overflow-y: auto; }
+.mo-ft { padding: 8px 14px; border-top: 1px solid #e0e0e0; display: flex; gap: 6px; justify-content: flex-end; flex-shrink: 0; }
+
+/* Form in modal */
+.f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.f-row { margin-bottom: 0; }
+.f-lbl { display: block; font-size: 10px; font-weight: 700; color: #666; margin-bottom: 3px; }
+.f-inp {
+  width: 100%;
+  padding: 4px 7px;
+  border: 1px solid #b8b8b8;
+  border-radius: 2px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #1a1a1a;
+  transition: border-color 0.15s;
+}
+.f-inp:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.12); }
+.f-full { grid-column: 1 / -1; }
+
+/* Score inputs */
+.sc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+.sc-wrap { text-align: center; }
+.sc-fl { display: block; font-size: 10px; font-weight: 700; margin-bottom: 2px; }
+.sc-inp {
+  width: 100%;
+  padding: 5px 2px;
+  text-align: center;
+  border: 1px solid #b8b8b8;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #1a1a1a;
+  -moz-appearance: textfield;
+  transition: border-color 0.15s;
+}
+.sc-inp::-webkit-outer-spin-button,
+.sc-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.sc-inp:focus { outline: none; border-color: #217346; box-shadow: 0 0 0 2px rgba(33,115,70,0.12); }
+.sc-hint { font-size: 9px; color: #999; text-align: center; margin-top: 4px; }
+
+/* Modal buttons */
+.mb { padding: 4px 14px; font-size: 11px; font-family: inherit; border-radius: 2px; cursor: pointer; border: 1px solid #aaa; font-weight: 600; }
+.mb-ok { background: #217346; color: #fff; border-color: #1a5c38; }
+.mb-ok:hover { background: #1a5c38; }
+.mb-ng { background: #fff; color: #333; }
+.mb-ng:hover { background: #f0f0f0; }
+
+/* Import list */
+.imp-list { max-height: 220px; overflow-y: auto; border: 1px solid #d0d0d0; margin-bottom: 8px; }
+.imp-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 4px 8px; border-bottom: 1px solid #eee;
+  font-size: 11px; cursor: pointer; transition: background 0.1s; user-select: none;
+}
+.imp-item:last-child { border-bottom: none; }
+.imp-item:hover:not(.already) { background: #f0f8f4; }
+.imp-item.already { opacity: 0.4; pointer-events: none; }
+.imp-item.sel { background: #e2f0e9; }
+.imp-ck {
+  width: 13px; height: 13px;
+  border: 1.5px solid #aaa; border-radius: 2px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; background: #fff;
+}
+.imp-item.sel .imp-ck { background: #217346; border-color: #217346; color: #fff; }
+.imp-nm { font-weight: 600; flex: 1; }
+.imp-cd { font-size: 9px; color: #999; font-variant-numeric: tabular-nums; }
+.imp-al { font-size: 9px; color: #bbb; }
+.imp-info { font-size: 10px; color: #777; margin-bottom: 5px; }
+
+/* ===== TASK PANE ===== */
+#taskPane {
+  width: 400px;
+  flex-shrink: 0;
+  border-left: 2px solid #217346;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.tp-hd {
+  background: #217346;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 6px;
+}
+.tp-tabs {
+  display: flex;
+  background: #1a5c38;
+  flex-shrink: 0;
+}
+.tp-tab {
+  flex: 1;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.tp-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.tp-tab.active { color: #fff; border-bottom-color: #7dd3b0; background: rgba(255,255,255,0.08); }
+.tp-iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  background: #fff;
+}
+.tp-close { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 14px; padding: 0 2px; line-height: 1; }
+.tp-close:hover { color: #fff; }
+/* Import notification bar */
+.tp-notify {
+  background: #d1fae5;
+  border-top: 1px solid #6ee7b7;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: #065f46;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.tp-notify.show { display: flex; }
+.tp-notify-btn {
+  background: #217346;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  padding: 2px 8px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== SHEET TABS ===== */
+.xl-sheettabs {
+  background: #d8d8d8;
+  border-top: 1px solid #b0b0b0;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 6px 0 6px;
+  gap: 2px;
+  flex-shrink: 0;
+  height: 22px;
+}
+.xl-stab {
+  padding: 2px 12px 1px;
+  font-size: 10px;
+  color: #555;
+  cursor: pointer;
+  border: 1px solid #b8b8b8;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  background: #c8c8c8;
+  white-space: nowrap;
+  user-select: none;
+  transition: background 0.1s;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.xl-stab:hover { background: #ddd; }
+.xl-stab.active {
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  border-color: #b0b0b0;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sheet 2: 自分の診断 */
+.sh2-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+}
+.sh2-table th {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  border-bottom: 2px solid #217346;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky; top: 0; z-index: 5;
+  color: #333;
+}
+.sh2-table td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 5px;
+  height: 20px;
+  font-size: 11px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sh2-table tr:hover td { background: #f4faf6; }
+.sh2-table .sh-rn {
+  background: #e8e8e8; border: 1px solid #c8c8c8;
+  text-align: center; font-size: 10px; color: #777;
+  width: 32px; padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
+}
+
+/* Sheet 3: チーム相性 */
+.sh3-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+}
+.sh3-table th {
+  background: #e8e8e8;
+  border: 1px solid #c8c8c8;
+  border-bottom: 2px solid #217346;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky; top: 0; z-index: 5;
+  color: #333;
+}
+.sh3-table td {
+  border: 1px solid #d8d8d8;
+  padding: 1px 5px;
+  height: 20px;
+  font-size: 11px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sh3-table tr:hover td { background: #f4faf6; }
+.sh3-table .sh-rn {
+  background: #e8e8e8; border: 1px solid #c8c8c8;
+  text-align: center; font-size: 10px; color: #777;
+  width: 32px; padding: 1px 3px;
+  position: sticky; left: 0; z-index: 3;
+}
+.rank-s { color: #c8a000; font-weight: 700; }
+.rank-a { color: #7c3aed; font-weight: 700; }
+.rank-b { color: #1d4ed8; }
+.rank-c { color: #555; }
+
+/* Inline cell editing */
+.inline-edit-inp {
+  width:100%; height:100%; border:2px solid #217346; outline:none;
+  padding:0 3px; font-size:11px; font-family:inherit;
+  background:#fffbe6; box-sizing:border-box; -moz-appearance:textfield;
+}
+.inline-edit-inp::-webkit-outer-spin-button,
+.inline-edit-inp::-webkit-inner-spin-button { -webkit-appearance:none; }
+.sh-td.is-editing { overflow:visible; padding:0; position:relative; z-index:20; }
+
+/* Custom column header */
+.custom-col-hd { position:relative; }
+.custom-col-hd:hover .col-del-btn { opacity:1; }
+.col-del-btn {
+  position:absolute; right:2px; top:1px;
+  background:rgba(255,255,255,0.85); border:none; border-radius:2px;
+  color:#c00; cursor:pointer; font-size:9px; padding:0 3px; line-height:14px;
+  opacity:0; transition:opacity 0.15s; font-weight:700;
+}
+.col-del-btn:hover { background:#fee2e2; opacity:1; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #333; color: #fff;
+  padding: 6px 16px; font-size: 11px; border-radius: 2px;
+  z-index: 9999; opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SEO: 検索エンジン向けのメイン見出し（視覚的には非表示・レイアウト不変） -->
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;">仕事用ダッシュボード — ビッグファイブ スコア管理</h1>
+
+<!-- TITLE BAR -->
+<div class="xl-title">
+  <span class="xl-title-icon"></span>
+  <span class="xl-title-name">仕事用ダッシュボード.xlsx — ビッグファイブ スコア管理</span>
+  <a href="mypage.html" class="xl-title-back">← サイトに戻る</a>
+</div>
+
+<!-- RIBBON TABS -->
+<div class="xl-tabs">
+  <div class="xl-tab active">ホーム</div>
+  <div class="xl-tab">データ</div>
+  <div class="xl-tab">表示</div>
+</div>
+
+<!-- RIBBON -->
+<div class="xl-ribbon">
+
+  <div class="rg">
+    <div class="rg-btns">
+      <button class="rb" onclick="openAddModal()">
+        <span class="rl">人物追加</span>
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button class="rb rb-sm" onclick="addSelf()">自分を追加</button>
+        <button class="rb rb-sm" onclick="openImportModal()">あの人データ取込</button>
+        <button class="rb rb-sm" onclick="exportCSV()">CSV保存</button>
+        <button class="rb rb-sm" onclick="copyForAI()">AI用コピー</button>
+      </div>
+    </div>
+    <span class="rg-label">操作</span>
+  </div>
+
+  <div class="rg">
+    <div class="rg-btns">
+      <button class="rb" onclick="openColModal()">
+        <span class="rl">列を追加</span>
+      </button>
+    </div>
+    <span class="rg-label">カスタム列</span>
+  </div>
+
+  <div class="rg">
+    <div class="rg-btns">
+      <button class="rb" onclick="openPane('other')" title="あの人診断をパネルで開く">
+        <span class="rl">あの人診断</span>
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px;padding-top:2px;">
+        <button class="rb rb-sm" onclick="openPane('self')">自分の診断</button>
+        <button class="rb rb-sm" onclick="openPane('team')">チーム相性</button>
+      </div>
+    </div>
+    <span class="rg-label">診断パネル</span>
+  </div>
+
+  <div class="rg" style="border-right:none">
+    <div class="rg-btns">
+      <div class="rstat"><strong id="statCount">0</strong><span>件登録</span></div>
+      <div class="rstat"><strong id="statScored" style="color:#217346">0</strong><span>件スコアあり</span></div>
+    </div>
+    <span class="rg-label">集計</span>
+  </div>
+
+</div>
+
+<!-- FORMULA BAR -->
+<div class="xl-fbar">
+  <input class="xl-fbar-ref" id="cellRef" value="A1" readonly>
+  <span class="xl-fbar-div"></span>
+  <span class="xl-fbar-text" id="fbarText">データはこの端末にのみ保存されます（localStorage）</span>
+</div>
+
+<!-- MAIN AREA (left: sheet | right: task pane) -->
+<div style="flex:1; overflow:hidden; display:flex; flex-direction:row;">
+
+<!-- LEFT: SHEET AREA -->
+<div id="sheetArea" style="flex:1; overflow:hidden; display:flex; flex-direction:column; min-width:0;">
+
+<!-- Sheet 1: 人物管理 -->
+<div id="sheet1" class="sheet-wrap" style="flex:1; overflow:auto;">
+  <table class="sh" id="sheetTable">
+    <colgroup id="sheetColgroup"></colgroup>
+    <thead id="sheetThead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div><!-- /sheet1 -->
+
+<!-- Sheet 2: 自分の診断 -->
+<div id="sheet2" class="sheet-wrap" style="flex:1; overflow:auto; display:none;">
+  <table class="sh2-table">
+    <thead>
+      <tr>
+        <th style="width:32px"></th>
+        <th style="width:100px; text-align:left">診断名</th>
+        <th style="width:50px">問題数</th>
+        <th style="width:34px; color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span></th>
+        <th style="width:34px; color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span></th>
+        <th style="width:34px; color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span></th>
+        <th style="width:34px; color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span></th>
+        <th style="width:34px; color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span></th>
+        <th style="width:68px">診断日</th>
+        <th style="width:80px">コード</th>
+        <th style="width:36px">展開</th>
+      </tr>
+    </thead>
+    <tbody id="tbody2"></tbody>
+  </table>
+</div>
+
+<!-- Sheet 3: チーム相性 -->
+<div id="sheet3" class="sheet-wrap" style="flex:1; overflow:auto; display:none;">
+  <table class="sh3-table">
+    <thead>
+      <tr>
+        <th style="width:32px"></th>
+        <th style="width:140px; text-align:left">チーム名</th>
+        <th style="width:40px">人数</th>
+        <th style="width:64px">相性スコア</th>
+        <th style="width:36px">ランク</th>
+        <th style="text-align:left">メンバー</th>
+        <th style="width:68px">診断日</th>
+        <th style="width:60px">詳細</th>
+      </tr>
+    </thead>
+    <tbody id="tbody3"></tbody>
+  </table>
+</div>
+
+<!-- SHEET TABS (inside left area) -->
+<div class="xl-sheettabs" style="flex-shrink:0;">
+  <div class="xl-stab active" id="stab1" onclick="switchSheet(1)">人物管理</div>
+  <div class="xl-stab" id="stab2" onclick="switchSheet(2)">自分の診断</div>
+  <div class="xl-stab" id="stab3" onclick="switchSheet(3)">チーム相性</div>
+</div>
+</div><!-- /sheet area -->
+
+<!-- RIGHT: TASK PANE -->
+<div id="taskPane" style="display:none;">
+  <div class="tp-hd">
+    <span id="tpTitle">診断パネル</span>
+    <button class="tp-close" onclick="closePane()" title="閉じる">✕</button>
+  </div>
+  <div class="tp-tabs">
+    <div class="tp-tab active" id="tptab-other" onclick="switchPaneTab('other')">あの人診断</div>
+    <div class="tp-tab" id="tptab-self" onclick="switchPaneTab('self')">自分の診断</div>
+    <div class="tp-tab" id="tptab-team" onclick="switchPaneTab('team')">チーム相性</div>
+  </div>
+  <div class="tp-notify" id="tpNotify">
+    <span id="tpNotifyMsg">新しい診断結果が保存されました</span>
+    <button class="tp-notify-btn" onclick="importLatestFromPane()">人物管理に追加</button>
+    <button style="background:none;border:none;color:#065f46;cursor:pointer;font-size:11px;margin-left:auto;" onclick="dismissNotify()">✕</button>
+  </div>
+  <iframe id="tpFrame" class="tp-iframe" src="about:blank"></iframe>
+</div>
+
+</div><!-- /main area -->
+
+<!-- STATUS BAR -->
+<div class="xl-status">
+  <span id="statusMain">準備完了</span>
+  <span style="margin-left:auto" id="statusSort">並び順: 診断日（新しい順）</span>
+</div>
+
+<!-- 追加/編集モーダル -->
+<div class="mo" id="editMo" onclick="closeMoOverlay('editMo')">
+  <div class="mo-box">
+    <div class="mo-hd">
+      <span id="editMoTitle">人物を追加</span>
+      <button class="mo-x" onclick="closeMo('editMo')">✕</button>
+    </div>
+    <div class="mo-bd">
+      <div class="f-grid" style="margin-bottom:8px">
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iName">名前（呼び名・ニックネーム） <span style="color:#c00">*</span></label>
+          <input class="f-inp" type="text" id="iName" placeholder="田中太郎" maxlength="30">
+        </div>
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iFullName">性格名（診断結果のタイプ名）</label>
+          <input class="f-inp" type="text" id="iFullName" placeholder="例：調停者、探偵、戦略家" maxlength="40">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iPos">役職</label>
+          <input class="f-inp" type="text" id="iPos" placeholder="営業部長" maxlength="30">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iDept">部署</label>
+          <input class="f-inp" type="text" id="iDept" placeholder="営業部" maxlength="30">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iAge">年齢</label>
+          <input class="f-inp" type="number" id="iAge" placeholder="35" min="0" max="120">
+        </div>
+        <div class="f-row">
+          <label class="f-lbl" for="iAddr">住所（都道府県など）</label>
+          <input class="f-inp" type="text" id="iAddr" placeholder="東京都渋谷区" maxlength="40">
+        </div>
+        <div class="f-row f-full">
+          <label class="f-lbl" for="iMemo">メモ</label>
+          <input class="f-inp" type="text" id="iMemo" placeholder="自由メモ" maxlength="60">
+        </div>
+      </div>
+      <div id="extraFields"></div>
+      <div style="margin-bottom:4px">
+        <label class="f-lbl">ビッグファイブスコア（1〜5）</label>
+        <div class="sc-grid">
+          <div class="sc-wrap"><span class="sc-fl" style="color:#5b21b6">O</span><input class="sc-inp" type="number" id="iO" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#1d4ed8">C</span><input class="sc-inp" type="number" id="iC" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#c2410c">E</span><input class="sc-inp" type="number" id="iE" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#be185d">A</span><input class="sc-inp" type="number" id="iA" min="1" max="5" placeholder="3"></div>
+          <div class="sc-wrap"><span class="sc-fl" style="color:#065f46">N</span><input class="sc-inp" type="number" id="iN" min="1" max="5" placeholder="3"></div>
+        </div>
+        <div class="sc-hint">「あの人診断」の結果コード（例: 32413）の各桁がスコアです</div>
+      </div>
+    </div>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('editMo')">キャンセル</button>
+      <button class="mb mb-ok" id="editSaveBtn" onclick="savePerson()">登録する</button>
+    </div>
+  </div>
+</div>
+
+<!-- インポートモーダル -->
+<div class="mo" id="impMo" onclick="closeMoOverlay('impMo')">
+  <div class="mo-box">
+    <div class="mo-hd">
+      <span>あの人データを取り込む</span>
+      <button class="mo-x" onclick="closeMo('impMo')">✕</button>
+    </div>
+    <div class="mo-bd">
+      <p style="font-size:11px; color:#666; margin-bottom:8px; line-height:1.6">マイページの「あの人」に保存済みの診断結果を取り込みます。<br>すでに同名で登録済みの人物はスキップされます。</p>
+      <div class="imp-list" id="impList"></div>
+      <div class="imp-info" id="impInfo">0件 選択中</div>
+    </div>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('impMo')">キャンセル</button>
+      <button class="mb mb-ok" id="impBtn" onclick="execImport()">取り込む</button>
+    </div>
+  </div>
+</div>
+
+<!-- 列追加モーダル -->
+<div class="mo" id="colMo" onclick="closeMoOverlay('colMo')">
+  <div class="mo-box" style="max-width:320px">
+    <div class="mo-hd">
+      <span>列を追加</span>
+      <button class="mo-x" onclick="closeMo('colMo')">✕</button>
+    </div>
+    <div class="mo-bd">
+      <div class="f-row" style="margin-bottom:10px">
+        <label class="f-lbl" for="colLabel">列名 <span style="color:#c00">*</span></label>
+        <input class="f-inp" type="text" id="colLabel" placeholder="例: 姓、電話番号、生年月日" maxlength="20">
+      </div>
+      <div class="f-row">
+        <label class="f-lbl" for="colType">データ型</label>
+        <select class="f-inp" id="colType">
+          <option value="text">テキスト（氏名・住所など）</option>
+          <option value="tel">電話番号</option>
+          <option value="email">メールアドレス</option>
+          <option value="number">数値</option>
+          <option value="birthday">生年月日（年齢を自動計算）</option>
+          <option value="date">日付</option>
+        </select>
+      </div>
+    </div>
+    <div class="mo-ft">
+      <button class="mb mb-ng" onclick="closeMo('colMo')">キャンセル</button>
+      <button class="mb mb-ok" onclick="addColumn()">追加する</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WORK_KEY = 'bigfive_work_people';
+const OTHER_KEY = 'bigfive_other_results';
+
+function codeToTypeName(O, C, E, A, N) {
+  if (!O||!C||!E||!A||!N) return '';
+  const scores = { O, C, E, A, N };
+  let main = 'O', max = O;
+  for (const [k, v] of Object.entries(scores)) { if (v > max) { max = v; main = k; } }
+  const mainLabels = { O:{high:'探求者',low:'確実派'}, C:{high:'実行者',low:'自由人'}, E:{high:'社交家',low:'内省家'}, A:{high:'調停者',low:'競争者'}, N:{high:'感受家',low:'平静派'} };
+  const subLabels  = { O:{high:'発想家',low:'現実派'}, C:{high:'規律派',low:'柔軟派'}, E:{high:'ムードメーカー',low:'思考家'}, A:{high:'支援者',low:'自立派'}, N:{high:'繊細派',low:'泰然家'} };
+  const mainLabel = max >= 4 ? mainLabels[main].high : mainLabels[main].low;
+  let sub = '';
+  for (const [k, v] of Object.entries(scores)) {
+    if (k !== main && (v === 1 || v === 5)) { sub = subLabels[k][v === 5 ? 'high' : 'low']; break; }
+  }
+  return sub ? `${sub}・${mainLabel}` : mainLabel;
+}
+const WORK_COLS_KEY = 'bigfive_work_columns';
+
+function load() { try { return JSON.parse(localStorage.getItem(WORK_KEY) || '[]'); } catch(e) { return []; } }
+function save(arr) { localStorage.setItem(WORK_KEY, JSON.stringify(arr)); }
+function genId() { return 'w' + Date.now() + Math.random().toString(36).slice(2, 6); }
+function loadCols() { try { return JSON.parse(localStorage.getItem(WORK_COLS_KEY)||'[]'); } catch(e) { return []; } }
+function saveCols(arr) { localStorage.setItem(WORK_COLS_KEY, JSON.stringify(arr)); }
+function genColId() { return 'col' + Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+function calcAge(birthday) {
+  if (!birthday) return null;
+  const b = new Date(birthday), t = new Date();
+  let age = t.getFullYear() - b.getFullYear();
+  if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) age--;
+  return age >= 0 ? age : null;
+}
+
+// ===== DYNAMIC HEADERS =====
+function renderHeaders() {
+  const cols = loadCols();
+  const custW = cols.reduce((s, c) => s + (c.width || 90), 0);
+  const totalW = 32 + 100 + custW + 90 + 80 + 38 + 120 + 120 + 34 * 5 + 66 + 120 + 36 + 70;
+  const tbl = document.getElementById('sheetTable');
+  tbl.style.width = Math.max(totalW, tbl.parentElement.clientWidth) + 'px';
+
+  document.getElementById('sheetColgroup').innerHTML =
+    '<col style="width:32px"><col style="width:100px">' +
+    cols.map(c => `<col style="width:${c.width||90}px">`).join('') +
+    '<col style="width:90px"><col style="width:80px"><col style="width:38px"><col style="width:120px">' +
+    '<col style="width:120px">' +
+    '<col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px"><col style="width:34px">' +
+    '<col style="width:66px"><col style="width:120px"><col style="width:36px"><col style="width:70px">';
+
+  const custTh = cols.map(c =>
+    `<th class="sh-ch custom-col-hd" title="${esc(c.label)}">${esc(c.label)}<button class="col-del-btn" onclick="event.stopPropagation();deleteColumn('${c.id}')">×</button></th>`
+  ).join('');
+  document.getElementById('sheetThead').innerHTML = `<tr>
+    <th class="sh-corner"></th>
+    <th class="sh-ch sortable" data-col="name">名前<span class="sa-arrow" id="sa-name"></span></th>
+    ${custTh}
+    <th class="sh-ch sortable" data-col="pos">役職<span class="sa-arrow" id="sa-pos"></span></th>
+    <th class="sh-ch sortable" data-col="dept">部署<span class="sa-arrow" id="sa-dept"></span></th>
+    <th class="sh-ch sortable" data-col="age">年齢<span class="sa-arrow" id="sa-age"></span></th>
+    <th class="sh-ch sortable" data-col="addr">住所<span class="sa-arrow" id="sa-addr"></span></th>
+    <th class="sh-ch sortable" data-col="fullName">性格名<span class="sa-arrow" id="sa-fullName"></span></th>
+    <th class="sh-ch sortable" data-col="O" style="color:#5b21b6">O<br><span style="font-size:9px;font-weight:400;color:#888">開放</span><span class="sa-arrow" id="sa-O"></span></th>
+    <th class="sh-ch sortable" data-col="C" style="color:#1d4ed8">C<br><span style="font-size:9px;font-weight:400;color:#888">誠実</span><span class="sa-arrow" id="sa-C"></span></th>
+    <th class="sh-ch sortable" data-col="E" style="color:#c2410c">E<br><span style="font-size:9px;font-weight:400;color:#888">外向</span><span class="sa-arrow" id="sa-E"></span></th>
+    <th class="sh-ch sortable" data-col="A" style="color:#be185d">A<br><span style="font-size:9px;font-weight:400;color:#888">協調</span><span class="sa-arrow" id="sa-A"></span></th>
+    <th class="sh-ch sortable" data-col="N" style="color:#065f46">N<br><span style="font-size:9px;font-weight:400;color:#888">感受</span><span class="sa-arrow" id="sa-N"></span></th>
+    <th class="sh-ch sortable" data-col="date">診断日<span class="sa-arrow" id="sa-date"></span></th>
+    <th class="sh-ch sortable" data-col="memo">メモ<span class="sa-arrow" id="sa-memo"></span></th>
+    <th class="sh-ch">種別</th>
+    <th class="sh-ch">操作</th>
+  </tr>`;
+  attachSortListeners();
+}
+
+function attachSortListeners() {
+  document.querySelectorAll('#sheetThead .sh-ch.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const c = th.dataset.col;
+      if (sortCol === c) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      else { sortCol = c; sortDir = c === 'date' ? 'desc' : 'asc'; }
+      render();
+    });
+  });
+}
+
+// ===== COLUMN MODAL =====
+function openColModal() {
+  document.getElementById('colLabel').value = '';
+  document.getElementById('colType').value = 'text';
+  document.getElementById('colMo').classList.add('show');
+  setTimeout(() => document.getElementById('colLabel').focus(), 60);
+}
+function addColumn() {
+  const label = document.getElementById('colLabel').value.trim();
+  if (!label) { toast('列名を入力してください'); return; }
+  const type = document.getElementById('colType').value;
+  const cols = loadCols();
+  cols.push({ id: genColId(), label, type });
+  saveCols(cols);
+  closeMo('colMo');
+  renderHeaders();
+  render();
+  toast(`「${label}」列を追加しました`);
+}
+function deleteColumn(colId) {
+  const cols = loadCols();
+  const col = cols.find(c => c.id === colId);
+  if (!col || !confirm(`「${col.label}」列を削除しますか？\nこの列のデータも全て消えます。`)) return;
+  saveCols(cols.filter(c => c.id !== colId));
+  const ppl = load();
+  ppl.forEach(p => { if (p.extra) delete p.extra[colId]; });
+  save(ppl);
+  renderHeaders();
+  render();
+  toast(`「${col.label}」列を削除しました`);
+}
+
+// ===== EXTRA FIELDS IN MODAL =====
+function populateExtraFields(person) {
+  const cols = loadCols();
+  const container = document.getElementById('extraFields');
+  if (!cols.length) { container.innerHTML = ''; return; }
+  container.innerHTML = `<div class="f-grid" style="border-top:1px solid #e8e8e8;padding-top:8px;margin-bottom:8px;">` +
+    cols.map(c => {
+      const val = (person && person.extra && person.extra[c.id] != null) ? person.extra[c.id] : '';
+      const itype = {text:'text',tel:'tel',email:'email',number:'number',birthday:'date',date:'date'}[c.type]||'text';
+      return `<div class="f-row">
+        <label class="f-lbl" for="iX_${c.id}">${esc(c.label)}</label>
+        <input class="f-inp" type="${itype}" id="iX_${c.id}" value="${esc(String(val))}">
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+let sortCol = 'date', sortDir = 'desc', selId = null;
+
+// ===== RENDER =====
+function render() {
+  const ppl = load();
+  const tbody = document.getElementById('tbody');
+
+  const sorted = [...ppl].sort((a, b) => {
+    let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+    if (typeof va === 'number' && typeof vb === 'number') return sortDir === 'asc' ? va - vb : vb - va;
+    va = String(va).toLowerCase(); vb = String(vb).toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // Sort arrows
+  ['name','pos','dept','age','addr','fullName','O','C','E','A','N','date','memo'].forEach(c => {
+    const el = document.getElementById('sa-' + c);
+    if (el) el.textContent = sortCol === c ? (sortDir === 'asc' ? '▲' : '▼') : '';
+  });
+  document.querySelectorAll('.sh-ch.sortable').forEach(th => {
+    th.classList.remove('sa', 'sd');
+    if (th.dataset.col === sortCol) th.classList.add(sortDir === 'asc' ? 'sa' : 'sd');
+  });
+
+  const SLBL = { name:'名前', pos:'役職', dept:'部署', age:'年齢', addr:'住所', fullName:'性格名',
+    O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受', date:'診断日', memo:'メモ' };
+  document.getElementById('statusSort').textContent =
+    '並び順: ' + (SLBL[sortCol] || sortCol) + (sortDir === 'asc' ? '（昇順）' : '（降順）');
+
+  const cols = loadCols();
+  const PAD_TO = 50;
+  const EMPTY_PAD = '<td class="sh-td"></td>'.repeat(15 + cols.length);
+
+  // あの人データをname→objectのMapに
+  const othersList = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const otherMap = {};
+  othersList.forEach(o => { if (o.name) otherMap[o.name] = o; });
+  // 自分データのactiveも取得
+  const myResults = (() => { try { return JSON.parse(localStorage.getItem('bigfive_my_results')||'[]'); } catch(e) { return []; } })();
+  const myActive = myResults[parseInt(localStorage.getItem('bigfive_active_my_index')||'0')] || {};
+
+  const dataHtml = sorted.map((p, i) => {
+    const isSel = selId === p.id;
+    const sc = ['O','C','E','A','N'].map(f => {
+      const v = p[f];
+      return v
+        ? `<td class="sh-td sh-sc s${v}" onclick="startEdit(event,'${p.id}','${f}')">${v}</td>`
+        : `<td class="sh-td sh-sc" style="color:#ddd" onclick="startEdit(event,'${p.id}','${f}')">—</td>`;
+    }).join('');
+    const ds = p.date ? p.date.slice(0,10).replace(/-/g,'/') : '—';
+    const src = p.source === 'self' ? '<span class="src src-s">自分</span>'
+      : p.source === 'imported' ? '<span class="src src-i">取込</span>'
+      : '<span class="src src-m">手動</span>';
+    const customCells = cols.map(c => {
+      const val = (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : '';
+      let disp = esc(String(val));
+      if (c.type === 'birthday' && val) {
+        const a = calcAge(val);
+        disp = `${String(val).replace(/-/g,'/')} <span style="font-size:9px;color:#888">(${a != null ? a+'歳' : '?'})</span>`;
+      }
+      return `<td class="sh-td" onclick="startEdit(event,'${p.id}','extra:${c.id}')">${disp}</td>`;
+    }).join('');
+    let rowHtml = `<tr class="${isSel ? 'row-sel' : ''}" onclick="selRow('${p.id}','${esc(p.name)}',${i+1})">
+      <td class="sh-rn">${i+1}</td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','name')"><span class="cv-name">${esc(p.name)}</span></td>
+      ${customCells}
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','pos')"><span class="cv-sub">${esc(p.pos||'')}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','dept')"><span class="cv-sub">${esc(p.dept||'')}</span></td>
+      <td class="sh-td" style="text-align:center" onclick="startEdit(event,'${p.id}','age')"><span class="cv-sub">${p.age||'—'}</span></td>
+      <td class="sh-td" title="${esc(p.addr||'')}" onclick="startEdit(event,'${p.id}','addr')"><span class="cv-sub">${esc(p.addr||'')}</span></td>
+      <td class="sh-td" onclick="startEdit(event,'${p.id}','fullName')">${p.fullName ? `<span class="cv-sub">${esc(p.fullName)}</span>` : `<span style="color:#bbb;font-style:italic;">${codeToTypeName(p.O,p.C,p.E,p.A,p.N)}</span>`}</td>
+      ${sc}
+      <td class="sh-td"><span class="cv-date">${ds}</span></td>
+      <td class="sh-td" title="${esc(p.memo||'')}" onclick="startEdit(event,'${p.id}','memo')"><span class="cv-sub">${esc(p.memo||'')}</span></td>
+      <td class="sh-td" style="text-align:center">${src}</td>
+      <td class="sh-td">
+        <div class="c-ops-wrap">
+          <button class="c-btn" onclick="event.stopPropagation();openEditModal('${p.id}')">編集</button>
+          <button class="c-btn del" onclick="event.stopPropagation();del('${p.id}')">削除</button>
+          <button class="c-btn" onclick="event.stopPropagation();toggleExpand1('${p.id}')" title="全診断を表示">${expandedPerson1===p.id?'▲':'▼'}</button>
+        </div>
+      </td>
+    </tr>`;
+    // 展開パネル
+    if (expandedPerson1 === p.id) {
+      const code = ['O','C','E','A','N'].map(f => p[f]||'?').join('');
+      const extra = otherMap[p.name] || (p.source==='self' ? myActive : {});
+      const totalCols = 16 + cols.length;
+      rowHtml += `<tr><td colspan="${totalCols}" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, extra)}</td></tr>`;
+    }
+    return rowHtml;
+  }).join('');
+
+  const padCount = Math.max(0, PAD_TO - sorted.length);
+  const padHtml = Array.from({length: padCount}, (_, i) =>
+    `<tr><td class="sh-rn" style="color:#ccc">${sorted.length + i + 1}</td>${EMPTY_PAD}</tr>`
+  ).join('');
+
+  if (sorted.length === 0) {
+    const hintRow = `<tr><td class="sh-rn" style="color:#ccc">1</td><td class="sh-td" colspan="14" style="color:#bbb;font-style:italic;font-size:10px;padding:2px 10px;">「人物追加」または「あの人データ取込」から始めてください</td></tr>`;
+    const restPad = Array.from({length: PAD_TO - 1}, (_, i) =>
+      `<tr><td class="sh-rn" style="color:#ccc">${i + 2}</td>${EMPTY_PAD}</tr>`
+    ).join('');
+    tbody.innerHTML = hintRow + restPad;
+  } else {
+    tbody.innerHTML = dataHtml + padHtml;
+  }
+  updateStats(ppl);
+}
+
+function updateStats(ppl) {
+  document.getElementById('statCount').textContent = ppl.length;
+  const sc = ppl.filter(p => p.O || p.C || p.E || p.A || p.N).length;
+  document.getElementById('statScored').textContent = sc;
+  document.getElementById('statusMain').textContent =
+    ppl.length > 0 ? `${ppl.length} 件登録 | スコアあり ${sc} 件` : '準備完了';
+}
+
+// ===== INLINE EDIT =====
+const FIELD_LABELS = { name:'名前', fullName:'性格名', pos:'役職', dept:'部署', age:'年齢', addr:'住所', memo:'メモ', O:'O開放', C:'C誠実', E:'E外向', A:'A協調', N:'N感受' };
+function startEdit(e, id, field) {
+  e.stopPropagation();
+  const td = e.currentTarget;
+  const p = load().find(x => x.id === id);
+  if (!p) return;
+  selId = id;
+  document.querySelectorAll('#tbody .row-sel').forEach(r => r.classList.remove('row-sel'));
+  const tr = td.closest('tr');
+  if (tr) {
+    tr.classList.add('row-sel');
+    const rnCell = tr.querySelector('.sh-rn');
+    if (rnCell) document.getElementById('cellRef').value = `A${rnCell.textContent.trim()}`;
+  }
+
+  const isExtra  = field.startsWith('extra:');
+  const extraId  = isExtra ? field.slice(6) : null;
+  const colDef   = extraId ? loadCols().find(c => c.id === extraId) : null;
+  const isScore  = ['O','C','E','A','N'].includes(field);
+  const isAge    = field === 'age';
+  const isNumber = colDef?.type === 'number';
+  const isDateT  = colDef?.type === 'date' || colDef?.type === 'birthday';
+  const isTel    = colDef?.type === 'tel';
+  const isEmail  = colDef?.type === 'email';
+  const val = isExtra
+    ? ((p.extra && p.extra[extraId] != null) ? p.extra[extraId] : '')
+    : (p[field] != null ? p[field] : '');
+
+  td.classList.add('is-editing');
+  td.innerHTML = '';
+  const lbl = colDef ? colDef.label : (FIELD_LABELS[field]||field);
+  document.getElementById('fbarText').textContent = `編集中: ${p.name} [${lbl}]（Enter で確定 / Esc でキャンセル）`;
+
+  const inp = document.createElement('input');
+  inp.className = 'inline-edit-inp';
+  inp.value = val;
+  if (isScore) {
+    inp.type = 'number'; inp.min = 1; inp.max = 5;
+    inp.style.textAlign = 'center'; inp.style.fontWeight = '700'; inp.style.fontSize = '13px';
+  } else if (isAge || isNumber) {
+    inp.type = 'number'; if (isAge) { inp.min = 0; inp.max = 120; } inp.style.textAlign = 'center';
+  } else if (isDateT) {
+    inp.type = 'date';
+  } else if (isTel) {
+    inp.type = 'tel';
+  } else if (isEmail) {
+    inp.type = 'email';
+  }
+  td.appendChild(inp);
+  inp.focus(); inp.select();
+
+  let done = false;
+  function commit() {
+    if (done) return; done = true;
+    const ppl = load();
+    const idx = ppl.findIndex(x => x.id === id);
+    if (idx < 0) { render(); return; }
+    const raw = inp.value.trim();
+    if (isExtra) {
+      if (!ppl[idx].extra) ppl[idx].extra = {};
+      ppl[idx].extra[extraId] = raw || null;
+      if (colDef?.type === 'birthday' && raw) ppl[idx].age = calcAge(raw);
+    } else if (isScore) {
+      const n = parseInt(raw);
+      ppl[idx][field] = (n >= 1 && n <= 5) ? n : null;
+    } else if (isAge) {
+      const n = parseInt(raw);
+      ppl[idx][field] = (n >= 0 && n <= 120) ? n : null;
+    } else {
+      if (field === 'name' && !raw) { render(); return; }
+      ppl[idx][field] = raw || null;
+    }
+    save(ppl); render();
+  }
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', e2 => {
+    if (e2.key === 'Enter') { e2.preventDefault(); inp.blur(); }
+    else if (e2.key === 'Escape') { done = true; render(); }
+    e2.stopPropagation();
+  });
+}
+
+function selRow(id, name, row) {
+  selId = selId === id ? null : id;
+  document.getElementById('cellRef').value = `A${row}`;
+  document.getElementById('fbarText').textContent = selId ? name : 'データはこの端末にのみ保存されます（localStorage）';
+  render();
+}
+
+// ===== ESC =====
+function esc(v) {
+  return String(v||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// ===== MODAL =====
+let editId = null;
+
+function openAddModal() {
+  editId = null;
+  document.getElementById('editMoTitle').textContent = '人物を追加';
+  document.getElementById('editSaveBtn').textContent = '登録する';
+  ['Name','FullName','Pos','Dept','Age','Addr','Memo'].forEach(f => document.getElementById('i'+f).value = '');
+  ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = '');
+  populateExtraFields(null);
+  document.getElementById('editMo').classList.add('show');
+  setTimeout(() => document.getElementById('iName').focus(), 60);
+}
+function openEditModal(id) {
+  const p = load().find(x => x.id === id);
+  if (!p) return;
+  editId = id;
+  document.getElementById('editMoTitle').textContent = '編集: ' + p.name;
+  document.getElementById('editSaveBtn').textContent = '保存する';
+  document.getElementById('iName').value = p.name || '';
+  document.getElementById('iFullName').value = p.fullName || '';
+  document.getElementById('iPos').value = p.pos || '';
+  document.getElementById('iDept').value = p.dept || '';
+  document.getElementById('iAge').value = p.age || '';
+  document.getElementById('iAddr').value = p.addr || '';
+  document.getElementById('iMemo').value = p.memo || '';
+  ['O','C','E','A','N'].forEach(f => document.getElementById('i'+f).value = p[f] || '');
+  populateExtraFields(p);
+  document.getElementById('editMo').classList.add('show');
+  setTimeout(() => document.getElementById('iName').focus(), 60);
+}
+function closeMo(id) { document.getElementById(id).classList.remove('show'); }
+function closeMoOverlay(id) { if (event.target === document.getElementById(id)) closeMo(id); }
+
+function savePerson() {
+  const name = document.getElementById('iName').value.trim();
+  if (!name) { toast('名前を入力してください'); document.getElementById('iName').focus(); return; }
+  const fullName = document.getElementById('iFullName').value.trim();
+  const pos  = document.getElementById('iPos').value.trim();
+  const dept = document.getElementById('iDept').value.trim();
+  let ageV = parseInt(document.getElementById('iAge').value);
+  let age  = !isNaN(ageV) && ageV >= 0 ? ageV : null;
+  const addr = document.getElementById('iAddr').value.trim();
+  const memo = document.getElementById('iMemo').value.trim();
+  const sc = {};
+  for (const f of ['O','C','E','A','N']) {
+    const v = parseInt(document.getElementById('i'+f).value);
+    sc[f] = (!isNaN(v) && v >= 1 && v <= 5) ? v : null;
+  }
+  const extra = {};
+  loadCols().forEach(c => {
+    const el = document.getElementById('iX_' + c.id);
+    if (el) {
+      const v = el.value.trim();
+      extra[c.id] = v || null;
+      if (c.type === 'birthday' && v) { age = calcAge(v); }
+    }
+  });
+  const ppl = load();
+  if (editId) {
+    const i = ppl.findIndex(x => x.id === editId);
+    if (i >= 0) { ppl[i] = { ...ppl[i], name, fullName, pos, dept, age, addr, memo, ...sc, extra }; }
+    save(ppl); closeMo('editMo'); render(); toast('保存しました');
+  } else {
+    ppl.push({ id: genId(), name, fullName, pos, dept, age, addr, memo, ...sc, extra, date: new Date().toISOString().slice(0,10), source: 'manual' });
+    save(ppl); closeMo('editMo'); render(); toast('追加しました');
+  }
+}
+
+function del(id) {
+  const p = load().find(x => x.id === id);
+  if (!p || !confirm(`「${p.name}」を削除しますか？`)) return;
+  save(load().filter(x => x.id !== id));
+  if (selId === id) selId = null;
+  render(); toast('削除しました');
+}
+
+// ===== ADD SELF =====
+function addSelf() {
+  const MY_KEY = 'bigfive_my_results';
+  const results = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY)||'[]'); } catch(e) { return []; } })();
+  if (!results.length) { toast('自分の診断データがありません。まず診断を受けてください'); return; }
+  const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
+  const r = results[activeIdx] || results[0];
+  const myName = (r.name || localStorage.getItem('bigfive_my_name') || '自分').trim();
+  const ppl = load();
+  if (ppl.some(p => p.name === myName)) { toast(`「${myName}」はすでに登録済みです`); return; }
+  const c = r.code || '';
+  const sO=c[0]?parseInt(c[0]):null, sC=c[1]?parseInt(c[1]):null, sE=c[2]?parseInt(c[2]):null, sA=c[3]?parseInt(c[3]):null, sN=c[4]?parseInt(c[4]):null;
+  ppl.push({ id: genId(), name: myName, fullName: r.typeName || codeToTypeName(sO,sC,sE,sA,sN), pos:'', dept:'', age:null, addr:'', memo:'',
+    O: sO, C: sC, E: sE, A: sA, N: sN,
+    date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'self' });
+  save(ppl); render(); toast(`「${myName}」を追加しました`);
+}
+
+// ===== IMPORT =====
+let impSel = new Set();
+function openImportModal() {
+  impSel.clear();
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const existing = new Set(load().map(p => p.name));
+  const list = document.getElementById('impList');
+  if (!others.length) {
+    list.innerHTML = '<div style="padding:16px;text-align:center;font-size:11px;color:#aaa">「あの人」データがありません</div>';
+    document.getElementById('impBtn').disabled = true;
+  } else {
+    document.getElementById('impBtn').disabled = false;
+    list.innerHTML = others.map((r, i) => {
+      const al = existing.has(r.name);
+      const ds = r.date ? r.date.slice(0,10).replace(/-/g,'/') : '不明';
+      return `<div class="imp-item${al?' already':''}" data-idx="${i}" onclick="toggleImp(this,${i})">
+        <div class="imp-ck" id="ick-${i}">${al?'✓':''}</div>
+        <span class="imp-nm">${esc(r.name||'名前なし')}</span>
+        <span class="imp-cd">${r.code||'?????'} | ${ds}</span>
+        ${al?'<span class="imp-al">登録済</span>':''}
+      </div>`;
+    }).join('');
+    others.forEach((r, i) => {
+      if (!existing.has(r.name)) {
+        impSel.add(i);
+        const el = list.querySelector(`[data-idx="${i}"]`);
+        if (el) { el.classList.add('sel'); document.getElementById('ick-'+i).textContent = '✓'; }
+      }
+    });
+    updImpInfo();
+  }
+  document.getElementById('impMo').classList.add('show');
+}
+function toggleImp(el, i) {
+  if (el.classList.contains('already')) return;
+  if (impSel.has(i)) { impSel.delete(i); el.classList.remove('sel'); document.getElementById('ick-'+i).textContent = ''; }
+  else { impSel.add(i); el.classList.add('sel'); document.getElementById('ick-'+i).textContent = '✓'; }
+  updImpInfo();
+}
+function updImpInfo() {
+  document.getElementById('impInfo').textContent = `${impSel.size}件 選択中`;
+  document.getElementById('impBtn').disabled = impSel.size === 0;
+}
+function execImport() {
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e) { return []; } })();
+  const ppl = load(); let added = 0;
+  impSel.forEach(i => {
+    const r = others[i]; if (!r) return;
+    const c = r.code || '';
+    const iO=c[0]?parseInt(c[0]):null, iC=c[1]?parseInt(c[1]):null, iE=c[2]?parseInt(c[2]):null, iA=c[3]?parseInt(c[3]):null, iN=c[4]?parseInt(c[4]):null;
+    ppl.push({ id: genId(), name: r.name||'名前なし', fullName: codeToTypeName(iO,iC,iE,iA,iN), pos:'', dept:'', age:null, addr:'', memo:'',
+      O: iO, C: iC, E: iE, A: iA, N: iN,
+      date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'imported' });
+    added++;
+  });
+  save(ppl); closeMo('impMo'); render(); toast(`${added}人を取り込みました`);
+}
+
+// ===== CSV =====
+function exportCSV() {
+  const ppl = load();
+  if (!ppl.length) { toast('データがありません'); return; }
+  const cols = loadCols();
+  const hdr = ['名前', ...cols.map(c=>c.label), '役職','部署','年齢','住所','性格名','O_開放性','C_誠実性','E_外向性','A_協調性','N_感受性','診断日','メモ','種別'];
+  const rows = ppl.map(p => [
+    p.name,
+    ...cols.map(c => (p.extra && p.extra[c.id] != null) ? p.extra[c.id] : ''),
+    p.pos||'', p.dept||'', p.age||'', p.addr||'', p.fullName||'',
+    p.O||'', p.C||'', p.E||'', p.A||'', p.N||'', p.date||'', p.memo||'', p.source==='imported'?'取込':'手動']);
+  const csv = [hdr, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bigfive_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(a.href); toast('CSVをダウンロードしました');
+}
+
+// ===== AI COPY =====
+function copyForAI() {
+  const ppl = load();
+  if (!ppl.length) { toast('データがありません'); return; }
+  const LB = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const lines = ['【ビッグファイブ スコア一覧】', '※ スコア 1〜5。5=非常に高い / 3=平均 / 1=非常に低い', ''];
+  ppl.forEach(p => {
+    const info = [p.pos, p.dept, p.age ? p.age+'歳' : null].filter(Boolean).join('・');
+    const sc = ['O','C','E','A','N'].map(f => p[f] ? `${LB[f]}(${f})=${p[f]}` : null).filter(Boolean).join('、');
+    const nameStr = p.fullName ? `${p.name}（${p.fullName}）` : p.name;
+    lines.push(`■ ${nameStr}${info ? '（'+info+'）' : ''}`);
+    if (sc) lines.push(`  ${sc}`);
+    if (p.memo) lines.push(`  メモ: ${p.memo}`);
+    lines.push('');
+  });
+  navigator.clipboard.writeText(lines.join('\n'))
+    .then(() => toast('コピーしました'))
+    .catch(() => toast('コピーに失敗しました'));
+}
+
+// ===== TOAST =====
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// Enter → save
+document.querySelectorAll('#editMo .f-inp, #editMo .sc-inp').forEach(el => {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') savePerson(); });
+});
+
+// ===== SHEET SWITCHING =====
+let activeSheet = 1;
+function switchSheet(n) {
+  activeSheet = n;
+  [1,2,3].forEach(i => {
+    document.getElementById('sheet'+i).style.display = i === n ? '' : 'none';
+    document.getElementById('stab'+i).classList.toggle('active', i === n);
+  });
+  document.getElementById('fbarText').textContent = {
+    1: 'データはこの端末にのみ保存されます（localStorage）',
+    2: '自分の診断履歴（マイページの「自分の結果」と同じデータ）',
+    3: 'チーム相性診断の保存済み結果（マイページの「チーム」と同じデータ）'
+  }[n];
+  if (n === 2) renderSheet2();
+  if (n === 3) renderSheet3();
+}
+
+// ===== SHEET 1 EXPAND =====
+let expandedPerson1 = null;
+function toggleExpand1(id) {
+  expandedPerson1 = expandedPerson1 === id ? null : id;
+  render();
+}
+
+// ===== SHEET 2: 自分の診断 =====
+let expandedResult2 = null;
+function toggleResult2(idx) {
+  expandedResult2 = expandedResult2 === idx ? null : idx;
+  renderSheet2();
+}
+
+// ===== 診断詳細表示ヘルパー =====
+function secHd(label, color) {
+  return `<div style="font-size:10px;font-weight:700;color:${color};border-bottom:2px solid ${color};padding-bottom:2px;margin:10px 0 6px;letter-spacing:0.04em;">${label}</div>`;
+}
+
+function bigFiveCardsHtml(code, facets) {
+  const LABELS = { O:'開放性', C:'誠実性', E:'外向性', A:'協調性', N:'感受性' };
+  const COLORS = { O:'#5b21b6', C:'#1d4ed8', E:'#c2410c', A:'#be185d', N:'#065f46' };
+  const DESCS = {
+    O: ['','非常に保守的。伝統・慣例を強く重んじる','保守的な傾向。安定・実績を優先する','均衡型。場面に応じて柔軟に対応できる','好奇心旺盛。新しい体験・考えを好む','非常に開放的。独創性と知的好奇心が非常に高い'],
+    C: ['','自由奔放。大局観で動く','おおらかな傾向。融通が利く柔軟さがある','均衡型。メリハリをつけて行動できる','几帳面で勤勉。計画的に物事を進める','非常に誠実・几帳面。細部へのこだわりが強い'],
+    E: ['','非常に内向的。独りの時間・静寂を好む','内向的な傾向。静かな環境が合う','均衡型。場に応じて使い分けができる','外向的な傾向。人との交流でエネルギーを得る','非常に外向的。社交性が高くリーダー的素養あり'],
+    A: ['','非常に競争的。自己主張・独立心が非常に強い','自己主張寄り。独立心が強め','均衡型。協調と自立のバランスが取れている','協調性が高い。他者への思いやりがある','非常に協調的。他者への配慮を最優先にする'],
+    N: ['','非常に情緒安定。プレッシャーに動じない','情緒安定。落ち着いた行動が多い','均衡型。感情の浮き沈みは普通程度','感受性が高め。環境の影響を受けやすい','非常に感受性が高い。感情の波が大きくなりやすい'],
+  };
+  const FACET_NAMES = {
+    N: ['不安','怒り','抑うつ','自己意識','無抑制','脆弱性'],
+    E: ['友好性','群居性','主張性','活動性','刺激追求','陽気さ'],
+    O: ['想像力','芸術的興味','感情性','冒険性','知性','自由主義'],
+    A: ['信頼','道徳性','利他性','協調性','謙虚さ','共感性'],
+    C: ['有能性','秩序性','義務感','達成努力','自己規律','慎重さ'],
+  };
+  const SC_BG = {5:'#c6efce',4:'#e2efda',3:'#f5f5f5',2:'#fce4d6',1:'#ffc7ce'};
+  const SC_CL = {5:'#276221',4:'#375623',3:'#555',2:'#833c0b',1:'#9c0006'};
+  let html = '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+    ['O','C','E','A','N'].map((f, fi) => {
+      const v = parseInt(code[fi]);
+      const valid = v >= 1 && v <= 5;
+      const color = COLORS[f];
+      const bars = [1,2,3,4,5].map(n =>
+        `<span style="display:inline-block;width:14px;height:10px;border-radius:2px;margin:0 1px;background:${n<=v?color:'#e0e0e0'};"></span>`
+      ).join('');
+      return `<div style="flex:1;min-width:130px;max-width:200px;border:1px solid #e0e0e0;border-top:3px solid ${color};border-radius:2px;padding:6px 8px;background:#fff;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+          <span style="font-size:11px;font-weight:700;color:${color}">${f} ${LABELS[f]}</span>
+          <span style="font-size:18px;font-weight:700;background:${SC_BG[v]||'#f0f0f0'};color:${SC_CL[v]||'#555'};padding:0 7px;border-radius:2px;line-height:1.4;">${valid?v:'?'}</span>
+        </div>
+        <div style="margin-bottom:5px;">${bars}</div>
+        <div style="font-size:10px;color:#444;line-height:1.5;">${valid?DESCS[f][v]:'—'}</div>
+      </div>`;
+    }).join('') + '</div>';
+
+  if (facets && typeof facets === 'object' && Object.keys(facets).length >= 30) {
+    let fhtml = '';
+    ['O','C','E','A','N'].forEach(f => {
+      const color = COLORS[f];
+      fhtml += `<div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:700;color:${color};margin-bottom:4px;">${f} ${LABELS[f]}の下位尺度</div>`;
+      fhtml += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+      FACET_NAMES[f].forEach((name, i) => {
+        const s = facets[f+(i+1)] || 3;
+        const pct = s * 20;
+        fhtml += `<div style="flex:1;min-width:80px;padding:3px 6px;background:#fff;border:1px solid #e8e8e8;border-radius:2px;">
+          <div style="font-size:9px;color:#666;margin-bottom:2px;">${name}</div>
+          <div style="display:flex;align-items:center;gap:3px;">
+            <div style="flex:1;height:5px;background:#ebebeb;border-radius:2px;overflow:hidden;"><div style="height:100%;background:${color};opacity:0.75;width:${pct}%;"></div></div>
+            <span style="font-size:10px;font-weight:700;color:${color};min-width:12px;">${s}</span>
+          </div>
+        </div>`;
+      });
+      fhtml += '</div></div>';
+    });
+    html += `<details style="margin-top:8px;">
+      <summary style="cursor:pointer;font-size:10px;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:2px;user-select:none;list-style:none;display:flex;align-items:center;gap:4px;">
+        <span style="font-size:8px;color:#888;">&#9654;</span> 下位尺度の詳細（30項目）
+      </summary>
+      <div style="margin-top:8px;">${fhtml}</div>
+    </details>`;
+  }
+  return html;
+}
+
+function darkTriadHtml(dt) {
+  const items = [
+    {label:'N ナルシシズム', val:dt.nPct, color:'#9333ea'},
+    {label:'M マキャベリズム', val:dt.mPct, color:'#2563eb'},
+    {label:'P サイコパシー', val:dt.pPct, color:'#dc2626'},
+  ];
+  let h = '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  items.forEach(it => {
+    const p = Math.min(100, Math.round(it.val||0));
+    h += `<div style="flex:1;min-width:120px;border:1px solid #e0e0e0;border-top:3px solid ${it.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:10px;font-weight:700;color:${it.color};margin-bottom:4px;">${it.label}</div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="flex:1;height:7px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:${it.color};width:${p}%;"></div></div>
+        <span style="font-size:12px;font-weight:700;color:${it.color};min-width:30px;">${p}%</span>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+  if (dt.profileName) h += `<div style="font-size:10px;color:#555;margin-top:5px;">タイプ: <strong>${esc(dt.profileName)}</strong></div>`;
+  return h;
+}
+
+function eqHtml(eq) {
+  const sc = eq.scores || {};
+  const overall = +(sc.overall||0).toFixed(1);
+  const fields = [{key:'self',label:'自己認識'},{key:'others',label:'他者認識'},{key:'social',label:'社会スキル'},{key:'stress',label:'ストレス管理'}];
+  let h = `<div style="margin-bottom:6px;"><span style="font-size:11px;color:#555;">総合: </span><strong style="font-size:16px;color:#0e7490;">${overall}</strong><span style="font-size:10px;color:#888;"> / 5.0　${esc(eq.levelName||'')}</span></div>`;
+  h += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+  fields.forEach(f => {
+    const v = +(sc[f.key]||0).toFixed(1);
+    const p = Math.round((v/5)*100);
+    h += `<div style="flex:1;min-width:100px;border:1px solid #e0e0e0;border-radius:2px;padding:4px 7px;background:#fff;">
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">${f.label}</div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="flex:1;height:7px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:#0e7490;width:${p}%;"></div></div>
+        <span style="font-size:11px;font-weight:700;color:#0e7490;">${v}</span>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+function attachmentHtml(at) {
+  const TYPES = {
+    secure:{name:'安定型',color:'#217346',desc:'安定した愛着。信頼と親密さを自然に築ける'},
+    anxious:{name:'不安型',color:'#c2410c',desc:'見捨てられ不安が高い傾向。強い結びつきを求める'},
+    avoidant:{name:'回避型',color:'#1d4ed8',desc:'親密さへの抵抗感が強い。独立性を重視する'},
+    fearful:{name:'恐れ回避型',color:'#6b21a8',desc:'親密さを求めながらも傷つくことを恐れる'},
+  };
+  const t = TYPES[at.typeKey] || {name:at.typeKey||'不明',color:'#888',desc:''};
+  const aP = Math.round(((at.anxiety||0)/5)*100);
+  const vP = Math.round(((at.avoidance||0)/5)*100);
+  return `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <div style="flex:2;min-width:150px;border:1px solid #e0e0e0;border-top:3px solid ${t.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:12px;font-weight:700;color:${t.color};margin-bottom:3px;">${t.name}</div>
+      <div style="font-size:10px;color:#555;line-height:1.4;">${t.desc}</div>
+    </div>
+    <div style="flex:1;min-width:120px;border:1px solid #e0e0e0;border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">不安 ${(at.anxiety||0).toFixed(1)}</div>
+      <div style="height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;margin-bottom:6px;"><div style="height:100%;background:#c2410c;width:${aP}%;"></div></div>
+      <div style="font-size:10px;color:#666;margin-bottom:3px;">回避 ${(at.avoidance||0).toFixed(1)}</div>
+      <div style="height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;"><div style="height:100%;background:#1d4ed8;width:${vP}%;"></div></div>
+    </div>
+  </div>`;
+}
+
+function mindsetHtml(ms) {
+  const g = ms.type === 'growth';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:${g?'#217346':'#1d4ed8'}">${g?'成長マインドセット':'固定マインドセット'}</div>
+      <div style="font-size:10px;color:#666;">${g?'努力で能力は伸びると信じる傾向':'能力は固定されていると考える傾向'}</div>
+    </div>
+  </div>`;
+}
+
+function locusHtml(lc) {
+  const isInt = lc.type === 'internal';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:${isInt?'#217346':'#b45309'}">${esc(lc.typeName||lc.type||'')}</div>
+      <div style="font-size:10px;color:#666;">${isInt?'原因は自分の行動にあると感じる傾向':'結果は外部要因に左右されると感じる傾向'}</div>
+    </div>
+  </div>`;
+}
+
+function riskHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div><div style="font-size:12px;font-weight:700;color:#b45309;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">リスク選択: ${d.riskyCount!=null?d.riskyCount+'回':'—'}</div></div>
+  </div>`;
+}
+function delayHtml(d) {
+  const pct = d.value!=null ? Math.round(d.value*100)+'%' : '—';
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div><div style="font-size:12px;font-weight:700;color:#0e7490;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">将来選択率: ${pct}</div></div>
+  </div>`;
+}
+function ultimatumHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div><div style="font-size:12px;font-weight:700;color:#1d4ed8;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">拒否ライン: ${d.value!=null?Math.round(d.value*100)+'%':'—'}</div></div>
+  </div>`;
+}
+function pggHtml(d) {
+  return `<div style="display:inline-flex;align-items:center;gap:10px;border:1px solid #e0e0e0;border-radius:2px;padding:6px 12px;background:#fff;">
+    <div><div style="font-size:12px;font-weight:700;color:#7c3aed;">${esc(d.typeName||d.type||'—')}</div>
+    <div style="font-size:10px;color:#666;">平均貢献率: ${d.avgRate!=null?Math.round(d.avgRate*100)+'%':'—'}</div></div>
+  </div>`;
+}
+
+// 独立キー診断（自分のみ）
+function standaloneTestsHtml() {
+  const LS = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e) { return null; } };
+  const hsp = LS('hsp_result');
+  const imp = LS('impostor_result');
+  const love= LS('love_result');
+  const sw  = LS('schwartz_result');
+  const ri  = LS('riasec_result');
+  const sdt = LS('sdt_result');
+
+  const LOVE_LB = {eros:'エロス（情熱的）',storge:'ストルゲ（友情から）',ludus:'ルダス（ゲーム的）',pragma:'プラグマ（実用的）',mania:'マニア（執着的）',agape:'アガペ（献身的）'};
+  const SW_LB   = {conformity:'同調',tradition:'伝統',benevolence:'親切心',universalism:'普遍主義','self-direction':'自律性',stimulation:'刺激',hedonism:'快楽',achievement:'達成',power:'権力',security:'安全'};
+  const SDT_LB  = {autonomy:'自律性',competence:'有能感',relatedness:'関係性'};
+  const RI_LB   = {R:'現実的',I:'研究的',A:'芸術的',S:'社会的',E:'企業的',C:'慣習的'};
+
+  let items = [];
+  if (hsp) {
+    const t = hsp.scores?.total;
+    const lvl = t>=42?'蘭型（最高域）':t>=34?'蘭型（高め）':t>=28?'チューリップ型':t>=20?'おだやか感受性':t!=null?'安定型':'—';
+    items.push({label:'HSP（感覚処理感受性）',val:lvl,sub:`スコア: ${t!=null?t:'—'}点`,color:'#be185d'});
+  }
+  if (imp) items.push({label:'インポスター症候群',val:esc(imp.severityName||'—'),sub:esc(imp.dominantTypeName||''),color:'#6b21a8'});
+  if (love) items.push({label:'愛情スタイル',val:esc(LOVE_LB[love.mainStyle]||love.mainStyle||'—'),sub:'',color:'#ec4899'});
+  if (sw && sw.top3) items.push({label:'シュワルツ価値観',val:sw.top3.map(k=>SW_LB[k]||k).join(' · '),sub:'上位3価値観',color:'#2563eb'});
+  if (ri && ri.scores) {
+    const top2 = Object.entries(ri.scores).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k])=>RI_LB[k]||k).join(' · ');
+    items.push({label:'RIASEC職業適性',val:top2||'—',sub:'上位2タイプ',color:'#0e7490'});
+  }
+  if (sdt) items.push({label:'基本的心理欲求（SDT）',val:esc(SDT_LB[sdt.strongest]||sdt.strongest||'—'),sub:'最も強い欲求',color:'#217346'});
+
+  if (!items.length) return '<div style="font-size:10px;color:#aaa;font-style:italic;">該当する診断データがありません</div>';
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;">' + items.map(it =>
+    `<div style="flex:1;min-width:150px;border:1px solid #e0e0e0;border-top:3px solid ${it.color};border-radius:2px;padding:5px 8px;background:#fff;">
+      <div style="font-size:9px;font-weight:700;color:${it.color};margin-bottom:2px;">${it.label}</div>
+      <div style="font-size:11px;font-weight:700;color:#333;line-height:1.3;">${it.val}</div>
+      ${it.sub?`<div style="font-size:9px;color:#888;">${it.sub}</div>`:''}
+    </div>`
+  ).join('') + '</div>';
+}
+
+function allTestsHtml(code, r, showStandalone) {
+  r = r || {};
+  const facets = r.facets || (r.scores && r.scores.facets) || null;
+  let h = '<div style="overflow-y:auto;max-height:360px;padding:0 4px 8px;">';
+  h += secHd('ビッグファイブ（性格の5因子）', '#217346');
+  h += bigFiveCardsHtml(code, facets);
+  if (r.darkTriad) { h += secHd('ダークトライアド', '#6b21a8');    h += darkTriadHtml(r.darkTriad); }
+  if (r.eq)        { h += secHd('EQ（感情知性）', '#0e7490');       h += eqHtml(r.eq); }
+  if (r.attachment){ h += secHd('愛着スタイル', '#be185d');         h += attachmentHtml(r.attachment); }
+  if (r.mindset)   { h += secHd('マインドセット', '#b45309');        h += mindsetHtml(r.mindset); }
+  if (r.locus)     { h += secHd('統制の所在', '#0f766e');            h += locusHtml(r.locus); }
+  if (r.risk)      { h += secHd('リスク選好', '#b45309');            h += riskHtml(r.risk); }
+  if (r.delay)     { h += secHd('時間割引（遅延報酬）', '#0e7490'); h += delayHtml(r.delay); }
+  if (r.ultimatum) { h += secHd('最後通牒ゲーム', '#1d4ed8');       h += ultimatumHtml(r.ultimatum); }
+  if (r.pgg)       { h += secHd('公共財ゲーム', '#7c3aed');          h += pggHtml(r.pgg); }
+  if (showStandalone) {
+    h += secHd('その他の診断（最新結果）', '#555');
+    h += standaloneTestsHtml();
+  }
+  h += '</div>';
+  return h;
+}
+
+function renderSheet2() {
+  const MY_KEY = 'bigfive_my_results';
+  const MY_NAME_KEY = 'bigfive_my_name';
+  const results = (() => { try { return JSON.parse(localStorage.getItem(MY_KEY)||'[]'); } catch(e) { return []; } })();
+  const myName = localStorage.getItem(MY_NAME_KEY) || '';
+  const tbody = document.getElementById('tbody2');
+  if (!results.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:28px;color:#aaa;font-style:italic">自分の診断データがありません。まずビッグファイブ診断を受けてください。</td></tr>`;
+    return;
+  }
+  const VER = { '10':'10問', '30':'30問', '120':'120問' };
+  const activeIdx = parseInt(localStorage.getItem('bigfive_active_my_index')||'0');
+  tbody.innerHTML = results.map((r, i) => {
+    const code = r.code || '?????';
+    const sc = ['O','C','E','A','N'].map((f, fi) => {
+      const v = parseInt(code[fi]);
+      return v >= 1 && v <= 5
+        ? `<td class="sh-sc s${v}" style="text-align:center;font-weight:700;font-size:12px;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">${v}</td>`
+        : `<td style="text-align:center;color:#ddd;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">—</td>`;
+    }).join('');
+    const ds = r.date ? r.date.slice(0,10).replace(/-/g,'/') : '—';
+    const ver = VER[r.version || '10'] || (r.version + '問');
+    const name = r.name || myName || '—';
+    const isActive = i === activeIdx;
+    const isExp = expandedResult2 === i;
+    let html = `<tr onclick="toggleResult2(${i})" style="cursor:pointer;${isExp?'background:#f0f7f0;':''}">
+      <td class="sh-rn">${i+1}</td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-weight:${isActive?'700':'400'};font-size:11px;">${esc(name)}${isActive?' <span style="font-size:9px;background:#d1fae5;color:#065f46;border-radius:2px;padding:0 3px;margin-left:2px">使用中</span>':''}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ver}</td>
+      ${sc}
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ds}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#888;font-family:monospace;">${code}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:12px;color:#217346;">${isExp?'▲':'▼'}</td>
+    </tr>`;
+    if (isExp) {
+      html += `<tr><td colspan="11" style="border:1px solid #b8d8b8;border-top:none;padding:10px 12px;background:#f8fdf8;">${allTestsHtml(code, r, true)}</td></tr>`;
+    }
+    return html;
+  }).join('');
+}
+
+// ===== SHEET 3: チーム相性 =====
+function renderSheet3() {
+  const TEAM_KEY = 'bigfive_team_results';
+  const teams = (() => { try { return JSON.parse(localStorage.getItem(TEAM_KEY)||'[]'); } catch(e) { return []; } })();
+  const tbody = document.getElementById('tbody3');
+  if (!teams.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:#aaa;font-style:italic">チームデータがありません。チーム相性診断でチームを保存してください。</td></tr>`;
+    return;
+  }
+  const RANK_COLORS = { S:'rank-s', A:'rank-a', B:'rank-b', C:'rank-c' };
+  tbody.innerHTML = teams.map((t, i) => {
+    const members = (t.members || []).map(m => m.name).join('、');
+    const memberCount = (t.members || []).length;
+    const ds = t.date ? t.date.slice(0,10).replace(/-/g,'/') : '—';
+    const score = typeof t.score === 'number' ? t.score : '—';
+    const rank = t.rank || '—';
+    const rankCls = RANK_COLORS[rank] || '';
+    const scoreColor = typeof t.score === 'number'
+      ? (t.score >= 80 ? '#276221' : t.score >= 60 ? '#1d4ed8' : '#833c0b')
+      : '#666';
+    return `<tr>
+      <td class="sh-rn">${i+1}</td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-weight:600;font-size:12px;">${esc(t.teamName||'チーム')}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">${memberCount}人</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-weight:700;font-size:14px;color:${scoreColor};">${score}${typeof t.score==='number'?'点':''}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;"><span class="${rankCls}">${rank}</span></td>
+      <td style="border:1px solid #d8d8d8;padding:1px 5px;height:20px;vertical-align:middle;font-size:10px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(members)}">${esc(members)}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;font-size:10px;color:#666;">${ds}</td>
+      <td style="text-align:center;border:1px solid #d8d8d8;height:20px;vertical-align:middle;">
+        <a href="team.html" target="_blank" style="font-size:10px;color:#1d4ed8;text-decoration:none;border:1px solid #c0d0e8;padding:0 5px;border-radius:1px;background:#f0f5ff;">診断へ</a>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== TASK PANE =====
+const PANE_URLS = {
+  other: 'other_quiz.html',
+  self:  'quiz.html',
+  team:  'team.html'
+};
+const PANE_TITLES = {
+  other: 'あの人診断',
+  self:  '自分の診断',
+  team:  'チーム相性診断'
+};
+let paneTab = 'other';
+let paneOpen = false;
+let prevOtherCount = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]').length; } catch(e) { return 0; } })();
+
+function openPane(tab) {
+  paneOpen = true;
+  document.getElementById('taskPane').style.display = 'flex';
+  switchPaneTab(tab || paneTab);
+}
+function closePane() {
+  paneOpen = false;
+  document.getElementById('taskPane').style.display = 'none';
+  document.getElementById('tpFrame').src = 'about:blank';
+}
+function switchPaneTab(tab) {
+  paneTab = tab;
+  ['other','self','team'].forEach(t => {
+    document.getElementById('tptab-'+t).classList.toggle('active', t === tab);
+  });
+  document.getElementById('tpTitle').textContent = PANE_TITLES[tab];
+  document.getElementById('tpFrame').src = PANE_URLS[tab];
+  if (tab === 'other') {
+    prevOtherCount = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]').length; } catch(e2) { return 0; } })();
+  }
+  dismissNotify();
+}
+
+// localStorage 変化を監視（iframeが診断を保存したとき検知）
+window.addEventListener('storage', e => {
+  if (e.key === OTHER_KEY && paneOpen && paneTab === 'other') {
+    const newData = (() => { try { return JSON.parse(e.newValue||'[]'); } catch(e2) { return []; } })();
+    if (newData.length > prevOtherCount) {
+      const added = newData.slice(0, newData.length - prevOtherCount);
+      const names = added.map(r => r.name || '名前なし').join('、');
+      document.getElementById('tpNotifyMsg').textContent = `「${names}」の診断が完了しました`;
+      document.getElementById('tpNotify').classList.add('show');
+      prevOtherCount = newData.length;
+    }
+  }
+  if (e.key === 'bigfive_my_results' && activeSheet === 2) renderSheet2();
+  if (e.key === 'bigfive_team_results' && activeSheet === 3) renderSheet3();
+});
+
+function importLatestFromPane() {
+  const others = (() => { try { return JSON.parse(localStorage.getItem(OTHER_KEY)||'[]'); } catch(e2) { return []; } })();
+  const ppl = load();
+  const existing = new Set(ppl.map(p => p.name));
+  let added = 0;
+  others.filter(r => !existing.has(r.name)).slice(0, 5).forEach(r => {
+    const c = r.code || '';
+    ppl.push({ id: genId(), name: r.name||'名前なし', pos:'', dept:'', age:null, addr:'', memo:'',
+      O: c[0]?parseInt(c[0]):null, C: c[1]?parseInt(c[1]):null, E: c[2]?parseInt(c[2]):null,
+      A: c[3]?parseInt(c[3]):null, N: c[4]?parseInt(c[4]):null,
+      date: r.date ? r.date.slice(0,10) : new Date().toISOString().slice(0,10), source: 'imported' });
+    added++;
+  });
+  if (added) { save(ppl); render(); toast(`${added}人を人物管理に追加しました`); }
+  else { toast('すでに登録済みです'); }
+  dismissNotify();
+}
+function dismissNotify() {
+  document.getElementById('tpNotify').classList.remove('show');
+}
+
+renderHeaders();
+render();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

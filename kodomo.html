@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/kodomo.html">
+<meta name="description" content="3〜6歳は3つの気質、小学生から中学生は5つの性格傾向。中高生本人版も選べる無料の子ども診断。">
+<title>子どもの性格診断｜3歳から高校生まで｜ビッグファイブ診断</title>
+<link rel="stylesheet" href="light-mode.css">
+<link rel="stylesheet" href="kodomo.css?v=20260927h">
+<link rel="stylesheet" href="kid-result-card.css?v=20260927h">
+</head>
+<body class="theme-light"><script>try{if(localStorage.getItem('bigfive_theme')==='dark')document.body.classList.remove('theme-light');}catch(e){}</script>
+
+<div class="bg-nebula"></div>
+<main>
+
+<!-- ===== 画面1：だれが答えるか ===== -->
+<section class="screen active" id="screen-who">
+  <h1 class="hero-title">子どもの性格診断</h1>
+  <p class="hero-sub">3〜6歳は3つの気質、小学生から中学生は5つの性格の傾向を見ます。中高生の本人版もあります。（無料・約3〜5分）</p>
+  <div class="data-note" id="dataNote" role="alert">診断データを読み込めませんでした。ページを再読み込みしてください。</div>
+  <div class="sel-stack">
+    <button class="sel-btn" id="who-parent">
+      <span class="sel-icon">👪</span>
+      保護者が答える
+      <small>お子さんのふだんの様子を思い浮かべて答えます（3歳〜中学生）</small>
+    </button>
+    <button class="sel-btn" id="who-self">
+      <span class="sel-icon">🧑‍🎓</span>
+      自分で答える（中学生・高校生）
+      <small>自分のことを自分で答えます</small>
+    </button>
+  </div>
+  <p class="entry-note">18歳以上の方は <a href="quiz.html">大人向けの診断</a>をご利用ください。<br>この結果は発達の検査や病気の診断ではありません。<a href="child-update.html">今回の変更について</a>／<a href="kodomo-kishitsu.html">幼児版が3つの気質で見る理由</a></p>
+</section>
+
+<!-- ===== 画面2：年齢（保護者のとき） ===== -->
+<section class="screen" id="screen-age">
+  <button class="back-link" id="ageBack">← 前にもどる</button>
+  <h1 class="hero-title" style="font-size:22px;">お子さんの年齢を教えてください</h1>
+  <p class="hero-sub" style="margin-bottom:22px;">年齢によって、おたずねする内容が変わります。</p>
+  <div class="prep-note" id="prepNote" role="alert">この区分の設問を読み込めませんでした。</div>
+  <div class="sel-stack">
+    <button class="sel-btn age-btn" data-g="3-6歳">
+      <span class="sel-icon">🧸</span>
+      3〜6歳（未就学）
+      <small>性格の土台になる「気質」を3つの軸で見ます</small>
+    </button>
+    <button class="sel-btn age-btn" data-g="小1-3">
+      <span class="sel-icon">✏️</span>
+      小学1〜3年
+      <small>5つの性格の傾向を30問で見ます</small>
+    </button>
+    <button class="sel-btn age-btn" data-g="小4-6">
+      <span class="sel-icon">📚</span>
+      小学4〜6年
+      <small>5つの性格の傾向を30問で見ます</small>
+    </button>
+    <button class="sel-btn age-btn" data-g="中学生保護者">
+      <span class="sel-icon">🎒</span>
+      中学生
+      <small>5つの性格の傾向を30問で見ます</small>
+    </button>
+  </div>
+  <button class="btn-main" id="startBtn" disabled>診断をはじめる →</button>
+</section>
+
+<!-- ===== 任意の呼び名とカードの絵柄 ===== -->
+<section class="screen" id="screen-profile">
+  <button class="back-link" id="profileBack" type="button">← 前にもどる</button>
+  <h1 class="hero-title" style="font-size:22px;">診断をはじめる前に</h1>
+  <p class="hero-sub">呼び名は任意です。結果はこの端末に保存され、共有リンクには呼び名や回答を含めません。</p>
+  <label class="profile-label" for="kidName">呼び名（任意）</label>
+  <input id="kidName" class="profile-input" type="text" maxlength="20" autocomplete="off" placeholder="入力しなくても進めます">
+  <fieldset class="gender-field"><legend>カードの絵柄を選ぶ</legend>
+    <label><input type="radio" name="kidGender" value="M"> 男の子の絵柄</label>
+    <label><input type="radio" name="kidGender" value="F"> 女の子の絵柄</label>
+  </fieldset>
+  <button class="btn-main" id="profileStart" type="button" disabled>設問へ進む →</button>
+</section>
+
+<!-- ===== 画面3：設問 ===== -->
+<section class="screen" id="screen-quiz">
+  <div class="who-bar">
+    <span class="who-icon" id="quizWhoIcon">👪</span>
+    <div>
+      <div class="who-name" id="quizWhoName">—</div>
+      <div class="who-sub" id="quizWhoSub">ふだんの様子を思い浮かべて答えてください</div>
+    </div>
+  </div>
+  <div class="progress" role="progressbar" aria-label="診断の進み具合" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBox">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/30</span>
+  </div>
+  <p class="q-num" id="qNum">Q1</p>
+  <p class="q-text" id="qText"></p>
+  <div class="answers" id="answers" role="group" aria-label="回答を選ぶ"></div>
+  <button class="btn-main" id="toResultBtn" style="display:none;">結果を見る</button>
+  <button class="quiz-back-btn" id="quizBackBtn">← 前の問いへもどる</button>
+  <p class="quiz-hint">すべての問いに答えると、結果に進めます。前の問いへもどって直すこともできます。</p>
+</section>
+
+<!-- ===== 画面4：結果 ===== -->
+<section class="screen" id="screen-result">
+  <div class="result-header">
+    <span class="result-badge">子どもの性格診断 結果</span>
+    <p class="result-title" id="resultTitle">—</p>
+    <p class="result-sub" id="resultSub">—</p>
+  </div>
+  <div class="result-card" id="resultCard" hidden></div>
+  <div id="resultBody"></div>
+  <div class="result-actions">
+    <p id="saveStatus" role="status" aria-live="polite"></p>
+    <button class="btn-main" id="saveRetry" type="button" hidden>保存をやり直す</button>
+    <a id="shareLink" class="btn-main result-link" href="#" target="_blank" rel="noopener">カードを共有する</a>
+    <a class="result-link" id="historyLink" href="mypage.html#kids">保存した結果を見る</a>
+    <a class="result-link" href="child-update.html">今回の変更を見る</a>
+  </div>
+  <p class="disclaimer">この診断は性格の傾向を見るものです。発達の検査や病気の診断ではありません。</p>
+  <button class="btn-main" id="retryBtn">もう一度答える</button>
+</section>
+
+</main>
+<script src="kodomo-data.js?v=20261003"></script>
+<script src="card-delivery.js?v=20260927h"></script>
+<script src="kid-card-data.js?v=20260927h"></script>
+<script src="personality-types.js?v=20260919"></script>
+<script src="image-resolver.js?v=20260927h"></script>
+<script src="hidden_characters.js"></script>
+<script src="rarity.js?v=20260927"></script>
+<script src="album.js?v=20260927h"></script>
+<script src="gacha-utils.js"></script>
+<script src="unlock.js?v=20260927"></script>
+<script src="unlock-banner.js"></script>
+<script src="kid-card-effects.js?v=20260927d"></script>
+<script src="kid-result-card.js?v=20260927h"></script>
+<script src="kodomo-runtime.js?v=20260927c"></script>
+<script src="nav.js"></script>
+</body>
+</html>

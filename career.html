@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/career.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キャリア適性診断 — ビッグファイブ診断</title>
+<meta name="description" content="キャリア適性診断を無料・登録不要で受けられます。18業界・26職種への適性を科学的に分析し、あなたに向いている仕事を特定。Barrick & Mountのメタ分析に基づくビッグファイブ型診断で、転職・就活・キャリア設計の手がかりになります。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="キャリア適性診断 — ビッグファイブ診断">
+<meta property="og:description" content="キャリア適性診断｜無料・登録不要。18業界・26職種への適性を科学的に分析。あなたに向いている仕事を今すぐ無料で確かめる。Barrick & Mountのメタ分析に基づく診断。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/career.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="キャリア適性診断 — ビッグファイブ診断">
+<meta name="twitter:description" content="キャリア適性診断｜無料・登録不要。18業界・26職種への適性を科学的に分析。あなたに向いている仕事を今すぐ無料で確かめる。Barrick & Mountのメタ分析に基づく診断。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "キャリア適性診断【公式】",
+  "url": "https://bigfive.jr-genius.jp/career.html",
+  "description": "ビッグファイブ性格診断の結果をもとに18業界・26職種への適性を科学的に分析。",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "genre": ["心理学", "キャリア", "適職診断", "ビッグファイブ"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #f59e0b; --accent2: #d97706; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+
+  .bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(245,158,11,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(139,92,246,0.06) 0%, transparent 70%);
+    animation: nebula-drift 25s ease-in-out infinite alternate; }
+  .bg-stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  /* ===== イントロ（スコアなし時） ===== */
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; }
+  .intro h1 { font-size: 24px; font-weight: 900; line-height: 1.3; }
+  .intro h1 span { color: var(--accent); }
+  .intro-sub { font-size: 14px; color: var(--dim); line-height: 1.7; max-width: 360px; }
+  .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(245,158,11,0.3); transition: transform .2s; text-decoration: none; }
+  .start-btn:hover { transform: translateY(-2px); }
+  .intro-note { font-size: 12px; color: var(--dim); }
+
+  /* ===== 結果ヘッダー ===== */
+  .career-header { text-align: center; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.06); width: 100%; }
+  .career-header .intro-badge { margin-bottom: 12px; }
+  .career-header h1 { font-size: 22px; font-weight: 900; line-height: 1.3; }
+  .career-header h1 span { color: var(--accent); }
+  .career-header .header-sub { font-size: 13px; color: var(--dim); margin-top: 6px; }
+
+  /* ===== ミニOCEANチャート ===== */
+  .mini-ocean { display: flex; gap: 8px; margin-top: 16px; justify-content: center; flex-wrap: wrap; }
+  .mini-ocean-item { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 54px; }
+  .mini-ocean-bar-bg { width: 48px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .mini-ocean-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .mini-ocean-label { font-size: 10px; font-weight: 700; }
+  .mini-ocean-score { font-size: 10px; color: var(--dim); }
+
+  /* ===== セクションヘッダー ===== */
+  .section-title { font-size: 15px; font-weight: 900; margin: 28px 0 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title svg { color: var(--accent); }
+
+  /* ===== キャリアアーキタイプ ===== */
+  .archetype-wrap { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; }
+  .archetype-card { flex: 1; min-width: 240px; background: rgba(26,10,62,0.45); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); text-align: center; }
+  .archetype-card.active { border-color: var(--accent); box-shadow: 0 4px 20px rgba(245,158,11,0.15); }
+  .archetype-icon { font-size: 28px; margin-bottom: 8px; }
+  .archetype-name { font-size: 17px; font-weight: 900; margin-bottom: 4px; }
+  .archetype-catch { font-size: 13px; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+  .archetype-desc { font-size: 13px; color: var(--dim); line-height: 1.7; }
+
+  /* ===== ランキングカード ===== */
+  .rank-card { width: 100%; background: rgba(26,10,62,0.45); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; backdrop-filter: blur(8px); margin-bottom: 8px; transition: border-color .2s; }
+  .rank-card:hover { border-color: rgba(245,158,11,0.3); }
+  .rank-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .rank-left { display: flex; align-items: center; gap: 10px; }
+  .rank-num { font-size: 14px; font-weight: 900; color: var(--accent); min-width: 24px; }
+  .rank-name { font-size: 15px; font-weight: 700; }
+  .rank-pct { font-size: 18px; font-weight: 900; color: var(--accent); }
+  .rank-bar-bg { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+  .rank-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
+  .rank-desc { font-size: 12px; color: var(--dim); line-height: 1.65; margin-bottom: 6px; }
+  .rank-reason { font-size: 12px; color: var(--accent); font-weight: 500; margin-top: 6px; }
+  .rank-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rank-tag { font-size: 10px; padding: 2px 8px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 999px; color: var(--accent); }
+  .compact-trait { font-size: 10px; font-weight: 600; opacity: 0.65; margin-left: 4px; }
+
+  /* 展開ボタン */
+  .expand-btn { width: 100%; padding: 12px; background: rgba(245,158,11,0.06); border: 1px dashed rgba(245,158,11,0.25); border-radius: 10px; color: var(--accent); font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; margin: 8px 0 20px; transition: background .2s; }
+  .expand-btn:hover { background: rgba(245,158,11,0.12); }
+
+  /* コンパクトランキング（展開後） */
+  .rank-compact { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .rank-compact:last-child { border-bottom: none; }
+  .rank-compact-left { display: flex; align-items: center; gap: 8px; }
+  .rank-compact-num { font-size: 12px; font-weight: 900; color: var(--dim); min-width: 22px; }
+  .rank-compact-name { font-size: 13px; font-weight: 500; }
+  .rank-compact-pct { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .job-blog-link { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(34,211,238,0.4); transition: color .15s; }
+  .job-blog-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ===== 詳細分析 ===== */
+  .analysis-box { width: 100%; background: rgba(26,10,62,0.45); border: 1px solid rgba(139,92,246,0.2); border-radius: 18px; padding: 20px; backdrop-filter: blur(8px); margin-bottom: 12px; position: relative; }
+  .analysis-box h3 { font-size: 13px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .08em; }
+  .analysis-box p { font-size: 14px; line-height: 1.8; color: var(--dim); }
+  .analysis-box strong { color: var(--text); }
+  .paid-badge { position: absolute; top: 14px; right: 14px; font-size: 10px; padding: 2px 10px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; color: var(--accent); font-weight: 700; }
+
+  /* ===== 関連リンク ===== */
+  .related-links { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 20px; }
+  .related-link { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: rgba(26,10,62,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 14px; font-weight: 500; transition: border-color .2s; }
+  .related-link:hover { border-color: rgba(245,158,11,0.3); }
+  .related-link svg { color: var(--accent); flex-shrink: 0; }
+  .related-link span { flex: 1; }
+  .related-arrow { color: var(--dim); }
+
+  /* ===== 免責 ===== */
+  .disclaimer { font-size: 11px; color: var(--dim); text-align: center; margin-top: 24px; padding: 12px; border-top: 1px solid rgba(255,255,255,0.04); line-height: 1.7; }
+
+  /* ===== 実用情報メタ ===== */
+  .rank-meta { display: flex; gap: 10px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
+  .rank-meta-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--dim); }
+  .rank-meta-item svg { flex-shrink: 0; width: 13px; height: 13px; }
+  .meta-salary { color: var(--accent); font-weight: 700; }
+  .meta-up { color: #22c55e; }
+  .meta-stable { color: var(--dim); }
+  .meta-down { color: #f97316; }
+  .meta-skill { font-size: 10px; padding: 1px 7px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2); border-radius: 999px; color: #a78bfa; }
+
+  /* ===== 隠し（展開用） ===== */
+  .hidden-list { display: none; background: rgba(26,10,62,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
+  .hidden-list.show { display: block; }
+
+  /* ===== SEO静的コンテンツ ===== */
+  .seo-content { max-width: 600px; width: 100%; margin: 0 auto; padding: 40px 0; }
+  .seo-content h2 { font-size: 20px; font-weight: 900; margin: 0 0 16px; color: var(--text); }
+  .seo-content h3 { font-size: 15px; font-weight: 700; margin: 24px 0 10px; color: var(--accent); }
+  .seo-content p { font-size: 14px; color: var(--dim); line-height: 1.85; margin-bottom: 12px; }
+  .seo-content.hide { display: none; }
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "キャリア適性診断", "item": "https://bigfive.jr-genius.jp/career.html" }
+  ]
+}
+</script>
+</head>
+<body data-feature-gate="career" class="theme-light">
+<script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+<canvas class="bg-stars" id="bgStars"></canvas>
+<a href="index.html" class="top-link">トップに戻る</a>
+
+<div class="quiz-container">
+
+  <!-- スコアなし時 -->
+  <div class="intro" id="noScoresArea" style="display:none;">
+    <span class="intro-badge">キャリア適性診断</span>
+    <h1>あなたの<span>キャリア適性</span>を分析</h1>
+    <p class="intro-sub">ビッグファイブの診断結果をもとに、18業界・26職種への適性を科学的に分析します。</p>
+    <a href="quiz.html" class="start-btn">まずはビッグファイブ診断を受ける</a>
+    <p class="intro-note">10問・約3分・無料・登録不要</p>
+  </div>
+
+  <!-- SEO静的コンテンツ（検索エンジン用・結果表示時は非表示） -->
+  <section class="seo-content" id="seoContent">
+    <h2>ビッグファイブでわかるキャリア適性診断</h2>
+    <p>自分に向いている仕事は何か。それは性格と深く関係しています。ビッグファイブ（Big Five）性格理論は、心理学で最も信頼されている性格モデルの一つで、開放性・誠実性・外向性・協調性・神経症性の5つの因子で性格を分析します。この診断では、ビッグファイブのスコアをもとに、あなたの性格に合う業界や職種を科学的に導き出します。</p>
+
+    <h3>18業界の適性を分析</h3>
+    <p>IT・情報通信、メーカー、金融・保険、コンサルティング、医療・福祉、教育・研究など、主要18業界へのマッチング度をパーセンテージで表示します。Barrick &amp; Mount（1991）のメタ分析に基づき、各業界で活躍する人の性格傾向とあなたのスコアを比較して適性を判定します。</p>
+
+    <h3>26職種への適性を判定</h3>
+    <p>営業、企画・商品開発、マーケティング、SE・システム開発、研究・開発、デザイン・クリエイティブ、データ分析・AIなど、26の職種について適性を分析。あなたの強みが最も活きる職種と、相性の良くない職種がわかります。</p>
+
+    <h3>8つのキャリアアーキタイプ</h3>
+    <p>あなたの性格パターンから、最も近いキャリアスタイルを判定します。組織を動かすリーダー型、新しい価値を生み出すクリエイター型、論理と精度で課題を解く分析型など、8つのアーキタイプからあなたに合うキャリアの方向性が見えます。</p>
+
+    <h3>キャリア診断の使い方</h3>
+    <p>まずビッグファイブ診断（10問・約3分・無料）を受けてください。診断結果が保存されていれば、このページで自動的にキャリア適性分析が表示されます。30問版や120問版を受けると、より精密な分析結果が得られます。</p>
+  </section>
+
+  <!-- 結果エリア -->
+  <div id="resultArea" style="display:none;"></div>
+
+</div>
+
+<script>
+// ===== 星背景 =====
+(function(){
+  var c=document.getElementById('bgStars'),ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  for(var i=0;i<100;i++){ctx.beginPath();ctx.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.2,0,2*Math.PI);ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.5+0.15)+')';ctx.fill();}
+})();
+
+// ===== データ定義 =====
+var traitInfo={
+  O:{name:'開放性',high:'好奇心が旺盛',low:'安定を好む',color:'#8b5cf6'},
+  C:{name:'誠実性',high:'几帳面で責任感が強い',low:'柔軟で適応力がある',color:'#3b82f6'},
+  E:{name:'外向性',high:'エネルギッシュで社交的',low:'静かに集中できる',color:'#f97316'},
+  A:{name:'協調性',high:'思いやりがある',low:'主張ができる',color:'#f472b6'},
+  N:{name:'感受性',high:'感性が豊か',low:'精神的に安定している',color:'#14b8a6'}
+};
+
+var INDUSTRIES=[
+  {id:'it',name:'IT・情報通信',betas:{O:0.20,C:0.25,E:0.08,A:0.06,ES:0.15},salary:520,outlook:'up',desc:'技術革新が絶え間なく続く業界。新しい技術に触れる機会が多く、常に学び続ける環境です。好奇心と論理的思考が活きる一方で、変化のスピードについていく柔軟性も求められます。',tags:['テクノロジー','イノベーション','論理的思考']},
+  {id:'mfg',name:'メーカー（製造）',betas:{O:0.03,C:0.28,E:0.05,A:0.08,ES:0.15},salary:480,outlook:'stable',desc:'品質と効率を重んじる業界で、几帳面さと責任感が何より評価されます。プロセス改善や継続的な品質向上が日常の仕事で、小さな積み重ねが大きな成果に繋がります。安定した環境で腰を据えて取り組みたい人に向いています。',tags:['品質管理','プロセス改善','継続的改善']},
+  {id:'construction',name:'建設・不動産',betas:{O:0.05,C:0.25,E:0.14,A:0.08,ES:0.16},salary:460,outlook:'stable',desc:'現場力と管理力が問われる業界で、実行力とタフさが求められます。大規模なプロジェクトを形にする達成感が大きく、チームで一つのものを作り上げるやりがいがあります。安全管理やスケジュール管理など、緻密さも必要です。',tags:['現場管理','安全管理','実行力']},
+  {id:'trading',name:'商社',betas:{O:0.10,C:0.20,E:0.22,A:0.10,ES:0.12},salary:650,outlook:'stable',desc:'人脈と交渉力が鍵の業界で、エネルギッシュな社交性が最大の武器になります。国内外を飛び回り、多様なビジネスに関わるスケールの大きさが魅力です。競争も激しいですが、その分成果が直接評価に反映されます。',tags:['交渉力','グローバル','ビジネス構築']},
+  {id:'retail',name:'小売・流通',betas:{O:0.05,C:0.20,E:0.18,A:0.16,ES:0.10},salary:370,outlook:'down',desc:'顧客との接点が多く、チームワークが求められる業界です。社交性と思いやりのバランスが重要で、お客様のニーズを素早く察知する力が活きます。季節やトレンドの変化に対応するスピード感も求められます。',tags:['顧客サービス','チームワーク','市場感覚']},
+  {id:'finance',name:'金融・保険',betas:{O:-0.08,C:0.30,E:0.06,A:0.06,ES:0.20},salary:580,outlook:'stable',desc:'正確性と分析力が求められる業界で、几帳面さと冷静な判断力が不可欠です。数字を扱う専門性が高く評価され、ルールや規制を遵守する厳格さも求められます。安定した環境で専門性を深めたい人に向いています。',tags:['分析力','リスク管理','正確性']},
+  {id:'consulting',name:'コンサルティング',betas:{O:0.15,C:0.24,E:0.20,A:0.05,ES:0.14},salary:620,outlook:'up',desc:'課題解決とクライアント対応が中心の業界で、論理的思考とプレゼン力の両方が求められます。多様な業界に関わり、高度な問題解決に取り組む知的な刺激が大きい環境です。成果主義が強く、実力が直接評価に繋がります。',tags:['課題解決','分析','プレゼン']},
+  {id:'ad',name:'広告・マーケティング',betas:{O:0.28,C:0.16,E:0.18,A:0.07,ES:0.08},salary:450,outlook:'up',desc:'創造性と影響力が交差する業界で、アイデア力と人を動かす力が活きる環境です。トレンドに敏感で常に新しい表現を追求する柔軟性が求められます。企画から実行まで関わる裁量の大きさが魅力です。',tags:['クリエイティブ','企画','影響力']},
+  {id:'media',name:'メディア・出版',betas:{O:0.30,C:0.16,E:0.14,A:0.07,ES:0.08},salary:400,outlook:'down',desc:'情報感度と表現力が求められる業界で、好奇心と豊かな感性が活きる環境です。社会の動きをいち早く捉え、読者や視聴者に届ける使命感があります。変化の激しい環境ですが、情報発信の影響力は大きいです。',tags:['情報収集','表現力','トレンド感']},
+  {id:'medical',name:'医療・福祉',betas:{O:0.08,C:0.22,E:0.10,A:0.24,ES:0.18},salary:420,outlook:'up',desc:'人を助けることが使命の業界で、思いやりと責任感が最も求められます。チーム医療が基本で、多職種連携の中で専門性を発揮します。肉体的にも精神的にも大変な場面がありますが、人の役に立っている実感は他の業界より大きいです。',tags:['共感力','責任感','チーム医療']},
+  {id:'education',name:'教育・研究',betas:{O:0.26,C:0.22,E:0.10,A:0.16,ES:0.12},salary:400,outlook:'stable',desc:'知的好奇心と人を育てる力が求められる業界で、探求心と伝える力が活きる環境です。専門分野を深く掘り下げながら、次世代の成長に関わるやりがいがあります。研究職は自律的にテーマに取り組める裁量の大きさが魅力です。',tags:['探求心','指導力','専門性']},
+  {id:'gov',name:'公務員',betas:{O:-0.06,C:0.28,E:0.06,A:0.12,ES:0.16},salary:430,outlook:'stable',desc:'ルールと公共性が重んじられる業界で、几帳面さと協調性が評価されます。決められた手順を忠実に守り、住民や市民のために働く使命感があります。雇用の安定性が高く、長期的なキャリアを築きやすい環境です。',tags:['公共性','規律','安定性']},
+  {id:'logistics',name:'運輸・物流',betas:{O:0.02,C:0.26,E:0.05,A:0.07,ES:0.16},salary:380,outlook:'stable',desc:'正確なスケジュール管理が求められる業界で、几帳面さとタフさが評価されます。モノを確実に届けるという社会的な役割があり、現場での判断力も重要です。チームでの連携が欠かせない環境です。',tags:['スケジュール管理','正確性','体力']},
+  {id:'hospitality',name:'観光・ホスピタリティ',betas:{O:0.10,C:0.16,E:0.24,A:0.22,ES:0.10},salary:320,outlook:'up',desc:'おもてなしの心が求められる業界で、社交性と思いやりの両方が不可欠です。多様なお客様に対応する臨機応変さと、チームでの連携が求められます。人を喜ばせることにやりがいを感じる人に向いています。',tags:['おもてなし','接客','チームワーク']},
+  {id:'agri',name:'農林水産',betas:{O:0.03,C:0.24,E:0.04,A:0.07,ES:0.20},salary:340,outlook:'stable',desc:'自然と向き合う地道な業界で、忍耐力と計画性が何より評価されます。天候や環境に左右される不確実性の中で、長期的な視点で計画を立てる力が求められます。自分の手で育てた成果が目に見える達成感があります。',tags:['忍耐力','自然環境','計画性']},
+  {id:'energy',name:'エネルギー',betas:{O:0.04,C:0.30,E:0.04,A:0.06,ES:0.22},salary:500,outlook:'stable',desc:'安全性と安定供給が使命の業界で、厳格な管理と冷静な判断力が求められます。大規模な設備やプラントを扱う技術力が必要で、ミスが許されない環境です。社会インフラを支える大きな責任とやりがいがあります。',tags:['安全管理','技術力','安定性']},
+  {id:'hr',name:'人材・HR',betas:{O:0.12,C:0.20,E:0.22,A:0.22,ES:0.12},salary:420,outlook:'up',desc:'人を理解し活かす業界で、共感力とコミュニケーション力が活きる環境です。採用、育成、評価など人と組織に関わる多様な業務があり、人の成長を近くで見守れる喜びがあります。社員からの信頼を築く誠実さも求められます。',tags:['人材開発','面談','マッチング']},
+  {id:'food',name:'外食・食品',betas:{O:0.06,C:0.18,E:0.20,A:0.16,ES:0.12},salary:310,outlook:'stable',desc:'現場のスピード感とチームワークが求められる業界で、エネルギーと思いやりのバランスが重要です。お客様に直接喜んでもらえるリアルな反応が魅力で、衛生管理や品質管理の意識も求められます。忙しい環境ですが、チームの一体感が強いです。',tags:['現場力','衛生管理','チームワーク']}
+];
+
+var JOB_TYPES=[
+  {id:'sales',name:'営業',betas:{O:0.06,C:0.18,E:0.24,A:0.12,ES:0.10},salary:'350〜800',outlook:'stable',skills:['コミュニケーション','目標管理','提案力'],desc:'顧客との関係構築と目標達成が中心の職種。人と接するエネルギーが最も重要で、新規開拓から既存顧客のフォローまで幅広い対応力が求められます。成果が数字で明確に表れるため、目標達成の達成感が大きい一方、プレッシャーも伴います。',tags:['目標達成','関係構築','プレゼン']},
+  {id:'planning',name:'企画・商品開発',betas:{O:0.26,C:0.20,E:0.14,A:0.08,ES:0.10},salary:'400〜700',outlook:'up',skills:['市場分析','プロジェクト管理','プレゼン'],desc:'アイデアを形にする職種で、好奇心と論理的思考のバランスが求められます。市場のニーズを捉え、企画書を書き、関係者を巻き込んで実現に導く一連のプロセスを担当します。自分のアイデアが商品として世に出るやりがいは大きいです。',tags:['アイデア','市場分析','プロジェクト']},
+  {id:'marketing',name:'マーケティング',betas:{O:0.24,C:0.20,E:0.16,A:0.08,ES:0.10},salary:'400〜700',outlook:'up',skills:['データ分析','SNS運用','戦略立案'],desc:'市場と消費者を分析し戦略を立案する職種。データ感覚と創造性の両方が必要で、SNSや広告、イベントなど多様なチャネルを活用します。効果測定をして次の手を考えるPDCAの速さが求められます。',tags:['データ分析','戦略立案','SNS']},
+  {id:'management',name:'経営・管理',betas:{O:0.18,C:0.28,E:0.28,A:0.06,ES:0.22},salary:'600〜1200',outlook:'stable',skills:['意思決定','予算管理','リーダーシップ'],desc:'組織の方向性を決め成果を出す職種。決断力と責任感が求められ、部門をまたぐ調整や予算管理など幅広い判断を迫られます。組織全体を動かす影響力がある一方、結果への責任も重いです。',tags:['意思決定','組織管理','予算']},
+  {id:'hr_labor',name:'人事・労務',betas:{O:0.10,C:0.20,E:0.18,A:0.24,ES:0.12},salary:'350〜600',outlook:'stable',skills:['労働法規','コミュニケーション','制度設計'],desc:'社員のサポートと制度設計が中心の職種。思いやりとルール遵守のバランスが重要で、採用、評価、労務管理まで幅広く担当します。社員一人ひとりと向き合う細やかさが求められます。',tags:['制度設計','社員支援','コンプライアンス']},
+  {id:'accounting',name:'経理・財務',betas:{O:-0.08,C:0.30,E:-0.04,A:0.06,ES:0.20},salary:'350〜600',outlook:'stable',skills:['簿記','Excel','税務知識'],desc:'数字を正確に扱う専門職で、几帳面さと冷静な判断力が何より求められます。決算書の作成、税務対応、資金管理など、会社の財政状態を正確に把握する重要な役割です。集中力が長く続く人に向いています。',tags:['決算','税務','正確性']},
+  {id:'se',name:'SE・システム開発',betas:{O:0.22,C:0.26,E:0.04,A:0.04,ES:0.16},salary:'400〜800',outlook:'up',skills:['プログラミング','要件定義','DB設計'],desc:'技術的課題を論理的に解決する職種で、集中力と論理的思考が活きる環境です。要件定義から設計、実装、テストまで一貫して関わり、システムを形にしていく達成感があります。新しい技術のキャッチアップも欠かせません。',tags:['システム設計','プログラミング','要件定義']},
+  {id:'research',name:'研究・開発',betas:{O:0.30,C:0.22,E:0.04,A:0.06,ES:0.14},salary:'400〜800',outlook:'up',skills:['実験設計','統計','論文執筆'],desc:'未知の領域を探求する職種で、強い好奇心と粘り強さが求められます。実験や分析を重ねて仮説を検証する地道な作業の連続ですが、新しい発見をしたときの喜びは格別です。自分のペースで深く取り組める環境が多いです。',tags:['実験','論文','仮説検証']},
+  {id:'design',name:'デザイン・クリエイティブ',betas:{O:0.32,C:0.10,E:0.10,A:0.08,ES:0.12},salary:'300〜600',outlook:'stable',skills:['Photoshop/Illustrator','UI/UX','色彩感覚'],desc:'美しさを生み出す表現の仕事で、豊かな感性と柔軟な発想が最大の武器です。クライアントの要望を汲み取りながら、見る人の心を動かす表現を作ります。フィードバックを受けて改良を重ねる謙虚さも必要です。',tags:['ビジュアル','UI/UX','ブランディング']},
+  {id:'pr',name:'広報・PR',betas:{O:0.18,C:0.18,E:0.26,A:0.10,ES:0.10},salary:'350〜600',outlook:'stable',skills:['文章力','メディア対応','SNS運用'],desc:'組織の顔として情報を発信する職種で、コミュニケーション力と戦略性が求められます。メディア対応、SNS運用、プレスリリース作成など、組織のイメージを左右する重要な役割です。タイムリーな情報発信ができる判断力が必要です。',tags:['メディア対応','SNS運用','情報発信']},
+  {id:'legal',name:'法務',betas:{O:0.10,C:0.30,E:0.04,A:0.05,ES:0.20},salary:'400〜700',outlook:'stable',skills:['法律知識','契約書審査','コンプライアンス'],desc:'法律の専門家として組織を守る職種で、几帳面さと冷静な判断力が不可欠です。契約書のチェック、コンプライアンス対応、紛争処理など、法的リスクを未然に防ぐ役割を担います。条文を正確に解釈する集中力が求められます。',tags:['契約書','コンプライアンス','リスク管理']},
+  {id:'cs',name:'カスタマーサポート',betas:{O:0.04,C:0.18,E:0.16,A:0.28,ES:0.15},salary:'280〜450',outlook:'stable',skills:['傾聴力','問題解決','クレーム対応'],desc:'顧客の課題を解決する最前線で、共感力と忍耐力が求められます。クレーム対応も含め、お客様の気持ちに寄り添いながら問題を解決していく役割です。感謝の言葉を直接いただける喜びが大きいです。',tags:['クレーム対応','傾聴','問題解決']},
+  {id:'production',name:'生産・製造',betas:{O:-0.04,C:0.28,E:0.03,A:0.07,ES:0.16},salary:'300〜500',outlook:'stable',skills:['品質管理','安全作業','改善手法'],desc:'品質と効率を追求する職種で、几帳面さと安定した集中力が評価されます。決められた手順を確実に守り、日々の作業の中で小さな改善を積み重ねることが求められます。目に見える成果ができる職場が多いです。',tags:['工程管理','品質','改善']},
+  {id:'qa',name:'品質管理',betas:{O:-0.06,C:0.30,E:0.03,A:0.06,ES:0.16},salary:'320〜550',outlook:'stable',skills:['統計解析','規格知識','報告書作成'],desc:'基準を満たしているかを確認する職種で、厳格さと正確性が最も求められます。検査データの分析、不具合の原因究明、改善策の提案など、品質を守る最後の砦です。妥協を許さない姿勢が組織から信頼されます。',tags:['検査','データ分析','不具合対策']},
+  {id:'logistics_p',name:'物流・購買',betas:{O:0.04,C:0.26,E:0.08,A:0.08,ES:0.14},salary:'300〜500',outlook:'up',skills:['在庫管理','交渉力','コスト分析'],desc:'モノの流れを管理する職種で、計画性と調整力が求められます。仕入れ、在庫管理、配送手配など、サプライチェーン全体をスムーズに回す役割です。コストと品質のバランスを取る判断力が重要です。',tags:['在庫管理','コスト削減','サプライチェーン']},
+  {id:'field',name:'施工・現場管理',betas:{O:0.04,C:0.24,E:0.14,A:0.07,ES:0.18},salary:'350〜600',outlook:'stable',skills:['工程管理','安全管理','図面読解'],desc:'現場の安全と進行を管理する職種で、実行力とタフさが求められます。作業員の指揮、工程管理、安全確認など、現場の全体像を把握しながら進める役割です。目の前に成果が形として現れる達成感があります。',tags:['工程管理','安全指導','作業員管理']},
+  {id:'medical_job',name:'医療・看護',betas:{O:0.08,C:0.22,E:0.10,A:0.28,ES:0.20},salary:'350〜700',outlook:'up',skills:['医療免許','チーム連携','研修継続'],desc:'人の命と健康を支える職種で、思いやりと冷静な判断力の両方が不可欠です。患者一人ひとりに寄り添いながら、チームで医療を提供します。肉体的にも精神的にも大変ですが、人の役に立っている実感は何物にも代えがたいです。',tags:['患者対応','チーム医療','専門知識']},
+  {id:'teaching',name:'教育・講師',betas:{O:0.24,C:0.20,E:0.16,A:0.22,ES:0.12},salary:'300〜600',outlook:'stable',skills:['指導力','カリキュラム設計','専門知識'],desc:'知識を伝え人を育てる職種で、専門性と共感力のバランスが求められます。生徒や受講者の成長を間近で見守れる喜びがあり、一人ひとりの理解度に合わせた指導が求められます。自分自身も常に学び続ける姿勢が必要です。',tags:['カリキュラム','個別指導','成長支援']},
+  {id:'consultant',name:'コンサルタント',betas:{O:0.16,C:0.26,E:0.22,A:0.06,ES:0.14},salary:'500〜1000',outlook:'stable',skills:['分析力','提案書作成','クライアント対応'],desc:'課題解決の専門家で、論理的思考とクライアント対応力の両方が求められます。データ分析、提案書作成、クライアントとの折衝など、知的な刺激が多い環境です。短い期間で大きな変化を起こすスピード感が魅力です。',tags:['提案書','データ分析','クライアント']},
+  {id:'webdev',name:'Web・アプリ開発',betas:{O:0.24,C:0.25,E:0.04,A:0.04,ES:0.14},salary:'400〜800',outlook:'up',skills:['プログラミング','Git','UI/UX'],desc:'コードで課題を解決する職種で、論理的思考と学習意欲が活きる環境です。フロントエンドからバックエンドまで幅広い技術領域があり、自分の作ったものが世界中に公開される達成感があります。新しいフレームワークの学習が欠かせません。',tags:['プログラミング','フレームワーク','リリース']},
+  {id:'data_ai',name:'データ分析・AI',betas:{O:0.26,C:0.28,E:0.03,A:0.03,ES:0.14},salary:'450〜900',outlook:'up',skills:['Python/R','統計','機械学習'],desc:'データからインサイトを導く職種で、論理的思考と几帳面さが求められます。大量のデータを整理し、統計的な手法で意味のあるパターンを見つけ出す作業が中心です。AIモデルの構築や検証にも関わり、最先端の技術に触れられる環境です。',tags:['統計','機械学習','Python']},
+  {id:'sales_plan',name:'営業企画',betas:{O:0.18,C:0.24,E:0.18,A:0.08,ES:0.12},salary:'380〜650',outlook:'stable',skills:['データ分析','戦略立案','プレゼン'],desc:'営業組織の戦略を立てる職種で、分析力と現場理解のバランスが求められます。売上データの分析、エリア戦略の策定、営業支援ツールの導入など、営業の成果を後押しする役割です。数字に基づいた客観的な提案力が重要です。',tags:['売上分析','戦略策定','営業支援']},
+  {id:'retail_store',name:'販売・接客',betas:{O:0.06,C:0.18,E:0.24,A:0.18,ES:0.10},salary:'250〜400',outlook:'down',skills:['接客スキル','商品知識','売場管理'],desc:'お客様と直接接する最前線で、エネルギーと思いやりのバランスが重要です。商品知識、接客スキル、売場作りまで幅広い対応力が求められます。お客様に喜んでもらえたときの反応が直接感じられるのが魅力です。',tags:['接客スキル','売場作り','商品知識']},
+  {id:'civil',name:'公務員',betas:{O:-0.05,C:0.28,E:0.05,A:0.12,ES:0.16},salary:'350〜550',outlook:'stable',skills:['公務員試験','条文理解','文書作成'],desc:'公共の利益を守る職種で、几帳面さと協調性が最も評価されます。住民サービスの窓口対応から政策の企画立案まで、地域社会を支える幅広い業務があります。ルールに沿って確実に業務を進める安定感が求められます。',tags:['住民サービス','政策企画','規律']},
+  {id:'freelance',name:'フリーランス・起業',betas:{O:0.22,C:0.22,E:0.22,A:0.04,ES:0.14},salary:'200〜1500',outlook:'stable',skills:['自己管理','営業力','財務管理'],desc:'自分の力で道を切り拓く職種で、自律性とリスクを取る力が求められます。営業から実務まで全て自分で行う自由度の高さが魅力ですが、収入の安定性は自分の実力に直結します。自己管理ができる人に向いています。',tags:['自己管理','事業計画','リスク']},
+  {id:'hr_recruit',name:'人事・採用',betas:{O:0.12,C:0.20,E:0.24,A:0.22,ES:0.12},salary:'350〜600',outlook:'up',skills:['面接技法','労働法規','マーケティング'],desc:'人材を見極め組織に迎える職種で、コミュニケーション力と共感力が活きる環境です。面接、説明会企画、内定者フォローなど、組織の未来を作る重要な役割です。応募者の潜在的な能力を見抜く洞察力が求められます。',tags:['面接','説明会','人材見極め']}
+];
+
+var ARCHETYPES=[
+  {id:'leader',name:'リーダー型',cond:function(s){return s.C>=4&&s.E>=4;},color:'#f59e0b',catch:'組織を動かし、結果を出す',desc:'計画性とエネルギーを持ち、人をまとめて目標を達成するタイプ。管理職や経営に向いています。'},
+  {id:'creator',name:'クリエイター型',cond:function(s){return s.O>=4&&s.N>=3;},color:'#8b5cf6',catch:'新しい価値を生み出す',desc:'豊かな発想力と感性を持ち、アイデアを形にするタイプ。企画やクリエイティブ分野に向いています。'},
+  {id:'analyst',name:'分析型',cond:function(s){return s.C>=4&&s.O>=3&&s.E<=3;},color:'#3b82f6',catch:'論理と精度で課題を解く',desc:'几帳面で論理的な思考力を持ち、データや事実から正確な結論を導くタイプ。専門職や分析職に向いています。'},
+  {id:'supporter',name:'サポート型',cond:function(s){return s.A>=4&&s.E>=3;},color:'#f472b6',catch:'人を助け、チームを支える',desc:'共感力が高く人のために動けるタイプ。接客・教育・医療・HRなど人を相手にする分野に向いています。'},
+  {id:'pioneer',name:'パイオニア型',cond:function(s){return s.O>=4&&s.E>=3&&s.A<=3;},color:'#f97316',catch:'未知の領域に切り込む',desc:'好奇心が旺盛でリスクを恐れず新しいことに挑戦するタイプ。起業や新規事業に向いています。'},
+  {id:'craftsman',name:'職人型',cond:function(s){return s.C>=4&&s.O<=3;},color:'#14b8a6',catch:'決められたことを極める',desc:'ルールや手順を忠実に守り高い品質を保つタイプ。製造・品質管理・経理など正確性が求められる分野に向いています。'},
+  {id:'diplomat',name:'外交官型',cond:function(s){return s.E>=4&&s.A>=4;},color:'#ec4899',catch:'人をつなぎ、場を動かす',desc:'高いコミュニケーション力と思いやりを持ち人間関係を築くタイプ。営業・広報・接客などに向いています。'},
+  {id:'sage',name:'賢者型',cond:function(s){return s.O>=4&&s.E<=3;},color:'#6366f1',catch:'知識を深め、真理を探る',desc:'好奇心は旺盛だが静かに思考を深めるタイプ。研究・分析・執筆など一人で深く取り組む分野に向いています。'}
+];
+
+// ===== マッチングアルゴリズム（Barrick & Mount 1991 回帰係数方式） =====
+var KEYS=['O','C','E','A','N'];
+
+function matchPct(user,item){
+  var b=item.betas,score=0,maxScore=0;
+  var POS=['O','C','E','A'];
+  for(var i=0;i<POS.length;i++){
+    var k=POS[i],bk=b[k]||0;
+    score+=bk*((user[k]||3)-1);
+    if(bk>0) maxScore+=bk*4;
+  }
+  var bES=b.ES||0;
+  score+=bES*(5-(user.N||3));
+  if(bES>0) maxScore+=bES*4;
+  if(maxScore===0) return 50;
+  return Math.max(5,Math.min(100,Math.round(30+70*(score/maxScore))));
+}
+
+function rankItems(user,list){
+  return list.map(function(item){
+    return {item:item,pct:matchPct(user,item)};
+  }).sort(function(a,b){return b.pct-a.pct;});
+}
+
+// ===== 職種ブログURL =====
+var JOB_BLOG_SLUG={data_ai:'data-ai',sales_plan:'sales-plan',retail_store:'retail-store',hr_recruit:'hr-recruit'};
+function jobBlogUrl(id){return 'blog/job-'+(JOB_BLOG_SLUG[id]||id)+'.html';}
+function jobNameHtml(item){return '<a href="'+jobBlogUrl(item.id)+'" target="_blank" rel="noopener" class="job-blog-link">'+item.name+'</a>';}
+
+// ===== 理由生成 =====
+function genReason(user,item){
+  var b=item.betas,contribs=[];
+  var POS=['O','C','E','A'];
+  for(var i=0;i<POS.length;i++){
+    var k=POS[i],bk=b[k]||0,u=user[k]||3;
+    if(bk>0) contribs.push({k:k,val:bk*(u-1),u:u});
+  }
+  var bES=b.ES||0,n=user.N||3;
+  if(bES>0) contribs.push({k:'ES',val:bES*(5-n),u:6-n});
+  contribs.sort(function(a,c){return c.val-a.val;});
+  var top=contribs.slice(0,2);
+  if(top.length===0) return 'バランスの取れた性格がこの'+(item.tags?'業界':'職種')+'に向いています。';
+  var parts=top.map(function(c){
+    if(c.k==='ES') return '精神的安定性の高さ';
+    return traitInfo[c.k].name+(c.u>=4?'の高さ':c.u<=2?'の低さ':'のバランス');
+  });
+  return parts.join('・')+'がこの'+(item.tags?'業界':'職種')+'でのパフォーマンスを支えます。';
+}
+
+function outlookLabel(o){
+  if(o==='up') return '<span class="meta-up">'+ICONS.trendUp+' 成長</span>';
+  if(o==='down') return '<span class="meta-down">'+ICONS.trendDown+' 縮小</span>';
+  return '<span class="meta-stable">'+ICONS.trendStable+' 安定</span>';
+}
+
+function topMatchLabel(user,item){
+  var b=item.betas,best='C',bestB=0;
+  var POS=['O','C','E','A'];
+  for(var i=0;i<POS.length;i++){
+    if((b[POS[i]]||0)>bestB){bestB=b[POS[i]];best=POS[i];}
+  }
+  if((b.ES||0)>bestB) best='N';
+  var label=best==='N'?'安定性':traitInfo[best].name;
+  return '<span class="compact-trait" style="color:'+traitInfo[best].color+'">'+label+'</span>';
+}
+
+// ===== アーキタイプ選択 =====
+function pickArchetypes(scores){
+  var matched=ARCHETYPES.filter(function(a){return a.cond(scores);});
+  if(matched.length>=1) return matched.slice(0,2);
+  // フォールバック：最も近い2つ
+  return ARCHETYPES.map(function(a){
+    var sc=0;
+    if(a.id==='leader') sc=(scores.C>=3?1:0)+(scores.E>=3?1:0);
+    else if(a.id==='creator') sc=(scores.O>=3?1:0)+(scores.N>=2?1:0);
+    else if(a.id==='analyst') sc=(scores.C>=3?1:0)+(scores.E<=3?1:0);
+    else if(a.id==='supporter') sc=(scores.A>=3?1:0)+(scores.E>=2?1:0);
+    else if(a.id==='pioneer') sc=(scores.O>=3?1:0)+(scores.A<=3?1:0);
+    else if(a.id==='craftsman') sc=(scores.C>=3?1:0)+(scores.O<=3?1:0);
+    else if(a.id==='diplomat') sc=(scores.E>=3?1:0)+(scores.A>=3?1:0);
+    else if(a.id==='sage') sc=(scores.O>=3?1:0)+(scores.E<=3?1:0);
+    return {arch:a,sc:sc};
+  }).sort(function(a,b){return b.sc-a.sc;}).slice(0,2).map(function(x){return x.arch;});
+}
+
+// ===== 詳細分析テキスト生成 =====
+function genAnalysis(scores){
+  var env=[],pitfall=[],strategy=[];
+
+  // 職場環境
+  if(scores.N>=4) env.push('静かで予測可能な環境が最適です。オープンオフィスや頻繁なコンテキストの切り替えは避けた方が良いでしょう。');
+  else if(scores.N<=2) env.push('プレッシャーのかかる環境でも力を発揮できます。変化の激しい環境でも安定してパフォーマンスを出せます。');
+  if(scores.E>=4) env.push('チームでの協働や頻繁なコミュニケーションがある環境でエネルギーを得られます。');
+  else if(scores.E<=2) env.push('一人で集中できる時間が確保できる環境が最適です。リモートワークや個室のレイアウトが向いています。');
+  if(scores.O>=4) env.push('自由度が高く、創造的な取り組みが評価される環境で能力を発揮します。');
+  else if(scores.O<=2) env.push('ルールと手順が明確な構造化された環境で安心して働けます。');
+  if(scores.C>=4) env.push('目標とスケジュールが明確な環境で最高のパフォーマンスを発揮します。');
+  if(scores.A>=4) env.push('チームの調整役として信頼を得やすいです。協働が重視される環境で力を発揮します。');
+  if(scores.C<=2) env.push('型にはまらない柔軟な働き方ができる環境で持ち味が活きます。');
+  if(env.length===0) env.push('バランスの取れた環境で柔軟に対応できます。色々な職場環境に適応できるのが強みです。');
+
+  // キャリアの落とし穴
+  if(scores.C>=4&&scores.O<=2) pitfall.push('ルーチンに固執しすぎて変化に適応できない可能性があります。定期的に新しいアプローチに触れる時間を持ちましょう。');
+  if(scores.A>=4&&scores.C<=2) pitfall.push('他人のために働きすぎて自分のキャリア優先事項がおろそかになる傾向があります。「ノ」と言う練習を意識しましょう。');
+  if(scores.N>=4&&scores.A>=4) pitfall.push('同僚の感情に引きずられて精神的に消耗しやすい傾向があります。感情的境界線を意識的に引くことが大切です。');
+  if(scores.E>=4&&scores.N>=4) pitfall.push('人間関係のトラブルを必要以上に深刻に受け止める傾向があります。客観的な視点を持つメンターを見つけると良いでしょう。');
+  if(scores.O>=4&&scores.C<=2) pitfall.push('新しいアイデアに飛びつきすぎて途中で投げ出す傾向があります。一つのことを最後までやり抜く習慣をつけましょう。');
+  if(scores.E<=2&&scores.A>=4) pitfall.push('自己主張が弱く不当な扱いを受けやすい傾向があります。交渉スキルを意識的に学ぶことをお勧めします。');
+  if(scores.C>=4&&scores.N>=4) pitfall.push('完璧を求めすぎて疲弊しやすい傾向があります。「80%で十分」という基準を持つと持続可能なペースを作れます。');
+  if(scores.N<=2&&scores.E<=2) pitfall.push('周囲から「冷たい」「無関心」と誤解されることがあります。意図的にコミュニケーションを取ることで防げます。');
+  if(pitfall.length===0) pitfall.push('バランスの取れた性格のため、極端な落とし穴は少ないですが、自分の強みを活かすキャリア選びを意識しましょう。');
+
+  // キャリア戦略
+  var topFactors=KEYS.slice().sort(function(a,b){return (scores[b]||3)-(scores[a]||3);});
+  var top1=topFactors[0],top2=topFactors[1];
+  strategy.push(traitInfo[top1].name+'が'+(scores[top1]>=4?'高い':'低い')+'あなたは、'+traitInfo[top1].high+(scores[top1]>=4?'特性':'特性の裏返し')+'を活かせる職種を狙うのが戦略的です。');
+  if(top2!==top1){
+    strategy.push(traitInfo[top2].name+'も'+(scores[top2]>=4?'高め':'低め')+'です。'+traitInfo[top1].name+'×'+traitInfo[top2].name+'の組み合わせは希少で、その交差点にある職種は競合が少ない狙い目です。');
+  }
+  if(scores.C>=4) strategy.push('誠実性が高いあなたは長期的なキャリア構築に向いています。3〜5年先を見据えた計画を立てることで、着実にステップアップできます。');
+  if(scores.O>=4) strategy.push('開放性が高いあなたは新しいスキルの習得が早いです。定期的に新しい技術や知識に触れる環境を選ぶと成長曲線が急伸します。');
+  if(scores.E>=4) strategy.push('外向性が高いあなたは人脈が最大の資産です。業界イベントやコミュニティへの参加を積極的に行うとキャリアの幅が広がります。');
+  if(scores.A>=4&&scores.E<=3) strategy.push('協調性が高く静かに貢献するタイプです。直接目立つ役割より、信頼を積み上げて影響力を発揮する戦略が向いています。');
+
+  return {env:env,pitfall:pitfall,strategy:strategy};
+}
+
+// ===== SVGアイコン =====
+var ICONS={
+  briefcase:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',
+  star:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  users:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
+  arrow:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  chart:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  target:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  yen:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 2 12 11 18 2"/><line x1="6" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="12" y1="11" x2="12" y2="22"/></svg>',
+  trendUp:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  trendStable:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  trendDown:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>',
+  skill:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+};
+
+// ===== メイン初期化 =====
+(function(){
+  if(window.GachaUtils)GachaUtils.grantDiagnosisBonus('career');
+  var urlParams=new URLSearchParams(location.search);
+  var code=urlParams.get('code');
+  var scores=null;
+
+  if(code&&/^[1-5]{5}$/.test(code)){
+    scores={O:parseInt(code[0]),C:parseInt(code[1]),E:parseInt(code[2]),A:parseInt(code[3]),N:parseInt(code[4])};
+  }
+
+  if(!scores){
+    var bfList=JSON.parse(localStorage.getItem('bigfive_my_results')||'[]');
+    var activeIdx=Math.min(parseInt(localStorage.getItem('bigfive_active_my_index')||'0'),Math.max(0,bfList.length-1));
+    var bf=bfList.length>0?bfList[activeIdx]:null;
+    if(!bf||!bf.scores){
+      document.getElementById('noScoresArea').style.display='flex';
+      return;
+    }
+    scores=bf.scores;
+  }
+
+  document.getElementById('seoContent').classList.add('hide');
+  var container=document.getElementById('resultArea');
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.alignItems='center';
+  container.style.gap='8px';
+
+  var html='';
+
+  // --- B1: ヘッダー + ミニOCEAN ---
+  html+='<div class="career-header">';
+  html+='<span class="intro-badge">'+ICONS.briefcase+' キャリア適性診断</span>';
+  html+='<h1>あなたの<span>キャリア適性</span>を分析</h1>';
+  html+='<p class="header-sub">ビッグファイブの診断結果をもとに、18業界・26職種への適性を分析します</p>';
+  html+='<div class="mini-ocean">';
+  for(var i=0;i<KEYS.length;i++){
+    var k=KEYS[i],sc=scores[k]||3,pct=(sc/5*100);
+    html+='<div class="mini-ocean-item">';
+    html+='<span class="mini-ocean-label" style="color:'+traitInfo[k].color+'">'+traitInfo[k].name+'</span>';
+    html+='<div class="mini-ocean-bar-bg"><div class="mini-ocean-bar-fill" style="width:'+pct+'%;background:'+traitInfo[k].color+'"></div></div>';
+    html+='<span class="mini-ocean-score">'+sc+'/5</span>';
+    html+='</div>';
+  }
+  html+='</div></div>';
+
+  // --- B2: キャリアアーキタイプ ---
+  var archetypes=pickArchetypes(scores);
+  html+='<div class="section-title">'+ICONS.star+' あなたのキャラクター</div>';
+  html+='<div class="archetype-wrap">';
+  for(var i=0;i<archetypes.length;i++){
+    var a=archetypes[i];
+    html+='<div class="archetype-card active" style="border-color:'+a.color+'">';
+    html+='<div class="archetype-name" style="color:'+a.color+'">'+a.name+'</div>';
+    html+='<div class="archetype-catch" style="color:'+a.color+'">'+a.catch+'</div>';
+    html+='<div class="archetype-desc">'+a.desc+'</div>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  // --- B3: 業界ランキング ---
+  var indRank=rankItems(scores,INDUSTRIES);
+  html+='<div class="section-title">'+ICONS.chart+' 業界別マッチング</div>';
+  for(var i=0;i<Math.min(5,indRank.length);i++){
+    var r=indRank[i];
+    html+='<div class="rank-card">';
+    html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+r.item.name+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
+    html+='<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:'+r.pct+'%"></div></div>';
+    html+='<div class="rank-desc">'+r.item.desc+'</div>';
+    html+='<div class="rank-reason">'+genReason(scores,r.item)+'</div>';
+    html+='<div class="rank-tags">';
+    for(var j=0;j<r.item.tags.length;j++) html+='<span class="rank-tag">'+r.item.tags[j]+'</span>';
+    html+='</div>';
+    html+='<div class="rank-meta">';
+    html+='<span class="rank-meta-item meta-salary">'+ICONS.yen+' 平均'+r.item.salary+'万円</span>';
+    html+='<span class="rank-meta-item">'+outlookLabel(r.item.outlook)+'</span>';
+    html+='</div></div>';
+  }
+  // 残りの業界（隠し）
+  html+='<div class="hidden-list" id="moreIndustry">';
+  for(var i=5;i<indRank.length;i++){
+    var r=indRank[i];
+    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+r.item.name+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct" style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--dim);font-weight:400;">'+r.item.salary+'万</span>'+r.pct+'%</span></div>';
+  }
+  html+='</div>';
+  html+='<button class="expand-btn" onclick="this.previousElementSibling.classList.toggle(\'show\');this.textContent=this.previousElementSibling.classList.contains(\'show\')?\'閉じる\':\'全18業界を見る\'">全18業界を見る</button>';
+
+  // --- B4: 職種ランキング ---
+  var jobRank=rankItems(scores,JOB_TYPES);
+  html+='<div class="section-title">'+ICONS.target+' 職種別マッチング</div>';
+  for(var i=0;i<Math.min(10,jobRank.length);i++){
+    var r=jobRank[i];
+    html+='<div class="rank-card">';
+    html+='<div class="rank-top"><div class="rank-left"><span class="rank-num">'+(i+1)+'</span><span class="rank-name">'+jobNameHtml(r.item)+'</span></div><span class="rank-pct">'+r.pct+'%</span></div>';
+    html+='<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:'+r.pct+'%"></div></div>';
+    html+='<div class="rank-desc">'+r.item.desc+'</div>';
+    html+='<div class="rank-reason">'+genReason(scores,r.item)+'</div>';
+    html+='<div class="rank-meta">';
+    html+='<span class="rank-meta-item meta-salary">'+ICONS.yen+' '+r.item.salary+'万円</span>';
+    html+='<span class="rank-meta-item">'+outlookLabel(r.item.outlook)+'</span>';
+    if(r.item.skills){
+      for(var s=0;s<r.item.skills.length;s++) html+='<span class="meta-skill">'+r.item.skills[s]+'</span>';
+    }
+    html+='</div></div>';
+  }
+  // 残りの職種
+  html+='<div class="hidden-list" id="moreJob">';
+  for(var i=10;i<jobRank.length;i++){
+    var r=jobRank[i];
+    html+='<div class="rank-compact"><div class="rank-compact-left"><span class="rank-compact-num">'+(i+1)+'</span><span class="rank-compact-name">'+jobNameHtml(r.item)+' '+topMatchLabel(scores,r.item)+'</span></div><span class="rank-compact-pct" style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--dim);font-weight:400;">'+r.item.salary+'万</span>'+r.pct+'%</span></div>';
+  }
+  html+='</div>';
+  html+='<button class="expand-btn" onclick="this.previousElementSibling.classList.toggle(\'show\');this.textContent=this.previousElementSibling.classList.contains(\'show\')?\'閉じる\':\'全26職種を見る\'">全26職種を見る</button>';
+
+  // --- B5: 詳細分析 ---
+  var analysis=genAnalysis(scores);
+  html+='<div class="section-title">'+ICONS.shield+' 詳細分析</div>';
+
+  html+='<div class="analysis-box">';
+  html+='<h3>あなたに合う職場環境</h3>';
+  for(var i=0;i<analysis.env.length;i++) html+='<p>'+analysis.env[i]+'</p>';
+  html+='</div>';
+
+  html+='<div class="analysis-box">';
+  html+='<h3>キャリアの落とし穴</h3>';
+  for(var i=0;i<analysis.pitfall.length;i++) html+='<p>'+analysis.pitfall[i]+'</p>';
+  html+='</div>';
+
+  html+='<div class="analysis-box">';
+  html+='<h3>キャリア戦略アドバイス</h3>';
+  for(var i=0;i<analysis.strategy.length;i++) html+='<p>'+analysis.strategy[i]+'</p>';
+  html+='</div>';
+
+  // --- B6: 関連リンク ---
+  html+='<div class="related-links">';
+  html+='<a href="result.html?code='+((bf&&bf.code)||code||'33333')+'" class="related-link">'+ICONS.briefcase+' <span>診断結果の詳細を見る</span> <span class="related-arrow">›</span></a>';
+  html+='<a href="career-integration.html?code='+scores.O+scores.C+scores.E+scores.A+scores.N+'" class="related-link">'+ICONS.chart+' <span>キャリア統合分析を見る（適性×興味）</span> <span class="related-arrow">›</span></a>';
+  html+='<a href="quiz.html" class="related-link">'+ICONS.target+' <span>診断を受け直す</span> <span class="related-arrow">›</span></a>';
+  html+='<a href="blog/shigoto-muki-fumuki.html" class="related-link">'+ICONS.star+' <span>ビッグファイブでわかる向いてる仕事・向いてない仕事</span> <span class="related-arrow">›</span></a>';
+  html+='</div>';
+
+  // 免責
+  html+='<div class="disclaimer">この分析はBarrick & Mount（1991）などの学術研究に基づく参考情報であり、個人の適性を確定するものではありません。年収は日本の一般的な目安であり、企業規模・地域・経験年数により大きく変動します。職業選択の最終判断はご自身で行ってください。測定誤差・気分・回答バイアスにより結果は変動します。</div>';
+
+  container.innerHTML=html;
+})();
+</script>
+<script>
+(function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=career_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
+</script>
+<section class="test-about">
+  <h2>キャリア適性診断とは</h2>
+  <p>「自分に向いている仕事は何か」。この診断は、その問いに<strong>ビッグファイブの性格データからアプローチする</strong>ものです。性格と仕事の成績の関係を本格的に調べた先駆けが、心理学者マレー・バリックとマイケル・マウントによる1991年のメタ分析（多くの研究をまとめて平均を取る分析）です。二人はそれまでに蓄積された研究を整理し、<strong>5因子と職務成績の関係が職種によってどう違うか</strong>を示しました（Barrick &amp; Mount, 1991）。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>5因子のうち<strong>誠実性だけ</strong>は、職種を問わず成績と一貫した関連が見られる</li>
+      <li>他の4因子は<strong>職種しだい</strong>（外向性は対人・営業系、開放性は学ぶ場面で関連しやすい）</li>
+      <li>適性は「就くべき職業」ではなく、<strong>力を発揮しやすい環境の傾向</strong>として読むもの</li>
+    </ul>
+  </div>
+
+  <h3>5因子と職務成績の関係</h3>
+  <p>バリックとマウントのメタ分析以降に研究が重ねられて分かってきたことを、かみくだくと次のとおりです。</p>
+  <div class="table-wrap"><table>
+    <tr><th>因子</th><th>職務成績との関連</th></tr>
+    <tr><td>誠実性</td><td>どの職種でも一貫して正の関連。まじめさ・計画性・最後までやり切る力は、仕事の種類を問わず効きやすい</td></tr>
+    <tr><td>外向性</td><td>販売や管理など、人とかかわり主導権を取る場面で関連が見られやすい</td></tr>
+    <tr><td>開放性</td><td>研修など、新しいことを学ぶ場面での成績と関連が見られやすい</td></tr>
+    <tr><td>協調性・神経症傾向</td><td>職種によって結果が分かれ、一貫した関連は報告されていない</td></tr>
+  </table></div>
+  <p>大事なのは、<strong>「誠実性は全職種で効く」以外は、すべて条件つき</strong>だという点です。性格だけで職務成績を予測できるわけではないのが研究者の共通認識で、知的能力や経験、やる気といった別の要素と組み合わせて考えるのが現実的とされます（Barrick, Mount, &amp; Judge, 2001）。</p>
+
+  <h3>長い目で見たキャリアの研究</h3>
+  <p>職務成績だけでなく、キャリア全体の満足度や収入を長期間追った研究もあります。ジャッジら（1999）は長期の追跡データを分析し、<strong>誠実性の高さは、仕事の満足度（内側の成功）と、収入・職業的な地位（外から見える成功）の両方と正の方向で結びつく</strong>ことを報告しています。いっぽう神経症傾向は、<strong>収入や地位といった外から見える成功</strong>と逆の方向の関連が見られました（Judge et al., 1999）。ただしこれも「傾きやすい」という話で、性格が収入を直接決めるわけではありません。職業の選び方・働き方・環境との相性という中間の要素を通じて、間接的に結びついていると考えられています。</p>
+
+  <h3>この診断の測り方</h3>
+  <p>この診断には独自の設問はありません。まずビッグファイブ診断（10問・約3分）を受けていただき、その5因子のスコアをもとに、18業界・26職種への傾きをパーセンテージで表示します。計算の土台は上の研究知見、とくに「誠実性は全職種で効く。他の因子は職種しだい」という部分です。表示される数字は「向き・不向きの目安」であって、合格・不合格の判定ではありません。</p>
+
+  <h3>ビッグファイブとの関係</h3>
+  <p>この診断は、ビッグファイブの<strong>応用</strong>にあたります。ビッグファイブ診断が「性格の測定」、この診断が「測った性格と職業データの照合」です。したがって、元になるビッグファイブのスコアが実際より大げさ（または控えめ）だと、適性の表示も同じぶんだけずれます。落ち着いた状態で、ふだんの自分に近い答えを選ぶのがコツです。</p>
+
+  <h3>よくある誤解</h3>
+  <ul>
+    <li><strong>「この性格だからこの職業に就くべき」</strong>——ではありません。研究が示すのは「関連しやすい傾向」までで、実際の選択には興味・能力・価値観・暮らしの事情がすべて関わります。</li>
+    <li><strong>「適性が低い職業は諦めるべき」</strong>——ではありません。数字は現在の性格スコアとの照合結果で、技能の伸びしろや環境の変化は反映していません。</li>
+    <li><strong>「性格は変わらないから適性も固定」</strong>——ではありません。平均としては、誠実性や協調性は年齢とともに高まる傾向が報告されており、適性の見え方も変わっていきます。</li>
+  </ul>
+
+  <h3>この診断について</h3>
+  <ul>
+    <li>ビッグファイブ診断（10問・約3分）を受けてから使用・<strong>無料・登録不要</strong></li>
+    <li>回答と結果は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>RIASEC（職業興味）診断とあわせると、<strong>性格と興味の両面</strong>から職業を眺められます</li>
+  </ul>
+
+  <h3>出典</h3>
+  <ul class="refs">
+    <li>Barrick, M. R., &amp; Mount, M. K. (1991). The Big Five personality dimensions and job performance: A meta-analysis. <em>Personnel Psychology, 44</em>(1), 1–26. <a href="https://doi.org/10.1111/j.1744-6570.1991.tb00688.x" rel="nofollow">doi:10.1111/j.1744-6570.1991.tb00688.x</a></li>
+    <li>Judge, T. A., Higgins, C. A., Thoresen, C. J., &amp; Barrick, M. R. (1999). The Big Five personality traits, general mental ability, and career success across the life span. <em>Personnel Psychology, 52</em>(3), 621–652. <a href="https://doi.org/10.1111/j.1744-6570.1999.tb00174.x" rel="nofollow">doi:10.1111/j.1744-6570.1999.tb00174.x</a></li>
+    <li>Barrick, M. R., Mount, M. K., &amp; Judge, T. A. (2001). Personality and performance at the beginning of the new millennium: What do we know and where do we go next? <em>International Journal of Selection and Assessment, 9</em>(1–2), 9–30. <a href="https://doi.org/10.1111/1468-2389.00160" rel="nofollow">doi:10.1111/1468-2389.00160</a></li>
+  </ul>
+
+  <h3>関連する診断</h3>
+  <ul class="related">
+    <li><a href="riasec.html">RIASEC職業興味診断</a></li>
+    <li><a href="quiz.html">ビッグファイブ性格診断</a></li>
+    <li><a href="work.html">仕事用ダッシュボード</a></li>
+    <li><a href="team.html">チーム相性診断</a></li>
+    <li><a href="diagnoses.html">診断の一覧を見る</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+<script src="gacha-utils.js"></script><script src="nav.js"></script>
+<script src="unlock.js"></script>
+</body>
+</html>

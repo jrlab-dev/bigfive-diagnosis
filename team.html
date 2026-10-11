@@ -1,0 +1,2394 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/team.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>チーム相性診断 — ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブ診断のチーム相性分析。最大8人まで無料で診断できます。保存した結果からメンバーを選んで、チーム全体の相性・メンバー全員の役割カード・最適ペアを判定。職場やサークルの人間関係の把握に役立ちます。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="チーム相性診断 — ビッグファイブ診断">
+<meta property="og:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。メンバーを選んでチーム全体の相性・全員の役割カード・最適ペアを判定。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/team.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="チーム相性診断 — ビッグファイブ診断">
+<meta name="twitter:description" content="ビッグファイブ 診断のチーム相性分析。最大8人まで無料で診断。メンバーを選んでチーム全体の相性・全員の役割カード・最適ペアを判定。">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "ビッグファイブ診断",
+  "url": "https://bigfive.jr-genius.jp/team.html",
+  "description": "最大8人まで無料でチーム相性を診断。保存したビッグファイブ結果からメンバーを選んで相性・因子分析・最適ペアを判定。",
+  "about": {
+    "@type": "Thing",
+    "name": "チーム相性診断",
+    "description": "ビッグファイブ5因子の相性分析によるチームビルディング支援"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "keywords": ["チーム相性", "ビッグファイブ", "相性診断", "チームビルディング"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  :root {
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --c-O: #8b5cf6;
+    --c-C: #3b82f6;
+    --c-E: #f97316;
+    --c-A: #f472b6;
+    --c-N: #14b8a6;
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ヘッダー */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--text); }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* 説明 */
+  .intro {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .intro p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+
+  /* メンバー選択 */
+  .member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .member-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .member-card:hover {
+    border-color: rgba(139,92,246,0.4);
+  }
+  .member-card.selected {
+    border-color: var(--purple);
+    background: rgba(139,92,246,0.12);
+    box-shadow: 0 0 20px rgba(139,92,246,0.15);
+  }
+  .member-card.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .member-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid rgba(139,92,246,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .member-card.selected .member-checkbox {
+    background: var(--purple);
+    border-color: var(--purple);
+  }
+  .member-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(139,92,246,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+  .member-icon img { width: 100%; height: 100%; object-fit: contain; }
+  .member-icon.other {
+    background: rgba(236,72,153,0.15);
+  }
+  .member-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .member-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .member-meta {
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .member-code {
+    font-family: monospace;
+    background: rgba(139,92,246,0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--purple);
+  }
+  .member-score-bars {
+    display: flex;
+    gap: 3px;
+    margin-top: 4px;
+  }
+  .member-sbar {
+    width: 20px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .member-sbar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  /* 選択カウンター */
+  .selection-info {
+    text-align: center;
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+  .selection-info span {
+    color: var(--purple);
+    font-weight: 700;
+  }
+
+  /* チーム名入力 */
+  .team-name-wrap {
+    margin-bottom: 16px;
+  }
+  .team-name-label {
+    display: block;
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .team-name-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .team-name-input::placeholder { color: rgba(148,163,184,0.4); font-weight: 400; }
+  .team-name-input:focus { border-color: var(--purple); }
+
+  /* 結果ヘッダー（チーム名表示） */
+  .result-team-name {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* 診断ボタン */
+  .btn-analyze {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 32px;
+  }
+  .btn-analyze:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+  }
+  .btn-analyze:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ===== 結果セクション ===== */
+  .result-section {
+    display: none;
+    animation: fadein 0.5s ease-out;
+  }
+  .result-section.visible {
+    display: block;
+  }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* チーム機能バランス */
+  .balance-wrap { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(139,92,246,0.15); }
+  .balance-title { font-size: 12px; color: var(--dim); margin-bottom: 8px; font-weight: 700; }
+  .balance-lamps { display: flex; gap: 6px; }
+  .balance-lamp { flex: 1; text-align: center; padding: 8px 2px; border-radius: 10px; background: rgba(139,92,246,0.08); font-size: 11px; }
+  .balance-lamp .bl-emoji { font-size: 16px; display: block; }
+  .balance-lamp .bl-label { display: block; color: var(--text); font-weight: 700; margin: 2px 0; font-size: 11px; }
+  .balance-lamp .bl-state { display: block; font-size: 10px; font-weight: 700; }
+  .balance-lamp.on .bl-state { color: #34d399; }
+  .balance-lamp.half .bl-state { color: #fbbf24; }
+  .balance-lamp.off { opacity: .55; }
+  .balance-lamp.off .bl-state { color: var(--dim); }
+  .balance-note { font-size: 10px; color: var(--dim); margin-top: 6px; }
+  .team-disclaimer { font-size: 10px; color: var(--dim); margin-top: 10px; text-align: center; }
+
+  /* 役割カード */
+  .roles-note { font-size: 11px; color: var(--dim); margin: -4px 0 12px; line-height: 1.6; }
+  .role-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .role-icon { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: rgba(139,92,246,0.15); flex-shrink: 0; }
+  .role-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .role-name { font-size: 15px; font-weight: 900; margin-top: 2px; }
+  .role-catch { font-size: 11px; color: var(--dim); font-weight: 400; margin-left: 6px; }
+
+  /* 足りない機能の処方箋 */
+  .rx-list { margin-top: 10px; }
+  .rx-item { font-size: 12px; color: var(--dim); line-height: 1.7; padding: 10px 12px; background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; margin-top: 8px; }
+  .rx-item b { color: var(--text); }
+
+  /* チームスコアカード */
+  .team-card {
+    background: rgba(26,10,62,0.5);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .team-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* 総合スコア */
+  .team-score-area {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .team-score-value {
+    font-size: clamp(48px, 12vw, 64px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .team-score-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .team-score-rank {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .rank-s { background: rgba(255,215,0,0.2); color: #fbbf24; }
+  .rank-a { background: rgba(139,92,246,0.2); color: #a78bfa; }
+  .rank-b { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .rank-c { background: rgba(148,163,184,0.15); color: var(--dim); }
+
+  /* 因子バー */
+  .factor-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .factor-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .factor-label {
+    font-size: 13px;
+    font-weight: 700;
+    width: 56px;
+    flex-shrink: 0;
+  }
+  .factor-bar-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .factor-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s ease;
+  }
+  .factor-avg {
+    font-size: 13px;
+    font-weight: 600;
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* 因子コメント */
+  .factor-comments {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .factor-comments-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .factor-comment {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+  .factor-comment:last-child { margin-bottom: 0; }
+  .factor-comment-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .factor-comment-text { flex: 1; }
+  .factor-comment strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ペアカード */
+  .pair-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .pair-section {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .pair-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .pair-label {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pair-names {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pair-score {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .pair-comment {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-top: 6px;
+  }
+
+  /* 総合コメント */
+  .summary-card {
+    background: linear-gradient(145deg, rgba(139,92,246,0.15) 0%, rgba(59,130,246,0.08) 100%);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .summary-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .summary-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text);
+  }
+  .summary-strengths,
+  .summary-cautions {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .summary-strengths {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .summary-cautions {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.2);
+  }
+  .summary-strengths strong { color: #34d399; }
+  .summary-cautions strong { color: #fbbf24; }
+
+  /* 保存ボタン */
+  .btn-save-team {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(139,92,246,0.7), rgba(59,130,246,0.7));
+    border: 1px solid rgba(139,92,246,0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .btn-save-team:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-save-team:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  /* 再選択ボタン */
+  .btn-reselect {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dim);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-reselect:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+
+  /* ポジションアドバイス */
+  .position-card {
+    background: rgba(26,10,62,0.45);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .position-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .position-member {
+    padding: 14px 16px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.12);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .position-member:last-child { margin-bottom: 0; }
+  .position-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .position-name .factor-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    color: #fff;
+  }
+  .position-advice {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+  .position-advice strong { color: var(--text); }
+  .position-tip-area {
+    margin-top: 8px;
+    position: relative;
+  }
+  .position-tip {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--dim);
+    padding: 10px 14px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 8px;
+  }
+  .position-good {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #34d399;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  /* ビッグファイブマン分析ボタン */
+  .btn-bigfiveman {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: #c084fc;
+    background: rgba(139,92,246,0.08);
+    border: 1px dashed rgba(139,92,246,0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+  .btn-bigfiveman:hover {
+    background: rgba(139,92,246,0.15);
+    border-color: rgba(139,92,246,0.7);
+  }
+
+  /* ビッグファイブマンカード */
+  .bigfiveman-card {
+    background: linear-gradient(145deg, rgba(88,28,135,0.18) 0%, rgba(30,10,80,0.15) 100%);
+    border: 1px solid rgba(139,92,246,0.35);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .bigfiveman-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .bigfiveman-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #c084fc;
+    padding: 2px 8px;
+    border: 1px solid rgba(192,132,252,0.4);
+    border-radius: 999px;
+  }
+  .bigfiveman-score-change {
+    font-size: 13px;
+    font-weight: 700;
+    margin-left: auto;
+  }
+  .bigfiveman-disclaimer {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+  }
+  .bigfiveman-type-wrap {
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(139,92,246,0.15);
+  }
+  .bigfiveman-type-label {
+    font-size: 11px;
+    color: #c084fc;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .bigfiveman-type-name {
+    font-size: 22px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #c084fc, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .bigfiveman-type-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--dim);
+  }
+  .bigfiveman-warnings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .bigfiveman-warning {
+    font-size: 13px;
+    line-height: 1.75;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+  .bigfiveman-warning.danger {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    color: #fca5a5;
+  }
+  .bigfiveman-warning.caution {
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.2);
+    color: #fde68a;
+  }
+  .bigfiveman-warning.positive {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: #6ee7b7;
+  }
+  .bigfiveman-members-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dim);
+  }
+  .bigfiveman-member-row {
+    padding: 10px 14px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid rgba(139,92,246,0.1);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .bigfiveman-member-row:last-child { margin-bottom: 0; }
+  .bigfiveman-member-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .bigfiveman-mini-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bigfiveman-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .bigfiveman-mini-label {
+    width: 80px;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+  .bigfiveman-mini-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bigfiveman-mini-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .bigfiveman-mini-val {
+    font-size: 11px;
+    font-weight: 600;
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+    color: var(--dim);
+  }
+  .bigfiveman-pair-warnings {
+    margin-bottom: 16px;
+  }
+  .bigfiveman-pair-warning {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .bigfiveman-pair-warning:last-child { margin-bottom: 0; }
+  .bigfiveman-pair-icon { flex-shrink: 0; font-size: 15px; }
+  .bigfiveman-pair-text { flex: 1; color: #fca5a5; }
+  .bigfiveman-pair-text strong { color: #f87171; }
+  .bigfiveman-advice-item {
+    padding: 10px 14px;
+    background: rgba(99,102,241,0.06);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .bigfiveman-advice-item:last-child { margin-bottom: 0; }
+  .bigfiveman-advice-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #a5b4fc;
+    margin-bottom: 4px;
+  }
+  .bigfiveman-advice-text {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+  .bigfiveman-btn-revert {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dim);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s;
+  }
+  .bigfiveman-btn-revert:hover {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
+  }
+
+  /* Dラボ紹介バナー */
+  .dlab-banner {
+    margin-top: 14px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.08));
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .dlab-banner-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #60a5fa;
+    margin-bottom: 8px;
+  }
+  .dlab-banner-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .dlab-banner-text {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+  .dlab-banner-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .dlab-banner-btn:hover { opacity: 0.85; }
+
+  /* 空状態 */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--dim);
+  }
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .empty-state a {
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .empty-state a:hover { text-decoration: underline; }
+
+  /* 共有メンバーバナー */
+  .shared-banner {
+    background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(139,92,246,0.1));
+    border: 1px solid rgba(236,72,153,0.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .shared-banner strong { color: #f9a8d4; }
+  .member-card.shared { border-color: rgba(236,72,153,0.5); }
+  .member-card.shared .member-icon { background: rgba(236,72,153,0.15); }
+
+  @media (max-width: 400px) {
+    body { padding: 24px 14px 60px; }
+    .member-card { padding: 12px 14px; gap: 10px; }
+    .team-card { padding: 18px 16px; }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "キャラクター図鑑",
+      "item": "https://bigfive.jr-genius.jp/team.html"
+    }
+  ]
+}
+</script>
+<script src="card-delivery.js?v=20260919"></script>
+</head>
+<body data-feature-gate="team" class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<div class="container">
+  <header class="header">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      トップに戻る
+    </a>
+    <h1 class="page-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> チーム相性診断</h1>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <div class="intro">
+    <p>保存した診断結果からメンバーを選んで（2〜8人）<br>チームの相性と、一人ひとりの「チームでの役割」を診断します</p>
+    <p style="margin-top:10px;font-size:13px;color:var(--dim)">大人数をグループに分けたい場合は <a href="group.html" style="color:var(--purple);text-decoration:none;font-weight:700">グループ分けツール →</a></p>
+  </div>
+
+  <!-- メンバー選択 -->
+  <div id="memberSection">
+    <div class="member-list" id="memberList"></div>
+    <div class="selection-info" id="selectionInfo"></div>
+    <div class="team-name-wrap">
+      <label class="team-name-label" for="teamNameInput">チーム名（任意）</label>
+      <input type="text" id="teamNameInput" class="team-name-input" placeholder="例：営業チーム、開発班…" maxlength="30">
+    </div>
+    <button class="btn-analyze" id="analyzeBtn" disabled>チーム相性を診断する</button>
+  </div>
+
+  <!-- 結果表示 -->
+  <div class="result-section" id="resultSection"></div>
+</div>
+
+<script src="personality-types.js?v=20260919"></script>
+<script>
+// ===== 定数 =====
+const STORAGE_KEY_MY = 'bigfive_my_results';
+const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+const STORAGE_KEY_TEAMS = 'bigfive_team_results';
+const MAX_MEMBERS = 8;
+const MAX_TEAMS = 10;
+const MIN_MEMBERS = 2;
+
+const traitInfo = {
+  O: { name: '開放性', color: '#8b5cf6' },
+  C: { name: '誠実性', color: '#3b82f6' },
+  E: { name: '外向性', color: '#f97316' },
+  A: { name: '協調性', color: '#f472b6' },
+  N: { name: '感受性', color: '#14b8a6' },
+};
+
+// ===== ユーティリティ =====
+function toImgCode(code) {
+  return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
+}
+
+function codeToScores(code) {
+  return {
+    O: parseInt(code[0]), C: parseInt(code[1]),
+    E: parseInt(code[2]), A: parseInt(code[3]), N: parseInt(code[4])
+  };
+}
+
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return '今日';
+  if (diffDays === 1) return '昨日';
+  if (diffDays < 7) return `${diffDays}日前`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}週間前`;
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+// ===== URLの共有データを解析 =====
+let sharedMember = null;
+let viewTeamData = null;
+let pickTarget = null;
+(function parseShareParam() {
+  try {
+    // マイページから保存済みチームを表示
+    const viewRaw = new URLSearchParams(location.search).get('view');
+    if (viewRaw) {
+      const params = new URLSearchParams(decodeURIComponent(viewRaw));
+      const members = [];
+      const codes = params.getAll('m');
+      const names = params.getAll('n');
+      const genders = params.getAll('g');
+      const types = params.getAll('t');
+      codes.forEach((c, i) => {
+        members.push({
+          code: c,
+          name: names[i] || `メンバー (${c})`,
+          gender: genders[i] || 'F',
+          type: types[i] || 'other'
+        });
+      });
+      if (members.length >= 2) {
+        viewTeamData = {
+          teamName: params.get('teamName') || '',
+          members
+        };
+      }
+      return;
+    }
+    // あの人診断の結果画面から来た場合（2026-07-19追加）：?pick=コード&pn=名前
+    const pickRaw = new URLSearchParams(location.search).get('pick');
+    if (pickRaw && /^[1-5]{5}$/.test(pickRaw)) {
+      pickTarget = { code: pickRaw, name: new URLSearchParams(location.search).get('pn') || '' };
+    }
+    // 共有リンクからのメンバー
+    const raw = new URLSearchParams(location.search).get('share');
+    if (!raw) return;
+    const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    if (!data.c || data.c.length !== 5) return;
+    sharedMember = {
+      id: 'shared_0',
+      name: data.n || `友達 (${data.c})`,
+      code: data.c,
+      scores: codeToScores(data.c),
+      gender: data.g || 'F',
+      type: 'shared',
+      date: new Date().toISOString()
+    };
+  } catch(e) {}
+})();
+
+// ===== メンバー読み込み =====
+let allMembers = [];
+let selectedIds = new Set();
+
+function loadMembers() {
+  // マイページからの保存済みチーム表示
+  if (viewTeamData) {
+    return viewTeamData.members.map((m, i) => ({
+      id: `view_${i}`,
+      name: m.name,
+      code: m.code,
+      scores: codeToScores(m.code),
+      gender: m.gender || 'F',
+      type: m.type || 'other',
+      date: new Date().toISOString()
+    }));
+  }
+
+  const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+  const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+
+  const members = [];
+
+  // 自分の結果（適用中データを使用）
+  if (myResults.length > 0) {
+    const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+    const r = myResults[activeIdx];
+    const scores = r.scores || codeToScores(r.code);
+    members.push({
+      id: 'my_0',
+      name: PersonalityTypes.getName(r.code, r.typeName || `自分 (${r.code})`),
+      code: r.code,
+      scores,
+      gender: r.gender || 'F',
+      type: 'my',
+      date: r.date
+    });
+  }
+
+  // 他人の結果
+  otherResults.forEach((r, i) => {
+    const scores = codeToScores(r.code);
+    members.push({
+      id: `other_${i}`,
+      name: r.name || `あの人 (${r.code})`,
+      code: r.code,
+      scores,
+      gender: r.gender || 'F',
+      type: 'other',
+      date: r.date
+    });
+  });
+
+  // URL共有メンバー（先頭に追加）
+  if (sharedMember) {
+    members.unshift(sharedMember);
+  }
+
+  return members;
+}
+
+// ===== メンバー一覧描画 =====
+function renderMembers() {
+  const container = document.getElementById('memberList');
+  allMembers = loadMembers();
+
+  // 共有バナーの表示
+  const intro = document.querySelector('.intro');
+  const existingBanner = document.getElementById('sharedBanner');
+  if (existingBanner) existingBanner.remove();
+  if (sharedMember) {
+    const banner = document.createElement('div');
+    banner.id = 'sharedBanner';
+    banner.className = 'shared-banner';
+    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${sharedMember.name}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
+    intro.after(banner);
+  }
+
+  if (allMembers.length < MIN_MEMBERS) {
+    const needDiag = sharedMember
+      ? `<p>自分の診断結果がありません。<a href="quiz.html">自分を診断する →</a></p>`
+      : `<p>診断結果が不足しています（最低${MIN_MEMBERS}人必要）</p><p><a href="quiz.html">自分を診断する →</a>　<a href="other_quiz.html">あの人を診断する →</a></p>`;
+    container.innerHTML = `<div class="empty-state">${needDiag}</div>`;
+    document.getElementById('selectionInfo').textContent = '';
+    document.getElementById('analyzeBtn').disabled = true;
+    return;
+  }
+
+  // 共有メンバーがいる場合、初回だけ自動選択
+  if (sharedMember && selectedIds.size === 0) {
+    selectedIds.add('shared_0');
+    const firstMy = allMembers.find(m => m.type === 'my');
+    if (firstMy) selectedIds.add(firstMy.id);
+  }
+
+  // あの人診断から来た場合、その人＋自分を初回だけ自動選択（2026-07-19追加）
+  if (pickTarget && selectedIds.size === 0) {
+    const cand = allMembers.find(m => m.type === 'other' && m.code === pickTarget.code && (!pickTarget.name || m.name === pickTarget.name))
+      || allMembers.find(m => m.type === 'other' && m.code === pickTarget.code);
+    if (cand) {
+      selectedIds.add(cand.id);
+      const firstMy = allMembers.find(m => m.type === 'my');
+      if (firstMy) selectedIds.add(firstMy.id);
+      if (!document.getElementById('pickBanner')) {
+        const b = document.createElement('div');
+        b.id = 'pickBanner';
+        b.className = 'shared-banner';
+        const msg = firstMy
+          ? `<strong>${cand.name}</strong>さんとあなたを選択済みです。<br>下の「チーム相性を診断する」を押すと役割カードが出ます。`
+          : `<strong>${cand.name}</strong>さんを選択済みです。<br>もう1人メンバーを選ぶと診断できます。`;
+        b.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${msg}`;
+        intro.after(b);
+      }
+    }
+    pickTarget = null;
+  }
+
+  container.innerHTML = allMembers.map(m => {
+    const isSelected = selectedIds.has(m.id);
+    const isDisabled = !isSelected && selectedIds.size >= MAX_MEMBERS;
+    return `
+      <div class="member-card${isSelected ? ' selected' : ''}${isDisabled ? ' disabled' : ''}${m.type === 'shared' ? ' shared' : ''}" data-id="${m.id}">
+        <div class="member-checkbox">${isSelected ? '✓' : ''}</div>
+        <div class="member-icon${m.type === 'other' ? ' other' : ''}">
+          <img src="images/characters/marume243/${m.gender}/${toImgCode(m.code)}.webp" alt=""
+               onerror="this.parentElement.innerHTML='<svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2&quot;/><circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/></svg>'">
+        </div>
+        <div class="member-info">
+          <div class="member-name">${m.name}</div>
+          <div class="member-meta">
+            <span class="member-code">${m.code}</span>
+          </div>
+          <div class="member-score-bars">
+            ${['O','C','E','A','N'].map(f => {
+              const pct = (m.scores[f] / 5) * 100;
+              return `<div class="member-sbar"><div class="member-sbar-fill" style="width:${pct}%;background:${traitInfo[f].color}"></div></div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // クリックイベント
+  container.querySelectorAll('.member-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+      } else if (selectedIds.size < MAX_MEMBERS) {
+        selectedIds.add(id);
+      }
+      renderMembers();
+    });
+  });
+
+  // 選択カウンター
+  const info = document.getElementById('selectionInfo');
+  const count = selectedIds.size;
+  if (count === 0) {
+    info.innerHTML = `メンバーを選択してください（${MIN_MEMBERS}〜${MAX_MEMBERS}人）`;
+  } else if (count >= 6) {
+    const commPaths = (count * (count - 1)) / 2;
+    info.innerHTML = `
+      <span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）
+      <div style="margin-top:10px;padding:12px 14px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;text-align:left;font-size:12px;line-height:1.8;color:#fbbf24;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <strong>チームの人数について</strong><br>
+        <span style="color:var(--dim);">
+          心理学の研究では、<strong style="color:var(--text);">5人前後が最も機能しやすいチームサイズ</strong>とされています。
+          ${count}人では会話の経路が<strong style="color:var(--text);">${commPaths}通り</strong>に増え、コミュニケーションコストが急増します。<br>
+          また「リングルマン効果」により、人数が増えるほど個人の貢献量が下がる傾向があります。
+          6人以上では意思決定が遅くなるリスクも高まります。
+        </span>
+      </div>
+    `;
+  } else {
+    info.innerHTML = `<span>${count}</span>人選択中（最大${MAX_MEMBERS}人まで）`;
+  }
+
+  // ボタン有効化
+  document.getElementById('analyzeBtn').disabled = count < MIN_MEMBERS;
+}
+
+// ===== ポジションアドバイスデータ =====
+const improvementTips = {
+  O: {
+    up: '①普段読まない分野の本や記事に触れてみる。特に文学的フィクションは視点取得能力を高める。②未経験の趣味に挑戦する。「毎日1つ新しいこと」をルールにすると行動確認効果がある。③年齢や職業が異なる人との対話を増やす。④通勤ルートや作業順序など、日常のルーティンを意識的に変える。',
+    down: '①毎日同じパターンの生活を避け、意識的に変化を取り入れる。②「自分には才能がない」という固定マインドセットに気づき、「まだ知らないだけ」と捉え直す。③SNSのアルゴリズムに依存せず、異なる情報源に触れる。④失敗を恐れず「間違えても学びがある」と捉える習慣をつける。'
+  },
+  C: {
+    up: '①「朝起きたら(if)ベッドを整える(then)」のように、状況と行動を結びつけるif-thenプランニングを実践。②既存の習慣に新しい行動をくっつける（例：コーヒーを淹れたらタスクを3つ書く）。③2分で終わることは即座にやる。④翌日の優先タスク3つを寝る前に決める。⑤目標を人に伝えて進捗を共有する。',
+    down: '①睡眠を7〜9時間確保する。睡眠不足は計画性と自己制御を直接阻害する。②慢性的な過労やバーンアウトに注意する。③スマホの即時報酬に依存しない。④「完璧にできないならやらない」という回避型完璧主義に気づく。⑤やるべきことを3つまで絞る習慣をつける。'
+  },
+  E: {
+    up: '①積極的に会話を始める練習。「行動が先、内面が後から追従」。②共通の目的を持つグループ（読書会、クラブなど）に参加。③「1日1回見知らぬ人に話しかける」目標を週単位で追跡。④スケジュールに意識的に外出を組み込む。⑤社交後、楽しめた会話を振り返る（ネガティブな反芻を防ぐ）。',
+    down: '①意識的に人と交流する機会を作る。対人接触の減少が社会的スキルを萎縮させる。②慢性的なストレスに注意。休息が重要。③対人トラウマの経験がある場合、専門家のサポートを検討。④SNSでの対面交流の代替に注意。⑤うつ状態が2週間以上続く場合は医療機関の受診を検討。'
+  },
+  A: {
+    up: '①相手の話を遮らず最後まで聞くアクティブ・リスニングを実践。②「もし自分があの人の立場なら？」と考える視点転換の練習。③「ありがとう」を具体的に伝える。④毎日小さな親切を1つ。⑤異なる意見を「違う視点」として受け入れる練習。',
+    down: '①慢性的な対人葛藤から距離を取ることも必要。②信頼できる人との定期的なつながりを維持する。③睡眠を最優先。睡眠不足が衝動的な怒りを招く。④オンライン上の対立への長期暴露に注意。⑤win-winの再構成を心がける。'
+  },
+  N: {
+    up: '①非機能的な思考に気づき「本当にそうか？別の見方はないか？」と問い直す。②不安を避けない練習（重症の場合は専門家に）。③感情を書き出すジャーナリング。④週150分以上の有酸素運動。⑤毎日3つの感謝できることを書く。',
+    down: '①慢性的なストレスを管理する。最も信頼性の高い悪化要因。②7〜9時間の睡眠を確保。③人とのつながりを維持。孤独が不安を悪化させる悪循環。④ネガティブなニュースやSNSの閲覧時間を制限。⑤感情に蓋をせず、適切に処理する習慣をつける。'
+  },
+};
+
+// ===== ポジションアドバイス計算 =====
+function genPositionAdvice(members, currentScore) {
+  const advice = [];
+
+  members.forEach((member, idx) => {
+    let bestImprovement = 0;
+    let bestFactor = null;
+    let bestDirection = 0;
+
+    ['O', 'C', 'E', 'A', 'N'].forEach(f => {
+      [-1, 1].forEach(dir => {
+        const newScore = Math.max(1, Math.min(5, member.scores[f] + dir));
+        if (newScore === member.scores[f]) return;
+
+        const adjustedMembers = members.map((m, i) =>
+          i === idx ? { ...m, scores: { ...m.scores, [f]: newScore } } : m
+        );
+        const { score: newTeamScore } = calcTeamScore(adjustedMembers);
+        const improvement = newTeamScore - currentScore;
+
+        if (improvement > bestImprovement) {
+          bestImprovement = improvement;
+          bestFactor = f;
+          bestDirection = dir;
+        }
+      });
+    });
+
+    if (bestFactor && bestImprovement >= 2) {
+      advice.push({
+        name: member.name,
+        factor: bestFactor,
+        factorName: traitInfo[bestFactor].name,
+        improvement: bestImprovement,
+        text: `${traitInfo[bestFactor].name}を${bestDirection > 0 ? '<b>伸ばす</b>' : '<b>他に活かす</b>'}ことでチームスコアが<b>+${bestImprovement}点</b>になります`,
+        tipKey: bestFactor,
+        tipDir: bestDirection > 0 ? 'up' : 'down'
+      });
+    } else {
+      advice.push({
+        name: member.name,
+        text: '現在の特性はチームに良い影響を与えています',
+        factor: null, tipKey: null
+      });
+    }
+  });
+
+  return advice;
+}
+
+// ===== ポジションアドバイスHTML生成 =====
+function genPositionAdviceHtml(members, currentScore) {
+  const adviceList = genPositionAdvice(members, currentScore);
+
+  // 表示対象がなければセクション自体を非表示
+  if (adviceList.length === 0) return '';
+
+  const membersHtml = adviceList.map(a => {
+    if (!a.factor) {
+      return `
+        <div class="position-member">
+          <div class="position-name">${a.name}</div>
+          <div class="position-good">現在の特性はチームに良い影響を与えています ✓</div>
+        </div>
+      `;
+    }
+    const color = traitInfo[a.factor].color;
+    const tip = improvementTips[a.tipKey][a.tipDir];
+    return `
+      <div class="position-member">
+        <div class="position-name">
+          ${a.name}
+          <span class="factor-tag" style="background:${color}">${a.factorName}</span>
+        </div>
+        <div class="position-advice">${a.text}</div>
+        <div class="position-tip-area">
+          <div class="position-tip">${tip}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="position-card">
+      <p class="position-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> チームとして伸びるポイント</p>
+      ${membersHtml}
+    </div>
+  `;
+}
+
+// ===== チームスコア計算 =====
+function calcTeamScore(members) {
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  const n = members.length;
+
+  // 平均
+  const avg = {};
+  factors.forEach(f => {
+    avg[f] = members.reduce((sum, m) => sum + m.scores[f], 0) / n;
+  });
+
+  // 分散
+  const variance = {};
+  factors.forEach(f => {
+    variance[f] = members.reduce((sum, m) => sum + (m.scores[f] - avg[f]) ** 2, 0) / n;
+  });
+
+  // 最小値・最大値（視覚化用）
+  const min = {}, max = {};
+  factors.forEach(f => {
+    min[f] = Math.min(...members.map(m => m.scores[f]));
+    max[f] = Math.max(...members.map(m => m.scores[f]));
+  });
+
+  let raw = 8;
+
+  // 【土台】5つのチーム機能のそろい方（発想=O/段取り=C/熱量=E/調整=A/危機察知=N）
+  // 誰かが4以上でフルカバー(7点)・最高が3で半カバー(3点)。
+  // 小さいチームに5機能全部は要求しない：2人=上位3機能・3人=上位4機能・4人以上=5機能で満点
+  const coverage = {};
+  factors.forEach(f => {
+    coverage[f] = max[f] >= 4 ? 2 : max[f] === 3 ? 1 : 0;
+  });
+  const topK = n === 2 ? 3 : n === 3 ? 4 : 5;
+  const fPts = factors.map(f => coverage[f] === 2 ? 7 : coverage[f] === 1 ? 3 : 0)
+    .sort((a, b) => b - a).slice(0, topK);
+  const fullCount = fPts.filter(p => p === 7).length;
+  raw += fPts.reduce((s, p) => s + p, 0) / topK * 5;
+  if (fullCount === topK) raw += 4; // 機能そろい踏みボーナス
+
+  // 【中心】全ペア相性の平均（研究相関ベース・細かい点差を生む層・compat.js流用）
+  let pairSum = 0, pairCount = 0;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    pairSum += calcPairCompatibility(members[i].code, members[j].code);
+    pairCount++;
+  }
+  const pairAvg = pairCount ? pairSum / pairCount : 0;
+  raw += Math.max(-14, Math.min(40, 20 + (pairAvg - 55) * 0.75));
+
+  // 【微調整】
+  const totalVar = factors.reduce((s, f) => s + variance[f], 0);
+  raw += Math.min(totalVar * 0.9, 5);            // 多様性ボーナス
+  if (n >= 3 && totalVar < 0.5) raw -= 12;       // 似た者チーム（視点の重なり・ペア層が同質を高評価する分の相殺）
+  if (min.A <= 1) raw -= 4;                      // 協調性が極端に低いメンバーの影響（Barrick et al. 1998系）
+  if (avg.A >= 4.5) raw -= 3;                    // A高すぎ＝グループシンクリスク
+  if (n > 5) {                                   // 大人数：会話経路が n*(n-1)/2 通りに急増
+    const extraPaths = (n * (n - 1) / 2) - 10;
+    raw -= Math.min(extraPaths * 0.8, 15);
+  }
+
+  // 正規化 0〜100
+  const score = Math.max(0, Math.min(100, Math.round(raw)));
+
+  return { score, avg, variance, min, max, coverage, topK, fullCount, pairAvg };
+}
+
+// ===== ペア相性計算 =====
+function calcPairCompatibility(code1, code2) {
+  const [o1, c1, e1, a1, n1] = code1.split('').map(Number);
+  const [o2, c2, e2, a2, n2] = code2.split('').map(Number);
+  return Math.round(calcCompatCore(
+    { O: o1, C: c1, E: e1, A: a1, N: n1 },
+    { O: o2, C: c2, E: e2, A: a2, N: n2 }
+  ));
+}
+
+// ===== チーム役割（2026-07-18新設：5因子×高低の10種＋バランサー・全部ポジティブ） =====
+const TEAM_ROLES = {
+  'O+': { name: 'アイデア役', emoji: '💡', catch: '新しい風を吹き込む人',
+    desc: 'チームが同じやり方に固まりそうなとき、別の角度から案を出せます。企画・改善・ブレストの起点です。',
+    tip: '思いつきに聞こえても頭ごなしに否定せず、まず「面白いね、どう実現する？」まで聞くと本領を発揮します。' },
+  'O-': { name: '現実チェック役', emoji: '🧭', catch: '地に足の番人',
+    desc: '実績のあるやり方・確実な手順を大事にします。アイデア倒れや暴走を防ぐ最後の砦です。',
+    tip: '新しい提案を通したいときは、過去の実例や確かな根拠を添えて話すと協力を得やすいです。' },
+  'C+': { name: '段取り役', emoji: '📋', catch: '計画と締切の番人',
+    desc: '期限・手順・抜け漏れを自然に管理できます。この人がいるだけでチームの実行力が上がります。',
+    tip: '急な予定変更が続くと消耗します。変更は早めに・理由つきで伝えるのがコツです。' },
+  'C-': { name: '柔軟対応役', emoji: '🌊', catch: '臨機応変の達人',
+    desc: '想定外の事態や急な変更に強く、計画が崩れた場面でもチームを止めません。',
+    tip: '細かい手順で縛るより、ゴールと期限だけ渡して任せると力を発揮します。' },
+  'E+': { name: '盛り上げ役', emoji: '🔥', catch: '場の熱量スイッチ',
+    desc: '会話の口火を切り、チームの空気を温めます。発表や交渉など「チームの顔」にも向いています。',
+    tip: '反応が薄いと調子が出ないタイプ。相づちやリアクションを返すだけで力が引き出せます。' },
+  'E-': { name: '集中職人役', emoji: '🔬', catch: '静かな推進力',
+    desc: '一人で深く集中して質の高い仕事を仕上げます。数少ない発言に本質が詰まっていることが多い人です。',
+    tip: '発言が少なくても不満とは限りません。「どう思う？」と名指しで振ると良い意見が出てきます。' },
+  'A+': { name: '調整役', emoji: '🕊️', catch: 'チームの潤滑油',
+    desc: '対立の間に立ち、みんなの意見を汲んで場を収められます。チームの居心地はこの人が作っています。',
+    tip: '不満を飲み込みがちなので、「あなた自身はどうしたい？」とときどき聞いてあげてください。' },
+  'A-': { name: 'ご意見番', emoji: '⚖️', catch: '忖度しないブレーキ',
+    desc: '空気に流されず、おかしいことをおかしいと言えます。全員賛成のときの見落としを防ぐ貴重な存在です。',
+    tip: '厳しい指摘は攻撃ではなく品質チェック。内容だけ受け取ると、チームの精度が上がります。' },
+  'N+': { name: 'センサー役', emoji: '📡', catch: 'リスクの早期警報',
+    desc: '小さな異変・空気の変化・危ういサインに誰より早く気づきます。この人の「なんか気になる」はチームの保険です。',
+    tip: '心配ごとを口にしたら「考えすぎ」と流さず、一度具体的に検討を。安心できる場ほど力を発揮します。' },
+  'N-': { name: '安定役', emoji: '🗿', catch: '動じない岩',
+    desc: 'トラブルや修羅場でも淡々と対処できます。チームが浮き足立ったときの心の支えです。',
+    tip: '平気そうに見えても負荷はかかっています。「大丈夫？」の一声は無駄になりません。' },
+  'BAL': { name: 'バランサー', emoji: '🎯', catch: 'チームの重心',
+    desc: 'チームの平均に近い万能型。どの役割も部分的に補える調整弁で、みんなの共通言語になれます。',
+    tip: '目立ちにくいですが、この人の「普通の感覚」はチームの物差し。迷ったら意見を聞いてみてください。' },
+};
+
+// 足りない機能の処方箋
+const FUNCTION_RX = {
+  O: '新しい案が出にくい組成です。会議の最初に「あえて突飛な案を出す時間」を作る、外部の事例を持ち込む係を決める、などで補えます。',
+  C: '締切と手順の管理が抜けやすい組成です。人の頑張りではなく、共有カレンダーやリマインダーなど道具に任せるのが近道です。',
+  E: '静かなチームです。発表や交渉の場面では、その場の勢いより資料の完成度で勝負する作戦が向いています。',
+  A: '率直な意見がぶつかりやすい組成です。「批判は案に向ける・人には向けない」など、話し合いのルールを最初に決めておくと安心です。',
+  N: '楽観に傾きやすい組成です。公開前・提出前のチェックリストなど、機械的な見直しの仕組みを一つ入れておくと強くなります。',
+};
+
+const FUNCTION_INFO = {
+  O: { label: '発想', emoji: '💡' },
+  C: { label: '段取り', emoji: '📋' },
+  E: { label: '熱量', emoji: '🔥' },
+  A: { label: '調整', emoji: '🕊️' },
+  N: { label: '見張り', emoji: '📡' },
+};
+
+// ===== 役割割り当て（チーム内の相対比較・個性の強い人から確定・重複はなるべく回避） =====
+function assignRoles(members, avg) {
+  const factors = ['O', 'C', 'E', 'A', 'N'];
+  const candsOf = (m, base) => factors.map(f => {
+    const diff = m.scores[f] - (base ? base[f] : 3);
+    return { key: f + (diff >= 0 ? '+' : '-'), abs: Math.abs(diff) };
+  }).sort((a, b) => b.abs - a.abs);
+
+  const prepared = members.map(m => ({ m, cands: candsOf(m, avg) }));
+  // 全員がチーム平均に近い（似た者チーム）→ 絶対値（標準の3）基準に切り替え
+  const isFlat = prepared.every(p => p.cands[0].abs < 0.5);
+  if (isFlat) prepared.forEach(p => { p.cands = candsOf(p.m, null); });
+
+  const taken = new Set();
+  const roleOf = {};
+  prepared.slice().sort((a, b) => b.cands[0].abs - a.cands[0].abs).forEach(p => {
+    const meaningful = p.cands.filter(c => c.abs >= 0.3);
+    if (meaningful.length === 0) { roleOf[p.m.id] = 'BAL'; return; }
+    const free = meaningful.find(c => !taken.has(c.key));
+    const pick = free || meaningful[0];
+    roleOf[p.m.id] = pick.key;
+    taken.add(pick.key);
+  });
+  return { roleOf, isFlat };
+}
+
+// ===== 役割カードHTML生成 =====
+function genRoleCardsHtml(members, avg) {
+  const { roleOf, isFlat } = assignRoles(members, avg);
+  const cards = members.map(m => {
+    const role = TEAM_ROLES[roleOf[m.id]];
+    return `
+      <div class="position-member">
+        <div class="role-head">
+          <div class="role-icon"><img src="images/characters/marume243/${m.gender}/${toImgCode(m.code)}.webp" alt="" onerror="this.style.display='none'"></div>
+          <div>
+            <div class="position-name">${m.name}</div>
+            <div class="role-name">${role.emoji} ${role.name}<span class="role-catch">${role.catch}</span></div>
+          </div>
+        </div>
+        <div class="position-advice">${role.desc}</div>
+        <div class="position-tip-area"><div class="position-tip">🤝 この人への接し方：${role.tip}</div></div>
+      </div>
+    `;
+  }).join('');
+  const flatNote = isFlat
+    ? `<p class="roles-note" style="margin-top:10px;">このチームは全員の性格が似ています（似た者チーム）。居心地は良い反面、視点が重なりやすいので、外の意見を聞く機会を意識的に作るのがおすすめです。</p>`
+    : '';
+  return `
+    <div class="position-card">
+      <p class="position-title">🧩 このチームでの役割</p>
+      <p class="roles-note">チーム内の相対的な比較で決まります。同じ人でも、チームが変われば役割も変わります。性格に優劣はありません。</p>
+      ${cards}
+      ${flatNote}
+    </div>
+  `;
+}
+
+// ===== 因子コメント生成 =====
+function genFactorComments(avg, variance) {
+  const comments = [];
+
+  // 誠実性
+  if (avg.C >= 4.0) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', text: `<strong>誠実性が高いチーム</strong>です。計画的に物事を進め、期限や約束を守る組織です。` });
+  } else if (avg.C >= 2.5) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>', text: `<strong>適度な計画性</strong>のあるチームです。柔軟さと計画性のバランスが取れています。` });
+  } else {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M2 20c2-4 6-6 10-6 4 0 8 2 10 6"/></svg>', text: `<strong>自由度が高いチーム</strong>です。柔軟で創造的ですが、段取りの役割分担が必要です。` });
+  }
+
+  // 協調性
+  if (avg.A >= 4.0) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>', text: `<strong>協力し合えるチーム</strong>です。対立が少なく、和やかに進められます。` });
+  } else if (avg.A >= 2.5) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M4 8l4-5 4 5"/><path d="M16 8l4-5 4 5"/><path d="M2 8h6v4a3 3 0 01-6 0V8zM14 8h6v4a3 3 0 01-6 0V8z"/></svg>', text: `<strong>意見の交わるチーム</strong>です。協力しつつも、建設的な議論ができるバランスがあります。` });
+  } else {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', text: `<strong>個性が強いチーム</strong>です。率直な意見が出やすい分、ルールを決めておくとスムーズです。` });
+  }
+
+  // 感受性
+  if (avg.N >= 4.0) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-3 4-5 6-5s4 2 6 2 4.5-2 6-2"/><path d="M2 18c1.5-3 4-5 6-5s4 2 6 2 4.5-2 6-2"/></svg>', text: `<strong>感受性が高いチーム</strong>です。ストレス管理や、定期的な振り返りの場を設けるのがおすすめです。` });
+  } else if (avg.N >= 2.5) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>', text: `<strong>感情のバランスが取れたチーム</strong>です。普段は落ち着いていますが、重要な場面では熱量を出せます。` });
+  } else {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', text: `<strong>精神的に安定したチーム</strong>です。困難な状況でも冷静に対処できる強みがあります。` });
+  }
+
+  // 分散系（条件付き）
+  if (variance.C >= 1.0) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', text: `生活リズムや計画性に<strong>ばらつきがあります</strong>。締切や役割の認識合わせをしっかりしましょう。` });
+  }
+  if (variance.O >= 1.0) {
+    comments.push({ icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg>', text: `<strong>多様な視点を持つチーム</strong>です。創造的なアイデアが生まれやすい環境です。` });
+  }
+
+  return comments;
+}
+
+// ===== 総合コメント生成 =====
+function genSummary(score, avg, variance, bestPair, worstPair, n, coverage) {
+  let rank, rankClass, summaryText;
+
+  if (score >= 80) {
+    rank = 'S'; rankClass = 'rank-s';
+    summaryText = '役割と相性がそろった、非常にバランスの良いチームです。互いの違いがそのまま強みとして働く理想的な組成です。';
+  } else if (score >= 60) {
+    rank = 'A'; rankClass = 'rank-a';
+    summaryText = '良好なチームバランスです。それぞれの役割の違いを意識して使い分ければ、さらに力を発揮できます。';
+  } else if (score >= 40) {
+    rank = 'B'; rankClass = 'rank-b';
+    summaryText = '伸びしろのあるチームです。足りない機能を道具やルールで補えば、十分に戦えます。';
+  } else {
+    rank = 'C'; rankClass = 'rank-c';
+    summaryText = '個性の振れ幅が大きいチームです。かみ合うまで摩擦も起きやすい分、役割分担がはまったときの突破力があります。';
+  }
+
+  // 強み（そろっているチーム機能から）
+  const strengthLabels = {
+    O: '発想力（新しい案が出せる）', C: '段取り力（計画と実行）', E: '発信力（場の熱量と対外の顔）',
+    A: '調整力（チームの和）', N: '危機察知力（見落としに早く気づく）'
+  };
+  const strengths = [];
+  ['O', 'C', 'E', 'A', 'N'].forEach(f => {
+    if (coverage && coverage[f] === 2) strengths.push(strengthLabels[f]);
+  });
+
+  // 注意点
+  const cautions = [];
+  if (variance.C >= 1.0) cautions.push('生活リズムや計画性の違い（締切の認識合わせを）');
+  if (avg.A <= 2.5) cautions.push('率直な意見がぶつかりやすい（話し合いのルールを最初に）');
+  if (avg.A >= 4.5) cautions.push('反対意見が出にくい傾向（あえての反論役を）');
+  if (avg.N >= 3.5) cautions.push('疲れやストレスがたまりやすい（定期的な振り返り・休憩ルールを）');
+  if (n >= 6) cautions.push(`人数が多い（${n}人）ためコミュニケーションコスト増加`);
+
+  return { rank, rankClass, summaryText, strengths, cautions };
+}
+
+// ===== 結果描画 =====
+function renderResults() {
+  const selected = allMembers.filter(m => selectedIds.has(m.id));
+  const { score, avg, variance, min, max, coverage, topK } = calcTeamScore(selected);
+  const comments = genFactorComments(avg, variance);
+
+  // 全ペア計算
+  let bestPair = null, worstPair = null;
+  for (let i = 0; i < selected.length; i++) {
+    for (let j = i + 1; j < selected.length; j++) {
+      const pairScore = calcPairCompatibility(selected[i].code, selected[j].code);
+      const pair = { a: selected[i], b: selected[j], score: pairScore };
+      if (!bestPair || pairScore > bestPair.score) bestPair = pair;
+      if (!worstPair || pairScore < worstPair.score) worstPair = pair;
+    }
+  }
+
+  const summary = genSummary(score, avg, variance, bestPair, worstPair, selected.length, coverage);
+
+  const teamName = document.getElementById('teamNameInput').value.trim();
+  const container = document.getElementById('resultSection');
+
+  // ペア表示（3人以上の場合のみ）
+  let pairHtml = '';
+  if (bestPair && selected.length >= 3) {
+    const scoreDiff = bestPair.score - (worstPair ? worstPair.score : 0);
+    let worstSectionHtml = '';
+    if (worstPair && scoreDiff >= 15) {
+      worstSectionHtml = `
+        <div class="pair-section">
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 翻訳が必要なペア</p>
+          <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
+          <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
+          <p class="pair-comment">チーム内でものの見方が最も違う2人です。悪い組み合わせではなく、言い方の「翻訳」が要るだけ。上の役割カードの「接し方」をお互いに読むところから始めるのがおすすめです。</p>
+        </div>
+      `;
+    } else {
+      worstSectionHtml = `
+        <div class="pair-section">
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> ペア相性のバランス</p>
+          <p class="pair-comment">チーム内のペア相性に大きな偏りはありません。全体的にバランスの取れたチームです。</p>
+        </div>
+      `;
+    }
+    pairHtml = `
+      <div class="pair-card">
+        <div class="pair-section">
+          <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> 最も相性が良いペア</p>
+          <p class="pair-names">${bestPair.a.name} × ${bestPair.b.name}</p>
+          <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
+        </div>
+        ${worstSectionHtml}
+        <p style="font-size:11px;color:rgba(255,255,255,0.35);margin:8px 0 0;text-align:center;">※ チーム相性は総合的な評価です。「あの人の分析」の相性（恋愛・仕事・友人別）とはスコアが異なる場合があります。</p>
+      </div>
+    `;
+  }
+
+  // チーム機能バランス（ランプ表示）
+  const lampsHtml = ['O','C','E','A','N'].map(f => {
+    const st = coverage[f] === 2 ? 'on' : coverage[f] === 1 ? 'half' : 'off';
+    const stText = coverage[f] === 2 ? 'そろってる' : coverage[f] === 1 ? 'ほどほど' : '不在';
+    return `<div class="balance-lamp ${st}"><span class="bl-emoji">${FUNCTION_INFO[f].emoji}</span><span class="bl-label">${FUNCTION_INFO[f].label}</span><span class="bl-state">${stText}</span></div>`;
+  }).join('');
+  const balanceNote = topK < 5
+    ? `<p class="balance-note">※ ${selected.length}人チームなので、5つの機能のうち得意な${topK}つがそろえば満点として採点しています。</p>`
+    : '';
+
+  // 足りない機能の処方箋
+  const uncovered = ['O','C','E','A','N'].filter(f => coverage[f] === 0);
+  const rxHtml = uncovered.length > 0 ? `
+    <div class="rx-list">
+      ${uncovered.map(f => `<div class="rx-item"><b>${FUNCTION_INFO[f].emoji} ${FUNCTION_INFO[f].label}が不在：</b>${FUNCTION_RX[f]}</div>`).join('')}
+    </div>
+  ` : '';
+
+  // 強み・注意点
+  let strengthsHtml = '';
+  let cautionsHtml = '';
+  if (summary.strengths.length > 0) {
+    strengthsHtml = `
+      <div class="summary-strengths">
+        <strong>チームの強み：</strong>${summary.strengths.join('、')}
+      </div>
+    `;
+  }
+  if (summary.cautions.length > 0) {
+    cautionsHtml = `
+      <div class="summary-cautions">
+        <strong>注意点：</strong>${summary.cautions.join('、')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    ${teamName ? `<p class="result-team-name"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${teamName}</p>` : ''}
+
+    <!-- チームスコア -->
+    <div class="team-card">
+      <p class="team-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> チーム全体スコア</p>
+      <div class="team-score-area">
+        <div class="team-score-value" id="teamScoreDisplay">${score}</div>
+        <p class="team-score-label">/ 100点</p>
+        <span class="team-score-rank ${summary.rankClass}" id="teamRankDisplay">${summary.rank}ランク</span>
+      </div>
+      <div class="factor-rows">
+        ${['O','C','E','A','N'].map(f => {
+          const val = avg[f];
+          const pct = (val / 5) * 100;
+          const lo = min[f], hi = max[f];
+          const range = lo !== hi ? ` (${lo}〜${hi})` : '';
+          return `
+            <div class="factor-row">
+              <span class="factor-label" style="color:${traitInfo[f].color}">${traitInfo[f].name}</span>
+              <div class="factor-bar-track">
+                <div class="factor-bar-fill" style="width:0%;background:${traitInfo[f].color};" data-w="${pct}%"></div>
+              </div>
+              <span class="factor-avg">${val.toFixed(1)}<small style="font-weight:400;font-size:10px;color:var(--dim);">${range}</small></span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div class="balance-wrap">
+        <p class="balance-title">チーム機能のそろい方</p>
+        <div class="balance-lamps">${lampsHtml}</div>
+        ${balanceNote}
+      </div>
+      <p class="team-disclaimer">※ ビッグファイブに基づく整理です。性格に優劣はなく、「そろい方」を見ています。</p>
+    </div>
+
+    <!-- チームでの役割 -->
+    ${genRoleCardsHtml(selected, avg)}
+
+    <!-- 因子コメント -->
+    <div class="factor-comments">
+      <p class="factor-comments-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> チーム分析</p>
+      ${comments.map(c => `
+        <div class="factor-comment">
+          <span class="factor-comment-icon">${c.icon}</span>
+          <span class="factor-comment-text">${c.text}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- ペア相性 -->
+    ${pairHtml}
+
+    <!-- 総合コメント -->
+    <div class="summary-card">
+      <p class="summary-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 総合コメント</p>
+      <p class="summary-text">${summary.summaryText}</p>
+      ${strengthsHtml}
+      ${cautionsHtml}
+      ${rxHtml}
+    </div>
+
+    <!-- ポジションアドバイス -->
+    ${genPositionAdviceHtml(selected, score)}
+
+    <!-- ビッグファイブマン分析 -->
+    <div id="bigfivemanSection"></div>
+    <button class="btn-bigfiveman" id="bigfivemanBtn" style="display:none;">🦸 ビッグファイブマン分析（EQ・ダークトライアドを反映）</button>
+
+    <button class="btn-save-team" id="saveTeamBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> このチームをマイページに保存する</button>
+    <button class="btn-reselect" id="reselectBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> メンバーを選び直す</button>
+  `;
+
+  // メンバーセクションを隠して結果を表示
+  document.getElementById('memberSection').style.display = 'none';
+  container.classList.add('visible');
+
+  // アニメーション（バー）
+  setTimeout(() => {
+    container.querySelectorAll('.factor-bar-fill').forEach(b => {
+      b.style.width = b.dataset.w;
+    });
+  }, 100);
+
+  // 保存ボタン
+  document.getElementById('saveTeamBtn').addEventListener('click', () => {
+    const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+    const entry = {
+      id: 'team_' + Date.now(),
+      teamName: teamName || '',
+      score,
+      rank: summary.rank,
+      rankClass: summary.rankClass,
+      members: selected.map(m => ({ name: m.name, code: m.code, type: m.type, gender: m.gender || 'F' })),
+      date: new Date().toISOString()
+    };
+    teams.unshift(entry);
+    if (teams.length > MAX_TEAMS) teams.length = MAX_TEAMS;
+    localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
+    const btn = document.getElementById('saveTeamBtn');
+    btn.textContent = '✓ 保存しました！';
+    btn.disabled = true;
+  });
+
+  // ビッグファイブマン分析：発動条件チェック
+  const bfmData = loadBigFiveManData(selected);
+  if (isUnlocked('bigfiveman') && canBigFiveMan(bfmData)) {
+    document.getElementById('bigfivemanBtn').style.display = 'block';
+  }
+
+  // ビッグファイブマン分析ボタン
+  let bfmActive = false;
+  document.getElementById('bigfivemanBtn').addEventListener('click', () => {
+    if (!bfmActive) {
+      const bonus = calcEqDtBonus(bfmData);
+      const newScore = Math.max(0, Math.min(100, score + bonus));
+      const newSummary = genSummary(newScore, avg, variance, bestPair, worstPair, selected.length, coverage);
+      animateScoreValue(score, newScore);
+      updateRankDisplay(newSummary.rank, newSummary.rankClass);
+      const warnings = genPairWarnings(bfmData);
+      document.getElementById('bigfivemanSection').innerHTML = genBigFiveManHtml(bfmData, warnings, bonus, newScore);
+      document.getElementById('bigfivemanBtn').textContent = '↩ ビッグファイブのみに戻す';
+      bfmActive = true;
+    } else {
+      animateScoreValue(parseInt(document.getElementById('teamScoreDisplay').textContent), score);
+      updateRankDisplay(summary.rank, summary.rankClass);
+      document.getElementById('bigfivemanSection').innerHTML = '';
+      document.getElementById('bigfivemanBtn').textContent = '🦸 ビッグファイブマン分析（EQ・ダークトライアドを反映）';
+      bfmActive = false;
+    }
+  });
+
+  // 再選択ボタン
+  document.getElementById('reselectBtn').addEventListener('click', () => {
+    container.classList.remove('visible');
+    container.innerHTML = '';
+    document.getElementById('memberSection').style.display = 'block';
+  });
+}
+
+// ===== ビッグファイブマン分析：データ取得 =====
+function loadBigFiveManData(members) {
+  // 旧キー（フォールバック用）
+  let myEqFallback = null, myDtFallback = null;
+  let myAttachFallback = null, myMindsetFallback = null, myLocusFallback = null;
+  try { myEqFallback = JSON.parse(localStorage.getItem('eq_result') || 'null'); } catch(e) {}
+  try { myDtFallback = JSON.parse(localStorage.getItem('dark_triad_result') || 'null'); } catch(e) {}
+  try { myAttachFallback = JSON.parse(localStorage.getItem('attachment_result') || 'null'); } catch(e) {}
+  try { myMindsetFallback = JSON.parse(localStorage.getItem('mindset_result') || 'null'); } catch(e) {}
+  try { myLocusFallback = JSON.parse(localStorage.getItem('locus_result') || 'null'); } catch(e) {}
+
+  // 適用中の自分のBig Five結果レコード
+  let myRecord = null;
+  try {
+    const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
+    myRecord = myResults[activeIdx] || null;
+  } catch(e) {}
+
+  const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
+
+  return members.map(m => {
+    let eq = null, dt = null, attachment = null, mindset = null, locus = null;
+    if (m.type === 'my') {
+      eq = (myRecord && myRecord.eq) || myEqFallback;
+      dt = (myRecord && myRecord.darkTriad) || myDtFallback;
+      attachment = (myRecord && myRecord.attachment) || myAttachFallback;
+      mindset = (myRecord && myRecord.mindset) || myMindsetFallback;
+      locus = (myRecord && myRecord.locus) || myLocusFallback;
+    } else if (m.type === 'other') {
+      const idx = parseInt(m.id.replace('other_', ''));
+      if (!isNaN(idx) && otherResults[idx]) {
+        eq = otherResults[idx].eq || null;
+        dt = otherResults[idx].darkTriad || null;
+        attachment = otherResults[idx].attachment || null;
+      }
+    }
+    return { ...m, eq, dt, attachment, mindset, locus };
+  });
+}
+
+// ===== ビッグファイブマン分析：発動条件 =====
+function canBigFiveMan(bfmData) {
+  const myData = bfmData.find(m => m.type === 'my');
+  const myHasData = myData && (myData.eq || myData.dt || myData.attachment || myData.mindset || myData.locus);
+  const othersWithData = bfmData.filter(m => m.type !== 'my' && (m.eq || m.dt || m.attachment));
+  return myHasData && othersWithData.length >= 1;
+}
+
+// ===== ビッグファイブマン分析：スコア補正計算 =====
+function calcEqDtBonus(bfmData) {
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  let bonus = 0;
+
+  const eqVals = eqMembers.map(m => m.eq.overall);
+  const eqAvg  = eqVals.length > 0 ? eqVals.reduce((s, v) => s + v, 0) / eqVals.length : null;
+  const eqMax  = eqVals.length > 0 ? Math.max(...eqVals) : null;
+  const eqMin  = eqVals.length > 0 ? Math.min(...eqVals) : null;
+  const eqHighCount = eqMembers.filter(m => m.eq.overall >= 3.5).length;
+
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
+  const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
+
+  // ── EQ補正（文脈込み）──
+  if (eqAvg !== null && eqMembers.length >= 2) {
+    // 全員EQが高い → 対立回避・創造性低下リスク（マイナス）
+    const allHighEq = eqVals.every(v => v >= 3.8);
+    if (allHighEq) {
+      bonus -= 4; // 全員高EQ＝空気読み合いで創造的摩擦が起きにくい
+    } else if (eqAvg >= 3.5) {
+      bonus += 3; // 適度に高EQ＝プラス
+    } else if (eqAvg <= 2.0) {
+      bonus -= 4;
+    }
+    // EQに偏りがある → 感情労働が一部に集中するリスク
+    if (eqMax !== null && eqMin !== null && eqMax - eqMin >= 1.5 && eqMembers.length >= 2) {
+      bonus -= 3;
+    }
+  }
+
+  // ── DT補正（文脈込み）──
+  // マキャベリアン1人 → 外部交渉力としてプラス面あり、EQ高多数と組み合わさると搾取リスク
+  if (machiHigh.length === 1) {
+    if (eqHighCount >= 2) {
+      bonus -= 6; // 搾取リスク（外部強みはあるが内部コスト大）
+    } else {
+      bonus += 2; // 外部折衝力としてプラス
+    }
+  } else if (machiHigh.length >= 2) {
+    bonus -= 7; // 複数マキャベリアン＝内部の権謀術数
+  }
+
+  // ナルシシスト1人 → 短期リーダーシップとして機能しうる（軽めのマイナス）
+  if (narcHigh.length === 1) {
+    bonus -= 2; // 単独なら牽引力になる可能性あり
+  } else if (narcHigh.length >= 2) {
+    bonus -= 8; // 複数は覇権争いリスク大
+  }
+
+  // サイコパシー → 高ストレス下での決断力あり、長期で信頼を傷つける
+  if (psychHigh.length >= 1) {
+    bonus -= 4;
+  }
+
+  // EQ適度＋DT全員低い → 持続性ボーナス
+  if (eqAvg !== null && eqAvg >= 3.0 && eqAvg < 3.8 && dtMembers.length >= 1 && anyDtHigh.length === 0) {
+    bonus += 4;
+  }
+
+  // ── 愛着スタイル補正（自分+あの人のペアパターン）──
+  const myData = bfmData.find(m => m.type === 'my');
+  const myType = myData && myData.attachment && myData.attachment.typeKey;
+  const otherAttachMembers = bfmData.filter(m => m.type !== 'my' && m.attachment && m.attachment.typeId);
+
+  if (myType && otherAttachMembers.length >= 1) {
+    let securePairCount = 0, clashPairCount = 0;
+    otherAttachMembers.forEach(m => {
+      const otherType = m.attachment.typeId;
+      if (myType === 'secure' && otherType === 'secure') securePairCount++;
+      // 不安×回避（追いかけっこパターン）
+      if ((myType === 'anxious' && otherType === 'avoidant') ||
+          (myType === 'avoidant' && otherType === 'anxious')) clashPairCount++;
+    });
+    if (securePairCount >= 1) bonus += 3;
+    bonus -= clashPairCount * 5;
+  }
+
+  return bonus;
+}
+
+// ===== ビッグファイブマン分析：ペア別・チーム全体の注目ポイント =====
+function genPairWarnings(bfmData) {
+  const warnings = [];
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  const eqVals = eqMembers.map(m => m.eq.overall);
+  const eqAvg  = eqVals.length > 0 ? eqVals.reduce((s, v) => s + v, 0) / eqVals.length : null;
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+  const psychHigh = dtMembers.filter(m => m.dt.pPct >= 65);
+
+  // ── チーム全体の傾向（ペア問わず） ──
+
+  // 全員EQ高い → 対立回避リスク
+  if (eqVals.length >= 2 && eqVals.every(v => v >= 3.8)) {
+    warnings.push({ type: 'caution', pair: false,
+      text: `全員のEQが高く、互いに気を遣い合う空気が生まれやすいです。「反対意見を言いにくい」「問題を先送りにする」といった現象が起きやすいため、意図的に反論役（デビルズアドボケイト）を設けることが有効です。` });
+  }
+
+  // EQに大きな偏り → 感情労働の集中
+  if (eqVals.length >= 2) {
+    const eqMax = Math.max(...eqVals), eqMin = Math.min(...eqVals);
+    if (eqMax - eqMin >= 1.5) {
+      const highEqNames = eqMembers.filter(m => m.eq.overall >= eqMax - 0.3).map(m => m.name);
+      warnings.push({ type: 'caution', pair: false,
+        text: `メンバー間でEQに差があります。<strong>${highEqNames.join('・')}さん</strong>に感情的な調整役・緩衝役が集中しやすく、長期的に燃え尽きるリスクがあります。意識的に役割を分担しましょう。` });
+    }
+  }
+
+  // マキャベリアン → 文脈込みの評価
+  if (machiHigh.length === 1) {
+    const m = machiHigh[0];
+    const eqHighCount = eqMembers.filter(em => em.eq.overall >= 3.5).length;
+    if (eqHighCount >= 2) {
+      warnings.push({ type: 'danger', pair: false,
+        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部交渉や組織政治での立ち回りでチームに強みをもたらします。一方、EQの高いメンバーが多い内部では、感情を読んだ利用的なダイナミクスが生じやすいため、定期的に率直な1on1を設けることが有効です。` });
+    } else {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部折衝や政治的な場面でチームの強みになります。内部では物事をストレートに話す場を意識的に作ると、関係が安定しやすいです。` });
+    }
+  } else if (machiHigh.length >= 2) {
+    warnings.push({ type: 'danger', pair: false,
+      text: `<strong>${machiHigh.map(m => m.name).join('・')}さん</strong>が両者ともマキャベリアン傾向が高いです。外部では強力ですが、内部で利害が衝突したときに権謀術数が生じやすく、チームの信頼基盤が崩れるリスクがあります。` });
+  }
+
+  // ナルシシズム → 文脈込みの評価
+  if (narcHigh.length === 1) {
+    const m = narcHigh[0];
+    warnings.push({ type: 'caution', pair: false,
+      text: `<strong>${m.name}さんのリーダーシップ傾向</strong>は、危機対応や短期プロジェクトで大きな推進力になります。ただし長期的には「自分の貢献だけが見えやすくなる」傾向があるため、他メンバーの成果を可視化する工夫が有効です。` });
+  } else if (narcHigh.length >= 2) {
+    warnings.push({ type: 'danger', pair: false,
+      text: `<strong>${narcHigh.map(m => m.name).join('・')}さん</strong>が両者ともリーダーシップ傾向が強いです。方向性が一致しているうちは突破力がありますが、意見が割れた場合に覇権争いに発展しやすいです。意思決定のフローを明文化しておくことを強く推奨します。` });
+  }
+
+  // サイコパシー
+  psychHigh.forEach(m => {
+    const eqHighNames = eqMembers.filter(em => em.id !== m.id && em.eq.overall >= 3.5).map(em => em.name);
+    if (eqHighNames.length >= 1) {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さん</strong>は高ストレス下での冷静な判断力が強みです。一方、長期的には<strong>${eqHighNames.join('・')}さん</strong>のような共感力の高いメンバーに感情的コストが蓄積しやすいです。定期的な振り返りの場が有効です。` });
+    } else {
+      warnings.push({ type: 'caution', pair: false,
+        text: `<strong>${m.name}さん</strong>は冷静な判断力が強みです。長期的にはチームの感情的なつながりを維持する工夫が必要です。` });
+    }
+  });
+
+  // ── 愛着スタイルペア警告 ──
+  const myMember = bfmData.find(m => m.type === 'my');
+  const myAttachType = myMember && myMember.attachment && myMember.attachment.typeKey;
+  if (myAttachType) {
+    bfmData.filter(m => m.type !== 'my' && m.attachment && m.attachment.typeId).forEach(m => {
+      const otherType = m.attachment.typeId;
+      if ((myAttachType === 'anxious' && otherType === 'avoidant') ||
+          (myAttachType === 'avoidant' && otherType === 'anxious')) {
+        const [chaser, distancer] = myAttachType === 'anxious'
+          ? [myMember.name, m.name]
+          : [m.name, myMember.name];
+        warnings.push({ type: 'caution', pair: true,
+          text: `<strong>${chaser}さんと${distancer}さんの愛着スタイル</strong>は「不安型×回避型」の組み合わせです。距離感でズレが生じやすく、追いかけるほど引いてしまう循環が起きやすいです。定期的に「今どんなペースで関わりたいか」を率直に伝え合う場を設けると関係が安定します。` });
+      } else if (myAttachType === 'secure' && otherType === 'secure') {
+        warnings.push({ type: 'good', pair: true,
+          text: `<strong>${myMember.name}さんと${m.name}さん</strong>は両者とも安定型の愛着スタイルです。感情的な余裕があり、安心して頼り合えるベース関係を築きやすい組み合わせです。` });
+      }
+    });
+  }
+
+  return warnings;
+}
+
+// ===== ビッグファイブマン分析：スコアアニメーション =====
+function animateScoreValue(from, to, duration = 700) {
+  const el = document.getElementById('teamScoreDisplay');
+  if (!el) return;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    el.textContent = Math.round(from + (to - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+    else el.textContent = to;
+  }
+  requestAnimationFrame(tick);
+}
+
+function updateRankDisplay(rank, rankClass) {
+  const el = document.getElementById('teamRankDisplay');
+  if (!el) return;
+  el.textContent = rank + 'ランク';
+  el.className = `team-score-rank ${rankClass}`;
+}
+
+// ===== ビッグファイブマン分析：HTML生成 =====
+function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
+  const eqMembers = bfmData.filter(m => m.eq && m.eq.overall != null);
+  const dtMembers = bfmData.filter(m => m.dt && m.dt.nPct != null);
+  const eqAvg = eqMembers.length > 0
+    ? eqMembers.reduce((s, m) => s + m.eq.overall, 0) / eqMembers.length : null;
+  const anyDtHigh = dtMembers.filter(m => Math.max(m.dt.nPct, m.dt.mPct, m.dt.pPct) >= 65);
+  const narcHigh  = dtMembers.filter(m => m.dt.nPct >= 65);
+  const machiHigh = dtMembers.filter(m => m.dt.mPct >= 65);
+
+  // チームタイプ判定（良い面・悪い面を両方記述）
+  const eqValsAll = eqMembers.map(m => m.eq.overall);
+  const allHighEq = eqValsAll.length >= 2 && eqValsAll.every(v => v >= 3.8);
+  let typeName, typeDesc;
+  if (eqAvg !== null && eqAvg >= 3.0 && eqAvg < 3.8 && anyDtHigh.length === 0 && dtMembers.length >= 1) {
+    typeName = '安定・持続型';
+    typeDesc = 'EQが適度に高く、ダークトライアド傾向も低い組み合わせです。長期プロジェクトへの適性が高く、信頼関係が自然に育ちます。急成長よりも着実な積み上げが得意な反面、外部への強い折衝力は別途補う必要があります。';
+  } else if (allHighEq) {
+    typeName = '調和重視型';
+    typeDesc = '全員EQが高く、対立を避ける力に優れています。雰囲気が良い反面、誰も反論しないまま問題が先送りになる「グループシンク」が起きやすいです。意図的に批判的思考を持ち込む役割を作ると、このチームの力が最大化します。';
+  } else if (eqAvg !== null && eqAvg >= 3.5) {
+    typeName = '調和型';
+    typeDesc = '感情知性が高く、対立をうまく収める力があります。人間関係のトラブルが少なく、相談しやすい空気があります。建設的な摩擦を意図的に作ると、さらに力が伸びます。';
+  } else if (machiHigh.length >= 1 && eqAvg !== null && eqAvg >= 3.0) {
+    typeName = '戦略×共感型';
+    typeDesc = '外部交渉・組織政治に強いメンバーと、共感力の高いメンバーが共存するチームです。外部折衝では強みを発揮します。内部では感情的搾取が起きやすい構造のため、信頼構築を意識的に行うことがこのチームの最重要課題です。';
+  } else if (narcHigh.length === 1 && eqAvg !== null) {
+    typeName = 'エネルギー型';
+    typeDesc = '強い推進力を持つメンバーがいるチームです。短期プロジェクトや危機対応では大きな力を発揮します。長期的には他メンバーの貢献の可視化と、リーダーシップを共有する仕組みが持続力のカギになります。';
+  } else if (narcHigh.length >= 2 || machiHigh.length >= 2) {
+    typeName = '競争型';
+    typeDesc = '個性と主張の強いメンバーが集まったチームです。方向性が合っているときの突破力は強いですが、利害が衝突したときに内部崩壊するリスクがあります。ルール・役割・評価基準の明文化が不可欠です。';
+  } else {
+    typeName = 'バランス型';
+    typeDesc = '多様な特性が混在した、状況適応力のあるチームです。';
+  }
+
+  // スコア補正表示
+  const bonusSign = bonus >= 0 ? `+${bonus}` : `${bonus}`;
+  const bonusColor = bonus >= 0 ? '#34d399' : '#f87171';
+
+  // 警告HTML
+  const iconMap = { danger: '🔴', caution: '🟡', good: '🟢' };
+  const cautionWarnings = warnings.filter(w => w.type !== 'good');
+  const goodWarnings = warnings.filter(w => w.type === 'good');
+  const warningsHtml = (cautionWarnings.length > 0 || goodWarnings.length > 0) ? `
+    <div class="bigfiveman-pair-warnings">
+      ${cautionWarnings.length > 0 ? `
+        <p class="bigfiveman-members-title" style="margin-bottom:8px;">⚠️ 注意が必要な組み合わせ</p>
+        ${cautionWarnings.map(w => `
+          <div class="bigfiveman-pair-warning">
+            <span class="bigfiveman-pair-icon">${iconMap[w.type] || '🟡'}</span>
+            <span class="bigfiveman-pair-text">${w.text}</span>
+          </div>
+        `).join('')}
+      ` : ''}
+      ${goodWarnings.length > 0 ? `
+        <p class="bigfiveman-members-title" style="margin-bottom:8px;margin-top:12px;">✨ 相性のよい組み合わせ</p>
+        ${goodWarnings.map(w => `
+          <div class="bigfiveman-pair-warning">
+            <span class="bigfiveman-pair-icon">🟢</span>
+            <span class="bigfiveman-pair-text">${w.text}</span>
+          </div>
+        `).join('')}
+      ` : ''}
+    </div>
+  ` : `
+    <div style="text-align:center;padding:10px 0;font-size:13px;color:#6ee7b7;">✓ 危険な組み合わせパターンは検出されませんでした</div>
+  `;
+
+  // メンバー別データ
+  const membersHtml = bfmData.map(m => {
+    if (!m.eq && !m.dt) return '';
+    const bars = [];
+    if (m.eq && m.eq.overall != null) {
+      const pct = ((m.eq.overall - 1) / 4) * 100;
+      bars.push(`<div class="bigfiveman-mini-row">
+        <span class="bigfiveman-mini-label">EQ</span>
+        <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${pct}%;background:#d946ef;"></div></div>
+        <span class="bigfiveman-mini-val">${m.eq.levelName || m.eq.overall.toFixed(1)}</span>
+      </div>`);
+    }
+    if (m.dt) {
+      [['ナルシシズム', '#f97316', m.dt.nPct],
+       ['マキャベリアン', '#ef4444', m.dt.mPct],
+       ['サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([label, color, val]) => {
+        if (val == null) return;
+        bars.push(`<div class="bigfiveman-mini-row">
+          <span class="bigfiveman-mini-label">${label}</span>
+          <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${val}%;background:${color};"></div></div>
+          <span class="bigfiveman-mini-val">${val}%</span>
+        </div>`);
+      });
+    }
+    return `<div class="bigfiveman-member-row">
+      <div class="bigfiveman-member-name">${m.name}</div>
+      <div class="bigfiveman-mini-bars">${bars.join('')}</div>
+    </div>`;
+  }).filter(Boolean).join('');
+
+  // 自分へのアドバイスHTML（mindset/locus）
+  const myMemberForAdvice = bfmData.find(m => m.type === 'my');
+  const adviceItems = [];
+
+  if (myMemberForAdvice && myMemberForAdvice.mindset) {
+    const ms = myMemberForAdvice.mindset;
+    const mindsetLabels = { growth: '成長マインドセット', mixed: '中間マインドセット', fixed: '固定マインドセット' };
+    const mindsetAdvice = {
+      growth: 'チームの困難を「成長の機会」と捉える視点がチームに伝わると、メンバーの挑戦意欲が高まります。',
+      mixed: '状況によって柔軟に思考スタイルを切り替えられる強みがあります。チームが停滞しているときに「できることから試そう」と促す役割が向いています。',
+      fixed: '安定志向の強さはリスク管理に活きます。一方、チームが新しい挑戦をするときは「まず小さく試す」というフレームで参加すると動きやすくなります。'
+    };
+    adviceItems.push(`<div class="bigfiveman-advice-item">
+      <span class="bigfiveman-advice-label">マインドセット：${mindsetLabels[ms.type] || ms.type}</span>
+      <p class="bigfiveman-advice-text">${mindsetAdvice[ms.type] || ''}</p>
+    </div>`);
+  }
+
+  if (myMemberForAdvice && myMemberForAdvice.locus) {
+    const lc = myMemberForAdvice.locus;
+    const locusLabels = { internal: '内的統制型', external: '外的統制型', balanced: 'バランス型' };
+    const locusAdvice = {
+      internal: '「自分で変えられる」という意識が強く、主体的な行動力がチームの推進力になります。ただし他者への期待値が高くなりすぎると摩擦が生まれやすいので注意しましょう。',
+      external: '状況の流れを読む柔軟性がありますが、チームでの意思決定時には「自分はどうしたいか」を一度明確にして発言すると影響力が増します。',
+      balanced: '自分でコントロールできることとできないことを使い分ける判断力が強みです。チームの振り返りの場でファシリテーター的な役割を担うと力を発揮しやすいです。'
+    };
+    adviceItems.push(`<div class="bigfiveman-advice-item">
+      <span class="bigfiveman-advice-label">統制の所在：${locusLabels[lc.type] || lc.type}</span>
+      <p class="bigfiveman-advice-text">${locusAdvice[lc.type] || ''}</p>
+    </div>`);
+  }
+
+  const adviceHtml = adviceItems.length > 0 ? `
+    <div class="bigfiveman-pair-warnings" style="margin-top:12px;">
+      <p class="bigfiveman-members-title" style="margin-bottom:8px;">💡 あなた自身へのアドバイス</p>
+      ${adviceItems.join('')}
+    </div>
+  ` : '';
+
+  return `
+    <div class="bigfiveman-card">
+      <div class="bigfiveman-header">
+        <span class="bigfiveman-label">🦸 ビッグファイブマン分析</span>
+        <span class="bigfiveman-score-change" style="color:${bonusColor};">スコア ${bonusSign}点</span>
+      </div>
+      <p class="bigfiveman-disclaimer">ビッグファイブに加え、EQ・ダークトライアドの診断スコアを統合して算出しています。いずれも心理検査による推定値のため、参考値としてご活用ください。</p>
+      <div class="bigfiveman-type-wrap">
+        <p class="bigfiveman-type-label">チームキャラクター診断</p>
+        <p class="bigfiveman-type-name">${typeName}</p>
+        <p class="bigfiveman-type-desc">${typeDesc}</p>
+      </div>
+      ${warningsHtml}
+      ${membersHtml ? `<p class="bigfiveman-members-title">メンバー別プロファイル</p>${membersHtml}` : ''}
+      ${adviceHtml}
+    </div>
+  `;
+}
+
+// ===== イベント =====
+document.getElementById('analyzeBtn').addEventListener('click', () => {
+  try {
+    if (localStorage.getItem('dev_nocount') !== '1') {
+      var u = 'https://bigfive.jr-genius.jp/count/hit?e=team_analyze';
+      if (navigator.sendBeacon) navigator.sendBeacon(u);
+      else if (window.fetch) fetch(u, { method: 'POST', keepalive: true }).catch(function(){});
+    }
+  } catch(e) {}
+  renderResults();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== 初期化 =====
+renderMembers();
+
+// マイページからの保存済みチーム表示：全員自動選択＋即分析
+if (viewTeamData && allMembers.length >= 2) {
+  allMembers.forEach(m => selectedIds.add(m.id));
+  if (viewTeamData.teamName) {
+    document.getElementById('teamNameInput').value = viewTeamData.teamName;
+  }
+  renderMembers();
+  renderResults();
+  // イントロを隠して結果セクションにスクロール
+  document.querySelector('.intro').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+</script>
+<script src="compat.js"></script>
+<section class="test-about">
+  <h2>チーム相性診断とは</h2>
+  <p>「良いチームとは、どんなメンバーの集まりか」。この診断は、その問いに<strong>メンバー一人ひとりのビッグファイブのデータからアプローチする</strong>ものです。チームの構成（どういう性格の人がどう組み合わさっているか）とチームの成果の関係は、組織心理学の大きな研究テーマです。2007年、心理学者スザンヌ・ベルが発表したメタ分析（多くの研究をまとめて平均を取る分析）は、その代表格で、<strong>チーム全体の性格の「平均値」が成果と結びつきやすい</strong>ことを示しました（Bell, 2007）。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>成果と結びつくのは、<strong>誠実性の「平均」</strong>と、<strong>協調性の「いちばん低い人の値」</strong></li>
+      <li>外向性は高ければ良いわけではなく、<strong>全員が高すぎると衝突が増える</strong>という指摘もある</li>
+      <li>診断は「人を選別する道具」ではなく、<strong>役割分担と工夫のヒント</strong>を得るもの</li>
+    </ul>
+  </div>
+
+  <h3>チームの成果と結びつきやすいもの</h3>
+  <p>これまでの研究をかみくだくと、5因子ごとにチームへの関わり方の違いが見えてきます。</p>
+  <div class="table-wrap"><table>
+    <tr><th>因子</th><th>チームとの結びつき</th></tr>
+    <tr><td>誠実性</td><td>チーム全体の平均が高いほど成果が出やすい傾向。計画的に、最後までやり切る文化が生まれやすい</td></tr>
+    <tr><td>協調性</td><td><strong>いちばん協調性の低いメンバーの値</strong>が成果と結びつく。一人でも極端に低い人がいると、チーム全体が苦しくなりやすい</td></tr>
+    <tr><td>外向性</td><td>「高ければ良い」わけではない。主導権を取り合う場面では衝突の芽にもなる</td></tr>
+    <tr><td>神経症傾向</td><td>メンバー個人の情緒が安定しているほど、その人のチームへの満足度が高い傾向（Peeters et al., 2006）</td></tr>
+  </table></div>
+  <p>注目してほしいのは、<strong>「平均値」が主役</strong>だという点です。「誰か一人が優秀なら大丈夫」「価値観が似ているほどうまくいく」という話ではありません。メンバー全員の性格を平らにならして見たときの、チーム全体の傾きが成果と結びつきやすいのです。</p>
+
+  <h3>「似た者どうしが良い」は誤り</h3>
+  <p>直感的には「気が合うメンバー（似た者どうし）の集まりが一番うまくいきそう」に思えます。しかし研究の結果はもっと複雑です。ベルのメタ分析では、実際の職場を調べた研究で、<strong>誠実性・開放性の「平均」</strong>と、<strong>協調性の「いちばん低い人の値」</strong>が成果と結びつきました。いっぽう実験室で作った即席のチームでは、性格の効果はほとんど見つかっていません（Bell, 2007）。つまり性格が効くのは、長く一緒に働く実際のチームの話です。似た者どうしは話が早い反面、考え方が同じに固まりやすく、違う視点が足りない場面で苦しくなることがあります。逆に、異質なメンバーは衝突も多いぶん、創造的な答えにたどり着きやすい場面があります。<strong>「相性の良い組み合わせ」より「組み合わせの特徴を知って工夫すること」</strong>が、研究が示す現実的な知恵です。</p>
+
+  <h3>この診断の測り方</h3>
+  <p>この診断には独自の設問はありません。メンバー一人ひとりがビッグファイブ診断（10問・約3分）を受けて結果を保存しておき、そこから2〜8人を選んでチームを組むと、5因子ごとの<strong>チーム平均（みんなの傾き）</strong>と、一人ひとりの<strong>チームでの役割</strong>が表示されます。大人数をグループに分けたいときは、グループ分けツールの利用も案内しています。</p>
+
+  <h3>ビッグファイブとの関係</h3>
+  <p>この診断は、個人のビッグファイブの結果を<strong>チームという単位で読み直す</strong>応用です。「自分一人の性格」が「集まったときの化学反応」に変わるのがおもしろいところです。たとえばピータースら（2006）は、学生68チーム310人を調べ、<strong>協調性が高い人</strong>と<strong>情緒が安定している人</strong>ほど、チームへの満足度が高いことを報告しています。おもしろいのは誠実性で、こちらは「高いほど満足」ではなく、<strong>まわりと誠実性が違っているほど満足度が高い</strong>という結果でした（Peeters et al., 2006）。同じチームの中でも、満足の感じ方は人それぞれ違う——それも含めて眺められるのが、この診断の特徴です。</p>
+
+  <h3>よくある誤解</h3>
+  <ul>
+    <li><strong>「気が合うメンバーが良いチーム」</strong>——とは限りません。似た者どうしは円満でも視点が固まりやすく、研究が一貫して示すのは、誠実性の平均の高さと、協調性の低い人がいないことのほうです。</li>
+    <li><strong>「相性が悪い人は交代すべき」</strong>——ではありません。診断が見せるのは傾向と工夫のヒントです。役割の分け方や進め方を変えるだけで、同じ顔ぶれでも協働のしかたは変わります。</li>
+    <li><strong>「診断結果で人を選別する道具」</strong>——ではありません。採用や異動の判断に使うものではなく、いまのメンバーでどう働きやすくするかを考えるためのものです。</li>
+  </ul>
+
+  <h3>この診断について</h3>
+  <ul>
+    <li>メンバー各自のビッグファイブ診断（10問・約3分）の結果をもとに使用・<strong>無料・登録不要</strong></li>
+    <li>結果は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>2〜8人まで登録でき、<strong>チーム平均と一人ひとりの役割</strong>が読めます</li>
+  </ul>
+
+  <h3>出典</h3>
+  <ul class="refs">
+    <li>Bell, S. T. (2007). Deep-level composition variables as predictors of team performance: A meta-analysis. <em>Journal of Applied Psychology, 92</em>(3), 595–615. <a href="https://doi.org/10.1037/0021-9010.92.3.595" rel="nofollow">doi:10.1037/0021-9010.92.3.595</a></li>
+    <li>Barrick, M. R., Stewart, G. L., Neubert, M. J., &amp; Mount, M. K. (1998). Relating member ability and personality to work-team processes and team effectiveness. <em>Journal of Applied Psychology, 83</em>(3), 377–391. <a href="https://doi.org/10.1037/0021-9010.83.3.377" rel="nofollow">doi:10.1037/0021-9010.83.3.377</a></li>
+    <li>Peeters, M. A. G., Rutte, C. G., van Tuijl, H. F. J. M., &amp; Reymen, I. M. M. J. (2006). The Big Five personality traits and individual satisfaction with the team. <em>Small Group Research, 37</em>(2), 187–211. <a href="https://doi.org/10.1177/1046496405285458" rel="nofollow">doi:10.1177/1046496405285458</a></li>
+  </ul>
+
+  <h3>関連する診断</h3>
+  <ul class="related">
+    <li><a href="quiz.html">ビッグファイブ性格診断</a></li>
+    <li><a href="group.html">グループ分けツール</a></li>
+    <li><a href="other_quiz.html">あの人の性格を分析する</a></li>
+    <li><a href="work.html">仕事用ダッシュボード</a></li>
+    <li><a href="diagnoses.html">診断の一覧を見る</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+<script src="nav.js?v=20260919"></script>
+<script src="unlock.js"></script>
+<script>
+(function(){try{if(localStorage.getItem('dev_nocount')==='1')return;var u='https://bigfive.jr-genius.jp/count/hit?e=team_view';if(navigator.sendBeacon)navigator.sendBeacon(u);else if(window.fetch)fetch(u,{method:'POST',keepalive:true}).catch(function(){});}catch(e){}})();
+</script>
+</body>
+</html>

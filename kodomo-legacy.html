@@ -1,0 +1,1340 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/kodomo-legacy.html">
+  <meta name="robots" content="noindex,follow">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>子どもの性格診断（4〜9歳）| ビッグファイブ診断</title>
+<meta name="description" content="ビッグファイブ診断キッズ版。4〜9歳のお子さんの性格を無料で診断。保護者が30問に回答するだけで、5因子からお子さんの強み・向いている遊び・将来のヒントがわかります。子育ての参考に、気軽にお試しください。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="子どもの性格診断（4〜9歳）| ビッグファイブ診断">
+<meta property="og:description" content="ビッグファイブ 診断キッズ版。4〜9歳のお子さんの性格を無料で診断。保護者が30問回答するだけ。お子さんの強み・遊び・将来のヒントがわかる。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/kodomo.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="子どもの性格診断（4〜9歳）| ビッグファイブ診断">
+<meta name="twitter:description" content="ビッグファイブ 診断キッズ版。4〜9歳のお子さんの性格を無料で診断。保護者が30問回答するだけ。お子さんの強み・遊び・将来のヒントがわかる。">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Quiz",
+  "name": "子どもの性格診断（旧版・4〜9歳）",
+  "url": "https://bigfive.jr-genius.jp/kodomo.html",
+  "description": "4〜9歳のお子さんの性格を無料で診断。保護者が30問回答するだけ。ビッグファイブ理論に基づくキッズ版性格診断。",
+  "about": {
+    "@type": "Thing",
+    "name": "子ども向けビッグファイブ診断",
+    "description": "ビッグファイブ性格理論を子ども向けに適応した性格診断"
+  },
+  "learningResourceType": "Quiz",
+  "timeRequired": "PT5M",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "audience": {
+    "@type": "PeopleAudience",
+    "suggestedMinAge": "4",
+    "suggestedMaxAge": "9"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "ビッグファイブ診断",
+    "url": "https://bigfive.jr-genius.jp/"
+  },
+  "inLanguage": "ja",
+  "genre": ["心理学", "子ども診断", "性格分析"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e6f3ff; --sky: #3b9ede; --blue: #0ea5e9;
+  --pink: #f472b6; --yellow: #f59e0b; --green: #059669;
+  --text: #0f2d4a; --dim: #5b7a9a;
+}
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+.bg-nebula {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 50% at 15% 10%, rgba(147,210,255,0.55) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 40% at 85% 20%, rgba(255,255,255,0.75) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 50% 85%, rgba(186,230,253,0.45) 0%, transparent 70%);
+}
+
+/* ===== スクリーン管理 ===== */
+.screen { display: none; min-height: 100vh; padding: 40px 24px; max-width: 560px; margin: 0 auto; flex-direction: column; position: relative; z-index: 1; }
+.screen.active { display: flex; }
+
+/* ===== スタート画面 ===== */
+.hero-badge { display: inline-block; font-size: 12px; font-weight: 700; color: #b45309; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.35); border-radius: 999px; padding: 6px 14px; margin-bottom: 20px; }
+.hero-title { font-size: 28px; font-weight: 900; line-height: 1.4; margin-bottom: 16px; }
+.hero-title em { font-style: normal; background: linear-gradient(135deg, var(--yellow), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 14px; color: var(--dim); line-height: 1.8; margin-bottom: 32px; }
+.feature-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+.feature-item { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.7); border: 1px solid rgba(59,158,222,0.18); border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: var(--dim); }
+.feature-item .fi-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.feature-item strong { color: var(--text); }
+.start-note { font-size: 11px; color: rgba(15,45,74,0.45); text-align: center; margin-top: 12px; line-height: 1.7; }
+
+/* ===== 入力画面 ===== */
+.input-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.input-sub { font-size: 13px; color: var(--dim); margin-bottom: 32px; line-height: 1.7; }
+.form-group { margin-bottom: 24px; }
+.form-label { display: block; font-size: 13px; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
+.text-input { width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.8); border: 1.5px solid rgba(59,158,222,0.3); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 16px; outline: none; transition: border-color .2s; }
+.text-input::placeholder { color: var(--dim); }
+.text-input:focus { border-color: var(--sky); }
+.btn-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-grid-2b { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sel-btn { padding: 14px 8px; border-radius: 12px; background: rgba(255,255,255,0.65); border: 1.5px solid rgba(59,158,222,0.2); color: var(--dim); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .2s; text-align: center; line-height: 1.5; }
+.sel-btn .sel-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+.sel-btn:hover { background: rgba(59,158,222,0.12); border-color: rgba(59,158,222,0.4); color: var(--text); }
+.sel-btn.selected { border-color: var(--yellow); background: rgba(245,158,11,0.12); color: var(--text); font-weight: 700; }
+.age-note { font-size: 11px; color: rgba(15,45,74,0.45); margin-top: 8px; line-height: 1.6; }
+
+/* ===== 共通ボタン ===== */
+.btn-main { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--yellow), #f59e0b); border: none; border-radius: 14px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 900; cursor: pointer; transition: all .2s; }
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,158,11,0.4); }
+.btn-main:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { width: 100%; padding: 14px; background: transparent; border: 1.5px solid rgba(15,45,74,0.18); border-radius: 14px; color: var(--dim); font-family: inherit; font-size: 14px; cursor: pointer; transition: all .2s; }
+.btn-secondary:hover { color: var(--text); border-color: rgba(15,45,74,0.35); }
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--dim); font-size: 13px; text-decoration: none; margin-bottom: 28px; cursor: pointer; background: none; border: none; font-family: inherit; }
+.back-link:hover { color: var(--text); }
+
+/* ===== クイズ画面 ===== */
+.who-bar { display: flex; align-items: center; gap: 10px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; }
+.who-icon { font-size: 20px; }
+.who-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.who-sub { font-size: 11px; color: var(--dim); }
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 36px; }
+.progress-bar { flex: 1; height: 6px; background: rgba(15,45,74,0.1); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--yellow), var(--pink)); transition: width .4s ease; }
+.progress-text { font-size: 13px; color: var(--dim); font-weight: 500; min-width: 40px; text-align: right; }
+.q-num { font-size: 13px; color: #b45309; font-weight: 500; margin-bottom: 10px; }
+.q-text { font-size: 17px; line-height: 1.75; margin-bottom: 32px; min-height: 58px; }
+.answers { display: flex; gap: 8px; margin-bottom: 32px; }
+.answer-btn { flex: 1; padding: 13px 3px; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--dim); background: rgba(255,255,255,0.65); border: 1.5px solid rgba(59,158,222,0.2); border-radius: 12px; cursor: pointer; transition: border-color .2s, color .2s; min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; }
+@media (hover: hover) {
+  .answer-btn:hover { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: var(--text); }
+}
+.answer-btn.selected { background: linear-gradient(135deg, var(--yellow), #f59e0b); border-color: transparent; color: #fff; font-weight: 700; }
+.quiz-back-btn { background: none; border: none; color: var(--dim); font-family: inherit; font-size: 13px; cursor: pointer; padding: 8px 0; }
+.quiz-back-btn:hover { color: var(--text); }
+
+/* ===== ローディング画面 ===== */
+#loadingScreen { align-items: center; justify-content: center; text-align: center; gap: 20px; }
+.loading-spinner { width: 48px; height: 48px; border: 3px solid rgba(59,158,222,0.2); border-top-color: var(--sky); border-radius: 50%; animation: spin 1s linear infinite; }
+.loading-text { font-size: 18px; font-weight: 500; }
+.loading-name { color: #b45309; }
+.loading-dots::after { content: ''; animation: dots 1.5s infinite; }
+/* ===== 結果画面 ===== */
+.result-header { text-align: center; margin-bottom: 28px; }
+.result-badge { display: inline-block; font-size: 12px; font-weight: 700; color: #b45309; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 10px; }
+.result-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+.result-title em { font-style: normal; color: #b45309; }
+.result-sub { font-size: 13px; color: var(--dim); }
+
+.char-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+.char-img { width: 140px; height: 140px; object-fit: contain; border-radius: 16px; background: rgba(255,255,255,0.7); border: 1px solid rgba(59,158,222,0.2); }
+.char-label { font-size: 12px; color: var(--dim); margin-top: 6px; }
+
+.section-card { background: rgba(255,255,255,0.7); border: 1px solid rgba(59,158,222,0.15); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+.section-title { font-size: 14px; font-weight: 700; color: var(--dim); margin-bottom: 14px; letter-spacing: .03em; }
+
+/* 特性バー */
+.trait-row { margin-bottom: 14px; }
+.trait-row:last-child { margin-bottom: 0; }
+.trait-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.trait-label { font-size: 13px; font-weight: 600; }
+.trait-desc { font-size: 11px; color: var(--dim); margin-left: 6px; font-weight: 400; }
+.trait-level { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.lv-high { background: rgba(59,158,222,0.15); color: #0369a1; }
+.lv-mid  { background: rgba(91,122,154,0.12); color: var(--dim); }
+.lv-low  { background: rgba(14,165,233,0.1); color: #0284c7; }
+.bar-bg { height: 8px; background: rgba(15,45,74,0.08); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; width: 0%; }
+
+/* 強み */
+.strength-box { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.22); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.strength-box:last-child { margin-bottom: 0; }
+.strength-name { font-size: 13px; font-weight: 700; color: #b45309; margin-bottom: 4px; }
+.strength-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+/* 遊びのヒント */
+.hint-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(59,158,222,0.1); font-size: 13px; line-height: 1.6; color: var(--text); }
+.hint-item:last-child { border-bottom: none; padding-bottom: 0; }
+.hint-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; margin-top: 7px; }
+
+/* 職業カード */
+.career-grid { display: flex; flex-direction: column; gap: 10px; }
+.career-card { display: flex; align-items: center; gap: 12px; background: rgba(59,158,222,0.07); border: 1px solid rgba(59,158,222,0.18); border-radius: 12px; padding: 14px; }
+.career-icon { font-size: 24px; flex-shrink: 0; }
+.career-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.career-msg { font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+/* 親への一言 */
+.parent-note { background: rgba(5,150,105,0.07); border: 1px solid rgba(5,150,105,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; font-size: 13px; color: var(--text); line-height: 1.75; }
+.parent-note strong { color: #059669; }
+
+.disclaimer { font-size: 11px; color: rgba(15,45,74,0.45); text-align: center; line-height: 1.7; margin-bottom: 16px; }
+
+/* アクションボタン */
+.action-btn { display: block; width: 100%; padding: 14px; border-radius: 14px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-align: center; margin-bottom: 10px; text-decoration: none; border: none; }
+.btn-save { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.btn-save:hover { box-shadow: 0 8px 32px rgba(5,150,105,0.35); }
+.btn-saved { background: rgba(5,150,105,0.1); border: 1.5px solid #059669; color: #059669; }
+.btn-retry { background: rgba(15,45,74,0.06); border: 1.5px solid rgba(15,45,74,0.15); color: var(--dim); }
+.btn-retry:hover { color: var(--text); }
+
+@media (max-width: 400px) {
+  .q-text { font-size: 15px; }
+  .answer-btn { font-size: 11px; padding: 11px 2px; }
+  .answers { gap: 5px; }
+  .hero-title { font-size: 24px; }
+}
+
+/* ===== お子さんの傾向セクション ===== */
+.tendency-section { margin-bottom: 16px; }
+.btn-tendency {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; font-family: inherit; font-size: 13px; font-weight: 700;
+  color: #b45309; background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+}
+.btn-tendency:hover { background: rgba(245,158,11,0.14); transform: translateY(-1px); }
+.btn-tendency.active { background: rgba(245,158,11,0.16); border-color: rgba(245,158,11,0.4); }
+.tendency-card {
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(59,158,222,0.18);
+  border-radius: 14px; padding: 18px 20px; margin-top: 12px;
+  animation: tendency-fadein 0.3s ease-out;
+}
+@keyframes tendency-fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.tendency-card-title { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; color: var(--text); }
+.tendency-card-note { font-size: 11px; color: var(--dim); text-align: center; margin-bottom: 14px; }
+.tendency-row { padding: 12px 0; border-bottom: 1px solid rgba(59,158,222,0.08); }
+.tendency-row:last-child { border-bottom: none; padding-bottom: 0; }
+.tendency-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.tendency-factor-name { font-size: 13px; font-weight: 700; }
+.tendency-label { font-size: 11px; padding: 2px 10px; border-radius: 10px; background: rgba(245,158,11,0.12); color: #b45309; font-weight: 600; }
+.tendency-text { font-size: 12px; line-height: 1.7; color: var(--dim); }
+
+/* ===== 親の関わり方セクション ===== */
+.btn-parenting {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; margin-top: 12px;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: #059669; background: rgba(5,150,105,0.08);
+  border: 1px solid rgba(5,150,105,0.25);
+  border-radius: 12px; cursor: pointer; transition: all 0.2s ease;
+}
+.btn-parenting:hover { background: rgba(5,150,105,0.14); transform: translateY(-1px); }
+.btn-parenting.active { background: rgba(5,150,105,0.18); border-color: rgba(5,150,105,0.5); }
+.parenting-card {
+  background: rgba(5,150,105,0.05); border: 1px solid rgba(5,150,105,0.18);
+  border-radius: 14px; padding: 18px 20px; margin-top: 12px;
+  animation: tendency-fadein 0.3s ease-out;
+}
+.parenting-card-title { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; color: #059669; }
+.parenting-note { font-size: 11px; color: var(--dim); text-align: center; margin-bottom: 14px; }
+.parenting-factor-block { margin-bottom: 6px; }
+.parenting-factor-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.6); border: 1px solid rgba(59,158,222,0.1);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.parenting-factor-header:hover { background: rgba(255,255,255,0.8); }
+.parenting-factor-header.open { border-radius: 10px 10px 0 0; background: rgba(255,255,255,0.7); }
+.parenting-factor-name { font-size: 13px; font-weight: 700; }
+.parenting-factor-arrow { font-size: 11px; color: var(--dim); transition: transform 0.2s ease; }
+.parenting-factor-arrow.open { transform: rotate(180deg); }
+.parenting-factor-body { display: none; border: 1px solid rgba(59,158,222,0.1); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+.parenting-factor-body.open { display: block; }
+.parenting-direction { padding: 10px 14px; }
+.parenting-direction + .parenting-direction { border-top: 1px solid rgba(59,158,222,0.06); }
+.parenting-direction-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.parenting-direction.recommend .parenting-direction-title { color: #059669; }
+.parenting-direction.caution .parenting-direction-title { color: #b45309; }
+.parenting-tip-item { font-size: 11px; line-height: 1.7; color: var(--dim); padding: 2px 0 2px 14px; position: relative; }
+.parenting-tip-item::before { content: '•'; position: absolute; left: 2px; color: #94a3b8; }
+.parenting-factor-locked .parenting-factor-header {
+  cursor: default;
+  opacity: 0.45;
+}
+.parenting-factor-locked .parenting-factor-header:hover {
+  background: rgba(255,255,255,0.6);
+}
+.parenting-lock-icon {
+  font-size: 13px;
+}
+</style>
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://bigfive.jr-genius.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "子どもの性格診断",
+      "item": "https://bigfive.jr-genius.jp/kodomo.html"
+    }
+  ]
+}
+</script>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div style="position:relative;z-index:3;padding:12px 20px;text-align:center;background:#e0f2fe;color:#0f2d4a;font-size:14px;line-height:1.7">以前の診断結果を表示しています。新しく診断する方は <a href="kodomo.html">新しい子どもの性格診断へ</a>。</div>
+<div class="bg-light-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+<div class="bg-nebula"></div>
+
+<!-- ===== スタート画面 ===== -->
+<div class="screen active" id="startScreen">
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    トップに戻る
+  </a>
+  <span class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 子ども性格診断</span>
+  <h1 class="hero-title">お子さんの「個性」を<br><em>科学的に知ろう</em></h1>
+  <p class="hero-sub">
+    ビッグファイブ心理学をもとに、保護者が日常の様子を観察して回答する診断です。<br>
+    お子さんの強みと、楽しみやすい遊び・将来の夢に向けたヒントがわかります。
+  </p>
+
+  <div class="feature-list">
+    <div class="feature-item">
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      <div><strong>お子さんの強みがわかる</strong><br>5つの特性（好奇心・やり遂げる力・社交性・思いやり・感受性）のバランスを分析</div>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg></span>
+      <div><strong>楽しみやすい遊びのヒント</strong><br>その子の特性に合った遊びや活動をご提案。無理なく個性を伸ばせます</div>
+    </div>
+    <div class="feature-item">
+      <span class="fi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+      <div><strong>将来の夢とつなげる</strong><br>「警察官になりたい」「絵描きになりたい」…夢に向けてどんな経験が役立つか</div>
+    </div>
+  </div>
+
+  <button class="btn-main" onclick="showScreen('inputScreen')">はじめる →</button>
+  <p class="start-note">
+    ※ この診断は保護者の観察をもとにした参考情報です。お子さんの優劣や可能性を断定するものではありません。<br>
+    無料・登録不要・所要時間約5〜8分
+  </p>
+</div>
+
+<!-- ===== 入力画面 ===== -->
+<div class="screen" id="inputScreen">
+  <button class="back-link" onclick="showScreen('startScreen')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    戻る
+  </button>
+  <p class="input-title">お子さんの情報を入力</p>
+  <p class="input-sub">保護者の方がお子さんの日常の様子を思い浮かべながら回答してください。</p>
+
+  <div class="form-group">
+    <label class="form-label" for="childName">お子さんのニックネーム（呼び名）</label>
+    <input type="text" class="text-input" id="childName" placeholder="例：れん、ひなちゃん…" maxlength="20">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">性別</label>
+    <div class="btn-grid-2">
+      <button class="sel-btn" data-gender="F" id="genderF">
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>女の子
+      </button>
+      <button class="sel-btn" data-gender="M" id="genderM">
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>男の子
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">年齢グループ</label>
+    <div class="btn-grid-2b">
+      <button class="sel-btn" data-age="child46" id="age46">
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>4〜6歳<br><small style="font-size:11px;font-weight:400;">幼稚園・保育園</small>
+      </button>
+      <button class="sel-btn" data-age="child79" id="age79">
+        <span class="sel-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>7〜9歳<br><small style="font-size:11px;font-weight:400;">小学校低学年</small>
+      </button>
+    </div>
+    <p class="age-note">※ 年齢によって質問の内容が変わります（計30問）</p>
+  </div>
+
+  <button class="btn-main" id="startQuizBtn" disabled onclick="startQuiz()">診断スタート →</button>
+</div>
+
+<!-- ===== クイズ画面 ===== -->
+<div class="screen" id="quizScreen">
+  <div class="who-bar">
+    <span class="who-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+    <div>
+      <div class="who-name" id="whoName">—</div>
+      <div class="who-sub" id="whoSub">の日常の様子を思い浮かべて答えてください</div>
+    </div>
+  </div>
+  <div class="progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">1/30</span>
+  </div>
+  <div class="question-area">
+    <p class="q-num" id="qNum">Q1</p>
+    <p class="q-text" id="qText"></p>
+    <div class="answers" id="answers">
+      <button class="answer-btn" data-val="1">まったく<br>違う</button>
+      <button class="answer-btn" data-val="2">少し<br>違う</button>
+      <button class="answer-btn" data-val="3">どちらとも<br>言えない</button>
+      <button class="answer-btn" data-val="4">少し<br>そう</button>
+      <button class="answer-btn" data-val="5">とても<br>そう</button>
+    </div>
+    <button class="quiz-back-btn" id="quizBackBtn">← 前の問題に戻る</button>
+  </div>
+</div>
+
+<!-- ===== ローディング画面 ===== -->
+<div class="screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <p class="loading-text"><span class="loading-name" id="loadingName">—</span>の性格を分析中<span class="loading-dots"></span></p>
+  <p style="font-size:13px;color:var(--dim);">観察データから個性を導き出しています</p>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div class="screen" id="resultScreen">
+  <div class="result-header">
+    <span class="result-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 子ども性格診断 結果</span>
+    <p class="result-title"><em id="resultName">—</em>の性格プロフィール</p>
+    <p class="result-sub">ビッグファイブ理論による観察分析</p>
+  </div>
+
+  <div class="char-area" id="charArea" style="display:none;">
+    <img class="char-img" id="charImg" src="" alt="キャラクター">
+    <p class="char-label" id="charLabel"></p>
+  </div>
+
+  <!-- 特性バー -->
+  <div class="section-card" id="traitsCard">
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 5つの特性バランス</p>
+  </div>
+
+  <!-- 強み -->
+  <div class="section-card" id="strengthCard">
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> この子の強み</p>
+  </div>
+
+  <!-- 遊びのヒント -->
+  <div class="section-card" id="hintsCard">
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg> 楽しみやすい遊びのヒント</p>
+  </div>
+
+  <!-- 将来の夢 -->
+  <div class="section-card" id="careerCard">
+    <p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> こんな仕事をする人に似た面があるかも</p>
+    <p style="font-size:11px;color:rgba(15,45,74,0.4);margin-bottom:14px;line-height:1.6;">これは可能性の一例です。同じ職業でもさまざまな個性の方が活躍しています。</p>
+    <div class="career-grid" id="careerGrid"></div>
+  </div>
+
+  <!-- お子さんの傾向 -->
+  <div class="tendency-section">
+    <button class="btn-tendency" id="tendencyBtn">
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <span id="tendencyBtnText">お子さんの傾向を知る</span>
+    </button>
+    <div class="tendency-card" id="tendencyCard" style="display:none;">
+      <p class="tendency-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> お子さんの傾向</p>
+      <p class="tendency-card-note">傾向は「悪いところ」ではありません。個性を理解し、サポートするヒントです。</p>
+      <div id="tendencyContent"></div>
+      <button class="btn-parenting" id="parentingBtn" style="display:none;">
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+        <span>一番の関わりポイントを見る</span>
+      </button>
+      <div class="parenting-card" id="parentingCard" style="display:none;">
+        <p class="parenting-card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 親の関わり方ヒント</p>
+        <p class="parenting-note">親の関わりだけで性格を大きく変えられるわけではありません。お子さんの気質を尊重することが最も重要です。</p>
+        <div id="parentingContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 親への一言 -->
+  <div class="parent-note" id="parentNote"></div>
+
+  <p class="disclaimer">この診断は保護者の観察をもとにした参考情報です。お子さんの実際の性格と異なる場合があります。どの結果でもお子さんの可能性は無限大です。</p>
+
+  <button class="action-btn btn-save" id="saveBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 結果を保存</button>
+  <button class="action-btn btn-retry" onclick="resetAll()">別の子を診断する</button>
+  <a href="index.html" class="action-btn btn-retry" style="display:block;">トップに戻る</a>
+</div>
+
+<script src="image-resolver.js?v=20260927"></script>
+<script src="hidden_characters.js"></script>
+<script src="rarity.js?v=20260927"></script>
+<script src="album.js?v=20260927"></script>
+<script src="gacha-utils.js"></script>
+<script src="unlock.js?v=20260927"></script>
+<script src="unlock-banner.js"></script>
+<script>
+// ===== 質問データ =====
+const questionsFixed15 = [
+  { text: 'この子は、初めて会う人にも自分から話しかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が悲しんでいると一緒に心配します', factor:'A', dir:'+' },
+  { text: 'この子は、やると決めたことを最後までやり遂げます', factor:'C', dir:'+' },
+  { text: 'この子は、嫌なことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、「なぜ？」「どうして？」とよく質問します', factor:'O', dir:'+' },
+  { text: 'この子は、一人遊びや静かな環境を好みます', factor:'E', dir:'-' },
+  { text: 'この子は、おもちゃや道具を友達と分け合えます', factor:'A', dir:'+' },
+  { text: 'この子は、言われなくても使ったものを元の場所に戻します', factor:'C', dir:'+' },
+  { text: 'この子は、気持ちをすぐに切り替えて立ち直れます', factor:'N', dir:'-' },
+  { text: 'この子は、知らない遊びや活動に積極的に挑戦します', factor:'O', dir:'+' },
+  { text: 'この子は、グループの中で意見を積極的に言います', factor:'E', dir:'+' },
+  { text: 'この子は、意見が合わないとき相手に強く言いすぎてしまうことがあります', factor:'A', dir:'-' },
+  { text: 'この子は、決めたルールや約束をきちんと守ります', factor:'C', dir:'+' },
+  { text: 'この子は、予定が変わったり思い通りにならないと不安になりやすいです', factor:'N', dir:'+' },
+  { text: 'この子は、空想やお話をつくるのが好きです', factor:'O', dir:'+' },
+];
+const questionsChild46 = [
+  { text: 'この子は、砂場や外遊びで知らない子にも「一緒に遊ぼう」と声をかけます', factor:'E', dir:'+' },
+  { text: 'この子は、友達が転んだときにすぐ「大丈夫？」と声をかけます', factor:'A', dir:'+' },
+  { text: 'この子は、幼稚園・保育園のお片付けの時間に自分から片付けます', factor:'C', dir:'+' },
+  { text: 'この子は、思い通りにならないと気持ちをなかなか落ち着かせられません', factor:'N', dir:'+' },
+  { text: 'この子は、虫や花など身近な生き物をじっくり観察します', factor:'O', dir:'+' },
+  { text: 'この子は、友達と遊ぶとき自分からルールや遊び方を提案します', factor:'E', dir:'+' },
+  { text: 'この子は、友達がほしがっているおもちゃを譲ることができます', factor:'A', dir:'+' },
+  { text: 'この子は、先生に言われた手順をきちんと守ろうとします', factor:'C', dir:'+' },
+  { text: 'この子は、新しい場所や初めての行事の前に不安そうな様子を見せます', factor:'N', dir:'+' },
+  { text: 'この子は、絵本や紙芝居の続きを自分なりに考えて話してくれます', factor:'O', dir:'+' },
+  { text: 'この子は、にぎやかな場所やイベントが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、友達とけんかしても自分から謝ることが苦手です', factor:'A', dir:'-' },
+  { text: 'この子は、気が進まない作業は途中でやめてしまうことがあります', factor:'C', dir:'-' },
+  { text: 'この子は、親がそばにいなくても落ち着いて過ごせます', factor:'N', dir:'-' },
+  { text: 'この子は、いつも同じ遊びより、新しい遊び方を試したがります', factor:'O', dir:'+' },
+];
+const questionsChild79 = [
+  { text: 'この子は、休み時間にクラスの友達を誘って一緒に遊びます', factor:'E', dir:'+' },
+  { text: 'この子は、困っているクラスメートがいると自分から手伝おうとします', factor:'A', dir:'+' },
+  { text: 'この子は、宿題を毎日決まった時間に自分から取り組みます', factor:'C', dir:'+' },
+  { text: 'この子は、うまくいかないことがあると気持ちの切り替えに時間がかかります', factor:'N', dir:'+' },
+  { text: 'この子は、授業で「もっと知りたい」と思ったことを家でも調べます', factor:'O', dir:'+' },
+  { text: 'この子は、グループ学習のとき自分から発言したり仕切ったりします', factor:'E', dir:'+' },
+  { text: 'この子は、グループの意見に反対でも、相手を傷つけないよう言い方を考えます', factor:'A', dir:'+' },
+  { text: 'この子は、係の仕事や当番を忘れずにこなします', factor:'C', dir:'+' },
+  { text: 'この子は、友達とトラブルがあっても翌日には普通に接することができます', factor:'N', dir:'-' },
+  { text: 'この子は、本や授業で知ったことについて「もっと知りたい」とよく言います', factor:'O', dir:'+' },
+  { text: 'この子は、放課後は一人でいるより友達と過ごすほうが好きです', factor:'E', dir:'+' },
+  { text: 'この子は、自分さえよければいいという行動をとることがあります', factor:'A', dir:'-' },
+  { text: 'この子は、やりたくない課題でも途中で投げ出さずに続けます', factor:'C', dir:'+' },
+  { text: 'この子は、発表や人前に立つ場面でひどく緊張します', factor:'N', dir:'+' },
+  { text: 'この子は、決まったやり方より自分なりのやり方を試したがります', factor:'O', dir:'+' },
+];
+
+// ===== 特性情報 =====
+const traitInfo = {
+  E: { name: '外向性（人と関わる力）', desc: '社交的・積極的・にぎやか好き', color: '#f97316',
+       high: '友だちといると元気になる社交型。グループの中で自然とリードする場面も。',
+       mid:  '一人の時間も友だちとの時間も楽しめるバランス型。',
+       low:  '一人遊びや静かな時間が好き。じっくり深く考える力がある。' },
+  A: { name: '協調性（思いやりの力）', desc: '思いやり・共感・協力的', color: '#f472b6',
+       high: '友だちの気持ちによく気づく、思いやりいっぱいの優しい子。',
+       mid:  '自分の意見も持ちながら、人とも協力できるバランス型。',
+       low:  '自分の意志がはっきりしている。リーダー気質でこだわりが強い。' },
+  C: { name: '誠実性（やり遂げる力）', desc: '計画的・責任感・きちんとした', color: '#3b82f6',
+       high: '決めたことをきちんとやり遂げる、頼もしくてしっかり者。',
+       mid:  'ある程度の計画性はあるが、柔軟に対応することもできる。',
+       low:  '自由な発想で動く直感型。ひらめきと即興力が強み。' },
+  N: { name: '感受性（心の豊かさ）', desc: '豊かな感情・繊細・感じやすい', color: '#14b8a6',
+       high: '感じる力がとても豊か。喜びも感動も人より大きく味わえる繊細な子。',
+       mid:  '感情のバランスが取れている。状況に合わせて対処できる。',
+       low:  '気持ちの切り替えが得意。プレッシャーにも動じにくいたくましさがある。' },
+  O: { name: '開放性（好奇心の力）', desc: '好奇心旺盛・想像力・新しいこと好き', color: '#8b5cf6',
+       high: '「なんで？どうして？」が止まらない好奇心の塊。想像力と発想力が豊か。',
+       mid:  '新しいことも慣れたことも楽しめる実用的タイプ。',
+       low:  '慣れたやり方が好きで安心できる。落ち着いた環境で力を発揮する。' },
+};
+
+// ===== お子さんの傾向データ =====
+const tendencyDesc = {
+  O: {
+    1: { text: '慣れたやり方を好み、新しい環境や体験には慎重な面があります。ただし、この安定を好む姿勢は継続力と深い集中力の源です。', label: '新しいことへの慎重さ' },
+    2: { text: '好奇心と安定の両方を求めるため、どちらの方向にも踏み込みにくいことがあります。ただし、この柔軟さは状況に応じた対応力の源です。', label: '好奇心と安定の間' },
+    3: { text: '新しいことも慣れたことも楽しめるバランス型です。ただし、どちらも深く追求する前に興味が移ることもあります。', label: 'バランス型' },
+    4: { text: '好奇心が旺盛で、色々なことに興味を持ちます。興味が次々と移り、一つのことを深く続けるのが苦手なことも。ただし、この広い興味は多才さの源です。', label: '興味の移り変わり' },
+    5: { text: '「なぜ？」「どうして？」が止まらないほど好奇心旺盛です。現実的な制約を忘れて夢中になりすぎることも。ただし、この発想力はイノベーションの源です。', label: '好奇心の爆発' },
+  },
+  C: {
+    1: { text: '自由な発想で動く直感型です。約束や片付けを後回しにすることがあります。ただし、この自由さは柔軟な発想の源でもあります。', label: '自由奔放型' },
+    2: { text: '計画性が少し�足りず、段取りが乱れがちな面があります。ただし、この「適度な手抜き」は効率化の源でもあります。', label: '段組みのゆらぎ' },
+    3: { text: '計画と実行のバランスが取れています。ただし、状況によってどちらかに偏ることもあります。', label: 'バランス型' },
+    4: { text: 'しっかり者で責任感が強いです。完璧主義になりすぎて「できない」と焦ることも。ただし、このこだわりは品質保証の源です。', label: '完璧主義の傾き' },
+    5: { text: 'ルールや計画をとても大切にするタイプです。融通が利かなくなり、予想外のことでパニックになりがち。ただし、この規律力は周囲から信頼される源です。', label: 'ルールへの強いこだわり' },
+  },
+  E: {
+    1: { text: '一人遊びや静かな環境が好きで、自分の世界に没頭するタイプです。人前で自己表現するのが苦手なことも。ただし、この静かさは深い思考の源でもあります。', label: '一人遊びが好き' },
+    2: { text: '人といる時間も一人の時間も両方楽しめますが、大きなグループでは疲れやすい面も。ただし、この両面性はどんな環境でも適応できる力の源です。', label: '小さなグループ派' },
+    3: { text: '社交的な場と静かな時間のバランスが取れています。状況に合わせて切り替えられる柔軟性があります。', label: 'バランス型' },
+    4: { text: '友達といると元気になる社交型です。一人の時間が不足すると内面の整理ができなくなることも。ただし、この親和力は人間関係の源でもあります。', label: '人との時間が多い' },
+    5: { text: 'エネルギッシュで常に誰かといることを求めがちです。刺激を求めすぎて衝動的になることも。ただし、このエネルギーは周囲を巻き込む力の源です。', label: '刺激への強い欲求' },
+  },
+  A: {
+    1: { text: '自分の意志がはっきりしていて、妥協を嫌う面があります。仲間外れになりやすいことも。ただし、このはっきりした意志はリーダーシップの源でもあります。', label: '自分の意志が強い' },
+    2: { text: '自分の気持ちを優先しがちで、周囲とのすれ違いが生じることがあります。ただし、この自分軸は自立心の源でもあります。', label: '自分優先の傾き' },
+    3: { text: '自分の意見と協調のバランスが取れています。ただし、場面によってどちらかに寄せきれないこともあります。', label: 'バランス型' },
+    4: { text: '思いやりが深く、友達に合わせすぎて自分の気持ちを後回しにすることがあります。ただし、この優しさは周囲からの信頼の源でもあります。', label: '我慢の蓄積' },
+    5: { text: 'とても優しく、争いを極端に避ける傾向があります。不満を我慢しすぎて疲弊することも。ただし、この平和主義はグループの調和の源です。', label: '我慢のしすぎ' },
+  },
+  N: {
+    1: { text: '気持ちの切り替えが得意で、プレッシャーにも動じにくいたくましい面があります。ただし、周囲の細やかな気持ちに気づきにくいことも。', label: '感情への鈍感さ' },
+    2: { text: '感情の波が穏やかです。ただし、他人の強い感情に対して「そこまで？」と感じてしまうこともあります。', label: '感情の安定' },
+    3: { text: '感情のバランスが取れています。ただし、嬉しい時の喜びも悲しい時の悲しみも、周囲より少し小さく感じることもあります。', label: 'バランス型' },
+    4: { text: '感じる力が豊かで、少しのことで気分が沈んだり不安になったりすることがあります。ただし、この繊細さは深い共感力の源でもあります。', label: '不安の増大' },
+    5: { text: '感情の波が激しく、ストレスに対する耐性が低い面があります。気分の浮き沈みが激しいことも。ただし、この感受性は豊かな感情表現の源でもあります。', label: '感情の波' },
+  },
+};
+
+// ===== 親の関わり方データ =====
+const parentingTips = {
+  O: {
+    up: {
+      title: '好奇心を伸ばす関わり',
+      tips: [
+        '「なぜ？」「どうして？」に丁寧に応じる。すぐに答えを教えすぎず「一緒に調べよう」と付き添う',
+        '美術館、科学館、自然など多様な体験の場を用意し、何に興味を持つかは子供に決めさせる',
+        '毎日構造化されていない自由遊びの時間を確保する。子供が主導権を持つ場面を作る',
+        '「上手に描けたね」ではなく「どんな風に考えた？」「工夫したね」とプロセスを称賛する',
+        '幅広いジャンルの本に触れさせる。絵本の読み聞かせの際「このキャラクターはどう思ってるかな？」と問いかける',
+      ]
+    },
+    down: {
+      title: '好奇心が削がれる原因を防ぐ',
+      tips: [
+        '「こうやって」「それは違う」と過度に指示すると探索欲求が萎縮する。子供の自発的な活動を尊重する',
+        '点数や出来栄えだけを褒めると「失敗できない」プレッシャーが創造性を阻害する',
+        '「変なことしないで」と奇抜な発想を否定しない。自己表現を控えるようになる',
+        '習い事や塾でスケジュールが詰まると自由に探求する時間がなくなる',
+        '動画の受動的な消費に時間を奪われ、能動的な創造活動が減ることに注意',
+      ]
+    }
+  },
+  C: {
+    up: {
+      title: 'やり遂げる力を伸ばす関わり',
+      tips: [
+        '朝の支度、就寝前など毎日同じパターンのルーティンを確立する。子供と一緒に決める',
+        '年齢に応じたお手伝いを与える。「家族の一員としての貢献」として位置づける',
+        '「今日は絵本を3冊読む」など達成可能な小さな目標を子供自身に立てさせる',
+        '「まず〇〇して、それから〇〇」の順番指導で我慢する力を鍛える',
+        'やり抜いた時は「途中でやめずに最後までやったね」と粘り強さを具体的に認める',
+      ]
+    },
+    down: {
+      title: '自己管理力が削がれる原因を防ぐ',
+      tips: [
+        '片付けや宿題を親がすべてすると、子供は自己管理の機会を得られない',
+        '親の気分でルールが変わると「約束を守っても意味がない」と学習してしまう',
+        '細かく指示しすぎると自律的な計画性が育たない。年齢に応じて任せる',
+        '怒鳴る・体罰によるしつけは表面的な従順しか生まず、内発的な責任感は育たない',
+        '「100点じゃないとダメ」は先延ばしや回避行動を引き起こす',
+      ]
+    }
+  },
+  E: {
+    up: {
+      title: '社会性を伸ばす関わり',
+      tips: [
+        '公園や児童館など他の子供との自然な交流機会を作る。親が同席し安心できる環境からスタート',
+        '習い事やチームスポーツを子供の好みに合わせて選ばせる。無理な参加を強いない',
+        '「今日、友達とどう遊んだ？」「楽しかったことは？」と社会的経験を言語化する',
+        '「今日の夕飯は何がいい？」と意見を求め、自己主張を促す',
+        '内向的な子に「もっと友達を作りなさい」と圧力をかけない。内向性は正常な気質',
+      ]
+    },
+    down: {
+      title: '社会性が削がれる原因を防ぐ',
+      tips: [
+        '友達関係に過度に介入すると、子供の自主的な対人スキルが育たない',
+        '「もっと友達を作りなさい」という圧力は対人不安を逆に高める可能性がある',
+        '親自身が人付き合いを避けると子供もそのモデルを学習する',
+        '習い事や塾で忙しすぎると友達と自由に遊ぶ時間がなくなる',
+        '「泣くのはダメ」と感情表現を制限すると自己表現全体が萎縮する',
+      ]
+    }
+  },
+  A: {
+    up: {
+      title: '思いやりを伸ばす関わり',
+      tips: [
+        '「嬉しいね」「悲しいんだね」と子供の感情を言葉で表現する手助けをする',
+        '絵本の読み聞かせで「このキャラクターはどう思ってるかな？」と登場人物の気持ちを問いかける',
+        'きょうだい喧嘩や友達とのトラブルを即座に仲裁せず「どうすれば嬉しいかな？」と一緒に考える',
+        '子供の話を遮らずに聞く。「そうだったんだね」と受け止める',
+        'ペットや植物の世話で他者のニーズに気づく経験をさせる',
+      ]
+    },
+    down: {
+      title: '思いやりが削がれる原因を防ぐ',
+      tips: [
+        '「そんなことで泣かないの」と感情を否定すると他者の感情も理解できなくなる',
+        '親が他者を批判しているのを子供に見せるとそのモデルを学習する',
+        '体罰は恐怖で従わせるだけで思いやりや共感は育たない',
+        '「お兄ちゃんはできるのに」ときょうだい比較は嫉妬と競争心を生む',
+        '「シェアしたらお菓子をあげる」と物質的報酬で条件付けると内発的動機づけが損なわれる',
+      ]
+    }
+  },
+  N: {
+    up: {
+      title: '情緒の安定を高める関わり',
+      tips: [
+        '一貫した応答性で子供のサインに敏感に反応する。この「安全基地」が安定性の基盤',
+        'エモーションコーチング：感情に気づく→認める→受け止める→名前をつける→落ち着いてから解決を考える',
+        '「不安に思うよね」と感情をそのまま受け止める。「心配しなくていいよ」で否定しない',
+        '予定を事前に伝え、ルーティンを守る。予測可能性が高い環境は不安を減らす',
+        '「いい子にしたら買ってあげる」ではなく存在そのものを肯定する言葉をかける',
+      ]
+    },
+    down: {
+      title: '情緒が不安定になる原因を防ぐ',
+      tips: [
+        '親の応答が一貫しないと「自分は愛されない」という不安が内在化する',
+        '「危ないからダメ」と過度に制限すると「自分にはできない」という無力感が育つ',
+        '「泣いてなんかダメ」と感情を否定すると不安を蓄積する',
+        '成績や行儀の良さに応じて愛情を変えると「条件を満たさないと愛されない」という不安が根付く',
+        '親が常に不安がっていると子供も「世界は危険だ」と学習する',
+      ]
+    }
+  }
+};
+
+// ===== 遊びのヒント =====
+const activityHints = {
+  O: {
+    young: ['図鑑を1ページ開いて、その生き物になりきってみよう（なりきり遊び）', 'えのぐで見たことない色を作って自由に塗ってみよう', 'おうちのものでなんでも楽器にする音遊びをしてみよう'],
+    old:   ['好きなテーマで自分だけのマンガや絵本を作ろう', 'ScratchJrでオリジナルゲームを作ってみよう', '図書館でランダムに本を1冊選んで読む「くじ引き読書」']
+  },
+  C: {
+    young: ['シールを使った自分だけの「今日のスケジュール表」を作ろう', 'タイマーでお片付け競争：何秒でできるかな？', '積み木やブロックで決めた形を丁寧に作り直してみよう'],
+    old:   ['手帳や日記に「今日やったこと」をリストにしよう', 'レシピ通りにお菓子を作る（計量も自分でやってみよう）', 'レゴを説明書通りに正確に組み立てる達成感を味わおう']
+  },
+  E: {
+    young: ['友だちとかくれんぼ・鬼ごっこをたくさんしよう', 'おままごとでお店屋さんになって演じてみよう', 'みんなの前でダンスや歌を披露してみよう'],
+    old:   ['サッカーやドッジボールなどチームスポーツに挑戦しよう', '友だちとクイズ大会や謎解きゲームを企画してみよう', '劇ごっこで主役や司会に挑戦しよう']
+  },
+  A: {
+    young: ['ぬいぐるみを並べて「みんなの気持ち」を考える遊びをしよう', '家族に「今日は何が食べたい？」と聞いてごはんを決めよう', '友だちと砂場で大きなお城を作ろう（役割分担して）'],
+    old:   ['友だちに「ありがとうカード」を書いてみよう', 'グループで絵を描く共同制作をしよう', 'ボードゲームで「みんなが楽しいか」を考えながら遊ぼう']
+  },
+  N: {
+    young: ['好きな音楽を聴きながら、気持ちを絵に描いてみよう（うれしいは何色？）', 'お気に入りのぬいぐるみと静かな時間を過ごそう（安心できる場所づくり）', 'シャボン玉・水遊び・砂遊びなど感触が楽しい遊びをゆっくりと'],
+    old:   ['絵日記に「今日の気持ち」を書いてみよう（うまく書けなくてOK）', '好きな本や映画の感想を親と話し合おう（気持ちを言葉にする練習）', '軽いヨガや深呼吸など、体をゆっくり動かすリラックス遊び']
+  }
+};
+
+// ===== 職業データ =====
+const careers = [
+  { name: '医師・看護師', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>', factors: ['C','A'], msg: 'だれかのつらさに気づける心は、人を助ける大きな力になるよ' },
+  { name: '先生・保育士', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>', factors: ['E','A'], msg: '友だちに教えるのが得意なきみに向いてるかも' },
+  { name: 'エンジニア・プログラマー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>', factors: ['C','O'], msg: 'なんで？どうして？が止まらないきみが作るものはすごいかもよ' },
+  { name: '芸術家・デザイナー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M2 20c2-4 6-6 10-6 4 0 8 2 10 6"/></svg>', factors: ['O'], msg: 'きみだけの見え方で世界を形にしてみて' },
+  { name: '音楽家・ミュージシャン', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', factors: ['O','N'], msg: '豊かな感性が音楽で輝く力になるよ' },
+  { name: '研究者・科学者', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>', factors: ['O','C'], msg: 'ふしぎをとことん調べる力が、発見につながるよ' },
+  { name: 'スポーツ選手', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><path d="M2 12h20"/></svg>', factors: ['C','E'], msg: 'あきらめない気持ちと、仲間と動く力が武器だよ' },
+  { name: '料理人・シェフ', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>', factors: ['C','O'], msg: '丁寧さと創造性の両方が活きる仕事だよ' },
+  { name: '獣医・動物飼育員', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="4" cy="8" r="2"/><path d="M12 14c-4 0-8 2-8 6 0 1.5 1 2 2 2h12c1 0 2-.5 2-2 0-4-4-6-8-6z"/></svg>', factors: ['A','C'], msg: '動物への思いやりと責任感がぴったりの仕事だよ' },
+  { name: 'ゲームクリエイター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg>', factors: ['O','C'], msg: '発想力と作り込む粘り強さが活きるよ' },
+  { name: 'YouTuber・クリエイター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>', factors: ['E','O'], msg: '発信力と独自の視点がきみの武器だよ' },
+  { name: 'カウンセラー・相談員', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>', factors: ['A','N'], msg: '人の気持ちに寄り添える力がだれかの支えになるよ' },
+  { name: '建築家・デザイナー', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>', factors: ['O','C'], msg: '夢を実際に形にできる仕事だよ' },
+  { name: '警察官・消防士', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 3 20 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>', factors: ['C'], msg: '約束を守る力と責任感が、人を守る力になるよ' },
+  { name: '作家・ライター', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>', factors: ['O','N'], msg: '頭の中の物語を言葉にしてみよう' },
+  { name: '弁護士・社会活動家', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M4 8l4-5 4 5"/><path d="M16 8l4-5 4 5"/><path d="M2 8h6v4a3 3 0 01-6 0V8zM14 8h6v4a3 3 0 01-6 0V8z"/></svg>', factors: ['A','O'], msg: '「おかしい！」と感じる心が世の中を変える力になるよ' },
+];
+
+// ===== 状態 =====
+let childName = '', childGender = '', ageGroup = '';
+let activeQuestions = [], total = 30;
+let current = 0, ans = [];
+
+// ===== 画面制御 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== 入力画面 =====
+document.querySelectorAll('[data-gender]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-gender]').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    childGender = btn.dataset.gender;
+    checkInputReady();
+  });
+});
+document.querySelectorAll('[data-age]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-age]').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    ageGroup = btn.dataset.age;
+    checkInputReady();
+  });
+});
+document.getElementById('childName').addEventListener('input', checkInputReady);
+function checkInputReady() {
+  document.getElementById('startQuizBtn').disabled = !(document.getElementById('childName').value.trim() && childGender && ageGroup);
+}
+
+// ===== クイズ開始 =====
+function startQuiz() {
+  location.href = 'kodomo.html';
+  return;
+  childName = document.getElementById('childName').value.trim();
+  const ageQuestions = ageGroup === 'child46' ? questionsChild46 : questionsChild79;
+  activeQuestions = [...questionsFixed15, ...ageQuestions];
+  total = activeQuestions.length;
+  ans = new Array(total).fill(null);
+  current = 0;
+
+  document.getElementById('whoName').textContent = childName;
+  document.getElementById('loadingName').textContent = childName;
+  document.getElementById('resultName').textContent = childName;
+
+  render();
+  showScreen('quizScreen');
+}
+
+// ===== クイズ描画 =====
+function render(showSaved = true) {
+  const renderShowSaved = showSaved;
+  document.getElementById('progressFill').style.width = `${((current+1)/total)*100}%`;
+  document.getElementById('progressText').textContent = `${current+1}/${total}`;
+  document.getElementById('qNum').textContent = `Q${current+1}`;
+  document.getElementById('qText').textContent = activeQuestions[current].text;
+
+  const answersDiv = document.getElementById('answers');
+  answersDiv.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
+  if (renderShowSaved) {
+    const saved = ans[current];
+    if (saved !== null) {
+      const target = answersDiv.querySelector(`.answer-btn[data-val="${saved}"]`);
+      if (target) target.classList.add('selected');
+    }
+  }
+  document.getElementById('quizBackBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+}
+
+// ===== 回答 =====
+let timer = null;
+document.getElementById('answers').addEventListener('click', e => {
+  const btn = e.target.closest('.answer-btn');
+  if (!btn) return;
+  clearTimeout(timer);
+  ans[current] = parseInt(btn.dataset.val);
+  document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  timer = setTimeout(() => {
+    document.getElementById('answers').querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+    if (current < total - 1) { current++; render(false); }
+    else { showScreen('loadingScreen'); setTimeout(showResult, 2200); }
+  }, 300);
+});
+document.getElementById('quizBackBtn').addEventListener('click', () => {
+  clearTimeout(timer);
+  if (current > 0) { current--; render(); }
+});
+
+// ===== スコア計算 =====
+
+/* 1問あたりの平均から1・3・5の3段階に丸める（2026-08-21・quiz.html と同じ方式に統一）
+ * 境目 2.5/3.5 は、5段階に切ってから marume243 の丸め規則(1,2→1／3→3／4,5→5)を
+ * 当てるのと完全に同じ位置。
+ * ⚠️旧版は 1問あたり 1.67/3.33（0点を起点に3等分）だった。最低点は0ではなく1なので、
+ *   ほぼ全問を最低評価にしないと「1」にならない状態だった。6問なら「1」の上限が10→14に変わる。
+ */
+function toLevel3(sum, n) {
+  const v = sum / n;
+  return v < 2.5 ? 1 : v < 3.5 ? 3 : 5;
+}
+
+function calcScores() {
+  const fm = { E:[], A:[], C:[], N:[], O:[] };
+  activeQuestions.forEach((q, i) => {
+    const raw = ans[i] || 3;
+    const val = q.dir === '-' ? (6 - raw) : raw;
+    fm[q.factor].push(val);
+  });
+  const sc = {};
+  for (const [f, vals] of Object.entries(fm)) {
+    sc[f] = toLevel3(vals.reduce((a, b) => a + b, 0), vals.length);
+  }
+  return sc;
+}
+
+// ===== 結果表示 =====
+function showResult(scOverride) {
+  const sc = scOverride || calcScores();
+
+  // キャラクター画像
+  const charArea = document.getElementById('charArea');
+  const charImg = document.getElementById('charImg');
+  function roundImg(s) { return s <= 2 ? 1 : s >= 4 ? 5 : 3; }
+  const imgCode = `${roundImg(sc.O)}${roundImg(sc.C)}${roundImg(sc.E)}${roundImg(sc.A)}${roundImg(sc.N)}`;
+  charImg.src = `images/characters/marume243/${childGender}/${imgCode}.webp`;
+  charImg.onerror = () => { charArea.style.display = 'none'; };
+  charImg.onload = () => { charArea.style.display = 'flex'; };
+  document.getElementById('charLabel').textContent = `${childName}の推定キャラクター`;
+
+  // 特性バー
+  const traitsCard = document.getElementById('traitsCard');
+  traitsCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 5つの特性バランス</p>';
+  ['O','C','E','A','N'].forEach(f => {
+    const s = sc[f], info = traitInfo[f];
+    const pct = s === 1 ? 20 : s === 3 ? 55 : 88;
+    const lv = s === 5 ? '高め' : s === 3 ? '普通' : '低め';
+    const lvClass = s === 5 ? 'lv-high' : s === 3 ? 'lv-mid' : 'lv-low';
+    traitsCard.innerHTML += `
+      <div class="trait-row">
+        <div class="trait-header">
+          <span class="trait-label">${info.name}<span class="trait-desc">${info.desc}</span></span>
+          <span class="trait-level ${lvClass}">${lv}</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:0%;background:${info.color};" data-w="${pct}%"></div></div>
+      </div>`;
+  });
+
+  // 強み（スコア5の因子 or スコア1の因子を強みとして表示）
+  const strengthCard = document.getElementById('strengthCard');
+  strengthCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> この子の強み</p>';
+  const topFactors = Object.entries(sc).sort((a, b) => b[1] - a[1]).slice(0, 2);
+  topFactors.forEach(([f, s]) => {
+    const info = traitInfo[f];
+    const desc = s === 5 ? info.high : s === 3 ? info.mid : info.low;
+    strengthCard.innerHTML += `
+      <div class="strength-box">
+        <div class="strength-name">${info.name}</div>
+        <div class="strength-text">${desc}</div>
+      </div>`;
+  });
+
+  // 遊びのヒント（スコア最高の因子）
+  const hintsCard = document.getElementById('hintsCard');
+  hintsCard.innerHTML = '<p class="section-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="10" r="1"/><circle cx="18" cy="13" r="1"/></svg> 楽しみやすい遊びのヒント</p>';
+  const topFactor = topFactors[0][0];
+  const ageKey = ageGroup === 'child46' ? 'young' : 'old';
+  const hints = activityHints[topFactor][ageKey];
+  hints.forEach(h => {
+    hintsCard.innerHTML += `<div class="hint-item"><span class="hint-dot"></span><span>${h}</span></div>`;
+  });
+  // 2番目の因子のヒントも1つ追加
+  if (topFactors[1]) {
+    const hint2 = activityHints[topFactors[1][0]][ageKey][0];
+    hintsCard.innerHTML += `<div class="hint-item"><span class="hint-dot"></span><span>${hint2}</span></div>`;
+  }
+
+  // 職業マッチング（トップ因子と重なるもの上位3件）
+  const topFactorNames = topFactors.map(([f]) => f);
+  const matched = careers
+    .map(c => ({ ...c, score: c.factors.filter(f => topFactorNames.includes(f)).length }))
+    .filter(c => c.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+  const careerGrid = document.getElementById('careerGrid');
+  careerGrid.innerHTML = '';
+  matched.forEach(c => {
+    careerGrid.innerHTML += `
+      <div class="career-card">
+        <span class="career-icon">${c.icon}</span>
+        <div>
+          <div class="career-name">${c.name}</div>
+          <div class="career-msg">${c.msg}</div>
+        </div>
+      </div>`;
+  });
+
+  // 親への一言
+  const parentNote = document.getElementById('parentNote');
+  const topF = topFactors[0][0];
+  const safeChildName = String(childName).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const parentMessages = {
+    O: `<strong>${safeChildName}は好奇心旺盛なタイプです。</strong>「なぜ？」という問いを否定せず、一緒に調べてみてください。正解より探求のプロセスを楽しむ姿勢が、この子の力を最大限に引き出します。`,
+    C: `<strong>${safeChildName}はしっかり者のタイプです。</strong>決めたことを守る力がある一方、完璧主義になりやすいことも。「80点でも十分すごい！」という声かけで、動き出しやすくなります。`,
+    E: `<strong>${safeChildName}はエネルギッシュな社交型です。</strong>人と関わることで力を発揮します。発表や友だちとの遊びなど、自己表現できる場をたくさん作ってあげましょう。`,
+    A: `<strong>${safeChildName}は思いやりの深いタイプです。</strong>人に合わせすぎて自分の気持ちを後回しにすることも。「きみはどうしたい？」とこまめに聞いてあげることが大切です。`,
+    N: `<strong>${safeChildName}は感受性が豊かなタイプです。</strong>感じる力の大きさは才能です。気持ちを「そうなんだね」とまず受け止めてあげることで、安心して自分を表現できるようになります。`,
+  };
+  parentNote.innerHTML = parentMessages[topF];
+
+  // ===== お子さんの傾向カード =====
+  (function() {
+    const btn = document.getElementById('tendencyBtn');
+    const card = document.getElementById('tendencyCard');
+    const content = document.getElementById('tendencyContent');
+    const btnText = document.getElementById('tendencyBtnText');
+    const parentingBtn = document.getElementById('parentingBtn');
+    const parentingCard = document.getElementById('parentingCard');
+    let isOpen = false;
+
+    const factors = ['O', 'C', 'E', 'A', 'N'];
+    let html = '';
+    factors.forEach(f => {
+      const s = sc[f];
+      const info = traitInfo[f];
+      const t = tendencyDesc[f][s];
+      html += `
+        <div class="tendency-row">
+          <div class="tendency-row-header">
+            <span class="tendency-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="tendency-label">${t.label}</span>
+          </div>
+          <p class="tendency-text">${t.text}</p>
+        </div>`;
+    });
+    content.innerHTML = html;
+
+    // 親の関わり方コンテンツ生成
+    // 一番改善が必要な因子を特定
+    // O/C/E/A: 低いほど改善が必要（3 - score）、N: 高いほど改善が必要（score - 3）
+    let weakestFactor = factors[0];
+    let maxNeed = -Infinity;
+    factors.forEach(f => {
+      const need = f === 'N' ? (sc[f] - 3) : (3 - sc[f]);
+      if (need > maxNeed) {
+        maxNeed = need;
+        weakestFactor = f;
+      }
+    });
+
+    let pHtml = '';
+    factors.forEach(f => {
+      const score = sc[f];
+      const info = traitInfo[f];
+      const tips = parentingTips[f];
+      const isLow = score <= 2;
+      const isHigh = score >= 4;
+      const isWeakest = f === weakestFactor;
+
+      if (isWeakest) {
+        pHtml += `
+        <div class="parenting-factor-block">
+          <div class="parenting-factor-header open" data-factor="${f}">
+            <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="parenting-factor-arrow open">▼</span>
+          </div>
+          <div class="parenting-factor-body open" id="parentingBody_${f}">
+            <div class="parenting-direction ${isLow ? 'recommend' : ''}">
+              <p class="parenting-direction-title">${isLow ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:2px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> ' : ''}${tips.up.title}</p>
+              ${tips.up.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
+            </div>
+            <div class="parenting-direction ${isHigh ? 'recommend' : ''}">
+              <p class="parenting-direction-title">${isHigh ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ' : ''}${tips.down.title}</p>
+              ${tips.down.tips.map(t => `<p class="parenting-tip-item">${t}</p>`).join('')}
+            </div>
+          </div>
+        </div>`;
+      } else {
+        pHtml += `
+        <div class="parenting-factor-block parenting-factor-locked">
+          <div class="parenting-factor-header">
+            <span class="parenting-factor-name" style="color:${info.color}">${info.name}</span>
+            <span class="parenting-lock-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+          </div>
+        </div>`;
+      }
+    });
+    document.getElementById('parentingContent').innerHTML = pHtml;
+
+    btn.addEventListener('click', () => {
+      isOpen = !isOpen;
+      card.style.display = isOpen ? 'block' : 'none';
+      btn.classList.toggle('active', isOpen);
+      btnText.textContent = isOpen ? '傾向を隠す' : 'お子さんの傾向を知る';
+      if (isOpen) {
+        parentingBtn.style.display = 'inline-flex';
+      }
+      if (!isOpen) {
+        parentingBtn.style.display = 'none';
+        parentingCard.style.display = 'none';
+      }
+    });
+
+    let isParentingOpen = false;
+    parentingBtn.addEventListener('click', () => {
+      isParentingOpen = !isParentingOpen;
+      parentingCard.style.display = isParentingOpen ? 'block' : 'none';
+      parentingBtn.classList.toggle('active', isParentingOpen);
+    });
+
+    const weakestPHeader = document.querySelector(`.parenting-factor-header[data-factor="${weakestFactor}"]`);
+    if (weakestPHeader) {
+      weakestPHeader.addEventListener('click', () => {
+        const body = document.getElementById('parentingBody_' + weakestFactor);
+        const arrow = weakestPHeader.querySelector('.parenting-factor-arrow');
+        const open = body.classList.contains('open');
+        body.classList.toggle('open', !open);
+        weakestPHeader.classList.toggle('open', !open);
+        arrow.classList.toggle('open', !open);
+      });
+    }
+  })();
+
+  // 保存用データ
+  window.currentChildResult = {
+    name: childName,
+    code: `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`,
+    scores: sc,
+    relation: ageGroup,
+    gender: childGender,
+    date: new Date().toISOString(),
+    version: '30',
+    rarity: 'common'
+  };
+  if (!scOverride) {
+    saveChildResultToList(window.currentChildResult);
+    addChildResultToAlbumAndUnlock(window.currentChildResult);
+    // 初回だけコイン1枚（共有リンクから開いた人＝scOverrideありには配らない）
+    if (window.GachaUtils) GachaUtils.grantDiagnosisBonus('kodomo');
+  }
+  checkAlreadySaved();
+
+  showScreen('resultScreen');
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.w);
+  }, 100);
+}
+
+// ===== 保存 =====
+const STORAGE_KEY = 'bigfive_other_results';
+const MAX_OTHERS_BASE = 10;
+
+// 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
+function safeLoad(key, fallback) {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    var v = JSON.parse(raw);
+    return (v == null) ? fallback : v;
+  } catch (e) {
+    try { if (raw != null) localStorage.setItem('broken__' + key, raw); } catch (e2) {}
+    return fallback;
+  }
+}
+
+// 開放状態に応じた上限を取得
+function getMaxOthers() {
+  return Math.max(MAX_OTHERS_BASE, typeof getOtherLimit === 'function' ? getOtherLimit() : 0);
+}
+
+function showOtherDeleteToast(maxOthers) {
+  var toast = document.createElement('div');
+  toast.textContent = '保存上限（' + maxOthers + '件）のため、一番古いあの人の結果を1件削除しました';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#f9fafb;padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);max-width:90%;text-align:center;';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3500);
+}
+
+function saveChildResultToList(result) {
+  if (!result) return false;
+
+  let others = safeLoad(STORAGE_KEY, []);
+  if (!Array.isArray(others)) others = [];
+  const isDuplicate = others.some(r => r.name === result.name && r.code === result.code);
+  if (isDuplicate) return false;
+
+  others.unshift(result);
+  const maxOthers = getMaxOthers();
+  if (others.length > maxOthers) {
+    others.pop();
+    showOtherDeleteToast(maxOthers);
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(others));
+  return true;
+}
+
+function addChildResultToAlbumAndUnlock(result) {
+  if (!result || !window.AlbumUtils) return;
+
+  const oldAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const version = result.version || '30';
+  const rarity = AlbumUtils.computeRarityForAlbum
+    ? AlbumUtils.computeRarityForAlbum(result.code, version, result.gender)
+    : (result.rarity || 'common');
+
+  const added = AlbumUtils.addToAlbum({
+    code: result.code,
+    gender: result.gender,
+    typeName: result.code,
+    version,
+    rarity,
+    isHidden: false,
+    hiddenId: null,
+    date: result.date,
+    source: 'child'
+  });
+
+  if (!added || typeof getNewUnlocks !== 'function' || typeof showUnlockBanners !== 'function') return;
+
+  const newAlbumCount = (typeof getCardCount === 'function')
+    ? getCardCount()
+    : AlbumUtils.getAlbumCards().length;
+  const unlocked = getNewUnlocks(oldAlbumCount, newAlbumCount);
+  if (unlocked.length > 0) {
+    setTimeout(() => showUnlockBanners(unlocked), 800);
+  }
+}
+
+function checkAlreadySaved() {
+  if (!window.currentChildResult) return;
+  let others = safeLoad(STORAGE_KEY, []);
+  if (!Array.isArray(others)) others = [];
+  const isSaved = others.some(r => r.name === window.currentChildResult.name && r.code === window.currentChildResult.code);
+  const btn = document.getElementById('saveBtn');
+  if (isSaved) { btn.textContent = '✓ 保存済み'; btn.className = 'action-btn btn-saved'; }
+}
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  if (!window.currentChildResult) return;
+  try {
+    const others = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const r = window.currentChildResult;
+    const isDuplicate = others.some(o => o.name === r.name && o.code === r.code);
+    if (!isDuplicate) {
+      others.unshift(r);
+      const maxOthers = getMaxOthers();
+      if (others.length > maxOthers) {
+        others.pop();
+        showOtherDeleteToast(maxOthers);
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(others));
+    }
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '✓ 保存しました！';
+    btn.className = 'action-btn btn-saved';
+    setTimeout(() => { btn.textContent = '✓ 保存済み'; }, 2000);
+  } catch(e) { console.error(e); }
+});
+
+// ===== リセット =====
+function resetAll() {
+  childName = ''; childGender = ''; ageGroup = '';
+  document.getElementById('childName').value = '';
+  document.querySelectorAll('[data-gender],[data-age]').forEach(b => b.classList.remove('selected'));
+  document.getElementById('startQuizBtn').disabled = true;
+  window.currentChildResult = null;
+  showScreen('inputScreen');
+}
+
+// ===== マイページからの直接表示（URLパラメータ） =====
+(function() {
+  const params = new URLSearchParams(location.search);
+  const typeCode = params.get('type');
+  if (!typeCode || typeCode.length !== 5) return;
+
+  childName = params.get('name') || 'お子さん';
+  childGender = params.get('gender') || 'F';
+  ageGroup = params.get('rel') || 'child46';
+
+  document.getElementById('resultName').textContent = childName;
+  document.getElementById('whoName').textContent = childName;
+  document.getElementById('loadingName').textContent = childName;
+
+  const sc = {
+    O: parseInt(typeCode[0]),
+    C: parseInt(typeCode[1]),
+    E: parseInt(typeCode[2]),
+    A: parseInt(typeCode[3]),
+    N: parseInt(typeCode[4])
+  };
+
+  showResult(sc);
+})();
+
+</script>
+<section class="test-about">
+  <h2>子どもの性格診断とは</h2>
+  <p>この診断は、4〜9歳のお子さんの性格を、<strong>保護者の観察</strong>をもとにビッグファイブの5因子で眺めるものです。「子どもにも大人と同じ性格の5因子はあるのか」を調べた代表格が、心理学者オリヴァー・ジョンらの1994年の研究です。この研究では思春期の男の子たちのデータから、大人のビッグファイブに対応する<strong>「リトル・ファイブ（Little Five）」</strong>と呼ばれる構造が子どもにも見られることが示されました（John et al., 1994）。</p>
+  <div class="about-box">
+    <p><strong>3行でいうと</strong></p>
+    <ul>
+      <li>子どもにも、大人と同じ<strong>5つの性格因子</strong>が観察できることが分かっている</li>
+      <li>性格には<strong>良い悪いはなく</strong>、どのタイプにも強みと課題の両方がある</li>
+      <li>今の結果は成長とともに<strong>変わっていくもの</strong>。「決定」ではなく「今の様子の記録」として読む</li>
+    </ul>
+  </div>
+
+  <h3>この診断の答え方</h3>
+  <p>設問は全30問で、うち15問は全員共通、残る15問は年齢別（4〜6歳／7〜9歳）に分かれています。お子さん本人が答えるのではなく、<strong>保護者がお子さんのふだんの様子を思い浮かべて答える</strong>しくみです。ただし、保護者の見方は「見ている場面」によって偏りがあります。パパとママで見解が違うことも珍しくなく、それ自体が「お子さんの違う面を見ている」サインでもあります。家の中・外・友達と一緒のとき・初めての場所など、いくつかの場面を思い浮かべながら答えると、より実態に近くなります。</p>
+
+  <h3>性格は成長とともに変わる</h3>
+  <p>大人とちがって、子どもの性格はまだ発達の途中です。ソトら（2011）の大規模な調査（10歳から65歳までが対象）では、<strong>誠実性（まじめさ）と協調性（やさしさ）は、年齢とともに平均として高まっていく</strong>傾向が報告されています。ただし小学校高学年から思春期にかけては、いったん逆向きに動く時期もあるとされています（Soto et al., 2011）。また、シャイナーとカスピの総説（2003）では、子ども期の性格にはある程度の連続性がある一方で、成長や環境によって変わりうると整理されています（Shiner &amp; Caspi, 2003）。今日の結果に一喜一憂する必要はなく、「この時期のスナップ写真」くらいの気持ちで見てください。</p>
+
+  <h3>ビッグファイブとの関係</h3>
+  <p>この診断は、大人のビッグファイブ診断の子ども版にあたります。子どもでは、同じ因子が次のような姿で現れます。</p>
+  <div class="table-wrap"><table>
+    <tr><th>因子</th><th>子どもでの現れ方の例</th></tr>
+    <tr><td>開放性</td><td>想像遊びが好き、新しいものに興味を示す、質問が多い</td></tr>
+    <tr><td>誠実性</td><td>片付けや約束を覚えている、最後までやり遂げる</td></tr>
+    <tr><td>外向性</td><td>人に話しかけるのが好き、外で元気に動き回る</td></tr>
+    <tr><td>協調性</td><td>友達に譲れる、けんかしても仲直りが早い</td></tr>
+    <tr><td>神経症傾向</td><td>不安が強い、泣きぐずりやかんしゃくが続きやすい、刺激に反応しやすい</td></tr>
+  </table></div>
+  <p>もちろん、これはあくまで例えです。同じ因子でも、お子さんによって現れ方は大きく違います。数字の高低は、<strong>優れている・劣っているを表すものではありません</strong>。</p>
+
+  <h3>よくある誤解</h3>
+  <ul>
+    <li><strong>「この子の性格が決まった」</strong>——ではありません。子どもの性格は発達の途中で、環境とかかわりの中で変わっていきます。今の結果は、成長の記録の1ページです。</li>
+    <li><strong>「この因子が低いのが悪い」</strong>——ではありません。性格に良い悪いはなく、どのタイプにも強みと課題があります。活発さが控えめな子には、じっくり観察する強みがあります。</li>
+    <li><strong>「診断結果でレッテルを貼る」</strong>——ことはおやめください。「うちの子は○○だから」と決めつけると、子どもが自分でいられる幅を狭めかねません。接し方のヒントとして使ってください。</li>
+  </ul>
+
+  <h3>この診断について</h3>
+  <ul>
+    <li>全30問（共通15問＋年齢別15問）・所要5〜8分・<strong>無料・登録不要</strong></li>
+    <li>回答は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>お子さんの成長にあわせて<strong>何度か受けて変化を眺める</strong>使い方もできます</li>
+  </ul>
+
+  <h3>出典</h3>
+  <ul class="refs">
+    <li>John, O. P., Caspi, A., Robins, R. W., Moffitt, T. E., &amp; Stouthamer-Loeber, M. (1994). The "Little Five": Exploring the nomological network of the Five-Factor Model of personality in adolescent boys. <em>Child Development, 65</em>(1), 160–178. <a href="https://doi.org/10.2307/1131373" rel="nofollow">doi:10.2307/1131373</a></li>
+    <li>Soto, C. J., John, O. P., Gosling, S. D., &amp; Potter, J. (2011). Age differences in personality traits from 10 to 65: Big Five domains and facets in a large cross-sectional sample. <em>Journal of Personality and Social Psychology, 100</em>(2), 330–348. <a href="https://doi.org/10.1037/a0021717" rel="nofollow">doi:10.1037/a0021717</a></li>
+    <li>Shiner, R. L., &amp; Caspi, A. (2003). Personality differences in childhood and adolescence: Measurement, development, and consequences. <em>Journal of Child Psychology and Psychiatry, 44</em>(1), 2–32. <a href="https://doi.org/10.1111/1469-7610.00101" rel="nofollow">doi:10.1111/1469-7610.00101</a></li>
+  </ul>
+
+  <h3>関連する診断</h3>
+  <ul class="related">
+    <li><a href="quiz.html">ビッグファイブ性格診断</a></li>
+    <li><a href="hsp.html">HSP診断</a></li>
+    <li><a href="other_quiz.html">あの人の性格を分析する</a></li>
+    <li><a href="diagnoses.html">診断の一覧を見る</a></li>
+  </ul>
+
+  <p class="updated">最終更新：2026年8月17日</p>
+</section>
+<script src="nav.js"></script>
+</body>
+</html>
