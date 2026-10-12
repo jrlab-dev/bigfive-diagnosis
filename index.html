@@ -641,6 +641,9 @@
     .stat-item::after { top: 15%; bottom: 15% }
     .hero-animated { gap: 20px; padding: 50px 16px 32px; min-height: 480px; }
     .logo-stage { height: clamp(140px, 32vw, 240px); margin: 0 auto; }
+    /* スマホはロゴを最初から見せる（速度テストのLCP対策・2026-10-12）。糸の演出はロゴの上の飾りとして動く */
+    .logo-stage { opacity: 1; transform: none; filter: none; }
+    #heroLogo, .logo-part { opacity: 1; clip-path: none; }
     .top-header {
       justify-content: center;
       gap: 14px;
@@ -799,11 +802,11 @@
   <section class="hero-animated" id="heroAnimated">
   <canvas id="heroCanvas"></canvas>
     <div id="logoStage" class="logo-stage" aria-label="ビッグファイブ診断のロゴ">
-      <img class="logo-part" data-trait="E" src="images/logo-part-E.webp" alt="">
-      <img class="logo-part" data-trait="O" src="images/logo-part-O.webp" alt="">
-      <img class="logo-part" data-trait="A" src="images/logo-part-A.webp" alt="">
-      <img class="logo-part" data-trait="C" src="images/logo-part-C.webp" alt="">
-      <img class="logo-part" data-trait="N" src="images/logo-part-N.webp" alt="">
+      <img class="logo-part" data-trait="E" fetchpriority="high" src="images/logo-part-E.webp" alt="">
+      <img class="logo-part" data-trait="O" fetchpriority="high" src="images/logo-part-O.webp" alt="">
+      <img class="logo-part" data-trait="A" fetchpriority="high" src="images/logo-part-A.webp" alt="">
+      <img class="logo-part" data-trait="C" fetchpriority="high" src="images/logo-part-C.webp" alt="">
+      <img class="logo-part" data-trait="N" fetchpriority="high" src="images/logo-part-N.webp" alt="">
       <img id="heroLogo" src="images/bigfive-diagnosis-logo.webp" alt="ビッグファイブ診断のロゴ">
     </div>
     <h1 class="hero-subtitle">ビッグファイブ診断</h1>
@@ -1367,6 +1370,7 @@
   const MAX_RETRACT    = TRAITS[TRAITS.length-1].retractDelay + RETRACT_FRAMES;
   const isMobile = window.innerWidth < 600;
   const STEPS = isMobile ? 60 : 100;
+  const LOGO_STATIC = isMobile;          // スマホはロゴを動かさない（CSSで最初から表示）
   const ANIM_SPEED = isMobile ? 3 : 1;   // スマホは演出を3倍速に（2026-10-12に2倍速から変更）。PCは等速。
 
   function hexToRgba(hex, a) {
@@ -1505,12 +1509,14 @@
     const isLight = document.body.classList.contains('theme-light');
     const initBright = isLight ? 2.6 : 1.8;
 
+    if (!LOGO_STATIC) {
     logoStage.style.transition='none';
     logoStage.style.transform='scale(1)';
     logoStage.style.opacity='0';
     logoStage.style.filter=`blur(24px) brightness(${initBright})`;
     logo.style.opacity='0';
     logoParts.forEach(part => { part.style.opacity='0'; part.style.clipPath='inset(0 100% 0 0)'; });
+    }
 
     void logoStage.getBoundingClientRect();
 
@@ -1524,7 +1530,7 @@
       t.color, t.delay, t.retractDelay, i, !!t.converge
     ));
 
-    logoStage.style.transform='scale(0.78)';
+    if (!LOGO_STATIC) logoStage.style.transform='scale(0.78)';
     frame=0; phase='grow'; holdCount=0; retractFrame=0;
     timeAcc=0; lastStamp=null; phaseTime=0; logoReveal=0;
     blurVal=24; brightVal=initBright;
@@ -1565,10 +1571,12 @@
     blurVal   += (targetBlur   - blurVal)   * smooth(0.045);
     brightVal += (targetBright - brightVal) * smooth(0.045);
 
+    if (!LOGO_STATIC) {
     logoStage.style.opacity   = logoReveal;
     logoStage.style.transform = `scale(${0.78+0.22*logoReveal})`;
     logoStage.style.filter    = `blur(${blurVal.toFixed(1)}px) brightness(${brightVal.toFixed(2)})`;
     updateLogoParts();
+    }
 
     const FPS = 60 * ANIM_SPEED;
     if (phase==='grow') {
@@ -1590,6 +1598,7 @@
         phase='done';
         ctx.clearRect(0,0,canvas.width,canvas.height);
         canvas.style.display='none';
+        if (!LOGO_STATIC) {
         logoStage.style.transition='transform 0.5s ease, opacity 0.3s ease, filter 0.4s ease';
         logoStage.style.opacity='1';
         logoStage.style.filter='blur(0px) brightness(1)';
@@ -1597,6 +1606,7 @@
         logo.style.opacity='1';
         logoParts.forEach(part => { part.style.opacity='1'; part.style.clipPath='inset(0 0 0 0)'; });
         setTimeout(()=>{ logoStage.style.transform='scale(1)'; },500);
+        }
 
         // テキスト表示
         setTimeout(()=>{
