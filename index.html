@@ -1346,7 +1346,7 @@
     { text: '性格診断', cls: 'reveal-line--main', tag: 'h1' },
     { text: '本当の自分を知る', cls: 'reveal-line--sub', tag: 'div' },
   ];
-  const CHAR_DELAY_MS = 100;
+  const CHAR_DELAY_MS = (window.innerWidth < 600) ? 60 : 100;   // スマホは文字の出る間隔も短く
   const LINE_GAP_MS = 200;
   const CHAR_GAP_AFTER_SHINE = 400;
 
@@ -1367,7 +1367,7 @@
   const MAX_RETRACT    = TRAITS[TRAITS.length-1].retractDelay + RETRACT_FRAMES;
   const isMobile = window.innerWidth < 600;
   const STEPS = isMobile ? 60 : 100;
-  const ANIM_SPEED = isMobile ? 2 : 1;   // スマホは演出を2倍速（約半分の時間）に。PCは等速。
+  const ANIM_SPEED = isMobile ? 3 : 1;   // スマホは演出を3倍速に（2026-10-12に2倍速から変更）。PCは等速。
 
   function hexToRgba(hex, a) {
     const r=parseInt(hex.slice(1,3),16);
@@ -1602,7 +1602,7 @@
         setTimeout(()=>{
           allChars.forEach(c => c.el.classList.remove('show'));
           allChars.forEach(c => { setTimeout(()=>{ c.el.classList.add('show'); }, c.delay); });
-        }, 900 + CHAR_GAP_AFTER_SHINE);
+        }, isMobile ? 300 : 900 + CHAR_GAP_AFTER_SHINE);   // スマホはロゴとほぼ同時に一言を出す
 
         // ボタン光演出
         setTimeout(()=>{
