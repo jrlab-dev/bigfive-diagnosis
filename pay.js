@@ -128,9 +128,21 @@
       });
   }
 
+  // 購入の復元（別の端末・データが消えたとき）。支払いに使ったメールアドレス＋カードの下4けた
+  function restore(email, last4) {
+    var id = deviceId();
+    return post('restore', { email: email, last4: last4, device_id: id }).then(function (r) {
+      if (r && r.ok && r.token && r.session_id) {
+        saveRecord({ v: 1, sid: r.session_id, tok: r.token, dev: id, at: r.paid_at, until: r.refundable_until });
+        ga('pay_restored');
+      }
+      return r;
+    });
+  }
+
   window.BigFivePay = {
     returnPath: function () { try { var v = localStorage.getItem('pay_return_path') || ''; return /^\/[A-Za-z0-9._~\-\/?=&%+]*$/.test(v) && v.indexOf('//') < 0 ? v : ''; } catch (e) { return ''; } },
     deviceId: deviceId, record: record, isPaid: isPaid, canRefund: canRefund,
-    startCheckout: startCheckout, verify: verify, refreshStatus: refreshStatus, refund: refund, ga: ga
+    startCheckout: startCheckout, verify: verify, refreshStatus: refreshStatus, refund: refund, restore: restore, ga: ga
   };
 })();

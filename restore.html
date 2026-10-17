@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/restore.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>購入を復元する — ビッグファイブ診断</title>
+<meta name="description" content="600円でご購入いただいた内容を、別の端末で開き直すページです。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0a0e27;
+  color: #e2e8f0;
+  min-height: 100vh;
+  line-height: 1.8;
+}
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #c4b5fd;
+}
+.page-updated {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 40px;
+}
+.section {
+  margin-bottom: 40px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(109,40,217,0.2);
+}
+.section p {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+.section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+.section ul li {
+  font-size: 14px;
+  color: #cbd5e1;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.section ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #8b5cf6;
+  font-size: 10px;
+  top: 4px;
+}
+.section a {
+  color: #6d28d9;
+}
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 48px 0;
+}
+.operator-box {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 2;
+}
+.pay-box { background: rgba(26,10,62,0.5); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 20px 22px; font-size: 14px; color: #cbd5e1; line-height: 1.9; margin-bottom: 18px; }
+.pay-box h2 { font-size: 16px; color: #c4b5fd; margin-bottom: 8px; }
+.pay-btn { display: block; width: 100%; max-width: 360px; margin: 18px auto 0; padding: 13px 10px; border: none; border-radius: 10px; font: inherit; font-size: 15px; font-weight: 700; text-align: center; text-decoration: none; color: #fff; background: linear-gradient(135deg, #8b5cf6, #6366f1); cursor: pointer; }
+.pay-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.pay-btn.sub { background: transparent; color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4); font-size: 13px; padding: 10px; }
+.pay-btn.danger { background: #b4234a; }
+.pay-small { font-size: 12px; color: #94a3b8; }
+.pay-reasons label { display: block; padding: 8px 4px; cursor: pointer; }
+.pay-reasons input { margin-right: 8px; }
+.pay-hidden { display: none; }
+body.theme-light .pay-box { background: rgba(139,92,246,0.05); border-color: rgba(91,33,182,0.18); color: #334155; }
+body.theme-light .pay-box h2 { color: #5b21b6; }
+body.theme-light .pay-btn.sub { color: #5b21b6; }
+body.theme-light .pay-small { color: #64748b; }
+</style>
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="container">
+
+  <h1 class="page-title">購入を復元する</h1>
+  <p class="page-updated">機種変更をしたとき・ブラウザのデータが消えたとき</p>
+
+  <div class="pay-box" id="rsForm">
+    <h2>600円で開いた内容を、この端末で開き直します</h2>
+    <p>お支払いのときに入力した<strong>メールアドレス</strong>と、お支払いに使った<strong>カード番号の下4けた</strong>を入れてください。どちらも、Stripeから届いた領収メールに書いてあります。</p>
+    <p style="margin-top:14px"><label>メールアドレス<br><input id="rsEmail" type="email" autocomplete="email" inputmode="email" style="width:100%;max-width:360px;padding:10px;font:inherit;border-radius:8px;border:1px solid rgba(139,92,246,0.4)"></label></p>
+    <p><label>カード番号の下4けた<br><input id="rsLast4" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off" style="width:8em;padding:10px;font:inherit;border-radius:8px;border:1px solid rgba(139,92,246,0.4)"></label></p>
+    <p class="pay-small">Apple Pay で支払った場合は、領収メールに書かれている下4けたを入れてください。</p>
+    <button class="pay-btn" id="rsGo" type="button" disabled>復元する</button>
+    <p class="pay-small pay-hidden" id="rsError" style="margin-top:12px"></p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="rsOk">
+    <h2>開きました</h2>
+    <p>30項目の詳細レポートと、サイト内の全ての診断が、この端末で開いています。</p>
+    <a class="pay-btn" href="mypage.html">マイページへ</a>
+    <a class="pay-btn sub" href="diagnoses.html">診断の一覧を見る</a>
+  </div>
+
+  <p class="pay-small" style="text-align:center;margin-top:24px">領収メールが見つからないときは <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a> へ。お支払いを確かめて、ご案内します。</p>
+
+</div>
+<script src="unlock.js?v=20260927"></script>
+<script src="pay.js?v=20261017"></script>
+<script>
+
+(function () {
+  var P = window.BigFivePay;
+  var email = document.getElementById('rsEmail'), last4 = document.getElementById('rsLast4');
+  var go = document.getElementById('rsGo'), err = document.getElementById('rsError');
+  function ready() { go.disabled = !(/^[^\s@]+@[^\s@]+$/.test(email.value.trim()) && /^[0-9]{4}$/.test(last4.value.trim())); }
+  email.addEventListener('input', ready); last4.addEventListener('input', ready);
+  var MSG = {
+    not_found: '見つかりませんでした。お支払いのときのメールアドレスと、カード番号の下4けたをもう一度お確かめください。',
+    too_many: '試した回数が多いため、今日はここまでにさせてください。明日もう一度お試しいただくか、お問い合わせフォームからご連絡ください。',
+    device_limit: 'この購入で開ける端末の数（5台）に達しています。お問い合わせフォームからご連絡ください。',
+    input: 'メールアドレスと、4けたの数字を入れてください。'
+  };
+  go.addEventListener('click', function () {
+    if (!P) return;
+    go.disabled = true; go.textContent = '確かめています…'; err.classList.add('pay-hidden');
+    P.restore(email.value.trim(), last4.value.trim()).then(function (r) {
+      go.textContent = '復元する'; ready();
+      if (r && r.ok) {
+        document.getElementById('rsForm').classList.add('pay-hidden');
+        document.getElementById('rsOk').classList.remove('pay-hidden');
+        return;
+      }
+      err.textContent = MSG[r && r.error] || 'いま確かめられませんでした。少し時間をおいて、もう一度お試しください。';
+      err.classList.remove('pay-hidden');
+    });
+  });
+})();
+
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

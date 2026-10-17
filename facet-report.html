@@ -275,7 +275,8 @@ function frLocked() {
   box.innerHTML = '<p class="fr-msg">この詳細レポートは、カードを300枚集めるか、600円で開きます。<br>いま' + n + '枚（あと' + Math.max(0, 300 - n) + '枚）</p>' +
     '<p style="text-align:center"><a class="fr-back" href="gacha.html">カードを集めに行く →</a></p>' +
     '<p class="fr-msg" style="font-size:12px">600円で開くときは、マイページから120問版の結果を開き、「600円で今すぐ開く」からお進みください。</p>' +
-    '<p style="text-align:center;font-size:12px"><a class="fr-back" href="mypage.html">マイページへ</a></p>';
+    '<p style="text-align:center;font-size:12px"><a class="fr-back" href="mypage.html">マイページへ</a></p>' +
+    '<p style="text-align:center;font-size:12px">購入済みの方は <a class="fr-back" href="restore.html">購入を復元する</a></p>';
 }
 
 if (!frIsOpen()) {
