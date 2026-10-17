@@ -215,10 +215,18 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- 心理学診断 一覧 -->
+  <!-- 運営者について -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/about.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- 性格診断 一覧 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/diagnoses.html</loc>
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

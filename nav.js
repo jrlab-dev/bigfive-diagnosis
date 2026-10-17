@@ -133,6 +133,7 @@ body { padding-top: 52px !important; }
     <span class="footer-copy">© Jr. Genius</span>
     <div class="footer-links">
       <a href="${basePath}blog/">ブログ</a>
+      <a href="${basePath}about.html">運営者について</a>
       <a href="${basePath}legal.html">プライバシーポリシー・利用規約</a>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせ</a>
     </div>
