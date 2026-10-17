@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/refund.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>返金について — ビッグファイブ診断</title>
+<meta name="description" content="600円でのご購入の返金についてのページです。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0a0e27;
+  color: #e2e8f0;
+  min-height: 100vh;
+  line-height: 1.8;
+}
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #c4b5fd;
+}
+.page-updated {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 40px;
+}
+.section {
+  margin-bottom: 40px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(109,40,217,0.2);
+}
+.section p {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+.section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+.section ul li {
+  font-size: 14px;
+  color: #cbd5e1;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.section ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #8b5cf6;
+  font-size: 10px;
+  top: 4px;
+}
+.section a {
+  color: #6d28d9;
+}
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 48px 0;
+}
+.operator-box {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 2;
+}
+.pay-box { background: rgba(26,10,62,0.5); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 20px 22px; font-size: 14px; color: #cbd5e1; line-height: 1.9; margin-bottom: 18px; }
+.pay-box h2 { font-size: 16px; color: #c4b5fd; margin-bottom: 8px; }
+.pay-btn { display: block; width: 100%; max-width: 360px; margin: 18px auto 0; padding: 13px 10px; border: none; border-radius: 10px; font: inherit; font-size: 15px; font-weight: 700; text-align: center; text-decoration: none; color: #fff; background: linear-gradient(135deg, #8b5cf6, #6366f1); cursor: pointer; }
+.pay-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.pay-btn.sub { background: transparent; color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4); font-size: 13px; padding: 10px; }
+.pay-btn.danger { background: #b4234a; }
+.pay-small { font-size: 12px; color: #94a3b8; }
+.pay-reasons label { display: block; padding: 8px 4px; cursor: pointer; }
+.pay-reasons input { margin-right: 8px; }
+.pay-hidden { display: none; }
+body.theme-light .pay-box { background: rgba(139,92,246,0.05); border-color: rgba(91,33,182,0.18); color: #334155; }
+body.theme-light .pay-box h2 { color: #5b21b6; }
+body.theme-light .pay-btn.sub { color: #5b21b6; }
+body.theme-light .pay-small { color: #64748b; }
+</style>
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="container">
+
+  <h1 class="page-title">返金について</h1>
+  <p class="page-updated">600円で開いた「30項目の詳細レポート・全診断の解放」の返金</p>
+
+  <div class="pay-box pay-hidden" id="rfNone">
+    <h2>この端末には、ご購入の記録がありません</h2>
+    <p>お支払いをした端末（ブラウザ）でこのページを開いてください。記録が見つからない場合や、別の端末で購入した場合は、<a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からご連絡ください。お支払いを確かめて返金します。</p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="rfDone">
+    <h2>返金の手続きが済んでいます</h2>
+    <p>カードへの払い戻しは、カード会社によって数日〜数週間かかることがあります。</p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="rfExpired">
+    <h2>ご購入から7日を過ぎています</h2>
+    <p>このページからの返金は、ご購入から7日以内に限ります。それでもご不満がある場合は、<a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からご連絡ください。</p>
+  </div>
+
+  <div id="rfMain" class="pay-hidden">
+    <div class="pay-box">
+      <h2>1. 返金の決まり</h2>
+      <p>ご購入から7日以内であれば、理由を問わず600円を全額返金します。返金はご購入に使ったカードなどへ戻ります。戻るまでの日数は、カード会社によって数日〜数週間かかることがあります。</p>
+    </div>
+    <div class="pay-box">
+      <h2>2. 返金するとどうなるか</h2>
+      <p>返金すると、600円で開いた<strong>30項目の詳細レポートと、カードを集めずに受けられる診断は閉じます</strong>。集めたカードの枚数どおりの開き方に戻ります。</p>
+      <p>カードを300枚集めると、お支払いなしで同じものが開きます。集めたカードや診断の結果は消えません。</p>
+    </div>
+    <div class="pay-box">
+      <h2>3. 返金の前に</h2>
+      <p>「うまく表示されない」「レポートが開かない」などの場合は、<a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a>からご連絡いただければ、直せることがあります。もちろん、そのまま返金していただいても構いません。</p>
+    </div>
+    <div class="pay-box">
+      <h2>4. 返金の理由を1つ選んでください</h2>
+      <p class="pay-small">サイトをよくするために使います。</p>
+      <div class="pay-reasons" id="rfReasons">
+        <label><input type="radio" name="reason" value="content">内容が思っていたものと違った</label>
+        <label><input type="radio" name="reason" value="expect">期待したほど役に立たなかった</label>
+        <label><input type="radio" name="reason" value="mistake">間違えて購入した</label>
+        <label><input type="radio" name="reason" value="technical">うまく表示されない・開かない</label>
+        <label><input type="radio" name="reason" value="other">その他</label>
+        <label><input type="radio" name="reason" value="noanswer">答えたくない</label>
+      </div>
+    </div>
+    <div class="pay-box">
+      <h2>5. 返金の手続き</h2>
+      <p class="pay-small" id="rfUntil"></p>
+      <button class="pay-btn" id="rfStep1" type="button" disabled>返金する</button>
+      <div class="pay-hidden" id="rfConfirm">
+        <p style="margin-top:16px">600円を返金し、30項目の詳細レポートと診断の解放を閉じます。よろしいですか？</p>
+        <button class="pay-btn danger" id="rfGo" type="button">返金を確定する</button>
+        <button class="pay-btn sub" id="rfBack" type="button">やめる</button>
+      </div>
+      <p class="pay-small pay-hidden" id="rfError" style="margin-top:12px"></p>
+    </div>
+  </div>
+
+</div>
+<script src="unlock.js?v=20260927"></script>
+<script src="pay.js?v=20261017"></script>
+<script>
+
+(function () {
+  var P = window.BigFivePay;
+  var ids = ['rfNone', 'rfDone', 'rfExpired', 'rfMain'];
+  function show(id) { ids.forEach(function (x) { document.getElementById(x).classList.toggle('pay-hidden', x !== id); }); }
+  var r = P ? P.record() : null;
+  if (!r || !r.sid) { show('rfNone'); return; }
+  if (r.refunded) { show('rfDone'); return; }
+  if (!r.tok) { show('rfNone'); return; }
+  if (!P.canRefund()) { show('rfExpired'); return; }
+  show('rfMain');
+  try {
+    var d = new Date(r.until * 1000);
+    document.getElementById('rfUntil').textContent = 'このページから返金できるのは ' + (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + d.getHours() + '時' + ('0' + d.getMinutes()).slice(-2) + '分 までです。';
+  } catch (e) {}
+  var step1 = document.getElementById('rfStep1'), confirmBox = document.getElementById('rfConfirm');
+  var go = document.getElementById('rfGo'), back = document.getElementById('rfBack'), err = document.getElementById('rfError');
+  function reason() { var x = document.querySelector('input[name="reason"]:checked'); return x ? x.value : ''; }
+  document.getElementById('rfReasons').addEventListener('change', function () { step1.disabled = !reason(); });
+  step1.addEventListener('click', function () { if (!reason()) return; step1.classList.add('pay-hidden'); confirmBox.classList.remove('pay-hidden'); });
+  back.addEventListener('click', function () { confirmBox.classList.add('pay-hidden'); step1.classList.remove('pay-hidden'); });
+  go.addEventListener('click', function () {
+    go.disabled = true; back.disabled = true; go.textContent = '手続きしています…'; err.classList.add('pay-hidden');
+    P.refund(reason()).then(function (res) {
+      if (res && res.ok) { show('rfDone'); window.scrollTo(0, 0); return; }
+      go.disabled = false; back.disabled = false; go.textContent = '返金を確定する';
+      if (res && res.error === 'expired') { show('rfExpired'); return; }
+      err.textContent = 'いま返金の手続きができませんでした。少し時間をおいてもう一度お試しいただくか、お問い合わせフォームからご連絡ください。';
+      err.classList.remove('pay-hidden');
+    });
+  });
+})();
+
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

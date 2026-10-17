@@ -719,7 +719,7 @@
 (function() {
   if (typeof UNLOCK_TABLE === 'undefined') return;
   var cardCount = typeof getCardCount === 'function' ? getCardCount() : 0;
-  var legacy = typeof isLegacyUser === 'function' && isLegacyUser();
+  var legacy = (typeof isLegacyUser === 'function' && isLegacyUser()) || (typeof isPaidUser === 'function' && isPaidUser());
   // Stage 2 範囲：25〜99枚の機能のみ表示（urlありのもの）
   var features = UNLOCK_TABLE.filter(function(e) {
     return e.cards >= 25 && e.cards <= 99 && e.url;

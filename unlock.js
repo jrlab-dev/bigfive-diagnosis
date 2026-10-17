@@ -63,6 +63,17 @@ function isLegacyUser() {
   return false;
 }
 
+// 600円で開いた人（2026-10-17）。300枚集めた人と同じく、全ての機能が開く。
+// 印は2種類＝①支払いの記録 bigfive_paid（Stripeで支払い済み・返金していない）
+// ②有料化の前に「600円で今すぐ開く」を押した人の印 counted_paid_buy_click（その人たちは今後も開いたまま）
+function isPaidUser() {
+  try { if (localStorage.getItem('counted_paid_buy_click') === '1') return true; } catch(e) { return false; }
+  try {
+    var r = JSON.parse(localStorage.getItem('bigfive_paid') || 'null');
+    return !!(r && typeof r.sid === 'string' && r.sid.indexOf('cs_') === 0 && typeof r.tok === 'string' && !r.refunded);
+  } catch(e) { return false; }
+}
+
 function getCardCount() {
   try {
     return JSON.parse(localStorage.getItem('bigfive_album') || '[]').length;
@@ -72,6 +83,7 @@ function getCardCount() {
 function isUnlocked(featureId) {
   if (ALWAYS_UNLOCKED_IDS.indexOf(featureId) >= 0) return true;
   if (isLegacyUser()) return true;
+  if (isPaidUser()) return true;
   var count = getCardCount();
   var entry = null;
   for (var i = 0; i < UNLOCK_TABLE.length; i++) {
@@ -82,7 +94,7 @@ function isUnlocked(featureId) {
 }
 
 function getNewUnlocks(oldCount, newCount) {
-  if (isLegacyUser()) return [];
+  if (isLegacyUser() || isPaidUser()) return [];
   return UNLOCK_TABLE.filter(function(e) {
     return e.cards > oldCount && e.cards <= newCount;
   });
@@ -96,7 +108,7 @@ function getRequiredCards(featureId) {
 }
 
 function getOtherLimit() {
-  if (isLegacyUser()) return 100;
+  if (isLegacyUser() || isPaidUser()) return 100;
   var count = getCardCount();
   if (count >= 150) return 100;
   if (count >= 110) return 85;

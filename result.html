@@ -931,6 +931,30 @@
   }
   .rep300-open:hover { filter: brightness(1.1); }
 
+  /* ── 購入直前の確認（2026-10-17）── */
+  .rep300-confirm {
+    margin-top: 14px; padding: 16px 14px; border-radius: 10px; text-align: left;
+    background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.25);
+  }
+  .rep300-confirm-title { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; text-align: center; }
+  .rep300-confirm-list { margin: 0; font-size: 12.5px; line-height: 1.75; color: var(--text); }
+  .rep300-confirm-list dt { font-weight: 700; color: var(--dim); margin-top: 8px; font-size: 11.5px; }
+  .rep300-confirm-list dd { margin: 0; }
+  .rep300-confirm-go { width: 100%; border: none; cursor: pointer; font-family: inherit; margin-top: 16px; }
+  .rep300-confirm-go[disabled] { opacity: .6; cursor: wait; }
+  .rep300-confirm-error { font-size: 12px; color: #f87171; margin: 10px 0 0; text-align: center; line-height: 1.7; }
+  .rep300-confirm-foot { text-align: center; font-size: 11.5px; color: var(--dim); margin: 12px 0 0; }
+  .rep300-confirm-foot a { color: var(--dim); }
+  .rep300-confirm-sep { margin: 0 .6em; }
+  .rep300-confirm-note { font-size: 12px; color: var(--dim); text-align: center; margin: 10px 0 0; }
+  body.theme-light .rep300-confirm-title,
+  body.theme-light .rep300-confirm-list { color: #1e293b; }
+  body.theme-light .rep300-confirm-list dt,
+  body.theme-light .rep300-confirm-foot,
+  body.theme-light .rep300-confirm-foot a,
+  body.theme-light .rep300-confirm-note { color: #64748b; }
+  body.theme-light .rep300-confirm-error { color: #b91c1c; }
+
   /* 明るいテーマ */
   body.theme-light .rep300-toc-item { color: #334155; background: rgba(139,92,246,0.08); }
   body.theme-light .rep300-toc-item.is-mine { color: #0369a1; background: rgba(34,211,238,0.14); }
@@ -1466,6 +1490,27 @@
       </p>
     </div>
 
+    <!-- 購入直前の確認（2026-10-17）。法律で求められる「申し込みの最終確認」をここで出す -->
+    <div class="rep300-confirm" id="rep300Confirm" style="display:none;" role="region" aria-labelledby="rep300ConfirmTitle">
+      <p class="rep300-confirm-title" id="rep300ConfirmTitle">600円で今すぐ開く</p>
+      <dl class="rep300-confirm-list">
+        <dt>開くもの</dt><dd>30項目の詳細レポート（約1万字）と、サイト内の全ての診断（カードを集めずに受けられます）</dd>
+        <dt>お値段</dt><dd>600円（1回だけ。続けて請求されることはありません）</dd>
+        <dt>お支払い</dt><dd>クレジットカード・Apple Pay など。決済サービスStripeの支払いページへ移ります</dd>
+        <dt>開く時期</dt><dd>お支払いが終わると、すぐに開きます</dd>
+        <dt>保存先</dt><dd>この端末のブラウザに保存されます。機種変更のときは、マイページの自動バックアップから引き継げます</dd>
+        <dt>返金</dt><dd>ご購入から7日以内は、全額返金できます（レポートの画面の下の「返金について」から）</dd>
+      </dl>
+      <button type="button" class="rep300-open rep300-confirm-go" id="rep300ConfirmGo">支払いページへ進む（600円）</button>
+      <p class="rep300-confirm-error" id="rep300ConfirmError" style="display:none;"></p>
+      <p class="rep300-confirm-foot">
+        <button type="button" class="rep300-escape-btn" id="rep300ConfirmCancel">やめる</button>
+        <span class="rep300-confirm-sep">｜</span>
+        <a href="tokushoho.html" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
+      </p>
+    </div>
+    <p class="rep300-confirm-note" id="rep300CancelNote" style="display:none;">お支払いは行われていません。</p>
+
     <a class="rep300-open" id="rep300Open" href="#" style="display:none;">レポートを開く</a>
 
   </div>
@@ -1719,6 +1764,7 @@
 <script src="facets.js"></script>
 <script src="album.js?v=20260927"></script>
 <script src="unlock.js?v=20260927"></script>
+<script src="pay.js?v=20261017"></script>
 <script src="concierge.js"></script>
 <script src="rarity.js?v=20260927"></script>
 <script src="compat.js"></script>
@@ -3183,7 +3229,7 @@ if (version === '10') {
   try { if (typeof getCardCount === 'function') cardCount = getCardCount() || 0; } catch (e) {}
   var reached = cardCount >= REP300_GOAL;
   var alreadyPaid = false;
-  try { alreadyPaid = localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
+  try { alreadyPaid = (typeof isPaidUser === 'function') ? isPaidUser() : localStorage.getItem('counted_paid_buy_click') === '1'; } catch (e) {}
 
   function showOpen() {
     waysEl.style.display = 'none';
@@ -3265,14 +3311,43 @@ if (version === '10') {
     });
   });
 
+  // 600円を押したら、購入直前の確認を出す（2026-10-17）。
+  // rep300_pay（押した人の数）は有料化の前と同じく数え続ける。お金が動くのは確認の先の支払いページだけ。
+  var confirmEl = document.getElementById('rep300Confirm');
+  var confirmGo = document.getElementById('rep300ConfirmGo');
+  var confirmCancel = document.getElementById('rep300ConfirmCancel');
+  var confirmError = document.getElementById('rep300ConfirmError');
   payBtn.addEventListener('click', function() {
     count('rep300_pay');
-    try { localStorage.setItem('counted_paid_buy_click', '1'); } catch (e) {}
-    thanksEl.style.display = 'block';
-    showOpen();
-    // お礼が画面に入るところまで運ぶ（押したのに何も起きていないように見えるのを防ぐ）
-    try { thanksEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+    if (window.BigFivePay) BigFivePay.ga('pay_confirm_view');
+    waysEl.style.display = 'none';
+    confirmEl.style.display = 'block';
+    try { confirmEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
   });
+  confirmCancel.addEventListener('click', function() {
+    confirmEl.style.display = 'none';
+    confirmError.style.display = 'none';
+    waysEl.style.display = '';
+  });
+  confirmGo.addEventListener('click', function() {
+    if (!window.BigFivePay) return;
+    confirmGo.disabled = true;
+    confirmGo.textContent = '支払いページを準備しています…';
+    confirmError.style.display = 'none';
+    BigFivePay.startCheckout().then(function(r) {
+      if (r && r.ok) return; // 支払いページへ移動中
+      confirmGo.disabled = false;
+      confirmGo.textContent = '支払いページへ進む（600円）';
+      confirmError.textContent = 'いま支払いページを開けませんでした。少し時間をおいて、もう一度お試しください。お支払いは行われていません。';
+      confirmError.style.display = 'block';
+    });
+  });
+  // 支払いページで「戻る」を押して帰ってきた人へ
+  try {
+    if (/[?&]pay=cancel(&|$)/.test(location.search) && !alreadyPaid) {
+      document.getElementById('rep300CancelNote').style.display = 'block';
+    }
+  } catch (e) {}
 
   var altFree = document.getElementById('paidAltFree');
   if (altFree) altFree.addEventListener('click', function() { count('paid_alt_free_click'); });

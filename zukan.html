@@ -1064,7 +1064,7 @@
   var locked = [];
   var count = 0;
   try {
-    if (!isLegacyUser()) {
+    if (!isLegacyUser() && !(typeof isPaidUser === 'function' && isPaidUser())) {
       count = getCardCount();
       locked = UNLOCK_TABLE.filter(function(e) {
         return e.url && e.id !== 'zukan_s3' && e.id !== 'zukan_s2' && count < e.cards;

@@ -230,6 +230,8 @@
 
 <div id="frBody" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
 
+<script src="unlock.js?v=20260927"></script>
+<script src="pay.js?v=20261017"></script>
 <script src="facets.js"></script>
 <script src="ai-copy-utils.js"></script>
 <script>
@@ -258,7 +260,27 @@ function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
 function msg(t){ box.innerHTML = '<p class="fr-msg">' + esc(t) + '</p>' +
   '<p style="text-align:center"><a class="fr-back" href="quiz.html?v=120">120問版を受ける →</a></p>'; }
 
-if (!/^[1-5]{30}$/.test(facets)) {
+// 開く条件（2026-10-17）＝カード300枚 か 600円で開いた人。
+// 見本の表示（sample=1）も同じ条件にする＝任意の点数を付けて開けてしまうため（サイト内に見本へのリンクは無い）
+function frIsOpen() {
+  var n = 0;
+  try { if (typeof getCardCount === 'function') n = getCardCount() || 0; } catch (e) {}
+  if (n >= 300) return true;
+  try { if (typeof isPaidUser === 'function' && isPaidUser()) return true; } catch (e) {}
+  return false;
+}
+function frLocked() {
+  var n = 0;
+  try { if (typeof getCardCount === 'function') n = getCardCount() || 0; } catch (e) {}
+  box.innerHTML = '<p class="fr-msg">この詳細レポートは、カードを300枚集めるか、600円で開きます。<br>いま' + n + '枚（あと' + Math.max(0, 300 - n) + '枚）</p>' +
+    '<p style="text-align:center"><a class="fr-back" href="gacha.html">カードを集めに行く →</a></p>' +
+    '<p class="fr-msg" style="font-size:12px">600円で開くときは、マイページから120問版の結果を開き、「600円で今すぐ開く」からお進みください。</p>' +
+    '<p style="text-align:center;font-size:12px"><a class="fr-back" href="mypage.html">マイページへ</a></p>';
+}
+
+if (!frIsOpen()) {
+  frLocked();
+} else if (!/^[1-5]{30}$/.test(facets)) {
   msg('このレポートは、120問版を受けた方の結果から作られます。');
 } else {
   var scores = {};
@@ -973,6 +995,23 @@ function render(data){
     }
   } catch (e) {}
 }
+</script>
+<script>
+// 600円で開いた人だけ、いちばん下に小さく「返金について」を出す（2026-10-17・目立たせない）
+// あわせて1日1回、返金されていないか確かめる（Stripeの画面から返金した場合もここで閉じる）
+(function () {
+  if (!window.BigFivePay) return;
+  var r = BigFivePay.record();
+  if (!r || !r.sid || !r.tok || r.refunded) return;
+  var p = document.createElement('p');
+  p.className = 'fr-refund-link';
+  p.style.cssText = 'text-align:center;font-size:11px;margin:40px 0 12px;opacity:.7';
+  p.innerHTML = '<a href="refund.html" style="color:inherit">返金について</a>';
+  document.body.insertBefore(p, document.body.querySelector('script[src="nav.js"]'));
+  BigFivePay.refreshStatus().then(function (st) {
+    if (st && st.ok && (st.refunded || st.paid === false)) location.reload();
+  });
+})();
 </script>
 <script src="nav.js"></script>
 </body>

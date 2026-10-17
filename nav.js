@@ -436,7 +436,10 @@ body { padding-top: 52px !important; }
   function ensureSyncId() {
     var id = localStorage.getItem(SYNC_ID_KEY);
     if (id) return id;
-    if (albumCount() < SYNC_ID_MIN_CARDS) return '';
+    // 600円で開いた人は、カードが少なくても控えを取る（機種変更で購入の記録を引き継ぐため・2026-10-17）
+    var paidRec = null;
+    try { paidRec = JSON.parse(localStorage.getItem('bigfive_paid') || 'null'); } catch (e) {}
+    if (albumCount() < SYNC_ID_MIN_CARDS && !(paidRec && paidRec.sid)) return '';
     if (!window.crypto || typeof crypto.randomUUID !== 'function') return ''; // 古いブラウザでは何もしない
     id = crypto.randomUUID();
     localStorage.setItem(SYNC_ID_KEY, id);

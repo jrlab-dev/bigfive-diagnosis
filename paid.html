@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+  <link rel="canonical" href="https://bigfive.jr-genius.jp/paid.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お支払いの確認 — ビッグファイブ診断</title>
+<meta name="description" content="600円でのお支払いの確認ページです。">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0a0e27;
+  color: #e2e8f0;
+  min-height: 100vh;
+  line-height: 1.8;
+}
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #c4b5fd;
+}
+.page-updated {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 40px;
+}
+.section {
+  margin-bottom: 40px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(109,40,217,0.2);
+}
+.section p {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+.section ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+.section ul li {
+  font-size: 14px;
+  color: #cbd5e1;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.section ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #8b5cf6;
+  font-size: 10px;
+  top: 4px;
+}
+.section a {
+  color: #6d28d9;
+}
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 48px 0;
+}
+.operator-box {
+  background: rgba(26,10,62,0.5);
+  border: 1px solid rgba(139,92,246,0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 2;
+}
+.pay-box { background: rgba(26,10,62,0.5); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 20px 22px; font-size: 14px; color: #cbd5e1; line-height: 1.9; margin-bottom: 18px; }
+.pay-box h2 { font-size: 16px; color: #c4b5fd; margin-bottom: 8px; }
+.pay-btn { display: block; width: 100%; max-width: 360px; margin: 18px auto 0; padding: 13px 10px; border: none; border-radius: 10px; font: inherit; font-size: 15px; font-weight: 700; text-align: center; text-decoration: none; color: #fff; background: linear-gradient(135deg, #8b5cf6, #6366f1); cursor: pointer; }
+.pay-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.pay-btn.sub { background: transparent; color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4); font-size: 13px; padding: 10px; }
+.pay-btn.danger { background: #b4234a; }
+.pay-small { font-size: 12px; color: #94a3b8; }
+.pay-reasons label { display: block; padding: 8px 4px; cursor: pointer; }
+.pay-reasons input { margin-right: 8px; }
+.pay-hidden { display: none; }
+body.theme-light .pay-box { background: rgba(139,92,246,0.05); border-color: rgba(91,33,182,0.18); color: #334155; }
+body.theme-light .pay-box h2 { color: #5b21b6; }
+body.theme-light .pay-btn.sub { color: #5b21b6; }
+body.theme-light .pay-small { color: #64748b; }
+</style>
+<link rel="stylesheet" href="light-mode.css">
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="container">
+
+  <h1 class="page-title">お支払いの確認</h1>
+  <p class="page-updated">600円で開く</p>
+
+  <div class="pay-box" id="stLoading"><h2>お支払いを確かめています…</h2><p>この画面のまま、少しお待ちください。</p></div>
+
+  <div class="pay-box pay-hidden" id="stOk">
+    <h2>ありがとうございます。開きました</h2>
+    <p>30項目の詳細レポートと、サイト内の全ての診断が、この端末で開いています。</p>
+    <p class="pay-small">領収書は、お支払いのときに入力したメールアドレスにStripeから届きます。</p>
+    <a class="pay-btn" id="goReport" href="mypage.html">30項目の詳細レポートを開く</a>
+    <a class="pay-btn sub" href="diagnoses.html">診断の一覧を見る</a>
+  </div>
+
+  <div class="pay-box pay-hidden" id="stNotPaid">
+    <h2>お支払いを確認できませんでした</h2>
+    <p>お支払いが終わっていない場合、料金はかかっていません。支払いページの途中で閉じた場合は、もう一度結果ページの「600円で今すぐ開く」からお進みください。</p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="stOtherDevice">
+    <h2>お支払いをした端末で開いてください</h2>
+    <p>この画面は、お支払いの手続きをした端末（ブラウザ）でだけ開きます。別の端末で使いたい場合は、お支払いをした端末でマイページの自動バックアップを使って引き継いでください。</p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="stRefunded">
+    <h2>このお支払いは返金済みです</h2>
+    <p>返金の手続きが済んでいるため、開いていません。</p>
+  </div>
+
+  <div class="pay-box pay-hidden" id="stRetry">
+    <h2>確認に時間がかかっています</h2>
+    <p>通信がうまくいきませんでした。お支払いが済んでいれば、もう一度確かめると開きます。</p>
+    <button class="pay-btn" id="retryBtn" type="button">もう一度確かめる</button>
+  </div>
+
+  <p class="pay-small" style="text-align:center;margin-top:24px">困ったときは <a href="https://docs.google.com/forms/d/e/1FAIpQLSdF_53zxYjvJtJjqVh2U578K_BHDhqSqAAHT6P-tXGQdvNQZg/viewform" target="_blank" rel="noopener">お問い合わせフォーム</a> へ。「払ったのに開かない」場合は、すぐに返金します。</p>
+
+</div>
+<script src="unlock.js?v=20260927"></script>
+<script src="pay.js?v=20261017"></script>
+<script>
+
+(function () {
+  var sid = new URLSearchParams(location.search).get('session_id') || '';
+  var ids = ['stLoading', 'stOk', 'stNotPaid', 'stOtherDevice', 'stRefunded', 'stRetry'];
+  function show(id) { ids.forEach(function (x) { document.getElementById(x).classList.toggle('pay-hidden', x !== id); }); }
+  var back = window.BigFivePay ? BigFivePay.returnPath() : '';
+  if (back) document.getElementById('goReport').href = back;
+  function run() {
+    if (!/^cs_(test|live)_[A-Za-z0-9]{10,200}$/.test(sid) || !window.BigFivePay) { show('stNotPaid'); return; }
+    // すでに同じ支払いで開いている（再読み込み・戻る）
+    var r = BigFivePay.record();
+    if (r && r.sid === sid && r.tok && !r.refunded) { show('stOk'); return; }
+    show('stLoading');
+    BigFivePay.verify(sid).then(function (res) {
+      if (res && res.ok) show('stOk');
+      else if (res && res.error === 'other_device') show('stOtherDevice');
+      else if (res && res.error === 'refunded') show('stRefunded');
+      else if (res && res.error === 'not_paid') show('stNotPaid');
+      else show('stRetry');
+    });
+  }
+  document.getElementById('retryBtn').addEventListener('click', run);
+  run();
+})();
+
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

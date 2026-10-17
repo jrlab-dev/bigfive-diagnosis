@@ -1577,8 +1577,11 @@ function renderGrowth(steps) {
   var progress = document.getElementById('reportCardProgress');
   var remain = document.getElementById('reportCardRemain');
   if (progress) progress.textContent = 'いま ' + count + '枚';
+  var paidOpen = false;
+  try { paidOpen = typeof isPaidUser === 'function' && isPaidUser(); } catch (e) {}
   if (remain) remain.textContent = count >= 300
     ? '30項目の詳細レポートを開ける枚数に到達しています'
+    : paidOpen ? '30項目の詳細レポートは、600円で開いています'
     : '30項目の詳細レポートまで、あと' + (300 - count) + '枚';
   function ga(id, name) {
     var el = document.getElementById(id);
