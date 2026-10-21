@@ -279,6 +279,21 @@ function frLocked() {
     '<p style="text-align:center;font-size:12px">購入済みの方は <a class="fr-back" href="restore.html">購入を復元する</a></p>';
 }
 
+// 本文を頼むときに付ける「開いてよい印」（2026-10-21）。サーバーの門番（bigfive-pay の /api/facet）が確かめる。
+// 600円の人＝購入の印（署名つき）。300枚・有料化前に開いた人＝申告（端末の中の記録なのでサーバーでは確かめられない）
+function frGateHeaders() {
+  var h = {};
+  try {
+    var r = JSON.parse(localStorage.getItem('bigfive_paid') || 'null');
+    if (r && r.sid && r.tok && !r.refunded) h['X-BF-Pay'] = r.sid + '.' + (r.dev || localStorage.getItem('bigfive_pay_device') || '') + '.' + r.tok;
+  } catch (e) {}
+  var n = 0;
+  try { if (typeof getCardCount === 'function') n = getCardCount() || 0; } catch (e) {}
+  if (n >= 300) h['X-BF-Open'] = 'cards';
+  else { try { if (localStorage.getItem('counted_paid_buy_click') === '1') h['X-BF-Open'] = 'legacy'; } catch (e) {} }
+  return h;
+}
+
 if (!frIsOpen()) {
   frLocked();
 } else if (!/^[1-5]{30}$/.test(facets)) {
@@ -418,7 +433,7 @@ if (!frIsOpen()) {
     return { intros: intros, parts: hit };
   }
 
-  fetch(url)
+  fetch(url, isLocal ? undefined : { headers: frGateHeaders() })
     .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data){
       if (isLocal && (attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||

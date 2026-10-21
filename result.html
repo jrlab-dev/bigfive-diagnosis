@@ -3162,7 +3162,8 @@ if (version === '10') {
   fetch(teaserLocal ? '_facet-texts-local.json'
                     : ('/api/facet?facets=' + facetsParam +
                        (teaserAtt ? '&att=' + teaserAtt : '') +
-                       (teaserHsp !== null ? '&hsp=' + teaserHsp : '') + teaserExtra))
+                       (teaserHsp !== null ? '&hsp=' + teaserHsp : '') + teaserExtra +
+                       '&teaser=' + TEASER_KEYS[bestI]))   // 門番（2026-10-21）は試し読みに書き出し140字だけ返す
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if (!data) return;
