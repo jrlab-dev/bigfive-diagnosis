@@ -2,8 +2,7 @@
 #
 # 何をしているか：
 #   毎朝5時（日本時間）に、サイトの計測カウンター79項目の「その時点の累計」を
-#   データベースに書き留める。ダッシュボード（dash-*.html）はこの記録の差を取って
-#   「1日ごとの増え方」を出している。
+#   データベースに書き留める。この記録の差を取ると「1日ごとの増え方」が分かる。
 #
 # ★これを止めてはいけない理由：
 #   カウンターは累計しか持たないので、記録を1日でも取り逃すと、その日の数字は永久に戻らない。
@@ -64,6 +63,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # 読み出し（/count/daily）は鍵が必要になったため、ここでは裏取りしない（2026-10-22）。
+      # 記録できたかは手元の記録道具が鍵付きで読んで確かめる。
       - name: カウンターを記録する
         run: |
           echo "記録を依頼します..."
@@ -79,17 +80,3 @@ jobs:
           fi
           echo "❌ 記録に失敗しました"
           exit 1
-
-      - name: 記録できたか確かめる
-        run: |
-          # 実際にデータベースに入ったかを、読み出しAPIで裏取りする（自己申告を信じない）
-          TODAY=$(TZ=Asia/Tokyo date +%Y-%m-%d)
-          DATES=$(curl -s --max-time 60 "https://bigfive.jr-genius.jp/count/daily?days=2")
-          echo "$DATES" | head -c 300
-          echo ""
-          if echo "$DATES" | grep -q "$TODAY"; then
-            echo "✅ $TODAY の記録がデータベースにあることを確認しました"
-          else
-            echo "❌ $TODAY の記録が見つかりません"
-            exit 1
-          fi

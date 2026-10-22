@@ -2801,6 +2801,57 @@ const SYNC_DATA_KEYS = [
   'ultimatum_result', 'beauty_result', 'trust_result',
 ];
 
+// 引き継ぎで取り込んでよいキー（許可リスト）。
+// 集める側（このページの collectLocalData と nav.js の collectBackupData）と同じ範囲＝
+//   ① SYNC_DATA_KEYS に名前のあるキー ② bigfive_ で始まるキー（SYNC_EXCLUDE_KEYS は除く）
+// これ以外のキー（他の機能の設定・開発用の印など）は、届いても取り込まない。
+const SYNC_IMPORT_PREFIX = 'bigfive_';
+const SYNC_IMPORT_KEY_RE = /^[A-Za-z0-9_.:-]{1,100}$/;
+const SYNC_IMPORT_MAX_LEN = 5000000;
+const SYNC_CODE_RE = /^[1-5]{5}$/;
+const SYNC_JSON_ARRAY_KEYS = ['bigfive_my_results', 'bigfive_other_results', 'bigfive_album'];
+const SYNC_RESULT_LIST_KEYS = ['bigfive_my_results', 'bigfive_other_results'];
+const SYNC_JSON_OBJECT_KEYS = ['bigfive_album_meta'];
+
+function isSyncImportKey(k) {
+  if (typeof k !== 'string' || !SYNC_IMPORT_KEY_RE.test(k)) return false;
+  if (SYNC_EXCLUDE_KEYS.includes(k)) return false;
+  return SYNC_DATA_KEYS.includes(k) || k.startsWith(SYNC_IMPORT_PREFIX);
+}
+
+function isPlainObject(x) {
+  return !!x && typeof x === 'object' && !Array.isArray(x);
+}
+
+// 値の形を確かめる。取り込める形に直せたら文字列を、だめなら null を返す。
+function sanitizeSyncValue(k, v) {
+  if (typeof v !== 'string' || v.length > SYNC_IMPORT_MAX_LEN) return null;
+  const isJsonArray = SYNC_JSON_ARRAY_KEYS.includes(k);
+  const isJsonObject = SYNC_JSON_OBJECT_KEYS.includes(k) || (SYNC_DATA_KEYS.includes(k) && !k.startsWith(SYNC_IMPORT_PREFIX));
+  if (!isJsonArray && !isJsonObject) return v;
+  let parsed;
+  try { parsed = JSON.parse(v); } catch (e) { return null; }
+  if (isJsonObject) return isPlainObject(parsed) ? v : null;
+  if (!Array.isArray(parsed)) return null;
+  if (!SYNC_RESULT_LIST_KEYS.includes(k)) return v;
+  // 診断結果の一覧：1件ずつ見て、形の崩れたものだけ外す（code は5桁の1〜5）
+  const kept = parsed.filter(item => isPlainObject(item) &&
+    (item.code === undefined || item.code === null || SYNC_CODE_RE.test(String(item.code))));
+  return kept.length === parsed.length ? v : JSON.stringify(kept);
+}
+
+// 届いたデータから、許可リストに入り形の正しいものだけを残す
+function filterSyncData(loadedData) {
+  const out = {};
+  if (!isPlainObject(loadedData)) return out;
+  Object.keys(loadedData).forEach(k => {
+    if (!isSyncImportKey(k)) return;
+    const v = sanitizeSyncValue(k, loadedData[k]);
+    if (v !== null) out[k] = v;
+  });
+  return out;
+}
+
 function getSyncId() {
   let id = localStorage.getItem(SYNC_ID_KEY);
   if (!id) {
@@ -2967,9 +3018,9 @@ function hideSyncChoice() {
 }
 
 function applySyncData(loadedData, mode) {
+  const safeData = filterSyncData(loadedData);
   if (mode === 'overwrite') {
-    Object.entries(loadedData).forEach(([k, v]) => {
-      if (SYNC_EXCLUDE_KEYS.includes(k)) return;
+    Object.entries(safeData).forEach(([k, v]) => {
       localStorage.setItem(k, v);
     });
   } else {
@@ -2983,8 +3034,7 @@ function applySyncData(loadedData, mode) {
       'bigfive_other_results': 100,   // 2026-08-19：上限拡張に合わせる（統合で切り捨てない）
       'bigfive_album': 8300,
     };
-    Object.entries(loadedData).forEach(([k, v]) => {
-      if (SYNC_EXCLUDE_KEYS.includes(k)) return;
+    Object.entries(safeData).forEach(([k, v]) => {
       if (ARRAY_KEYS.includes(k)) {
         try {
           const current = JSON.parse(localStorage.getItem(k) || '[]');

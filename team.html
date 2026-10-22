@@ -994,6 +994,7 @@
 </div>
 
 <script src="personality-types.js?v=20260919"></script>
+<script src="compat.js"></script>
 <script>
 // ===== 定数 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
@@ -2317,7 +2318,9 @@ document.getElementById('analyzeBtn').addEventListener('click', () => {
 renderMembers();
 
 // マイページからの保存済みチーム表示：全員自動選択＋即分析
-if (viewTeamData && allMembers.length >= 2) {
+// 分析は compat.js・unlock.js などページ下部の読み込みを使うため、読み込みが済んでから行う
+function showViewTeam() {
+  if (!(viewTeamData && allMembers.length >= 2)) return;
   allMembers.forEach(m => selectedIds.add(m.id));
   if (viewTeamData.teamName) {
     document.getElementById('teamNameInput').value = viewTeamData.teamName;
@@ -2330,8 +2333,12 @@ if (viewTeamData && allMembers.length >= 2) {
     document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 150);
 }
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', showViewTeam);
+} else {
+  showViewTeam();
+}
 </script>
-<script src="compat.js"></script>
 <section class="test-about">
   <h2>チーム相性診断とは</h2>
   <p>「良いチームとは、どんなメンバーの集まりか」。この診断は、その問いに<strong>メンバー一人ひとりのビッグファイブのデータからアプローチする</strong>ものです。チームの構成（どういう性格の人がどう組み合わさっているか）とチームの成果の関係は、組織心理学の大きな研究テーマです。2007年、心理学者スザンヌ・ベルが発表したメタ分析（多くの研究をまとめて平均を取る分析）は、その代表格で、<strong>チーム全体の性格の「平均値」が成果と結びつきやすい</strong>ことを示しました（Bell, 2007）。</p>
