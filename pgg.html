@@ -498,6 +498,7 @@ body.theme-light .dg-text { color: #1e293b; }
   }
 
   function charImgUrl(gender, scores) {
+    gender = gender === 'M' ? 'M' : 'F'; // 保存データの値をそのままパスに入れない
     var code = '';
     for (var i = 0; i < scores.length; i++) {
       var v = scores[i];
@@ -534,6 +535,12 @@ body.theme-light .dg-text { color: #1e293b; }
     }
   }
 
+  function escHtml(v) {
+    return String(v).replace(/[&<>"']/g, function(ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+
   function buildBotFromResult(item, idx) {
     var scores = scoresFromResult(item);
     var gender = item.gender || 'F';
@@ -544,7 +551,8 @@ body.theme-light .dg-text { color: #1e293b; }
     var stability = 0.78 + (c - 3) * 0.07 - (n - 3) * 0.06;
     var reactivity = 0.18 + (a - 3) * 0.04 + (n - 3) * 0.05;
     var bot = {
-      name: item.name || item.typeName || ('あの人' + (idx + 1)),
+      // 名前は保存データから来る。表示先はすべてHTMLなので、ここでエスケープしておく
+      name: escHtml(item.name || item.typeName || ('あの人' + (idx + 1))),
       scores: scores,
       gender: gender,
       base: base,

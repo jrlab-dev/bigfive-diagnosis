@@ -1042,12 +1042,17 @@ const periodNotes = {
 // ===== 状態 =====
 let personName = '', personPeriod = '', personRel = '', personGender = 'F';
 let diagMode = 'simple';
+// 名前は利用者の入力・保存データなので、HTMLに入れるときは escHtml を通す
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
 let current = 0;
 const ans = new Array(total).fill(null);
 
 // 自分のスコア（result.htmlから渡される または LocalStorageから読み込み）
 const urlParams = new URLSearchParams(window.location.search);
 let myCode = urlParams.get('my') || '';
+if (!/^[1-5]{5}$/.test(myCode)) myCode = '';
 
 // URLパラメータになければ LocalStorageから適用中の自分のコードを読み込む
 if (!myCode) {
@@ -1062,6 +1067,9 @@ if (!myCode) {
     console.error('LocalStorage読み込みエラー:', e);
   }
 }
+
+// 形式が違うコードは使わない（点数なしとして扱う）
+if (!/^[1-5]{5}$/.test(String(myCode || ''))) myCode = '';
 
 const myScores = myCode.length === 5 ? {
   O: parseInt(myCode[0]), C: parseInt(myCode[1]),
@@ -1452,9 +1460,9 @@ function showResult() {
 
   // 性格説明
   const descCard = document.getElementById('descCard');
-  const { summary, detail, keywords } = genPersonDesc(sc, personName);
+  const { summary, detail, keywords } = genPersonDesc(sc, escHtml(personName));
   descCard.innerHTML = `
-    <p class="desc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> ${personName}さんの性格まとめ</p>
+    <p class="desc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> ${escHtml(personName)}さんの性格まとめ</p>
     <p class="desc-text">${summary}<br>${detail}</p>
     <div class="desc-keywords">${keywords.map(k=>`<span class="desc-kw">${k}</span>`).join('')}</div>`;
 
@@ -1463,7 +1471,7 @@ function showResult() {
   if (cfg.isChild) {
     compatCard.className = 'compat-prompt';
     compatCard.innerHTML = `
-      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> ${personName}の性格タイプについて</p>
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> ${escHtml(personName)}の性格タイプについて</p>
       <p class="compat-prompt-sub" style="line-height:1.7;">これは保護者から見たお子さんの傾向です。<br>家庭外の姿は反映されない場合があります。<br>結果はあくまで参考としてお使いください。</p>`;
     // 精度注記を子供向けに上書き
     document.getElementById('resultAccuracyNote').innerHTML =
@@ -1508,11 +1516,11 @@ function showResult() {
   } else {
     // 自分のスコアなし → 自己診断への誘導
     const otherCode = `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`;
-    const myQueryParam = myCode ? `&my=${myCode}` : '';
+    const myQueryParam = /^[1-5]{5}$/.test(myCode) ? `&my=${encodeURIComponent(myCode)}` : '';
     compatCard.className = 'compat-prompt';
     compatCard.innerHTML = `
-      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> ${personName}さんとの相性を見る</p>
-      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${personName}さんとの相性スコア</strong>が表示されます</p>
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> ${escHtml(personName)}さんとの相性を見る</p>
+      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${escHtml(personName)}さんとの相性スコア</strong>が表示されます</p>
       <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}${myQueryParam}" class="compat-prompt-btn">
         自分を診断して相性を確認する →
       </a>`;
@@ -1699,7 +1707,7 @@ function showResult() {
     const btnLabel = teamUnlocked ? 'チーム相性と役割カードを見る →' : 'チーム相性診断を見に行く →';
     teamPrompt.style.display = 'block';
     teamPrompt.innerHTML = `
-      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${personName}さんとチームを組むと？</p>
+      <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${escHtml(personName)}さんとチームを組むと？</p>
       <p class="compat-prompt-sub">${sub}</p>
       <a href="team.html?pick=${tr.code}&pn=${encodeURIComponent(tr.name)}" class="compat-prompt-btn" id="teamPromptBtn">${btnLabel}</a>`;
     document.getElementById('teamPromptBtn').addEventListener('click', () => {

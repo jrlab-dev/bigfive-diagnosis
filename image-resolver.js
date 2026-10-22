@@ -36,7 +36,9 @@
 
   /** 各桁を {1,3,5} に丸める。1,2→1 / 3→3 / 4,5→5 */
   function roundedCode(code) {
-    return String(code || '33333').split('').map(function (d) {
+    code = String(code || '33333');
+    if (!/^[1-5]{5}$/.test(code)) code = '33333';
+    return code.split('').map(function (d) {
       var n = parseInt(d, 10);
       return n <= 2 ? '1' : n >= 4 ? '5' : '3';
     }).join('');
@@ -75,6 +77,7 @@
     if (version === 'kid3') return /^[123]{3}$/.test(code)
       ? { path: 'images/kid-cards/' + gender + '/' + code + '.webp?v=20260927h', tier: 'kid' }
       : { path: '', tier: 'kid' };
+    if (!/^[1-5]{5}$/.test(code)) code = '33333'; // 形式外のコードはパスに入れない
     var rCode = roundedCode(code);
 
     // ステップ1: secret（'60'/'120'のみ・rawCode完全一致）
@@ -105,6 +108,7 @@
     version = normalizeVersion(version);
     if (version === 'kid3') return /^[123]{3}$/.test(code)
       ? [{ path: 'images/kid-cards/' + gender + '/' + code + '.webp?v=20260927h', tier: 'kid' }] : [];
+    if (!/^[1-5]{5}$/.test(code)) code = '33333'; // 形式外のコードはパスに入れない
     var rCode = roundedCode(code);
     var candidates = [];
 

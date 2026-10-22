@@ -1156,7 +1156,7 @@ function loadOtherDiagnostics() {
     return;
   }
   wrap.innerHTML = '<div class="other-diag-wrap">' + items.map(it =>
-    `<span class="diag-chip"><span class="diag-chip-label">${it.label}</span>&nbsp;<span class="diag-chip-val">${it.value}</span></span>`
+    `<span class="diag-chip"><span class="diag-chip-label">${it.label}</span>&nbsp;<span class="diag-chip-val">${escHtml(it.value)}</span></span>`
   ).join('') + '</div>';
 }
 
@@ -1165,8 +1165,8 @@ function addEduRow(data) {
   const tbody = document.getElementById('eduBody');
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td class="edu-yr"><input type="number" class="edu-yr-in" placeholder="年" min="1950" max="2050" value="${data ? data.yr : ''}"></td>
-    <td class="edu-mo"><input type="number" class="edu-mo-in" placeholder="月" min="1" max="12" value="${data ? data.mo : ''}"></td>
+    <td class="edu-yr"><input type="number" class="edu-yr-in" placeholder="年" min="1950" max="2050" value="${data ? escHtml(String(data.yr)) : ''}"></td>
+    <td class="edu-mo"><input type="number" class="edu-mo-in" placeholder="月" min="1" max="12" value="${data ? escHtml(String(data.mo)) : ''}"></td>
     <td class="edu-ev">
       <select class="edu-ev-in">
         <option value="卒業" ${data && data.ev === '卒業' ? 'selected' : ''}>卒業</option>
@@ -1183,7 +1183,7 @@ function addEduRow(data) {
 }
 
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 // ===== 職歴行追加（テーブル形式）=====
@@ -1195,8 +1195,8 @@ function addWorkRow(data) {
   tr.innerHTML = `
     <td><input type="text" class="wc-co" placeholder="例：株式会社○○" value="${data ? escHtml(data.co||'') : ''}"></td>
     <td><input type="text" class="wc-pos" placeholder="例：営業" value="${data ? escHtml(data.pos||'') : ''}"></td>
-    <td><input type="month" class="wc-from" value="${data ? (data.from||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
-    <td><input type="month" class="wc-to" value="${data ? (data.to||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
+    <td><input type="month" class="wc-from" value="${data ? escHtml(data.from||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
+    <td><input type="month" class="wc-to" value="${data ? escHtml(data.to||'') : ''}" onchange="updateTenureRow(this.closest('tr'))"></td>
     <td class="tenure-cell"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
@@ -1549,7 +1549,7 @@ function addSkillRow(data) {
   tr.innerHTML = `
     <td><div class="cert-suggest-wrap"><input type="text" class="sc-name" placeholder="例：簿記・TOEIC・免許" value="${data ? escHtml(data.name||'') : ''}" oninput="showCertSuggest(this)" onblur="hideCertSuggest(this)" autocomplete="off"><div class="cert-suggest-list"></div></div></td>
     <td><input type="text" class="sc-grade" placeholder="${gradePH}" value="${data ? escHtml(data.grade||'') : ''}"${gradeListAttr}>${gradeDL}</td>
-    <td><input type="month" class="sc-date" value="${data ? (data.date||'') : ''}"></td>
+    <td><input type="month" class="sc-date" value="${data ? escHtml(data.date||'') : ''}"></td>
     <td><button class="btn-detail" onclick="toggleDetail('${id}_d')">詳細</button></td>
     <td><button class="btn-del-row" onclick="delRowPair('${id}')">×</button></td>
   `;
@@ -1568,7 +1568,7 @@ function addSkillRow(data) {
           <input type="text" class="sc-number" placeholder="例：第123456号・780点" value="${data ? escHtml(data.number||'') : ''}">
         </div>
         <div class="row"><label>有効期限</label>
-          <input type="month" class="sc-expiry" value="${data ? (data.expiry||'') : ''}">
+          <input type="month" class="sc-expiry" value="${data ? escHtml(data.expiry||'') : ''}">
         </div>
         <div class="row"><label>備考・レベル・詳細</label>
           <input type="text" class="sc-note" placeholder="例：ビジネス英語可" value="${data ? escHtml(data.note||'') : ''}">

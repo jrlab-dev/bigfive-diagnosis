@@ -296,6 +296,10 @@ const REL_CONFIG = {
 // ===== 状態 =====
 let selectedPersonIdx = -1;
 let selectedName = '';
+// 名前は保存データから来るので、HTMLに入れるときは escHtml を通す
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
 let selectedRel  = null;
 let currentQuestions = [];
 let current = 0;
@@ -337,8 +341,8 @@ function renderPersonList() {
     btn.innerHTML = `
       <span style="font-size:24px;">${icon}</span>
       <div style="flex:1;">
-        <div style="font-size:15px;font-weight:700;">${r.name}</div>
-        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${label}${hasAT ? ' · 診断済み' : ''}</div>
+        <div style="font-size:15px;font-weight:700;">${escHtml(r.name)}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${escHtml(label)}${hasAT ? ' · 診断済み' : ''}</div>
       </div>
       <span style="font-size:18px;color:var(--dim);">›</span>`;
     btn.addEventListener('click', () => selectPerson(i));
@@ -509,26 +513,26 @@ function renderResult(s) {
     const otherType = profile.id;
     let msg = '';
     if (selfType === 'secure' && otherType === 'secure') {
-      msg = `あなたも${selectedName}さんも安定型です。互いに感情的な余裕があり、自然体でいられる関係を築けます。深い信頼を積み上げていきやすい組み合わせです。`;
+      msg = `あなたも${escHtml(selectedName)}さんも安定型です。互いに感情的な余裕があり、自然体でいられる関係を築けます。深い信頼を積み上げていきやすい組み合わせです。`;
     } else if (selfType === 'secure' && otherType === 'anxious') {
-      msg = `あなたは安定型、${selectedName}さんは不安型の傾向があります。あなたの安定感が${selectedName}さんの不安を和らげることができます。「大丈夫」「ここにいる」という安心感を意識的に伝えると、関係が安定します。`;
+      msg = `あなたは安定型、${escHtml(selectedName)}さんは不安型の傾向があります。あなたの安定感が${escHtml(selectedName)}さんの不安を和らげることができます。「大丈夫」「ここにいる」という安心感を意識的に伝えると、関係が安定します。`;
     } else if (selfType === 'secure' && otherType === 'avoidant') {
-      msg = `あなたは安定型、${selectedName}さんは回避型の傾向があります。あなたが感情的な距離を尊重しながら接することで、${selectedName}さんは少しずつ心を開いてきます。焦らず一定のペースで信頼を積み上げましょう。`;
+      msg = `あなたは安定型、${escHtml(selectedName)}さんは回避型の傾向があります。あなたが感情的な距離を尊重しながら接することで、${escHtml(selectedName)}さんは少しずつ心を開いてきます。焦らず一定のペースで信頼を積み上げましょう。`;
     } else if (selfType === 'secure' && otherType === 'fearful') {
-      msg = `あなたは安定型、${selectedName}さんは恐れ型の傾向があります。あなたの一貫した安定感が、${selectedName}さんの「傷つきたくない」という恐れを和らげる鍵になります。急がず、ゆっくりと安心感を積み上げてください。`;
+      msg = `あなたは安定型、${escHtml(selectedName)}さんは恐れ型の傾向があります。あなたの一貫した安定感が、${escHtml(selectedName)}さんの「傷つきたくない」という恐れを和らげる鍵になります。急がず、ゆっくりと安心感を積み上げてください。`;
     } else if (selfType === 'anxious' && otherType === 'avoidant') {
-      msg = `不安型のあなたと回避型の${selectedName}さんの組み合わせは、追えば引く・引けば来るという「追いかけっこ」パターンになりやすい組み合わせです。あなたが少し感情的な追求を緩め、相手の空間を尊重することで関係が安定しやすくなります。`;
+      msg = `不安型のあなたと回避型の${escHtml(selectedName)}さんの組み合わせは、追えば引く・引けば来るという「追いかけっこ」パターンになりやすい組み合わせです。あなたが少し感情的な追求を緩め、相手の空間を尊重することで関係が安定しやすくなります。`;
     } else if (selfType === 'avoidant' && otherType === 'anxious') {
-      msg = `回避型のあなたと不安型の${selectedName}さんの組み合わせです。${selectedName}さんはあなたの反応を敏感に読み取っています。「大丈夫」という小さな安心感を意識的に伝えるだけで、相手の不安が大きく和らぐことがあります。`;
+      msg = `回避型のあなたと不安型の${escHtml(selectedName)}さんの組み合わせです。${escHtml(selectedName)}さんはあなたの反応を敏感に読み取っています。「大丈夫」という小さな安心感を意識的に伝えるだけで、相手の不安が大きく和らぐことがあります。`;
     } else if (selfType === otherType) {
       const labels = { anxious: '不安型', avoidant: '回避型', fearful: '恐れ型' };
-      msg = `あなたも${selectedName}さんも${labels[selfType] || selfType}の傾向があります。同じスタイル同士なので共感し合えますが、お互いの弱点が重なりやすい面もあります。意識的にオープンなコミュニケーションを取ることが関係を深めます。`;
+      msg = `あなたも${escHtml(selectedName)}さんも${labels[selfType] || selfType}の傾向があります。同じスタイル同士なので共感し合えますが、お互いの弱点が重なりやすい面もあります。意識的にオープンなコミュニケーションを取ることが関係を深めます。`;
     } else {
-      msg = `あなたと${selectedName}さんの愛着スタイルは異なります。スタイルの違いは「相性が悪い」ではなく、互いに補い合えるポテンシャルでもあります。相手の行動の背景にある不安や抵抗を理解することが、より良い関係につながります。`;
+      msg = `あなたと${escHtml(selectedName)}さんの愛着スタイルは異なります。スタイルの違いは「相性が悪い」ではなく、互いに補い合えるポテンシャルでもあります。相手の行動の背景にある不安や抵抗を理解することが、より良い関係につながります。`;
     }
-    crossArea.innerHTML = `<p style="font-size:12px;color:var(--dim);margin:0 0 10px;">あなた自身の愛着スタイル診断結果（${typeNames[selfType] || selfType}）と比較しています。</p><p style="font-size:14px;line-height:1.75;">${msg}</p>`;
+    crossArea.innerHTML = `<p style="font-size:12px;color:var(--dim);margin:0 0 10px;">あなた自身の愛着スタイル診断結果（${escHtml(typeNames[selfType] || selfType)}）と比較しています。</p><p style="font-size:14px;line-height:1.75;">${msg}</p>`;
   } else {
-    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分の愛着スタイル診断を受けると、<strong>${selectedName}さん</strong>との関係パターンをさらに詳しく分析できます。</p><a href="attachment.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.3);border-radius:999px;color:#f472b6;font-size:13px;font-weight:700;text-decoration:none;">自分の愛着スタイルを診断する →</a>`;
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分の愛着スタイル診断を受けると、<strong>${escHtml(selectedName)}さん</strong>との関係パターンをさらに詳しく分析できます。</p><a href="attachment.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.3);border-radius:999px;color:#f472b6;font-size:13px;font-weight:700;text-decoration:none;">自分の愛着スタイルを診断する →</a>`;
   }
 
   window.scrollTo(0, 0);

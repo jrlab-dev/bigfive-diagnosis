@@ -1012,6 +1012,14 @@ const traitInfo = {
 };
 
 // ===== ユーティリティ =====
+// 名前などはURLや保存データから来るので、HTMLに入れるときは escHtml を通す
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+function isValidCode(c) { return typeof c === 'string' && /^[1-5]{5}$/.test(c); }
+function safeGender(g) { return g === 'M' || g === 'F' ? g : 'F'; }
+function cutName(n) { return n ? String(n).slice(0, 30) : ''; }
+
 function toImgCode(code) {
   return code.split('').map(d => { const n = parseInt(d); return n <= 2 ? '1' : n >= 4 ? '5' : '3'; }).join('');
 }
@@ -1050,16 +1058,17 @@ let pickTarget = null;
       const genders = params.getAll('g');
       const types = params.getAll('t');
       codes.forEach((c, i) => {
+        if (!isValidCode(c)) return;
         members.push({
           code: c,
-          name: names[i] || `メンバー (${c})`,
-          gender: genders[i] || 'F',
-          type: types[i] || 'other'
+          name: cutName(names[i]) || `メンバー (${c})`,
+          gender: safeGender(genders[i]),
+          type: ['my', 'other', 'shared'].includes(types[i]) ? types[i] : 'other'
         });
       });
       if (members.length >= 2) {
         viewTeamData = {
-          teamName: params.get('teamName') || '',
+          teamName: cutName(params.get('teamName')),
           members
         };
       }
@@ -1068,19 +1077,19 @@ let pickTarget = null;
     // あの人診断の結果画面から来た場合（2026-07-19追加）：?pick=コード&pn=名前
     const pickRaw = new URLSearchParams(location.search).get('pick');
     if (pickRaw && /^[1-5]{5}$/.test(pickRaw)) {
-      pickTarget = { code: pickRaw, name: new URLSearchParams(location.search).get('pn') || '' };
+      pickTarget = { code: pickRaw, name: cutName(new URLSearchParams(location.search).get('pn')) };
     }
     // 共有リンクからのメンバー
     const raw = new URLSearchParams(location.search).get('share');
     if (!raw) return;
     const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
-    if (!data.c || data.c.length !== 5) return;
+    if (!data || !isValidCode(data.c)) return;
     sharedMember = {
       id: 'shared_0',
-      name: data.n || `友達 (${data.c})`,
+      name: cutName(data.n) || `友達 (${data.c})`,
       code: data.c,
       scores: codeToScores(data.c),
-      gender: data.g || 'F',
+      gender: safeGender(data.g),
       type: 'shared',
       date: new Date().toISOString()
     };
@@ -1114,13 +1123,13 @@ function loadMembers() {
   if (myResults.length > 0) {
     const activeIdx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), Math.max(0, myResults.length - 1));
     const r = myResults[activeIdx];
-    const scores = r.scores || codeToScores(r.code);
-    members.push({
+    const scores = r && isValidCode(r.code) ? (r.scores || codeToScores(r.code)) : null;
+    if (scores) members.push({
       id: 'my_0',
       name: PersonalityTypes.getName(r.code, r.typeName || `自分 (${r.code})`),
       code: r.code,
       scores,
-      gender: r.gender || 'F',
+      gender: safeGender(r.gender),
       type: 'my',
       date: r.date
     });
@@ -1128,13 +1137,14 @@ function loadMembers() {
 
   // 他人の結果
   otherResults.forEach((r, i) => {
+    if (!r || !isValidCode(r.code)) return;
     const scores = codeToScores(r.code);
     members.push({
       id: `other_${i}`,
       name: r.name || `あの人 (${r.code})`,
       code: r.code,
       scores,
-      gender: r.gender || 'F',
+      gender: safeGender(r.gender),
       type: 'other',
       date: r.date
     });
@@ -1161,7 +1171,7 @@ function renderMembers() {
     const banner = document.createElement('div');
     banner.id = 'sharedBanner';
     banner.className = 'shared-banner';
-    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${sharedMember.name}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
+    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${escHtml(sharedMember.name)}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
     intro.after(banner);
   }
 
@@ -1195,8 +1205,8 @@ function renderMembers() {
         b.id = 'pickBanner';
         b.className = 'shared-banner';
         const msg = firstMy
-          ? `<strong>${cand.name}</strong>さんとあなたを選択済みです。<br>下の「チーム相性を診断する」を押すと役割カードが出ます。`
-          : `<strong>${cand.name}</strong>さんを選択済みです。<br>もう1人メンバーを選ぶと診断できます。`;
+          ? `<strong>${escHtml(cand.name)}</strong>さんとあなたを選択済みです。<br>下の「チーム相性を診断する」を押すと役割カードが出ます。`
+          : `<strong>${escHtml(cand.name)}</strong>さんを選択済みです。<br>もう1人メンバーを選ぶと診断できます。`;
         b.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${msg}`;
         intro.after(b);
       }
@@ -1215,7 +1225,7 @@ function renderMembers() {
                onerror="this.parentElement.innerHTML='<svg width=&quot;16&quot; height=&quot;16&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><path d=&quot;M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2&quot;/><circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/></svg>'">
         </div>
         <div class="member-info">
-          <div class="member-name">${m.name}</div>
+          <div class="member-name">${escHtml(m.name)}</div>
           <div class="member-meta">
             <span class="member-code">${m.code}</span>
           </div>
@@ -1355,7 +1365,7 @@ function genPositionAdviceHtml(members, currentScore) {
     if (!a.factor) {
       return `
         <div class="position-member">
-          <div class="position-name">${a.name}</div>
+          <div class="position-name">${escHtml(a.name)}</div>
           <div class="position-good">現在の特性はチームに良い影響を与えています ✓</div>
         </div>
       `;
@@ -1365,7 +1375,7 @@ function genPositionAdviceHtml(members, currentScore) {
     return `
       <div class="position-member">
         <div class="position-name">
-          ${a.name}
+          ${escHtml(a.name)}
           <span class="factor-tag" style="background:${color}">${a.factorName}</span>
         </div>
         <div class="position-advice">${a.text}</div>
@@ -1550,7 +1560,7 @@ function genRoleCardsHtml(members, avg) {
         <div class="role-head">
           <div class="role-icon"><img src="images/characters/marume243/${m.gender}/${toImgCode(m.code)}.webp" alt="" onerror="this.style.display='none'"></div>
           <div>
-            <div class="position-name">${m.name}</div>
+            <div class="position-name">${escHtml(m.name)}</div>
             <div class="role-name">${role.emoji} ${role.name}<span class="role-catch">${role.catch}</span></div>
           </div>
         </div>
@@ -1684,7 +1694,7 @@ function renderResults() {
       worstSectionHtml = `
         <div class="pair-section">
           <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 翻訳が必要なペア</p>
-          <p class="pair-names">${worstPair.a.name} × ${worstPair.b.name}</p>
+          <p class="pair-names">${escHtml(worstPair.a.name)} × ${escHtml(worstPair.b.name)}</p>
           <p class="pair-score" style="color: #fbbf24;">${worstPair.score}点</p>
           <p class="pair-comment">チーム内でものの見方が最も違う2人です。悪い組み合わせではなく、言い方の「翻訳」が要るだけ。上の役割カードの「接し方」をお互いに読むところから始めるのがおすすめです。</p>
         </div>
@@ -1701,7 +1711,7 @@ function renderResults() {
       <div class="pair-card">
         <div class="pair-section">
           <p class="pair-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> 最も相性が良いペア</p>
-          <p class="pair-names">${bestPair.a.name} × ${bestPair.b.name}</p>
+          <p class="pair-names">${escHtml(bestPair.a.name)} × ${escHtml(bestPair.b.name)}</p>
           <p class="pair-score" style="color: #34d399;">${bestPair.score}点</p>
         </div>
         ${worstSectionHtml}
@@ -1747,7 +1757,7 @@ function renderResults() {
   }
 
   container.innerHTML = `
-    ${teamName ? `<p class="result-team-name"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${teamName}</p>` : ''}
+    ${teamName ? `<p class="result-team-name"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> ${escHtml(teamName)}</p>` : ''}
 
     <!-- チームスコア -->
     <div class="team-card">
@@ -2042,7 +2052,7 @@ function genPairWarnings(bfmData) {
   if (eqVals.length >= 2) {
     const eqMax = Math.max(...eqVals), eqMin = Math.min(...eqVals);
     if (eqMax - eqMin >= 1.5) {
-      const highEqNames = eqMembers.filter(m => m.eq.overall >= eqMax - 0.3).map(m => m.name);
+      const highEqNames = eqMembers.filter(m => m.eq.overall >= eqMax - 0.3).map(m => escHtml(m.name));
       warnings.push({ type: 'caution', pair: false,
         text: `メンバー間でEQに差があります。<strong>${highEqNames.join('・')}さん</strong>に感情的な調整役・緩衝役が集中しやすく、長期的に燃え尽きるリスクがあります。意識的に役割を分担しましょう。` });
     }
@@ -2054,35 +2064,35 @@ function genPairWarnings(bfmData) {
     const eqHighCount = eqMembers.filter(em => em.eq.overall >= 3.5).length;
     if (eqHighCount >= 2) {
       warnings.push({ type: 'danger', pair: false,
-        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部交渉や組織政治での立ち回りでチームに強みをもたらします。一方、EQの高いメンバーが多い内部では、感情を読んだ利用的なダイナミクスが生じやすいため、定期的に率直な1on1を設けることが有効です。` });
+        text: `<strong>${escHtml(m.name)}さんのマキャベリアン傾向</strong>は、外部交渉や組織政治での立ち回りでチームに強みをもたらします。一方、EQの高いメンバーが多い内部では、感情を読んだ利用的なダイナミクスが生じやすいため、定期的に率直な1on1を設けることが有効です。` });
     } else {
       warnings.push({ type: 'caution', pair: false,
-        text: `<strong>${m.name}さんのマキャベリアン傾向</strong>は、外部折衝や政治的な場面でチームの強みになります。内部では物事をストレートに話す場を意識的に作ると、関係が安定しやすいです。` });
+        text: `<strong>${escHtml(m.name)}さんのマキャベリアン傾向</strong>は、外部折衝や政治的な場面でチームの強みになります。内部では物事をストレートに話す場を意識的に作ると、関係が安定しやすいです。` });
     }
   } else if (machiHigh.length >= 2) {
     warnings.push({ type: 'danger', pair: false,
-      text: `<strong>${machiHigh.map(m => m.name).join('・')}さん</strong>が両者ともマキャベリアン傾向が高いです。外部では強力ですが、内部で利害が衝突したときに権謀術数が生じやすく、チームの信頼基盤が崩れるリスクがあります。` });
+      text: `<strong>${machiHigh.map(m => escHtml(m.name)).join('・')}さん</strong>が両者ともマキャベリアン傾向が高いです。外部では強力ですが、内部で利害が衝突したときに権謀術数が生じやすく、チームの信頼基盤が崩れるリスクがあります。` });
   }
 
   // ナルシシズム → 文脈込みの評価
   if (narcHigh.length === 1) {
     const m = narcHigh[0];
     warnings.push({ type: 'caution', pair: false,
-      text: `<strong>${m.name}さんのリーダーシップ傾向</strong>は、危機対応や短期プロジェクトで大きな推進力になります。ただし長期的には「自分の貢献だけが見えやすくなる」傾向があるため、他メンバーの成果を可視化する工夫が有効です。` });
+      text: `<strong>${escHtml(m.name)}さんのリーダーシップ傾向</strong>は、危機対応や短期プロジェクトで大きな推進力になります。ただし長期的には「自分の貢献だけが見えやすくなる」傾向があるため、他メンバーの成果を可視化する工夫が有効です。` });
   } else if (narcHigh.length >= 2) {
     warnings.push({ type: 'danger', pair: false,
-      text: `<strong>${narcHigh.map(m => m.name).join('・')}さん</strong>が両者ともリーダーシップ傾向が強いです。方向性が一致しているうちは突破力がありますが、意見が割れた場合に覇権争いに発展しやすいです。意思決定のフローを明文化しておくことを強く推奨します。` });
+      text: `<strong>${narcHigh.map(m => escHtml(m.name)).join('・')}さん</strong>が両者ともリーダーシップ傾向が強いです。方向性が一致しているうちは突破力がありますが、意見が割れた場合に覇権争いに発展しやすいです。意思決定のフローを明文化しておくことを強く推奨します。` });
   }
 
   // サイコパシー
   psychHigh.forEach(m => {
-    const eqHighNames = eqMembers.filter(em => em.id !== m.id && em.eq.overall >= 3.5).map(em => em.name);
+    const eqHighNames = eqMembers.filter(em => em.id !== m.id && em.eq.overall >= 3.5).map(em => escHtml(em.name));
     if (eqHighNames.length >= 1) {
       warnings.push({ type: 'caution', pair: false,
-        text: `<strong>${m.name}さん</strong>は高ストレス下での冷静な判断力が強みです。一方、長期的には<strong>${eqHighNames.join('・')}さん</strong>のような共感力の高いメンバーに感情的コストが蓄積しやすいです。定期的な振り返りの場が有効です。` });
+        text: `<strong>${escHtml(m.name)}さん</strong>は高ストレス下での冷静な判断力が強みです。一方、長期的には<strong>${eqHighNames.join('・')}さん</strong>のような共感力の高いメンバーに感情的コストが蓄積しやすいです。定期的な振り返りの場が有効です。` });
     } else {
       warnings.push({ type: 'caution', pair: false,
-        text: `<strong>${m.name}さん</strong>は冷静な判断力が強みです。長期的にはチームの感情的なつながりを維持する工夫が必要です。` });
+        text: `<strong>${escHtml(m.name)}さん</strong>は冷静な判断力が強みです。長期的にはチームの感情的なつながりを維持する工夫が必要です。` });
     }
   });
 
@@ -2098,10 +2108,10 @@ function genPairWarnings(bfmData) {
           ? [myMember.name, m.name]
           : [m.name, myMember.name];
         warnings.push({ type: 'caution', pair: true,
-          text: `<strong>${chaser}さんと${distancer}さんの愛着スタイル</strong>は「不安型×回避型」の組み合わせです。距離感でズレが生じやすく、追いかけるほど引いてしまう循環が起きやすいです。定期的に「今どんなペースで関わりたいか」を率直に伝え合う場を設けると関係が安定します。` });
+          text: `<strong>${escHtml(chaser)}さんと${escHtml(distancer)}さんの愛着スタイル</strong>は「不安型×回避型」の組み合わせです。距離感でズレが生じやすく、追いかけるほど引いてしまう循環が起きやすいです。定期的に「今どんなペースで関わりたいか」を率直に伝え合う場を設けると関係が安定します。` });
       } else if (myAttachType === 'secure' && otherType === 'secure') {
         warnings.push({ type: 'good', pair: true,
-          text: `<strong>${myMember.name}さんと${m.name}さん</strong>は両者とも安定型の愛着スタイルです。感情的な余裕があり、安心して頼り合えるベース関係を築きやすい組み合わせです。` });
+          text: `<strong>${escHtml(myMember.name)}さんと${escHtml(m.name)}さん</strong>は両者とも安定型の愛着スタイルです。感情的な余裕があり、安心して頼り合えるベース関係を築きやすい組み合わせです。` });
       }
     });
   }
@@ -2210,14 +2220,15 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
       bars.push(`<div class="bigfiveman-mini-row">
         <span class="bigfiveman-mini-label">EQ</span>
         <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${pct}%;background:#d946ef;"></div></div>
-        <span class="bigfiveman-mini-val">${m.eq.levelName || m.eq.overall.toFixed(1)}</span>
+        <span class="bigfiveman-mini-val">${escHtml(m.eq.levelName || m.eq.overall.toFixed(1))}</span>
       </div>`);
     }
     if (m.dt) {
       [['ナルシシズム', '#f97316', m.dt.nPct],
        ['マキャベリアン', '#ef4444', m.dt.mPct],
-       ['サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([label, color, val]) => {
-        if (val == null) return;
+       ['サイコパシー', '#8b5cf6', m.dt.pPct]].forEach(([label, color, raw]) => {
+        if (raw == null) return;
+        const val = Number(raw);
         bars.push(`<div class="bigfiveman-mini-row">
           <span class="bigfiveman-mini-label">${label}</span>
           <div class="bigfiveman-mini-track"><div class="bigfiveman-mini-fill" style="width:${val}%;background:${color};"></div></div>
@@ -2226,7 +2237,7 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
       });
     }
     return `<div class="bigfiveman-member-row">
-      <div class="bigfiveman-member-name">${m.name}</div>
+      <div class="bigfiveman-member-name">${escHtml(m.name)}</div>
       <div class="bigfiveman-mini-bars">${bars.join('')}</div>
     </div>`;
   }).filter(Boolean).join('');
@@ -2244,7 +2255,7 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
       fixed: '安定志向の強さはリスク管理に活きます。一方、チームが新しい挑戦をするときは「まず小さく試す」というフレームで参加すると動きやすくなります。'
     };
     adviceItems.push(`<div class="bigfiveman-advice-item">
-      <span class="bigfiveman-advice-label">マインドセット：${mindsetLabels[ms.type] || ms.type}</span>
+      <span class="bigfiveman-advice-label">マインドセット：${escHtml(mindsetLabels[ms.type] || ms.type)}</span>
       <p class="bigfiveman-advice-text">${mindsetAdvice[ms.type] || ''}</p>
     </div>`);
   }
@@ -2258,7 +2269,7 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
       balanced: '自分でコントロールできることとできないことを使い分ける判断力が強みです。チームの振り返りの場でファシリテーター的な役割を担うと力を発揮しやすいです。'
     };
     adviceItems.push(`<div class="bigfiveman-advice-item">
-      <span class="bigfiveman-advice-label">統制の所在：${locusLabels[lc.type] || lc.type}</span>
+      <span class="bigfiveman-advice-label">統制の所在：${escHtml(locusLabels[lc.type] || lc.type)}</span>
       <p class="bigfiveman-advice-text">${locusAdvice[lc.type] || ''}</p>
     </div>`);
   }

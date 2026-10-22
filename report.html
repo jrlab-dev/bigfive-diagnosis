@@ -866,7 +866,7 @@ function renderTestsGrid(data) {
             <span class="test-summary-icon">${t.icon}</span>
             <span class="test-summary-label">${t.label}</span>
           </div>
-          <div class="test-summary-value" style="color:${t.color}">${t.value}</div>
+          <div class="test-summary-value" style="color:${t.color}">${String(t.value).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]))}</div>
         </div>`;
     } else {
       return `

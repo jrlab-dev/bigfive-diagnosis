@@ -2042,16 +2042,16 @@ function genRichDesc(sc) {
   const e2 = desc[top2][sc[top2]];
 
   const summariesScientific = {
-    EO: `${subject}は明るく社交的でありながら好奇心旺盛な行動派タイプです。`,
-    EC: `${subject}は社交的でありながら責任感も強い、信頼されやすいタイプです。`,
-    EA: `${subject}は人懐こく思いやり深い、周りを温かくする存在です。`,
-    EN: `${subject}は表に出る明るさの裏に繊細な感受性を持ち合わせています。`,
-    OC: `${subject}は好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。`,
-    OA: `${subject}はオープンマインドで人にも親切な、懐の深いタイプです。`,
-    ON: `${subject}は豊かな感受性と好奇心を持つ、感性の鋭いタイプです。`,
-    CA: `${subject}は誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。`,
-    CN: `${subject}は几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。`,
-    AN: `${subject}は共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。`,
+    EO: `${subjectHtml}は明るく社交的でありながら好奇心旺盛な行動派タイプです。`,
+    EC: `${subjectHtml}は社交的でありながら責任感も強い、信頼されやすいタイプです。`,
+    EA: `${subjectHtml}は人懐こく思いやり深い、周りを温かくする存在です。`,
+    EN: `${subjectHtml}は表に出る明るさの裏に繊細な感受性を持ち合わせています。`,
+    OC: `${subjectHtml}は好奇心と計画性を兼ね備えた、着実に挑戦できるタイプです。`,
+    OA: `${subjectHtml}はオープンマインドで人にも親切な、懐の深いタイプです。`,
+    ON: `${subjectHtml}は豊かな感受性と好奇心を持つ、感性の鋭いタイプです。`,
+    CA: `${subjectHtml}は誠実で思いやりがあり、周囲から信頼を集めやすいタイプです。`,
+    CN: `${subjectHtml}は几帳面で繊細。細かいことに気づける、丁寧な仕事をするタイプです。`,
+    AN: `${subjectHtml}は共感力が高く感情豊か。人の気持ちに寄り添うのが得意なタイプです。`,
   };
   const summariesMystic = {
     AN: `あなたは人の感情を受け取るアンテナが、人より何枚も多い。だから人が多い場所で消耗するのは、当然のことです。`,
@@ -2068,7 +2068,7 @@ function genRichDesc(sc) {
   const summaries = isOtherMode ? summariesScientific : summariesMystic;
   const keyStr = top1 + top2;
   const revKey = top2 + top1;
-  const summary = summaries[keyStr] || summaries[revKey] || `${subject}は${e1.kw[0]}で${e2.kw[0]}な性格傾向があります。`;
+  const summary = summaries[keyStr] || summaries[revKey] || `${subjectHtml}は${e1.kw[0]}で${e2.kw[0]}な性格傾向があります。`;
 
   // 全5因子のキーワードを収集
   const allKw = [];
@@ -2135,12 +2135,20 @@ const params = new URLSearchParams(window.location.search);
 const typeCode = params.get('code') || params.get('type') || '33333';
 const version = params.get('v') || '10';
 const otherCode = params.get('other_code'); // 他者診断から来た場合の相手のコード
-const otherName = params.get('other_name') || 'あの人';
-const personName = params.get('name'); // マイページから「あの人の結果」を開いた場合の名前
+// 名前は外から来る文字列なので、30文字までに切り、HTMLに入れるときは escHtml を通す
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, function(ch) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+  });
+}
+const otherName = String(params.get('other_name') || 'あの人').slice(0, 30);
+const personName = params.get('name') && params.get('name').slice(0, 30); // マイページから「あの人の結果」を開いた場合の名前
+const personNameHtml = personName ? escHtml(personName) : personName;
 const relation = params.get('rel') || 'friend'; // 関係性（love/work/friend）
 const isOtherMode = !!personName;
 const isChildMode = isOtherMode && (relation === 'child46' || relation === 'child79');
 const subject = isOtherMode ? personName + 'さん' : 'あなた';
+const subjectHtml = escHtml(subject);
 const isSavedView = params.get('saved') === '1';
 const isSharedView = params.get('from') === 'share';
 // 本人がいま受けた診断結果だけを、無料の総合レポートへつなぐ。
@@ -2502,7 +2510,7 @@ setTimeout(() => {
 
 // ===== 説明カード =====
 const { summary, detail, keywords } = genRichDesc(sc);
-const descTitle = isOtherMode ? `${personName}さんの性格まとめ` : 'あなたの性格まとめ';
+const descTitle = isOtherMode ? `${personNameHtml}さんの性格まとめ` : 'あなたの性格まとめ';
 document.getElementById('descCard').innerHTML = `
   <p class="desc-card-title">${descTitle}</p>
   <p class="desc-card-text">${summary}<br>${detail}</p>
@@ -2603,7 +2611,8 @@ document.getElementById('descCard').innerHTML = `
 
   const 全文モード = version === '120';
 
-  fetch('/api/essay?code=' + typeCode + '&v=' + version)
+  if (!/^[1-5]{5}$/.test(typeCode)) return;
+  fetch('/api/essay?code=' + typeCode + '&v=' + encodeURIComponent(version))
     .then(r => (r.ok ? r.json() : null))
     .then(d => {
       if (!d) return;
@@ -3380,7 +3389,7 @@ if (isOtherMode) {
   const weakBtnText = document.getElementById('weaknessBtnText');
   if (weakBtnText) weakBtnText.textContent = personName + 'さんの弱点を知る';
   const weakTitle = document.querySelector('.weakness-card-title');
-  if (weakTitle) weakTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> ' + personName + 'さんの弱点';
+  if (weakTitle) weakTitle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg> ' + personNameHtml + 'さんの弱点';
 
   // ダークトライアドセクション
   if (!isChildMode) {
@@ -3403,7 +3412,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <p style="font-size:13px;font-weight:700;color:#a78bfa;margin:0;display:flex;align-items:center;gap:6px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                ${personName}さんのダークトライアド
+                ${personNameHtml}さんのダークトライアド
               </p>
               <a href="${dtDiagUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
             </div>
@@ -3423,7 +3432,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;gap:10px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
               <div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">${personName}さんのダークトライアドを診断</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${personNameHtml}さんのダークトライアドを診断</div>
                 <div style="font-size:12px;color:var(--dim);margin-top:2px;">27問の行動観察でダークサイドを分析</div>
               </div>
             </div>
@@ -3453,7 +3462,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <p style="font-size:13px;font-weight:700;color:#f472b6;margin:0;display:flex;align-items:center;gap:6px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                ${personName}さんの愛着スタイル
+                ${personNameHtml}さんの愛着スタイル
               </p>
               <a href="${atDiagUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
             </div>
@@ -3473,7 +3482,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;gap:10px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               <div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">${personName}さんの愛着スタイルを診断</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${personNameHtml}さんの愛着スタイルを診断</div>
                 <div style="font-size:12px;color:var(--dim);margin-top:2px;">20問の行動観察で愛着パターンを分析</div>
               </div>
             </div>
@@ -3513,7 +3522,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <p style="font-size:13px;font-weight:700;color:#06b6d4;margin:0;display:flex;align-items:center;gap:6px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-                ${personName}さんのEQ
+                ${personNameHtml}さんのEQ
               </p>
               <a href="${eqDiagUrl}" style="font-size:11px;color:var(--dim);text-decoration:none;">再診断 →</a>
             </div>
@@ -3527,7 +3536,7 @@ if (isOtherMode) {
             <div style="display:flex;align-items:center;gap:10px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
               <div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">${personName}さんのEQを診断</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">${personNameHtml}さんのEQを診断</div>
                 <div style="font-size:12px;color:var(--dim);margin-top:2px;">20問の行動観察で感情知能のパターンを分析</div>
               </div>
             </div>
@@ -3620,7 +3629,7 @@ if (isOtherMode) {
 
       const compatCard = document.getElementById('compatibilityCard');
       compatCard.style.display = 'block';
-      document.querySelector('.compatibility-title').innerHTML = '<span class="icon-with-text"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' + personName + 'さんとの相性</span>';
+      document.querySelector('.compatibility-title').innerHTML = '<span class="icon-with-text"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' + personNameHtml + 'さんとの相性</span>';
 
       document.getElementById('compatScore').textContent = score;
       document.getElementById('compatLabel').textContent = `${labelInfo.label} (${score}点)`;
@@ -3630,9 +3639,9 @@ if (isOtherMode) {
 
       const bars = [
         { label: '自分の安定性', value: (6 - components.myN), max: 5, type: 'positive' },
-        { label: `${personName}さんの安定性`, value: (6 - components.partnerN), max: 5, type: 'positive' },
+        { label: `${personNameHtml}さんの安定性`, value: (6 - components.partnerN), max: 5, type: 'positive' },
         { label: '自分の思いやり', value: components.myA, max: 5, type: 'positive' },
-        { label: `${personName}さんの思いやり`, value: components.partnerA, max: 5, type: 'positive' },
+        { label: `${personNameHtml}さんの思いやり`, value: components.partnerA, max: 5, type: 'positive' },
         { label: '生活スタイル差', value: details.dC, max: 4, type: 'negative' },
         { label: '社交スタイル差', value: details.dE, max: 4, type: 'negative' },
       ];
@@ -5129,7 +5138,7 @@ if (isOtherMode) {
       '<div style="border:1.5px dashed rgba(139,92,246,0.3);border-radius:12px;padding:16px;text-align:center;">' +
         '<p style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:10px;">📊 統合スコア（研究に基づく精度向上）</p>' +
         '<button disabled style="width:100%;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:700;background:#374151;color:#6b7280;cursor:not-allowed;">本人に共有してもらうと解放されます</button>' +
-        '<p style="font-size:12px;color:var(--dim);margin-top:8px;">' + name + 'さんが自分の診断結果を共有してくれると、あなたの診断と統合した最も精度の高いスコアが出ます</p>' +
+        '<p style="font-size:12px;color:var(--dim);margin-top:8px;">' + escHtml(name) + 'さんが自分の診断結果を共有してくれると、あなたの診断と統合した最も精度の高いスコアが出ます</p>' +
       '</div>';
     return;
   }

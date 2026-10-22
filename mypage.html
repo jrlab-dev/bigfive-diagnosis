@@ -1926,18 +1926,18 @@ function renderMyResults() {
 
     const isActive = i === activeIdx;
     return `
-      <a href="result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}${facetsQuery(r.facets)}" class="result-card" style="${isActive ? 'border:1.5px solid rgba(139,92,246,0.5);padding-top:28px;' : ''}">
+      <a href="result.html?type=${encodeURIComponent(r.code)}&v=${encodeURIComponent(r.version || '10')}&gender=${encodeURIComponent(gender)}${facetsQuery(r.facets)}" class="result-card" style="${isActive ? 'border:1.5px solid rgba(139,92,246,0.5);padding-top:28px;' : ''}">
         ${isActive ? '<div style="position:absolute;top:8px;left:12px;background:#8b5cf6;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>適用中</span></div>' : ''}
         <div class="result-card-icon" style="background: rgba(139,92,246,0.2);">
           <div class="character-thumb">
-            <img src="${imgPath}" data-rest="${imgRest}" alt="キャラクター" onerror="if(this.dataset.rest){var a=this.dataset.rest.split('|');this.src=a.shift();this.dataset.rest=a.join('|')}else{this.parentElement.innerHTML='<span class=\\'character-thumb-placeholder\\'><svg class=\\'icon-sm\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><circle cx=\\'12\\' cy=\\'8\\' r=\\'4\\'/><path d=\\'M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2\\'/></svg></span>'}">
+            <img src="${escAttr(imgPath)}" data-rest="${escAttr(imgRest)}" alt="キャラクター" onerror="if(this.dataset.rest){var a=this.dataset.rest.split('|');this.src=a.shift();this.dataset.rest=a.join('|')}else{this.parentElement.innerHTML='<span class=\\'character-thumb-placeholder\\'><svg class=\\'icon-sm\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><circle cx=\\'12\\' cy=\\'8\\' r=\\'4\\'/><path d=\\'M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2\\'/></svg></span>'}">
           </div>
         </div>
         <div class="result-card-content">
-          <div class="result-card-name">${typeName}</div>
+          <div class="result-card-name">${escAttr(typeName)}</div>
           <div class="result-card-meta">
-            <span class="result-card-code">${r.code}</span>
-            <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:${vColor}33;color:${vColor};border:1px solid ${vColor}66;">${vLabel}</span>
+            <span class="result-card-code">${escAttr(r.code)}</span>
+            <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;background:${vColor}33;color:${vColor};border:1px solid ${vColor}66;">${escAttr(vLabel)}</span>
             <span class="result-card-date">${formatDate(r.date)}</span>
           </div>
           <div class="score-bars">
@@ -2144,15 +2144,15 @@ function renderOtherResults() {
     return `
       <div class="result-card other-sortable${isChecked ? ' checked' : ''}" data-index="${i}" style="${isChild ? 'background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.4);' : isShared ? 'background:rgba(236,72,153,0.06);border-color:rgba(236,72,153,0.3);' : ''}">
         <div class="card-checkbox other-check${isChecked ? ' checked' : ''}" onclick="event.preventDefault(); event.stopPropagation(); toggleOtherCheck(${i})">${isChecked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div>
-        <a href="${isChild ? childHref : `result.html?type=${r.code}&v=${r.version || '10'}&gender=${gender}&name=${encodeURIComponent(r.name)}&rel=${r.relation || 'friend'}&idx=${i}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
+        <a href="${isChild ? childHref : `result.html?type=${encodeURIComponent(r.code)}&v=${encodeURIComponent(r.version || '10')}&gender=${encodeURIComponent(gender)}&name=${encodeURIComponent(r.name)}&rel=${encodeURIComponent(r.relation || 'friend')}&idx=${i}`}" style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;text-decoration:none;color:inherit;">
           <div class="result-card-icon other-char-icon" style="background: rgba(236,72,153,0.08); padding:0; overflow:hidden;">
-            <img src="${charSrc}" data-rest="${charRest}" alt="${escAttr(r.name)}"
+            <img src="${escAttr(charSrc)}" data-rest="${escAttr(charRest)}" alt="${escAttr(r.name)}"
                  onerror="if(this.dataset.rest){var a=this.dataset.rest.split('|');this.src=a.shift();this.dataset.rest=a.join('|')}else{var pe=this.parentElement;pe.innerHTML='<svg class=\\'icon\\' style=\\'color:#ec4899\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><path d=\\'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2\\'/><circle cx=\\'12\\' cy=\\'7\\' r=\\'4\\'/></svg>';pe.style.background='rgba(236,72,153,0.2)';pe.style.display='flex';pe.style.alignItems='center';pe.style.justifyContent='center';}">
           </div>
           <div class="result-card-content">
             <div class="result-card-name">${escAttr(r.name)}${isChild ? ' <span style="font-size:11px;background:rgba(251,191,36,0.3);color:#92400e;border-radius:999px;padding:1px 7px;font-weight:700;"><span class="icon-with-text"><svg class="icon-sm" style="width:11px;height:11px;color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.7 2.8 1.7 3.7C6.5 11 5 13 5 15.5V20c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-4.5c0-2.5-1.5-4.5-4.2-5.3 1-.9 1.7-2.2 1.7-3.7C16.5 4 14.5 2 12 2z"/><circle cx="9" cy="5" r="1.5" fill="#fbbf24"/><path d="M8 4.5L7 3M10 4.5L11 3" stroke="#fbbf24" stroke-width="1" stroke-linecap="round"/></svg>子供</span></span>' : ''}${isShared ? ' <span style="font-size:11px;background:rgba(236,72,153,0.2);color:#ec4899;border-radius:999px;padding:1px 7px;font-weight:700;">本人共有</span>' : ''}</div>
             <div class="result-card-meta">
-              <span class="result-card-code">${r.code}</span>
+              <span class="result-card-code">${escAttr(r.code)}</span>
               <span class="result-card-date">${formatDate(r.date)}</span>
             </div>
             <div class="score-bars">
@@ -2230,13 +2230,13 @@ function renderTeamResults() {
       <div class="result-card" style="cursor:pointer;" onclick="openTeamResult(${i})">
         <div class="result-card-icon" style="background:rgba(139,92,246,0.15);font-size:22px;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
         <div class="result-card-content">
-          <div class="result-card-name">${label}</div>
+          <div class="result-card-name">${escAttr(label)}</div>
           <div class="result-card-meta" style="margin-bottom:4px;">
-            <span style="font-size:18px;font-weight:900;color:${rankColor};">${t.score}点</span>
-            <span style="font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;background:${rankColor}22;color:${rankColor};border:1px solid ${rankColor}55;margin-left:6px;">${t.rank}ランク</span>
+            <span style="font-size:18px;font-weight:900;color:${rankColor};">${escAttr(String(t.score))}点</span>
+            <span style="font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;background:${rankColor}22;color:${rankColor};border:1px solid ${rankColor}55;margin-left:6px;">${escAttr(String(t.rank))}ランク</span>
             <span class="result-card-date">${formatDate(t.date)}</span>
           </div>
-          <div style="font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.members.length}人 — ${memberNames}</div>
+          <div style="font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.members.length}人 — ${escAttr(memberNames)}</div>
         </div>
         <button class="delete-btn" onclick="event.stopPropagation(); deleteTeamResult(${i})">削除</button>
       </div>

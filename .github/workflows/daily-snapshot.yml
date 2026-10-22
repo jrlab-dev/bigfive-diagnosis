@@ -51,6 +51,9 @@ on:
     - cron: '23 22 * * *'   # 日本時間の翌朝 7:23（保険・本命が捨てられたとき用）
   workflow_dispatch:   # GitHubの画面から手動でも実行できるようにしておく
 
+# 外へcurlするだけなので、リポジトリへの権限は渡さない
+permissions: {}
+
 # 同時に2つ動かないようにする（遅延で重なったとき用）
 concurrency:
   group: daily-snapshot

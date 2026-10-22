@@ -307,7 +307,7 @@ function avatarImg(p, size) {
   var s = size || 48;
   var r = Math.round(s * 0.167) + 'px';
   var g = p.gender || '';
-  if (p.code && (g === 'M' || g === 'F')) {
+  if (p.code && /^[1-5]{5}$/.test(String(p.code)) && (g === 'M' || g === 'F')) {
     var candidates = getImgCandidates(p);
     var src = candidates[0];
     var rest = candidates.slice(1).join('|');
@@ -427,7 +427,7 @@ function renderPairDisplay(elId) {
 }
 function pairMini(p) {
   var g = p.gender || '', av = '';
-  if (p.code && (g === 'M' || g === 'F')) {
+  if (p.code && /^[1-5]{5}$/.test(String(p.code)) && (g === 'M' || g === 'F')) {
     var candidates = getImgCandidates(p);
     var src = candidates[0];
     var rest = candidates.slice(1).join('|');

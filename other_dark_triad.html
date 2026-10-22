@@ -440,6 +440,10 @@ const PROFILES = [
 // ===== 状態 =====
 let selectedRel = null;
 let selectedName = '';
+// 名前は保存データから来るので、HTMLに入れるときは escHtml を通す
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
 let currentQuestions = [];
 let current = 0;
 let answers = [];
@@ -493,8 +497,8 @@ function renderPersonList() {
     btn.innerHTML = `
       <span style="font-size:24px;">${icon}</span>
       <div style="flex:1;">
-        <div style="font-size:15px;font-weight:700;">${r.name}</div>
-        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${label}${hasDT ? ' · 診断済み' : ''}</div>
+        <div style="font-size:15px;font-weight:700;">${escHtml(r.name)}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px;">${escHtml(label)}${hasDT ? ' · 診断済み' : ''}</div>
       </div>
       <span style="font-size:18px;color:var(--dim);">›</span>`;
     btn.addEventListener('click', () => selectPerson(i));
@@ -685,21 +689,21 @@ function renderResult(s) {
 
     let msg = '';
     if (selfDom === 'N' && otherDom === 'N') {
-      msg = `あなたも${selectedName}さんも、ナルシシズムが高い傾向です。両者とも承認欲求が強いため、称賛の奪い合いや競争になりやすく、長期的には摩擦が増える可能性があります。互いに相手の成果を認める意識が、関係の安定につながります。`;
+      msg = `あなたも${escHtml(selectedName)}さんも、ナルシシズムが高い傾向です。両者とも承認欲求が強いため、称賛の奪い合いや競争になりやすく、長期的には摩擦が増える可能性があります。互いに相手の成果を認める意識が、関係の安定につながります。`;
     } else if (selfDom === 'N' && otherDom === 'M') {
-      msg = `あなたのナルシシズムに対して、${selectedName}さんはマキャベリズムが高い傾向です。あなたの承認欲求が操作に利用される可能性があります。「褒められたから信頼する」という判断は一度立ち止まって確認することをおすすめします。`;
+      msg = `あなたのナルシシズムに対して、${escHtml(selectedName)}さんはマキャベリズムが高い傾向です。あなたの承認欲求が操作に利用される可能性があります。「褒められたから信頼する」という判断は一度立ち止まって確認することをおすすめします。`;
     } else if (selfDom === 'M' && otherDom === 'N') {
-      msg = `あなたはマキャベリズム寄りで、${selectedName}さんはナルシシズム寄りです。あなたが関係をコントロールしやすい立場にあります。相手の自尊心を適切に満たしながら関係を動かせますが、長期的な誠実さが問われます。`;
+      msg = `あなたはマキャベリズム寄りで、${escHtml(selectedName)}さんはナルシシズム寄りです。あなたが関係をコントロールしやすい立場にあります。相手の自尊心を適切に満たしながら関係を動かせますが、長期的な誠実さが問われます。`;
     } else if (selfDom === 'M' && otherDom === 'M') {
-      msg = `あなたも${selectedName}さんも、マキャベリズムが高い傾向です。表面は協力的でも水面下での腹の探り合いが起きやすい組み合わせです。目標や利害が一致している場面では強いチームになれますが、利害が離れると関係が脆くなることがあります。`;
+      msg = `あなたも${escHtml(selectedName)}さんも、マキャベリズムが高い傾向です。表面は協力的でも水面下での腹の探り合いが起きやすい組み合わせです。目標や利害が一致している場面では強いチームになれますが、利害が離れると関係が脆くなることがあります。`;
     } else if (otherDom === 'P' && self.pPct < 40) {
-      msg = `${selectedName}さんのサイコパシーに対して、あなたの共感性は高めです。相手の冷淡な反応にあなたが傷つきやすい組み合わせです。感情的な反応を期待しすぎず、関係の期待値を現実的に設定することが大切です。`;
+      msg = `${escHtml(selectedName)}さんのサイコパシーに対して、あなたの共感性は高めです。相手の冷淡な反応にあなたが傷つきやすい組み合わせです。感情的な反応を期待しすぎず、関係の期待値を現実的に設定することが大切です。`;
     } else if (selfTotal < 40 && otherTotal < 40) {
-      msg = `あなたも${selectedName}さんも、ダークトライアドの各特性が全体的に低い傾向です。互いに誠実さと共感を大切にするスタイルで、安定した関係を築けるポテンシャルが高い組み合わせです。`;
+      msg = `あなたも${escHtml(selectedName)}さんも、ダークトライアドの各特性が全体的に低い傾向です。互いに誠実さと共感を大切にするスタイルで、安定した関係を築けるポテンシャルが高い組み合わせです。`;
     } else if (otherTotal - selfTotal > 25) {
-      msg = `${selectedName}さんのダークトライアド全体スコアが、あなたより大幅に高い傾向です。意図せず振り回されたり、搾取的な関係になっていないか定期的に振り返ることをおすすめします。`;
+      msg = `${escHtml(selectedName)}さんのダークトライアド全体スコアが、あなたより大幅に高い傾向です。意図せず振り回されたり、搾取的な関係になっていないか定期的に振り返ることをおすすめします。`;
     } else {
-      msg = `あなたと${selectedName}さんのダークトライアドプロファイルを重ねると、それぞれの特性の強みが補い合える関係です。ただし、どちらの因子が高いかによって対人摩擦のパターンが異なります。お互いの行動の「なぜ」を理解することが関係の深化につながります。`;
+      msg = `あなたと${escHtml(selectedName)}さんのダークトライアドプロファイルを重ねると、それぞれの特性の強みが補い合える関係です。ただし、どちらの因子が高いかによって対人摩擦のパターンが異なります。お互いの行動の「なぜ」を理解することが関係の深化につながります。`;
     }
 
     const selfBadges = [
@@ -710,7 +714,7 @@ function renderResult(s) {
 
     crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);margin:0 0 10px;">あなた自身のダークトライアド診断結果と比較しています。</p>${selfBadges ? `<div style="margin-bottom:10px;">${selfBadges}</div>` : ''}<p style="font-size:14px;line-height:1.75;">${msg}</p>`;
   } else {
-    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分のダークトライアド診断を受けると、<strong>${selectedName}さん</strong>との相性や関係ダイナミクスをさらに詳しく分析できます。</p><a href="dark-triad.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:999px;color:var(--accent);font-size:13px;font-weight:700;text-decoration:none;">自分のダークトライアドを診断する →</a>`;
+    crossArea.innerHTML = `<p style="font-size:13px;color:var(--dim);line-height:1.7;">自分のダークトライアド診断を受けると、<strong>${escHtml(selectedName)}さん</strong>との相性や関係ダイナミクスをさらに詳しく分析できます。</p><a href="dark-triad.html" style="display:inline-block;margin-top:12px;padding:10px 20px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:999px;color:var(--accent);font-size:13px;font-weight:700;text-decoration:none;">自分のダークトライアドを診断する →</a>`;
   }
 
   window.scrollTo(0, 0);

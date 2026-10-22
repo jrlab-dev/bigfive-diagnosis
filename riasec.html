@@ -759,7 +759,10 @@ function clearProgress(){
   if(saved){
     try{
       var data=JSON.parse(saved);
-      if(data.scores){
+      // 保存データは形式を確かめてから使う（コードや型名をそのままHTMLに入れるため）
+      var ds=data.scores;
+      var dsOk=ds&&/^[RIASEC]{3}$/.test(String(ds.code))&&Array.isArray(ds.sorted)&&ds.sorted.length===TYPE_KEYS.length&&ds.sorted.every(function(t){return TYPE_KEYS.indexOf(t)!==-1&&ds[t]&&typeof ds[t].avg==='number';});
+      if(dsOk){
         document.getElementById('introArea').style.display='none';
         showResult(data.scores);
         return;
