@@ -1149,7 +1149,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
             note.style.cssText = 'font-size:12px;color:#f97316;margin:8px 0 0;text-align:center;';
             wrap.appendChild(note);
           }
-          note.textContent = `精密版は${required}枚で解放（あと${remaining}枚）`;
+          note.textContent = `精密版は${required}枚で解放（あと${remaining}枚）。このまま30問で診断すると1枚増えます。ガチャでも増やせます`;
           return;
         }
       } catch(e) {}
@@ -2084,7 +2084,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
   <p class="updated">最終更新：2026年8月17日</p>
 </section>
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
-<script src="unlock.js"></script>
+<script src="unlock.js?v=20261022b"></script>
 <script src="unlock-banner.js"></script>
 </body>
 </html>
