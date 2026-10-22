@@ -154,6 +154,13 @@ function renderGate(featureId) {
     backLink: '#64748b'
   };
 
+  // チーム相性診断は「すぐ開く」ことが伝わるよう、その人の今の状態に合わせた最短ルートを出す（2026-10-22）
+  // 鍵の枚数（UNLOCK_TABLEの6枚）は変えない。順番は 自分の診断 → ガチャ → あの人診断（あの人診断は2枚で開くため）
+  if (featureId === 'team') {
+    renderTeamGate(c, current, required);
+    return;
+  }
+
   var teamNote = '';
   if (featureId === 'team') {
     teamNote = '<p style="color:' + c.text + ';font-size:0.8rem;margin:0 0 20px 0;line-height:1.6;background:' + c.boxBg + ';border:1px solid ' + c.boxBorder + ';border-radius:10px;padding:12px 14px;text-align:left;">💡 あの人診断をすると、カードが増えるうえに、そのまま「チーム相性診断」のメンバーとしても使えるようになります。</p>';
@@ -186,6 +193,92 @@ function renderGate(featureId) {
     + '</div>'
     + '</div>'
     + '<a href="quiz.html" style="display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:0.95rem;margin-bottom:12px;">診断してカードを手に入れる</a>'
+    + '<a href="index.html" style="display:inline-block;color:' + c.backLink + ';font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(gate);
+}
+
+// チーム相性診断の鍵の画面（最短ルートつき）
+function teamGatePlan(current, required) {
+  var need = Math.max(0, required - current);
+  var mine = [];
+  try { mine = JSON.parse(localStorage.getItem('bigfive_my_results') || '[]') || []; } catch (e) { mine = []; }
+  var selfDone = mine.length > 0 || current > 0;
+  var coins = 3;                                  // ガチャのコインは、初めての人は3枚から（gacha-utils.js と同じ）
+  try {
+    var raw = localStorage.getItem('bigfive_coins');
+    if (raw !== null) coins = Math.max(0, parseInt(raw, 10) || 0);
+  } catch (e) {}
+  var bonus = {};
+  try { bonus = JSON.parse(localStorage.getItem('bigfive_coin_bonus') || '{}') || {}; } catch (e) { bonus = {}; }
+  var selfCards = selfDone ? 0 : 1;
+  var coinsAfter = coins + (selfDone || bonus['10'] ? 0 : 1);   // 10問版の初回ボーナスはコイン1枚
+  var gacha = Math.min(coinsAfter, Math.max(0, need - selfCards));
+  var others = Math.max(0, need - selfCards - gacha);
+  return { need: need, selfDone: selfDone, coins: coins, gacha: gacha, others: others };
+}
+
+function renderTeamGate(c, current, required) {
+  // 説明が長いので、カードは透けない色にし、後ろは強めにぼかす（後ろの文字が重なって読みにくいため）
+  var light = document.body.classList.contains('theme-light');
+  c.solid = light ? '#ffffff' : '#0f1430';
+  c.veil = light ? 'rgba(241,245,249,0.88)' : 'rgba(5,8,25,0.88)';
+  var plan = teamGatePlan(current, required);
+  var pct = required > 0 ? Math.min(100, Math.round(current / required * 100)) : 0;
+  var btn = 'display:block;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;padding:11px 14px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:0.9rem;margin-top:8px;text-align:center;';
+  var stepBox = 'background:' + c.boxBg + ';border:1px solid ' + c.boxBorder + ';border-radius:12px;padding:12px 14px;margin:0 0 10px 0;text-align:left;';
+  var num = function (n, done) {
+    return '<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;margin-right:8px;font-size:0.8rem;font-weight:bold;flex-shrink:0;' +
+      (done ? 'background:#10b981;color:#fff;">✓' : 'background:' + c.accent + ';color:#fff;">' + n) + '</span>';
+  };
+  var head = function (n, done, text) {
+    return '<div style="display:flex;align-items:center;color:' + c.text + ';font-size:0.92rem;font-weight:bold;line-height:1.5;">' + num(n, done) + '<span>' + text + '</span></div>';
+  };
+  var small = function (text) {
+    return '<p style="color:' + c.sub + ';font-size:0.8rem;margin:6px 0 0 30px;line-height:1.6;">' + text + '</p>';
+  };
+  var steps = '';
+  var n = 0;
+  if (plan.selfDone) {
+    steps += '<div style="' + stepBox + 'opacity:0.75;">' + head('', true, '自分の診断') + small('済んでいます') + '</div>';
+  } else {
+    n++;
+    steps += '<div style="' + stepBox + '">' + head(n, false, '自分を診断する（10問・約2分）') +
+      small('カードが1枚と、ガチャのコインが1枚もらえます') +
+      '<a href="quiz.html?v=10" style="' + btn + '">自分を診断する</a></div>';
+  }
+  if (plan.gacha > 0) {
+    n++;
+    steps += '<div style="' + stepBox + '">' + head(n, false, 'ガチャを' + plan.gacha + '回引く（約1分）') +
+      small('コイン1枚で1回。' + (plan.selfDone ? 'いまコインが' + plan.coins + '枚あります' : '最初からある' + plan.coins + '枚と、①でもらう1枚で' + plan.gacha + '回引けます') + '。1回ごとにカードが1枚増えます') +
+      '<a href="gacha.html" style="' + btn + '">ガチャを引く</a></div>';
+  }
+  if (plan.others > 0) {
+    n++;
+    steps += '<div style="' + stepBox + '">' + head(n, false, '職場の人や友だちを' + plan.others + '人「あの人診断」する（1人30問・約5分）') +
+      small('1人ごとにカードが1枚増えます。<b>診断した人は、そのままこのチームのメンバーになります</b>') +
+      '<a href="other_quiz.html" style="' + btn + '">あの人診断をする</a></div>';
+  }
+  var minutes = (plan.selfDone ? 0 : 2) + (plan.gacha > 0 ? 1 : 0) + plan.others * 5;
+  var soon = minutes <= 3 ? 'すぐに' : '約' + (Math.ceil(minutes / 5) * 5) + '分で';
+
+  document.body.style.overflow = 'hidden';
+  var gate = document.createElement('div');
+  gate.id = 'unlock-gate';
+  gate.innerHTML =
+    '<div style="position:fixed;top:52px;left:0;right:0;bottom:0;background:' + c.veil + ';display:flex;flex-direction:column;align-items:center;justify-content:flex-start;z-index:9999;padding:20px 16px 96px;text-align:center;font-family:\'Hiragino Sans\',\'Noto Sans JP\',sans-serif;overflow-y:auto;">'
+    + '<div style="max-width:380px;width:100%;margin:auto 0;background:' + c.solid + ';border-radius:16px;padding:22px 18px;box-shadow:' + c.cardShadow + ';">'
+    + '<div style="font-size:2.2rem;margin-bottom:6px;">👥</div>'
+    + '<h2 style="color:' + c.h2 + ';font-size:1.15rem;margin:0 0 8px 0;line-height:1.5;">チーム相性診断</h2>'
+    + '<p style="color:' + c.text + ';font-size:0.95rem;margin:0 0 4px 0;line-height:1.6;">職場や仲間（最大8人）の性格を並べて、<br>チーム全体の相性・一人ひとりの役割・<br>相性のよいペアが分かります</p>'
+    + '<p style="color:' + c.accent + ';font-size:1.05rem;font-weight:bold;margin:12px 0 4px 0;line-height:1.6;">カードを集めると開きます。<br>下の順番なら' + soon + 'できます</p>'
+    + '<p style="color:' + c.sub + ';font-size:0.8rem;margin:0 0 8px 0;">いま カード ' + current + '枚 ／ ' + required + '枚で開く（あと ' + plan.need + '枚）</p>'
+    + '<div style="background:' + c.barBg + ';border-radius:999px;height:8px;width:100%;margin-bottom:16px;">'
+    + '<div style="background:linear-gradient(90deg,#8b5cf6,#ec4899);height:100%;border-radius:999px;width:' + pct + '%;"></div></div>'
+    + steps
+    + '<p style="color:' + c.sub + ';font-size:0.8rem;margin:12px 0 4px 0;line-height:1.6;">' + required + '枚になると「チーム相性診断が解放されました！」と出ます。「今すぐ使う」を押すと、このページに戻れます。</p>'
+    + '<p style="color:' + c.muted + ';font-size:0.72rem;margin:0 0 14px 0;line-height:1.6;">※ ガチャで同じカードが出たときは増えません（まれです）。<a href="child-update.html" style="color:inherit">カードのルール</a></p>'
     + '<a href="index.html" style="display:inline-block;color:' + c.backLink + ';font-size:0.8rem;text-decoration:none;">トップに戻る</a>'
     + '</div>'
     + '</div>';
