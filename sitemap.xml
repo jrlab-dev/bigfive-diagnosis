@@ -2439,4 +2439,10 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+<url>
+  <loc>https://bigfive.jr-genius.jp/blog/mypace-na-hito.html</loc>
+  <lastmod>2026-10-25</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
