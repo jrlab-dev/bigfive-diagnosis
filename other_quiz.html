@@ -312,6 +312,10 @@
   .advice-item:last-child { margin-bottom: 0; }
   .advice-item-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
   .advice-item-text { font-size: 13px; line-height: 1.7; color: var(--dim); }
+  .gap-card .gap-lead { margin-bottom: 14px; }
+  .gap-card .gap-item .advice-item-text { margin-bottom: 4px; }
+  .gap-card .advice-item-text strong { color: var(--text); font-weight: 600; }
+  .gap-note { font-size: 12px; line-height: 1.6; color: var(--dim); margin-top: 12px; opacity: .85; }
 
   /* 相性誘導カード */
   .compat-prompt {
@@ -710,6 +714,7 @@
   <div class="traits-card" id="traitsCard"></div>
   <div class="compat-card" id="compatCard"></div>
   <div class="advice-card" id="adviceCard" style="display:none;"></div>
+  <div class="advice-card gap-card" id="gapCard" style="display:none;"></div>
   <div class="compat-prompt" id="teamPromptCard" style="display:none;"></div>
   <div class="desc-card" id="descCard"></div>
   <div id="facetCardWrap" style="display:none;width:100%;">
@@ -1513,6 +1518,13 @@ function showResult() {
     adviceCard.className = `advice-card ${personRel}`;
     adviceCard.style.display = 'block';
     adviceCard.innerHTML = generateAdvice(personRel, sc, personName, {svgSize: 16});
+
+    // ぶつかりやすいところ（自分と相手の差・gap.js）
+    const gapCard = document.getElementById('gapCard');
+    const gapHtml = (typeof generateGapHtml === 'function') ? generateGapHtml(myScores, sc, personName) : '';
+    gapCard.className = `advice-card gap-card ${personRel}`;
+    gapCard.innerHTML = gapHtml;
+    gapCard.style.display = gapHtml ? 'block' : 'none';
   } else {
     // 自分のスコアなし → 自己診断への誘導
     const otherCode = `${sc.O}${sc.C}${sc.E}${sc.A}${sc.N}`;
@@ -1520,12 +1532,13 @@ function showResult() {
     compatCard.className = 'compat-prompt';
     compatCard.innerHTML = `
       <p class="compat-prompt-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> ${escHtml(personName)}さんとの相性を見る</p>
-      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${escHtml(personName)}さんとの相性スコア</strong>が表示されます</p>
+      <p class="compat-prompt-sub">自分のビッグファイブ診断を受けると<br><strong>${escHtml(personName)}さんとの相性と、ぶつかりやすいところ</strong>が表示されます</p>
       <a href="quiz.html?v=10&ref=other&other_code=${otherCode}&other_name=${encodeURIComponent(personName)}${myQueryParam}" class="compat-prompt-btn">
         自分を診断して相性を確認する →
       </a>`;
     const adviceCard = document.getElementById('adviceCard');
     adviceCard.style.display = 'none';
+    document.getElementById('gapCard').style.display = 'none';
   }
 
   // 精度注記
@@ -2023,6 +2036,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 <script src="album.js"></script>
 <script src="compat.js"></script>
 <script src="advice.js"></script>
+<script src="gap.js"></script>
 <section class="test-about">
   <h2>「あの人の性格を分析する」とは</h2>
   <p>この診断は、自分ではなく身近な誰かの性格を、あなたの日ごろの観察をもとにビッグファイブで推定する、<strong>他者評定（本人以外の人が性格を評価すること）</strong>の診断です。心理学では性格を、本人に聞く「自己評定」と、周りの人が見る「他者評定」の両側面から研究する歴史が長くあります。2010年、心理学者のシミーネ・ヴァジーレは両者をくらべて、<strong>「性格のどの側面を、だれがいちばん正確に知っているか」には偏りの法則がある</strong>ことを示しました（Vazire, 2010）。</p>

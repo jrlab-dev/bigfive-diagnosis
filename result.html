@@ -1166,6 +1166,10 @@
     line-height: 1.8;
     color: var(--dim);
   }
+  .gap-card .gap-lead { margin-bottom: 14px; }
+  .gap-card .gap-item .advice-item-text { margin-bottom: 4px; }
+  .gap-card .advice-item-text strong { color: var(--text); font-weight: 600; }
+  .gap-note { font-size: 12px; line-height: 1.6; color: var(--dim); margin-top: 12px; opacity: .85; }
   .compat-bar-value {
     font-size: 11px; width: 32px; text-align: right; color: var(--dim);
   }
@@ -1339,6 +1343,9 @@
       <p class="advice-title" id="adviceTitle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 接し方アドバイス</p>
       <div id="adviceContent"></div>
     </div>
+  </div>
+  <div class="advice-section" id="gapSection" style="display:none;">
+    <div class="advice-card gap-card" id="gapCard"></div>
   </div>
 
   <!-- 統合スコアセクション（あの人モードのみ・JSで制御） -->
@@ -1716,6 +1723,7 @@
 <script src="rarity.js?v=20260927"></script>
 <script src="compat.js"></script>
 <script src="advice.js"></script>
+<script src="gap.js"></script>
 <script src="report-texts.js"></script>
 <script>
 // 破損データに強い読み込み関数（A-2）：JSONが壊れていてもfallbackを返し、破損分はbroken__キーに退避する
@@ -3671,6 +3679,22 @@ if (isOtherMode) {
         if (relation === 'work') adviceCard.classList.add('work');
         if (relation === 'friend') adviceCard.classList.add('friend');
         adviceContent.innerHTML = generateAdvice(relation, partnerScores, personName, {includeTitle: false});
+      }
+
+      // ぶつかりやすいところ（自分と相手の差・gap.js）
+      const gapSection = document.getElementById('gapSection');
+      const gapCard = document.getElementById('gapCard');
+      if (gapSection && gapCard && typeof generateGapHtml === 'function') {
+        const mySc = { O: parseInt(myCode[0]), C: parseInt(myCode[1]), E: parseInt(myCode[2]), A: parseInt(myCode[3]), N: parseInt(myCode[4]) };
+        const ptSc = { O: parseInt(typeCode[0]), C: parseInt(typeCode[1]), E: parseInt(typeCode[2]), A: parseInt(typeCode[3]), N: parseInt(typeCode[4]) };
+        const gapHtml = generateGapHtml(mySc, ptSc, personName);
+        if (gapHtml) {
+          gapCard.className = 'advice-card gap-card';
+          if (relation === 'work') gapCard.classList.add('work');
+          if (relation === 'friend') gapCard.classList.add('friend');
+          gapCard.innerHTML = gapHtml;
+          gapSection.style.display = 'block';
+        }
       }
     }
   }
