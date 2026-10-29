@@ -181,7 +181,7 @@
       } else {
         card = buildCard('generic',
           '<div style="font-size:.92rem;">総合レポートでは、この結果をビッグファイブや他の診断と重ねた<b>クロス分析</b>が読めます。' +
-          '受けた診断が増えるほど、分析も増えていきます。</div>');
+          '追加診断の結果に応じて、組み合わせて読む内容を見直せます。</div>');
       }
     }
     area.appendChild(card);

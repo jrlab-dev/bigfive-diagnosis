@@ -231,6 +231,7 @@
 <div id="frBody" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
 
 <script src="facets.js"></script>
+<script src="ai-copy-utils.js"></script>
 <script>
 // ===== 30項目の定義（result.html:2512 の facetMeta と完全一致させる。名前を勝手に変えない） =====
 // facets（30桁）の並び： N0-5・E6-11・O12-17・A18-23・C24-29
@@ -637,10 +638,11 @@ function render(data){
   });
 
   var ATT_JA = { secure: '安定型', anxious: '不安型', avoidant: '回避型', fearful: '恐れ型' };
-  var CROSS_NOTE = {
-    2: '根拠：この組み合わせは、愛着理論×ビッグファイブの相関研究（複数研究のまとめ）で方向が確認されています',
-    1: '根拠：理論的に整合する組み合わせです（項目単位の研究は発展途上）'
-  };
+  function crossNote(science) {
+    if (science === 2 || science === '2') return 'サイトの根拠区分：関連研究を参照する区分です。文章全体や個人への当てはまりを実証するものではありません';
+    if (science === 1 || science === '1') return 'サイトの根拠区分：独自の理論的な読み合わせです。個人の行動や原因を実証するものではありません';
+    return 'サイトの根拠区分：未確認です';
+  }
   function crossParas(t){
     return String(t).split('\n\n').map(function(p){
       return '<p class="report-factor-text">' + esc(p) + '</p>';
@@ -676,7 +678,8 @@ function render(data){
   var anyTest = attKey || hspLv || impSev || impDom || eqLv || eqWk || dtS ||
                 locusKey || mindKey || sdtKey || loveKey || valKey || hexLv || riTop;
   html += '<div class="report-card">' +
-    '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>';
+    '<p class="report-card-title">クロス分析：心理学テスト × あなたの30項目</p>' +
+    '<p class="report-card-note">研究で示された相関と、サイト独自の読み合わせは別です。文章全体や個人の原因が実証されたという意味ではありません。<a href="science.html" style="color:#a78bfa;">心理学の一般的な根拠</a> · <a href="cross.html" style="color:#a78bfa;">組み合わせの仕組み</a></p>';
   if (!anyTest) {
     html += '<p class="report-card-note">別の心理学テストと重ねて読む、このレポートだけの章です</p>' +
       '<p class="report-factor-text">無料の<b>愛着スタイル診断</b>（12問・約2分）やHSP・インポスター・EQ・ダークトライアドの各診断を' +
@@ -753,7 +756,7 @@ function render(data){
         headBits.push('職業興味「' + (RI_JA[p.ri] || p.ri) + '」'); testCnt++; }
       var mat = '材料：' + matBits.join(' × ');
       var inner = '<div class="fr-cross-meta"><span>' + esc(mat) + '</span>' +
-        '<span>' + esc(CROSS_NOTE[p.science] || CROSS_NOTE[1]) + '</span></div>' + crossParas(p.body);
+        '<span>' + esc(crossNote(p.science)) + '</span></div>' + crossParas(p.body);
       var head = p.title ? p.title : headBits.join(' × ');
       if (testCnt >= 3) head = '★3テスト一致：' + head;
       if (i < 2) {
@@ -805,8 +808,8 @@ function render(data){
     html += '<div class="report-card" style="border:1px solid rgba(139,92,246,0.4)">' +
       '<p class="report-card-title">専用AIカウンセラー <span style="font-size:0.72em;background:rgba(139,92,246,0.25);' +
       'padding:2px 10px;border-radius:999px;vertical-align:middle">30項目詳細レポートの特典</span></p>' +
-      '<p class="report-card-note">このレポートの全文（30項目の解説＋クロス分析＝約1.5万字）を、AIに渡せる形でコピーします。' +
-      '貼り付けた先のAIは、この分析を土台にあなたの相談に乗る——専用カウンセラーになります。</p>' +
+      '<p class="report-card-note">この画面で取得できた30項目の解説と、該当するクロス分析がある場合はその本文を、AIに渡せる形でコピーします。' +
+      '内容を確認して自分でAIに貼り付け、相談の材料にできます。AIへ自動送信はしません。</p>' +
       '<p class="report-card-note" style="margin-top:6px">使い方：<b>①</b> 下のボタンで全文をコピー → ' +
       '<b>②</b> ChatGPTやClaudeのチャット欄に貼り付け → <b>③</b> 続けて相談したいことを書く</p>' +
       '<div class="ai-mode-choice" id="frAiMode">' +
@@ -821,7 +824,7 @@ function render(data){
       '<p style="text-align:center;margin:12px 0 4px">' +
       '<button id="frAiCopy" style="background:#8b5cf6;color:#fff;border:none;padding:12px 22px;border-radius:12px;' +
       'font-weight:700;font-size:0.95rem;cursor:pointer">全文をコピーして、AIに連れて行く</button></p>' +
-      '<p id="frAiCopyDone" class="fr-facet-desc" style="text-align:center;display:none">' +
+      '<p id="frAiCopyDone" class="fr-facet-desc" role="status" aria-live="polite" style="text-align:center;display:none">' +
       'コピーしました。AIのチャット欄に貼り付けて、そのあとに相談したいことを書いてください。</p></div>';
   }
 
@@ -861,13 +864,32 @@ function render(data){
     frPaintAiMode();
   })();
 
-  // AI持ち出しボタンの動作（全文整形→クリップボード）
+  // Copy only after the explicit button action; report failure truthfully.
   var aiBtn = document.getElementById('frAiCopy');
-  if (aiBtn) aiBtn.addEventListener('click', function(){
+  if (aiBtn) aiBtn.onclick = function(){
     var t = buildAiFullText(data, frAiMode);
-    function done(){
+    return AICopyUtils.copyText(t, navigator, document).then(function(ok) {
       var d = document.getElementById('frAiCopyDone');
-      if (d) d.style.display = 'block';
+      if (d) {
+        d.style.display = 'block';
+        d.textContent = ok ? 'コピーしました。内容をAIに貼り付けて、そのあとに相談したいことを書いてください。' :
+          'コピーできませんでした。下に表示した文章を選択して、手動でコピーしてください。';
+      }
+      var manual = document.getElementById('frAiManualCopy');
+      if (!ok && !manual) {
+        manual = document.createElement('textarea');
+        manual.id = 'frAiManualCopy';
+        manual.setAttribute('aria-label', '手動コピー用のレポート全文');
+        manual.readOnly = true;
+        manual.rows = 10;
+        manual.style.width = '100%';
+        aiBtn.parentNode.appendChild(manual);
+      }
+      if (manual) {
+        manual.hidden = ok;
+        if (!ok) { manual.value = t; manual.focus(); manual.select(); }
+      }
+      if (!ok) { aiBtn.textContent = '全文をコピーして、AIに連れて行く'; return; }
       aiBtn.textContent = 'コピーしました ✓';
       try {
         if (localStorage.getItem('dev_nocount') !== '1' && !localStorage.getItem('counted_paid_ai_copy')) {
@@ -875,23 +897,13 @@ function render(data){
           fetch('/count/hit?e=paid_ai_copy', { method: 'POST', keepalive: true }).catch(function(){});
         }
       } catch (e) {}
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(t).then(done).catch(function(){ fallbackCopy(t); done(); });
-    } else { fallbackCopy(t); done(); }
-  });
-  function fallbackCopy(t){
-    var ta = document.createElement('textarea');
-    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch (e) {}
-    ta.remove();
-  }
+    });
+  };
   // 型を細かく指定すると毎回同じ返事になりループするため、禁止3つだけ残して自由に会話させる（2026-08-18）
   var FR_AI_HEAD = [
     'あなたは性格心理学（ビッグファイブ理論など）に詳しい、親身な相談相手です。',
     '以下は、私が性格診断サイトで受けた120問版ビッグファイブ診断の「30項目 詳細レポート」の全文です。',
-    '私の30項目の点数と、その解説、そして他の心理学テストとの掛け合わせ分析（クロス分析）が含まれています。',
+    '取得できた30項目の点数と解説を含みます。クロス分析の有無は、以下の本文に記したとおりです。',
     'この分析を土台に、このあと私が書く質問や相談に答えてください。',
     '性格は「傾向」であって決めつけではない前提で、断定しすぎずにお願いします。',
     '',
@@ -923,18 +935,30 @@ function render(data){
       L.push('■ ' + m.name + '（' + FACTOR[m.factor].name + '）: ' + s + '点');
       if (body) L.push(body);
     });
+    if (isSample) L.unshift('【見本データ】これは本人の診断結果ではありません。');
     var cx = data._cross;
-    if (cx && ((cx.parts && cx.parts.length) || (cx.intros && cx.intros.length))) {
+    if (cx && ((Array.isArray(cx.parts) && cx.parts.length) || (Array.isArray(cx.intros) && cx.intros.length))) {
       L.push('');
       L.push('【クロス分析（他の心理学テストとの掛け合わせ）】');
       (cx.intros || []).forEach(function(it){ L.push(it.body); L.push(''); });
       (cx.parts || []).forEach(function(p){
         L.push('■ ' + (p.title ? p.title : 'クロス分析'));
+        L.push(crossNote(p.science));
         L.push(p.body);
         L.push('');
       });
     }
-    L.push('【分析はここまで】このあとに、私の相談を書きます。');
+    if (!cx || !((Array.isArray(cx.parts) && cx.parts.length) || (Array.isArray(cx.intros) && cx.intros.length))) L.push('【クロス分析】このコピーにクロス分析の本文は含まれていません。');
+    L.push('', '【資料の読み方と開き直し方】',
+      '研究で示された相関と、サイト独自の読み合わせは別です。根拠区分はサイトの分類であり、文章全体や個人の行動・原因を実証するものではありません。',
+      '未掲載・未確認の診断の点数やタイプは不明です。他の結果から補ったり推測したりしないでください。受診時期が異なる結果を含むことがあります。',
+      'これはコピー時点で取得できた資料です。追加診断を受けた場合は、同じブラウザの結果からレポートを開き直し、必要に応じて全文を再コピーしてください。結果により表示内容が変わらない場合もあります。解放条件は各画面で確認できます。',
+      '組み合わせの仕組み：https://bigfive.jr-genius.jp/cross.html',
+      '心理学の一般的な説明：https://bigfive.jr-genius.jp/science.html',
+      '保存結果と詳細レポートの入口：https://bigfive.jr-genius.jp/mypage.html',
+      '無料の総合レポート：https://bigfive.jr-genius.jp/report.html',
+      'これらの共通URLだけでは、外部AIはブラウザ内の個人結果を読めません。',
+      '【分析はここまで】このあとに、私の相談を書きます。');
     return L.join('\n');
   }
 

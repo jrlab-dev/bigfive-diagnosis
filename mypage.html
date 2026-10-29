@@ -1611,12 +1611,12 @@
   <div id="aiProfileSection" style="display:none;">
     <div class="ai-profile-card">
       <p class="section-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> AI相談プロフィール（無料）</p>
-      <p class="ai-profile-desc">あなたの性格データをワンクリックでコピー。ChatGPTやClaudeなどのAIに貼り付けて、あなたに合ったアドバイスがもらえます。</p>
+      <p class="ai-profile-desc">診断の数値プロフィールをコピーして、ChatGPTやClaudeなどのAIへの相談に使えます。話し方の指定と追加説明がない数値だけのコピーは500字以内です。サイトのクロス分析本文は含みません。</p>
       <div style="border:1px solid rgba(139,92,246,0.35); border-radius:12px; padding:12px 14px; margin-bottom:12px;">
         <p style="font-size:12px; font-weight:700; color:#a78bfa; margin:0 0 8px;">使うと、こんな会話ができます（例）</p>
         <p style="font-size:12px; color:var(--dim); margin:0 0 6px;">🙂 あなた：（プロフィールを貼り付けて）職場の人間関係について相談したいです</p>
         <p style="font-size:12px; margin:0 0 6px; background:rgba(139,92,246,0.08); border-radius:8px; padding:8px 10px; line-height:1.7;">🤖 AI：それは気が張りますね。協調性が高く、感受性も高めなので、相手の機嫌を先に察してしまって、そのぶん疲れがたまりやすいのだと思います。無理に距離を詰めようとせず、返事を一拍おくだけでもずいぶん違います。差し支えなければ、いちばん気をつかうのはどんな場面ですか。</p>
-        <p style="font-size:11px; color:var(--dim); margin:0;">→ 指示は付けず、あなたのデータだけを渡します。AIが自分で読み取って話しかけてきます。</p>
+        <p style="font-size:11px; color:var(--dim); margin:0;">→ 通常は診断の数値だけを渡します。必要なら下で、相談の話し方やレポートへの戻り先を追加できます。</p>
       </div>
       <details class="ai-mode-details">
         <summary class="ai-mode-summary">AIへの話し方を指定する（ふつうは不要）</summary>
@@ -1630,13 +1630,20 @@
           <p class="ai-mode-note">会話の途中でも「聞くだけでいい」「答えがほしい」と言えば切り替わります。</p>
         </div>
       </details>
-      <textarea class="ai-profile-text" id="aiProfileText" readonly></textarea>
+      <label style="display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.7;margin:12px 0;cursor:pointer;">
+        <input type="checkbox" id="aiIncludeContext" autocomplete="off" style="margin-top:4px;flex-shrink:0;">
+        <span>追加診断・レポートへの戻り先も含める（500字を超えます）</span>
+      </label>
+      <textarea class="ai-profile-text" id="aiProfileText" aria-label="AIに渡す文章の確認" readonly></textarea>
       <button class="ai-copy-btn" id="aiCopyBtn">プロフィールをコピー</button>
+      <p id="aiCopyStatus" role="status" aria-live="polite" style="font-size:12px;line-height:1.7;margin-top:8px;"></p>
+      <textarea id="aiManualCopy" aria-label="手動コピー用の相談文" rows="8" readonly hidden style="width:100%;font-size:12px;line-height:1.7;"></textarea>
       <div id="aiAfterLinks" style="display:none; text-align:center; font-size:13px; margin-top:10px; line-height:2;">
         コピーできました。AIを開いて、貼り付けて送信してください：<br>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Geminiを開く ↗</a>
         <a href="https://chatgpt.com/" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">ChatGPTを開く ↗</a>
         <a href="https://claude.ai/new" target="_blank" rel="noopener" style="color:#8b5cf6; margin:0 8px;">Claudeを開く ↗</a>
+        <br><a href="report.html" style="color:#8b5cf6;">追加診断のあと、同じブラウザで総合レポートを開き直す</a>
       </div>
       <div class="ai-examples">
         <p class="ai-examples-title">質問例（タップすると、プロフィール＋質問がまとめてコピーされます）</p>
@@ -1646,7 +1653,7 @@
           <li class="ai-ex">この性格の強みを活かせる仕事・職場を提案してください</li>
           <li class="ai-ex">この性格の傾向を踏まえて、人間関係で気をつけるべきことを教えてください</li>
         </ul>
-        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6;">※ 心理テストを受けるほどAIに渡せる情報が増え、より精密なアドバイスがもらえます。<br>※ 深刻な悩み（心身の不調が続くなど）は、AIだけでなく専門機関・医療機関にも相談してください。</p>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6;">※ 対応する診断を追加すると相談の材料を見直せます。AIの助言の質や、レポート本文の増加を保証するものではありません。<br>※ 深刻な悩み（心身の不調が続くなど）は、AIだけでなく専門機関・医療機関にも相談してください。</p>
       </div>
     </div>
   </div>
@@ -1776,6 +1783,7 @@
 </div>
 
 <script src="personality-types.js?v=20260919"></script>
+<script src="ai-copy-utils.js"></script>
 <script>
 // ===== データ管理 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
@@ -3317,7 +3325,13 @@ function renderAIProfile() {
   const hasPGG = !!localStorage.getItem('pgg_result');
   const hasRisk = !!localStorage.getItem('risk_result');
 
-  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor && !hasPGG && !hasRisk) return;
+  if (!bf && !hasHSP && !hasAtt && !hasLove && !hasMind && !hasSch && !hasSDT && !hasLocus && !hasEQ && !hasImpostor && !hasPGG && !hasRisk) {
+    section.style.display = 'none';
+    textarea.value = '';
+    const manual = document.getElementById('aiManualCopy');
+    if (manual) { manual.hidden = true; manual.value = ''; }
+    return;
+  }
   section.style.display = 'block';
 
   // マッピング
@@ -3475,34 +3489,22 @@ function renderAIProfile() {
 
   const aiProfileData = lines.join('\n');
 
-  // 未受診の診断リスト（AIが相談の流れで必要なときだけ勧められるように）
-  const untaken = [];
-  if (!bf) untaken.push('ビッグファイブ性格診断: 性格の全体像（5つの因子）が分かる');
-  if (!hasHSP) untaken.push('HSP感受性チェック: 刺激への敏感さ・疲れやすさが分かる');
-  if (!hasAtt) untaken.push('愛着スタイル診断: 人との距離のとり方・関係の築き方のクセが分かる');
-  if (!hasLove) untaken.push('恋愛スタイル診断: 恋愛での愛し方のタイプが分かる');
-  if (!hasMind) untaken.push('マインドセット診断: 能力や性格は変えられると考えているかが分かる');
-  if (!hasSch) untaken.push('価値観診断: 人生で大切にしている価値観の上位が分かる');
-  if (!hasSDT) untaken.push('動機タイプ診断: やる気の源泉（自分で決めたい・上達したい・人と繋がりたい）が分かる');
-  if (!hasLocus) untaken.push('統制の所在診断: 物事の結果を自分の力と捉えるか、運や環境と捉えるかが分かる');
-  if (!hasEQ) untaken.push('感情知能(EQ)診断: 感情の扱い方の得意・不得意が分かる');
-  if (!hasImpostor) untaken.push('インポスター症候群チェック: 「本当の自分は実力不足」と感じてしまう傾向が分かる');
-  if (!hasPGG) untaken.push('コインゲーム: 人と協力するときの行動タイプが分かる');
-  if (!hasRisk) untaken.push('リスク選好ゲーム: リスクへの向き合い方が分かる');
-  if (untaken.length > 0) {
-    lines.push('');
-    lines.push('【このサイトにあって、私がまだ受けていない診断】');
-    untaken.forEach(function(t) { lines.push('・' + t); });
-    lines.push('相談の流れで本当に役立ちそうなときだけ、この中から1つ勧めてください。必要がなければ勧めないでください。勧めるのは会話全体で1〜2回までにしてください。診断はすべて無料で、サイト（https://bigfive.jr-genius.jp）のマイページから受けられます。');
-  }
-
-  const aiProfileBody = lines.join('\n');
   let currentAiMode = 'none';
+  const includeContext = document.getElementById('aiIncludeContext');
+  const copyStatus = document.getElementById('aiCopyStatus');
+  function composePreview() {
+    const base = currentAiMode === 'none' ? aiProfileData : aiHeaderFor(currentAiMode) + aiProfileData;
+    textarea.value = base + (includeContext.checked ? '\n\n' + AICopyUtils.buildContext(localStorage, !!bf) : '');
+    if (copyStatus) copyStatus.textContent = '';
+    const manual = document.getElementById('aiManualCopy');
+    if (manual) { manual.hidden = true; manual.value = ''; }
+  }
+  includeContext.onchange = composePreview;
   function applyAiMode(mode) {
     if (mode !== 'none' && !AI_MODE_LINE[mode]) mode = 'none';
     currentAiMode = mode;
     try { localStorage.setItem('bigfive_ai_mode', mode); } catch (e) {}
-    textarea.value = (mode === 'none') ? aiProfileData : aiHeaderFor(mode) + aiProfileBody;
+    composePreview();
     document.querySelectorAll('#aiModeChoice .ai-mode-btn').forEach(function(b) {
       b.classList.toggle('on', b.getAttribute('data-mode') === mode);
     });
@@ -3528,51 +3530,53 @@ function renderAIProfile() {
     } catch (e) {}
   }
 
-  // コピー機能（onclickで重複登録を防ぐ）
+  function showCopyResult(ok, text) {
+    if (copyStatus) copyStatus.textContent = ok ? 'コピーしました。内容をAIに貼り付けてください。' :
+      'コピーできませんでした。下に表示した文章を選択して、手動でコピーしてください。';
+    const links = document.getElementById('aiAfterLinks');
+    if (links) links.style.display = ok ? 'block' : 'none';
+    const manual = document.getElementById('aiManualCopy');
+    if (manual) {
+      manual.hidden = ok;
+      if (!ok) { manual.value = text; manual.focus(); manual.select(); }
+    }
+  }
+
+  // Each explicit action copies the currently visible preview once.
   document.getElementById('aiCopyBtn').onclick = function() {
     const btn = this;
     sendCount('ai_profile_copy');
     if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
-    countCopyOnce('button');   // 人数を数えるため（2026-08-27）
-    const showAiLinks = function() { const el = document.getElementById('aiAfterLinks'); if (el) el.style.display = 'block'; };
-    navigator.clipboard.writeText(textarea.value).then(() => {
+    countCopyOnce('button');
+    const text = textarea.value;
+    return AICopyUtils.copyText(text, navigator, document).then(function(ok) {
+      showCopyResult(ok, text);
+      if (!ok) {
+        btn.textContent = 'プロフィールをコピー';
+        btn.classList.remove('copied');
+        return;
+      }
       btn.textContent = 'コピーしました ✓';
       btn.classList.add('copied');
-      showAiLinks();
-      setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
-    }).catch(() => {
-      textarea.select();
-      document.execCommand('copy');
-      btn.textContent = 'コピーしました ✓';
-      btn.classList.add('copied');
-      showAiLinks();
-      setTimeout(() => { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
+      setTimeout(function() { btn.textContent = 'プロフィールをコピー'; btn.classList.remove('copied'); }, 2000);
     });
   };
 
-  // 質問例タップで「プロフィール＋質問」をまとめてコピー（onclickで重複登録を防ぐ）
   document.querySelectorAll('.ai-examples li.ai-ex').forEach(function(li) {
-    const q = li.textContent.trim();
+    const q = li.getAttribute('data-question') || li.textContent.trim();
+    li.setAttribute('data-question', q);
     li.onclick = function() {
       if (li.classList.contains('excopied')) return;
       sendCount('ai_profile_copy');
       if (currentAiMode === 'none') sendCount('ai_profile_copy_raw');
-      countCopyOnce('example');   // 人数を数えるため（2026-08-27）
+      countCopyOnce('example');
       const combined = textarea.value + '\n\n【相談したいこと】\n' + q;
-      const done = function() {
+      return AICopyUtils.copyText(combined, navigator, document).then(function(ok) {
+        showCopyResult(ok, combined);
+        if (!ok) return;
         li.textContent = '✓ コピーしました！AIに貼り付けてください';
         li.classList.add('excopied');
-        const el = document.getElementById('aiAfterLinks');
-        if (el) el.style.display = 'block';
         setTimeout(function() { li.textContent = q; li.classList.remove('excopied'); }, 1800);
-      };
-      navigator.clipboard.writeText(combined).then(done).catch(function() {
-        const orig = textarea.value;
-        textarea.value = combined;
-        textarea.select();
-        document.execCommand('copy');
-        textarea.value = orig;
-        done();
       });
     };
   });

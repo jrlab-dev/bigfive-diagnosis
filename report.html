@@ -8,27 +8,27 @@
   <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>総合性格レポート — ビッグファイブ診断</title>
-<meta name="description" content="ビッグファイブ診断の総合性格レポートです。最大10種類の診断結果を統合し、性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。複数の診断を組み合わせて、より立体的に自分を理解できます。">
+<meta name="description" content="保存したビッグファイブと、対応する心理診断の結果を組み合わせて読む無料の総合レポートです。追加診断のあと、同じブラウザで開き直すと保存結果を反映します。結果によって表示内容が変わらない場合もあります。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブ診断">
 <meta property="og:title" content="総合性格レポート — ビッグファイブ診断">
-<meta property="og:description" content="ビッグファイブ 診断の総合性格レポート。最大10種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。">
+<meta property="og:description" content="保存したビッグファイブと、対応する心理診断の結果を組み合わせて読む無料の総合レポートです。追加診断のあと、同じブラウザで開き直すと保存結果を反映します。結果によって表示内容が変わらない場合もあります。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/report.html">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="総合性格レポート — ビッグファイブ診断">
-<meta name="twitter:description" content="ビッグファイブ 診断の総合性格レポート。最大10種類の診断結果を統合。性格・恋愛・HSP・愛着・価値観・動機・マインドセット・統制の所在・EQ・インポスターを一画面で無料分析。">
+<meta name="twitter:description" content="保存したビッグファイブと、対応する心理診断の結果を組み合わせて読む無料の総合レポートです。追加診断のあと、同じブラウザで開き直すと保存結果を反映します。結果によって表示内容が変わらない場合もあります。">
 <meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "総合性格レポート【公式】",
+  "name": "総合性格レポート",
   "url": "https://bigfive.jr-genius.jp/report.html",
-  "description": "ビッグファイブ診断を含む最大10種類の心理学診断結果を統合して表示する総合レポートページ。",
+  "description": "保存したビッグファイブと、対応する心理診断の結果を組み合わせて読む無料の総合レポートです。追加診断のあと、同じブラウザで開き直すと保存結果を反映します。結果によって表示内容が変わらない場合もあります。",
   "isPartOf": {
     "@type": "WebSite",
     "name": "ビッグファイブ診断",
@@ -486,9 +486,11 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
 
   <!-- ページヘッダー -->
   <div class="page-header">
-    <div class="page-badge">✦ PREMIUM REPORT</div>
+    <div class="page-badge">総合レポート・無料</div>
     <h1 class="page-title">総合性格レポート</h1>
-    <p class="page-subtitle">10の心理テストを統合した、あなただけの深層分析</p>
+    <p class="page-subtitle">保存した診断結果を、組み合わせて読む</p>
+    <p style="font-size:13px;line-height:1.9;color:var(--dim);margin:14px 0 0;">保存したビッグファイブと、対応する心理診断の結果から読む無料の総合レポートです。追加診断のあと、このページを同じブラウザで開き直すと保存結果を反映します。結果によって表示内容が変わらない場合もあります。<br>
+      <a href="cross.html" style="color:var(--purple);">クロス分析の仕組み</a> · <a href="diagnoses.html" style="color:var(--purple);">追加診断と利用条件</a> · <a href="mypage.html#aiProfileSection" style="color:var(--purple);">AI相談用の数値をコピー</a></p>
   </div>
 
   <!-- 未受診バナー（受診が足りない場合に表示） -->
@@ -572,7 +574,7 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
 
   <div class="footer-note">
     このレポートはビッグファイブ理論・自己決定理論・シュワルツ価値観モデル・愛着理論・マインドセット理論・感情知能(EQ)等、<br>
-    10種類以上の科学的心理学理論に基づいて生成されています。
+    複数の心理学理論と、サイト独自の読み合わせを使っています。個人の行動や原因を実証するものではありません。
   </div>
 
 </div>
@@ -1142,22 +1144,22 @@ function buildCrossZukan(data, lv) {
     '<div style="width:' + pct + '%;height:100%;background:linear-gradient(90deg,#8b5cf6,#ec4899);border-radius:99px;"></div></div>' +
     '<b style="white-space:nowrap;">' + done + ' / ' + TESTS.length + ' 診断</b></div>';
   if (done >= TESTS.length) {
-    html += '全12診断を制覇しています。あなたの総合レポートは、このサイトで読める最も厚い状態です。新しいクロス分析が追加されたら、ここに自動で反映されます。';
-    return html;
-  }
+    html += '対応する12の追加診断の結果が保存されています。いまの内容を振り返ったり、必要に応じてAIへの相談に使えます。';
+  } else {
   const cand = TESTS.filter(t => !t.taken).sort((a, b) => b.max - a.max);
   const best = cand[0];
-  html += '受けた診断が増えるほど、上のクロス分析は育ちます。';
+  html += '対応する診断を追加すると、組み合わせて振り返る材料を見直せます。';
   if (best && best.max > 0) {
     html += '<div style="margin-top:10px;padding:12px 14px;border:1px solid rgba(139,92,246,0.35);border-radius:12px;background:rgba(139,92,246,0.08);">' +
       '次のおすすめ：<b>' + best.label + '</b><br>' +
-      '<span style="font-size:0.9em;opacity:0.85;">あなたのビッグファイブと組める書き下ろしが、最大' + best.max + '本待っています</span><br>' +
+      '<span style="font-size:0.9em;opacity:0.85;">あなたのビッグファイブと組み合わせて振り返れます。結果によって、無料欄の表示内容が変わらない場合もあります。</span><br>' +
       '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">受けてみる →</a></div>';
     if (cand.length > 1) html += '<div style="margin-top:8px;font-size:0.86em;opacity:0.75;">ほか未受診：' +
       cand.slice(1).map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
   } else if (best) {
     html += '<div style="margin-top:8px;font-size:0.9em;">未受診：' +
       cand.map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
+  }
   }
   html += '<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(139,92,246,0.2);">' +
     '<div style="font-weight:700;margin-bottom:8px;">この結果を持って、AIに相談する</div>' +
@@ -1167,7 +1169,7 @@ function buildCrossZukan(data, lv) {
       '→ <a href="mypage.html#aiProfileSection" style="color:#a78bfa;">マイページでコピーする</a></span></div>' +
     '<div style="border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 14px;">' +
       '<b>🤝 専用AIカウンセラー</b> <span style="font-size:0.76em;background:rgba(139,92,246,0.22);color:#a78bfa;padding:2px 10px;border-radius:999px;">30項目詳細レポートの特典</span><br>' +
-      '<span style="font-size:0.88em;opacity:0.85;">点数に加えて、解説とクロス分析の全文（約1.5万字）を渡す。AIがこのサイトの分析を土台に相談に乗る——深さが別物になります。' +
+      '<span style="font-size:0.88em;opacity:0.85;">30項目の点数に加えて、取得できた解説と該当するクロス分析の本文をコピーできます。利用には120問版の結果と解放条件が必要です。' +
       '（120問版の結果ページから）</span></div></div>';
   return html;
 }
