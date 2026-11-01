@@ -1481,21 +1481,13 @@
 
     </div>
 
-    <div class="rep300-thanks" id="rep300Thanks" style="display:none;">
-      <p class="rep300-thanks-title">ありがとうございます</p>
-      <p class="rep300-thanks-text">
-        <span>お支払いは要りません。</span><span>このままお読みいただけます。</span><br>
-        <span><b>お金を払ってでも読みたい。</b></span><br>
-        <span>そう思っていただけたことが、</span><span>いちばんの答えでした。</span>
-      </p>
-    </div>
 
     <!-- 購入直前の確認（2026-10-17）。法律で求められる「申し込みの最終確認」をここで出す -->
     <div class="rep300-confirm" id="rep300Confirm" style="display:none;" role="region" aria-labelledby="rep300ConfirmTitle">
       <p class="rep300-confirm-title" id="rep300ConfirmTitle">600円で今すぐ開く</p>
       <dl class="rep300-confirm-list">
         <dt>開くもの</dt><dd>30項目の詳細レポート（約1万字）と、サイト内の全ての診断（カードを集めずに受けられます）</dd>
-        <dt>お値段</dt><dd>600円（1回だけ。続けて請求されることはありません）</dd>
+        <dt>お値段</dt><dd>600円（税込・1回だけ。続けて請求されることはありません）</dd>
         <dt>お支払い</dt><dd>クレジットカード・Apple Pay など。決済サービスStripeの支払いページへ移ります</dd>
         <dt>開く時期</dt><dd>お支払いが終わると、すぐに開きます</dd>
         <dt>保存先</dt><dd>この端末のブラウザに保存されます。機種変更やデータが消えたときは、お支払いのメールアドレスとカード番号の下4けたで、いつでも開き直せます</dd>
@@ -3053,7 +3045,6 @@ if (version === '10') {
   var waysEl     = document.getElementById('rep300Ways');
   var payBtn     = document.getElementById('rep300PayBtn');
   var collectBtn = document.getElementById('rep300CollectBtn');
-  var thanksEl   = document.getElementById('rep300Thanks');
   var openBtn    = document.getElementById('rep300Open');
   var remainEl   = document.getElementById('rep300Remain');
   var haveEl     = document.getElementById('rep300Have');
