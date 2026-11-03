@@ -3316,7 +3316,10 @@ if (version === '10') {
     confirmEl.style.display = 'block';
     try { confirmEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
   });
+  // 支払いの手前でやめた人も数える（2026-11-03）。pay_confirm_view・pay_checkout_start との差で
+  // 「確認画面でやめた／支払いページでやめた／支払いページが開けなかった」を分けて見るため。
   confirmCancel.addEventListener('click', function() {
+    if (window.BigFivePay) BigFivePay.ga('pay_confirm_cancel');
     confirmEl.style.display = 'none';
     confirmError.style.display = 'none';
     waysEl.style.display = '';
@@ -3328,6 +3331,7 @@ if (version === '10') {
     confirmError.style.display = 'none';
     BigFivePay.startCheckout().then(function(r) {
       if (r && r.ok) return; // 支払いページへ移動中
+      BigFivePay.ga('pay_checkout_error', { error: (r && r.error) || 'unknown' });
       confirmGo.disabled = false;
       confirmGo.textContent = '支払いページへ進む（600円）';
       confirmError.textContent = 'いま支払いページを開けませんでした。少し時間をおいて、もう一度お試しください。お支払いは行われていません。';
@@ -3338,6 +3342,13 @@ if (version === '10') {
   try {
     if (/[?&]pay=cancel(&|$)/.test(location.search) && !alreadyPaid) {
       document.getElementById('rep300CancelNote').style.display = 'block';
+      // 支払いページから戻ってきた回数。再読み込みでは数えない。
+      // GA4本体（nav.js）はページ末尾で読み込まれるので、まだ無ければ3秒後に1回だけ送り直す
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (window.BigFivePay && !(nav && nav.type === 'reload')) {
+        if (window.gtag) BigFivePay.ga('pay_checkout_cancel');
+        else setTimeout(function() { BigFivePay.ga('pay_checkout_cancel'); }, 3000);
+      }
     }
   } catch (e) {}
 
