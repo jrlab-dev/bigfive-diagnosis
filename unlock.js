@@ -12,24 +12,24 @@ var UNLOCK_TABLE = [
   // （未受診の人には「サブ診断を受けるとここに表示されます」という案内文が元から出る作り）
   // loveの後に置いているのは、解放バナーを「恋愛スタイル→総合レポート」の順に出すため
   { cards:  1, id: 'report',             label: '総合レポート',          url: 'report.html' },
-  { cards:  2, id: 'other',              label: 'あの人診断',            url: 'other_quiz.html' },
   { cards:  3, id: 'career',             label: 'キャリア適性診断',      url: 'career.html' },
   { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
   { cards:  5, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
   { cards:  6, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
   { cards: 70, id: 'other-detailed2',   label: 'あの人診断 120問相当精密版', url: 'other_quiz.html' },
-  { cards: 10, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
+  // 2026-11-07：鍵の見直し。あの人診断・価値観・ダークトライアドは鍵なし（ALWAYS_UNLOCKED_IDS）へ。
+  // 理由＝検索で診断ページがよく表示され、来た人の大半が鍵の画面で止まっていた（初日の人の半分は0〜1枚）。
+  // 愛着10→7（総合レポートの「次のおすすめ」の74％が愛着）、RIASEC30→28・統制の所在40→38（あの人の保存件数と同じ枚数で重なっていたため）。
+  { cards:  7, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
   { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
-  { cards: 18, id: 'schwartz',           label: '価値観診断',            url: 'schwartz.html' },
   { cards: 20, id: 'zukan_s2',           label: 'コレクション Stage 2',   url: 'zukan.html' },
   { cards: 25, id: 'eq',                 label: 'EQ診断',               url: 'eq.html' },
-  { cards: 30, id: 'riasec',             label: 'RIASEC職業興味診断',    url: 'riasec.html' },
+  { cards: 28, id: 'riasec',             label: 'RIASEC職業興味診断',    url: 'riasec.html' },
   { cards: 30, id: 'other_limit_30',     label: 'あの人保存30件に拡張',   url: null },
   { cards: 35, id: 'career-integration', label: 'キャリア統合分析',      url: 'career-integration.html' },
-  { cards: 40, id: 'locus',              label: '統制の所在診断',        url: 'locus.html' },
+  { cards: 38, id: 'locus',              label: '統制の所在診断',        url: 'locus.html' },
   { cards: 40, id: 'other_limit_40',     label: 'あの人保存40件に拡張',   url: null },
   { cards: 45, id: 'sdt',                label: '動機づけ診断',          url: 'sdt.html' },
-  { cards: 50, id: 'dark-triad',         label: 'ダークトライアド診断',   url: 'dark-triad.html' },
   { cards: 50, id: 'other_limit_50',     label: 'あの人保存50件に拡張',   url: null },
   { cards: 55, id: 'other-dark-triad',   label: 'あの人のダークトライアド診断', url: 'other_dark_triad.html' },
   { cards: 60, id: 'other-attachment',   label: 'あの人の愛着スタイル診断', url: 'other_attachment.html' },
@@ -44,7 +44,7 @@ var UNLOCK_TABLE = [
 ];
 
 // 常に解放済みのID
-var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'kodomo'];
+var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'kodomo', 'other', 'schwartz', 'dark-triad'];
 
 function isLegacyUser() {
   try { if (localStorage.getItem('bigfive_legacy_user') === 'true') return true; } catch(e) { return false; }
@@ -167,7 +167,7 @@ function renderGate(featureId) {
   };
 
   // 少ない枚数で開くもの（QUICK_GATES）は「すぐ開く」ことが伝わるよう、その人の今の状態に合わせた最短ルートを出す（2026-10-22）
-  // 鍵の枚数（UNLOCK_TABLE）は変えない。順番は 自分の診断 → ガチャ → あの人診断（あの人診断は2枚で開くため）
+  // 鍵の枚数（UNLOCK_TABLE）は変えない。順番は 自分の診断 → ガチャ → あの人診断（あの人診断は鍵なし・2026-11-07）
   if (QUICK_GATES[featureId]) {
     renderQuickGate(featureId, c, current, required);
     return;
@@ -215,9 +215,9 @@ function renderGate(featureId) {
 var QUICK_GATES = {
   love:     { title: '恋愛スタイル診断',            what: '12問で、あなたの恋愛パターン（6タイプ）と相性の良いタイプが分かります' },
   report:   { title: '総合レポート',                what: '受けた診断の結果をまとめて、あなたの性格を一画面で読めます' },
-  other:    { title: 'あの人診断',                  what: '気になる人・上司・友人の行動を30問で答えると、その人の性格と、あなたとの相性が分かります' },
   career:   { title: 'キャリア適性診断',            what: '18業界・26職種への向き不向きと、あなたに向いている仕事が分かります' },
   impostor: { title: 'インポスター症候群チェック',  what: '15問で「自分は偽物では」という感覚の強さと、そのタイプが分かります' },
+  attachment: { title: '愛着スタイル診断',          what: '12問で、大切な人との関わり方のパターン（安心型・不安型・回避型・恐れ型）が分かります' },
   team:     { title: 'チーム相性診断',              what: '職場や仲間（最大8人）の性格を並べて、チーム全体の相性・一人ひとりの役割・相性のよいペアが分かります' }
 };
 
@@ -244,9 +244,8 @@ function quickGatePlan(featureId, current, required) {
   }
   var g = Math.min(coins, left);
   if (g > 0) { steps.push({ kind: 'gacha', n: g, coins: coins }); left -= g; coins -= g; }
-  var reached = required - left;                  // ここまでで持っている見込みの枚数
-  if (left > 0 && featureId !== 'other' && reached >= 2) {
-    steps.push({ kind: 'other', n: left }); left = 0;   // あの人診断（1人ごとにカード1枚。2枚で開く）
+  if (left > 0 && featureId !== 'other') {
+    steps.push({ kind: 'other', n: left }); left = 0;   // あの人診断（1人ごとにカード1枚。鍵なし）
   }
   if (left > 0) {                                 // コインが足りないとき：別の版（30問）で自分を診断＝別のカード1枚＋初回ならコイン3枚
     steps.push({ kind: 'self30', coins: bonus['30'] ? 0 : 3 }); left -= 1;

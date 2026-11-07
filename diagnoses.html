@@ -210,7 +210,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: va
   <div class="diag-grid" id="gameGrid"></div>
 </div>
 
-<script src="unlock.js?v=20260927"></script>
+<script src="unlock.js?v=20261107"></script>
 <script>
 const DIAGNOSES = [
   {
@@ -692,14 +692,14 @@ window._showLockedToast = function(remaining) {
     <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
     <tr><td><a href="quiz.html">ビッグファイブ性格診断</a></td><td>心理学で最も信頼性が高い5因子モデル。開放性・誠実性・外向性・協調性・神経症傾向のバランスから3125タイプを判定。</td><td>10問</td><td>約3分</td><td>5因子モデル（Costa &amp; McCrae, 1992／項目はIPIP-NEO）</td><td>だれでも</td></tr>
     <tr><td><a href="hexaco.html">HEXACO性格診断</a></td><td>ビッグファイブに第6因子「正直さ-謙虚さ」を加えた6因子モデル。200問で、ビッグファイブにはなかった正直さ-謙虚さの次元まで分析します。</td><td>200問</td><td>約15分</td><td>HEXACOモデル（Ashton &amp; Lee, 2007）</td><td>カード200枚</td></tr>
-    <tr><td><a href="attachment.html">愛着スタイル チェック</a></td><td>大切な人との関わり方のパターンを分析。安心型・不安型・回避型・恐れ型の4スタイルから自分の傾向がわかる。</td><td>12問</td><td>約3分</td><td>成人愛着理論（Hazan &amp; Shaver, 1987）</td><td>カード10枚</td></tr>
+    <tr><td><a href="attachment.html">愛着スタイル チェック</a></td><td>大切な人との関わり方のパターンを分析。安心型・不安型・回避型・恐れ型の4スタイルから自分の傾向がわかる。</td><td>12問</td><td>約3分</td><td>成人愛着理論（Hazan &amp; Shaver, 1987）</td><td>カード7枚</td></tr>
     <tr><td><a href="sdt.html">動機タイプ診断</a></td><td>Deci &amp; Ryanの自己決定理論による21問診断。自律性・有能感・関係性の3欲求から「何があなたを動かすか」を科学的に分析。</td><td>21問</td><td>約5分</td><td>自己決定理論（Deci &amp; Ryan, 1985）</td><td>カード45枚</td></tr>
-    <tr><td><a href="schwartz.html">価値観タイプ診断</a></td><td>シュワーツの価値理論（80カ国で検証）に基づく21問診断。安全・達成・普遍主義など10カテゴリであなたの核心的な価値観を分析。</td><td>21問</td><td>約5分</td><td>基本的価値理論（Schwartz, 1992）</td><td>カード18枚</td></tr>
-    <tr><td><a href="locus.html">統制の所在チェック</a></td><td>Rotterの心理学理論に基づく15問診断。内的統制・他者支配・偶然の3因子から「自分のコントロール感」を科学的に分析。</td><td>15問</td><td>約4分</td><td>統制の所在（Rotter, 1966）</td><td>カード40枚</td></tr>
+    <tr><td><a href="schwartz.html">価値観タイプ診断</a></td><td>シュワーツの価値理論（80カ国で検証）に基づく21問診断。安全・達成・普遍主義など10カテゴリであなたの核心的な価値観を分析。</td><td>21問</td><td>約5分</td><td>基本的価値理論（Schwartz, 1992）</td><td>だれでも</td></tr>
+    <tr><td><a href="locus.html">統制の所在チェック</a></td><td>Rotterの心理学理論に基づく15問診断。内的統制・他者支配・偶然の3因子から「自分のコントロール感」を科学的に分析。</td><td>15問</td><td>約4分</td><td>統制の所在（Rotter, 1966）</td><td>カード38枚</td></tr>
     <tr><td><a href="eq.html">感情知能（EQ）チェック</a></td><td>GolemanのEQモデルに基づく20問診断。自己認識・自己管理・動機・共感・社会的スキルの5因子で感情知能を分析。</td><td>20問</td><td>約5分</td><td>感情知能（学術版はSalovey &amp; Mayer, 1990／このチェックはGolemanの5領域モデル構成）</td><td>カード25枚</td></tr>
     <tr><td><a href="hsp.html">HSP 感受性チェック</a></td><td>あなたの感じ方の深さを分析。EOE（易興奮性）・AES（美的感受性）・LST（低感覚閾値）の3因子で特徴がわかる。</td><td>12問</td><td>約3分</td><td>感覚処理感受性（Aron &amp; Aron, 1997）</td><td>だれでも</td></tr>
     <tr><td><a href="mindset.html">マインドセット診断</a></td><td>ドゥエック博士の理論に基づく診断。「成長型」か「固定型」かを8問で分析。才能観・努力観があなたの行動にどう影響するかがわかる。</td><td>8問</td><td>約2分</td><td>知能観・マインドセット（Dweck, 2006）</td><td>カード14枚</td></tr>
-    <tr><td><a href="dark-triad.html">ダークトライアド診断</a></td><td>Jones &amp; Paulhus（2014）のSD3を参考にした17問診断。ナルシシズム・マキャベリズム・サイコパシーの3因子であなたのダークサイドを分析。</td><td>17問</td><td>約4分</td><td>ダークトライアド（Paulhus &amp; Williams, 2002）</td><td>カード50枚</td></tr>
+    <tr><td><a href="dark-triad.html">ダークトライアド診断</a></td><td>Jones &amp; Paulhus（2014）のSD3を参考にした17問診断。ナルシシズム・マキャベリズム・サイコパシーの3因子であなたのダークサイドを分析。</td><td>17問</td><td>約4分</td><td>ダークトライアド（Paulhus &amp; Williams, 2002）</td><td>だれでも</td></tr>
     <tr><td><a href="love.html">恋愛スタイル診断</a></td><td>情熱型・遊び型・友情型・現実型・執着型・献身型の6スタイルからあなたの恋愛パターンを分析。ビッグファイブとの組み合わせも。</td><td>24問</td><td>約4分</td><td>恋愛の色彩理論（Lee, 1977／尺度はHendrick &amp; Hendrick, 1986）</td><td>カード1枚</td></tr>
     <tr><td><a href="impostor.html">インポスター症候群チェック</a></td><td>Clanceの心理学研究に基づく15問診断。重症度と5つのタイプから「自分は偽物ではないか」という感覚を分析。</td><td>15問</td><td>約4分</td><td>インポスター現象（Clance &amp; Imes, 1978）</td><td>カード4枚</td></tr>
   </table>
@@ -709,7 +709,7 @@ window._showLockedToast = function(remaining) {
   <div class="table-wrap">
   <table>
     <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
-    <tr><td><a href="other_quiz.html">あの人を診断する</a></td><td>パートナー・友人・家族など「あの人」の性格をビッグファイブで診断。診断後はチーム相性分析にも使えます。</td><td>30問</td><td>約5分</td><td>他者評定（informant report）の研究</td><td>カード2枚</td></tr>
+    <tr><td><a href="other_quiz.html">あの人を診断する</a></td><td>パートナー・友人・家族など「あの人」の性格をビッグファイブで診断。診断後はチーム相性分析にも使えます。</td><td>30問</td><td>約5分</td><td>他者評定（informant report）の研究</td><td>だれでも</td></tr>
     <tr><td><a href="other_dark_triad.html">あの人のダークトライアド診断</a></td><td>27問の行動観察でナルシシズム・マキャベリズム・サイコパシーを分析。恋人・職場・友人など関係別の専用質問で相手のダークサイドを科学的に読み解く。</td><td>27問</td><td>約6分</td><td>他者評定＋ダークトライアド</td><td>カード55枚</td></tr>
     <tr><td><a href="other_attachment.html">あの人の愛着スタイル診断</a></td><td>20問の行動観察で不安軸・回避軸の2軸から愛着スタイル（安定型・不安型・回避型・恐れ型）を分析。恋人・片思い・職場など関係に合わせた専用質問。</td><td>20問</td><td>約5分</td><td>他者評定＋成人愛着理論</td><td>カード60枚</td></tr>
     <tr><td><a href="other_eq.html">あの人のEQ診断</a></td><td>22問の行動観察で自己認識・自己管理・動機・共感・社会的スキルの5因子を分析。Golemanモデル準拠。相手の感情知能のパターンと関係への活かし方がわかる。</td><td>22問</td><td>約5分</td><td>他者評定＋感情知能（Golemanの5領域モデル構成）</td><td>カード65枚</td></tr>
@@ -722,7 +722,7 @@ window._showLockedToast = function(remaining) {
   <table>
     <tr><th>診断</th><th>わかること</th><th>問題数</th><th>目安</th><th>もとになった理論</th><th>受けられる条件</th></tr>
     <tr><td><a href="career.html">キャリア適性診断</a></td><td>ビッグファイブの結果をもとに18業界・26職種への適性を分析。科学的根拠に基づくキャリアマッチング。無料。</td><td>結果を使う</td><td>—</td><td>5因子と職務成績のメタ分析（Barrick &amp; Mount, 1991 ほか）</td><td>カード3枚</td></tr>
-    <tr><td><a href="riasec.html">RIASEC職業興味診断</a></td><td>Hollandの理論に基づく職業興味検査。60問（約5分）または291問（約20分）で6タイプからあなたの職業適性パターンを導きます。</td><td>60問</td><td>約5分</td><td>職業選択理論・RIASEC（Holland, 1997）</td><td>カード30枚</td></tr>
+    <tr><td><a href="riasec.html">RIASEC職業興味診断</a></td><td>Hollandの理論に基づく職業興味検査。60問（約5分）または291問（約20分）で6タイプからあなたの職業適性パターンを導きます。</td><td>60問</td><td>約5分</td><td>職業選択理論・RIASEC（Holland, 1997）</td><td>カード28枚</td></tr>
     <tr><td><a href="career-integration.html">キャリア統合分析</a></td><td>ビッグファイブ適性×RIASEC興味の2軸を統合。性格的適性と職業興味の両面から最適なキャリアを分析。両方の結果が必要です。</td><td>結果を使う</td><td>—</td><td>性格・興味・価値観の統合</td><td>カード35枚</td></tr>
   </table>
   </div>

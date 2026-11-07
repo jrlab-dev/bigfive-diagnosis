@@ -582,6 +582,7 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
 <script src="personality-types.js?v=20260919"></script>
 <script src="image-resolver.js?v=20260919"></script>
 <script src="cross-att-texts.js?v=7"></script>
+<script src="unlock.js?v=20261107"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -672,6 +673,21 @@ function loadData() {
   return { bf, love, mindset, sdt, schwartz, hsp, attachment, locus, eq, impostor, darkTriad, pgg, risk, trust, ultimatum, beauty, delay };
 }
 
+// ===== 鍵の状態（2026-11-07）=====
+// 開いていない診断には「🔒 あとカード○枚」を出し、「次のおすすめ」は開いている診断から選ぶ。
+// 鍵の枚数は unlock.js の UNLOCK_TABLE が正（ここには枚数を書かない）
+const GATE_BY_URL = { 'love.html': 'love', 'attachment.html': 'attachment', 'impostor.html': 'impostor', 'eq.html': 'eq',
+  'locus.html': 'locus', 'mindset.html': 'mindset', 'sdt.html': 'sdt', 'hexaco.html': 'hexaco', 'riasec.html': 'riasec' };
+function lockLeft(url) {
+  const id = GATE_BY_URL[url];
+  if (!id || typeof isUnlocked !== 'function') return 0;
+  try {
+    if (isUnlocked(id)) return 0;
+    return Math.max(1, getRequiredCards(id) - getCardCount());
+  } catch (e) { return 0; }
+}
+function lockLabel(n) { return '🔒 あとカード' + n + '枚'; }
+
 // ===== 未受診チェック =====
 function checkMissing(data) {
   const missing = [];
@@ -691,7 +707,9 @@ function checkMissing(data) {
   if (!data.ultimatum)  missing.push({ name: '最後通牒ゲーム',           url: 'ultimatum.html' });
   if (!data.beauty)     missing.push({ name: 'ビューティーコンテスト',   url: 'beauty.html' });
   if (!data.delay)      missing.push({ name: '時間割引ゲーム',           url: 'delay.html' });
-  return missing;
+  // 開いているものを先に（同じ組の中は今の順）
+  return missing.map(m => Object.assign({}, m, { lock: lockLeft(m.url) }))
+    .sort((a, b) => (a.lock > 0) - (b.lock > 0));
 }
 
 // ===== プロフィールカード描画 =====
@@ -877,7 +895,7 @@ function renderTestsGrid(data) {
             <span class="test-summary-icon">${t.icon}</span>
             <span class="test-summary-label">${t.label}</span>
           </div>
-          <div class="test-summary-value">未受診 →</div>
+          <div class="test-summary-value">${lockLeft(t.url) ? lockLabel(lockLeft(t.url)) : '未受診 →'}</div>
         </a>`;
     }
   }).join('');
@@ -1146,19 +1164,22 @@ function buildCrossZukan(data, lv) {
   if (done >= TESTS.length) {
     html += '対応する12の追加診断の結果が保存されています。いまの内容を振り返ったり、必要に応じてAIへの相談に使えます。';
   } else {
-  const cand = TESTS.filter(t => !t.taken).sort((a, b) => b.max - a.max);
+  TESTS.forEach(t => { t.lock = lockLeft(t.url); });
+  // 並び：①開いていて組み合わせの文章が増えるもの ②鍵があって文章が増えるもの ③文章が増えないもの。同じ組の中は増える本数の多い順
+  const grp = t => (t.max > 0 ? (t.lock ? 1 : 0) : 2);
+  const cand = TESTS.filter(t => !t.taken).sort((a, b) => (grp(a) - grp(b)) || (b.max - a.max));
   const best = cand[0];
   html += '対応する診断を追加すると、組み合わせて振り返る材料を見直せます。';
   if (best && best.max > 0) {
     html += '<div style="margin-top:10px;padding:12px 14px;border:1px solid rgba(139,92,246,0.35);border-radius:12px;background:rgba(139,92,246,0.08);">' +
       '次のおすすめ：<b>' + best.label + '</b><br>' +
       '<span style="font-size:0.9em;opacity:0.85;">あなたのビッグファイブと組み合わせて振り返れます。結果によって、無料欄の表示内容が変わらない場合もあります。</span><br>' +
-      '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">受けてみる →</a></div>';
+      '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">' + (best.lock ? lockLabel(best.lock) + '（開き方を見る）' : '受けてみる →') + '</a></div>';
     if (cand.length > 1) html += '<div style="margin-top:8px;font-size:0.86em;opacity:0.75;">ほか未受診：' +
-      cand.slice(1).map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
+      cand.slice(1).map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + (t.lock ? '（' + lockLabel(t.lock) + '）' : '') + '</a>').join('・') + '</div>';
   } else if (best) {
     html += '<div style="margin-top:8px;font-size:0.9em;">未受診：' +
-      cand.map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + '</a>').join('・') + '</div>';
+      cand.map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + (t.lock ? '（' + lockLabel(t.lock) + '）' : '') + '</a>').join('・') + '</div>';
   }
   }
   html += '<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(139,92,246,0.2);">' +
@@ -1543,7 +1564,7 @@ function renderGrowth(steps) {
     const banner = document.getElementById('missingBanner');
     banner.style.display = 'block';
     document.getElementById('missingList').innerHTML = missing.map(m =>
-      `<li>・<a href="${m.url}">${m.name} →</a></li>`
+      `<li>・<a href="${m.url}">${m.name}${m.lock ? '（' + lockLabel(m.lock) + '）' : ' →'}</a></li>`
     ).join('');
   }
 
@@ -1569,7 +1590,6 @@ function renderGrowth(steps) {
 </script>
 
 <script src="nav.js?v=20260919"></script>
-<script src="unlock.js?v=20261022b"></script>
 <script>
 (function(){
   var count = 0;
