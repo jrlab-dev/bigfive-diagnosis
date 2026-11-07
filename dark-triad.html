@@ -7,12 +7,12 @@
 <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ダークトライアド診断 — ビッグファイブ診断</title>
-<meta name="description" content="ダークトライアド診断を無料・登録不要で受けられます。17問でナルシシズム・マキャベリズム・サイコパシーという3つのダークな性格傾向の強さを測定。心理学研究に基づく科学的なチェックで、自分の暗い面を客観的に把握できます。">
+<title>ダークトライアド診断テスト（無料・17問）— ビッグファイブ診断</title>
+<meta name="description" content="ダークトライアドのテストを無料・登録不要で。17問・約4分で、ナルシシズム・マキャベリズム・サイコパシーという3つの性格傾向の強さをチェック。研究で使われるSD3を参考にしたセルフチェックで、5つのタイプとビッグファイブとの関係も分かります。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブ診断">
-<meta property="og:title" content="ダークトライアド診断 — ビッグファイブ診断">
-<meta property="og:description" content="ダークトライアド診断｜無料・登録不要。17問でわかるナルシシズム・マキャベリズム・サイコパシーの傾向チェック。心理学研究に基づく科学的な診断を今すぐ無料で。">
+<meta property="og:title" content="ダークトライアド診断テスト（無料・17問）— ビッグファイブ診断">
+<meta property="og:description" content="ダークトライアドのテスト｜無料・登録不要。17問・約4分でわかるナルシシズム・マキャベリズム・サイコパシーの傾向チェック。">
 <meta property="og:url" content="https://bigfive.jr-genius.jp/dark-triad.html">
 <meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
 <meta property="og:image:width" content="1200">
@@ -116,6 +116,15 @@
   .start-btn { padding: 16px 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 999px; color: #fff; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 24px rgba(220,38,38,0.3); transition: transform .2s; }
   .start-btn:hover { transform: translateY(-2px); }
   .intro-note { font-size: 12px; color: var(--dim); }
+  .dt-guide { width: 100%; max-width: 420px; margin-top: 12px; text-align: left; border-top: 1px solid rgba(220,38,38,0.2); padding-top: 20px; }
+  .dt-guide h2 { font-size: 16px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+  .dt-guide h2:first-child { margin-top: 0; }
+  .dt-guide p, .dt-guide li, .dt-guide dd { font-size: 13px; color: var(--dim); line-height: 1.75; }
+  .dt-guide dt { font-size: 14px; font-weight: 700; color: var(--text); margin-top: 10px; }
+  .dt-guide ul { padding-left: 18px; }
+  .dt-guide a { color: var(--accent); }
+  .dt-guide .dt-refs { padding-left: 18px; }
+  .dt-guide .dt-refs li { font-size: 12px; margin-bottom: 6px; word-break: break-word; }
 
   /* ===== プログレス ===== */
   .progress { display: none; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
@@ -225,6 +234,31 @@
     </div>
     <button class="start-btn" id="startBtn">診断スタート</button>
     <p class="intro-note">17問・約4分・無料・登録不要</p>
+    <section class="dt-guide" aria-labelledby="dtGuideTitle">
+      <h2 id="dtGuideTitle">このダークトライアドテストでわかること</h2>
+      <p>ダークトライアドは、心理学で「周りとの摩擦を生みやすい3つの性格傾向」をまとめて呼ぶ言葉です<a href="#ref1">［1］</a>。このテストでは、3つの傾向それぞれの強さを測ります。</p>
+      <dl>
+        <dt>ナルシシズム（自己愛）</dt><dd>自分を特別だと感じ、称賛や注目を求める傾向。自信や推進力になる一方、批判に敏感になりやすい面もあります。</dd>
+        <dt>マキャベリズム</dt><dd>目的のために計算して動き、実利を優先する傾向。冷静な判断や交渉に生きる一方、人を手段のように扱うと信頼を失います。</dd>
+        <dt>サイコパシー</dt><dd>衝動的でリスクを恐れにくく、他人の感情に引きずられにくい傾向。危機での落ち着きになる一方、相手の痛みに気づきにくい面があります。</dd>
+      </dl>
+      <h2>テストのしくみ</h2>
+      <p>質問は17問で、約4分で終わります。研究で広く使われている短い尺度「Short Dark Triad（SD3）」<a href="#ref2">［2］</a>を参考にした、一般向けのセルフチェックです。SD3（27問）や日本語版のSD3-J<a href="#ref3">［3］</a>そのものではありません。結果では、3つの傾向の強さと、5つのタイプ（クリーン型・ナルシスト優位型・マキャベリスト優位型・サイコパス優位型・フルダーク型）のどれに近いかが分かります。</p>
+      <h2>結果を読むときの注意</h2>
+      <ul>
+        <li>3つの傾向は、程度の差はあれ誰にでもあります。高い＝悪い人、ではありません。</li>
+        <li>研究では、3つの傾向はお互いにかなり重なっていて、性格の5つの特性（ビッグファイブ）のうち、主に「協調性」の低さと関係するとされています<a href="#ref4">［4］</a>。</li>
+        <li>自分で答えるテストなので、答えたときの気分や「よく見せたい」気持ちで結果は変わります。医学的な診断ではありません。</li>
+      </ul>
+      <h2>よくある質問</h2>
+      <dl>
+        <dt>無料ですか？</dt><dd>はい。無料・登録不要で、カードがなくてもすぐ受けられます。</dd>
+        <dt>気になる相手のダークトライアドも分かりますか？</dt><dd>「<a href="other_dark_triad.html">あの人のダークトライアド診断</a>」で、相手の行動から推定できます（カードを55枚集めると開きます）。</dd>
+        <dt>ビッグファイブとの関係も分かりますか？</dt><dd><a href="quiz.html">ビッグファイブ診断</a>も受けておくと、総合レポートで組み合わせの読み解きが見られます。くわしくは解説記事「<a href="blog/dark-triad-toha.html">ダークトライアドとは</a>」へ。</dd>
+      </dl>
+      <h2>参考文献</h2>
+      <ol class="dt-refs"><li id="ref1">Paulhus, D. L., &amp; Williams, K. M. (2002). The Dark Triad of personality: Narcissism, Machiavellianism, and psychopathy. <em>Journal of Research in Personality, 36</em>(6), 556–563. <a href="https://doi.org/10.1016/S0092-6566(02)00505-6" target="_blank" rel="noopener">doi:10.1016/S0092-6566(02)00505-6</a></li><li id="ref2">Jones, D. N., &amp; Paulhus, D. L. (2014). Introducing the Short Dark Triad (SD3): A brief measure of dark personality traits. <em>Assessment, 21</em>(1), 28–41. <a href="https://doi.org/10.1177/1073191113514105" target="_blank" rel="noopener">doi:10.1177/1073191113514105</a></li><li id="ref3">下司忠大・小塩真司（2017）．日本語版Short Dark Triad（SD3-J）の作成．<em>パーソナリティ研究, 26</em>(1), 12–22. <a href="https://doi.org/10.2132/personality.26.1.2" target="_blank" rel="noopener">doi:10.2132/personality.26.1.2</a></li><li id="ref4">Muris, P., Merckelbach, H., Otgaar, H., &amp; Meijer, E. (2017). The malevolent side of human nature: A meta-analysis and critical review of the literature on the dark triad (narcissism, Machiavellianism, and psychopathy). <em>Perspectives on Psychological Science, 12</em>(2), 183–204. <a href="https://doi.org/10.1177/1745691616666070" target="_blank" rel="noopener">doi:10.1177/1745691616666070</a></li></ol>
+    </section>
   </div>
 
   <!-- プログレス -->
