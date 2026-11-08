@@ -12,7 +12,9 @@ var UNLOCK_TABLE = [
   // （未受診の人には「サブ診断を受けるとここに表示されます」という案内文が元から出る作り）
   // loveの後に置いているのは、解放バナーを「恋愛スタイル→総合レポート」の順に出すため
   { cards:  1, id: 'report',             label: '総合レポート',          url: 'report.html' },
-  { cards:  3, id: 'career',             label: 'キャリア適性診断',      url: 'career.html' },
+  // 2026-11-08：キャリア適性・RIASECは鍵なし（ALWAYS_UNLOCKED_IDS）、キャリア統合分析は35→3枚。
+  // 理由＝授業（Chromebook）で来た157台がキャリア適性2台・RIASEC 0台で止まっていた。2つを受けるともらえるコイン2枚でガチャを引けば3枚に届く。
+  { cards:  3, id: 'career-integration', label: 'キャリア統合分析',      url: 'career-integration.html' },
   { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
   { cards:  5, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
   { cards:  6, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
@@ -24,9 +26,7 @@ var UNLOCK_TABLE = [
   { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
   { cards: 20, id: 'zukan_s2',           label: 'コレクション Stage 2',   url: 'zukan.html' },
   { cards: 25, id: 'eq',                 label: 'EQ診断',               url: 'eq.html' },
-  { cards: 28, id: 'riasec',             label: 'RIASEC職業興味診断',    url: 'riasec.html' },
   { cards: 30, id: 'other_limit_30',     label: 'あの人保存30件に拡張',   url: null },
-  { cards: 35, id: 'career-integration', label: 'キャリア統合分析',      url: 'career-integration.html' },
   { cards: 38, id: 'locus',              label: '統制の所在診断',        url: 'locus.html' },
   { cards: 40, id: 'other_limit_40',     label: 'あの人保存40件に拡張',   url: null },
   { cards: 45, id: 'sdt',                label: '動機づけ診断',          url: 'sdt.html' },
@@ -44,7 +44,7 @@ var UNLOCK_TABLE = [
 ];
 
 // 常に解放済みのID
-var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'kodomo', 'other', 'schwartz', 'dark-triad'];
+var ALWAYS_UNLOCKED_IDS = ['bigfive', 'hsp', 'kodomo', 'other', 'schwartz', 'dark-triad', 'career', 'riasec'];
 
 function isLegacyUser() {
   try { if (localStorage.getItem('bigfive_legacy_user') === 'true') return true; } catch(e) { return false; }
@@ -215,7 +215,7 @@ function renderGate(featureId) {
 var QUICK_GATES = {
   love:     { title: '恋愛スタイル診断',            what: '12問で、あなたの恋愛パターン（6タイプ）と相性の良いタイプが分かります' },
   report:   { title: '総合レポート',                what: '受けた診断の結果をまとめて、あなたの性格を一画面で読めます' },
-  career:   { title: 'キャリア適性診断',            what: '18業界・26職種への向き不向きと、あなたに向いている仕事が分かります' },
+  'career-integration': { title: 'キャリア統合分析', what: 'キャリア適性（性格）とRIASEC（興味）の結果を重ねて、26職種の総合ランキングが分かります' },
   impostor: { title: 'インポスター症候群チェック',  what: '15問で「自分は偽物では」という感覚の強さと、そのタイプが分かります' },
   attachment: { title: '愛着スタイル診断',          what: '12問で、大切な人との関わり方のパターン（安心型・不安型・回避型・恐れ型）が分かります' },
   team:     { title: 'チーム相性診断',              what: '職場や仲間（最大8人）の性格を並べて、チーム全体の相性・一人ひとりの役割・相性のよいペアが分かります' }
