@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/school-guide.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>授業で使えるビッグファイブ診断｜中学・高校の先生向けガイド</title>
+<meta name="description" content="中学・高校の授業（キャリア教育・総合的な探究の時間など）で、ビッグファイブ診断を使うときの進め方のガイドです。無料・登録不要で、性格診断からキャリア適性・職業興味（RIASEC）まで1時間の授業で進められます。データの扱いも説明します。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="授業で使えるビッグファイブ診断｜中学・高校の先生向けガイド">
+<meta property="og:description" content="中学・高校の授業でビッグファイブ診断を使うときの進め方。無料・登録不要、性格診断から職業興味まで1時間で。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/school-guide.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="授業で使えるビッグファイブ診断｜中学・高校の先生向けガイド">
+<meta name="twitter:description" content="中学・高校の授業でビッグファイブ診断を使うときの進め方とデータの扱い。">
+<meta name="twitter:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "授業で使えるビッグファイブ診断（中学・高校の先生向けガイド）",
+  "url": "https://bigfive.jr-genius.jp/school-guide.html",
+  "description": "中学・高校の授業でビッグファイブ診断・キャリア適性診断・RIASEC職業興味診断を使うときの進め方とデータの扱いの説明ページ。",
+  "isPartOf": { "@type": "WebSite", "name": "ビッグファイブ診断", "url": "https://bigfive.jr-genius.jp/" },
+  "inLanguage": "ja",
+  "audience": { "@type": "EducationalAudience", "educationalRole": "teacher" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://bigfive.jr-genius.jp/" },
+    { "@type": "ListItem", "position": 2, "name": "授業で使うときのガイド", "item": "https://bigfive.jr-genius.jp/school-guide.html" }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0e27;
+    --text: #e2e8f0;
+    --dim: #94a3b8;
+    --muted: #64748b;
+    --purple: #8b5cf6;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --border: rgba(139,92,246,0.18);
+  }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.85;
+    overflow-x: hidden;
+  }
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(139,92,246,0.10), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 80% 75%, rgba(6,182,212,0.08), transparent 70%);
+  }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  .site-header-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .nav {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .nav a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .nav a:hover { color: var(--cyan); }
+  .theme-toggle-mini {
+    border: 1px solid rgba(139,92,246,0.35);
+    background: rgba(255,255,255,0.04);
+    color: var(--dim);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .theme-toggle-mini:hover {
+    color: var(--cyan);
+    border-color: rgba(6,182,212,0.45);
+  }
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 58px 20px 72px;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 42px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(139,92,246,0.36);
+    color: #c4b5fd;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 3.2rem);
+    line-height: 1.25;
+    font-weight: 900;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, #fff, #c4b5fd, #67e8f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .lead {
+    max-width: 760px;
+    margin: 0 auto;
+    color: var(--dim);
+    font-size: 15px;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .btn.primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    box-shadow: 0 10px 30px rgba(139,92,246,0.25);
+  }
+  .btn.secondary {
+    color: var(--text);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+  }
+  section { margin-bottom: 42px; }
+  .section-title {
+    font-size: 1.45rem;
+    line-height: 1.45;
+    font-weight: 900;
+    margin-bottom: 14px;
+  }
+  .section-text {
+    color: var(--dim);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .card {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.045);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .card p {
+    color: var(--dim);
+    font-size: 13px;
+    line-height: 1.75;
+  }
+  .path {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: linear-gradient(145deg, rgba(139,92,246,0.08), rgba(6,182,212,0.04));
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .unlock-row {
+    display: grid;
+    grid-template-columns: 76px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(139,92,246,0.12);
+  }
+  .unlock-row:last-child { border-bottom: none; }
+  .count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    min-height: 34px;
+    border-radius: 999px;
+    background: rgba(139,92,246,0.16);
+    color: #ddd6fe;
+    font-size: 13px;
+    font-weight: 900;
+  }
+  .unlock-main strong {
+    display: block;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .unlock-main {
+    min-width: 0;
+  }
+  .unlock-main span {
+    color: var(--dim);
+    font-size: 12px;
+  }
+  .unlock-link {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .note {
+    border: 1px solid rgba(6,182,212,0.20);
+    background: rgba(6,182,212,0.06);
+    border-radius: 12px;
+    padding: 18px;
+    color: var(--dim);
+    font-size: 13px;
+  }
+  .note strong { color: #67e8f9; }
+  .steps {
+    counter-reset: step;
+    display: grid;
+    gap: 12px;
+  }
+  .step {
+    position: relative;
+    padding: 16px 16px 16px 58px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    font-weight: 900;
+    font-size: 13px;
+  }
+  .step h3 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .step p {
+    color: var(--dim);
+    font-size: 13px;
+  }
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+  }
+  body.theme-light {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --dim: #475569;
+    --muted: #64748b;
+    --border: rgba(109,40,217,0.16);
+    background: #f8fafc;
+  }
+  body.theme-light .bg {
+    background:
+      radial-gradient(ellipse 60% 45% at 20% 15%, rgba(139,92,246,0.12), transparent 70%),
+      radial-gradient(ellipse 50% 35% at 80% 75%, rgba(6,182,212,0.10), transparent 70%);
+  }
+  body.theme-light .site-header {
+    background: rgba(255,255,255,0.88);
+    border-bottom-color: rgba(109,40,217,0.16);
+  }
+  body.theme-light .brand,
+  body.theme-light .card h3,
+  body.theme-light .unlock-main strong {
+    color: #1e293b;
+  }
+  body.theme-light h1 {
+    background: linear-gradient(135deg, #1e293b, #6d28d9, #0e7490);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  body.theme-light .eyebrow,
+  body.theme-light .count {
+    color: #6d28d9;
+    background: rgba(109,40,217,0.08);
+    border-color: rgba(109,40,217,0.24);
+  }
+  body.theme-light .card,
+  body.theme-light .step {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .path {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(109,40,217,0.14);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.05);
+  }
+  body.theme-light .unlock-row {
+    border-bottom-color: rgba(109,40,217,0.10);
+  }
+  body.theme-light .btn.secondary,
+  body.theme-light .theme-toggle-mini {
+    color: #334155;
+    border-color: rgba(109,40,217,0.18);
+    background: rgba(255,255,255,0.75);
+  }
+  body.theme-light .note {
+    color: #475569;
+    background: rgba(6,182,212,0.08);
+    border-color: rgba(6,182,212,0.20);
+  }
+  body.theme-light footer {
+    border-top-color: rgba(109,40,217,0.14);
+  }
+  .unlock-name-link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .unlock-name-link:hover { color: var(--cyan); }
+  @media (max-width: 760px) {
+    .site-header-inner { align-items: flex-start; flex-direction: column; }
+    .nav { justify-content: flex-start; }
+    main { padding-top: 38px; }
+    .grid { grid-template-columns: 1fr; }
+    .unlock-row { display: block; }
+    .count { display: inline-flex; vertical-align: middle; margin-right: 6px; margin-top: 0; }
+    .unlock-main { display: inline; }
+    .unlock-main strong { display: inline; }
+    .unlock-main span { display: block; margin-top: 6px; }
+    .unlock-link { display: none; }
+  }
+
+  .copy-box { position: relative; background: var(--card, rgba(255,255,255,0.04)); border: 1px solid var(--border, rgba(148,163,184,0.25)); border-radius: 12px; padding: 16px; margin: 12px 0 8px; }
+  .copy-box pre { white-space: pre-wrap; word-break: break-all; font-family: inherit; font-size: 14px; line-height: 1.8; color: var(--text); margin: 0; }
+  .copy-btn { margin-top: 12px; padding: 10px 18px; border-radius: 10px; border: none; background: linear-gradient(135deg,#8b5cf6,#ec4899); color: #fff; font-weight: 700; font-family: inherit; font-size: 14px; cursor: pointer; }
+  .guide-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .guide-table th, .guide-table td { border-bottom: 1px solid var(--border, rgba(148,163,184,0.25)); padding: 10px 8px; text-align: left; vertical-align: top; line-height: 1.7; color: var(--text); }
+  .guide-table th { white-space: nowrap; }
+  .guide-list { padding-left: 1.4em; margin: 8px 0 12px; }
+  .guide-table .sep { display: none; }
+  @media (max-width: 600px) {
+    .guide-table, .guide-table tbody, .guide-table tr, .guide-table td { display: block; width: auto; }
+    .guide-table tr:first-child { display: none; }
+    .guide-table tr { padding: 12px 0; border-bottom: 1px solid var(--border, rgba(148,163,184,0.25)); }
+    .guide-table td { border: none; padding: 2px 0; }
+    .guide-table td:first-child { font-weight: 700; font-size: 15px; }
+    .guide-table td:nth-child(2) { font-size: 13px; color: var(--dim, #94a3b8); }
+    .guide-table td:nth-child(2) br { display: none; }
+    .guide-table .sep { display: inline; }
+  }
+  .guide-list li { margin-bottom: 8px; line-height: 1.8; color: var(--text); }
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg"></div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">ビッグファイブ診断</a>
+    <nav class="nav">
+      <a href="quiz.html">診断する</a>
+      <a href="mypage.html">マイページ</a>
+      <a href="diagnoses.html">診断一覧</a>
+      <button class="theme-toggle-mini" id="themeToggleMini" type="button">DARK</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="eyebrow">FOR TEACHERS</span>
+    <h1>授業で使うときのガイド<br>（中学・高校の先生向け）</h1>
+    <p class="lead">
+      キャリア教育や総合的な探究の時間などで、生徒にビッグファイブ診断を受けてもらうときの進め方をまとめました。
+      登録やログインは不要で、1人1台の端末（Chromebookなど）のブラウザからそのまま使えます。性格の診断から、向いている仕事・興味のある仕事まで、1時間の授業で進められます。
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="#handout">生徒に配る文を見る</a>
+      <a class="btn secondary" href="start.html">先に自分で試してみる</a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">授業で使える診断</h2>
+    <table class="guide-table">
+      <tr><th>診断</th><th>時間</th><th>分かること</th></tr>
+      <tr><td><a href="start.html">ビッグファイブ診断</a></td><td>10問・約2分<span class="sep">／</span><br>30問・約5分<span class="sep">／</span><br>120問・約15分</td><td>外向性・協調性・誠実性・感受性（神経症傾向）・開放性の5つの性格の傾向</td></tr>
+      <tr><td><a href="career.html">キャリア適性診断</a></td><td>追加の質問なし</td><td>ビッグファイブの結果から、18業界・26職種への向き不向き</td></tr>
+      <tr><td><a href="riasec.html">RIASEC職業興味診断</a></td><td>60問・約5分</td><td>どんな仕事に興味があるかを6つのタイプで</td></tr>
+      <tr><td><a href="career-integration.html">キャリア統合分析</a></td><td>追加の質問なし</td><td>性格（キャリア適性）と興味（RIASEC）を重ねた、26職種の総合ランキング</td></tr>
+    </table>
+    <p class="section-text">
+      どれも無料で、カードがなくても受けられます。キャリア統合分析だけはカードが3枚必要ですが、ビッグファイブ診断とRIASECを受けてもらえるコインでガチャを2回引けば届きます（鍵の画面に手順が出ます）。
+      30項目の詳細レポートだけは600円（任意）ですが、授業では使いません。生徒が支払いをしなくても、上の診断はすべて最後まで使えます。広告もありません。
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-title">50分の授業の流れ（例）</h2>
+    <div class="steps">
+      <div class="step"><h3>1. 導入（5分）</h3><p>性格には「良い・悪い」はなく、人によって傾向が違うだけであること。結果は自分を考えるための参考で、進路を決めるものではないこと。この2つを先に伝えておくと、結果を落ち着いて読めます。</p></div>
+      <div class="step"><h3>2. ビッグファイブ診断（5〜10分）</h3><p>30問版（約5分）がおすすめです。時間が短ければ10問版（約2分）でも、このあとの診断に進めます。</p></div>
+      <div class="step"><h3>3. キャリア適性診断（5分）</h3><p>ビッグファイブの結果をもとに、向いている業界・職種が出ます。追加の質問はありません。</p></div>
+      <div class="step"><h3>4. RIASEC職業興味診断（5分）</h3><p>60問で、どんな仕事に興味があるかを調べます。「向いていること」と「やってみたいこと」は別、という気づきにつながります。</p></div>
+      <div class="step"><h3>5. キャリア統合分析（5分）</h3><p>ガチャを2回引いてカードを3枚にすると開きます。性格と興味を重ねた職種のランキングが見られます。</p></div>
+      <div class="step"><h3>6. 振り返り（15〜20分）</h3><p>「意外だった結果」「気になった仕事」「その仕事について調べてみたいこと」を書いてもらいます。友達と結果を比べるより、自分の考えを言葉にする時間にするのがおすすめです。</p></div>
+    </div>
+  </section>
+
+  <section id="handout">
+    <h2 class="section-title">生徒に配る文（そのまま貼れます）</h2>
+    <p class="section-text">Google Classroom などに、そのまま貼り付けて使えます。</p>
+    <div class="copy-box">
+<pre id="handoutText">性格と進路を考えてみよう
+① 性格診断（30問・約5分）
+https://bigfive.jr-genius.jp/start.html
+② キャリア適性診断（質問なし）
+https://bigfive.jr-genius.jp/career.html
+③ 職業興味診断（60問・約5分）
+https://bigfive.jr-genius.jp/riasec.html
+④ キャリア統合分析（ガチャを2回引くと開きます）
+https://bigfive.jr-genius.jp/career-integration.html
+※ 名前やメールアドレスを入れる必要はありません。
+※ 結果に良い・悪いはありません。自分を知る参考にしてください。</pre>
+      <button class="copy-btn" id="copyHandout" type="button">この文をコピーする</button>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">データの扱い</h2>
+    <ul class="guide-list">
+      <li><strong>名前・メールアドレスの登録はありません。</strong>ログインも不要です。</li>
+      <li>診断の結果は、その端末のブラウザに保存されます。</li>
+      <li>機種変更のときに結果を戻せるよう、カードや診断結果などの進み具合を、匿名の番号と一緒にサーバーへ自動で保存しています。名前やメールアドレスは含みません。</li>
+      <li>ビッグファイブ診断の回答とスコアは、性格傾向の分布を調べるために、個人を特定できない形で記録しています。</li>
+      <li>ページの閲覧などの利用状況を、端末ごとにランダムに作った番号で記録しています（Google Analytics を含みます）。</li>
+      <li>「あの人診断」（身近な人の性格を推定する診断）では、相手の呼び名を入力します。授業で使う場合は、友達の本名ではなくニックネームなどにするよう伝えてください。</li>
+      <li>共有の端末で使った場合は、マイページの「すべてのデータを削除」で、その端末の結果を消せます。</li>
+    </ul>
+    <p class="section-text">くわしくは<a href="legal.html">プライバシーポリシー</a>をご覧ください。</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">結果の扱いで気をつけてほしいこと</h2>
+    <ul class="guide-list">
+      <li>自分で答える診断なので、その日の気分や「よく見せたい」気持ちで結果は変わります。</li>
+      <li>進路を決めるためのものではなく、考えるきっかけとして使ってください。向き不向きは、経験や学びで変わっていきます。</li>
+      <li>結果を見せ合うことは、無理にさせないでください。</li>
+      <li>医学的な診断ではありません。悩みが深いときは、学校の相談窓口などにつないでください。</li>
+      <li>ビッグファイブは、性格心理学で広く研究されているモデルです（<a href="science.html">ビッグファイブ理論とは</a>）。このサイトの質問は国際的な公開尺度（IPIP-NEO）にもとづく日本語の設問で、日本語版としての正式な検証は行っていません。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="section-title">よくある質問</h2>
+    <div class="steps">
+      <div class="step"><h3>何歳から使えますか？</h3><p>中学生以上（13歳以上）が対象です。小学生以下には、保護者が答える<a href="kodomo.html">子どもの性格診断</a>があります。</p></div>
+      <div class="step"><h3>どんな端末で使えますか？</h3><p>ブラウザで動くので、Chromebook・タブレット・スマートフォン・パソコンのどれでも使えます。アプリのインストールはいりません。</p></div>
+      <div class="step"><h3>授業の前に準備することはありますか？</h3><p>特にありません。先生が一度ご自身で30問版を受けておくと、生徒がつまずきやすいところが分かります。</p></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn primary" href="start.html">診断を試してみる</a>
+      <a class="btn secondary" href="diagnoses.html">診断の一覧を見る</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 ビッグファイブ診断</p>
+</footer>
+<script>
+(function() {
+  var key = 'bigfive_theme';
+  var btn = document.getElementById('themeToggleMini');
+  if (!btn) return;
+  function updateLabel() {
+    btn.textContent = document.body.classList.contains('theme-light') ? 'DARK' : 'LIGHT';
+  }
+  updateLabel();
+  btn.addEventListener('click', function() {
+    var isLight = document.body.classList.toggle('theme-light');
+    localStorage.setItem(key, isLight ? 'light' : 'dark');
+    updateLabel();
+  });
+})();
+</script>
+
+<script>
+(function () {
+  var btn = document.getElementById('copyHandout');
+  var pre = document.getElementById('handoutText');
+  if (!btn || !pre) return;
+  btn.addEventListener('click', function () {
+    var text = pre.textContent;
+    function done() { btn.textContent = 'コピーしました'; setTimeout(function () { btn.textContent = 'この文をコピーする'; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(pre);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = '選んだ文をコピーしてください';
+    }
+  });
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

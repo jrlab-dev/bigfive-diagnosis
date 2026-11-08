@@ -172,6 +172,7 @@
 - トップ・診断の入口: https://bigfive.jr-genius.jp/
 - 診断（10問・30問・120問）: https://bigfive.jr-genius.jp/quiz.html
 - 診断の一覧: https://bigfive.jr-genius.jp/diagnoses.html
+- 授業で使うときのガイド（中学・高校の先生向け）: https://bigfive.jr-genius.jp/school-guide.html
 - クロス分析の仕組み解説（実例つき）: https://bigfive.jr-genius.jp/cross.html
 - 総合性格レポート（無料・クロス分析はここで読める）: https://bigfive.jr-genius.jp/report.html
 - マイページ・AI相談プロフィール: https://bigfive.jr-genius.jp/mypage.html
