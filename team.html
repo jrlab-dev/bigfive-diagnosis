@@ -1188,6 +1188,9 @@ const roomId = (function() {
   try { const r = new URLSearchParams(location.search).get('room') || ''; return /^[A-Za-z0-9]{22}$/.test(r) ? r : ''; } catch(e) { return ''; }
 })();
 let roomState = { loading: !!roomId, error: '', name: '', members: [], max: 60, ttl: 30, busy: false, msg: '' };
+// カードが足りない人でも、招待リンクのチームは作れる（?invite=1）。このときは作る枠だけを出す
+const roomInviteMode = !roomId && (function() { try { return new URLSearchParams(location.search).get('invite') === '1'; } catch(e) { return false; } })();
+if (roomInviteMode) { try { document.body.removeAttribute('data-feature-gate'); } catch(e) {} }
 let roomTouched = false;
 let roomPollCount = 0;
 if (roomId) {
@@ -2667,6 +2670,25 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
 
 // 部屋の表示と読み込み（開いている間は15秒ごとに10分まで自動で最新にする）
 renderRoomPanel();
+if (roomInviteMode) {
+  // 作る枠だけを出す（端末の中のメンバーで診断する部分は、鍵が開いてから）
+  try { document.getElementById('memberSection').hidden = true; } catch(e) {}
+}
+// 鍵の画面に、カードなしで始められる入口を足す
+window.addEventListener('load', function() {
+  try {
+    const gate = document.getElementById('unlock-gate');
+    if (!gate || roomId || document.getElementById('gateInviteBox')) return;
+    const h2 = gate.querySelector('h2');
+    const anchor = h2 && h2.nextElementSibling ? h2.nextElementSibling : h2;
+    if (!anchor) return;
+    anchor.insertAdjacentHTML('afterend',
+      '<div id="gateInviteBox" style="margin:12px 0 4px;padding:12px;border-radius:12px;border:1px solid rgba(139,92,246,0.45);background:rgba(139,92,246,0.08);">'
+      + '<p style="margin:0 0 8px;font-size:0.85rem;line-height:1.6;color:inherit;">クラスや職場で<strong>みんなで集まる</strong>なら、カードなしで始められます</p>'
+      + '<a href="team.html?invite=1" style="display:inline-block;padding:10px 18px;border-radius:999px;font-size:0.9rem;font-weight:700;color:#fff;text-decoration:none;background:linear-gradient(135deg,#7c3aed,#ec4899);">招待リンクでチームを作る</a>'
+      + '</div>');
+  } catch(e) {}
+});
 if (roomId) {
   roomRefresh(false).then(() => { roomEvent('team_room_view', { members: roomState.members.length, error: roomState.error || '' }); });
   const roomTimer = setInterval(() => {
