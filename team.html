@@ -924,6 +924,21 @@
   }
   .shared-banner strong { color: #f9a8d4; }
   .member-card.shared { border-color: rgba(236,72,153,0.5); }
+  .room-panel { margin: 0 0 18px; padding: 16px; border-radius: 16px; border: 1px solid rgba(139,92,246,0.35); background: rgba(139,92,246,0.07); font-size: 14px; line-height: 1.7; }
+  .room-panel h2 { font-size: 16px; margin: 0 0 6px; }
+  .room-panel p { margin: 0 0 10px; }
+  .room-panel .room-note { font-size: 12px; color: var(--dim); margin: 10px 0 0; }
+  .room-panel .room-note a, .room-panel .room-list a { color: var(--purple); font-weight: 700; }
+  .room-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; margin: 0 0 10px; }
+  .room-input { flex: 1 1 160px; min-width: 0; font-family: inherit; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(139,92,246,0.4); background: rgba(255,255,255,0.9); color: #1e293b; }
+  .room-btn { flex: 0 0 auto; font-family: inherit; font-size: 14px; font-weight: 700; padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer; color: #fff; background: linear-gradient(135deg, #7c3aed, #ec4899); text-decoration: none; display: inline-block; text-align: center; }
+  .room-btn.sub { color: inherit; background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.35); }
+  .room-btn:disabled { opacity: .55; cursor: default; }
+  .room-link { background: none; border: none; padding: 4px 0; margin-right: 14px; font-family: inherit; font-size: 12px; color: inherit; opacity: .8; text-decoration: underline; cursor: pointer; }
+  .room-status { font-weight: 700; margin: 0 0 8px; }
+  .room-err { color: #dc2626; font-weight: 700; }
+  .room-list { font-size: 13px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .member-me-badge { font-size: 11px; font-weight: 700; color: #6d28d9; background: rgba(139,92,246,0.15); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
   .member-recv-badge { font-size: 11px; font-weight: 700; color: #db2777; background: rgba(236,72,153,0.12); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
   .member-recv-btn { font-family: inherit; font-size: 11px; color: inherit; opacity: .75; background: none; border: none; padding: 4px 2px; text-decoration: underline; cursor: pointer; white-space: nowrap; }
   .member-recv-first { margin-left: auto; }
@@ -978,9 +993,12 @@
   </header>
 
   <div class="intro">
-    <p>保存した診断結果からメンバーを選んで（2〜8人）<br>チームの相性と、一人ひとりの「チームでの役割」を診断します</p>
+    <p>メンバーを選んで（2〜8人）<br>チームの相性と、一人ひとりの「チームでの役割」を診断します</p>
     <p style="margin-top:10px;font-size:13px;color:var(--dim)">大人数をグループに分けたい場合は <a href="group.html" style="color:var(--purple);text-decoration:none;font-weight:700">グループ分けツール →</a></p>
   </div>
+
+  <!-- 招待リンクで集まる部屋 -->
+  <div id="roomPanel" class="room-panel" hidden></div>
 
   <!-- メンバー選択 -->
   <div id="memberSection">
@@ -1161,6 +1179,246 @@ let pickTarget = null;
   } catch(e) {}
 })();
 
+// ===== 招待リンクで集まる部屋 =====
+// サーバーに置くのは、部屋の名前とメンバーの呼び名・性格コード・性別・版だけ。30日使われないと消える。
+const ROOM_API = '/api/team/';
+const STORAGE_KEY_ROOMS = 'bigfive_team_rooms';
+const STORAGE_KEY_PENDING_ROOM = 'bigfive_team_pending_room';
+const roomId = (function() {
+  try { const r = new URLSearchParams(location.search).get('room') || ''; return /^[A-Za-z0-9]{22}$/.test(r) ? r : ''; } catch(e) { return ''; }
+})();
+let roomState = { loading: !!roomId, error: '', name: '', members: [], max: 60, ttl: 30, busy: false, msg: '' };
+let roomTouched = false;
+let roomPollCount = 0;
+if (roomId) {
+  // 部屋から来た人には鍵を出さない。部屋のページは検索に出さない
+  try {
+    document.body.removeAttribute('data-feature-gate');
+    const mt = document.createElement('meta'); mt.name = 'robots'; mt.content = 'noindex'; document.head.appendChild(mt);
+    localStorage.removeItem(STORAGE_KEY_PENDING_ROOM);
+  } catch(e) {}
+}
+function roomStore() {
+  try { const o = JSON.parse(localStorage.getItem(STORAGE_KEY_ROOMS) || '{}'); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; } catch(e) { return {}; }
+}
+function roomSave(id, patch) {
+  try {
+    const o = roomStore();
+    o[id] = Object.assign({}, o[id] || {}, patch, { t: Date.now() });
+    const keys = Object.keys(o).sort((a, b) => (o[b].t || 0) - (o[a].t || 0));
+    keys.slice(20).forEach(k => delete o[k]);
+    localStorage.setItem(STORAGE_KEY_ROOMS, JSON.stringify(o));
+  } catch(e) {}
+}
+function roomForget(id) {
+  try { const o = roomStore(); delete o[id]; localStorage.setItem(STORAGE_KEY_ROOMS, JSON.stringify(o)); } catch(e) {}
+}
+function roomMine() { return roomStore()[roomId] || {}; }
+function roomEvent(name, props) {
+  try { if (typeof gtag === 'function') gtag('event', name, props || {}); } catch(e) {}
+}
+async function roomCall(path, body) {
+  try {
+    const res = await fetch(ROOM_API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const j = await res.json().catch(() => null);
+    return j && typeof j === 'object' ? j : { ok: false, error: 'server' };
+  } catch(e) { return { ok: false, error: 'network' }; }
+}
+function roomDeviceId() {
+  try {
+    let d = localStorage.getItem('bigfive_share_id') || '';
+    if (!/^[A-Za-z0-9]{6,24}$/.test(d)) {
+      d = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      localStorage.setItem('bigfive_share_id', d);
+    }
+    return d;
+  } catch(e) { return ''; }
+}
+function roomMyResult() {
+  try {
+    const my = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
+    if (!Array.isArray(my) || !my.length) return null;
+    const idx = Math.min(parseInt(localStorage.getItem('bigfive_active_my_index') || '0'), my.length - 1);
+    const r = my[idx];
+    if (!r || !isValidCode(r.code)) return null;
+    return { code: r.code, gender: safeGender(r.gender), version: ['10', '30', '60', '120'].includes(String(r.version)) ? String(r.version) : '30',
+             typeName: PersonalityTypes.getName(r.code, r.typeName || r.code) };
+  } catch(e) { return null; }
+}
+function roomUrl(id) { return location.origin + location.pathname + '?room=' + id; }
+function roomErrText(code) {
+  if (code === 'no_room') return 'このチームは見つかりません。30日使われないと自動で消えます。';
+  if (code === 'full') return 'このチームは満員です（60人まで）。';
+  if (code === 'too_many') return '今日作れるチームの数を超えました。明日また試してください。';
+  if (code === 'name') return '呼び名を入れてください。';
+  return 'いまチームのページを開けません。少し待ってからもう一度試してください。結果ページの「相性チェックURL」で1人ずつ集める方法は使えます。';
+}
+async function roomRefresh(silent) {
+  if (!roomId) return;
+  if (!silent) { roomState.loading = true; renderRoomPanel(); }
+  const j = await roomCall('get', { room: roomId });
+  roomState.loading = false;
+  if (!j.ok) {
+    if (!silent || j.error === 'no_room') { roomState.error = j.error || 'server'; }
+    if (j.error === 'no_room') roomForget(roomId);
+  } else {
+    roomState.error = '';
+    roomState.name = j.name || '';
+    roomState.members = Array.isArray(j.members) ? j.members.filter(m => m && isValidCode(m.code) && /^[A-Za-z0-9]{6,24}$/.test(m.mid || '')) : [];
+    roomState.max = j.max || 60;
+    roomState.ttl = j.ttl_days || 30;
+    roomSave(roomId, { name: roomState.name });
+    // 受け取った本人の結果として端末にも残し、初めての相手ならカードを1枚増やす（自分の分は除く）
+    const mine = roomMine();
+    roomState.members.forEach(m => {
+      if (m.mid === mine.mid) return;
+      try { saveReceivedMember({ n: m.name, c: m.code, g: m.gender, v: m.version, i: 'rm' + m.mid }); } catch(e) {}
+    });
+  }
+  renderRoomPanel();
+  renderMembers();
+}
+function roomMembersForList() {
+  const mine = roomMine();
+  return roomState.members.map(m => ({
+    id: 'room_' + m.mid,
+    name: m.name,
+    code: m.code,
+    scores: codeToScores(m.code),
+    gender: safeGender(m.gender),
+    type: 'shared',
+    isMe: m.mid === mine.mid,
+    date: new Date().toISOString()
+  }));
+}
+function renderRoomPanel() {
+  const el = document.getElementById('roomPanel');
+  if (!el) return;
+  if (viewTeamData) { el.hidden = true; return; }
+  el.hidden = false;
+  if (!roomId) {
+    const st = roomStore();
+    const recent = Object.keys(st).sort((a, b) => (st[b].t || 0) - (st[a].t || 0)).slice(0, 5);
+    el.innerHTML = `
+      <h2>みんなで集まる（招待リンク）</h2>
+      <p>リンクを1本送るだけで、各自のスマホやパソコンから本人の結果を持ち寄れます。クラスや職場のチームで使えます。</p>
+      <div class="room-row">
+        <input type="text" class="room-input" id="roomNameInput" maxlength="20" placeholder="チーム名（任意）">
+        <button type="button" class="room-btn" id="roomCreateBtn"${roomState.busy ? ' disabled' : ''}>招待リンクを作る</button>
+      </div>
+      ${roomState.msg ? `<p class="room-err">${escHtml(roomState.msg)}</p>` : ''}
+      ${recent.length ? `<ul class="room-list">${recent.map(id => `<li>・<a href="team.html?room=${id}">${escHtml(st[id].name || '名前なしのチーム')}</a> を開く</li>`).join('')}</ul>` : ''}
+      <p class="room-note">招待リンクを使ったときだけ、呼び名・性格コード・性別をサーバーに置きます（最後に使われてから30日で消えます）。くわしくは <a href="legal.html">プライバシーポリシー</a></p>`;
+    const btn = document.getElementById('roomCreateBtn');
+    if (btn) btn.addEventListener('click', async () => {
+      if (roomState.busy) return;
+      roomState.busy = true; roomState.msg = '';
+      const nm = (document.getElementById('roomNameInput').value || '').trim();
+      btn.disabled = true;
+      const j = await roomCall('create', { name: nm, device: roomDeviceId() });
+      roomState.busy = false;
+      if (!j.ok || !/^[A-Za-z0-9]{22}$/.test(j.room || '')) { roomState.msg = roomErrText(j.error); renderRoomPanel(); return; }
+      roomSave(j.room, { owner_key: j.owner_key, name: j.name || '' });
+      roomEvent('team_room_create', {});
+      location.href = 'team.html?room=' + j.room;
+    });
+    return;
+  }
+  // --- 部屋の中 ---
+  const mine = roomMine();
+  const joined = !!(mine.mid && roomState.members.some(m => m.mid === mine.mid));
+  const me = roomMyResult();
+  const meInRoom = joined ? roomState.members.find(m => m.mid === mine.mid) : null;
+  let body = '';
+  if (roomState.loading) {
+    body = '<p class="room-status">読み込み中…</p>';
+  } else if (roomState.error) {
+    body = `<p class="room-err">${escHtml(roomErrText(roomState.error))}</p>
+      <p>${roomState.error === 'no_room' ? '<a class="room-btn sub" href="team.html">チーム診断のページへ</a>' : '<button type="button" class="room-btn sub" id="roomReloadBtn">最新にする</button>'}</p>`;
+  } else {
+    const count = roomState.members.length;
+    let mineHtml = '';
+    if (joined) {
+      const changed = me && meInRoom && (me.code !== meInRoom.code || me.gender !== meInRoom.gender);
+      mineHtml = `<p class="room-status">✓ 「${escHtml(meInRoom.name)}」として参加しています</p>
+        ${changed ? `<p><button type="button" class="room-btn sub" id="roomRejoinBtn">いまの自分の結果に出し直す</button></p>` : ''}`;
+    } else if (me) {
+      let defName = '';
+      try { defName = (localStorage.getItem('bigfive_my_name') || '').trim().slice(0, 12); } catch(e) {}
+      mineHtml = `<p>あなたの結果：<strong>${escHtml(me.typeName)}</strong>（${me.code}）</p>
+        <div class="room-row">
+          <input type="text" class="room-input" id="roomMyName" maxlength="12" placeholder="呼び名（本名でなくてOK）" value="${escHtml(defName)}">
+          <button type="button" class="room-btn" id="roomJoinBtn"${roomState.busy ? ' disabled' : ''}>このチームに自分の結果を出す</button>
+        </div>`;
+    } else {
+      mineHtml = `<p>まだ診断結果がありません。先に診断を受けると、このチームに結果を出せます。</p>
+        <p><a class="room-btn" id="roomQuizLink" href="quiz.html?v=10">先に診断を受ける（10問・約2分）</a></p>`;
+    }
+    body = `
+      <p>いま <strong>${count}人</strong> が結果を出しています${count < MIN_MEMBERS ? '。2人そろうと診断できます' : ''}。</p>
+      ${mineHtml}
+      ${roomState.msg ? `<p class="room-err">${escHtml(roomState.msg)}</p>` : ''}
+      <p style="margin-top:14px;font-weight:700">招待リンク（メンバーに送ってください）</p>
+      <div class="room-row">
+        <input type="text" class="room-input" id="roomUrlInput" readonly value="${escHtml(roomUrl(roomId))}">
+        <button type="button" class="room-btn sub" id="roomCopyBtn">コピー</button>
+      </div>
+      <div>
+        <button type="button" class="room-link" id="roomReloadBtn">最新にする</button>
+        ${joined ? '<button type="button" class="room-link" id="roomLeaveBtn">自分の分を取り消す</button>' : ''}
+        ${mine.owner_key ? '<button type="button" class="room-link" id="roomDeleteBtn">このチームを消す</button>' : ''}
+      </div>
+      <p class="room-note">リンクを知っている人は全員、メンバーの呼び名と結果を見られます。最後に使われてから${roomState.ttl}日で自動で消えます。くわしくは <a href="legal.html">プライバシーポリシー</a></p>`;
+  }
+  el.innerHTML = `<h2>${escHtml(roomState.name || 'チーム')}</h2>${body}`;
+
+  const on = (id, fn) => { const b = document.getElementById(id); if (b) b.addEventListener('click', fn); };
+  on('roomReloadBtn', () => roomRefresh(false));
+  on('roomQuizLink', () => { try { localStorage.setItem(STORAGE_KEY_PENDING_ROOM, roomId); } catch(e) {} });
+  on('roomCopyBtn', async () => {
+    const input = document.getElementById('roomUrlInput');
+    try { await navigator.clipboard.writeText(input.value); }
+    catch(e) { input.select(); try { document.execCommand('copy'); } catch(e2) {} }
+    const b = document.getElementById('roomCopyBtn'); if (b) { b.textContent = 'コピーしました'; setTimeout(() => { if (b) b.textContent = 'コピー'; }, 2000); }
+  });
+  const doJoin = async (name) => {
+    const res = roomMyResult();
+    if (!res || roomState.busy) return;
+    roomState.busy = true; roomState.msg = '';
+    const cur = roomMine();
+    const j = await roomCall('join', { room: roomId, name, code: res.code, gender: res.gender, version: res.version, mid: cur.mid || '', member_key: cur.member_key || '' });
+    roomState.busy = false;
+    if (!j.ok) { roomState.msg = roomErrText(j.error); renderRoomPanel(); return; }
+    roomSave(roomId, { mid: j.mid, member_key: j.member_key });
+    try { if (name && !localStorage.getItem('bigfive_my_name')) localStorage.setItem('bigfive_my_name', name); } catch(e) {}
+    if (!j.updated) roomEvent('team_room_join', { members: roomState.members.length + 1 });
+    roomTouched = false;
+    await roomRefresh(true);
+  };
+  on('roomJoinBtn', () => {
+    const nm = (document.getElementById('roomMyName').value || '').trim();
+    if (!nm) { roomState.msg = roomErrText('name'); renderRoomPanel(); return; }
+    doJoin(nm);
+  });
+  on('roomRejoinBtn', () => doJoin(meInRoom ? meInRoom.name : ''));
+  on('roomLeaveBtn', async () => {
+    if (!confirm('このチームから自分の結果を取り消しますか？')) return;
+    const cur = roomMine();
+    const j = await roomCall('leave', { room: roomId, mid: cur.mid || '', member_key: cur.member_key || '' });
+    if (!j.ok) { roomState.msg = roomErrText(j.error); renderRoomPanel(); return; }
+    roomSave(roomId, { mid: '', member_key: '' });
+    roomTouched = false;
+    await roomRefresh(true);
+  });
+  on('roomDeleteBtn', async () => {
+    if (!confirm('このチームを消しますか？メンバー全員の分がサーバーから消え、招待リンクも使えなくなります。')) return;
+    const j = await roomCall('delete', { room: roomId, owner_key: roomMine().owner_key || '' });
+    if (!j.ok) { roomState.msg = roomErrText(j.error); renderRoomPanel(); return; }
+    roomForget(roomId);
+    location.href = 'team.html';
+  });
+}
+
 // ===== メンバー読み込み =====
 let allMembers = [];
 let selectedIds = new Set();
@@ -1178,6 +1436,9 @@ function loadMembers() {
       date: new Date().toISOString()
     }));
   }
+
+  // 招待リンクの部屋の中では、部屋に出された本人の結果だけを並べる
+  if (roomId) return roomMembersForList();
 
   const myResults = JSON.parse(localStorage.getItem(STORAGE_KEY_MY) || '[]');
   const otherResults = JSON.parse(localStorage.getItem(STORAGE_KEY_OTHERS) || '[]');
@@ -1242,13 +1503,20 @@ function renderMembers() {
   }
 
   if (allMembers.length < MIN_MEMBERS) {
-    const needDiag = sharedMember
+    const needDiag = roomId
+      ? (roomState.loading || roomState.error ? '' : `<p>メンバーが${MIN_MEMBERS}人そろうと、ここに一覧が出て診断できます。</p>`)
+      : sharedMember
       ? `<p>自分の診断結果がありません。<a href="quiz.html">自分を診断する →</a></p>`
       : `<p>診断結果が不足しています（最低${MIN_MEMBERS}人必要）</p><p><a href="quiz.html">自分を診断する →</a>　<a href="other_quiz.html">あの人を診断する →</a></p>`;
     container.innerHTML = `<div class="empty-state">${needDiag}</div>`;
     document.getElementById('selectionInfo').textContent = '';
     document.getElementById('analyzeBtn').disabled = true;
     return;
+  }
+
+  // 部屋の中：手で選び直すまでは、出された順に最大8人を選んでおく
+  if (roomId && !roomTouched) {
+    selectedIds = new Set(allMembers.slice(0, MAX_MEMBERS).map(m => m.id));
   }
 
   // 共有メンバーがいる場合、初回だけ自動選択
@@ -1294,6 +1562,7 @@ function renderMembers() {
           <div class="member-name">${escHtml(m.name)}</div>
           <div class="member-meta">
             <span class="member-code">${m.code}</span>
+            ${m.isMe ? '<span class="member-me-badge">あなた</span>' : ''}
             ${m.type === 'shared' && m.id.indexOf('recv_') === 0 ? `<span class="member-recv-badge">本人の結果</span>
             <button type="button" class="member-recv-btn member-recv-first" data-recv-act="rename" data-recv-id="${m.id}">名前を変える</button>
             <button type="button" class="member-recv-btn" data-recv-act="remove" data-recv-id="${m.id}">外す</button>` : ''}
@@ -1338,6 +1607,7 @@ function renderMembers() {
   // クリックイベント
   container.querySelectorAll('.member-card').forEach(card => {
     card.addEventListener('click', () => {
+      if (roomId) roomTouched = true;
       const id = card.dataset.id;
       if (selectedIds.has(id)) {
         selectedIds.delete(id);
@@ -2395,6 +2665,16 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
   `;
 }
 
+// 部屋の表示と読み込み（開いている間は15秒ごとに10分まで自動で最新にする）
+renderRoomPanel();
+if (roomId) {
+  roomRefresh(false).then(() => { roomEvent('team_room_view', { members: roomState.members.length, error: roomState.error || '' }); });
+  const roomTimer = setInterval(() => {
+    if (++roomPollCount > 40) { clearInterval(roomTimer); return; }
+    if (document.visibilityState === 'visible' && !roomState.busy && roomState.error !== 'no_room') roomRefresh(true);
+  }, 15000);
+}
+
 // 受け取りの記録（初めて受け取ったときだけ）
 window.addEventListener('load', function() {
   try {
@@ -2404,6 +2684,7 @@ window.addEventListener('load', function() {
 
 // ===== イベント =====
 document.getElementById('analyzeBtn').addEventListener('click', () => {
+  if (roomId) roomEvent('team_room_analyze', { selected: selectedIds.size, members: roomState.members.length });
   try {
     if (localStorage.getItem('dev_nocount') !== '1') {
       var u = 'https://bigfive.jr-genius.jp/count/hit?e=team_analyze';
@@ -2482,7 +2763,7 @@ if (document.readyState === 'loading') {
   <h3>この診断について</h3>
   <ul>
     <li>メンバー各自のビッグファイブ診断（10問・約3分）の結果をもとに使用・<strong>無料・登録不要</strong></li>
-    <li>結果は<strong>お使いの端末の中だけ</strong>に保存され、サーバーには送られません</li>
+    <li>結果は<strong>お使いの端末の中</strong>に保存されます。<strong>招待リンクでチームを作ったときだけ</strong>、メンバーの呼び名・性格コード・性別をサーバーに置きます（最後に使われてから30日で消えます）</li>
     <li>2〜8人まで登録でき、<strong>チーム平均と一人ひとりの役割</strong>が読めます</li>
   </ul>
 

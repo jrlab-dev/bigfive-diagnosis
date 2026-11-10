@@ -5320,5 +5320,23 @@ if (isOtherMode) {
 })();
 </script>
 
+<script>
+// 招待リンクのチームから診断を受けに来た人へ、チームへ戻る案内を出す
+(function(){
+  try {
+    var room = localStorage.getItem('bigfive_team_pending_room') || '';
+    if (!/^[A-Za-z0-9]{22}$/.test(room)) return;
+    var q = new URLSearchParams(location.search);
+    if (q.get('saved') === '1' || q.get('from') === 'share' || q.get('other_code')) return;
+    var a = document.createElement('a');
+    a.href = 'team.html?room=' + room;
+    a.id = 'teamRoomReturn';
+    a.textContent = '👥 チームに自分の結果を出す →';
+    a.style.cssText = 'display:block;width:100%;box-sizing:border-box;margin:0 0 14px;padding:14px 16px;border-radius:14px;text-align:center;font-weight:700;font-size:15px;line-height:1.5;color:#fff;text-decoration:none;background:linear-gradient(135deg,#7c3aed,#ec4899);box-shadow:0 4px 14px rgba(124,58,237,0.3);';
+    var box = document.querySelector('.container') || document.body;
+    box.insertBefore(a, box.firstChild);
+  } catch(e) {}
+})();
+</script>
 </body>
 </html>
