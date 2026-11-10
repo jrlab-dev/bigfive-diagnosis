@@ -924,6 +924,10 @@
   }
   .shared-banner strong { color: #f9a8d4; }
   .member-card.shared { border-color: rgba(236,72,153,0.5); }
+  .member-recv-badge { font-size: 11px; font-weight: 700; color: #db2777; background: rgba(236,72,153,0.12); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+  .member-recv-btn { font-family: inherit; font-size: 11px; color: inherit; opacity: .75; background: none; border: none; padding: 4px 2px; text-decoration: underline; cursor: pointer; white-space: nowrap; }
+  .member-recv-first { margin-left: auto; }
+  .member-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
   .member-card.shared .member-icon { background: rgba(236,72,153,0.15); }
 
   @media (max-width: 400px) {
@@ -994,11 +998,17 @@
 </div>
 
 <script src="personality-types.js?v=20260919"></script>
+<script src="hidden_characters.js"></script>
+<script src="rarity.js"></script>
+<script src="album.js"></script>
 <script src="compat.js"></script>
 <script>
 // ===== 定数 =====
 const STORAGE_KEY_MY = 'bigfive_my_results';
 const STORAGE_KEY_OTHERS = 'bigfive_other_results';
+// 共有リンクで受け取った本人の結果（あの人診断の推測とは分けて持つ）
+const STORAGE_KEY_RECEIVED = 'bigfive_received_members';
+const MAX_RECEIVED = 100;
 const STORAGE_KEY_TEAMS = 'bigfive_team_results';
 const MAX_MEMBERS = 8;
 const MAX_TEAMS = 10;
@@ -1043,6 +1053,68 @@ function formatDate(isoString) {
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 }
 
+// ===== 受け取ったメンバーの保存 =====
+function loadReceived() {
+  try {
+    const a = JSON.parse(localStorage.getItem(STORAGE_KEY_RECEIVED) || '[]');
+    return Array.isArray(a) ? a.filter(r => r && isValidCode(r.code) && r.rid) : [];
+  } catch(e) { return []; }
+}
+function saveReceivedList(list) {
+  try { localStorage.setItem(STORAGE_KEY_RECEIVED, JSON.stringify(list.slice(0, MAX_RECEIVED))); return true; } catch(e) { return false; }
+}
+function receivedToMember(r) {
+  return {
+    id: 'recv_' + r.rid,
+    name: r.name,
+    code: r.code,
+    scores: codeToScores(r.code),
+    gender: safeGender(r.gender),
+    type: 'shared',
+    date: r.date
+  };
+}
+let receivedIsNew = false;
+let receivedCardAdded = false;
+// 共有リンクの中身を端末に保存し、初めての相手ならカードを1枚増やす
+function saveReceivedMember(data) {
+  const name = cutName(data.n) || `友達 (${data.c})`;
+  const gender = safeGender(data.g);
+  const version = ['10', '30', '60', '120'].includes(String(data.v)) ? String(data.v) : '30';
+  const sid = (typeof data.i === 'string' && /^[A-Za-z0-9]{6,24}$/.test(data.i)) ? data.i : '';
+  const list = loadReceived();
+  let rec = list.find(r => sid ? r.sid === sid : (!r.sid && r.code === data.c && r.gender === gender && r.origName === name));
+  if (rec) {
+    // 同じ人が受け直した場合は結果だけ新しくする（カードは増やさない）
+    if (rec.code !== data.c || rec.gender !== gender) {
+      rec.code = data.c; rec.gender = gender; rec.version = version; rec.date = new Date().toISOString();
+      saveReceivedList(list);
+    }
+    return receivedToMember(rec);
+  }
+  rec = {
+    rid: sid || ('r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8)),
+    sid, name, origName: name, code: data.c, gender, version,
+    date: new Date().toISOString()
+  };
+  list.unshift(rec);
+  if (!saveReceivedList(list)) {
+    // 保存できない端末でも、この画面の間だけは使えるようにする
+    return receivedToMember(rec);
+  }
+  receivedIsNew = true;
+  try {
+    if (window.AlbumUtils && AlbumUtils.addToAlbum) {
+      const rarity = AlbumUtils.computeRarityForAlbum ? AlbumUtils.computeRarityForAlbum(rec.code, version, gender) : 'common';
+      receivedCardAdded = !!AlbumUtils.addToAlbum({
+        code: rec.code, gender, typeName: rec.code, version, rarity,
+        isHidden: false, hiddenId: null, date: rec.date, source: 'received'
+      });
+    }
+  } catch(e) {}
+  return receivedToMember(rec);
+}
+
 // ===== URLの共有データを解析 =====
 let sharedMember = null;
 let viewTeamData = null;
@@ -1085,15 +1157,7 @@ let pickTarget = null;
     if (!raw) return;
     const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
     if (!data || !isValidCode(data.c)) return;
-    sharedMember = {
-      id: 'shared_0',
-      name: cutName(data.n) || `友達 (${data.c})`,
-      code: data.c,
-      scores: codeToScores(data.c),
-      gender: safeGender(data.g),
-      type: 'shared',
-      date: new Date().toISOString()
-    };
+    sharedMember = saveReceivedMember(data);
   } catch(e) {}
 })();
 
@@ -1151,10 +1215,11 @@ function loadMembers() {
     });
   });
 
-  // URL共有メンバー（先頭に追加）
-  if (sharedMember) {
-    members.unshift(sharedMember);
-  }
+  // 受け取った本人の結果（いま届いた人を先頭に）
+  const received = loadReceived().map(receivedToMember);
+  if (sharedMember && !received.some(m => m.id === sharedMember.id)) received.unshift(sharedMember);
+  if (sharedMember) received.sort((a, b) => (b.id === sharedMember.id) - (a.id === sharedMember.id));
+  members.unshift(...received);
 
   return members;
 }
@@ -1172,7 +1237,7 @@ function renderMembers() {
     const banner = document.createElement('div');
     banner.id = 'sharedBanner';
     banner.className = 'shared-banner';
-    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${escHtml(sharedMember.name)}</strong> さんから相性チェックのリンクが届きました！<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
+    banner.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> <strong>${escHtml(sharedMember.name)}</strong> さんの結果が届きました。${receivedCardAdded ? 'カードが1枚増えました。' : ''}<br>メンバーに保存したので、ほかの人のリンクも開くと3人以上のチームで診断できます。<br>あなたの診断結果を選んで「チーム相性を診断する」を押してください。`;
     intro.after(banner);
   }
 
@@ -1188,7 +1253,7 @@ function renderMembers() {
 
   // 共有メンバーがいる場合、初回だけ自動選択
   if (sharedMember && selectedIds.size === 0) {
-    selectedIds.add('shared_0');
+    selectedIds.add(sharedMember.id);
     const firstMy = allMembers.find(m => m.type === 'my');
     if (firstMy) selectedIds.add(firstMy.id);
   }
@@ -1229,6 +1294,9 @@ function renderMembers() {
           <div class="member-name">${escHtml(m.name)}</div>
           <div class="member-meta">
             <span class="member-code">${m.code}</span>
+            ${m.type === 'shared' && m.id.indexOf('recv_') === 0 ? `<span class="member-recv-badge">本人の結果</span>
+            <button type="button" class="member-recv-btn member-recv-first" data-recv-act="rename" data-recv-id="${m.id}">名前を変える</button>
+            <button type="button" class="member-recv-btn" data-recv-act="remove" data-recv-id="${m.id}">外す</button>` : ''}
           </div>
           <div class="member-score-bars">
             ${['O','C','E','A','N'].map(f => {
@@ -1240,6 +1308,32 @@ function renderMembers() {
       </div>
     `;
   }).join('');
+
+  // 受け取ったメンバーの名前変更・一覧から外す
+  container.querySelectorAll('.member-recv-btn').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const id = btn.dataset.recvId;
+      const list = loadReceived();
+      const rec = list.find(r => 'recv_' + r.rid === id);
+      if (!rec) return;
+      if (btn.dataset.recvAct === 'rename') {
+        const v = prompt('このメンバーの呼び名', rec.name);
+        if (v === null) return;
+        const nm = cutName(v.trim());
+        if (!nm) return;
+        rec.name = nm;
+        saveReceivedList(list);
+        if (sharedMember && sharedMember.id === id) sharedMember.name = nm;
+      } else {
+        if (!confirm(`「${rec.name}」をメンバー一覧から外しますか？（カードは減りません）`)) return;
+        saveReceivedList(list.filter(r => r !== rec));
+        selectedIds.delete(id);
+        if (sharedMember && sharedMember.id === id) sharedMember = null;
+      }
+      renderMembers();
+    });
+  });
 
   // クリックイベント
   container.querySelectorAll('.member-card').forEach(card => {
@@ -2300,6 +2394,13 @@ function genBigFiveManHtml(bfmData, warnings, bonus, newScore) {
     </div>
   `;
 }
+
+// 受け取りの記録（初めて受け取ったときだけ）
+window.addEventListener('load', function() {
+  try {
+    if (receivedIsNew && typeof gtag === 'function') gtag('event', 'team_share_receive', { card_added: receivedCardAdded ? 1 : 0, received_total: loadReceived().length });
+  } catch(e) {}
+});
 
 // ===== イベント =====
 document.getElementById('analyzeBtn').addEventListener('click', () => {

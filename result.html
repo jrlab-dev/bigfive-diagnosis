@@ -3895,7 +3895,15 @@ if (isOtherMode) {
   if (shareCompat) {
     shareCompat.addEventListener('click', async () => {
       const typeName = document.getElementById('typeName').textContent;
-      const data = { n: typeName, c: typeCode, g: params.get('gender') || 'F' };
+      let shareId = '';
+      try {
+        shareId = localStorage.getItem('bigfive_share_id') || '';
+        if (!/^[A-Za-z0-9]{6,24}$/.test(shareId)) {
+          shareId = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+          localStorage.setItem('bigfive_share_id', shareId);
+        }
+      } catch(e) {}
+      const data = { n: typeName, c: typeCode, g: params.get('gender') || 'F', v: version, i: shareId };
       const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
       const compatUrl = `https://bigfive.jr-genius.jp/team.html?share=${encoded}`;
       try {
