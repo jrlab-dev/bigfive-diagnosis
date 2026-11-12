@@ -1487,6 +1487,17 @@
     text-decoration: none; font-size: 12px; font-weight: 700; white-space: nowrap; transition: all 0.2s;
   }
   .selfprofile-beta-link:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+  /* 2026-11-12 試運転を終えたので、入口を読める濃さに（light-mode.css は他ページと共通のため、ここで上書き） */
+  html body .selfprofile-beta { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.14); }
+  html body .selfprofile-beta-icon { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.16); }
+  html body .selfprofile-beta-title { color: rgba(255,255,255,0.88); }
+  html body .selfprofile-beta-desc { color: rgba(255,255,255,0.62); }
+  html body .selfprofile-beta-link { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.22); }
+  html body.theme-light .selfprofile-beta { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); }
+  html body.theme-light .selfprofile-beta-icon { color: rgba(0,0,0,0.55); border-color: rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); }
+  html body.theme-light .selfprofile-beta-title { color: rgba(0,0,0,0.82); }
+  html body.theme-light .selfprofile-beta-desc { color: rgba(0,0,0,0.6); }
+  html body.theme-light .selfprofile-beta-link { color: rgba(0,0,0,0.75); border-color: rgba(0,0,0,0.18); background: rgba(0,0,0,0.04); }
 
   /* ===== 診断スタンプ帳 ===== */
   .stamp-section { margin-bottom: 20px; }
@@ -1664,7 +1675,7 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     </div>
     <div style="flex:1;min-width:0;">
-      <div class="selfprofile-beta-title">私の自己プロフィール<span class="beta-tag">試運転中</span></div>
+      <div class="selfprofile-beta-title">私の自己プロフィール</div>
       <div class="selfprofile-beta-desc">診断結果に経験・価値観を添えて、AIに伝えるプロフィール。入力はすべて任意。このブラウザに保存します。</div>
     </div>
     <a href="selfprofile.html" class="selfprofile-beta-link">開く →</a>
