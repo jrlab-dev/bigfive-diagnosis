@@ -951,6 +951,7 @@ textarea.is-empty-slot{border-style:dashed}
       <label><input type="radio" name="profilePurpose" value="general" checked> 普段の相談</label>
       <label><input type="radio" name="profilePurpose" value="career"> 仕事・履歴書の相談</label>
       <label><input type="radio" name="profilePurpose" value="blog"> 自分らしいブログ</label>
+      <label><input type="radio" name="profilePurpose" value="narikiri"> 自分を演じてもらう</label>
     </fieldset>
     <p id="profilePurposeHint" class="lifehist-note"></p>
     <h3>2. 今回渡す内容を選ぶ</h3>
@@ -2288,7 +2289,8 @@ function showToast(msg) {
 const PROFILE_PURPOSES = {
   general: {sections:['personality','analysis','bg','goals','memo'], hint:'診断結果と、あなたが大切にしていることを相談の手がかりにします。', request:'以下は私が共有を選んだプロフィールです。診断結果と本人の記録を区別し、私の背景を踏まえて相談に乗ってください。情報が足りないときは質問してください。'},
   career: {sections:['personality','analysis','work','skills','goals'], hint:'強み・職歴・目標を中心に、履歴書や仕事の相談に使います。氏名や住所は初期選択に含めません。', request:'以下のプロフィールを踏まえて、私に合う仕事・応募先への伝え方・履歴書の戦略を一緒に考えてください。職歴や資格、実績を創作せず、応募先や不足情報は質問してください。診断だけで適職を決めつけないでください。'},
-  blog: {sections:['personality','analysis','bg','goals','memo'], hint:'価値観・経験・伝え方の好みを、文章づくりの手がかりにします。', request:'以下のプロフィールを参考に、私の価値観や考え方に合うブログを書く手伝いをしてください。テーマと文体の希望を確認し、本人が語っていない体験や事実を創作しないでください。共有した私生活の情報を、そのまま公開文に書かないでください。'}
+  blog: {sections:['personality','analysis','bg','goals','memo'], hint:'価値観・経験・伝え方の好みを、文章づくりの手がかりにします。', request:'以下のプロフィールを参考に、私の価値観や考え方に合うブログを書く手伝いをしてください。テーマと文体の希望を確認し、本人が語っていない体験や事実を創作しないでください。共有した私生活の情報を、そのまま公開文に書かないでください。'},
+  narikiri: {sections:['personality','analysis','bg','goals','memo'], hint:'AIに、あなた本人として考え・話してもらいます。「この場面ならどうする？」「面接でこう聞かれたら？」と話しかけて使えます。小説やTRPGのキャラクターづくりの土台にもなります。', request:'以下は私のプロフィールです。あなたはこれから、このプロフィールの本人として振る舞ってください。性格の診断結果だけでなく、書かれている経験・価値観・目標・人との接し方を手がかりに、本人が考えそうなこと、選びそうな行動、使いそうな言葉で答えてください。プロフィールに書かれていない部分は、性格と価値観から本人らしく補ってください。準備ができたら「わかりました。あなたとして話します。」とだけ返し、そのあとは私の質問や場面設定に、本人として答えてください。'}
 };
 function getProfilePurpose() { return document.querySelector('[name="profilePurpose"]:checked')?.value || 'general'; }
 function buildPurposeText() { return PROFILE_PURPOSES[getProfilePurpose()].request + '\n\n' + buildFilteredText(); }
