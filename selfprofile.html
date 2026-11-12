@@ -550,6 +550,13 @@ body.theme-light input:focus, body.theme-light textarea:focus, body.theme-light 
 .theme-toggle:hover{transform:scale(1.05)}
 body.theme-light .theme-toggle{background:rgba(255,255,255,.9);border-color:rgba(60,70,140,.35);color:#3a4690}
 
+/* ===== 強みを見つける材料 ===== */
+.best-self{margin-top:16px;padding:14px 14px 10px;border:1px dashed var(--border);border-radius:10px;background:var(--bg3)}
+.best-self-head{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.04em}
+.best-self-note{font-size:11px;color:var(--dim);line-height:1.7;margin:0 0 10px}
+.best-self .btn-auto{margin:2px 0 8px}
+body.theme-light .best-self{background:rgba(160,128,96,.06)}
+
 /* ===== 充実度 ===== */
 .fill-meter{margin:18px 0 6px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg2)}
 .fill-meter-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -702,6 +709,20 @@ textarea.is-empty-slot{border-style:dashed}
       <div class="row">
         <label>志望動機の素材・仕事への思い（転職・就活用）</label>
         <textarea id="motivation" rows="3" placeholder="例：前職で○○を経験し、より○○に関わる仕事がしたいと感じた。人の成長を支援することに喜びを感じる。"></textarea>
+      </div>
+      <div class="best-self">
+        <div class="best-self-head">強みを見つける材料</div>
+        <p class="best-self-note">「うまくいった」「自分らしかった」と思う場面を、小さなことでいいので書いてください。周りの人から聞いた場面も加えると、自分では当たり前すぎて気づいていない強みが見えてきます。</p>
+        <div class="row">
+          <label>うまくいった場面・自分らしかった場面（3つまで）</label>
+          <textarea id="bestScenes" rows="4" placeholder="例：文化祭の準備で、意見がまとまらない班の一人ひとりに話を聞いて回り、当日までに役割を決め直した。"></textarea>
+        </div>
+        <div class="row">
+          <label>人から聞いた、あなたが良かった場面</label>
+          <textarea id="othersScenes" rows="4" placeholder="例：同僚に「トラブルのとき、最初に落ち着いて状況を整理してくれて助かった」と言われた。"></textarea>
+        </div>
+        <button class="btn-auto" type="button" onclick="copyAskMessage()">周りの人へのお願いの文面をコピー</button>
+        <p class="best-self-note">家族・友だち・同僚に送って、返ってきた話を上の欄に書き写してください。</p>
       </div>
     </div>
   </div>
@@ -949,6 +970,7 @@ textarea.is-empty-slot{border-style:dashed}
     <p class="lifehist-note">診断結果と、伝えたい背景をひとつに。用途を選び、今回渡す内容を確認してください。入力した内容の保存とは別の操作です。</p>
     <fieldset class="profile-purpose"><legend>1. 何に使いますか？</legend>
       <label><input type="radio" name="profilePurpose" value="general" checked> 普段の相談</label>
+      <label><input type="radio" name="profilePurpose" value="strength"> 強みを見つける</label>
       <label><input type="radio" name="profilePurpose" value="career"> 仕事・履歴書の相談</label>
       <label><input type="radio" name="profilePurpose" value="blog"> 自分らしいブログ</label>
       <label><input type="radio" name="profilePurpose" value="narikiri"> 自分を演じてもらう</label>
@@ -1017,13 +1039,15 @@ const FILL_ITEMS = [
   {k:'str',   label:'強み',           test:()=>val('strengths')!=='', go:'strengths'},
   {k:'weak',  label:'弱み・課題',     test:()=>val('weaknesses')!=='', go:'weaknesses'},
   {k:'val',   label:'価値観',         test:()=>val('values')!=='', go:'values'},
+  {k:'best',  label:'うまくいった場面', test:()=>val('bestScenes')!=='', go:'bestScenes'},
+  {k:'others',label:'人から聞いた場面', test:()=>val('othersScenes')!=='', go:'othersScenes'},
   {k:'style', label:'接し方のコツ',   test:()=>val('style')!=='', go:'style'},
   {k:'goal',  label:'目標',           test:()=>val('jobTarget')!=='' || val('longGoal')!=='', go:'longGoal'},
   {k:'edu',   label:'学歴',           test:()=>[...document.querySelectorAll('#eduBody .edu-nm-in')].some(i=>i.value.trim()), go:'eduBody', extra:true},
   {k:'work',  label:'職歴',           test:()=>[...document.querySelectorAll('#workBody .wc-co')].some(i=>i.value.trim()), go:'workBody', extra:true},
   {k:'skill', label:'資格・スキル',   test:()=>[...document.querySelectorAll('#skillBody .sc-name')].some(i=>i.value.trim()), go:'skillBody', extra:true},
 ];
-const FILL_SLOT_IDS = ['strengths','weaknesses','values','style','jobTarget','longGoal'];
+const FILL_SLOT_IDS = ['strengths','weaknesses','values','bestScenes','othersScenes','style','jobTarget','longGoal'];
 function updateFillMeter() {
   const bar = document.getElementById('fillBar'); if (!bar) return;
   let done = 0; const empty = [];
@@ -1838,6 +1862,8 @@ function collectProfileData() {
     weaknesses: val('weaknesses'),
     values:     val('values'),
     motivation: val('motivation'),
+    bestScenes: val('bestScenes'),
+    othersScenes: val('othersScenes'),
     background: val('background'),
     style:      val('style'),
     jobTarget:  val('jobTarget'),
@@ -1961,7 +1987,7 @@ function loadAll() {
 
   const simple = ['lastName','firstName','birthdate','genderOfficial','genderSelf',
                   'hometown','postalCode','addrPref','addrCity','addrTown','addrStreet','addrBuilding','email','phone',
-                  'strengths','weaknesses','values','motivation',
+                  'strengths','weaknesses','values','motivation','bestScenes','othersScenes',
                   'background','style','jobTarget','longGoal','memo'];
   simple.forEach(id => {
     const el = document.getElementById(id);
@@ -2127,6 +2153,8 @@ function buildFullText() {
     ['弱み・課題',     'weaknesses'],
     ['価値観',         'values'],
     ['志望動機の素材', 'motivation'],
+    ['うまくいった場面・自分らしかった場面', 'bestScenes'],
+    ['人から聞いた、良かった場面', 'othersScenes'],
     ['生い立ち・背景', 'background'],
     ['自分史（振り返りメモ）', 'lifeHistoryText'],
     ['対人スタイル',   'style'],
@@ -2288,6 +2316,7 @@ function showToast(msg) {
 
 const PROFILE_PURPOSES = {
   general: {sections:['personality','analysis','bg','goals','memo'], hint:'診断結果と、あなたが大切にしていることを相談の手がかりにします。', request:'以下は私が共有を選んだプロフィールです。診断結果と本人の記録を区別し、私の背景を踏まえて相談に乗ってください。情報が足りないときは質問してください。'},
+  strength: {sections:['personality','analysis','bg','goals','memo'], hint:'診断の数字と、あなたが書いた「うまくいった場面」「人から聞いた場面」から、根拠のある強みと、自分では気づいていない強みを見つけてもらいます。周りの人から聞いた場面があるほど深くなります。', request:'以下は私のプロフィールです。性格診断の結果と、私が書いた「うまくいった場面・自分らしかった場面」「人から聞いた、良かった場面」などの記録をもとに、私の強みを見つけてください。\n進め方：\n1. 場面の中にくり返し出てくる共通点を探し、強みを3〜5つにまとめてください。それぞれに、根拠にした場面と、関係する診断結果を添えてください。\n2. 私自身が当たり前すぎて強みだと思っていなさそうなものがあれば、1つ挙げてください。\n3. まとめた強みから、「最高のときの私」を3〜4文の自画像として書いてください。\n4. その強みを、今の仕事や暮らしで生かす小さな方法を3つ挙げてください。\n場面の記録が少ないときは、思い出すための質問を先にしてください。'},
   career: {sections:['personality','analysis','work','skills','goals'], hint:'強み・職歴・目標を中心に、履歴書や仕事の相談に使います。氏名や住所は初期選択に含めません。', request:'以下のプロフィールを踏まえて、私に合う仕事・応募先への伝え方・履歴書の戦略を一緒に考えてください。職歴や資格、実績を創作せず、応募先や不足情報は質問してください。診断だけで適職を決めつけないでください。'},
   blog: {sections:['personality','analysis','bg','goals','memo'], hint:'価値観・経験・伝え方の好みを、文章づくりの手がかりにします。', request:'以下のプロフィールを参考に、私の価値観や考え方に合うブログを書く手伝いをしてください。テーマと文体の希望を確認し、本人が語っていない体験や事実を創作しないでください。共有した私生活の情報を、そのまま公開文に書かないでください。'},
   narikiri: {sections:['personality','analysis','bg','goals','memo'], hint:'AIに、あなた本人として考え・話してもらいます。「この場面ならどうする？」「面接でこう聞かれたら？」と話しかけて使えます。小説やTRPGのキャラクターづくりの土台にもなります。', request:'以下は私のプロフィールです。あなたはこれから、このプロフィールの本人として振る舞ってください。性格の診断結果だけでなく、書かれている経験・価値観・目標・人との接し方を手がかりに、本人が考えそうなこと、選びそうな行動、使いそうな言葉で答えてください。プロフィールに書かれていない部分は、性格と価値観から本人らしく補ってください。準備ができたら「わかりました。あなたとして話します。」とだけ返し、そのあとは私の質問や場面設定に、本人として答えてください。'}
@@ -2452,6 +2481,8 @@ function buildFilteredText() {
     ['弱み・課題',     'weaknesses', 'analysis'],
     ['価値観',         'values',     'analysis'],
     ['志望動機の素材', 'motivation', 'analysis'],
+    ['うまくいった場面・自分らしかった場面', 'bestScenes', 'analysis'],
+    ['人から聞いた、良かった場面', 'othersScenes', 'analysis'],
     ['生い立ち・背景', 'background', 'bg'],
 
     ['対人スタイル',   'style',      'bg'],
@@ -2569,6 +2600,12 @@ function buildFilteredResume() {
 async function copyProfileOutput(build, message) {
   try { await copyText(build()); showToast(message); }
   catch (e) { showToast('コピーできませんでした。文章の確認欄から選択してコピーしてください。'); }
+}
+function copyAskMessage() {
+  const text = '突然ごめんね。いま自分の強みを整理していて、ひとつお願いがあります。\n' +
+    '私が「いちばん良かった」「自分らしかった」と思う場面を、1つ教えてもらえないかな。いつ・何をしていたときか、具体的に書いてくれるとうれしいです。短くて大丈夫です。\n\n' +
+    '（性格診断の結果と一緒に記録しています → https://bigfive.jr-genius.jp/ ）';
+  return copyProfileOutput(() => text, '✓ お願いの文面をコピーしました。LINEやメールに貼り付けて送れます');
 }
 function copyAi()             { return copyProfileOutput(buildFilteredText, '✓ プロフィールをコピーしました'); }
 function copyNarikiruPrompt() { return copyProfileOutput(buildFilteredNarikiruPrompt, '✓ なりきりプロンプトをコピーしました'); }
