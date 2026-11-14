@@ -124,6 +124,18 @@
 
   if (!PICKERS[PAGE]) return;
 
+  /* 掛け合わせ（クロス分析）の鍵（2026-11-14）：受けるのは無料、ビッグファイブとのつながりはカードの枚数で開く */
+  var CROSS_ID = { 'love.html': 'love', 'impostor.html': 'impostor', 'attachment.html': 'attachment',
+    'mindset.html': 'mindset', 'hexaco.html': 'hexaco', 'eq.html': 'eq', 'locus.html': 'locus' };
+  function crossLeft() {
+    var id = CROSS_ID[PAGE];
+    if (!id || typeof isCrossUnlocked !== 'function') return 0;
+    try {
+      if (isCrossUnlocked(id)) return 0;
+      return Math.max(1, getRequiredCards(id) - getCardCount());
+    } catch (e) { return 0; }
+  }
+
   function esc(t) {
     return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
@@ -145,9 +157,12 @@
       'max-width:640px;margin:20px auto 6px;padding:16px 18px;border:1px solid rgba(139,92,246,.45);' +
       'border-radius:14px;background:rgba(139,92,246,.10);text-align:left;line-height:1.75;');
     var label = '<div style="font-size:.76rem;font-weight:700;letter-spacing:.06em;color:#a78bfa;margin-bottom:8px;">' +
-      (state === 'invite' ? 'もうひと掘り' : 'あなた専用のクロス分析（無料）') + '</div>';
+      (state === 'invite' ? 'もうひと掘り' : (state === 'locked' ? 'あなた専用のクロス分析（🔒 カードで開く）' : 'あなた専用のクロス分析（無料）')) + '</div>';
     var cta;
-    if (state === 'invite') {
+    if (state === 'locked') {
+      cta = '<a href="gacha.html" data-ct="1" style="display:inline-block;margin-top:10px;background:#8b5cf6;color:#fff;' +
+        'padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:.92rem;">ガチャでカードを集める →</a>';
+    } else if (state === 'invite') {
       cta = '<a href="start.html" data-ct="1" style="display:inline-block;margin-top:10px;background:#8b5cf6;color:#fff;' +
         'padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:.92rem;">ビッグファイブ診断を受ける（2分〜） →</a>';
     } else {
@@ -172,6 +187,17 @@
     } else {
       var picked = PICKERS[PAGE](window.CROSS_ATT || {}, lv);
       if (!picked) return true; /* この診断の結果が無い（未完了で結果画面でない等）＝出さない */
+      var left = crossLeft();
+      if (left > 0) {
+        card = buildCard('locked',
+          '<div style="font-size:.92rem;">この結果とあなたのビッグファイブを重ねた<b>クロス分析</b>は、カードを<b>あと' + left + '枚</b>集めると総合レポートに追加されます。' +
+          'カードはガチャやほかの診断で増えます。</div>');
+        area.appendChild(card);
+        count('cross_teaser_view');
+        var la = card.querySelector('a[data-ct]');
+        if (la) la.addEventListener('click', function () { count('cross_teaser_click'); });
+        return true;
+      }
       var cands = (picked.cands || []).slice().sort(function (a, b) { return b.total - a.total; });
       var body = cands.length ? cands[0].body : picked.soron;
       if (body) {

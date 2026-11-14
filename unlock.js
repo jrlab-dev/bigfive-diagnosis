@@ -4,7 +4,10 @@
 var UNLOCK_DEPLOY_DATE = '2026-05-20T15:00:00.000Z';
 
 var UNLOCK_TABLE = [
-  { cards:  1, id: 'love',               label: '恋愛スタイル診断',       url: 'love.html' },
+  // 2026-11-14：恋愛・インポスター・愛着・マインドセット・HEXACOの5つは「受けるのは無料」。
+  // 枚数はそのまま、開くものを「ビッグファイブとの掛け合わせ（総合レポートのクロス分析）」に変えた（TAKE_FREE_IDS）。
+  // 理由＝鍵を外した3つ（11/7）で受け終える人が約4倍になった。鍵は受ける前でなく、結果を見たあとの「つながり」に置く。
+  { cards:  1, id: 'love',               label: '恋愛スタイル×ビッグファイブのクロス分析', url: 'report.html' },
   // 2026-08-09：総合レポートを8枚→1枚へ（診断を1回受ければ開く）。
   // 理由＝①中身は全部無料コンテンツで、隠す理由が無かった ②「¥980を断った人の出口」として
   // result.htmlから案内している先が、カード8枚未満の人には鍵付きの扉になっていた
@@ -15,15 +18,15 @@ var UNLOCK_TABLE = [
   // 2026-11-08：キャリア適性・RIASECは鍵なし（ALWAYS_UNLOCKED_IDS）、キャリア統合分析は35→3枚。
   // 理由＝授業（Chromebook）で来た157台がキャリア適性2台・RIASEC 0台で止まっていた。2つを受けるともらえるコイン2枚でガチャを引けば3枚に届く。
   { cards:  3, id: 'career-integration', label: 'キャリア統合分析',      url: 'career-integration.html' },
-  { cards:  4, id: 'impostor',           label: 'インポスター症候群チェック', url: 'impostor.html' },
+  { cards:  4, id: 'impostor',           label: 'インポスター症候群×ビッグファイブのクロス分析', url: 'report.html' },
   { cards:  5, id: 'other-detailed',     label: 'あの人診断 精密版（60問）', url: 'other_quiz.html' },
   { cards:  6, id: 'team',               label: 'チーム相性診断',        url: 'team.html' },
   { cards: 70, id: 'other-detailed2',   label: 'あの人診断 120問相当精密版', url: 'other_quiz.html' },
   // 2026-11-07：鍵の見直し。あの人診断・価値観・ダークトライアドは鍵なし（ALWAYS_UNLOCKED_IDS）へ。
   // 理由＝検索で診断ページがよく表示され、来た人の大半が鍵の画面で止まっていた（初日の人の半分は0〜1枚）。
   // 愛着10→7（総合レポートの「次のおすすめ」の74％が愛着）、RIASEC30→28・統制の所在40→38（あの人の保存件数と同じ枚数で重なっていたため）。
-  { cards:  7, id: 'attachment',         label: '愛着スタイル診断',      url: 'attachment.html' },
-  { cards: 14, id: 'mindset',            label: 'マインドセット診断',     url: 'mindset.html' },
+  { cards:  7, id: 'attachment',         label: '愛着スタイル×ビッグファイブのクロス分析', url: 'report.html' },
+  { cards: 14, id: 'mindset',            label: 'マインドセット×ビッグファイブのクロス分析', url: 'report.html' },
   { cards: 20, id: 'zukan_s2',           label: 'コレクション Stage 2',   url: 'zukan.html' },
   { cards: 25, id: 'eq',                 label: 'EQ診断',               url: 'eq.html' },
   { cards: 30, id: 'other_limit_30',     label: 'あの人保存30件に拡張',   url: null },
@@ -40,7 +43,7 @@ var UNLOCK_TABLE = [
   { cards: 150, id: 'other_limit_100',   label: 'あの人保存100件に拡張',   url: null },
   { cards: 90, id: 'group',             label: 'グループ分けツール',       url: 'group.html' },
   { cards: 100, id: 'zukan_s3',          label: '完全図鑑 Stage 3',      url: 'zukan.html' },
-  { cards: 200, id: 'hexaco',            label: 'HEXACO性格診断',         url: 'hexaco.html' },
+  { cards: 200, id: 'hexaco',            label: 'HEXACO×ビッグファイブのクロス分析', url: 'report.html' },
 ];
 
 // 常に解放済みのID
@@ -80,7 +83,20 @@ function getCardCount() {
   } catch(e) { return 0; }
 }
 
+// 受けるのは無料で、掛け合わせ（クロス分析）だけ枚数で開く診断（2026-11-14）
+var TAKE_FREE_IDS = ['love', 'impostor', 'attachment', 'mindset', 'hexaco'];
+function isTakeFree(featureId) { return TAKE_FREE_IDS.indexOf(featureId) >= 0; }
+
+// ページ（診断そのもの）が使えるか。受けるのが無料の診断は常に true
 function isUnlocked(featureId) {
+  if (ALWAYS_UNLOCKED_IDS.indexOf(featureId) >= 0) return true;
+  if (isTakeFree(featureId)) return true;
+  return isCrossUnlocked(featureId);
+}
+
+// ビッグファイブとの掛け合わせ（総合レポートのクロス分析）が開いているか。
+// 受けるのが無料の診断も、ここは今までどおりカードの枚数で決まる
+function isCrossUnlocked(featureId) {
   if (ALWAYS_UNLOCKED_IDS.indexOf(featureId) >= 0) return true;
   if (isLegacyUser()) return true;
   if (isPaidUser()) return true;
@@ -213,11 +229,8 @@ function renderGate(featureId) {
 
 // 少ない枚数で開くものの鍵の画面（最短ルートつき）。what＝そのページで何が分かるか（各ページの説明文に合わせる）
 var QUICK_GATES = {
-  love:     { title: '恋愛スタイル診断',            what: '12問で、あなたの恋愛パターン（6タイプ）と相性の良いタイプが分かります' },
   report:   { title: '総合レポート',                what: '受けた診断の結果をまとめて、あなたの性格を一画面で読めます' },
   'career-integration': { title: 'キャリア統合分析', what: 'キャリア適性（性格）とRIASEC（興味）の結果を重ねて、26職種の総合ランキングが分かります' },
-  impostor: { title: 'インポスター症候群チェック',  what: '15問で「自分は偽物では」という感覚の強さと、そのタイプが分かります' },
-  attachment: { title: '愛着スタイル診断',          what: '12問で、大切な人との関わり方のパターン（安心型・不安型・回避型・恐れ型）が分かります' },
   team:     { title: 'チーム相性診断',              what: '職場や仲間（最大8人）の性格を並べて、チーム全体の相性・一人ひとりの役割・相性のよいペアが分かります' }
 };
 

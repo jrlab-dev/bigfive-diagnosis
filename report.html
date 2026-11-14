@@ -562,7 +562,7 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
     <div class="section-label">NEXT STEP</div>
     <div class="report-next-card">
       <p class="report-next-title">🎴 次は、カード集めを楽しむ</p>
-      <p class="report-next-copy">診断やガチャでカードが増え、新しい診断が開きます。300枚集めると、性格を30項目に分けた詳細レポートも開きます。</p>
+      <p class="report-next-copy">診断やガチャでカードが増え、クロス分析や新しい診断が開きます。300枚集めると、性格を30項目に分けた詳細レポートも開きます。</p>
       <p class="report-next-progress" id="reportCardProgress">カード枚数を確認中...</p>
       <p class="report-next-copy" id="reportCardRemain"></p>
       <div class="report-next-buttons">
@@ -582,7 +582,7 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
 <script src="personality-types.js?v=20260919"></script>
 <script src="image-resolver.js?v=20260919"></script>
 <script src="cross-att-texts.js?v=7"></script>
-<script src="unlock.js?v=20261108"></script>
+<script src="unlock.js?v=20261114"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -687,6 +687,54 @@ function lockLeft(url) {
   } catch (e) { return 0; }
 }
 function lockLabel(n) { return '🔒 あとカード' + n + '枚'; }
+
+// ===== 掛け合わせ（クロス分析）の鍵（2026-11-14）=====
+// 恋愛・インポスター・愛着・マインドセット・HEXACOは受けるのは無料。ビッグファイブとの掛け合わせだけ、今までの枚数で開く。
+// 開いていない診断は、分析の文章では「受けていない」と同じ扱いにする（文章を出さない・AIにも渡らない）。
+function crossLeft(url) {
+  const id = GATE_BY_URL[url];
+  if (!id || typeof isCrossUnlocked !== 'function') return 0;
+  try {
+    if (isCrossUnlocked(id)) return 0;
+    return Math.max(1, getRequiredCards(id) - getCardCount());
+  } catch (e) { return 0; }
+}
+function crossOpen(url) { return crossLeft(url) === 0; }
+const CROSS_KEYS = [
+  { key: 'love',       url: 'love.html',       label: '恋愛スタイル' },
+  { key: 'impostor',   url: 'impostor.html',   label: 'インポスター症候群' },
+  { key: 'attachment', url: 'attachment.html', label: '愛着スタイル' },
+  { key: 'mindset',    url: 'mindset.html',    label: 'マインドセット' },
+  { key: 'eq',         url: 'eq.html',         label: 'EQ' },
+  { key: 'locus',      url: 'locus.html',      label: '統制の所在' },
+  { key: 'sdt',        url: 'sdt.html',        label: '動機タイプ' }
+];
+function hexacoTaken() {
+  try { const h = JSON.parse(localStorage.getItem('hexaco_result')); return !!(h && h.scores); } catch (e) { return false; }
+}
+function maskCross(raw) {
+  const data = Object.assign({}, raw);
+  data._raw = raw;
+  data.crossLocked = [];
+  CROSS_KEYS.forEach(k => {
+    if (!raw[k.key]) return;
+    const left = crossLeft(k.url);
+    if (left > 0) { data[k.key] = null; data.crossLocked.push({ label: k.label, url: k.url, left: left }); }
+  });
+  if (hexacoTaken()) {
+    const left = crossLeft('hexaco.html');
+    if (left > 0) data.crossLocked.push({ label: 'HEXACO', url: 'hexaco.html', left: left });
+  }
+  data.crossLocked.sort((a, b) => a.left - b.left);
+  return data;
+}
+function crossLockedHtml(list) {
+  const rows = list.map(c => '<li style="margin:4px 0;">' + c.label + ' × ビッグファイブ　<b style="white-space:nowrap;">' + lockLabel(c.left) + '</b></li>').join('');
+  return '受けた診断のうち、まだビッグファイブとつながっていないものがあります。カードを集めると、ここにクロス分析が追加されます。' +
+    '<ul style="list-style:none;padding:0;margin:10px 0 4px;">' + rows + '</ul>' +
+    '<a href="gacha.html" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">ガチャでカードを集める →</a>' +
+    '<a href="collection-guide.html" style="display:inline-block;margin:8px 0 0 12px;color:#a78bfa;font-size:0.9em;">カードの集め方</a>';
+}
 
 // ===== 未受診チェック =====
 function checkMissing(data) {
@@ -937,6 +985,9 @@ function buildAnalysis(data) {
   const crossText = getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey, locusType, eqLevel, eqWeakest, impostorSev, impostorDom);
   if (crossText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> 複数テストが示すあなたの傾向', text: crossText });
 
+  // ── 2.2 まだつながっていないクロス分析（2026-11-14）──
+  if (data.crossLocked && data.crossLocked.length) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> まだつながっていないクロス分析', text: crossLockedHtml(data.crossLocked) });
+
   // ── 2.5 クロス分析を育てる（2026-08-03 気づかせ計画柱②・図鑑化）──
   const zukanText = buildCrossZukan(data, { O, C, E, A, N });
   if (zukanText) blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> クロス分析を育てる', text: zukanText });
@@ -1125,29 +1176,30 @@ function buildCrossZukan(data, lv) {
     return Object.keys(m).length ? Math.max.apply(null, Object.values(m)) : 0;
   };
   let hexTaken = false, riTaken = false;
-  try { const h = JSON.parse(localStorage.getItem('hexaco_result')); hexTaken = !!(h && h.scores); } catch (e) {}
+  const raw = data._raw || data;
+  hexTaken = hexacoTaken();
   try { const r = JSON.parse(localStorage.getItem('riasec_result')); riTaken = !!(r && r.scores && r.scores.code); } catch (e) {}
   const TESTS = [
-    { label: '愛着スタイル診断', url: 'attachment.html', taken: !!data.attachment,
+    { label: '愛着スタイル診断', url: 'attachment.html', taken: !!raw.attachment,
       max: maxBy(fm(CA.cuts), c => c.type) },
     { label: 'HSP診断', url: 'hsp.html', taken: !!data.hsp,
       max: maxBy(fm(CA.hspcuts), c => c.hsp) },
-    { label: 'インポスター症候群診断', url: 'impostor.html', taken: !!data.impostor,
+    { label: 'インポスター症候群診断', url: 'impostor.html', taken: !!raw.impostor,
       max: fm(CA.impcuts).length },
-    { label: 'EQ診断', url: 'eq.html', taken: !!data.eq,
+    { label: 'EQ診断', url: 'eq.html', taken: !!raw.eq,
       max: maxBy(fm(CA.eqcuts), c => c.eq) },
     { label: 'ダークトライアド診断', url: 'dark-triad.html', taken: !!(data.darkTriad && data.darkTriad.scores),
       max: ['narc', 'mach', 'psy'].reduce((s, t) => {
         const mine = fm(CA.dtcuts, c => c.dt === t);
         return s + maxBy(mine, c => c.lvl);
       }, 0) },
-    { label: '統制の所在診断', url: 'locus.html', taken: !!data.locus,
+    { label: '統制の所在診断', url: 'locus.html', taken: !!raw.locus,
       max: maxBy(fm(CA.locuscuts), c => c.locus) },
-    { label: 'マインドセット診断', url: 'mindset.html', taken: !!data.mindset,
+    { label: 'マインドセット診断', url: 'mindset.html', taken: !!raw.mindset,
       max: maxBy(fm(CA.mindcuts), c => c.mind) },
-    { label: '動機タイプ診断', url: 'sdt.html', taken: !!data.sdt,
+    { label: '動機タイプ診断', url: 'sdt.html', taken: !!raw.sdt,
       max: maxBy(fm(CA.sdtcuts), c => c.sdtk) },
-    { label: '恋愛スタイル診断', url: 'love.html', taken: !!data.love,
+    { label: '恋愛スタイル診断', url: 'love.html', taken: !!raw.love,
       max: maxBy(fm(CA.lovecuts), c => c.lovek) },
     { label: '価値観診断', url: 'schwartz.html', taken: !!data.schwartz, max: 0 },
     { label: 'HEXACO診断', url: 'hexaco.html', taken: hexTaken,
@@ -1164,7 +1216,8 @@ function buildCrossZukan(data, lv) {
   if (done >= TESTS.length) {
     html += '対応する12の追加診断の結果が保存されています。いまの内容を振り返ったり、必要に応じてAIへの相談に使えます。';
   } else {
-  TESTS.forEach(t => { t.lock = lockLeft(t.url); });
+  // lock＝文章が増えない理由になる鍵（受けるのが無料の診断は掛け合わせの鍵、それ以外はページの鍵）。page＝ページの鍵
+  TESTS.forEach(t => { t.page = lockLeft(t.url); t.lock = t.page || crossLeft(t.url); });
   // 並び：①開いていて組み合わせの文章が増えるもの ②鍵があって文章が増えるもの ③文章が増えないもの。同じ組の中は増える本数の多い順
   const grp = t => (t.max > 0 ? (t.lock ? 1 : 0) : 2);
   const cand = TESTS.filter(t => !t.taken).sort((a, b) => (grp(a) - grp(b)) || (b.max - a.max));
@@ -1173,8 +1226,10 @@ function buildCrossZukan(data, lv) {
   if (best && best.max > 0) {
     html += '<div style="margin-top:10px;padding:12px 14px;border:1px solid rgba(139,92,246,0.35);border-radius:12px;background:rgba(139,92,246,0.08);">' +
       '次のおすすめ：<b>' + best.label + '</b><br>' +
-      '<span style="font-size:0.9em;opacity:0.85;">あなたのビッグファイブと組み合わせて振り返れます。結果によって、無料欄の表示内容が変わらない場合もあります。</span><br>' +
-      '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">' + (best.lock ? lockLabel(best.lock) + '（開き方を見る）' : '受けてみる →') + '</a></div>';
+      '<span style="font-size:0.9em;opacity:0.85;">' + (best.lock && !best.page
+        ? '受けるのは無料です。ビッグファイブとのクロス分析は、カードがあと' + best.lock + '枚そろうと追加されます。'
+        : 'あなたのビッグファイブと組み合わせて振り返れます。結果によって、無料欄の表示内容が変わらない場合もあります。') + '</span><br>' +
+      '<a href="' + best.url + '" style="display:inline-block;margin-top:8px;background:#8b5cf6;color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.92em;">' + (best.page ? lockLabel(best.page) + '（開き方を見る）' : '受けてみる →') + '</a></div>';
     if (cand.length > 1) html += '<div style="margin-top:8px;font-size:0.86em;opacity:0.75;">ほか未受診：' +
       cand.slice(1).map(t => '<a href="' + t.url + '" style="color:inherit;">' + t.label + (t.lock ? '（' + lockLabel(t.lock) + '）' : '') + '</a>').join('・') + '</div>';
   } else if (best) {
@@ -1203,7 +1258,7 @@ function getCrossInsight(O, C, E, A, N, love, sdt, mindset, hspTotal, attachKey,
   // HSP × ビッグファイブ（2026-08-02第2弾で新パーツに吸収＝cross-att-texts.js のhspcuts。旧4本はここから削除）
 
   let hexH = null;
-  try { const hx = JSON.parse(localStorage.getItem('hexaco_result')); if (hx && hx.scores) hexH = hx.scores.H; } catch (e) {}
+  try { const hx = JSON.parse(localStorage.getItem('hexaco_result')); if (hx && hx.scores && crossOpen('hexaco.html')) hexH = hx.scores.H; } catch (e) {}
   const hexLv = typeof hexH === 'number' ? (hexH >= 4.0 ? 'high' : (hexH < 2.5 ? 'low' : '')) : '';
   let riTop = '';
   try { const rr = JSON.parse(localStorage.getItem('riasec_result'));
@@ -1556,8 +1611,9 @@ function renderGrowth(steps) {
 // ===== メイン =====
 // ===================================================
 (function init() {
-  const data    = loadData();
-  const missing = checkMissing(data);
+  const raw     = loadData();
+  const data    = maskCross(raw);
+  const missing = checkMissing(raw);
 
   // 未受診バナー
   if (missing.length > 0) {
@@ -1578,7 +1634,7 @@ function renderGrowth(steps) {
   }
 
   renderProfile(data.bf);
-  renderTestsGrid(data);
+  renderTestsGrid(raw);
   renderAnalysis(buildAnalysis(data));
   renderWeakness(buildWeakness(data));
   renderAdvice(buildAdvice(data));
