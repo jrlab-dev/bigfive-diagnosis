@@ -576,6 +576,8 @@
     </div>
   </div>
 
+  <div class="advice-card" id="askBanner" style="display:none;width:100%;margin-bottom:18px;text-align:left;"></div>
+
   <p class="start-eyebrow">
     <span class="icon-with-text">
       <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -731,6 +733,8 @@
 
   <!-- SOKAモデル注釈 -->
   <div class="soka-note" id="sokaNote" style="display:none;"></div>
+
+  <div class="advice-card" id="sendBackCard" style="display:none;width:100%;text-align:left;"></div>
 
   <button class="action-btn btn-save" id="saveBtn">
     <span class="icon-with-text">
@@ -1578,8 +1582,8 @@ function showResult() {
   sokaNote.style.display = 'block';
   sokaNote.innerHTML = `
     <div style="font-size:11px;color:var(--dim);text-align:center;margin-bottom:12px;line-height:1.6;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> 性格心理学の研究によると、<strong style="color:var(--text);">協調性・誠実性</strong>は他者からの評価の方が正確で、<br>
-      <strong style="color:var(--text);">情緒安定性・開放性</strong>は本人の自己評価の方が正確と言われています。
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 019 14"/></svg> 性格心理学の研究によると、<strong style="color:var(--text);">不安や緊張</strong>のように外から見えにくい部分は本人の評価が、<br>
+      <strong style="color:var(--text);">知的さ</strong>のように「よく見られたい」が絡む部分は身近な人の評価が当たりやすく、<strong style="color:var(--text);">外向性</strong>は両者がそろいやすいとされています。
     </div>`;
 
   // ファセット詳細表示（60問版のみ）
@@ -2100,5 +2104,76 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js?v=20261114"></script>
 <script src="unlock-banner.js"></script>
+<script src="seen.js?v=1"></script>
+<script>
+/* 他人から見たあなた（2026-11-14）：頼まれたときの案内と、結果を本人へ送るリンク */
+(function () {
+  var S = window.SeenBy;
+  if (!S) return;
+  var esc = S.esc;
+  var ask = S.cleanName(new URLSearchParams(location.search).get('ask'));
+  if (ask) {
+    var bn = document.getElementById('askBanner');
+    bn.innerHTML = '<p style="font-weight:700;margin-bottom:6px;">' + esc(ask) + 'さんから「わたしを診断して」と頼まれています</p>' +
+      '<p style="font-size:13px;line-height:1.8;">' + esc(ask) + 'さんのふだんの様子を思い出して、見たままに答えてください。答え終わると、結果を' + esc(ask) + 'さんに送るリンクが出ます。</p>';
+    bn.style.display = '';
+    var ni = document.getElementById('personName');
+    if (ni && !ni.value) { ni.value = ask; try { checkReady(); checkDetailed2Available(); } catch (e) {} }
+    S.ev('seen_ask_open', {});
+  }
+  function means() {
+    var fm = { O: [], C: [], E: [], A: [], N: [] };
+    activeQuestions.forEach(function (q, i) {
+      if (!fm[q.factor]) return;
+      var raw = ans[i] || 3;
+      fm[q.factor].push(q.dir === '-' ? 6 - raw : raw);
+    });
+    var o = {};
+    S.F.forEach(function (f) { var v = fm[f]; o[f] = v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : 3; });
+    return o;
+  }
+  function setup() {
+    var card = document.getElementById('sendBackCard');
+    if (!card) return;
+    if (!S.REL[personRel]) { card.style.display = 'none'; return; }
+    var nm = esc(personName);
+    var asked = !!ask && ask === personName;
+    card.innerHTML = '<p style="font-weight:700;margin-bottom:6px;">この結果を' + nm + 'さんに送る</p>' +
+      '<p style="font-size:13px;line-height:1.8;">' + (asked
+        ? nm + 'さんから頼まれた診断です。送ると、' + nm + 'さんは自分の評価とあなたの見立てを比べられます。'
+        : nm + 'さんがビッグファイブ診断を受けていれば、自分の評価とあなたの見立てのずれを見られます。') +
+      'あなたが答えた一つひとつの回答は送らず、5つの性格の点数だけを送ります。</p>' +
+      '<label for="sendByName" style="display:block;font-size:13px;font-weight:700;margin:10px 0 6px;">あなたの呼び名（' + nm + 'さんに表示・空でも可）</label>' +
+      '<input type="text" class="text-input" id="sendByName" maxlength="20" placeholder="例：みき">' +
+      '<button class="action-btn btn-primary" id="sendBackBtn" type="button" style="margin-top:12px;">' + nm + 'さんに結果を送る</button>' +
+      '<div id="sendBackMsg" style="font-size:13px;margin-top:8px;word-break:break-all;"></div>';
+    card.style.display = '';
+    var bi = document.getElementById('sendByName');
+    try { bi.value = localStorage.getItem('bigfive_seen_byname') || ''; } catch (e) {}
+    var m = means();
+    document.getElementById('sendBackBtn').addEventListener('click', function () {
+      var by = S.cleanName(bi.value);
+      try { localStorage.setItem('bigfive_seen_byname', by); } catch (e) {}
+      var url = S.sendUrl(m, personRel, by, S.shareId(), personName);
+      S.ev('seen_send_create', { asked: asked ? 1 : 0, rel: personRel });
+      var msg = document.getElementById('sendBackMsg');
+      S.share(url, (by ? by + 'から：' : '') + 'あなたの性格を答えました。開くと、あなたの自己評価と比べられます').then(function (r) {
+        if (r === 'shared') msg.textContent = '送りました。';
+        else if (r === 'copied') msg.innerHTML = 'リンクをコピーしました。LINEやメッセージに貼り付けて送ってください。<br>' + esc(url);
+        else if (r === 'shown') msg.innerHTML = '下のリンクをコピーして送ってください。<br>' + esc(url);
+        else msg.textContent = '';
+      });
+    });
+  }
+  var orig = window.showResult;
+  if (typeof orig === 'function') {
+    window.showResult = function () {
+      var r = orig.apply(this, arguments);
+      try { setup(); } catch (e) {}
+      return r;
+    };
+  }
+})();
+</script>
 </body>
 </html>

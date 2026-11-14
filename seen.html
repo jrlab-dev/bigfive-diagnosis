@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="canonical" href="https://bigfive.jr-genius.jp/seen.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>他人から見たあなた｜友だちの評価と自己評価を比べる — ビッグファイブ診断</title>
+<meta name="description" content="友だちや職場の人にあなたの性格を答えてもらい、自分のビッグファイブと比べる無料の機能です。自分では気づきにくい「周りからの見え方」と、そのずれの意味を研究にもとづいて読み解きます。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ビッグファイブ診断">
+<meta property="og:title" content="他人から見たあなた — ビッグファイブ診断">
+<meta property="og:description" content="友だちにあなたの性格を答えてもらい、自分のビッグファイブと比べます。">
+<meta property="og:url" content="https://bigfive.jr-genius.jp/seen.html">
+<meta property="og:image" content="https://bigfive.jr-genius.jp/ogp-image?code=33333&gender=F&type=share">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="light-mode.css">
+<style>
+:root { --purple: #8b5cf6; --orange: #f97316; --line: rgba(139,92,246,0.18); --card: rgba(26,10,62,0.5); --soft: rgba(226,232,240,0.85); --track: rgba(255,255,255,0.08); }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.8; overflow-x: hidden; }
+body.theme-light { --line: rgba(106,13,173,0.16); --card: rgba(255,255,255,0.86); --soft: #334155; --track: rgba(15,23,42,0.08); --orange: #c2410c; }
+.wrap { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 84px 16px 64px; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; color: var(--purple); border: 1px solid var(--line); border-radius: 999px; padding: 2px 12px; }
+h1 { font-size: 26px; line-height: 1.5; margin: 10px 0 8px; }
+.lead { font-size: 14px; color: var(--soft); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px; margin: 18px 0; }
+.card h2 { font-size: 16px; margin-bottom: 10px; }
+.card p { font-size: 14px; color: var(--soft); margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+label { display: block; font-size: 13px; font-weight: 700; margin: 10px 0 6px; }
+input[type=text] { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--text); }
+body.theme-light input[type=text] { background: #fff; }
+.btn { display: inline-block; width: 100%; text-align: center; font: inherit; font-weight: 700; font-size: 15px; color: #fff; background: var(--purple); border: none; border-radius: 12px; padding: 12px 16px; margin-top: 12px; cursor: pointer; text-decoration: none; }
+.btn.sub { background: transparent; color: var(--purple); border: 1px solid var(--line); }
+.msg { font-size: 13px; color: var(--purple); margin-top: 8px; min-height: 1em; word-break: break-all; }
+.link-box { margin-top: 8px; font-size: 13px; }
+.head { font-size: 15px; color: var(--text); }
+.row { padding: 14px 0; border-top: 1px solid var(--line); }
+.row:first-of-type { border-top: none; }
+.row-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.row-name { font-weight: 700; font-size: 15px; }
+.tag { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+.tag.same { color: #10b981; border: 1px solid rgba(16,185,129,0.4); }
+.tag.gap { color: var(--orange); border: 1px solid rgba(249,115,22,0.45); }
+.scale { position: relative; height: 10px; background: var(--track); border-radius: 999px; margin: 14px 4px 6px; }
+.dot { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid #fff; }
+.dot.me { background: var(--purple); }
+.dot.them { background: var(--orange); }
+.legend { display: flex; gap: 14px; font-size: 12px; color: var(--soft); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+.row p { font-size: 13.5px; margin: 6px 0 0; }
+select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); max-width: 100%; }
+.who { font-size: 13px; color: var(--soft); display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px dashed var(--line); }
+.who button { font: inherit; font-size: 12px; color: var(--soft); background: none; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; cursor: pointer; }
+.refs { font-size: 12px; color: var(--soft); }
+.refs li { margin: 4px 0 4px 18px; }
+.toast { background: rgba(16,185,129,0.14); border: 1px solid rgba(16,185,129,0.4); color: var(--text); border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 14px; }
+</style>
+</head>
+<body class="theme-light"><script>if(localStorage.getItem("bigfive_theme")==="dark")document.body.classList.remove("theme-light");</script>
+<div class="bg-light-blobs" aria-hidden="true"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+<div class="bg-nebula"></div>
+<main class="wrap">
+  <span class="badge">クロス分析・無料</span>
+  <h1>他人から見たあなた</h1>
+  <p class="lead">友だちや職場の人に、あなたの性格を30問で答えてもらいます。届いた答えをあなたのビッグファイブと重ねて、自分では気づきにくい「周りからの見え方」を読み解きます。</p>
+  <div id="toast"></div>
+
+  <section class="card" id="resultCard" hidden>
+    <h2>あなたの自己評価と、周りの見立て</h2>
+    <div id="pickWrap" style="margin-bottom:8px;"></div>
+    <p class="head" id="headline"></p>
+    <p id="relNote"></p>
+    <div class="legend"><span><i style="background:var(--purple)"></i>自分の評価</span><span><i style="background:var(--orange)"></i>周りの見立て</span><span>左が低い・右が高い</span></div>
+    <div id="rows"></div>
+    <div id="whoList" style="margin-top:12px;"></div>
+  </section>
+
+  <section class="card" id="noSelfCard" hidden>
+    <h2>まだ比べる相手がいません</h2>
+    <p>周りの見立ては届いていますが、あなた自身のビッグファイブ診断の結果がこの端末にありません。診断を受けると、ここで自分の評価と比べられます。</p>
+    <a class="btn" href="quiz.html?v=10">ビッグファイブ診断を受ける</a>
+  </section>
+
+  <section class="card" id="askCard">
+    <h2>友だちに、あなたのことを答えてもらう</h2>
+    <p>リンクを送ると、相手は「あの人診断」であなたの性格を30問（約5分）で答えます。答え終わると、相手の画面に「結果をあなたに送る」リンクが出ます。そのリンクを開くと、このページに見立てが加わります。</p>
+    <label for="myName">相手に表示するあなたの呼び名</label>
+    <input type="text" id="myName" maxlength="20" placeholder="例：じゅん、田中">
+    <button class="btn" id="askBtn" type="button">頼むリンクを送る</button>
+    <div class="msg" id="askMsg"></div>
+    <p style="font-size:12px;margin-top:10px;">答えはこの端末だけに保存され、サーバーには送りません。何人に頼んでもかまいません。人数が増えるほど、見立ての平均が安定します。</p>
+  </section>
+
+  <section class="card">
+    <h2>自己評価と他人の評価がずれる理由</h2>
+    <p>同じ人の性格を本人と周りの人が評価すると、ある程度は一致しますが、ぴったりそろうことはまずありません。ずれは「どちらかが間違っている」のではなく、それぞれに見えている面が違うことを表しています。</p>
+    <p>心理学者のヴァザイアが提唱した「自己と他者の知識の非対称性」の考え方では、不安や緊張のように外から見えにくい特徴は本人のほうがよく知っていて、知的さのように「よく見られたい」気持ちが入りやすい特徴は、身近な他人のほうが当たりやすいとされます。外向性のように行動に表れやすい特徴は、本人と他人の評価がもっともそろいやすいことも分かっています。</p>
+    <p>また、他人による性格の評価をまとめた研究では、相手との付き合いが長く親しいほど、評価の正確さが上がることが示されています。</p>
+    <ul class="refs">
+      <li>Vazire, S. (2010). Who knows what about a person? The self–other knowledge asymmetry (SOKA) model. <i>Journal of Personality and Social Psychology, 98</i>(2), 281–300. doi:10.1037/a0017908</li>
+      <li>Connelly, B. S., &amp; Ones, D. S. (2010). An other perspective on personality: Meta-analytic integration of observers' accuracy and predictive validity. <i>Psychological Bulletin, 136</i>(6), 1092–1122. doi:10.1037/a0021212</li>
+    </ul>
+  </section>
+
+  <p style="text-align:center;font-size:13px;"><a href="report.html" style="color:var(--purple);">総合レポートへ</a> · <a href="other_quiz.html" style="color:var(--purple);">あの人を診断する</a> · <a href="diagnoses.html" style="color:var(--purple);">診断一覧</a></p>
+</main>
+
+<script src="seen.js?v=1"></script>
+<script>
+(function () {
+  var S = window.SeenBy;
+  var esc = S.esc;
+  var toast = document.getElementById('toast');
+
+  /* 1) 届いたリンクを保存して、アドレス欄からは消す */
+  if (/[?&]s=/.test(location.search)) {
+    var got = S.receive(location.search);
+    try { history.replaceState(null, '', 'seen.html'); } catch (e) {}
+    if (got && got !== 'same') {
+      toast.innerHTML = '<div class="toast">' + (got.by ? esc(got.by) + 'さん' : '周りの人') + 'からの見立てが届きました。下で、あなたの自己評価と比べられます。</div>';
+      S.ev('seen_receive', { total: S.load().length, rel: got.rel });
+    } else if (got === 'same') {
+      toast.innerHTML = '<div class="toast">この見立ては、すでに受け取っています。</div>';
+    } else {
+      toast.innerHTML = '<div class="toast">リンクを読み取れませんでした。送ってもらったリンクを、もう一度そのまま開いてください。</div>';
+    }
+  }
+
+  /* 2) 比べる */
+  var pick = 'avg';
+  function render() {
+    var list = S.load();
+    var self = S.mine();
+    var rc = document.getElementById('resultCard');
+    var ns = document.getElementById('noSelfCard');
+    rc.hidden = !list.length || !self;
+    ns.hidden = !list.length || !!self;
+    if (!list.length || !self) return;
+
+    var pw = document.getElementById('pickWrap');
+    if (list.length > 1) {
+      var opts = '<option value="avg">' + list.length + '人の平均</option>' + list.map(function (e, i) {
+        return '<option value="' + i + '">' + (e.by ? esc(e.by) + 'さん' : '名前なし') + '（' + S.REL[e.rel] + '）</option>';
+      }).join('');
+      pw.innerHTML = '<select id="pick" aria-label="だれの見立てを見るか">' + opts + '</select>';
+      var sel = document.getElementById('pick');
+      if (pick !== 'avg' && !list[pick]) pick = 'avg';
+      sel.value = String(pick);
+      sel.addEventListener('change', function () { pick = sel.value === 'avg' ? 'avg' : parseInt(sel.value, 10); render(); });
+    } else {
+      pw.innerHTML = '';
+      pick = 'avg';
+    }
+    var one = pick === 'avg' ? null : list[pick];
+    var other = one ? one.s : S.average(list);
+    var rows = S.compare(self, other);
+    document.getElementById('headline').innerHTML = S.headline(rows);
+    var rels = one ? [one.rel] : list.map(function (e) { return e.rel; }).filter(function (r, i, a) { return a.indexOf(r) === i; });
+    document.getElementById('relNote').textContent = rels.length === 1 ? S.REL_NOTE[rels[0]] : '見ている場面が違う人たちの平均なので、ふだんのあなたに近い見立てになります。';
+    var pos = function (v) { return ((v - 1) / 4 * 100).toFixed(1) + '%'; };
+    document.getElementById('rows').innerHTML = rows.map(function (r) {
+      var tag = r.kind === 'same' ? '<span class="tag same">そろっている</span>'
+        : '<span class="tag gap">' + (r.big ? '大きなずれ' : '少しずれ') + '：周りから見ると' + (r.kind === 'higher' ? '高め' : '低め') + '</span>';
+      return '<div class="row"><div class="row-top"><span class="row-name">' + r.name + '</span>' + tag + '</div>' +
+        '<div class="scale"><span class="dot me" style="left:' + pos(r.self) + '"></span><span class="dot them" style="left:' + pos(r.other) + '"></span></div>' +
+        '<p>' + S.TEXT[r.f][r.kind] + '</p></div>';
+    }).join('');
+    document.getElementById('whoList').innerHTML = '<p style="font-size:13px;font-weight:700;margin-bottom:4px;">届いた見立て（' + list.length + '件）</p>' + list.map(function (e, i) {
+      var d = new Date(e.date);
+      var ds = isNaN(d) ? '' : (d.getMonth() + 1) + '/' + d.getDate();
+      return '<div class="who"><span>' + (e.by ? esc(e.by) + 'さん' : '名前なし') + '・' + S.REL[e.rel] + (ds ? '・' + ds : '') + '</span><button type="button" data-rm="' + i + '">外す</button></div>';
+    }).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rm]'), function (b) {
+      b.addEventListener('click', function () {
+        if (!confirm('この見立てを外しますか？')) return;
+        S.remove(parseInt(b.getAttribute('data-rm'), 10)); pick = 'avg'; render();
+      });
+    });
+  }
+  render();
+
+  /* 3) 頼むリンク */
+  var nameInput = document.getElementById('myName');
+  try { nameInput.value = localStorage.getItem('bigfive_seen_myname') || ''; } catch (e) {}
+  document.getElementById('askBtn').addEventListener('click', function () {
+    var nm = S.cleanName(nameInput.value);
+    var msg = document.getElementById('askMsg');
+    if (!nm) { msg.textContent = '相手に表示する呼び名を入れてください。'; nameInput.focus(); return; }
+    try { localStorage.setItem('bigfive_seen_myname', nm); } catch (e) {}
+    var url = S.askUrl(nm);
+    S.ev('seen_ask_create', { has_self: S.mine() ? 1 : 0, received: S.load().length });
+    S.share(url, nm + 'さんから：わたしの性格を、あなたから見たままに答えてください（約5分・30問）').then(function (r) {
+      if (r === 'shared') msg.textContent = '送りました。答えが届くのを待ちましょう。';
+      else if (r === 'copied') msg.innerHTML = 'リンクをコピーしました。LINEやメッセージに貼り付けて送ってください。<div class="link-box">' + esc(url) + '</div>';
+      else if (r === 'shown') msg.innerHTML = '下のリンクをコピーして送ってください。<div class="link-box">' + esc(url) + '</div>';
+      else msg.textContent = '';
+    });
+  });
+})();
+</script>
+<script src="nav.js?v=20260919"></script>
+</body>
+</html>

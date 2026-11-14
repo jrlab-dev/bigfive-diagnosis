@@ -55,6 +55,13 @@
     <priority>0.6</priority>
   </url>
 
+  <!-- 他人から見たあなた -->
+  <url>
+    <loc>https://bigfive.jr-genius.jp/seen.html</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
   <!-- チーム相性診断 -->
   <url>
     <loc>https://bigfive.jr-genius.jp/team.html</loc>
