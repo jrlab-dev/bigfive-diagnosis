@@ -981,9 +981,9 @@ const relConfig = {
     compatMid:  'お互いを理解し合えれば深い絆になれます。価値観のすり合わせが大切です。',
     compatLow:  '性格の違いが大きめです。違いを個性として尊重できれば成長できる関係です。',
     // 信頼度情報（心理学研究に基づく）
-    observerNote: '恋人・パートナーは、ふだん人に見せない姿も知っている相手です。親しい相手ほど評価は正確になりやすく、特に不安や気持ちの揺れのような外から見えにくい面でその差が大きいとされています。',
-    accurateFactors: [],
-    lessAccurateFactors: [],
+    observerNote: '恋人・パートナーからの評価は、いちばん当たりやすい部類です。ふだん人に見せない姿まで知っているので、特に感受性（気持ちの揺れ）の評価が信頼できます。',
+    accurateFactors: ['E','N','A','C'],
+    lessAccurateFactors: ['O'],
   },
   work: {
     icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>', label: '仕事・上司・同僚',
@@ -996,9 +996,9 @@ const relConfig = {
     compatMid:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> コミュニケーションを丁寧にすれば良いチームワークが生まれます。',
     compatLow:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> スタイルの違いがあります。役割分担を明確にすると力を発揮しやすくなります。',
     // 信頼度情報
-    observerNote: '職場で見えているのは、主に仕事中の姿です。不安や気持ちの揺れのような内面は見えにくいため、その部分は参考程度にしてください。',
-    accurateFactors: [],
-    lessAccurateFactors: ['N'],
+    observerNote: '職場関係では、誠実性や協調性の評価が当たりやすいです。ただし気持ちの揺れや頭の中の考えは見えにくいため、その部分は参考程度にしてください。',
+    accurateFactors: ['C','A'],
+    lessAccurateFactors: ['N','O'],
   },
   friend: {
     icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>', label: '友人・知人',
@@ -1009,9 +1009,9 @@ const relConfig = {
     compatHigh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 気の合う友人です！話題が合いやすく、一緒にいて楽しい関係です。',
     compatMid:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> お互いの違いを楽しめれば、刺激し合える良い関係になります。',
     compatLow:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-6.22-8.56"/><path d="M21 3v6h-6"/></svg> タイプは違いますが、だからこそ新しい視点をもらえる関係かもしれません。',
-    observerNote: '友人に見えているのは、主にくつろいだ場面の姿です。仕事ぶりや、不安のような内面は見えにくいことがあるため、その部分は参考程度にしてください。',
-    accurateFactors: [],
-    lessAccurateFactors: ['N'],
+    observerNote: '友人関係では、外向性や開放性の評価が当たりやすいです。ただし真面目さや気持ちの揺れは遊びの場面では見えにくいため、参考程度にしてください。',
+    accurateFactors: ['E','O'],
+    lessAccurateFactors: ['C','N'],
   },
   child46: {
     icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>', label: '子供（4〜6歳）',
@@ -2104,7 +2104,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 <script src="gacha-utils.js"></script><script src="nav.js"></script>
 <script src="unlock.js?v=20261114"></script>
 <script src="unlock-banner.js"></script>
-<script src="seen.js?v=5"></script>
+<script src="seen.js?v=6"></script>
 <script>
 /* 他人から見たあなた（2026-11-14）：頼まれたときの案内と、結果を本人へ送るリンク */
 (function () {
@@ -2141,7 +2141,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
     card.innerHTML = '<p style="font-weight:700;margin-bottom:6px;">この結果を' + nm + 'さんに送る</p>' +
       '<p style="font-size:13px;line-height:1.8;">' + (asked
         ? nm + 'さんから頼まれた診断です。送ると、' + nm + 'さんは自分の評価とあなたの見立てを比べられます。'
-        : nm + 'さんがビッグファイブ診断を受けていれば、自分の評価とあなたの見立てのずれを見られます。相手が知りたがっているときに送りましょう。') +
+        : nm + 'さんがビッグファイブ診断を受けていれば、自分の評価とあなたの見立てのずれを見られます。') +
       'あなたが答えた一つひとつの回答は送らず、5つの性格の点数だけを送ります。</p>' +
       '<label for="sendByName" style="display:block;font-size:13px;font-weight:700;margin:10px 0 6px;">あなたの呼び名（' + nm + 'さんに表示・空でも可）</label>' +
       '<input type="text" class="text-input" id="sendByName" maxlength="20" placeholder="例：みき">' +
