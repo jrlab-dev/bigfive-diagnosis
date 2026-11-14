@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>他人から見たあなた｜友だちの評価と自己評価を比べる — ビッグファイブ診断</title>
-<meta name="description" content="友だちや職場の人にあなたの性格を答えてもらい、自分のビッグファイブと比べる無料の機能です。自分では気づきにくい「周りからの見え方」と、そのずれの意味を研究にもとづいて読み解きます。">
+<meta name="description" content="友だちや職場の人にあなたの性格を答えてもらい、自分のビッグファイブと比べる無料の機能です。自分では気づきにくい「周りからの見え方」と、そのずれの意味を研究の知見もふまえて読み解きます。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ビッグファイブ診断">
 <meta property="og:title" content="他人から見たあなた — ビッグファイブ診断">
@@ -85,7 +85,7 @@ select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px;
   <section class="card" id="noSelfCard" hidden>
     <h2>まだ比べる相手がいません</h2>
     <p>周りの見立ては届いていますが、あなた自身のビッグファイブ診断の結果がこの端末にありません。診断を受けると、ここで自分の評価と比べられます。</p>
-    <a class="btn" href="quiz.html?v=10">ビッグファイブ診断を受ける</a>
+    <a class="btn" href="quiz.html?v=30">ビッグファイブ診断を受ける</a>
   </section>
 
   <section class="card" id="askCard">
@@ -101,8 +101,8 @@ select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px;
   <section class="card">
     <h2>自己評価と他人の評価がずれる理由</h2>
     <p>同じ人の性格を本人と周りの人が評価すると、ある程度は一致しますが、ぴったりそろうことはまずありません。ずれは「どちらかが間違っている」のではなく、それぞれに見えている面が違うことを表しています。</p>
-    <p>心理学者のヴァザイアが提唱した「自己と他者の知識の非対称性」の考え方では、不安や緊張のように外から見えにくい特徴は本人のほうがよく知っていて、外向性のように行動に表れやすい特徴は、本人と他人の評価がもっともそろいやすいことも分かっています。</p>
-    <p>また、他人による性格の評価をまとめた研究では、相手との付き合いが長く親しいほど、評価の正確さが上がることが示されています。</p>
+    <p>心理学者のヴァジール（Vazire）が「自己と他者の知識の非対称性」のモデルを提案し、実験で確かめたところでは、不安や緊張のように外から見えにくい特徴は本人のほうが正確に判断でき、外向性のように行動に表れやすい特徴は、本人も周りも同じくらい正確に判断できます。</p>
+    <p>また、他人による性格の評価をまとめた研究では、よく会う相手ほど評価の正確さは上がり、特に親しい相手ほど大きく上がることが示されています。その差は、不安のような外から見えにくい特徴で大きくなります。</p>
     <ul class="refs">
       <li>Vazire, S. (2010). Who knows what about a person? The self–other knowledge asymmetry (SOKA) model. <i>Journal of Personality and Social Psychology, 98</i>(2), 281–300. doi:10.1037/a0017908</li>
       <li>Connelly, B. S., &amp; Ones, D. S. (2010). An other perspective on personality: Meta-analytic integration of observers' accuracy and predictive validity. <i>Psychological Bulletin, 136</i>(6), 1092–1122. doi:10.1037/a0021212</li>
@@ -112,7 +112,7 @@ select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px;
   <p style="text-align:center;font-size:13px;"><a href="report.html" style="color:var(--purple);">総合レポートへ</a> · <a href="other_quiz.html" style="color:var(--purple);">あの人を診断する</a> · <a href="diagnoses.html" style="color:var(--purple);">診断一覧</a></p>
 </main>
 
-<script src="seen.js?v=3"></script>
+<script src="seen.js?v=5"></script>
 <script>
 (function () {
   var S = window.SeenBy;
@@ -164,6 +164,7 @@ select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px;
     document.getElementById('headline').innerHTML = S.headline(rows);
     var rels = one ? [one.rel] : list.map(function (e) { return e.rel; }).filter(function (r, i, a) { return a.indexOf(r) === i; });
     document.getElementById('relNote').textContent = rels.length === 1 ? S.REL_NOTE[rels[0]] : '見ている場面が違う人たちの平均なので、ふだんのあなたに近い見立てになります。';
+    if (self.three) document.getElementById('relNote').textContent += ' あなたの結果は10問版（3段階）なので、比べ方もおおまかです。30問版以上を受けると、細かく比べられます。';
     var pos = function (v) { return ((v - 1) / 4 * 100).toFixed(1) + '%'; };
     document.getElementById('rows').innerHTML = rows.map(function (r) {
       var tag = r.kind === 'same' ? '<span class="tag same">そろっている</span>'

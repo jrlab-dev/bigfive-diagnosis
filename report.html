@@ -583,7 +583,7 @@ body.theme-light .report-next-zukan { color:#334155; background:rgba(255,255,255
 <script src="image-resolver.js?v=20260919"></script>
 <script src="cross-att-texts.js?v=7"></script>
 <script src="unlock.js?v=20261114"></script>
-<script src="seen.js?v=3"></script>
+<script src="seen.js?v=5"></script>
 <script>
 // ===== 定義集 =====
 const LOVE_STYLES = {
@@ -1000,7 +1000,7 @@ function buildAnalysis(data) {
           (gapsSB.length ? `いちばんずれが大きいのは<strong>${gapsSB[0].name}</strong>です。<br>${SB.TEXT[gapsSB[0].f][gapsSB[0].kind]}` : SB.headline(rowsSB)) +
           `<br><a href="seen.html" style="color:var(--purple);font-weight:700;">5つの性格ぜんぶの比べ方を見る →</a>`;
       } else {
-        seenText = '友だちや職場の人に、あなたの性格を30問で答えてもらうと、あなたのビッグファイブと重ねて「周りからどう見えているか」をここに追加します。カードは要りません。' +
+        seenText = '友だちや職場の人に、あなたの性格を30問で答えてもらうと、あなたのビッグファイブと重ねて「周りからどう見えているか」をここに追加します。' +
           '<br><a href="seen.html" style="color:var(--purple);font-weight:700;">友だちに頼むリンクを作る →</a>';
       }
       blocks.push({ title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> 他人から見たあなた × ビッグファイブ', text: seenText });
