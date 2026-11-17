@@ -3030,10 +3030,21 @@ document.getElementById('syncCopyBtn').addEventListener('click', () => {
 });
 
 let _pendingSyncData = null;
+let _pendingSyncUserId = '';
 
 function hideSyncChoice() {
   document.getElementById('syncChoice').style.display = 'none';
   _pendingSyncData = null;
+  _pendingSyncUserId = '';
+}
+
+// 戻したら、元の同期IDをこの端末にも引き継ぐ。順位表に同じ人が2行並ばないようにするため。
+// 2台を並行して使うと、クラウドの控えは最後に保存した端末の中身になる（端末の中のデータは消えない）。
+// 自動バックアップの時刻も消して、次の表示で引き継いだIDのまま保存し直させる。
+function adoptSyncId(userId) {
+  if (!userId || !SYNC_UUID_RE.test(userId)) return;
+  localStorage.setItem(SYNC_ID_KEY, userId);
+  localStorage.removeItem('bigfive_sync_last_auto');
 }
 
 function applySyncData(loadedData, mode) {
@@ -3106,6 +3117,7 @@ document.getElementById('syncLoadBtn').addEventListener('click', async () => {
 
     // データを一時保存して選択UIを表示
     _pendingSyncData = json.data;
+    _pendingSyncUserId = json.user_id || '';
     const keys = Object.keys(json.data);
     const arrCount = keys.filter(k => {
       try { return Array.isArray(JSON.parse(json.data[k])); } catch { return false; }
@@ -3126,6 +3138,7 @@ document.getElementById('syncLoadBtn').addEventListener('click', async () => {
 document.getElementById('syncOverwriteBtn').addEventListener('click', () => {
   if (!_pendingSyncData) return;
   applySyncData(_pendingSyncData, 'overwrite');
+  adoptSyncId(_pendingSyncUserId);
   sendCount('backup_restore_ok');
   hideSyncChoice();
   setStatus('上書き完了！ページを再読み込みします...', 'ok');
@@ -3135,6 +3148,7 @@ document.getElementById('syncOverwriteBtn').addEventListener('click', () => {
 document.getElementById('syncMergeBtn').addEventListener('click', () => {
   if (!_pendingSyncData) return;
   applySyncData(_pendingSyncData, 'merge');
+  adoptSyncId(_pendingSyncUserId);
   sendCount('backup_restore_ok');
   hideSyncChoice();
   setStatus('統合完了！ページを再読み込みします...', 'ok');
