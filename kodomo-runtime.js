@@ -493,8 +493,9 @@ function persistResult(record) {
       } catch (albumError) { console.error('カード保存に失敗しました', albumError); }
       try {
         // 既存のkodomo初回コインを再利用する。この関数がGA4 diag_resultも送る。
+        // 版（kid_t3＝3〜6歳／kid_e1・kid_e2＝小学生／kid_jh＝中学生の保護者／kid_self＝中高生本人）と結果のタイプも添える（2026-11-19）。
         // 共有・保存済み表示はpersistResultを通らないため完了イベントも発火しない。
-        if (localStorage.getItem('dev_nocount') !== '1' && window.GachaUtils) GachaUtils.grantDiagnosisBonus('kodomo');
+        if (localStorage.getItem('dev_nocount') !== '1' && window.GachaUtils) GachaUtils.grantDiagnosisBonus('kodomo', { kid_ver: record.relation, kid_type: record.code });
       } catch (bonusError) { console.error('初回特典の処理に失敗しました', bonusError); }
     }
     history.replaceState(null, '', 'kodomo.html?saved=' + encodeURIComponent(record.id) + '&group=' + encodeURIComponent(record.relation));
