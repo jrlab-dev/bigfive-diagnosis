@@ -102,7 +102,6 @@
   }
   .scroll-stage--stats { height: 120vh; }
   .scroll-stage--features { height: 160vh; }
-  .scroll-stage--voice { height: 116vh; }
   .scroll-stage.stage-collapsed { height: auto !important; }
   .scroll-stage.stage-collapsed .scroll-stage-inner { position: relative; min-height: 0; }
 
@@ -554,6 +553,13 @@
   .icon-with-text { display: inline-flex; align-items: center; gap: 8px; }
 
   /* ソーシャルプルーフ */
+  .can-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .can-card { display: block; padding: 18px 18px 16px; border-radius: 14px; background: var(--card-bg); border: 1px solid rgba(139,92,246,0.25); color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .can-card:hover { border-color: rgba(139,92,246,0.6); transform: translateY(-2px); }
+  .can-t { display: block; font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
+  .can-t::after { content: ' →'; color: #8b5cf6; }
+  .can-d { display: block; font-size: 0.86rem; line-height: 1.7; opacity: 0.85; }
+  @media (max-width: 600px) { .can-grid { grid-template-columns: 1fr; } }
   .social-proof { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
   .proof-label {
     text-align: center; font-size: 11px; font-weight: 700; color: var(--purple);
@@ -670,7 +676,6 @@
     .proof-grid { grid-template-columns: 1fr; }
     .scroll-stage--stats { height: 120vh; }
     .scroll-stage--features { height: 150vh; }
-    .scroll-stage--voice { height: 108vh; }
     .scroll-stage--cta { height: 160vh; }
     .scroll-stage--anohito { height: 150vh; }
     .scroll-stage--concierge { height: 130vh; }
@@ -779,16 +784,7 @@
 </header>
 
 <!-- ログインボーナス ポップアップ -->
-<div id="login-bonus-overlay">
-  <div class="login-bonus-modal">
-    <span class="bonus-coin-icon">🪙</span>
-    <div class="bonus-title">ログインボーナス！</div>
-    <div class="bonus-earned" id="bonusEarned">+1枚</div>
-    <div class="bonus-streak" id="bonusStreak">🔥 1日連続ログイン中</div>
-    <div class="bonus-total" id="bonusTotal">所持コイン: 1枚</div>
-    <button class="bonus-close-btn" id="bonusCloseBtn">受け取る</button>
-  </div>
-</div>
+<div id="login-bonus-overlay"></div>
 <div class="bg-light-blobs" aria-hidden="true">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -1015,32 +1011,18 @@
   </div>
   </div>
 
-  <!-- ソーシャルプルーフ -->
-  <div class="scroll-stage scroll-stage--voice" data-stage="voice">
-  <div class="scroll-stage-inner">
-  <section class="social-proof">
-    <h2 class="proof-label">VOICE</h2>
-    <div class="proof-grid" data-scroll-group data-scroll-weights="0.8,0.8,0.6,0.55">
-          <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「<span class="nb">初めて自分を</span><span class="nb">客観的に</span><span class="nb">理解できた。</span><span class="nb">今の仕事が</span><span class="nb">合わない理由が</span><span class="nb">わかった」</span></p>
-            <p class="proof-user">20代女性・事務職</p>
-          </div>
-          <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「<span class="nb">チーム相性診断で</span><span class="nb">配置転換が</span><span class="nb">スムーズに。</span><span class="nb">部下との</span><span class="nb">コミュニケーションが</span><span class="nb">改善」</span></p>
-            <p class="proof-user">30代男性・マネージャー</p>
-          </div>
-          <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「<span class="nb">夫婦相性が</span><span class="nb">わかって</span><span class="nb">喧嘩が減った。</span><span class="nb">相手の見方も</span><span class="nb">変わりました」</span></p>
-            <p class="proof-user">40代女性・主婦</p>
-          </div>
-          <div class="proof-card" data-scroll-anim="shrink">
-            <p class="proof-text">「<span class="nb">就活で</span><span class="nb">自分の強みを</span><span class="nb">言語化できる</span><span class="nb">ように</span><span class="nb">なった」</span></p>
-            <p class="proof-user">20代男性・学生</p>
-          </div>
-        </div>
-      </section>
-  </div>
-  </div>
+  <!-- このサイトでできること（2026-11-21：作り話の利用者の声を外し、事実だけの欄に差し替え。AIがトップの文字から紹介できるように） -->
+  <section class="social-proof site-can">
+    <h2 class="proof-label">このサイトでできること</h2>
+    <div class="can-grid">
+      <a class="can-card" href="diagnoses.html"><span class="can-t">診断は全26種類</span><span class="can-d">HSP・愛着スタイル・価値観・恋愛スタイルなど。うち12種類はビッグファイブと重ねて読むクロス分析に対応しています。</span></a>
+      <a class="can-card" href="report.html"><span class="can-t">総合レポート</span><span class="can-d">受けた診断が増えるほど、あなたの傾向が1枚のレポートにまとまっていきます。</span></a>
+      <a class="can-card" href="mypage.html"><span class="can-t">AIに相談するためのプロフィール</span><span class="can-d">診断結果をまとめた文章をコピーして、ChatGPTなどのAIに貼って相談できます。</span></a>
+      <a class="can-card" href="career-integration.html"><span class="can-t">キャリア・就活</span><span class="can-d">職業興味（RIASEC）とキャリア適性を受けて、キャリア統合分析で1つにまとめられます。</span></a>
+      <a class="can-card" href="other_quiz.html"><span class="can-t">家族・恋人・チーム</span><span class="can-d">あの人診断で身近な人の性格を推測。チーム相性は最大8人まで分析できます。</span></a>
+      <a class="can-card" href="school-guide.html"><span class="can-t">学校の授業でも使われています</span><span class="can-d">中学・高校の先生向けに、授業での進め方をまとめたガイドがあります。</span></a>
+    </div>
+  </section>
 
   <!-- よくある質問（2026-07-26追加・faq.htmlとは質問文を変えて重複を避けている） -->
   <section class="faq-home">
@@ -1048,7 +1030,7 @@
     <div class="faq-home-list">
       <div class="faq-home-item">
         <h3 class="faq-home-q">ビッグファイブ診断は本当に無料で使えますか？</h3>
-        <p class="faq-home-a"><strong>無料です。</strong>心理学の国際標準・30の下位尺度を120問まで分析するビッグファイブ診断は、10問版・30問版・120問版すべて無料・料金は一切かかりません。あの人の性格診断やチーム相性診断も、途中で有料プランに切り替わることはありません。</p>
+        <p class="faq-home-a"><strong>無料です。</strong>心理学の国際標準・30の下位尺度を120問まで分析するビッグファイブ診断は、10問版・30問版・120問版すべて無料です。あの人の性格診断・チーム相性診断・総合レポートも無料で、途中で料金を求められることはありません。有料は、30項目の詳細レポートなどがまとめて開く600円（任意・買い切り）の1つだけで、カードを集めれば無料でも開きます。</p>
       </div>
       <div class="faq-home-item">
         <h3 class="faq-home-q">会員登録やログインは必要ですか？</h3>
@@ -1074,7 +1056,7 @@
         "name": "ビッグファイブ診断は本当に無料で使えますか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "無料です。心理学の国際標準・30の下位尺度を120問まで分析するビッグファイブ診断は、10問版・30問版・120問版すべて無料・料金は一切かかりません。あの人の性格診断やチーム相性診断も、途中で有料プランに切り替わることはありません。"
+          "text": "無料です。心理学の国際標準・30の下位尺度を120問まで分析するビッグファイブ診断は、10問版・30問版・120問版すべて無料です。あの人の性格診断・チーム相性診断・総合レポートも無料で、途中で料金を求められることはありません。有料は、30項目の詳細レポートなどがまとめて開く600円（任意・買い切り）の1つだけで、カードを集めれば無料でも開きます。"
         }
       },
       {
@@ -1774,6 +1756,8 @@
     localStorage.setItem('bigfive_login_streak', '1');
     return;
   }
+  // モーダルの中身は表示するときに作る（検索・AIがページ本文として読まないように。2026-11-21）
+  document.getElementById('login-bonus-overlay').innerHTML = '<div class="login-bonus-modal"><span class="bonus-coin-icon">🪙</span><div class="bonus-title">ログインボーナス！</div><div class="bonus-earned" id="bonusEarned"></div><div class="bonus-streak" id="bonusStreak"></div><div class="bonus-total" id="bonusTotal"></div><button class="bonus-close-btn" id="bonusCloseBtn">受け取る</button></div>';
   var result = GachaUtils.claimLoginBonus();
   var coins  = GachaUtils.getCoins();
   document.getElementById('bonusEarned').textContent = '+' + result.earned + '枚';
